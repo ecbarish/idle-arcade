@@ -48,6 +48,22 @@ Mark a ticket done in the same PR that finishes it.
   you walk into (inn, shop, ranch) instead of menu buttons. Auto-explore = your tamer walks routes on their own.
 - [x] **T10: Wildbond third area, data only** (ChatGPT): see the T10 section below.
 
+- [ ] **T12: Realmbound lore pass** (ChatGPT): see the T12 section below.
+
+### T12: Realmbound lore pass
+Make Realmbound's world feel lived-in, and start the lore record future guides will be built from.
+- **Lore bible:** create `docs/lore/realmbound.md`: the Sundered Reach's history (why it is "sundered"), the Concord
+  and the Wildclans (how they formed, what they want, why they clash in the Greywater Fens), the four races, every
+  zone, every named NPC and quest giver (a line or two each: who they are, what they want), the bosses and named
+  elites (Grizzlemaw, Kraska Duneclaw, Coalmaw, the dungeon bosses) and the Ember Covenant. Build only on what the
+  game already says (games/realmbound/js/01-world.js, 06-npcs.js, 07-dungeons.js and docs/realmbound-design.md);
+  expand freely but never contradict in-game text. Keep it original. List any open lore questions at the end.
+- **In-game, data plus one small display change:** give every quest a `done` line (what the giver says when you turn
+  it in, in their voice, 1-2 sentences) and show it in the existing quest-completed message in the log. Give every
+  zone a `lore` paragraph (2-3 sentences) and show it where the zone's name/description already appears. Change
+  nothing else: no balance, no new mechanics, no save-format changes. Run tests/run.html; all checks must still pass.
+- Leave games/wildbond/ alone (Claude is working there).
+
 ### T10: Wildbond third area (data only)
 Add **Emberfall Highlands** (volcanic uplands above the coast; name places and creatures however fits) in
 games/wildbond/js/00-data.js only. Change no other file.
