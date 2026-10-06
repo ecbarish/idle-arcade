@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Idle Arcade · Realmbound</title>
+<meta name="description" content="A classic-MMO idle adventure you can play at your desk: two factions, tamed pets, mounts, companions who remember you, and dungeons that never run out.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Alegreya+Sans:wght@400;500;700;800&family=Bungee&display=swap" rel="stylesheet">
+<style>
+/* Layout: a game box back-cover. Title over a live scene, then the feature blurbs, then "what's coming", then the play button. */
+:root{
+  --bg:#0f0d0a; --stone:#1b1712; --stone2:#241e17; --bronze:#8a6a35; --bronze-d:#5a4422;
+  --gold:#f2c14e; --fg:#e9e1cf; --muted:#a89a80; --q2:#1eff00; --q3:#3a8bff; --q4:#b55cf0; --q5:#ff8000;
+  --f-head:'IM Fell English SC', Georgia, serif; --f-body:'Alegreya Sans', system-ui, sans-serif; --f-sign:'Bungee', Impact, sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:17px;line-height:1.55;background-image:radial-gradient(ellipse at 50% 0,#2a2117 0,transparent 65%)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;display:flex;flex-direction:column;gap:40px}
+.kicker{font-family:var(--f-sign);font-size:14px;letter-spacing:.06em;color:#ff6fa8}
+h1{font-family:var(--f-head);font-weight:400;font-size:clamp(48px,9vw,96px);line-height:.95;margin:4px 0 8px;color:var(--gold);text-shadow:0 3px 0 #000}
+.lede{font-size:clamp(18px,2.4vw,22px);max-width:56ch;margin:0;color:#ded3bb}
+.hero{display:flex;flex-direction:column;gap:18px}
+.scene{position:relative;aspect-ratio:16/6;max-width:100%;border:2px solid var(--bronze-d);border-radius:10px;overflow:hidden;background:#223}
+.scene canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.play{display:inline-block;text-decoration:none;font-weight:800;font-size:18px;padding:12px 22px;border-radius:8px;background:var(--gold);color:#2a1d00;border:2px solid #000;box-shadow:0 3px 0 #000}
+.play.alt{background:var(--stone2);color:var(--fg);border-color:var(--bronze)}
+.note{color:var(--muted);font-size:15px}
+h2{font-family:var(--f-head);font-weight:400;font-size:clamp(28px,4vw,38px);color:var(--gold);margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 16px;max-width:60ch}
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.feat{background:var(--stone);border:1px solid var(--bronze-d);border-radius:10px;padding:16px 18px;min-width:0}
+.feat h3{margin:0 0 6px;font-size:19px;font-weight:800}
+.feat p{margin:0;color:#d5c9ac;font-size:16px}
+.rar{display:flex;flex-wrap:wrap;gap:4px 14px;font-weight:800;margin-top:8px;font-size:15px}
+.road{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.step{border-left:3px solid var(--bronze);padding:4px 0 4px 14px}
+.step b{display:block;font-size:17px}
+.step span{color:var(--muted);font-size:15px}
+.step.now{border-color:var(--q2)}
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.game{background:var(--stone2);border:1px solid var(--bronze-d);border-radius:8px;padding:12px 14px}
+.game b{font-size:17px}
+.game span{display:block;color:var(--muted);font-size:14px}
+.pill{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:1px 7px;border-radius:999px;border:1px solid currentColor;margin-left:6px}
+footer{color:var(--muted);font-size:14px;border-top:1px solid var(--bronze-d);padding-top:16px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <div class="kicker">IDLE ARCADE PRESENTS</div>
+      <h1>Realmbound</h1>
+      <p class="lede">The classic MMO you remember, rebuilt as a game you can play at your desk. Quest, tame, ride and raid your way up, playing it yourself when you have a minute and letting it run when you don't.</p>
+    </div>
+    <div class="scene"><canvas id="scene" aria-label="A hunter riding a wolf with her party, facing a dungeon boss"></canvas></div>
+    <div class="cta">
+      <a class="play" href="games/realmbound/index.html">Play Realmbound</a>
+      <a class="play alt" href="index.html">See the whole arcade</a>
+      <span class="note">Free, in your browser, no account. Works on phones. Your progress saves on your device.</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>What's in it today</h2>
+    <p class="sub">Two factions, five classes, three zones and two dungeons, levels 1 to 30.</p>
+    <div class="feats">
+      <div class="feat"><h3>Play it, or let it play</h3><p>Flip between Focus and Auto any time. Pressing your abilities yourself always pays better: you catch openings, dodge boss attacks and earn bonus XP. Auto keeps you leveling while you work.</p></div>
+      <div class="feat"><h3>Automation you earn</h3><p>No shop, ever. Loot by hand 60 times and AutoLoot installs itself. Press your rotation enough and the Rotation Macro learns it. Every helper is earned by doing the chore first.</p></div>
+      <div class="feat"><h3>Tame anything wild</h3><p>Hunters tame beasts their level or lower, then fight together until they're bonded. Every wild beast rolls a rarity:</p>
+        <div class="rar"><span style="color:#d8d8d8">Common</span><span style="color:var(--q2)">Uncommon</span><span style="color:var(--q3)">Rare</span><span style="color:var(--q4)">Epic</span><span style="color:var(--q5)">Legendary</span></div></div>
+      <div class="feat"><h3>Mounts that get better</h3><p>Save up for your first horse or wolf, or teach your bonded pet to carry you. Every mount trains as you ride it, from Green all the way to Champion.</p></div>
+      <div class="feat"><h3>People who remember you</h3><p>Named adventurers wander the world beside you, each with their own personality. Help them, group up, share loot. Friends unlock combined attacks mid-fight.</p></div>
+      <div class="feat"><h3>Dungeons that never end</h3><p>Gather five, learn the bosses, dodge the big hits. Every clear unlocks a harder Heroic tier with random twists and better loot. There is no top.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Where it's headed</h2>
+    <p class="sub">Built a layer at a time. This is the plan.</p>
+    <div class="road">
+      <div class="step now"><b>Now: levels 1–30</b><span>Quests, pets, mounts, companions, two dungeons with endless Heroic tiers.</span></div>
+      <div class="step"><b>To level 60</b><span>New zones, more classes, talent trees for every role.</span></div>
+      <div class="step"><b>Raids and your guild</b><span>Recruit a roster of 40, earn DKP, and take down raid bosses together.</span></div>
+      <div class="step"><b>Faction battlegrounds</b><span>Concord against Wildclans.</span></div>
+      <div class="step"><b>Hardcore seasons</b><span>Permadeath realms with a new rule set each season.</span></div>
+      <div class="step"><b>Alts and Legacy</b><span>Every hero you finish makes the next one stronger.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Also in the arcade</h2>
+    <p class="sub">Realmbound is one game in a growing collection. Every game saves on its own, and the hub picks up where you left off.</p>
+    <div class="games">
+      <div class="game"><b>Primordial</b><span class="pill" style="color:var(--q2)">Playable</span><span>Evolve from a single cell. Mutation drafts, extinctions, endless progress.</span></div>
+      <div class="game"><b>Starfall Guild</b><span class="pill" style="color:var(--q3)">Prototype</span><span>Run an anime adventurer guild, Kairosoft style.</span></div>
+      <div class="game"><b>Creature game</b><span class="pill" style="color:var(--muted)">Planned</span><span>Catch, raise, breed and race creatures, from common to mythical hybrids.</span></div>
+      <div class="game"><b>Diamond Career</b><span class="pill" style="color:var(--muted)">Planned</span><span>Create a baseball player, earn your contract, run the club.</span></div>
+      <div class="game"><b>Otherworld</b><span class="pill" style="color:var(--muted)">Planned</span><span>Reborn in another world. Each life is a new run.</span></div>
+    </div>
+  </section>
+
+  <footer>Made by Evan Barish. Original world, names and art: inspired by the games we grew up on, not copied from them.
+    Follow along at <a href="https://github.com/ecbarish/idle-arcade">github.com/ecbarish/idle-arcade</a>.</footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+const cv=document.getElementById('scene'),cx=cv.getContext('2d');let W=0,H=0;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function size(){const r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=Math.round(W*d);cv.height=Math.round(H*d);cx.setTransform(d,0,0,d,0,0);cx.imageSmoothingEnabled=false;}
+size();addEventListener('resize',size);
+function person(x,y,p,skin,hair,col,weapon,t){const q=(a,b,w,h,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(x+a*p),Math.round(y+b*p),Math.ceil(w*p),Math.ceil(h*p));};const bob=!reduce&&Math.sin(t*6)>0?1:0;
+  q(2,10,1,3,'#2b2b3a');q(5,10,1,3,'#2b2b3a');q(1,5-bob*.2,6,5,col);q(0,6,1,3,col);q(7,6,1,3,col);q(1,1,6,4,skin);q(2,3,1,1,'#111');q(5,3,1,1,'#111');q(1,0,6,1,hair);q(0,1,1,2,hair);q(7,1,1,2,hair);
+  if(weapon==='bow'){q(9,2,1,6,'#8a5a2b');q(8,2,1,6,'#e8e4d4');}else if(weapon==='staff'){q(8,-1,1,11,'#8a5a2b');q(7,-2,3,2,'#69ccf0');}else if(weapon==='shield'){q(-1,5,2,4,'#9aa5b5');q(8,2,1,6,'#dfe6ee');}else q(8,2,1,6,'#dfe6ee');}
+function wolf(x,y,p,col,t,right){cx.save();cx.translate(x,y);if(right){cx.translate(6*p,0);cx.scale(-1,1);}const q=(a,b,w,h,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(a*p),Math.round(b*p),Math.ceil(w*p),Math.ceil(h*p));};const b=!reduce&&Math.sin(t*9)>0?1:0;
+  q(-1,6,10,4,col);q(-4,4,4,4,col);q(-4,3,1,1,col);q(-2,3,1,1,col);q(-5,5,1,1,'#111');q(-4,5,1,1,'#ffde55');q(0,10,1,3-b,col);q(7,10,1,2+b,col);q(2,10,1,3,col);q(5,10,1,3,col);q(9,5,2,1,col);cx.restore();}
+function boss(x,y,p,t){const q=(a,b,w,h,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(x+a*p),Math.round(y+b*p),Math.ceil(w*p),Math.ceil(h*p));};const s=!reduce?Math.sin(t*2)*p:0;
+  q(-2,4,16,6,'#3a2a7a');q(-7,2+s*.2,6,5,'#3a2a7a');q(-7,3,1,1,'#ffe36a');q(13,6,5,2,'#3a2a7a');q(17,7,3,1,'#3a2a7a');q(0,10,2,4,'#3a2a7a');q(10,10,2,4,'#3a2a7a');q(2,2,10,2,'#5a4aa0');
+  cx.strokeStyle='#f2c14e';cx.lineWidth=2;cx.strokeRect(x-9*p,y-1*p,30*p,17*p);}
+function frame(ms){const t=ms/1000;if(!W){requestAnimationFrame(frame);return;}
+  const g=cx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0b1d26');g.addColorStop(1,'#1b3d45');cx.fillStyle=g;cx.fillRect(0,0,W,H);
+  cx.fillStyle='#14303a';for(let i=0;i<6;i++){const px=W*(.08+i*.18);cx.fillRect(px,H*.12,W*.035,H*.66);cx.fillRect(px-6,H*.1,W*.035+12,8);}
+  const gy=H*.8;cx.fillStyle='#2a3c36';cx.fillRect(0,gy,W,H-gy);
+  const p=Math.max(2,Math.floor(H/40));
+  person(W*.07,gy-13*p,p,'#f1c9a0','#e8c070','#3a6fd8','shield',t);
+  person(W*.15,gy-13*p+p,p,'#b9a3d9','#e8e8f0','#f0f0f0','staff',t+1);
+  person(W*.23,gy-13*p,p,'#7fa65a','#2b2b2b','#69ccf0','staff',t+2);
+  wolf(W*.33,gy-14*p,Math.round(p*1.1),'#c8c8c8',t,true);person(W*.33+2*p,gy-14*p-4.5*p,p,'#7fa65a','#2b2b2b','#abd473','bow',t);
+  boss(W*.68,gy-14*p*1.4,Math.round(p*1.4),t);
+  cx.font=`700 ${Math.max(12,p*4)}px Alegreya Sans, sans-serif`;cx.textAlign='center';cx.fillStyle='#ff8a2a';cx.fillText("Ysh'Kara, the Tide Beneath",W*.72,gy-24*p);
+  if(!reduce){const a=(t%3)/3;cx.globalAlpha=1-a;cx.fillStyle='#ffd24a';cx.font=`800 ${p*6}px Alegreya Sans, sans-serif`;cx.fillText('248!',W*.7,gy-28*p-a*p*8);cx.globalAlpha=1;}
+  cx.textAlign='left';if(!reduce)requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

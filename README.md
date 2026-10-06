@@ -35,6 +35,9 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-07 (later)** — Merged ChatGPT's Ashen Ridge / level 30 / Cindervein Foundry work (PR #1) after review; 118 scenario
+  checks pass. Added promo.html, a shareable pitch page for friends.
+
 - **2026-10-06** — Realmbound: level cap 30, Ashen Ridge with two faction outposts, ten quests,
   six enemy types including the legendary Coalmaw, and the Cindervein Foundry (three bosses).
   Dungeons now keep separate Heroic unlocks; existing Sanctum saves migrate automatically.
