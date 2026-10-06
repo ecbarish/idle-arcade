@@ -146,3 +146,19 @@ Warlock. Each has 3 talent trees, one point per level from 10.
 A classic MMO interface: dark stone and bronze frames, gold serif headings, a square action bar with
 cooldown sweeps, item tooltips colored by rarity, a minimap-style zone panel. Distinct from Starfall Guild's
 bright handheld look and Primordial's microscope.
+
+## Ashen Ridge and the Foundry (built 2026-10-06)
+
+- The level cap is 30. Previously capped level-20 characters resume earning XP without resetting.
+- Ashen Ridge is shared territory, accessible from level 18. Concord characters use Emberwatch Hold;
+  Wildclans characters use Cinderhorn Outpost. Ten quests lead through wolves, obsidian boars, ogres,
+  the Ember Covenant and slagscales to the legendary Coalmaw. The new beasts use existing taming,
+  rarity, trait, feeding and bond systems.
+- The Cindervein Foundry opens at 27: four packs and three bosses. Cinder Rain damages the party;
+  Molten Rupture is actively dodgeable with D. Original names, procedural pixel art and volcanic colors.
+- Each dungeon tracks clears, runs and its highest Heroic tier separately in `drecords`. Existing
+  `dstats` remain aggregate counters for earned addons and companion scaling; old stats initialize the
+  Sanctum record only. Old active dungeon runs gain the `sanctum` identity on load.
+- Automation and Focus/Auto efficiency are unchanged. LFG Tool repeats the dungeon you just cleared.
+
+Next: professions and broader talent choices, then Frostmere and the journey to level 60.
