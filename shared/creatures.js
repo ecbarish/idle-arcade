@@ -65,6 +65,7 @@
     STATS.forEach(function (s) {
       var v = Math.floor((2 * base[s] + c.pot[s]) * c.lvl / 100);
       v = s === 'hp' ? v + c.lvl + 10 : v + 5;
+      v += Math.floor(((c.train && c.train[s]) || 0) / 4); // trained points: every 4 adds 1
       if (t.up === s) v *= 1.1; if (t.down === s) v *= 0.9;
       out[s] = Math.max(1, Math.round(v * rm * (1 + 0.02 * bl)));
     });

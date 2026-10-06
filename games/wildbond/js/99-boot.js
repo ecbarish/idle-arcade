@@ -22,6 +22,9 @@ document.addEventListener('click', e => {
     case 'rename': { const c = findC(arg); if (!c) break; const card = el.closest('.cbody'); if (card.querySelector('.rn')) break;
       card.insertAdjacentHTML('beforeend', `<div class="rn"><input maxlength="14" value="${c.name}" aria-label="New name"><button class="btn sm" data-act="dorename" data-arg="${c.uid}">Save</button></div>`); return; }
     case 'dorename': { const c = findC(arg), v = (el.previousElementSibling.value || '').replace(/[<>&"]/g, '').trim().slice(0, 14); if (c && v) c.name = v; tabKey = ''; break; }
+    case 'buyfood': buyFood(arg, 10); break;
+    case 'breed': { const all = everyone(); if (startBreed(all.find(c => c.uid === BARN.a), all.find(c => c.uid === BARN.b))) { BARN.a = BARN.b = null; } break; }
+    case 'biome': travelTo(arg); break;
     case 'era': if (S.eras.includes(arg) && ART[arg]) { S.era = arg; document.querySelectorAll('canvas[data-sp]').forEach(c => delete c.dataset.done); tabKey = ''; } break;
   }
   if (S.started) { renderAll(); save(); }
@@ -35,7 +38,7 @@ document.addEventListener('keydown', e => {
 });
 
 /* test hook, local dev server only */
-if (location.hostname === 'localhost') window.__wb = { get S() { return S; }, get B() { return B; }, explore, command, calmNow, worldTick, finishBattle, challengeWarden, chooseStarter, newCreature, startBattle };
+if (location.hostname === 'localhost') window.__wb = { get S() { return S; }, get B() { return B; }, newDay, startBreed, breedInfo, catchUpDays, travelTo, explore, command, calmNow, worldTick, finishBattle, challengeWarden, chooseStarter, newCreature, startBattle };
 
 let started = false;
 function start() {
@@ -44,6 +47,7 @@ function start() {
   resize(); renderAll(); renderTabs(true);
   // time away: auto-explore keeps going at a gentle pace, manual play just rests
   const away = (Date.now() - (S.last || Date.now())) / 1000;
+  if (S.started) { const days = catchUpDays(Math.max(0, away)); if (days) setTimeout(() => toast(` ranch day passed while you were away. Check the Ranch tab.`), 1500); }
   if (S.started && away > 60) { healAll(); if (S.auto) { const n = Math.min(200, Math.floor(away / 30)); let xp = 0, coins = 0; for (let i = 0; i < n; i++) { coins += rint(2, 6) * 3; xp += Math.round(teamAvg() * 9); }
       S.coins += coins; for (const c of S.team) grow(c, Math.round(xp / Math.max(1, S.team.length))); toast(`While you were away your team explored ${n} times: +${fmtI(coins)} coins.`); } else toast('Your team rested while you were away.'); }
   let last = performance.now();

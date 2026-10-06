@@ -14,7 +14,7 @@ function fresh() {
 let S = fresh();
 
 function sp(c) { return SPECIES[c.sp]; }
-function stOf(c) { return Cr.stats(c, sp(c).base); }
+function stOf(c) { const s = Cr.stats(c, sp(c).base); if ((c.fatigue || 0) > 70 || c.injured > 0) for (const k in s) if (k !== 'hp') s[k] = Math.round(s[k] * 0.9); return s; }
 function movesOf(c) { const L = sp(c).learn.filter(([l]) => l <= c.lvl).map(([, m]) => m); return [...new Set(L)].slice(-4); }
 function healAll() { for (const c of S.team) c.hp = stOf(c).hp; }
 function alive() { return S.team.filter(c => c.hp > 0); }

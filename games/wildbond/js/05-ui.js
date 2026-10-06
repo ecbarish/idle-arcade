@@ -41,7 +41,7 @@ function renderPanel() {
     $('#bhint').textContent = B.over ? '' : isAuto() ? (S.auto ? 'Auto-explore is on: your team fights on its own.' : 'Autopilot took over. Press any command to take charge.') : 'Command points refill every 5 seconds.';
     return;
   }
-  const k = 'x' + S.explored + W.msg + S.lures + wardenReady() + elderReady() + alive().length + S.auto;
+  const k = 'x' + S.biome + S.badges.length + S.explored + W.msg + S.lures + wardenReady() + elderReady() + alive().length + S.auto;
   if (k === panelKey) return; panelKey = k;
   const nb = STORY.find(b => !S.story[b.id] && b.id !== 'warden' && !(b.id === 'elder' && S.story.elderFled));
   el.innerHTML = `<div class="explore"><div><b>${BIOMES[S.biome].name}</b> <span class="meta">explored ${S.explored} times · wild levels ${BIOMES[S.biome].lv[0]}–${BIOMES[S.biome].lv[1]}</span></div>
@@ -50,6 +50,7 @@ function renderPanel() {
     <div class="acts"><button class="btn big" data-act="explore" ${alive().length ? '' : 'disabled'}>Explore <kbd>E</kbd></button>
       ${wardenReady() ? '<button class="btn gold" data-act="warden">Challenge the Warden</button>' : ''}
       ${elderReady() ? '<button class="btn gold" data-act="elder">Seek Elderhorn</button>' : ''}
+      ${Object.keys(BIOMES).filter(id => id !== S.biome && biomeOpen(id)).map(id => `<button class="btn alt" data-act="biome" data-arg="${id}">Travel to ${BIOMES[id].name}</button>`).join('')}
       <button class="btn alt" data-act="rest">Rest in Larkhaven</button><button class="btn alt" data-act="lures">Buy 5 lures (50)</button></div></div>`;
 }
 

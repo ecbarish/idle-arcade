@@ -65,7 +65,7 @@ function buyLures() { if (B) return; if (S.coins < 50) { W.msg = 'Lures cost 50 
 
 /* After a battle: show the result briefly, then clear it. Auto mode keeps exploring on its own. */
 function worldTick(h) {
-  S.stats.play += h;
+  S.stats.play += h; ranchTick(h);
   if (B) { battleTick(h);
     if (B && B.over) { W.endT += h; if (W.endT > (S.auto ? 2 : 3.5)) finishBattle(); } return; }
   if (S.auto) { W.autoT += h; if (W.autoT >= 3) { W.autoT = 0; if (!alive().length || alive().length < S.team.length && alive().some(c => c.hp < stOf(c).hp * 0.3)) restInTown(); else explore(); } }

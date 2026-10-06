@@ -35,6 +35,10 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-08 (later)** — Wildbond part 2: ranch days every 5 minutes (also while away) with daily food and
+  training plans, fatigue, injuries and mood; breeding barn with inherited genes, pedigree and three hidden hybrids
+  (Lynxhound, Drakelet, Bramblestag); biome travel. Merged ChatGPT's 16-bit art era (PR #3).
+
 - **2026-10-08** — Wildbond part 1 (early access): shared creature module, three starters with evolutions, rival Wren,
   Thornwood with 10 wild species, lure-and-calm capture, 3v3 auto battles with commands (Focus, Guard, Rally),
   telegraphed attacks, Elderhorn, the Thornwood Warden and the Thorn Badge, Wilddex, art-era system. Merged

@@ -18,7 +18,7 @@ ART.pixel = {
       case 'spider': q(0, 7, 8, 5, col); q(-3, 6, 4, 4, col); q(-3, 7, 1, 1, '#ff3a3a'); q(-1, 7, 1, 1, '#ff3a3a');
         for (let i = 0; i < 4; i++) { q(-1 + i * 2.5, 12, 1, 2 - ((i + b) % 2), col); q(-2 + i * 2.5, 5, 1, 2, col); } break;
       case 'lizard': case 'croc': { const L = sp.fam === 'croc' ? 14 : 11; q(-1, 9, L - 3, 3, col); q(-5, 9, 4, 2, col); q(-5, 9, 1, 1, dk); q(-3, 9, 1, 1, '#ffde55');
-        q(L - 4, 10, 4, 1, col); q(0, 12, 1, 2 - b, col); q(L - 6, 12, 1, 1 + b, col); if (sp.fam === 'croc') q(-6, 10, 2, 1, '#e8e4d4'); break; }
+        q(L - 4, 10, 4, 1, col); q(0, 12, 1, 2 - b, col); q(L - 6, 12, 1, 1 + b, col); if (sp.fam === 'croc') q(-6, 10, 2, 1, '#e8e4d4'); if (sp.wings) { q(0, 6 - b, 5, 2, 'rgba(255,255,255,.55)'); q(2, 5 - b, 3, 1, 'rgba(255,255,255,.4)'); } break; }
       case 'boar': q(-1, 6, 10, 5, col); q(-4, 7, 4, 4, col); q(-5, 9, 1, 1, '#e8e4d4'); q(-4, 8, 1, 1, '#ffde55');
         q(0, 11, 1, 3 - b, col); q(7, 11, 1, 2 + b, col); q(2, 11, 1, 3, col); q(5, 11, 1, 3, col); q(0, 5, 6, 1, 'rgba(0,0,0,.3)'); break;
       case 'horse': { const mn = 'rgba(0,0,0,.4)'; q(-1, 5, 11, 5, col); q(-3, 1, 3, 6, col); q(-6, 1, 4, 3, col); q(-6, 2, 1, 1, dk); q(-7, 3, 1, 1, col);
