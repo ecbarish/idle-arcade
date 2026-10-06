@@ -152,3 +152,44 @@ Categories judge different things: **Grace** (Speed, Wits), **Might** (Power, Gu
 bond, variant colors), **Tricks** (abilities learned through training). Temperament and mood matter; grooming
 and practice routines raise appeal. **Active play:** time a creature's showcase move to the crowd's
 excitement. Ribbons and titles are cosmetic plus small breeding value.
+
+## Pacing, level caps and journey settings (planned 2026-10-06)
+Evan's direction: the journey and the grind are the fun part, but the player should choose how long it takes.
+Replayability and reasons to revisit older content matter. Ideas drawn from what fans love in Pokemon fan games
+(Radical Red, Run & Bun, Unbound, Rejuvenation, Insurgence, Reborn).
+
+**Measured problem (v0):** on Auto from a fresh save, the team hit level 12 in 15 minutes and the level-20 cap in
+about 2 hours, before the first badge. Far too fast.
+
+**Full 1-100 range.** About eight areas, each with a level band (Thornwood ~2-12, Saltmarsh ~12-22, Emberfall
+~22-32, ...). Eight badges carry you to about 70; the post-game takes you to 100.
+
+**Journey length, chosen at the start and changeable at the Larkhaven inn** (Rejuvenation lets you change difficulty
+at a tent in town):
+- *Breezy:* more XP and coins, for a quick story run (first badge in about an hour of play).
+- *Classic:* the intended pace (first badge in about 2-3 hours, main story 30-50 hours).
+- *Long Road:* less XP, rarer finds, for players who want the grind.
+Idle/Auto always earns less than active play on every setting.
+
+**Level caps tied to badges** (the most-loved fan-game feature: Run & Bun, Radical Red). Each badge raises the cap.
+Options: *Soft* (default: XP drops to a trickle above the cap, so you can't over-level an area by idling),
+*Hard* (no XP above the cap), *Off*.
+
+**Challenge modes, picked at a new game** (Insurgence builds these in so players don't track rules by hand):
+*Nuzlocke* (a fainted creature is released; only the first encounter per area can be caught), *Randomizer* (wild
+tables shuffled), *Solo Run* (one creature only), *Hardcore* (smarter opponents, no Rally). Completing a mode earns
+a title and a ranch cosmetic.
+
+**Reasons to revisit old areas:**
+- Rematches: Wardens and Wren can be rebattled at higher tiers that scale to your level (Radical Red lets you
+  rebattle gym leaders), with better rewards each tier.
+- Rare spawns that only appear in older areas at certain times, weather or after later badges (new variants of old
+  creatures, colour variants).
+- Area mastery: stars for completing an area's Wilddex, beating its rematch tiers and finding its secrets.
+- Ranch jobs and breeding need materials and creatures that live only in specific areas.
+
+**Quality of life** (fan games keep proving these matter): a team-wide XP share toggle, a move relearner in town,
+temperament changing (an item, like mints), visible potential grades (already in), reusable lures as a late unlock,
+battle speed-up.
+
+**Post-game:** a battle tower with streaks, the region's legendaries, a Hall of Fame record, Champion rematches.
