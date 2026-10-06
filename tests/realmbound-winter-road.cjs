@@ -15,7 +15,7 @@ for(const faction of ['concord','wild']){
  await page.locator('[data-act="zone"][data-arg="frostmere"]').click();assert.equal(await page.evaluate(()=>window.__rb.S.chars[0].zone),'ashen');
  await page.evaluate(()=>{window.__rb.S.chars[0].lvl=28;window.__rb.boot();});
  await page.locator('[data-act="zone"][data-arg="frostmere"]').click();assert.equal(await page.evaluate(()=>window.__rb.S.chars[0].zone),'frostmere');
- assert.ok((await page.locator('#zoneSub').textContent()).includes('lit window'));
+ assert.ok((await page.locator('#zoneLore').textContent()).includes('lit window'));
  // Reconstitute a save using the pre-chapter schema and level cap; real reload enters current boot/load.
  await page.evaluate(()=>{const rb=window.__rb,h=rb.S.chars[0];h.lvl=30;h.zone='ashen';h.xp=0;h.quests={active:[],done:{a10:true},prog:{},rewards:{}};h.drecords={foundry:{clears:1,best:0,runs:1}};rb.boot();rb.save();});
  await page.reload();await page.waitForFunction(()=>window.__rb&&window.__rb.S.chars.length);

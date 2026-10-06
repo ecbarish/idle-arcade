@@ -2,7 +2,7 @@
 
 ## Approval and scope
 
-Evan authorized proceeding with Codex's Frostmere recommendation on 2026-10-06 while Claude was unavailable. This is the concrete specification and implementation record for T3, with the small progression decisions it needs from T1. It does not complete T1's full 30–60, raid or guild design. Branch: `codex/realmbound-winter-road`, based on the unmerged T12 lore branch at `ab972312df00603789071d6efcb560e550788376`; review that dependency before merging.
+Evan authorized proceeding with Codex's Frostmere recommendation on 2026-10-06 while Claude was unavailable. This is the concrete specification and implementation record for T3, with the small progression decisions it needs from T1. It does not complete T1's full 30–60, raid or guild design. Branch: `codex/realmbound-winter-road`, originally based on T12 lore at `ab972312df00603789071d6efcb560e550788376`. PR #6 is now merged; main `e4c10f6f53999d38bec770991f8543316ad96efd` has been integrated locally. Open this chapter PR against main.
 
 Frostmere's first chapter uses the existing travel, kill/collect quests, equipment generation, combat, companion and Hunter systems. No new save fields, migrations, abilities, dungeon, profession or renderer. The wider design still reserves levels 41–45 and the necropolis for later work.
 
@@ -72,7 +72,7 @@ Before expanding beyond this chapter, Claude/owner should review quest pacing ov
 For a quick local playtest, extract `idle-arcade-winter-road.zip`, open a terminal in its `idle-arcade` folder,
 run `python -m http.server 8765` (or `powershell -ExecutionPolicy Bypass -File serve.ps1`), and open
 http://localhost:8765/games/realmbound/ and http://localhost:8765/tests/run.html. This is the feature branch,
-including pending T12 lore, rather than the current deployed main. Localhost and GitHub Pages have separate
+including merged T12 lore and the locally implemented Winter Road, rather than just the deployed main. Localhost and GitHub Pages have separate
 browser saves; moving the source does not automatically transfer a browser save between those origins.
 
 To keep the authored commits when publishing from an authenticated desktop, download the Git bundle and
@@ -87,7 +87,7 @@ git fetch origin
 git push -u origin codex/realmbound-winter-road
 ```
 
-Open a PR on GitHub. While PR #6 is open, select base `codex/realmbound-lore`; once it is merged, use main
+Open a PR on GitHub against main (PR #6 is merged); inspect the diff
 and inspect the diff for only this chapter and the shared notes. Do not merge automatically. The separate
 `winter-road.patch` contains the two commits after PR #6 and is an alternative for an existing checkout;
 do not apply it on top of the bundled branch.
@@ -113,6 +113,10 @@ old-cap scripts resumed at level 31. Existing world data and state/migration sou
 base. All five classes passed opening group combat; solo spot checks varied. Sustained grind and solo
 balance need owner/Claude review.
 
-Depends on PR #6 and includes the previously unpublished shared notes. Evan authorized this narrow T1
+Includes merged PR #6 and the previously unpublished shared notes. Evan authorized this narrow T1
 progression spec while Claude was unavailable; T3 is complete here, and the wider T1 remains open.
 Wildbond and parked games are unchanged. Please review without automatic merging.
+
+## Main integration update — 2026-10-06
+
+Integrated main `e4c10f6` after T12 merged. Claude moved zone lore into `#zoneLore`; the two browser scenario selectors now follow that element. No gameplay changes were made in this integration. The earlier 231 browser/236 DOM passes above predate this integration. A fresh run was attempted, but the temporary Chromium and jsdom installations were no longer present; rerun `tests/run.html` on the desktop before approving the chapter. JavaScript syntax checks passed.

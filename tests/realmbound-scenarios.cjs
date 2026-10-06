@@ -48,7 +48,7 @@ module.exports = function scenarios() {
       for(const faction of ['concord','wild']){
         const winter=rb.newHero('Wintercheck',faction,faction==='concord'?'human':'grishar','hunter');
         winter.lvl=40;winter.zone='frostmere';rb.S.chars.push(winter);rb.S.cur=winter.id;rb.boot();
-        check(document.querySelector('#zoneSub').textContent.includes(rb.ZONES.frostmere.lore),'Frostmere lore visible: '+faction);
+        check(document.querySelector('#zoneLore').textContent.includes(rb.ZONES.frostmere.lore),'Frostmere lore visible: '+faction);
         check(document.body.textContent.includes(rb.ZONES.frostmere.hub[faction]),'correct winter hub visible: '+faction);
         const chain=rb.QUESTS.frostmere;
         for(const q of chain){
