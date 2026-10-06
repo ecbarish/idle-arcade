@@ -44,6 +44,9 @@ Mark a ticket done in the same PR that finishes it.
 - [ ] **T11: Wildbond pacing overhaul** (Claude, next): levels 1-100, journey length (Breezy/Classic/Long Road),
   badge level caps (soft/hard/off), XP share toggle. See "Pacing, level caps and journey settings" in
   docs/creature-game-design.md. Rescale T10's Emberfall levels when merging. Challenge modes and rematches follow.
+- [ ] **T13: Era progression in the world** (Claude, after T7b): Pocket (Game Boy) → 16-bit → HD-2D → voxel
+  Diorama → modern 3D → first-person/VR, each with era-matched mechanics and story beats. See "Eras you walk through"
+  in docs/creature-game-design.md. T7b must keep the tile map separate from the renderer.
 - [ ] **T7b (revised): Walkable world** (Claude): top-down map with tall grass, route trainers, items, NPCs; towns
   you walk into (inn, shop, ranch) instead of menu buttons. Auto-explore = your tamer walks routes on their own.
 - [x] **T10: Wildbond third area, data only** (ChatGPT): see the T10 section below.

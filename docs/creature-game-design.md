@@ -193,3 +193,32 @@ temperament changing (an item, like mints), visible potential grades (already in
 battle speed-up.
 
 **Post-game:** a battle tower with streaks, the region's legendaries, a Hall of Fame record, Champion rematches.
+
+## Eras you walk through: from Game Boy to modern 3D (planned 2026-10-06)
+Inspired by the 2026 Pokemon Red/Blue "Gen 1 Recompilation" voxel mod by Dramatic Shape: it keeps the original maps,
+events and rules and only changes how the world is drawn and where the camera sits (tilted 3D diorama, third-person,
+first-person, and PC VR through OpenXR). The lesson for us: **game logic on a tile map, renderers swappable.**
+Our `ART[era]` registry already works this way; the walkable world (T7b) must too.
+
+**The look and the camera grow with the story** (each era unlocked by progress, any unlocked era selectable):
+| Era | Look and camera | Mechanics that arrive with it (matching that generation) |
+|---|---|---|
+| Pocket (start) | Top-down, 4 shades of green, Game Boy feel | Simple: walk, tall grass, trainers who spot you, small bag |
+| 16-bit | Top-down full color, shading | Running shoes, day/night clock, berries, ranch |
+| HD-2D | Pixel sprites in a lit 3D world, tilted camera, depth of field | Weather, your lead creature follows you, visible wild creatures instead of random grass |
+| Diorama | Voxel 3D world built from the same map (like the mod), orbitable camera | Ride creatures, open wild areas, camera control |
+| Modern 3D | Third-person camera, full 3D | Big open zones, raids on wild legendaries |
+| First-person / VR | Walk it yourself; WebXR headset support as a post-game extra | Photo mode, Wilddex research by observing |
+
+**How it's built (no new tools needed):** one tile map per area, rendered by 2D canvas for the early eras and by
+three.js (from cdnjs) for the 3D ones. Creatures in 3D start as our pixel sprites extruded into voxels (the mod's own
+trick), so every species works in every era from day one; hand-made models can replace them later. Browsers support
+WebXR, so VR is reachable without an engine change.
+
+**In the story:** the region was "faded" long ago; each guardian you befriend restores a layer of the world (color,
+then light, then depth). People notice and joke about it:
+- Maren: "In my day the world had four colors and we liked it."
+- A kid in Larkhaven: "Mom, the corners are round now."
+- Wren: "Is it me, or can you see further than you could yesterday?"
+- An old fisher who refuses to admit anything changed.
+This ties the art upgrades to the plot instead of being a settings menu, and gives each era a story moment.
