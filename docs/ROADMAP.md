@@ -38,11 +38,14 @@ Mark a ticket done in the same PR that finishes it.
   every story beat (09-dialogue.js, CAST/SCENES/`lines`/`win` in 00-data.js), battle animation (slide-in, lunge,
   flinch, element sparks, crit shake, faint, victory hop), chiptune sound effects and per-area music made live with
   Web Audio (10-sound.js, off by default). Done 2026-10-08.
-- [ ] **T7b: Wildbond real-game feel, part 2** (Claude): a region map with Larkhaven as a real town (inn, shop, ranch,
-  people to talk to), routes between areas, NPCs with side quests.
 - [ ] **T8: Game guides** (ChatGPT) — **parked** until games are closer to finished, so guides don't need constant
   rewrites. Spec kept below. Meanwhile, keep lore written down in each game's design doc as it's added.
 - [ ] **T9: Wildbond guide** (ChatGPT) — parked with T8.
+- [ ] **T11: Wildbond pacing overhaul** (Claude, next): levels 1-100, journey length (Breezy/Classic/Long Road),
+  badge level caps (soft/hard/off), XP share toggle. See "Pacing, level caps and journey settings" in
+  docs/creature-game-design.md. Rescale T10's Emberfall levels when merging. Challenge modes and rematches follow.
+- [ ] **T7b (revised): Walkable world** (Claude): top-down map with tall grass, route trainers, items, NPCs; towns
+  you walk into (inn, shop, ranch) instead of menu buttons. Auto-explore = your tamer walks routes on their own.
 - [ ] **T10: Wildbond third area, data only** (ChatGPT): see the T10 section below.
 
 ### T10: Wildbond third area (data only)
