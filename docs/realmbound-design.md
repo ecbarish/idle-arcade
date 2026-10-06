@@ -179,3 +179,11 @@ bright handheld look and Primordial's microscope.
 - Automation and Focus/Auto efficiency are unchanged. LFG Tool repeats the dungeon you just cleared.
 
 Next: professions and broader talent choices, then Frostmere and the journey to level 60.
+
+## Frostmere first chapter: The Winter Road
+
+The playable first slice covers levels 30–40, with Lanternrest Lodge and Whitebough Hearth, ten quests,
+three ordinary tameable beast species, ice trolls and Hushfang, a legendary wolf elite. The chapter restores
+the winter road and discovers the approach to a buried necropolis. The dungeon and levels 41–45 remain
+future work. Existing level-30 saves resume directly; the current cap is 40. See
+[the chapter specification](realmbound-winter-road.md) for access, rewards, progression and the staged upgrade path.

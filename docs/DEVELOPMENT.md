@@ -2,6 +2,36 @@
 
 This is the shared status and decision record for Evan, Claude and Codex. Read this with `HANDOFF.md` and `docs/ROADMAP.md` before taking work. The roadmap controls ticket scope and priorities; these notes distinguish observed code, pending work and proposals. Recheck main and open PRs before relying on an older status entry.
 
+## Active work — The Winter Road, 2026-10-06
+
+**Owner authorization:** Evan said to proceed with the recommendation while Claude was unavailable, then reiterated that all games need a path from their basic foundation to richer mechanics and capabilities. Codex therefore wrote the narrow T1 progression decisions required for T3 instead of waiting for Claude. This does not transfer or complete the wider T1 raid/guild/30–60 design.
+
+**Branch and dependency:** `codex/realmbound-winter-road`, based on PR #6's lore head `ab972312df00603789071d6efcb560e550788376`. The earlier documentation-only review commit is included here; do not publish it again separately if this branch is used. Main was refreshed at `fd93445126fa3fbfd139dd926597dcf1f404c961` before starting. This is local work awaiting publication/review, not a merged feature.
+
+**Implemented:** level cap 40; Frostmere's first 30–40 chapter, two faction hubs, six enemies, ten voiced quests, three ordinary tameable species and the legendary wolf Hushfang. A narrow runtime change sends level-30+ companions to Frostmere; the quest hint follows the next accessible zone instead of always sending heroes back to Greywater. Existing save key, migration, combat formulas, equipment budgets, dungeon rules and old world entries remain unchanged. Wildbond and the parked games were not edited.
+
+**Source of truth:** [chapter specification](realmbound-winter-road.md), including the content table, access at 28 under the existing travel rule, cap behavior, rewards, lore and review limitations. T3 is marked done in this branch; T1 remains open. The chapter reaches the necropolis approach, not its dungeon or levels 41–45.
+
+**Checks:** `/tests/run.html` passes 231/231; the Node DOM suite passes 236 checks. Browser interactions cover both faction travel gates, generated-gear battles and elite loot, correct quest voices, all tabs, taming and save/reload with no console errors. A save made by main's old-cap scripts loaded and resumed at level 31. All five classes won an opening fight with four companions. Solo results depend on build/rarity; a mage died in one spot check and succeeded in the next. See the chapter specification for the exact limits of testing. Reusable browser check: `tests/realmbound-winter-road.cjs`.
+
+**Publishing:** the final `git push -u origin codex/realmbound-winter-road` failed: `could not read Username for https://github.com`. No chapter branch or PR was published. The earlier website upload hit a browser error page blocked by URL policy; that route was not retried or bypassed. The work is committed locally with the required noreply email. A complete source ZIP, Git bundle retaining the commits, and patch are supplied for Evan's desktop setup tonight. Publish the branch from an authenticated desktop, open a PR against `codex/realmbound-lore` while PR #6 is open (or main once that dependency is merged), and do not merge it automatically.
+
+**Next action for Claude/owner:** publish/review this stacked branch, review T12 first, then merge/rebase the chapter onto main as appropriate. Do not merge it automatically. Review sustained solo/group pacing, the existing equipment naming ceiling and the 40–60 plan. Avoid editing this branch's world data concurrently until ownership is handed back. The old proposal below is historical; the chapter spec supersedes its unresolved first-slice decisions.
+
+## Owner's standing direction: upgrade the games in stages
+
+Start with each game's core loop and foundations, then expand its mechanics, world, presentation and technical capabilities over time. Larger artwork alone is not the whole upgrade. Keep the source and notes easy to hand between Claude and Codex, and carry existing player progress forward.
+
+| Stage | Deliverable | Gate before proceeding |
+|---|---|---|
+| Core foundation | A playable loop, stable saves, small source files and checks | Players can complete the initial slice; state and rules are understood |
+| Content and choices | Chapters, creatures, quests, builds and character stories | Each addition has a purpose, progression rules and original names |
+| Deeper systems | Professions, parties, raids/guilds or the game's equivalent | A specific approved design, save-compatibility plan and acceptance route |
+| Richer world/presentation | Exploration, stronger art eras, animation/audio and interaction | Upgrade serves the loop; game rules and identities survive rendering changes |
+| Technical capability | New platforms, networking or tools when needed | A concrete requirement justifies deployment/dependency changes |
+
+This is a direction, not permission to unpark every game or implement all stages at once. Realmbound remains the priority to 60. Wildbond already separates data, battle/state and art eras; preserve that route while Claude owns its pacing/walkable-world work. Primordial and Starfall should eventually separate their large source files before sustained parallel content work. Diamond Career and Otherworld first need a small playable foundation when unparked. Every feature handoff should record its current stage, the player benefit, future dependencies and save compatibility; avoid speculative infrastructure with no current use.
+
 ## Latest review — 2026-10-06
 
 **Request:** review the project, recommend a next development step, and keep notes so Evan can switch between Claude and Codex. Evan has more content ideas for all the games. This review does not implement a new game feature or unpark other games.
@@ -81,7 +111,7 @@ Do not turn an inbox entry into an approved ticket automatically. When approved,
 - **This session:** review/notes only, branch `codex/development-notes`. Changes `HANDOFF.md` and this file. No game, balance or save changes. No new roadmap ticket is claimed or marked done. The notes are committed locally with the required noreply author email. The remote branch was created, but its file uploads did not commit and no PR was opened: terminal push lacks credentials, and the website upload redirected to a browser error page blocked by the browser URL policy. The remote branch still points to the reviewed main commit. Next publisher should push this local branch (or apply the supplied patch), verify both files, and open a documentation-only PR without merging.
 - **Observed main checks:** all four playable games opened on a fresh local Chromium profile without page/console errors; `tests/run.html` returned **118/118 PASS**. This was a startup smoke test plus the existing Realmbound scenarios, not a full balance, pacing or late-game audit of all games.
 - **Active boundary:** Evan said Claude is working on Wildbond. T11, revised T7b and T13 remain Claude-owned roadmap work. Leave that directory alone unless the next explicit ticket authorizes a coordinated scope.
-- **Next recommended action:** Claude specifies the first Frostmere chapter under T1; Codex takes T3 only after the specification is concrete.
+- **Historical recommendation:** Claude specifies T1 before T3. Evan subsequently authorized Codex to proceed with the narrow first-chapter specification; see the active record above. The wider T1 remains Claude-owned.
 
 ## How to leave the next session
 

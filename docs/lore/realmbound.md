@@ -61,7 +61,7 @@ The chain turns toward stopping awakening rites and preparing for the descent: s
 
 ### Regions still planned
 
-**Frostmere** is the proposed tundra region, with ice trolls and a necropolis. In local travelers' tales it is a place where a hearth must be kept for the person still outside; that custom is an expansion, not a new town, quest or named ruler. Its connection to the Sundering and the identity of its dead remain open.
+**Frostmere** is a tundra crossed by the winter road. Lanternrest Lodge and Whitebough Hearth keep a fire for travelers still outside, but ice troll foragers steal their provisions and waykeepers strip the crossing markers. Recovering those stones reveals older carvings beneath the road marks, then a buried street of facing doorways with no hearths behind them. Hushfang guards the approach to this necropolis; its connection to the Sundering and the identity of its dead remain open.
 
 **The Hollow Crown** is the proposed corrupted forest with dragonkin and raid entrances. Its name evokes a place where an absence has become as powerful as a ruler, but no actual sovereign, dragon lineage or cause of corruption is established. Those decisions belong to future content.
 
@@ -212,5 +212,17 @@ The factions' answer begins with ordinary obligations: recover the food, clothe 
 6. What precisely does the Ember Covenant intend to awaken, and how does Veyr relate to it? Are the two cults connected at all?
 7. Who directs Thornvale's Diggers beyond their foremen? *The Foreman's Ledger* does not currently provide a recovered document to answer that.
 8. Are any adventurer names shared identities with quest givers: Aldous, Merrin, Elowen, Kesh, Ruk, Ugra or Brakka? Keep them distinct unless confirmed. Corwin is not automatically Corwen; Drogo is not Drogan; Vash is not Vosh; Isla is not Ilsa.
-9. What become the named places, people and history of Frostmere and the Hollow Crown? Their design flavors are planned, and this pass does not turn them into playable zones.
+9. Who built Frostmere's necropolis, and why did the ice troll waykeepers reuse its stones? The Winter Road reaches its approach, but does not answer this. The Hollow Crown remains a planned region.
 10. How do the factions' Greywater claims evolve as shared threats grow? The present game establishes neither a peace treaty nor open faction warfare.
+
+## The Winter Road: new people and the White Vigil
+
+- **Roadwarden Sella** keeps Lanternrest's supply tally and watch. She puts feeding both camps before settling whose sacks were recovered, and measures success by drivers coming home.
+- **Pathkeeper Dorr** tends Whitebough's road and hearth. He values a shared meal over a faction argument and asks that a lamp remain for the slowest traveler.
+- **Seamster Oren** mends cloaks and sled braces at Lanternrest. His care shows in collars roomy enough for scarves and sound materials saved from waste.
+- **Hideworker Naska** prepares Whitebough's winter equipment. She judges a hide by the warmth it can still give and asks scouts to share their shelter.
+- **Surveyor Tavin** reads the crossing stones for Lanternrest. The older carving troubles his maps; he refuses to name the necropolis's dead before learning who they were.
+- **Storykeeper Eshra** preserves Whitebough's crossing stories. None explains the old words beneath the waymarkers, so she listens before assigning the silent city a history.
+- **Hushfang, the White Vigil** is a great pale wolf at the road's last crossing. Defeating or taming it ends the danger to sleds; neither proves why it watched the buried city. A Hunter may earn its companionship through the existing legendary taming rules.
+
+The recovered provisions reach both faction camps. This is practical cooperation between these travelers, not a declaration that the Concord and Wildclans have resolved all their disputes. No connection between these ice trolls and the Ember Covenant is established.
