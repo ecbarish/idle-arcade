@@ -78,13 +78,51 @@ const SPECIES = {
     learn: [[1, 'charge'], [6, 'gust']], dex: 'A wild foal that runs with the wind. Born to race.' },
   elderhorn: { name: 'Elderhorn', fam: 'horse', el: 'Grove', col: '#6a8a4a', antlers: 1, big: 1, unique: 1,
     base: { hp: 95, pow: 90, grd: 95, spd: 70, wit: 80, spi: 95 },
-    learn: [[1, 'charge'], [1, 'vineLash'], [1, 'regrowth'], [1, 'thornQuake']], dex: 'The ancient guardian of Thornwood. Few have seen it and fewer have earned its trust.' }
+    learn: [[1, 'charge'], [1, 'vineLash'], [1, 'regrowth'], [1, 'thornQuake']], dex: 'The ancient guardian of Thornwood. Few have seen it and fewer have earned its trust.' },
+  brineskit: { name: 'Brineskit', fam: 'lizard', el: 'Tide', col: '#569eaa',
+    base: { hp: 48, pow: 42, grd: 48, spd: 58, wit: 60, spi: 44 },
+    learn: [[1, 'tailWhip'], [1, 'bubbleJet'], [8, 'mistVeil'], [16, 'tidePulse']], evo: { at: 16, to: 'shoalcrest' },
+    dex: 'It skims shallow tide pools on its wide toes and shelters beneath empty shells.' },
+  shoalcrest: { name: 'Shoalcrest', fam: 'croc', el: 'Tide', col: '#307e96', big: 1,
+    base: { hp: 75, pow: 62, grd: 72, spd: 58, wit: 85, spi: 68 },
+    learn: [[1, 'tailWhip'], [1, 'bubbleJet'], [8, 'mistVeil'], [16, 'tidePulse']],
+    dex: 'Its ridged back parts the surf into calm channels where smaller creatures can cross.' },
+  dunepounce: { name: 'Dunepounce', fam: 'cat', el: 'Stone', col: '#c5aa75',
+    base: { hp: 46, pow: 62, grd: 60, spd: 57, wit: 32, spi: 43 },
+    learn: [[1, 'scratch'], [6, 'rockToss'], [12, 'harden'], [16, 'charge']],
+    dex: 'It buries its stone-tipped paws in warm dunes before springing at shadows on the sand.' },
+  reedtusk: { name: 'Reedtusk', fam: 'boar', el: 'Grove', col: '#829956',
+    base: { hp: 65, pow: 58, grd: 62, spd: 30, wit: 38, spi: 47 },
+    learn: [[1, 'charge'], [5, 'vineLash'], [12, 'regrowth']],
+    dex: 'It combs the marsh with curved tusks, leaving narrow trails that fill with fresh reeds.' },
+  wrackjaw: { name: 'Wrackjaw', fam: 'hyena', el: 'Stone', col: '#94877b',
+    base: { hp: 50, pow: 65, grd: 48, spd: 62, wit: 32, spi: 43 },
+    learn: [[1, 'bite'], [6, 'rockToss'], [12, 'howl']],
+    dex: 'Its rattling laugh echoes through driftwood piles as it cracks shellfish with pebble-hard jaws.' },
+  kiteskirl: { name: 'Kiteskirl', fam: 'bird', el: 'Gale', col: '#adc9da',
+    base: { hp: 40, pow: 45, grd: 36, spd: 76, wit: 58, spi: 45 },
+    learn: [[1, 'peck'], [5, 'gust'], [12, 'tailwind']],
+    dex: 'It rides the sea breeze without flapping and whistles whenever a storm approaches.' },
+  spindriftfoal: { name: 'Spindriftfoal', fam: 'horse', el: 'Gale', col: '#d2d9cb',
+    base: { hp: 52, pow: 48, grd: 40, spd: 78, wit: 38, spi: 44 },
+    learn: [[1, 'charge'], [6, 'gust'], [14, 'tailwind']],
+    dex: 'It races along the waterline, scattering ribbons of sea spray with every stride.' },
+  foamglint: { name: 'Foamglint', fam: 'sprite', el: 'Tide', col: '#a0dfcf',
+    base: { hp: 36, pow: 30, grd: 40, spd: 64, wit: 72, spi: 58 },
+    learn: [[1, 'bubbleJet'], [8, 'mistVeil'], [16, 'tidePulse']],
+    dex: 'This elusive fleck of living foam glows only where moonlit waves meet the marsh.' },
+  breakwatermane: { name: 'Breakwatermane', fam: 'wolf', el: 'Tide', col: '#497a9e', unique: 1, big: 1,
+    base: { hp: 95, pow: 90, grd: 85, spd: 80, wit: 85, spi: 90 },
+    learn: [[1, 'bite'], [1, 'bubbleJet'], [10, 'howl'], [16, 'tidePulse']],
+    dex: 'The coast falls silent when this ancient wolf walks the breakers, its mane carrying the rhythm of every tide.' }
 };
 const STARTERS = ['cindercub', 'ripplet', 'mosshog'];
 
 const BIOMES = {
   thornwood: { name: 'Thornwood', lv: [2, 9], sky: ['#9fd0f0', '#e0f0d0'], hill: '#4f7a3a', ground: '#6a9a48',
-    wild: [['glimmerwing', 22], ['pebblepaw', 20], ['duskweaver', 16], ['bogsnap', 14], ['emberling', 12], ['gnawhound', 12], ['galefoal', 4], ['sunspark', 3]] }
+    wild: [['glimmerwing', 22], ['pebblepaw', 20], ['duskweaver', 16], ['bogsnap', 14], ['emberling', 12], ['gnawhound', 12], ['galefoal', 4], ['sunspark', 3]] },
+  saltmarsh: { name: 'Saltmarsh Coast', lv: [10, 18], req: 'thorn', sky: ['#7dbbd8', '#d1e9ed'], hill: '#a6ae75', ground: '#7f9b6c',
+    wild: [['brineskit', 24], ['dunepounce', 20], ['reedtusk', 16], ['wrackjaw', 14], ['kiteskirl', 18], ['spindriftfoal', 8], ['foamglint', 3]] }
 };
 
 /* Story beats trigger on the number of times you've explored. */
