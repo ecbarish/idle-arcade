@@ -105,7 +105,7 @@ h2,h3{font-family:var(--f-head);font-weight:400;color:var(--gold);margin:0;lette
 .lootwin ul{list-style:none;margin:0;padding:0;font-size:14px}
 .log{background:rgba(0,0,0,.45);border:1px solid #2a2218;border-radius:6px;padding:6px 10px;font-size:13px;height:118px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
 .log div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.l-hit{color:#e9e1cf} .l-crit{color:#ffd24a} .l-hurt{color:#ff8a7a} .l-sys{color:#ffe36a} .l-xp{color:#b48cff} .l-loot{color:#7cf08a} .l-heal{color:#7cf08a} .l-pet{color:#d9f7a8}
+.l-hit{color:#e9e1cf} .l-crit{color:#ffd24a} .l-hurt{color:#ff8a7a} .l-sys{color:#ffe36a} .l-xp{color:#b48cff} .l-loot{color:#7cf08a} .l-heal{color:#7cf08a} .l-pet{color:#d9f7a8} .l-say{color:#8fd0ff} .l-party{color:#cfe3ff} .l-warn{color:#ff8a2a;font-weight:800}
 
 /* menus */
 .menu{min-width:0}
@@ -186,6 +186,26 @@ textarea{width:100%;min-height:60px;background:#000;color:var(--fg);border:1px s
 .rarlegend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;font-weight:800}
 .petinp{background:#000;border:1px solid var(--bronze);border-radius:4px;color:var(--fg);padding:2px 6px;font-weight:700;width:140px}
 
+/* party + people */
+.party{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px}
+.pm{background:var(--stone2);border:1px solid var(--bronze-d);border-radius:6px;padding:4px 8px;min-width:0}
+.pm .pn{font-weight:800;font-size:13px;display:flex;justify-content:space-between;gap:6px;white-space:nowrap;overflow:hidden}
+.pm .role{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pm .bar{height:9px;margin-top:2px}
+.pm.dead{opacity:.45}
+.enccard{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:linear-gradient(90deg,#1c2a3a,var(--stone2));border:1px solid #6a8ab0;border-radius:8px;padding:7px 10px}
+.enccard .who2{font-size:14px}
+.enccard .who2 b{font-family:var(--f-head);font-weight:400;font-size:18px}
+.enccard .acts2{display:flex;gap:6px;flex-wrap:wrap}
+.ab.special{width:auto;min-width:86px;padding:0 10px;border-color:#7cf08a}
+.ab.special .ic{font-family:var(--f-body);font-weight:800;font-size:13px}
+.ab.dodge{border-color:#ff8a2a;box-shadow:0 0 14px #ff8a2a;animation:pulse .4s ease-in-out infinite alternate}
+.ab.combo{border-color:#8fd0ff;box-shadow:0 0 14px #8fd0ff;animation:pulse .5s ease-in-out infinite alternate}
+.aff{height:6px;background:#000;border:1px solid #3a3022;border-radius:2px;overflow:hidden;margin-top:3px;max-width:220px}
+.aff i{display:block;height:100%;background:linear-gradient(90deg,#8fd0ff,#b55cf0)}
+.lfgrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--bronze-d);border-radius:6px;margin-bottom:5px;background:var(--stone2);text-align:left;width:100%}
+.lfgrow.on{border-color:var(--gold);background:#2d2414}
+
 @media (max-width:980px){.grid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:520px){.units{grid-template-columns:1fr}.ab{width:46px;height:46px}.ab .ic{font-size:11px}}
 @media (prefers-reduced-motion:reduce){.ab.react{animation:none}.toast{animation:none}.bar i{transition:none}}
@@ -220,6 +240,8 @@ textarea{width:100%;min-height:60px;background:#000;color:var(--fg);border:1px s
           <div class="portrait" id="tPort">–<span class="lvl" id="tLvl">?</span></div>
         </div>
       </div>
+      <div class="party" id="partyframes" hidden></div>
+      <div class="enccard" id="enccard" hidden><div class="who2" id="encText"></div><div class="acts2" id="encActs"></div></div>
       <div class="petframe" id="petframe" hidden>
         <span class="pn" id="pfName"></span>
         <div class="bar b-hp"><i id="pfHp"></i><span id="pfHpT"></span></div>
@@ -228,6 +250,8 @@ textarea{width:100%;min-height:60px;background:#000;color:var(--fg);border:1px s
       <div class="lootwin" id="lootwin" hidden><ul id="lootList"></ul><button class="btn" data-act="loot">Loot all (L)</button></div>
       <div class="abar">
         <div class="slots" id="slots"></div>
+        <div class="slots"><button class="ab special combo" data-act="combo" id="comboBtn" hidden><span class="key">C</span><span class="ic" id="comboTxt">Combo</span></button>
+          <button class="ab special dodge" data-act="dodge" id="dodgeBtn" hidden><span class="key">D</span><span class="ic">Dodge!</span></button></div>
         <div class="mode">
           <div class="seg" role="group" aria-label="Play mode"><button data-act="mode" data-arg="focus" id="mFocus">Focus</button><button data-act="mode" data-arg="auto" id="mAuto">Auto</button></div>
           <div class="modehint" id="modeHint"></div>
@@ -241,6 +265,7 @@ textarea{width:100%;min-height:60px;background:#000;color:var(--fg);border:1px s
       <nav class="tabs" role="tablist" aria-label="Game menus">
         <button role="tab" data-act="tab" data-arg="quests">Quests <span class="badge" id="qBadge" hidden>!</span></button>
         <button role="tab" data-act="tab" data-arg="char">Character</button>
+        <button role="tab" data-act="tab" data-arg="friends">Friends <span class="badge" id="fBadge" hidden>!</span></button>
         <button role="tab" data-act="tab" data-arg="bags">Bags <span class="badge" id="bBadge" hidden></span></button>
         <button role="tab" data-act="tab" data-arg="mounts">Mounts <span class="badge" id="mBadge" hidden>!</span></button>
         <button role="tab" data-act="tab" data-arg="pets" id="petsTab" hidden>Pets <span class="badge" id="pBadge" hidden>!</span></button>
@@ -510,6 +535,53 @@ function activeMount(){const h=H();if(!h||!h.riding)return null;
 function mountSpeed(m){m=m||activeMount();if(!m)return 0;return Math.min(m.base,RIDING[H().riding].cap)+.05*trainLvl(m.xp||0);}
 function travel(t){return t/(1+mountSpeed());}
 
+/* =================== the world's adventurers =================== */
+/* Each hero's world has 16 named adventurers of their faction. They level with the world, wander the zones,
+   and remember you: affinity grows as you wave, help, group, share loot and clear dungeons together. */
+const NPC_NAMES={concord:['Brienne','Aldous','Merrin','Tobias','Elowen','Garrett','Isla','Corwin','Hazel','Rhys','Maeve','Dorian','Wynn','Celeste','Bram','Odette'],
+  wild:['Kesh','Ruk','Ugra','Thrak','Zula','Vash','Nokka','Grom','Sira','Drogo','Kaja','Tusk','Vela','Morg','Ishara','Brakka']};
+const PERSONALITY={
+  cheerful:{name:'Cheerful',join:.8,lines:{greet:['Hi there! Want to team up?','Oh, a friendly face!','Hey! Room for one more?'],kill:['Got it!','Nice one!','Teamwork!'],combo:['Now! Together!',"Let's do this!"],thanks:['For me? Thank you!',"You're the best."],wipe:['Ow... again?',"We'll get it next time!"],clear:['We did it! That was amazing!']}},
+  gruff:{name:'Gruff',join:.5,lines:{greet:['Hm. You look like you can swing a blade.','Stay out of my way and we will get along.'],kill:['Next.','Hmph.'],combo:["Now. Don't miss."],thanks:['...Appreciated.'],wipe:['Sloppy.'],clear:["Good work. Don't let it go to your head."]}},
+  shy:{name:'Shy',join:.4,lines:{greet:['Oh! Um... hello.','I-is it okay if I tag along?'],kill:['I-I did it.'],combo:['N-now, please!'],thanks:["You didn't have to... thank you."],wipe:['Sorry, that was my fault...'],clear:["I'm glad I came with you."]}},
+  bold:{name:'Bold',join:.9,lines:{greet:["Ha! Another hero! Let's show these beasts!"],kill:['Too easy!',"Who's next?!"],combo:['With me! CHARGE!'],thanks:['A worthy prize!'],wipe:['A minor setback!'],clear:['Songs will be sung of this day!']}},
+  scholarly:{name:'Scholarly',join:.6,lines:{greet:['Fascinating. You seem competent.','Ah, a fellow traveler. Do you read?'],kill:['As predicted.'],combo:['On my mark: now!'],thanks:['This will aid my research.'],wipe:['Statistically, we were due.'],clear:['The tide-runes alone were worth the trip.']}},
+  greedy:{name:'Greedy',join:.7,lines:{greet:['Any loot in it for me?'],kill:['Check the pockets!'],combo:['For the treasure!'],thanks:["Now we're talking!"],wipe:['I lost my good boots for this?'],clear:['Payday!']}},
+};
+const AFFINITY=[{n:'Stranger',at:0},{n:'Acquaintance',at:10},{n:'Friend',at:30},{n:'Close Friend',at:60},{n:'Sworn Ally',at:100}];
+const ROLE_OF={warrior:'tank',priest:'heal',mage:'dps',rogue:'dps',hunter:'dps'};
+const ROLE_NAME={tank:'Tank',heal:'Healer',dps:'Damage'};
+const COMBO={warrior:{name:'Shield and Sword',desc:'A heavy combined strike, and the party takes 30% less damage for 6 seconds.'},
+  priest:{name:'Radiant Covenant',desc:'Heals the whole party and smites the enemy.'},mage:{name:'Arcane Convergence',desc:'A huge burst of combined magic.'},
+  rogue:{name:'Pincer Ambush',desc:'You strike from both sides for a guaranteed critical hit.'},hunter:{name:'Pack Tactics',desc:'Big damage, and the party deals 20% more for 8 seconds.'}};
+const affLvl=n=>{let l=0;AFFINITY.forEach((a,i)=>{if(n.aff>=a.at)l=i;});return l;};
+function genNpcs(faction){const names=NPC_NAMES[faction].slice().sort(()=>R()-.5),cls=['warrior','priest','mage','rogue','hunter'];
+  return names.map((name,i)=>({id:uid(),name,race:pick(FACTIONS[faction].races),cls:cls[i%5],pers:pick(Object.keys(PERSONALITY)),offset:rint(-3,3),aff:0,met:false,notes:[],
+    hair:pick(['#6b4423','#e8c070','#2b2b2b','#a03020','#d8d8d8','#4a2a1a','#7a5ab0'])}));}
+function npcLvl(n){return clamp(H().lvl+n.offset,1,LEVEL_CAP);}
+function npcZone(n){return npcLvl(n)<10?FACTIONS[H().faction].start:'fens';}
+function npcOf(id){return (H().npcs||[]).find(n=>n.id===id);}
+function noteNpc(n,t){n.notes=n.notes||[];n.notes.unshift(t);if(n.notes.length>6)n.notes.length=6;}
+function say(n,kind){const L=PERSONALITY[n.pers].lines[kind];if(L)line(`${n.name}: ${pick(L)}`,'l-say');}
+function addAff(n,v,note){const b=affLvl(n);n.aff=Math.max(0,n.aff+v);n.met=true;if(note)noteNpc(n,note);const a=affLvl(n);
+  if(a>b){toast(`${n.name} is now your ${AFFINITY[a].n}`);slog(`${n.name} became your ${AFFINITY[a].n.toLowerCase()}.`);if(a===2)line(`You and ${n.name} can now combine abilities in a fight.`,'l-sys');}}
+function compStats(n){const l=npcLvl(n),role=ROLE_OF[n.cls],g=1+.08*Math.max(0,(H().dstats?H().dstats.best:-1)+1),am=1+.03*affLvl(n);
+  return {lvl:l,role,hpMax:Math.round((60+l*26)*(role==='tank'?1.9:1)*g),dps:(6+l*2.6)*(role==='dps'?1.4:role==='tank'?.75:.45)*g*am,hps:(5+l*2.6)*g*am,armor:l*30*(role==='tank'?3:1)};}
+
+/* =================== the Drowned Sanctum =================== */
+const SANCTUM={name:'The Drowned Sanctum',minLvl:17,
+  enc:[
+    {name:'Drowned Acolytes',n:3,lvl:18,kind:'humanoid',col:'#2a5a8a'},
+    {name:'Tidecaller Shamans',n:2,lvl:19,kind:'humanoid',col:'#3a7a9a'},
+    {boss:true,name:'Tide Warden Ossak',lvl:20,kind:'humanoid',col:'#1f6a6a',hpM:8,dmgM:2.2,mech:{wave:14},loot:2},
+    {name:'Gloomfin Brutes',n:3,lvl:19,kind:'humanoid',col:'#3a8a7a'},
+    {boss:true,name:'Mother Murk',lvl:20,kind:'beast',fam:'croc',col:'#3a5a2a',hpM:9,dmgM:2.3,mech:{surge:16,wave:22},loot:2},
+    {name:'Abyssal Lurkers',n:2,lvl:20,kind:'beast',fam:'croc',col:'#1a3a4a'},
+    {boss:true,final:true,name:"Ysh'Kara, the Tide Beneath",lvl:21,kind:'beast',fam:'lizard',col:'#3a2a7a',hpM:12,dmgM:2.5,mech:{wave:15,surge:19,enrage:150},loot:3}]};
+const DUN_MODS={fortified:{name:'Fortified',desc:'Non-boss enemies have 30% more health.'},tyrannical:{name:'Tyrannical',desc:'Bosses have 30% more health and hit 15% harder.'},
+  raging:{name:'Raging',desc:'Enemies below 30% health deal 40% more damage.'},tidal:{name:'Tidal',desc:'Boss waves and surges come 30% more often.'}};
+const tierMult=t=>Math.pow(1.3,t);
+
 /* =================== state =================== */
 /* One save holds every character. S.cur is the id of the one being played. */
 const MAX_CHARS=8;
@@ -525,7 +597,7 @@ function migrate(o){
 }
 function newHero(name,faction,race,cls){
   const h={id:uid(),log:[],lastPlayed:Date.now(),name,faction,race,cls,lvl:1,xp:0,rested:0,money:0,zone:FACTIONS[faction].start,gear:{},bags:[],talents:{},
-    quests:{active:[],done:{},prog:{},rewards:{}},addons:{unl:{},on:{}},mode:'focus',grind:null,pets:[],activePet:null,riding:0,mounts:[],mount:null,
+    quests:{active:[],done:{},prog:{},rewards:{}},addons:{unl:{},on:{}},mode:'focus',grind:null,pets:[],activePet:null,riding:0,mounts:[],mount:null,npcs:genNpcs(faction),party:[],dun:null,dstats:{clears:0,best:-1,runs:0},
     stats:{kills:0,deaths:0,loots:0,junkSold:0,quests:0,equips:0,manual:0,uses:0,play:0,money:0,feeds:0,tamed:0},avg:{cycle:30,xp:20,money:5},seenAddons:true};
   const K=CLASSES[cls];
   h.gear.weapon=genItem(1,1,'weapon',{cls,type:K.weap[0]});
@@ -564,7 +636,7 @@ function moneyTxt(c){c=Math.floor(c);const g=Math.floor(c/10000),s=Math.floor(c%
 /* =================== combat runtime =================== */
 let C=null;
 function freshC(){return {phase:'seek',t:1.5,mob:null,hp:ST?ST.hpMax:100,res:0,cp:0,gcd:0,cast:null,cds:{},buffs:{},win:{},swing:0,ai:0,aiArmed:false,
-  absorb:0,loot:null,fightT:0,lastCast:-99,run:0,lastInput:-99,lastKill:0,err:'',errT:0,lines:[],fx:[],anim:{hero:0,mob:0}};}
+  absorb:0,loot:null,party:[],fightT:0,lastCast:-99,run:0,lastInput:-99,lastKill:0,err:'',errT:0,lines:[],fx:[],anim:{hero:0,mob:0}};}
 function aiOn(){return H().mode==='auto'||C.run-C.lastInput>15;}
 function engaged(){return H().mode==='focus'&&C.run-C.lastInput<=10;}
 function macroRank(){const h=H();if(!(h.addons.unl.macro&&h.addons.on.macro))return 0;const u=h.stats.manual;return u>=6000?3:u>=2000?2:1;}
@@ -577,7 +649,7 @@ function slog(m){const h=H();if(!h)return;h.log=h.log||[];h.log.unshift(m);if(h.
 /* ---- damage helpers ---- */
 function critRoll(extra){return R()*100<(C.buffs.vendetta?100:ST.crit+(extra||0));}
 function wroll(){return ST.w.min+R()*(ST.w.max-ST.w.min)+ST.ap/14*ST.w.speed+(C.buffs.cry?C.buffs.cry.ap/14*ST.w.speed:0);}
-function dmgMods(){let m=(1+T('dmg')/100)*(C.mob&&C.mob.marked>0?1.1:1)*(C.buffs.howl?1.1:1);const d=C.mob.lvl-H().lvl;if(d>0)m*=1-.04*d;if(RACES[H().race].bloodrage&&C.hp<ST.hpMax*.3)m*=1.1;return m;}
+function dmgMods(){let m=(1+T('dmg')/100)*(C.mob&&C.mob.marked>0?1.1:1)*(C.buffs.howl?1.1:1)*(C.buffs.pack?1.2:1);const d=C.mob.lvl-H().lvl;if(d>0)m*=1-.04*d;if(RACES[H().race].bloodrage&&C.hp<ST.hpMax*.3)m*=1.1;return m;}
 function hitMob(amount,o){
   o=o||{};const m=C.mob;if(!m)return 0;
   if(o.phys&&!o.sure&&R()<.05+.005*Math.max(0,m.lvl-H().lvl)){line(`${o.label||'Your attack'} was dodged by ${m.name}.`,'l-hit');fx('Dodge','#ccc','mob');
@@ -623,7 +695,7 @@ const ABIL={
   ],
   priest:[
     {id:'smite',name:'Holy Smite',lvl:1,cast:()=>2,cost:()=>22+lv()*3,desc:'Holy damage. 2 second cast.',ai:()=>true,fn:()=>{hitMob(12+lv()*3.9+ST.sp*.7,{label:'Holy Smite'});sparkChance();}},
-    {id:'mend',name:'Mend',lvl:1,cast:()=>2,cost:()=>25+lv()*3.5,desc:'Heals you. 2 second cast.',cond:()=>C.hp<ST.hpMax,ai:()=>C.hp<ST.hpMax*.45,fn:()=>{healHero(30+lv()*9+ST.sp*.8,'Mend');sparkChance();}},
+    {id:'mend',name:'Mend',lvl:1,cast:()=>2,cost:()=>25+lv()*3.5,desc:'Heals you, or whoever in your party is hurt worst. 2 second cast.',cond:()=>C.hp<ST.hpMax||partyAlive().some(p=>p.hp<compStats(p.n).hpMax),ai:()=>C.hp<ST.hpMax*.45||partyAlive().some(p=>p.hp<compStats(p.n).hpMax*.45),fn:()=>{const amt=30+lv()*9+ST.sp*.8;if(partyAlive().length)healLowest(amt*(1+T('heal')/100),'Mend');else healHero(amt,'Mend');sparkChance();}},
     {id:'ward',name:'Ward of Light',lvl:2,cd:12,cost:()=>25+lv()*3,desc:'Absorbs damage for 30 seconds. 12 second cooldown.',cond:()=>C.absorb<=0,ai:()=>true,fn:()=>{C.absorb=(30+lv()*8+ST.sp*.5)*(1+T('heal')/100);C.buffs.absorb={t:30};line('A Ward of Light surrounds you.','l-sys');}},
     {id:'rot',name:'Shadow Rot',lvl:4,cost:()=>20+lv()*2.5,desc:'Shadow damage over 15 seconds.',cond:()=>!C.mob.dots.rot,ai:()=>C.mob.hp>C.mob.max*.35,fn:()=>{addDot('rot',(18+lv()*4.5+ST.sp*.5)*(1+T('dot')/100),15,'Shadow Rot');line(`${C.mob.name} is afflicted by Shadow Rot.`,'l-hit');}},
     {id:'spark',name:'Divine Spark',lvl:1,react:'spark',cost:()=>0,desc:'Only when Divine Spark lights up. An instant, free, empowered Smite.',ai:()=>true,fn:()=>{C.win.spark=0;hitMob((12+lv()*3.9+ST.sp*.7)*1.5,{label:'Divine Spark'});}},
@@ -681,6 +753,7 @@ function targetMob(){
   const ok=z.filter(m=>!m.rare&&m.lv[0]<=h.lvl);return ok.length?ok[ok.length-1]:z[0];
 }
 function spawn(){
+  if(H().dun){spawnDungeon();return;}
   const t=targetMob(),lvl=rint(t.lv[0],t.lv[1]),e=!!t.elite,beast=t.kind==='beast';
   const rar=beast?wildRarity(t):0;let name=t.name,col=t.col,petName=t.name;
   if(rar===1)name=petName=`${pick(UNCOMMON_PRE)} ${t.name}`;
@@ -695,6 +768,83 @@ function spawn(){
   line(`You attack ${name} (level ${lvl}${e?' elite':''}${beast&&rar?`, ${RARITY[rar].name.toLowerCase()}`:''}).`,'l-sys');
   if(beast&&rar>=2&&!t.rare)toast(`A ${RARITY[rar].name} beast: ${name}!`);
 }
+/* ---- dungeon runs ---- */
+function startDungeon(tier,party){
+  const h=H();h.party=party.slice(0,4);const keys=Object.keys(DUN_MODS),mods=[],nm=tier>=4?2:tier>=1?1:0;
+  while(mods.length<nm){const k=pick(keys);if(!mods.includes(k))mods.push(k);}
+  h.dun={tier,step:0,mods,wipes:0};h.dstats.runs++;syncParty();for(const p of C.party){p.hp=compStats(p.n).hpMax;p.dead=false;}
+  C.mob=null;C.loot=null;C.enc=null;C.phase='seek';C.t=4;
+  line(`You enter ${SANCTUM.name}${tier?` (Heroic ${tier})`:''}.`,'l-sys');toast(`${SANCTUM.name}${tier?` · Heroic ${tier}`:''}`);
+  if(mods.length)line(`Modifiers: ${mods.map(k=>DUN_MODS[k].name).join(', ')}.`,'l-warn');
+  if(C.party.length)say(pick(C.party).n,'greet');
+}
+function leaveDungeon(msg){const h=H();h.dun=null;C.mob=null;C.loot=null;C.surge=null;C.phase='rest';for(const p of C.party){p.dead=false;}if(msg)line(msg,'l-sys');}
+function spawnDungeon(){
+  const d=H().dun,e=SANCTUM.enc[d.step];if(!e){finishDungeon();return;}
+  const tm=tierMult(d.tier),lvl=e.lvl;let hp,dmg;
+  if(e.boss){hp=(30+lvl*28)*e.hpM;dmg=(3+lvl*2.3)*e.dmgM;if(d.mods.includes('tyrannical')){hp*=1.3;dmg*=1.15;}}
+  else{hp=(30+lvl*28)*1.1*e.n;dmg=(3+lvl*2.3)*(.6+.4*e.n)*1.3;if(d.mods.includes('fortified'))hp*=1.3;}
+  C.mob={id:'dun'+d.step,dun:true,boss:!!e.boss,final:!!e.final,name:e.n>1?`${e.name} (${e.n})`:e.name,kind:e.kind,fam:e.fam,col:e.col,elite:!!e.boss,lvl,rar:0,traits:[],
+    xpM:e.boss?6:e.n*1.2,max:Math.round(hp*tm),dmg:dmg*tm,armor:lvl*25,speed:2,swing:1.2,dots:{},chill:0,marked:0,mech:e.mech||null,
+    tidal:d.mods.includes('tidal'),raging:d.mods.includes('raging'),lootN:e.loot||0};
+  C.mob.hp=C.mob.max;C.phase='fight';C.fightT=0;C.swing=.4;C.cp=0;C.win={};C.taming=null;C.surge=null;C.guardUsed=false;C.charged=false;
+  C.petSwing=.8;C.petCd=(petOf()&&FAMILIES[petOf().family].ab==='charge')?.5:4;
+  if(C.mob.mech){C.waveT=(C.mob.mech.wave||0)*.6;C.surgeT=(C.mob.mech.surge||0)*.7;}
+  if(H().cls==='rogue'&&H().lvl>=4)openWin('opening',3);
+  line(`${e.boss?'Boss: ':''}${C.mob.name} (level ${lvl}).`,e.boss?'l-warn':'l-sys');if(e.boss)toast(`Boss: ${e.name}`);
+}
+function dunKill(m){
+  const h=H(),d=h.dun;for(const p of C.party)addAff(p.n,m.boss?2:.5);
+  const alive=partyAlive();if(alive.length&&R()<(m.boss?.9:.35))say(pick(alive).n,'kill');
+  d.step++;C.dunDone=d.step>=SANCTUM.enc.length;
+  if(m.boss)slog(`Defeated ${m.name}${d.tier?` (Heroic ${d.tier})`:''}.`);
+  const junk={money:Math.round(m.lvl*rint(4,9)*(m.boss?6:1)),items:R()<.5?[genJunk(m.lvl,m.kind==='beast'?'beast':'humanoid')]:[]};takeLoot(junk,false);
+  const gear=[];for(let i=0;i<m.lootN;i++){const ep=m.final&&R()<.15+.03*d.tier;gear.push(genItem(m.lvl+1+2*d.tier+(ep?3:0),ep?4:3,pick(SLOTS),{cls:R()<.7?h.cls:undefined}));}
+  if(!gear.length){afterDungeonPull();return;}
+  if((h.addons.unl.autoloot&&h.addons.on.autoloot)||aiOn()){
+    for(const it of gear){if(canEquip(it)&&score(it)>score(h.gear[it.slot]))takeLoot({money:0,items:[it]},false);else giveLoot(it);}afterDungeonPull();return;}
+  C.loot={money:0,items:gear,dun:true};C.phase='loot';C.t=40;
+}
+function giveLoot(it){const ps=partyAlive().length?partyAlive():C.party;if(!ps.length)return;const p=pick(ps);
+  addAff(p.n,5,`You gave them [${it.name}].`);say(p.n,'thanks');line(`You give [${it.name}] to ${p.n.name}.`,'l-loot');}
+function dunLootAct(id,give){if(!C.loot||!C.loot.dun)return;const i=C.loot.items.findIndex(x=>x.id===id);if(i<0)return;const it=C.loot.items.splice(i,1)[0];C.lastInput=C.run;
+  if(give)giveLoot(it);else takeLoot({money:0,items:[it]},true);if(!C.loot.items.length)afterDungeonPull();}
+function afterDungeonPull(){
+  C.loot=null;C.surge=null;C.buffs.vendetta=null;if(C.dunDone){C.dunDone=false;finishDungeon();return;}
+  for(const p of C.party)if(p.dead){p.dead=false;p.hp=compStats(p.n).hpMax*.3;line(`${p.n.name} gets back on their feet.`,'l-sys');}
+  const mana=CLASSES[H().cls].res==='mana';
+  const low=C.hp<ST.hpMax*.6||(mana&&C.res<ST.resMax*.45)||C.party.some(p=>p.hp<compStats(p.n).hpMax*.6);
+  if(low){C.phase='rest';line('The party catches its breath.','l-sys');}else{C.phase='seek';C.t=4;}
+}
+function finishDungeon(){
+  const h=H(),d=h.dun;h.dstats.clears++;const first=d.tier>h.dstats.best;h.dstats.best=Math.max(h.dstats.best,d.tier);
+  for(const p of C.party){addAff(p.n,10,`Cleared ${SANCTUM.name}${d.tier?` (Heroic ${d.tier})`:''} together at level ${h.lvl}.`);}
+  if(C.party.length)say(pick(C.party).n,'clear');
+  slog(`Cleared ${SANCTUM.name}${d.tier?` on Heroic ${d.tier}`:''}${d.wipes?` after ${d.wipes} wipe${d.wipes>1?'s':''}`:' without a wipe'}.`);
+  toast(`${SANCTUM.name} cleared!${first?` Heroic ${d.tier+1} unlocked.`:''}`);
+  const tier=d.tier;
+  if(h.addons.unl.lfg&&h.addons.on.lfg&&C.party.length===4){leaveDungeon();startDungeon(tier,h.party);line('LFG Tool: queued your group for another run.','l-sys');}
+  else leaveDungeon(`You leave ${SANCTUM.name}.`);
+}
+/* ---- meeting people in the world ---- */
+function maybeEncounter(){const h=H();if(h.dun||C.enc||R()>.12)return;
+  const here=(h.npcs||[]).filter(n=>npcZone(n)===h.zone&&!(h.party||[]).includes(n.id));if(!here.length)return;
+  const n=pick(here);C.enc={id:n.id,t:25,kind:pick(['fighting','resting','questing']),waved:false};n.seen=(n.seen||0)+1;}
+function encAct(kind){const h=H(),e=C.enc;if(!e)return;const n=npcOf(e.id);if(!n){C.enc=null;return;}C.lastInput=C.run;const z=ZONES[h.zone].name;
+  if(kind==='wave'){if(!e.waved){e.waved=true;addAff(n,1,n.met?null:`Met in ${z} at level ${h.lvl}.`);say(n,'greet');}return;}
+  if(kind==='help'&&e.kind==='fighting'){addAff(n,3,`You helped them in a fight in ${z}.`);say(n,'thanks');gainXP(Math.round((h.lvl*5+45)*.6),false);C.enc=null;return;}
+  if(kind==='invite'){
+    if(h.party.length>=4){err('Your party is full (4).');return;}
+    if(Math.abs(npcLvl(n)-h.lvl)>4){line(`${n.name}: You're a bit out of my league... another time.`,'l-say');C.enc=null;return;}
+    const ok=affLvl(n)>=1||R()<PERSONALITY[n.pers].join;
+    if(ok){if(!n.met)noteNpc(n,`Met in ${z} at level ${h.lvl}.`);addAff(n,1,`Grouped up in ${z}.`);n.joinedAt=C.run;h.party.push(n.id);syncParty();say(n,'greet');line(`${n.name} joins your party.`,'l-sys');}
+    else{n.met=true;line(`${n.name}: Maybe another time.`,'l-say');}
+    C.enc=null;}
+}
+function partyUpkeep(){const h=H();if(h.dun)return;
+  for(const id of [...h.party]){const n=npcOf(id);if(!n){h.party=h.party.filter(x=>x!==id);continue;}
+    const stranger=affLvl(n)<1&&C.run-(n.joinedAt||0)>480,gap=Math.abs(npcLvl(n)-h.lvl)>5;
+    if(stranger||gap){line(`${n.name}: I have to head off. Good luck out there!`,'l-say');h.party=h.party.filter(x=>x!==id);syncParty();}}}
 /* ---- pets in combat ---- */
 function petHit(mult,label){
   const p=petOf(),m=C.mob;if(!p||p.hp<=0||!m)return 0;const ps=petStats(p);
@@ -751,6 +901,8 @@ function onKill(){
   line(`${m.name} dies.`,'l-sys');
   // xp
   let x=Math.round(killXP(m)*(m.xpM||1));if(engaged())x=Math.round(x*1.1);gainXP(x,true);petGain(x);
+  if(m.dun){dunKill(m);return;}
+  for(const p of C.party){addAff(p.n,.2);}if(C.party.length&&R()<.15)say(pick(C.party).n,'kill');
   // quest progress
   for(const qid of h.quests.active){const q=ALLQ[qid];if(q.mob!==m.id)continue;const p=h.quests.prog[qid]||0;if(p>=q.n)continue;
     if(q.type==='kill'||R()<.6){h.quests.prog[qid]=p+1;const it=q.type==='kill'?`${m.name} slain`:ZONES[q.zone].mobs.find(x=>x.id===q.mob).drop;
@@ -783,13 +935,14 @@ function takeLoot(loot,manual){
   if(manual)h.stats.loots++;
 }
 function afterFight(){
+  if(H().dun){afterDungeonPull();return;}
   const h=H();C.loot=null;C.buffs.vendetta=null;
   const lowGear=SLOTS.some(s=>h.gear[s]&&h.gear[s].dur<30);
   const sweep=h.addons.unl.sweep&&h.addons.on.sweep;
   if(aiOn()&&(lowGear||(sweep&&h.bags.length>=16))){C.phase='town';C.t=travel(10);line('Heading back to town.','l-sys');return;}
   const mana=CLASSES[h.cls].res==='mana';
   if(C.hp<ST.hpMax*.55||(mana&&C.res<ST.resMax*.4)){C.phase='rest';line('You sit down to rest.','l-sys');return;}
-  C.phase='seek';C.t=travel(2.5);
+  C.phase='seek';C.t=travel(2.5);maybeEncounter();
 }
 function gainXP(x,kill){
   const h=H();if(h.lvl>=LEVEL_CAP){return;}
@@ -810,7 +963,8 @@ function die(){
   const h=H();h.stats.deaths++;C.mob=null;C.cast=null;C.loot=null;C.phase='dead';C.t=15+h.lvl;C.absorb=0;C.buffs={};
   for(const s of SLOTS){const it=h.gear[s];if(it)it.dur=Math.max(0,it.dur-10);}recalc();
   line('You have died. Your gear lost 10% durability.','l-hurt');toast('You have died');slog(`Died at level ${h.lvl}.`);
-  C.taming=null;const p=petOf();if(p&&p.hp>0){p.hp=0;p.happy=Math.max(0,p.happy-10);line(`${p.name} falls beside you.`,'l-hurt');}
+  C.taming=null;C.surge=null;const p=petOf();if(p&&p.hp>0){p.hp=0;p.happy=Math.max(0,p.happy-10);line(`${p.name} falls beside you.`,'l-hurt');}
+  if(h.dun){h.dun.wipes++;line('The party wipes. Everyone runs back in.','l-hurt');for(const q of C.party){q.dead=false;q.hp=compStats(q.n).hpMax;}if(C.party.length)say(pick(C.party).n,'wipe');}
 }
 function petTick(h,phase){
   const he=H(),p=petOf();if(!p)return;const ps=petStats(p);
@@ -837,8 +991,11 @@ function step(h){
     case 'seek':C.t-=h;C.hp=Math.min(ST.hpMax,C.hp+ST.hpMax*.01*h);if(mana)C.res=Math.min(ST.resMax,C.res+ST.resMax*.02*h);if(C.t<=0)spawn();break;
     case 'rest':{C.hp=Math.min(ST.hpMax,C.hp+ST.hpMax*.07*h);if(mana)C.res=Math.min(ST.resMax,C.res+ST.resMax*.07*h);
       const p=petOf(),petOk=!p||p.hp<=0?!(p&&C.reviving>0):p.hp>=petStats(p).hpMax*.9;
-      if(C.hp>=ST.hpMax*.97&&(!mana||C.res>=ST.resMax*.95)&&petOk){C.phase='seek';C.t=travel(2.5);}break;}
-    case 'loot':C.t-=h;if(C.t<=0){if(C.loot&&aiOn()&&C.loot.money)takeLoot({money:C.loot.money,items:[]},false);if(C.loot&&C.loot.items.length)line('The corpse decays. Some loot was left behind.','l-hurt');afterFight();}break;
+      const partyOk=C.party.every(q=>q.dead||q.hp>=compStats(q.n).hpMax*.9);
+      if(C.hp>=ST.hpMax*.97&&(!mana||C.res>=ST.resMax*.95)&&petOk&&partyOk){C.phase='seek';C.t=he.dun?4:travel(2.5);}break;}
+    case 'loot':C.t-=h;if(C.t<=0){
+      if(C.loot&&C.loot.dun){for(const it of C.loot.items)giveLoot(it);afterDungeonPull();break;}
+      if(C.loot&&aiOn()&&C.loot.money)takeLoot({money:C.loot.money,items:[]},false);if(C.loot&&C.loot.items.length)line('The corpse decays. Some loot was left behind.','l-hurt');afterFight();}break;
     case 'dead':C.t-=h;if(C.t<=0){C.hp=ST.hpMax*.5;if(mana)C.res=ST.resMax*.5;C.phase='rest';line('You return to your body.','l-sys');}break;
     case 'town':C.t-=h;if(C.t<=0){C.phase='intown';line(`You arrive at ${hubName()}.`,'l-sys');
         if(he.addons.unl.sweep&&he.addons.on.sweep)sellJunk(true);if(he.addons.unl.petcare&&he.addons.on.petcare&&he.bags.filter(i=>i.food).length<3)buyFood(true);C.townT=3;}break;
@@ -846,10 +1003,71 @@ function step(h){
     case 'fight':fight(h,mana);break;
   }
   if(he.pets&&he.pets.length)petTick(h,C.phase);
-  if(C.phase==='seek'||C.phase==='town'){const mt=activeMount();if(mt){const b=trainLvl(mt.xp||0);mt.xp=(mt.xp||0)+h;const a=trainLvl(mt.xp);
+  if(C.phase!=='fight')for(const q of C.party){if(q.dead)continue;const mx=compStats(q.n).hpMax;q.hp=Math.min(mx,q.hp+mx*(C.phase==='rest'?.08:.02)*h);}
+  if(C.enc){C.enc.t-=h;if(C.enc.t<=0||he.dun)C.enc=null;}
+  C.upk=(C.upk||0)+h;if(C.upk>=1){C.upk=0;partyUpkeep();}
+  if(!he.dun&&(C.phase==='seek'||C.phase==='town')){const mt=activeMount();if(mt){const b=trainLvl(mt.xp||0);mt.xp=(mt.xp||0)+h;const a=trainLvl(mt.xp);
     if(a>b){toast(`${mt.name} is now ${MOUNT_TRAIN[a].n}`);slog(`${mt.name} reached ${MOUNT_TRAIN[a].n} training.`);}}}
   if(C.phase!=='fight'&&C.cast)C.cast=null;
   C.anim.pet=Math.max(0,(C.anim.pet||0)-h);
+}
+/* ---- party combat ---- */
+function syncParty(){const h=H();C.party=(h.party||[]).map(id=>{const n=npcOf(id);if(!n)return null;const old=(C.party||[]).find(p=>p.id===id);
+  return old?Object.assign(old,{n}):{id,n,hp:compStats(n).hpMax,swing:1+R(),healT:1.5,dead:false};}).filter(Boolean);}
+function partyAlive(){return (C&&C.party||[]).filter(p=>!p.dead);}
+function hasRole(r){return partyAlive().some(p=>ROLE_OF[p.n.cls]===r);}
+function compsAct(h){
+  for(const p of C.party){if(p.dead)continue;const s=compStats(p.n);
+    p.swing-=h;if(p.swing<=0&&C.mob){p.swing=2;let a=s.dps*2*(.85+R()*.3)*(C.buffs.pack?1.2:1)*(C.mob.marked>0?1.1:1);const crit=R()<.1;if(crit)a*=2;a=Math.max(1,Math.round(a*.85));
+      C.mob.hp-=a;fx(String(a)+(crit?'!':''),crit?'#ffd24a':'#cfe3ff','mob',crit);if(crit||R()<.25)line(`${p.n.name} ${crit?'crits':'hits'} ${C.mob.name} for ${a}.`,'l-party');
+      if(C.mob.hp<=0){onKill();return;}}
+    if(s.role==='heal'){p.healT-=h;if(p.healT<=0){p.healT=2.5;healLowest(s.hps*2.5,p.n.name);}}}
+}
+function healLowest(amount,who){
+  const opts=[{k:'hero',pct:C.hp/ST.hpMax}];for(const p of partyAlive())opts.push({k:p,pct:p.hp/compStats(p.n).hpMax});
+  const pet=petOf();if(pet&&pet.hp>0)opts.push({k:'pet',pct:pet.hp/petStats(pet).hpMax});
+  opts.sort((a,b)=>a.pct-b.pct);const t=opts[0];if(t.pct>=.98)return;const a=Math.round(amount);
+  if(t.k==='hero'){C.hp=Math.min(ST.hpMax,C.hp+a);fx('+'+a,'#7cf08a','hero');line(`${who} heals you for ${a}.`,'l-heal');}
+  else if(t.k==='pet'){pet.hp=Math.min(petStats(pet).hpMax,pet.hp+a);fx('+'+a,'#7cf08a','pet');}
+  else{t.k.hp=Math.min(compStats(t.k.n).hpMax,t.k.hp+a);fx('+'+a,'#7cf08a','party');if(R()<.3)line(`${who} heals ${t.k.n.name===who?'themselves':t.k.n.name} for ${a}.`,'l-heal');}
+}
+function pickTarget(){
+  const opts=[],tankUp=hasRole('tank');opts.push({k:'hero',w:H().cls==='warrior'?(tankUp?2:6):1});
+  const pet=petOf();if(pet&&pet.hp>0)opts.push({k:'pet',w:petStats(pet).taunt*4});
+  for(const p of partyAlive()){const r=ROLE_OF[p.n.cls];opts.push({k:p,w:r==='tank'?8:r==='heal'?1.3:1});}
+  let r=R()*opts.reduce((s,o)=>s+o.w,0);for(const o of opts){r-=o.w;if(r<=0)return o.k;}return 'hero';
+}
+function hitComp(p,raw){const s=compStats(p.n);let a=raw*(1-s.armor/(s.armor+400+85*C.mob.lvl))*(C.buffs.bulwark?.7:1);a=Math.max(1,Math.round(a));
+  p.hp-=a;fx('-'+a,'#ffb38a','party');if(p.hp<=0){p.hp=0;p.dead=true;line(`${p.n.name} has fallen!`,'l-hurt');}}
+function hitPet(raw){const pp=petOf(),ps=petStats(pp);let a=raw*(1-ps.armor/(ps.armor+400+85*C.mob.lvl))*(C.buffs.bulwark?.7:1);a=Math.max(1,Math.round(a));
+  pp.hp-=a;line(`${C.mob.name} hits ${petLabel(pp).replace(/^Your /,'your ')} for ${a}.`,'l-hurt');fx('-'+a,'#ff9a7a','pet');if(pp.hp<=0)petDie();}
+/* returns true if the hit killed you */
+function hitHero(raw,label){const m=C.mob,he=H();let a=raw*(1-ST.armor/(ST.armor+400+85*m.lvl));const d=m.lvl-he.lvl;if(d>0)a*=1+.04*d;if(C.buffs.bulwark)a*=.7;a=Math.max(1,Math.round(a));
+  if(C.absorb>0){const ab=Math.min(C.absorb,a);C.absorb-=ab;a-=ab;if(ab)fx('Absorb','#9cc8ff','hero');}
+  if(a>0){C.hp-=a;line(`${label||m.name+' hits you'} for ${a}.`,'l-hurt');fx('-'+a,'#ff6a5a','hero');if(he.cls==='warrior')C.res=Math.min(100,C.res+a/(he.lvl*3+10)*2.5);}
+  if(C.hp<=0){const gp=petOf();
+    if(gp&&gp.hp>0&&bondLvl(gp)>=4&&!C.guardUsed){C.guardUsed=true;C.hp=Math.round(ST.hpMax*.15);gp.hp=Math.max(1,gp.hp-a);line(`${gp.name} throws itself in front of the blow!`,'l-sys');toast(`${gp.name} saved you`);}
+    else{die();return true;}}
+  return false;}
+function bossWave(m){line(`${m.name} calls a Crashing Wave!`,'l-warn');const raw=m.dmg*.8;
+  for(const p of partyAlive())hitComp(p,raw*(.9+R()*.2));const pet=petOf();if(pet&&pet.hp>0)hitPet(raw);return hitHero(raw,'The Crashing Wave hits you');}
+function bossSurge(m){const raw=m.dmg*3;
+  for(const p of partyAlive()){if(R()>=.45+.1*affLvl(p.n))hitComp(p,raw*.8);}
+  if(C.dodged){line('You dodge the Tidal Surge.','l-sys');fx('Dodged!','#7cf08a','hero');return false;}
+  return hitHero(raw,'The Tidal Surge slams you');}
+function dodgeNow(){if(!(C.win.dodge>0&&C.surge))return;C.dodged=true;C.win.dodge=0;C.lastInput=C.run;line('You brace and leap clear.','l-sys');}
+function doCombo(manual){
+  const p=C.party.find(x=>x.id===C.comboWith&&!x.dead);if(!p||!(C.win.combo>0)||!C.mob)return;C.win.combo=0;if(manual)C.lastInput=C.run;
+  const n=p.n,s=compStats(n),am=1+.15*Math.max(0,affLvl(n)-2),base=(ST.melee?wroll():20+H().lvl*4+ST.sp)*am,ck=COMBO[n.cls];
+  line(`Combo with ${n.name}: ${ck.name}!`,'l-sys');toast(`${ck.name}!`);addAff(n,1);
+  switch(n.cls){
+    case 'warrior':C.buffs.bulwark={t:6};hitMob(base*2+s.dps*6,{sure:1,label:ck.name});break;
+    case 'priest':{const pct=.25*am;C.hp=Math.min(ST.hpMax,C.hp+ST.hpMax*pct);for(const q of partyAlive())q.hp=Math.min(compStats(q.n).hpMax,q.hp+compStats(q.n).hpMax*pct);
+      const pet=petOf();if(pet&&pet.hp>0)pet.hp=Math.min(petStats(pet).hpMax,pet.hp+petStats(pet).hpMax*pct);fx('+heal','#7cf08a','hero');hitMob(base*1.2,{sure:1,label:ck.name});break;}
+    case 'mage':hitMob(base*1.5+s.dps*10,{sure:1,label:ck.name});break;
+    case 'rogue':hitMob(base*2.2+s.dps*6,{sure:1,critBonus:100,label:ck.name});break;
+    case 'hunter':C.buffs.pack={t:8};hitMob(base*1.3+s.dps*6,{sure:1,label:ck.name});break;
+  }
 }
 function fight(h,mana){
   const m=C.mob,he=H();if(!m){C.phase='seek';C.t=1;return;}
@@ -872,22 +1090,32 @@ function fight(h,mana){
   // dots
   for(const k in m.dots){const d=m.dots[k];d.t-=h;if(d.t<=0){d.t=3;d.left--;const a=Math.max(1,Math.round(d.per*dmgMods()));m.hp-=a;line(`${m.name} suffers ${a} from ${d.label}.`,'l-hit');fx(String(a),'#e6c35a','mob');
     if(d.left<=0)delete m.dots[k];if(m.hp<=0){onKill();return;}}}
-  // mob swing
+  // companions
+  if(C.party.length){compsAct(h);if(!C.mob||C.phase!=='fight')return;}
+  // boss mechanics
+  if(m.mech){
+    if(m.mech.wave){C.waveT-=h;if(C.waveT<=0){C.waveT=m.mech.wave*(m.tidal?.7:1);if(bossWave(m))return;}}
+    if(m.mech.surge&&!C.surge){C.surgeT-=h;if(C.surgeT<=0){C.surgeT=m.mech.surge*(m.tidal?.7:1);C.surge={t:2.5};C.dodged=false;openWin('dodge',2.5);
+      line(`${m.name} begins to cast Tidal Surge!`,'l-warn');toast('Tidal Surge! Press D to dodge');if(aiOn()&&R()<aiEff()*.75)C.dodged=true;}}
+    if(C.surge){C.surge.t-=h;if(C.surge.t<=0){C.surge=null;C.win.dodge=0;if(bossSurge(m))return;}}
+    if(m.mech.enrage&&!m.enraged&&C.fightT>m.mech.enrage){m.enraged=true;line(`${m.name} becomes enraged!`,'l-warn');toast(`${m.name} is enraged`);}
+  }
+  // combined abilities with friends
+  const friends=partyAlive().filter(p=>affLvl(p.n)>=2);
+  if(friends.length&&!(C.win.combo>0)){C.comboT=(C.comboT===undefined?8:C.comboT)-h;if(C.comboT<=0){C.comboT=14+R()*6;const p=pick(friends);C.comboWith=p.id;openWin('combo',5);say(p.n,'combo');}}
+  // mob swing: the enemy picks a target, and tanks draw most attacks
   if(m.chill>0)m.chill-=h;
   m.swing-=h*(m.chill>0?.6:1);
   if(m.swing<=0){m.swing=m.speed;C.anim.mob=-.18;
-    const pp=petOf();
-    if(pp&&pp.hp>0&&R()<petStats(pp).taunt){const ps=petStats(pp);let a=m.dmg*(.85+R()*.3)*(1-ps.armor/(ps.armor+400+85*m.lvl));a=Math.max(1,Math.round(a));
-      pp.hp-=a;line(`${m.name} hits ${petLabel(pp).replace(/^Your /,"your ")} for ${a}.`,'l-hurt');fx('-'+a,'#ff9a7a','pet');if(pp.hp<=0)petDie();}
+    const raw=m.dmg*(.85+R()*.3)*(m.raging&&m.hp<m.max*.3?1.4:1)*(m.enraged?2.5:1);const tg=pickTarget();
+    if(tg==='pet')hitPet(raw);
+    else if(tg!=='hero')hitComp(tg,raw);
     else if(R()*100<ST.dodge){line(`${m.name} attacks. You dodge.`,'l-hit');fx('Dodge','#ccc','hero');if(he.cls==='rogue'&&he.lvl>=6)openWin('riposte',4);}
     else if(ST.melee&&R()<.05){line(`${m.name} attacks. You parry.`,'l-hit');fx('Parry','#ccc','hero');if(he.cls==='rogue'&&he.lvl>=6)openWin('riposte',4);}
-    else{let a=m.dmg*(.85+R()*.3)*(1-ST.armor/(ST.armor+400+85*m.lvl));const d=m.lvl-he.lvl;if(d>0)a*=1+.04*d;a=Math.max(1,Math.round(a));
-      if(C.absorb>0){const ab=Math.min(C.absorb,a);C.absorb-=ab;a-=ab;if(ab)fx('Absorb','#9cc8ff','hero');}
-      if(a>0){C.hp-=a;line(`${m.name} hits you for ${a}.`,'l-hurt');fx('-'+a,'#ff6a5a','hero');if(he.cls==='warrior')C.res=Math.min(100,C.res+a/(he.lvl*3+10)*2.5);}
-      if(C.hp<=0){const gp=petOf();
-        if(gp&&gp.hp>0&&bondLvl(gp)>=4&&!C.guardUsed){C.guardUsed=true;C.hp=Math.round(ST.hpMax*.15);gp.hp=Math.max(1,gp.hp-a);line(`${gp.name} throws itself in front of the blow!`,'l-sys');toast(`${gp.name} saved you`);}
-        else{die();return;}}}}
+    else if(hitHero(raw))return;}
   // the hero's decision
+  if(aiOn()&&C.win.combo>0&&C.win.combo_ai)doCombo(false);
+  if(!C.mob)return;
   if(aiOn()&&!C.cast&&!C.taming&&C.gcd<=0){
     if(!C.aiArmed){C.aiArmed=true;C.ai=(1-aiEff())*1.5;}
     else{C.ai-=h;if(C.ai<=0){C.aiArmed=false;
@@ -896,7 +1124,7 @@ function fight(h,mana){
 }
 function hubName(){const z=ZONES[H().zone];return typeof z.hub==='string'?z.hub:z.hub[H().faction];}
 function giver(q){return Array.isArray(q.giver)?q.giver[H().faction==='concord'?0:1]:q.giver;}
-function goTown(){if(C.phase==='fight'){err("You can't leave in the middle of a fight.");return;}C.phase='town';C.t=travel(10);C.mob=null;line('Heading back to town.','l-sys');}
+function goTown(){if(H().dun){err('Leave the dungeon first.');return;}if(C.phase==='fight'){err("You can't leave in the middle of a fight.");return;}C.phase='town';C.t=travel(10);C.mob=null;line('Heading back to town.','l-sys');}
 function leaveTown(){C.phase='seek';C.t=travel(6);line('You head back out.','l-sys');}
 
 /* ---- items & vendor ---- */
@@ -945,6 +1173,7 @@ const ADDONS=[
   {id:'gearcmp',name:'GearCompare',desc:'Equips upgrades automatically when you pick them up.',req:'Equip 12 items by hand',prog:()=>[H().stats.equips,12]},
   {id:'macro',name:'Rotation Macro',desc:'Makes Auto mode play your action bar better. Rank 2 at 2,000 presses, rank 3 at 6,000 (catches openings half the time).',req:'Press 500 abilities yourself',prog:()=>[H().stats.manual,500]},
   {id:'petcare',cls:'hunter',name:'PetCare',desc:'Feeds your pet when it gets hungry, and buys meat when you visit town.',req:'Feed your pet 20 times by hand',prog:()=>[H().stats.feeds,20]},
+  {id:'lfg',name:'LFG Tool',desc:'Re-runs the Drowned Sanctum with the same group as soon as you clear it.',req:'Clear the Drowned Sanctum 3 times',prog:()=>[H().dstats.clears,3]},
 ];
 function checkAddons(){const h=H();for(const a of ADDONS){if(h.addons.unl[a.id]||(a.cls&&a.cls!==h.cls))continue;const [x,n]=a.prog();if(x>=n){h.addons.unl[a.id]=true;h.addons.on[a.id]=true;h.seenAddons=false;toast(`Addon installed: ${a.name}`);slog(`Earned the ${a.name} addon.`);line(`Addon installed: ${a.name}.`,'l-sys');}}}
 
@@ -1032,6 +1261,32 @@ bags:{
       <div class="r">${it.mountItem?`<button class="btn sm" data-act="learnmount" data-arg="${it.id}">Learn mount</button>`:''}${can?`<button class="btn sm" data-act="equip" data-arg="${it.id}">Equip</button>`:''}${eats?`<button class="btn sm" data-act="feed" data-arg="${it.id}">Feed ${pet.name}</button>`:''}${town?`<button class="btn sm alt" data-act="sell" data-arg="${it.id}">Sell</button>`:''}</div></div>`;}).join(''):'<p class="meta">Your bags are empty.</p>';
     return o;},
   update(){const b=$('#repBtn');if(b){const c=repairCost();b.innerHTML=c?`Repair (${moneyTxt(c)})`:'Nothing to repair';b.disabled=!c||H().money<c;}}
+},
+friends:{
+  key(){const h=H();return h.party.join(',')+'|'+(h.npcs||[]).filter(n=>n.met).map(n=>n.id+':'+affLvl(n)+':'+npcLvl(n)).join(',')+'|'+!!h.dun+'|'+h.zone+'|'+h.lvl+'|'+h.dstats.clears;},
+  build(){const h=H();const met=(h.npcs||[]).filter(n=>n.met).sort((a,b)=>b.aff-a.aff);const unmet=(h.npcs||[]).length-met.length;
+    let o=`<h3>Friends</h3><p class="sub">Adventurers wander the world beside you. Meet them on the road, group up, and they'll remember you. Friends unlock combined abilities in a fight.</p>`;
+    o+=`<h4>Party ${h.party.length}/4</h4>`;
+    o+=h.party.length?h.party.map(id=>{const n=npcOf(id);if(!n)return '';const al=affLvl(n);return `<div class="rowl"><div class="l"><b style="color:${CLASSES[n.cls].col}">${n.name}</b> <span class="meta">${ROLE_NAME[ROLE_OF[n.cls]]} · level ${npcLvl(n)}</span>
+      <div class="meta">${AFFINITY[al].n}${al>=2?` · Combo: <b>${COMBO[n.cls].name}</b>`:` · combos unlock at Friend`}</div></div>
+      <div class="r">${h.dun?'':`<button class="btn sm alt" data-act="kick" data-arg="${id}">Part ways</button>`}</div></div>`;}).join(''):'<p class="meta">Nobody with you. Invite people you meet on the road, or friends from the list below.</p>';
+    // dungeon
+    o+=`<h4>${SANCTUM.name}</h4>`;
+    if(h.dun)o+=`<p class="meta">You're inside${h.dun.tier?` on Heroic ${h.dun.tier}`:''}. <button class="btn sm alt" data-act="leavedun">Leave dungeon</button></p>`;
+    else{const ok=h.lvl>=SANCTUM.minLvl,inF=h.zone==='fens';
+      o+=`<p class="meta">A five-person dungeon beneath the Greywater Fens: 4 packs and 3 bosses, for level ${SANCTUM.minLvl}+. Bosses use Crashing Waves and Tidal Surges (press D to dodge). Clearing a tier unlocks the next Heroic tier.</p>
+        <p class="meta">Cleared ${h.dstats.clears} time${h.dstats.clears===1?'':'s'}${h.dstats.best>=0?` · best: ${h.dstats.best?'Heroic '+h.dstats.best:'Normal'}`:''}</p>
+        <button class="btn" data-act="lfg" ${ok&&inF?'':'disabled'}>Find a group</button> ${!ok?`<span class="meta">Needs level ${SANCTUM.minLvl}.</span>`:!inF?'<span class="meta">Travel to Greywater Fens first.</span>':''}`;}
+    // people
+    o+=`<h4>People you've met (${met.length})</h4>`;
+    o+=met.length?met.map(n=>{const al=affLvl(n),nx=AFFINITY[al+1],inP=h.party.includes(n.id);return `<div class="rowl" style="align-items:flex-start"><div class="l"><b style="color:${CLASSES[n.cls].col}">${n.name}</b>
+      <span class="meta">level ${npcLvl(n)} ${RACES[n.race].name} ${CLASSES[n.cls].name} · ${PERSONALITY[n.pers].name} · now in ${ZONES[npcZone(n)].name}</span>
+      <div class="meta"><b>${AFFINITY[al].n}</b>${nx?` (${Math.floor(n.aff)} / ${nx.at})`:''}</div><div class="aff"><i style="width:${nx?(n.aff-AFFINITY[al].at)/(nx.at-AFFINITY[al].at)*100:100}%"></i></div>
+      ${n.notes&&n.notes.length?`<div class="meta" style="font-style:italic">${n.notes[0]}</div>`:''}</div>
+      <div class="r">${inP?'<span class="pill" style="color:#7cf08a">In party</span>':(al>=1&&!h.dun?`<button class="btn sm" data-act="invite" data-arg="${n.id}" ${h.party.length>=4||Math.abs(npcLvl(n)-h.lvl)>4?'disabled':''}>Invite</button>`:'')}</div></div>`;}).join(''):'<p class="meta">No one yet. Keep an eye out on the road.</p>';
+    if(unmet)o+=`<p class="meta" style="margin-top:6px">${unmet} more adventurer${unmet>1?'s':''} roam the world. You'll run into them as you travel.</p>`;
+    return o;},
+  update(){}
 },
 mounts:{
   key(){const h=H(),p=petOf();return h.riding+'|'+h.mount+'|'+(h.mounts||[]).map(m=>m.id).join(',')+'|'+inTown()+'|'+h.lvl+'|'+(p?p.id+':'+!!p.mountTrained+':'+bondLvl(p):'');},
@@ -1150,7 +1405,11 @@ function updateWorld(){
   // zone buttons
   const zb=ZONE_ORDER[h.faction].map(id=>`<button class="btn sm ${id===h.zone?'':'alt'}" data-act="zone" data-arg="${id}" ${id===h.zone?'disabled':''}>${ZONES[id].name}</button>`).join('')+
     ` <select class="btn sm alt" id="grindSel" aria-label="Hunt target"><option value="">Hunt: follow quests</option>${z.mobs.filter(m=>!m.rare).map(m=>`<option value="${m.id}" ${h.grind===m.id?'selected':''}>Hunt: ${m.name} (${m.lv[0]}-${m.lv[1]})</option>`).join('')}</select>`;
-  const zk=h.zone+h.grind+h.faction;const zbEl=$('#zoneBtns');if(zbEl.dataset.k!==zk){zbEl.innerHTML=zb;zbEl.dataset.k=zk;}
+  const d=h.dun;
+  if(d){const bosses=SANCTUM.enc.slice(0,d.step).filter(e=>e.boss).length;$('#zoneName').textContent=SANCTUM.name+(d.tier?` · Heroic ${d.tier}`:'');
+    $('#zoneSub').textContent=`Pull ${Math.min(d.step+1,SANCTUM.enc.length)} of ${SANCTUM.enc.length} · Bosses ${bosses}/3${d.wipes?` · ${d.wipes} wipe${d.wipes>1?'s':''}`:''}${d.mods.length?' · '+d.mods.map(k=>DUN_MODS[k].name).join(', '):''}`;}
+  const zk=d?'dun':h.zone+h.grind+h.faction;const zbEl=$('#zoneBtns');
+  if(zbEl.dataset.k!==zk){zbEl.innerHTML=d?'<button class="btn sm alt" data-act="leavedun">Leave dungeon</button>':zb;zbEl.dataset.k=zk;}
   // player frame
   $('#pName').textContent=h.name;$('#pLvl').textContent=h.lvl;$('#pPort').firstChild.textContent=h.name[0];$('#pPort').style.borderColor=K.col;
   $('#pHp').style.width=(Math.max(0,C.hp)/ST.hpMax*100)+'%';$('#pHpT').textContent=`${Math.max(0,Math.ceil(C.hp))} / ${ST.hpMax}`;
@@ -1173,6 +1432,20 @@ function updateWorld(){
     $('#pfHp').style.width=(Math.max(0,pet.hp)/ps.hpMax*100)+'%';$('#pfHpT').textContent=pet.hp>0?`${Math.ceil(pet.hp)} / ${ps.hpMax}`:(C.reviving>0?`Reviving… ${C.reviving.toFixed(1)}s`:'Dead');
     const md=$('#pfMood');md.textContent=moodName(pet);md.style.color=pet.happy>=70?'#7cf08a':pet.happy<30?'#ff6a5a':'var(--muted)';}
   $('#pBadge').hidden=!(pet&&(pet.happy<30||pet.hp<=0));
+  // party frames
+  const pfr=$('#partyframes');pfr.hidden=!C.party.length;
+  if(C.party.length){const pk=C.party.map(p=>p.id).join(',');if(pfr.dataset.k!==pk){pfr.dataset.k=pk;
+      pfr.innerHTML=C.party.map(p=>`<div class="pm" id="pm-${p.id}"><div class="pn"><span style="color:${CLASSES[p.n.cls].col}">${p.n.name}</span><span class="role">${ROLE_NAME[ROLE_OF[p.n.cls]]} · ${npcLvl(p.n)}</span></div><div class="bar b-hp"><i id="pmh-${p.id}"></i><span id="pmt-${p.id}"></span></div></div>`).join('');}
+    for(const p of C.party){const mx=compStats(p.n).hpMax;$('#pm-'+p.id).classList.toggle('dead',p.dead);$('#pmh-'+p.id).style.width=(p.hp/mx*100)+'%';$('#pmt-'+p.id).textContent=p.dead?'Fallen':`${Math.ceil(p.hp)} / ${mx}`;}}
+  // someone you meet on the road
+  const ec=$('#enccard'),e=C.enc,en=e&&npcOf(e.id);ec.hidden=!en;
+  if(en){const ek=e.id+e.kind+e.waved+h.party.length;if(ec.dataset.k!==ek){ec.dataset.k=ek;const K2=CLASSES[en.cls];
+      const what={fighting:`is fighting for their life nearby`,resting:`is resting by a campfire`,questing:`is out questing`}[e.kind];
+      $('#encText').innerHTML=`<b style="color:${K2.col}">${en.name}</b> <span class="meta">level ${npcLvl(en)} ${RACES[en.race].name} ${K2.name} · ${PERSONALITY[en.pers].name}${en.met?` · ${AFFINITY[affLvl(en)].n}`:''}</span><div class="meta">${what}.</div>`;
+      $('#encActs').innerHTML=`${e.waved?'':'<button class="btn sm alt" data-act="encwave">Wave</button>'}${e.kind==='fighting'?'<button class="btn sm" data-act="enchelp">Help them</button>':''}<button class="btn sm" data-act="encinvite" ${h.party.length>=4?'disabled':''}>Invite to group</button>`;}}
+  // combo + dodge
+  const cbn=$('#comboBtn'),cp=C.party.find(x=>x.id===C.comboWith);cbn.hidden=!(C.win.combo>0&&cp&&!cp.dead&&C.phase==='fight');if(!cbn.hidden){$('#comboTxt').textContent=`${COMBO[cp.n.cls].name}`;cbn.title=`Combo with ${cp.n.name}: ${COMBO[cp.n.cls].desc}`;}
+  $('#dodgeBtn').hidden=!(C.win.dodge>0&&C.surge);
   // action bar
   const sk=h.cls+h.lvl+JSON.stringify(h.talents);if(sk!==slotsKey)buildSlots();
   bar().forEach((a,i)=>{const el=$('#ab-'+i);if(!el)return;const learned=knows(a.id);el.classList.toggle('locked',!learned);
@@ -1192,10 +1465,13 @@ function updateWorld(){
   $('#xpT').textContent=h.lvl>=LEVEL_CAP?`Level ${h.lvl} · cap for this version`:`XP ${fmtI(h.xp)} / ${fmtI(need)}${h.rested>0?` · Rested ${fmtI(h.rested)}`:''}`;
   // status + err
   const am=activeMount();
-  const st={seek:am?`Riding ${am.name} to find ${targetMob().name}…`:`Looking for ${targetMob().name}…`,fight:m?`Fighting ${m.name}`:'',loot:'Loot the corpse (L) before it decays',rest:'Resting…',dead:`You are dead. Running back to your corpse: ${Math.ceil(C.t)}s`,town:`Travelling to ${hubName()}: ${Math.ceil(C.t)}s`,intown:`In town at ${hubName()}. Open Bags to sell and repair.`}[C.phase]||'';
+  const st={seek:d?'Moving deeper into the Sanctum…':am?`Riding ${am.name} to find ${targetMob().name}…`:`Looking for ${targetMob().name}…`,fight:m?(C.surge?`${m.name} is casting Tidal Surge! Press D to dodge!`:`Fighting ${m.name}`):'',
+    loot:C.loot&&C.loot.dun?'Boss loot: take it, or give it to a companion':'Loot the corpse (L) before it decays',rest:d||C.party.length?'The party catches its breath…':'Resting…',dead:`You are dead. Running back to your corpse: ${Math.ceil(C.t)}s`,town:`Travelling to ${hubName()}: ${Math.ceil(C.t)}s`,intown:`In town at ${hubName()}. Open Bags to sell and repair.`}[C.phase]||'';
   $('#status').textContent=st;$('#err').textContent=C.errT>0?C.err:'';
   // loot window
-  const lw=$('#lootwin');lw.hidden=!(C.phase==='loot'&&C.loot);if(!lw.hidden){const html=(C.loot.money?`<li>${moneyStr(C.loot.money)}</li>`:'')+C.loot.items.map(it=>`<li>${itemSpan(it)}</li>`).join('');const ll=$('#lootList');if(ll.dataset.h!==html){ll.innerHTML=html;ll.dataset.h=html;}}
+  const lw=$('#lootwin');lw.hidden=!(C.phase==='loot'&&C.loot);if(!lw.hidden){const dl=C.loot.dun;
+    const html=(C.loot.money?`<li>${moneyStr(C.loot.money)}</li>`:'')+C.loot.items.map(it=>`<li style="margin:3px 0">${itemSpan(it)}${dl?` ${canEquip(it)&&score(it)>score(h.gear[it.slot])?'<span class="pill" style="color:#7cf08a">Upgrade</span>':''} <button class="btn sm" data-act="dtake" data-arg="${it.id}">Take</button> <button class="btn sm alt" data-act="dgive" data-arg="${it.id}">Give to a companion</button>`:''}</li>`).join('');
+    const ll=$('#lootList');if(ll.dataset.h!==html){ll.innerHTML=html;ll.dataset.h=html;}}
   // log
   const lg=C.lines.slice(-7).map(l=>`<div class="${l.cls}">${l.txt}</div>`).join('');const le=$('#log');if(le.dataset.h!==lg){le.innerHTML=lg;le.dataset.h=lg;}
   // badges
@@ -1239,6 +1515,27 @@ function deleteChar(id){
   if(!S.chars.length){Arcade.erase(KEY,'realmbound');S=emptyS();CR.name=pick(NAMES);openModal('create',createHTML());return;}
   Arcade.save(KEY,S);openModal('chars',charsHTML());
 }
+function lootAll(){if(!C.loot)return;C.lastInput=C.run;
+  if(C.loot.dun){for(const it of C.loot.items)takeLoot({money:0,items:[it]},true);afterDungeonPull();return;}
+  takeLoot(C.loot,true);C.loot=null;afterFight();}
+/* ---- the group finder ---- */
+let LFG={sel:[],tier:0};
+function lfgOk(n){return n&&npcLvl(n)>=SANCTUM.minLvl-2;}
+function lfgHTML(){const h=H();
+  const friends=h.npcs.filter(n=>n.met&&affLvl(n)>=1&&lfgOk(n)).sort((a,b)=>b.aff-a.aff);
+  const sel=LFG.sel.map(npcOf).filter(Boolean),roles=sel.map(n=>ROLE_OF[n.cls]);
+  const tank=roles.includes('tank')||h.cls==='warrior',heal=roles.includes('heal')||h.cls==='priest';
+  const tiers=[];for(let t=0;t<=h.dstats.best+1;t++)tiers.push(t);
+  return `<h2>${SANCTUM.name}</h2><p class="sub">Pick four companions. Friends fight better, dodge Tidal Surges more often and unlock combos. Strangers fill empty spots.</p>
+  <h4>Your group ${sel.length}/4</h4>
+  ${sel.length?sel.map(n=>`<button class="lfgrow on" data-act="lfgsel" data-arg="${n.id}"><span><b style="color:${CLASSES[n.cls].col}">${n.name}</b> <span class="meta">${ROLE_NAME[ROLE_OF[n.cls]]} · level ${npcLvl(n)} · ${n.met?AFFINITY[affLvl(n)].n:'Stranger'}</span></span><span class="meta">Remove</span></button>`).join(''):'<p class="meta">Nobody picked yet.</p>'}
+  <p class="meta" style="margin:6px 0">${tank?'✓':'✗'} Tank ${h.cls==='warrior'?'(you)':''} · ${heal?'✓':'✗'} Healer ${h.cls==='priest'?'(you)':''}${!tank||!heal?' · Missing roles make bosses much harder.':''}</p>
+  <h4>Friends available</h4>
+  ${friends.filter(n=>!LFG.sel.includes(n.id)).map(n=>`<button class="lfgrow" data-act="lfgsel" data-arg="${n.id}"><span><b style="color:${CLASSES[n.cls].col}">${n.name}</b> <span class="meta">${ROLE_NAME[ROLE_OF[n.cls]]} · level ${npcLvl(n)} · ${AFFINITY[affLvl(n)].n}</span></span><span class="meta">Add</span></button>`).join('')||'<p class="meta">No friends at the right level yet. Strangers can fill the group.</p>'}
+  <div class="mfoot" style="justify-content:flex-start"><button class="btn alt" data-act="lfgfill" ${sel.length>=4?'disabled':''}>Fill with strangers</button></div>
+  <h4>Difficulty</h4><div class="mfoot" style="justify-content:flex-start;margin-top:0">${tiers.map(t=>`<button class="btn sm ${LFG.tier===t?'':'alt'}" data-act="lfgtier" data-arg="${t}">${t?'Heroic '+t:'Normal'}</button>`).join('')}</div>
+  <p class="meta">${LFG.tier?`Enemies are ${Math.round((tierMult(LFG.tier)-1)*100)}% tougher, loot is ${LFG.tier*2} item levels higher, and ${LFG.tier>=4?'two random modifiers apply':'one random modifier applies'} (${Object.values(DUN_MODS).map(m=>m.name).join(', ')}).`:'The first clear unlocks Heroic 1.'}</p>
+  <div class="mfoot"><button class="btn alt" data-act="close">Not now</button><button class="btn" data-act="lfgenter" ${sel.length===4?'':'disabled'}>Enter the Sanctum</button></div>`;}
 function offlineHTML(r){return `<h2>Welcome back</h2><p class="sub">You were away for ${fmtTime(r.sec)}. Your hero rested at the inn and kept hunting while you were gone, at half pace.</p>
   <div class="stats" style="margin:10px 0"><div><span class="meta">Monsters slain</span><b>${fmtI(r.kills)}</b></div><div><span class="meta">Experience</span><b>${fmtI(r.xp)}</b></div><div><span class="meta">Money</span><b>${moneyStr(r.money)}</b></div><div><span class="meta">Rested XP gained</span><b>${fmtI(r.rested)}</b></div>${r.levels?`<div><span class="meta">Levels gained</span><b>${r.levels}</b></div>`:''}</div>
   <p class="meta">Rested experience doubles the XP from kills until it runs out. Loot and quests wait for you.</p><div class="mfoot"><button class="btn" data-act="close">Continue</button></div>`;}
@@ -1263,7 +1560,7 @@ document.addEventListener('click',e=>{
     case 'press':press(Number(arg));break;
     case 'mode':H().mode=arg;C.lastInput=arg==='focus'?C.run:-99;break;
     case 'tab':S.tab=arg;renderTab(true);break;
-    case 'loot':if(C.loot){takeLoot(C.loot,true);C.loot=null;C.lastInput=C.run;afterFight();}break;
+    case 'loot':lootAll();break;
     case 'accept':accept(arg);break;
     case 'abandon':abandon(arg);break;
     case 'turnin':{const [id,c]=arg.split(':');turnIn(id,Number(c),false);break;}
@@ -1273,11 +1570,31 @@ document.addEventListener('click',e=>{
     case 'repair':repairAll(false);break;
     case 'town':goTown();break;
     case 'leavetown':leaveTown();break;
-    case 'zone':if(C.phase==='fight'){err("You can't travel in the middle of a fight.");break;}if(arg==='fens'&&H().lvl<8){err('Greywater Fens is too dangerous before level 8.');break;}H().zone=arg;H().grind=null;C.phase='seek';C.t=travel(12);C.mob=null;line(`You travel to ${ZONES[arg].name}.`,'l-sys');break;
+    case 'zone':if(H().dun){err('Leave the dungeon first.');break;}if(C.phase==='fight'){err("You can't travel in the middle of a fight.");break;}if(arg==='fens'&&H().lvl<8){err('Greywater Fens is too dangerous before level 8.');break;}H().zone=arg;H().grind=null;C.phase='seek';C.t=travel(12);C.mob=null;line(`You travel to ${ZONES[arg].name}.`,'l-sys');break;
     case 'talent':{const h=H(),t=TALENTS[h.cls].list.find(x=>x.id===arg);const r=h.talents[arg]||0;if(talentPoints()>0&&r<t.max&&(!t.req||talentSpent()>=t.req)){h.talents[arg]=r+1;recalc();}break;}
     case 'resettal':H().talents={};recalc();break;
     case 'addon':H().addons.on[arg]=!H().addons.on[arg];break;
     case 'tame':startTame();break;
+    case 'encwave':encAct('wave');break;
+    case 'enchelp':encAct('help');break;
+    case 'encinvite':encAct('invite');break;
+    case 'combo':doCombo(true);break;
+    case 'dodge':dodgeNow();break;
+    case 'dtake':dunLootAct(Number(arg),false);break;
+    case 'dgive':dunLootAct(Number(arg),true);break;
+    case 'leavedun':if(H().dun){leaveDungeon(`You leave ${SANCTUM.name}.`);}break;
+    case 'kick':{const h=H(),n=npcOf(Number(arg));h.party=h.party.filter(x=>x!==Number(arg));syncParty();if(n)line(`${n.name}: Take care. Find me if you need me.`,'l-say');break;}
+    case 'invite':{const h=H(),n=npcOf(Number(arg));if(!n||h.dun||h.party.length>=4||h.party.includes(n.id))break;n.joinedAt=C.run;h.party.push(n.id);syncParty();say(n,'greet');line(`${n.name} comes to meet you and joins your party.`,'l-sys');break;}
+    case 'lfg':{const h=H();LFG.sel=h.party.filter(id=>lfgOk(npcOf(id))).slice(0,4);LFG.tier=Math.max(0,h.dstats.best+1);openModal('lfg',lfgHTML());break;}
+    case 'lfgsel':{const id=Number(arg);if(LFG.sel.includes(id))LFG.sel=LFG.sel.filter(x=>x!==id);else if(LFG.sel.length<4)LFG.sel.push(id);openModal('lfg',lfgHTML());break;}
+    case 'lfgfill':{const h=H();const pool=h.npcs.filter(n=>lfgOk(n)&&!LFG.sel.includes(n.id)).sort(()=>R()-.5);
+      const need=r=>!LFG.sel.some(id=>ROLE_OF[npcOf(id).cls]===r)&&!(r==='tank'&&h.cls==='warrior')&&!(r==='heal'&&h.cls==='priest');
+      for(const r of ['tank','heal']){if(LFG.sel.length<4&&need(r)){const n=pool.find(x=>ROLE_OF[x.cls]===r&&!LFG.sel.includes(x.id));if(n)LFG.sel.push(n.id);}}
+      for(const n of pool){if(LFG.sel.length>=4)break;if(!LFG.sel.includes(n.id))LFG.sel.push(n.id);}openModal('lfg',lfgHTML());break;}
+    case 'lfgtier':LFG.tier=Number(arg);openModal('lfg',lfgHTML());break;
+    case 'lfgenter':{const h=H();if(C.phase==='fight'){err('Finish your fight first.');break;}if(LFG.sel.length!==4||h.lvl<SANCTUM.minLvl)break;
+      for(const id of LFG.sel){const n=npcOf(id);if(!n.met)noteNpc(n,`Joined you for ${SANCTUM.name} at level ${h.lvl}.`);n.met=true;n.joinedAt=C.run;}
+      closeModal();startDungeon(LFG.tier,LFG.sel);break;}
     case 'buyriding':{const h=H(),nx=RIDING[h.riding+1];if(!nx||!inTown()||h.lvl<nx.lvl||h.money<nx.cost)break;h.money-=nx.cost;h.riding++;toast(`You learned ${nx.n}`);slog(`Learned ${nx.n}.`);line(`You learned ${nx.n}.`,'l-sys');break;}
     case 'buymount':{const h=H(),s=MOUNT_SHOP[h.faction].find(x=>x.key===arg);if(!s||!inTown()||!h.riding||h.lvl<s.lvl||h.money<s.cost||h.mounts.some(m=>m.key===s.key))break;
       h.money-=s.cost;const m={id:uid(),key:s.key,name:s.name,kind:s.kind,col:s.col,rar:s.rar,base:s.base,xp:0};h.mounts.push(m);if(!activeMount())h.mount=m.id;toast(`New mount: ${s.name}`);slog(`Bought a ${s.name}.`);break;}
@@ -1304,7 +1621,9 @@ document.addEventListener('click',e=>{
 document.addEventListener('change',e=>{if(e.target.id==='grindSel'&&H()){H().grind=e.target.value||null;}});
 document.addEventListener('keydown',e=>{if(!H()||!C||(e.target.matches&&e.target.matches('input,textarea,select')))return;
   if(/^[1-9]$/.test(e.key)){press(Number(e.key)-1);updateWorld();e.preventDefault();}
-  else if(e.key==='l'||e.key==='L'){if(C.loot){takeLoot(C.loot,true);C.loot=null;C.lastInput=C.run;afterFight();updateWorld();}}
+  else if(e.key==='l'||e.key==='L'){lootAll();updateWorld();}
+  else if(e.key==='c'||e.key==='C'){doCombo(true);updateWorld();}
+  else if(e.key==='d'||e.key==='D'){dodgeNow();updateWorld();}
   else if(e.key==='Escape'&&modalKind&&modalKind!=='create')closeModal();});
 
 /* =================== scene =================== */
@@ -1330,6 +1649,14 @@ function drawMob(m,x,y,p,t){const sc=m.elite?1.45:1;p*=sc;const q=(gx,gy,w,hh,c)
   if(m.kind==='beast')drawBeast(cx,x,y,p,c,m.fam||'wolf',false,t);
   else{q(0,0,5,4,c);q(1,2,1,1,'#ff4a3a');q(3,2,1,1,'#ff4a3a');q(-1,4,7,6,c);q(-2,4,1,4,c);q(6,4,1,4,c);q(0,10,2,3+b,c);q(3,10,2,3-b,c);q(-3,1,1,8,'#7a5a3a');}
   if(m.elite){cx.strokeStyle='#f2c14e';cx.lineWidth=2;cx.strokeRect(x-6*p,y-2*p,18*p,17*p);}}
+/* Companions and other adventurers */
+function drawPerson(x,y,p,o,t){const r=RACES[o.race],K=CLASSES[o.cls];const q=(gx,gy,w,hh,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(x+gx*p),Math.round(y+gy*p),Math.ceil(w*p),Math.ceil(hh*p));};
+  if(o.dead)cx.globalAlpha=.3;const b=!reduce&&!o.dead&&Math.sin(t*6)>0?1:0;
+  q(2,10,1,3,'#2b2b3a');q(5,10,1,3,'#2b2b3a');q(1,5-b*.2,6,5,K.col);q(1,9,6,1,'#3a2a1a');q(0,6,1,3,K.col);q(7,6,1,3,K.col);
+  q(1,1,6,4,r.skin);q(2,3,1,1,'#111');q(5,3,1,1,'#111');q(1,0,6,1,o.hair);q(0,1,1,2,o.hair);q(7,1,1,2,o.hair);if(r.tusks){q(2,4,1,1,'#fff');q(5,4,1,1,'#fff');}if(r.ears){q(-1,2,1,1,r.skin);q(8,2,1,1,r.skin);}
+  if(o.cls==='warrior'){q(-1,5,2,4,'#9aa5b5');q(8,2,1,6,'#dfe6ee');}else if(o.cls==='rogue')q(8,6,2,1,'#dfe6ee');else if(o.cls==='hunter'){q(9,2,1,6,'#8a5a2b');q(8,2,1,6,'#e8e4d4');}
+  else{q(8,-1,1,11,'#8a5a2b');q(7,-2,3,2,o.cls==='mage'?'#69ccf0':'#f2c14e');}
+  cx.globalAlpha=1;}
 /* One beast drawer for wild beasts, pets and portraits. Faces left unless right=true. */
 function drawBeast(c,x,y,p,col,fam,right,t){
   c.save();c.translate(x,y);if(right){c.translate(6*p,0);c.scale(-1,1);}
@@ -1346,7 +1673,7 @@ function drawBeast(c,x,y,p,col,fam,right,t){
   }
   c.restore();
 }
-function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidden)return;const t=ms/1000;const h=H(),z=ZONES[h.zone];
+function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidden)return;const t=ms/1000;const h=H(),z=h.dun?{sky:['#0b1d26','#1b3d45'],hill:'#14303a',ground:'#2a3c36'}:ZONES[h.zone];
   const g=cx.createLinearGradient(0,0,0,PH);g.addColorStop(0,z.sky[0]);g.addColorStop(1,z.sky[1]);cx.fillStyle=g;cx.fillRect(0,0,PW,PH);
   cx.fillStyle=z.hill;cx.beginPath();cx.moveTo(0,PH*.7);for(let x=0;x<=PW;x+=PW/10)cx.lineTo(x,PH*.55+Math.sin(x*.02+1)*PH*.07);cx.lineTo(PW,PH);cx.lineTo(0,PH);cx.fill();
   const gy=PH*.78;cx.fillStyle=z.ground;cx.fillRect(0,gy,PW,PH-gy);cx.fillStyle='rgba(0,0,0,.12)';for(let x=0;x<PW;x+=18)cx.fillRect(x+(Math.floor(x/18)%2)*6,gy+6,8,3);
@@ -1354,7 +1681,7 @@ function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidde
   const p=Math.max(2,Math.floor(PH/42));
   const walk=(C.phase==='seek'||C.phase==='town')&&!reduce?Math.sin(t*8)*p*.6:0;
   const lunge=C.anim.hero>0?p*3:0;
-  const ride=(C.phase==='seek'||C.phase==='town')?activeMount():null;
+  const ride=!h.dun&&(C.phase==='seek'||C.phase==='town')?activeMount():null;
   if(ride){const mp=Math.max(2,Math.round(p*(ride.kind==='horse'?1:1.1)));const bottom=ride.kind==='horse'?15:ride.kind==='lizard'||ride.kind==='croc'?13:13;
     const back={horse:5,boar:5,lizard:8,croc:8}[ride.kind]||6;const gallop=reduce?0:Math.abs(Math.sin(t*10))*p*.3;const by=gy-bottom*mp-gallop;
     drawBeast(cx,PW*.28-2*p,by,mp,ride.col,ride.kind,true,t*1.8);drawHero(PW*.28,by+back*mp-10.5*p,p,t);}
@@ -1366,6 +1693,11 @@ function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidde
   if(C.mob){const m=C.mob;const mx=PW*.64+(C.anim.mob<0?-p*3:0)+(C.anim.mob>0&&!reduce?(R()-.5)*p*2:0);drawMob(m,mx,gy-13*p*(m.elite?1.45:1),p,t);
     const c=con(m.lvl);cx.font=`700 ${Math.max(11,p*4)}px Alegreya Sans, sans-serif`;cx.textAlign='center';cx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--con-'+c);cx.fillText(`${m.name}`,mx+3*p,gy-17*p*(m.elite?1.45:1));
     cx.fillStyle='#000';cx.fillRect(mx-6*p,gy-16*p*(m.elite?1.45:1),18*p,p*1.4);cx.fillStyle='#d33';cx.fillRect(mx-6*p,gy-16*p*(m.elite?1.45:1),18*p*Math.max(0,m.hp/m.max),p*1.4);}
+  // companions stand behind you
+  C.party.forEach((q,i)=>{const pp=Math.max(2,Math.round(p*.85));const x=PW*.28-(i+1)*PW*.065,y=gy-13*pp+((i%2)?pp:0)+(walk?walk*.5:0);
+    drawPerson(x,y,pp,{cls:q.n.cls,race:q.n.race,hair:q.n.hair,dead:q.dead||C.phase==='dead'},t+i);});
+  if(C.surge&&C.mob){cx.font=`800 ${p*5}px Alegreya Sans, sans-serif`;cx.textAlign='center';cx.fillStyle='#ff8a2a';cx.fillText('TIDAL SURGE',PW*.66,gy-22*p);
+    cx.fillStyle='rgba(60,140,220,.25)';cx.fillRect(PW*.1,gy-4*p,PW*.6*(1-C.surge.t/2.5),4*p);cx.textAlign='left';}
   if(C.phase==='rest'&&!reduce){cx.fillStyle='#fff';cx.font=`700 ${p*4}px Alegreya Sans, sans-serif`;cx.fillText('z',PW*.28+10*p,gy-16*p-(Math.floor(t*2)%3)*p*2);}
   cx.textAlign='center';
   for(let i=C.fx.length-1;i>=0;i--){const f=C.fx[i];f.age+=1/60;if(f.age>1.1||reduce){C.fx.splice(i,1);continue;}const x=(f.who==='mob'?PW*.66:f.who==='pet'?PW*.43:PW*.3)+(f.x-.5)*PW*.08,y=gy-20*p-f.age*p*10;
@@ -1379,7 +1711,9 @@ function boot(){
   h.log=h.log||[];h.addons=h.addons||{unl:{},on:{}};h.avg=h.avg||{cycle:30,xp:20,money:5};
   for(const k of ['kills','deaths','loots','junkSold','quests','equips','manual','uses','play','money','feeds','tamed'])h.stats[k]=h.stats[k]||0;
   h.pets=h.pets||[];if(h.activePet===undefined)h.activePet=null;h.riding=h.riding||0;h.mounts=h.mounts||[];if(h.mount===undefined)h.mount=null;
+  if(!h.npcs)h.npcs=genNpcs(h.faction);h.party=h.party||[];if(h.dun===undefined)h.dun=null;h.dstats=h.dstats||{clears:0,best:-1,runs:0};
   recalc();C=freshC();C.hp=h.cur?Math.min(ST.hpMax,h.cur.hp):ST.hpMax;C.res=h.cur?Math.min(ST.resMax,h.cur.res):(CLASSES[h.cls].res==='mana'?ST.resMax:0);if(C.hp<=0)C.hp=ST.hpMax*.5;
+  syncParty();
   closeModal();curKey=null;buildSlots();updateWorld();
 }
 /* test hook, local dev server only */

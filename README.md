@@ -35,6 +35,10 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-07** — Realmbound: wandering NPC adventurers with personalities and friendship, grouping,
+  combo abilities, the Drowned Sanctum (3 bosses, waves, dodgeable Tidal Surge, loot sharing, infinite Heroic
+  tiers), LFG Tool addon. See HANDOFF.md to continue with any tool.
+
 - **2026-10-07** — Realmbound: mounts. Riding skills, faction mount vendors, rare reins from legendary elites,
   mounts that train as you ride them, Hunters riding their own pets. Travel between fights, to town and
   between zones is faster when mounted.
