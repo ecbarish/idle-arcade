@@ -51,7 +51,7 @@ Mark a ticket done in the same PR that finishes it.
   you walk into (inn, shop, ranch) instead of menu buttons. Auto-explore = your tamer walks routes on their own.
 - [x] **T10: Wildbond third area, data only** (ChatGPT): see the T10 section below.
 
-- [ ] **T12: Realmbound lore pass** (ChatGPT): see the T12 section below.
+- [x] **T12: Realmbound lore pass** (ChatGPT): see the T12 section below.
 
 ### T12: Realmbound lore pass
 Make Realmbound's world feel lived-in, and start the lore record future guides will be built from.
