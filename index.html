@@ -41,6 +41,7 @@ a{color:inherit}
 .t-starfall{font-family:'DotGothic16',monospace;font-size:28px;color:#fff;text-shadow:0 3px 0 #2b3550}
 .t-mmo{font-family:var(--f-sign);font-size:26px;color:#ffd27a}
 .t-baseball{font-family:var(--f-sign);font-size:24px;color:#fff}
+.t-wildbond{font-family:var(--f-sign);font-size:26px;color:#fff;text-shadow:0 3px 0 #217a52}
 .t-otherworld{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:34px;color:#fff;text-shadow:0 0 14px rgba(140,200,255,.8)}
 .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
 .status{align-self:flex-start;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 9px;border-radius:999px;border:1px solid currentColor}
@@ -101,6 +102,9 @@ const GAMES=[
   {id:'realmbound',title:'Realmbound',tcls:'t-mmo',status:['Prototype','s-proto'],href:'games/realmbound/index.html',
    blurb:'A classic-MMO adventure: pick a faction and a class, quest to level 30, and conquer two dungeons. Hunters tame wild beasts from common to legendary and bond with them. Play it yourself or let Auto take over.',
    tags:['Classic MMO','Loot','Raids'],cover:'mmo'},
+  {id:'wildbond',title:'Wildbond',tcls:'t-wildbond',status:['Early access','s-proto'],href:'games/wildbond/index.html',
+   blurb:'Pick a partner, explore Thornwood, and catch, raise and battle wild creatures with your team of three. Steer battles with timed commands, outgrow your rival, and earn the Thorn Badge.',
+   tags:['Creatures','Catch & raise','Story'],cover:'wildbond'},
   {id:'baseball',title:'Diamond Career',tcls:'t-baseball',status:['In design','s-design'],
    blurb:'Create a player, climb from the minors on your contract, spend what you earn, and later run the whole club. Step in for key at-bats or let them simulate.',
    tags:['Baseball','Career','Team management'],cover:'baseball'},
@@ -111,7 +115,7 @@ const GAMES=[
 const ago=t=>{const s=(Date.now()-t)/1000;if(s<90)return'just now';if(s<3600)return Math.round(s/60)+' min ago';if(s<86400)return Math.round(s/3600)+' h ago';return Math.round(s/86400)+' days ago';};
 
 /* Each game's save key in localStorage, used by "Reset progress" */
-const SAVE_KEYS={'primordial':'primordial-save-v1','starfall-guild':'starfall-guild-save-v1','realmbound':'realmbound-save-v1'};
+const SAVE_KEYS={'primordial':'primordial-save-v1','starfall-guild':'starfall-guild-save-v1','realmbound':'realmbound-save-v1','wildbond':'wildbond-save-v1'};
 const idx=Arcade.readIndex();
 const shelf=document.getElementById('shelf');
 shelf.innerHTML=GAMES.map(g=>{
@@ -154,6 +158,12 @@ const covers={
     c.fillStyle='#1f6a3a';c.beginPath();c.moveTo(cx,cy-18);c.lineTo(cx+s-22,cy-s);c.lineTo(cx,cy-2*s+22);c.lineTo(cx-s+22,cy-s);c.closePath();c.fill();
     c.fillStyle='#fff';[[cx,cy-6],[cx+s-6,cy-s],[cx,cy-2*s+6],[cx-s+6,cy-s]].forEach(([x,y])=>c.fillRect(x-4,y-4,8,8));
     const bx=cx+Math.sin(t*1.5)*s*.6,by=cy-s-Math.abs(Math.cos(t*1.5))*s*.5;c.beginPath();c.arc(bx,by,5,0,7);c.fill();},
+  wildbond(c,w,h,t){const g=c.createLinearGradient(0,0,0,h);g.addColorStop(0,'#9fd0f0');g.addColorStop(1,'#e0f0d0');c.fillStyle=g;c.fillRect(0,0,w,h);
+    c.fillStyle='#4f7a3a';c.beginPath();c.moveTo(0,h*.7);for(let x=0;x<=w;x+=w/8)c.lineTo(x,h*.55+Math.sin(x*.03)*h*.06);c.lineTo(w,h);c.lineTo(0,h);c.fill();c.fillStyle='#6a9a48';c.fillRect(0,h*.78,w,h*.22);
+    const p=4,b=Math.sin(t*5)>0?1:0,q=(x,y,ww,hh,col)=>{c.fillStyle=col;c.fillRect(x,y,ww*p,hh*p);};
+    const wolf=(x,col)=>{const y=h*.78-14*p;q(x-p,y+7*p,10,4,col);q(x-4*p,y+5*p,4,4,col);q(x-5*p,y+6*p,1,1,'#111');q(x,y+11*p,1,3-b,col);q(x+7*p,y+11*p,1,2+b,col);q(x+2*p,y+11*p,1,3,col);q(x+5*p,y+11*p,1,3,col);q(x+9*p,y+6*p,2,1,col);};
+    wolf(w*.22,'#d8642e');const fy=Math.sin(t*3)*3;c.globalAlpha=.35;c.fillStyle='#ffe36a';c.beginPath();c.arc(w*.55,h*.42+fy,22,0,7);c.fill();c.globalAlpha=1;q(w*.55-12,h*.42-10+fy,6,5,'#ffe36a');
+    q(w*.72,h*.78-7*p,7,4,'#9fd6f0');q(w*.72-3*p,h*.78-9*p,4,4,'#9fd6f0');q(w*.72+p,h*.78-9*p-b*2*p,5,2,'rgba(255,255,255,.6)');},
   otherworld(c,w,h,t){const g=c.createLinearGradient(0,0,0,h);g.addColorStop(0,'#1b2a6b');g.addColorStop(1,'#e98bb0');c.fillStyle=g;c.fillRect(0,0,w,h);
     const cx=w*.3,cy=h*.5,R=h*.36;c.save();c.translate(cx,cy);c.rotate(t*.3);c.strokeStyle='rgba(180,230,255,.85)';c.lineWidth=1.5;
     [1,.78].forEach(k=>{c.beginPath();c.arc(0,0,R*k,0,7);c.stroke();});c.beginPath();for(let i=0;i<=6;i++){const a=i*Math.PI*2/6*2;c.lineTo(Math.cos(a)*R*.78,Math.sin(a)*R*.78);}c.stroke();c.restore();

@@ -50,6 +50,15 @@ save and hub progress afterward. Close other Realmbound tabs before running. The
 localhost-only debug hook; on other server hostnames the runner exposes that same hook only inside its
 test iframe. Existing Node DOM and Playwright checks remain in `tests/` for development environments.
 
+## Wildbond layout
+- `shared/creatures.js`: shared creature core (genes 0-31 shown as grades F-S, rarity, temperament, traits, bond,
+  stat math, XP curve, breeding). Exposes `window.Creatures`.
+- `games/wildbond/js/`: 00-data (elements, moves, species, biomes, story, art eras: data only), 01-art (art eras:
+  every drawing call goes through `ART[era]`), 02-state, 03-battle, 04-world (explore, story, town), 05-ui,
+  06-scene, 99-boot. Localhost test hook: `window.__wb`.
+- Art eras: the look evolves with progress (Pixel → 16-bit → HD → 3D). A new era is a new `ART.<id>` object with
+  `creature`, `backdrop`, `tamer`; never draw outside it.
+
 ## Next steps
 1. Promo page for friends (hub card + screenshots).
 2. Realmbound: professions and expanded talent trees, then levels 30-60, more dungeons, raids and guild, faction battlegrounds.

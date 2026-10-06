@@ -35,6 +35,11 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-08** — Wildbond part 1 (early access): shared creature module, three starters with evolutions, rival Wren,
+  Thornwood with 10 wild species, lure-and-calm capture, 3v3 auto battles with commands (Focus, Guard, Rally),
+  telegraphed attacks, Elderhorn, the Thornwood Warden and the Thorn Badge, Wilddex, art-era system. Merged
+  ChatGPT's Realmbound split (PR #2).
+
 - **2026-10-07 (night)** — Hub: "Reset progress" on every game card with progress, with a confirmation step.
   Erases that game's save on this device (for Realmbound, every character).
 

@@ -20,7 +20,12 @@ Mark a ticket done in the same PR that finishes it.
 - [ ] **T1: Specs for levels 30-60, raids and the guild** (Claude).
 - [x] **T2: Creature game spec + shared creature module plan** (Claude). See docs/creature-game-design.md.
 - [ ] **T3: Content for levels 30-40** (ChatGPT, after T0 and T1).
-- [ ] **T4: Creature module + creature game v0** (Claude, after T0 and T2).
+- [x] **T4a: Shared creature module + Wildbond part 1** (Claude): starters, rival, Thornwood, capture, 3v3 command
+  battles, evolution, Warden and badge, art-era system (Pixel only). Done 2026-10-08.
+- [ ] **T4b: Wildbond part 2** (Claude): ranch days (feed/train/rest), breeding with genes and hybrids.
+- [ ] **T5: Wildbond 16-bit art era** (ChatGPT): a new `ART.bit16` in games/wildbond/js/01-art.js with the same three
+  functions as `ART.pixel` (creature, backdrop, tamer). Finer sprites, shading, outlines. Unlocked by the Thorn Badge
+  (add 'bit16' to S.eras when the badge is earned). Gameplay files must not change.
 
 ## Bugs and feedback
 Add one line per issue: what happened, where (zone or screen), and the character's level/class.
