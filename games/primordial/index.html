@@ -21,7 +21,7 @@ html,body{height:100%}
 body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.45}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-.home{color:var(--cyan);text-decoration:none}
+.home{display:inline-block;color:var(--cyan);text-decoration:none;border:1px solid var(--cyan);border-radius:999px;padding:5px 12px;font-size:13px;letter-spacing:.02em;text-transform:none;margin-right:6px}
 .home:hover{text-decoration:underline}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
@@ -282,6 +282,11 @@ const $=s=>document.querySelector(s);
 const now=()=>Date.now();
 
 /* ---------- content ---------- */
+let BREED=0.03,MILE=25;
+/* Milestones double a tier's output. They come at 25, 50, 100, 200... bought, so each doubling costs more. */
+let msCount=b=>b<MILE?0:Math.floor(Math.log2(b/MILE))+1;
+const nextMs=b=>MILE*Math.pow(2,msCount(b));
+const linearMs=b=>Math.floor(b/MILE); // how many units of the tier below each organism buds per second
 const TIERS=[
   {name:'Protocell', plural:'Protocells', base:10,   growth:1.12},
   {name:'Flagellate',plural:'Flagellates',base:150,  growth:1.13},
@@ -408,7 +413,7 @@ function derive(){
   if(cnt.quorum){let tb=0;for(const t of S.tiers)tb+=t.bought;global*=Math.pow(1+tb*0.01,cnt.quorum);}
   global*=Math.pow(nicheV,S.won);
   let tide=null; if(w.tide){tide=Math.floor(S.stats.run/30)%2===0;global*=tide?2.5:0.5;}
-  const tm=TIERS.map((t,i)=>{let m=Math.pow(2,Math.floor(S.tiers[i].bought/25))*tierAll*((w.tier&&w.tier[i])||1);
+  const tm=TIERS.map((t,i)=>{let m=Math.pow(2,msCount(S.tiers[i].bought))*tierAll*((w.tier&&w.tier[i])||1);
     for(const id in cnt){const mt=MUTS[id]&&MUTS[id].tier;if(mt&&mt[i])m*=Math.pow(mt[i],cnt[id]);}return m;});
   const nps=S.tiers[0].amt*tm[0]*global;
   const growth=TIERS.map(t=>Math.max(1.03,t.growth-growthD));
@@ -418,7 +423,7 @@ function derive(){
 /* ---------- economy ---------- */
 function gain(x){if(!(x>0))return;S.n=Math.min(1e300,S.n+x);S.runTotal=Math.min(1e300,S.runTotal+x);}
 function step(h){
-  for(let i=TIERS.length-1;i>0;i--){const p=S.tiers[i].amt*0.25*D.tm[i]*h;if(p>0)S.tiers[i-1].amt=Math.min(1e300,S.tiers[i-1].amt+p);}
+  for(let i=TIERS.length-1;i>0;i--){const p=S.tiers[i].amt*BREED*D.tm[i]*h;if(p>0)S.tiers[i-1].amt=Math.min(1e300,S.tiers[i-1].amt+p);}
   gain(D.nps*h);
 }
 function tierUnlocked(i){return !TIER_REQ[i]||TIER_REQ[i].ok();}
@@ -432,7 +437,7 @@ function buy(i,mode){
   const c=costN(i,k);if(c>S.n)return false;
   S.n-=c;const t=S.tiers[i];t.bought+=k;t.amt+=k;
   if(t.bought>S.stats.maxBought[i])S.stats.maxBought[i]=t.bought;
-  if(t.bought%25<k||k>=25){/* crossed a milestone */ if(Math.floor(t.bought/25)>Math.floor((t.bought-k)/25)) toast(`${TIERS[i].plural} output doubled (${t.bought} bought)`,'var(--cyan)');}
+  if(t.bought%25<k||k>=25){/* crossed a milestone */ if(msCount(t.bought)>msCount(t.bought-k)) toast(`${TIERS[i].plural} output doubled (${t.bought} bought)`,'var(--cyan)');}
   D=derive();return true;
 }
 function clickValue(){return (1+D.nps*0.05)*D.click+D.nps*D.glow;}
@@ -440,7 +445,8 @@ function absorb(){const v=clickValue();gain(v);S.stats.clicks++;return v;}
 
 /* ---------- mutations ---------- */
 function nextMut(){return 100*Math.pow(D.mutGrowth,S.mutGranted)*D.drift;}
-function checkMut(){let g=0,got=0;while(S.runTotal>=nextMut()&&g++<60){S.mutGranted++;S.pending++;got++;}
+const MAX_PENDING=3;
+function checkMut(){let g=0,got=0;while(S.pending<MAX_PENDING&&S.runTotal>=nextMut()&&g++<60){S.mutGranted++;S.pending++;got++;}
   if(got&&!(S.inst.unl.select&&S.inst.on.select))toast(got>1?`${got} mutations ready`:'A mutation is ready','var(--violet)');}
 function ensureOffer(){
   if(S.offer||S.pending<=0)return;
@@ -486,7 +492,7 @@ function battleTick(h){
 }
 
 /* ---------- extinction ---------- */
-const EXT_MIN=1e8;
+const EXT_MIN=1e10;
 function gmFor(total){return total<EXT_MIN?0:Math.floor(Math.pow(total/EXT_MIN,0.35)*W().gm);}
 function gmGain(){return gmFor(S.runTotal);}
 function nextGmAt(){const g=gmGain()+1;return EXT_MIN*Math.pow(g/W().gm,1/0.35);}
@@ -591,7 +597,7 @@ const TABS={
 org:{
   key(){return TIERS.map((_,i)=>tierVisible(i)?1:0).join('')+nextLockedTier();},
   build(){
-    let h=`<div class="tabhead"><div><h2>Organisms</h2><p class="sub">Each kind breeds the kind below it. Every 25 bought doubles that kind's output.</p></div>
+    let h=`<div class="tabhead"><div><h2>Organisms</h2><p class="sub">Each kind breeds the kind below it. Output doubles at 25, 50, 100, 200 bought, and so on.</p></div>
     <div class="seg" role="group" aria-label="Buy amount">${[1,10,'max'].map(m=>`<button data-act="mode" data-arg="${m}" id="mode-${m}">${m==='max'?'Max':'×'+m}</button>`).join('')}</div></div><div class="orgs">`;
     TIERS.forEach((t,i)=>{if(!tierVisible(i))return;
       h+=`<div class="org"><span class="glyph" style="--c:${TCOL[i]}"></span><div style="min-width:0"><div class="oname">${t.name} <span class="num" id="o-own-${i}"></span><span class="bought" id="o-b-${i}"></span></div>
@@ -605,9 +611,9 @@ org:{
     [1,10,'max'].forEach(m=>{const b=$('#mode-'+m);if(b)b.classList.toggle('on',String(S.buy)===String(m));});
     TIERS.forEach((t,i)=>{const own=$('#o-own-'+i);if(!own)return;const T=S.tiers[i];
       own.textContent=fmtI(T.amt);$('#o-b-'+i).textContent=T.amt>=T.bought+1?`${fmtI(T.bought)} bought`:'';
-      const each=i===0?D.tm[0]*D.global:0.25*D.tm[i];
+      const each=i===0?D.tm[0]*D.global:BREED*D.tm[i];
       $('#o-d-'+i).textContent=i===0?`${fmt(each)} nutrients/s each · ${fmt(T.amt*each)}/s total`:`Buds ${fmt(each)} ${TIERS[i-1].plural}/s each · ${fmt(T.amt*each)}/s total`;
-      const r=T.bought%25;$('#o-ms-'+i).style.width=(r/25*100)+'%';$('#o-msl-'+i).textContent=`${r}/25 to ×2 · now ×${fmt(D.tm[i])}`;
+      const r=T.bought,nx=nextMs(r),pv=msCount(r)?nx/2:0;$('#o-ms-'+i).style.width=((r-pv)/(nx-pv)*100)+'%';$('#o-msl-'+i).textContent=`${r}/${nx} to ×2 · now ×${fmt(D.tm[i])}`;
       let k,can;if(S.buy==='max'){k=Math.max(1,maxAfford(i));can=maxAfford(i)>0;}else{k=Number(S.buy);}
       const c=costN(i,k);if(S.buy!=='max')can=S.n>=c;
       $('#o-l-'+i).textContent=`Buy ${fmtI(k)}`;$('#o-c-'+i).textContent=fmt(c);
@@ -627,7 +633,7 @@ mut:{
   },
   update(){
     const nx=nextMut(),prev=S.mutGranted?100*Math.pow(D.mutGrowth,S.mutGranted-1)*D.drift:0;
-    $('#m-next').textContent=`${fmt(S.runTotal)} / ${fmt(nx)} earned this run`;
+    $('#m-next').textContent=S.pending>=MAX_PENDING?`${MAX_PENDING} mutations are waiting. Draft them to keep evolving.`:`${fmt(S.runTotal)} / ${fmt(nx)} earned this run`;
     const p=Math.max(0,Math.min(1,(Math.log10(S.runTotal+1)-Math.log10(prev+1))/(Math.log10(nx+1)-Math.log10(prev+1))));
     $('#m-bar').style.width=(p*100)+'%';
     const b=$('#m-draft');b.disabled=S.pending<=0;b.textContent=S.pending>0?`Draft a mutation (${S.pending})`:'No mutation ready';
@@ -821,6 +827,8 @@ function frame(t){
 }
 
 /* ---------- boot ---------- */
+/* test hook, local dev server only */
+if(location.hostname==='localhost')window.__pr={get S(){return S;},get D(){return D;},TIERS,setBreed:v=>{BREED=v;},setMile:v=>{MILE=v;},setMs:f=>{msCount=f;},linearMs,derive,step,buy,maxAfford,advance,checkMut,nextMut,ensureOffer,pickMut,clickValue,gain,instincts:runInstincts,checkInstincts,set(o){S=o;}};
 let started=false;
 function start(data){
   if(started)return;started=true;

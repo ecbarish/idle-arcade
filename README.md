@@ -35,6 +35,10 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-07 (evening)** — Primordial rebalance from phone playtest: breeding slowed to a fraction, milestones double at
+  25/50/100/200…, first extinction at 10B (simulated ~22 min for a perfect player, ~40 real), at most 3
+  mutations waiting at once. Clear "← Arcade" button in Primordial and Starfall Guild.
+
 - **2026-10-07 (later)** — Merged ChatGPT's Ashen Ridge / level 30 / Cindervein Foundry work (PR #1) after review; 118 scenario
   checks pass. Added promo.html, a shareable pitch page for friends.
 
