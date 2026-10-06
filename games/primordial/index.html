@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Primordial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: a lab bench. Left = the specimen pool (click to feed) and the niche contest; right = the field notebook in tabs. */
+:root{
+  --bg:#0a181d; --bg2:#0f242b; --panel:#122b33; --line:#1f4250; --line2:#2b5868;
+  --fg:#dcebe7; --muted:#8aa9a7; --dim:#5d7d7d;
+  --amber:#f0b25a; --amber-ink:#2a1b05; --coral:#ff7d6b; --cyan:#5fd0c8; --violet:#b892ff; --good:#86dc97;
+  --f-display:'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+  --f-body:'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono:'JetBrains Mono', ui-monospace, Consolas, monospace;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.45}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+.home{color:var(--cyan);text-decoration:none}
+.home:hover{text-decoration:underline}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.app{max-width:1240px;margin:0 auto;padding-inline:16px;padding-block:14px 40px;display:flex;flex-direction:column;gap:14px}
+.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* header */
+.top{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,.8fr);gap:18px;align-items:end;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.species{font-family:var(--f-display);font-style:italic;font-weight:400;font-size:clamp(26px,3.4vw,38px);line-height:1.05;margin:2px 0 4px;text-wrap:balance}
+.world{display:flex;gap:8px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:13px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:2px 9px;border:1px solid var(--line2);border-radius:999px;font-size:12px;color:var(--fg);background:var(--bg2)}
+.big{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:clamp(28px,3.6vw,40px);font-weight:600;color:var(--amber);line-height:1.05}
+.mid{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:24px;font-weight:600;color:var(--violet);line-height:1.1}
+.rate{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+
+/* main grid */
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:18px;align-items:start}
+.left{display:flex;flex-direction:column;gap:12px;min-width:0}
+.right{min-width:0;display:flex;flex-direction:column;gap:12px}
+.pool{position:relative;border:1px solid var(--line2);border-radius:14px;overflow:hidden;aspect-ratio:4/3;max-width:100%;background:#0c2229;cursor:crosshair}
+.pool canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.scale{position:absolute;left:12px;bottom:10px;font-family:var(--f-mono);font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:3px;pointer-events:none}
+.scale::before{content:"";display:block;width:56px;height:3px;background:var(--muted);border-radius:1px}
+.poolhint{position:absolute;inset:auto 0 42%;text-align:center;color:var(--fg);font-size:15px;pointer-events:none;opacity:.85}
+.tide{position:absolute;right:10px;top:10px;pointer-events:none}
+.absorb{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 16px;border-radius:12px;border:1px solid var(--amber);background:var(--amber);color:var(--amber-ink);font-weight:700;font-size:15px;transition:transform .06s}
+.absorb:active{transform:scale(.985)}
+.absorb .num{font-weight:600}
+
+.panel{border:1px solid var(--line);border-radius:12px;background:var(--bg2);padding:14px}
+.niche h3{margin:0;font-size:15px;font-weight:700}
+.nhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.fight{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center}
+.side{min-width:0}
+.side .who{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.side .who i{font-family:var(--f-display);font-size:17px;color:var(--fg)}
+.side.r{text-align:right}
+.vs{font-family:var(--f-display);font-style:italic;color:var(--dim);font-size:18px}
+.hp{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:6px}
+.hp i{display:block;height:100%;background:var(--amber);transition:width .2s linear}
+.side.r .hp i{background:var(--coral);margin-left:auto}
+.nfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.verdict{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;border:1px solid currentColor}
+.v-good{color:var(--good)} .v-even{color:var(--amber)} .v-bad{color:var(--coral)}
+.btn{padding:8px 14px;border-radius:9px;border:1px solid var(--line2);background:var(--panel);font-weight:600}
+.btn:hover:not(:disabled){border-color:var(--amber)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.primary{background:var(--amber);color:var(--amber-ink);border-color:var(--amber)}
+.btn.danger{border-color:var(--coral);color:var(--coral)}
+.btn.danger.armed{background:var(--coral);color:#2a0b06}
+.ghost{background:none;border:1px solid var(--line2);border-radius:9px;padding:8px 14px;color:var(--muted)}
+.lastfight{font-size:12px;color:var(--muted);margin-top:8px;min-height:1.4em}
+
+/* tabs */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:9px 12px;color:var(--muted);font-weight:600;white-space:nowrap;display:flex;gap:6px;align-items:center}
+.tabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--amber)}
+.badge{font-family:var(--f-mono);font-size:11px;background:var(--violet);color:#1b0f33;border-radius:999px;padding:0 6px;font-weight:600}
+.tabhead{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.tabhead h2{font-family:var(--f-display);font-weight:400;font-size:26px;margin:0;line-height:1.1}
+.sub{color:var(--muted);margin:3px 0 0;font-size:13px;max-width:60ch}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden}
+.seg button{background:none;border:0;padding:6px 12px;color:var(--muted);font-weight:600;font-family:var(--f-mono);font-size:12px}
+.seg button.on{background:var(--line2);color:var(--fg)}
+
+/* organisms */
+.orgs{display:flex;flex-direction:column}
+.org{display:grid;grid-template-columns:28px minmax(0,1fr) 128px;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.glyph{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--c);background:color-mix(in srgb,var(--c) 22%,transparent);position:relative;justify-self:center}
+.glyph::after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:var(--c);left:9px;top:5px}
+.oname{font-weight:700;font-size:15px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.oname .num{font-weight:600;color:var(--amber);font-size:14px}
+.oname .bought{font-weight:400;color:var(--dim);font-size:12px}
+.odesc{color:var(--muted);font-size:12.5px}
+.ms{display:flex;gap:8px;align-items:center;margin-top:5px;font-size:11px;color:var(--dim);font-family:var(--f-mono)}
+.msbar{flex:1;max-width:180px;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.msbar i{display:block;height:100%;background:var(--cyan)}
+.buy{display:flex;flex-direction:column;align-items:stretch;padding:7px 10px;border-radius:9px;border:1px solid var(--line2);background:var(--panel);text-align:right}
+.buy .l{font-size:11px;color:var(--muted);font-weight:600}
+.buy .c{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-weight:600;font-size:14px}
+.buy.can{border-color:var(--amber)}
+.buy.can .c{color:var(--amber)}
+.buy:disabled{opacity:.5;cursor:default}
+.org.locked{opacity:.6}
+.org.locked .glyph{--c:var(--dim)}
+.lock{font-size:12px;color:var(--muted);text-align:right}
+
+/* mutations */
+.mutready{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.progress{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:8px}
+.progress i{display:block;height:100%;background:var(--violet)}
+.mlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:12px}
+.mut{border:1px solid var(--line);border-left:3px solid var(--rc);border-radius:8px;padding:9px 11px;background:var(--bg2);min-width:0}
+.mut .n{font-weight:700;display:flex;justify-content:space-between;gap:8px}
+.mut .d{font-size:12.5px;color:var(--muted)}
+.r-common{--rc:#9fb7b4} .r-rare{--rc:var(--cyan)} .r-epic{--rc:var(--violet)}
+.rar{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--rc)}
+.empty{color:var(--muted);font-size:13px;padding:14px 0}
+
+/* instincts */
+.inst{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.inst .n{font-weight:700;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.inst .d{font-size:12.5px;color:var(--muted)}
+.inst.dormant .n{color:var(--muted)}
+.state{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:1px 7px;border-radius:999px}
+.state.on{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good)}
+.state.off{background:var(--line);color:var(--dim)}
+.toggle{width:44px;height:24px;border-radius:999px;border:1px solid var(--line2);background:var(--line);position:relative;padding:0}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--muted);transition:left .15s}
+.toggle[aria-pressed="true"]{background:color-mix(in srgb,var(--good) 35%,var(--line));border-color:var(--good)}
+.toggle[aria-pressed="true"]::after{left:23px;background:var(--good)}
+.req{font-family:var(--f-mono);font-size:12px;color:var(--dim)}
+.inp{width:96px;padding:5px 8px;border-radius:7px;border:1px solid var(--line2);background:var(--bg);color:var(--fg);font-family:var(--f-mono)}
+
+/* genome */
+.ext{border:1px solid color-mix(in srgb,var(--coral) 45%,var(--line));background:color-mix(in srgb,var(--coral) 6%,var(--bg2));border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.ext .gain{font-family:var(--f-mono);font-size:22px;font-weight:600;color:var(--violet)}
+.ext .row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.shop{display:flex;flex-direction:column;margin-top:6px}
+.gitem{display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.gitem .n{font-weight:700}
+.gitem .lv{font-family:var(--f-mono);font-size:12px;color:var(--violet);margin-left:6px;font-weight:600}
+.gitem .d{font-size:12.5px;color:var(--muted)}
+.gbuy{padding:7px 10px;border-radius:9px;border:1px solid var(--line2);background:var(--panel);font-family:var(--f-mono);font-weight:600;text-align:right}
+.gbuy.can{border-color:var(--violet);color:var(--violet)}
+.gbuy:disabled{opacity:.5;cursor:default}
+h4{margin:18px 0 4px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.eras{display:flex;flex-direction:column;gap:0;margin-top:4px}
+.era{display:grid;grid-template-columns:14px minmax(0,1fr);gap:10px;padding:7px 0;align-items:start}
+.era .dot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--dim);margin-top:5px}
+.era.here .dot{background:var(--amber);border-color:var(--amber)}
+.era .t{font-weight:600}
+.era .s{font-size:12px;color:var(--muted)}
+.era.future .t{color:var(--muted)}
+.mods{margin:4px 0 0;padding-left:18px;color:var(--muted);font-size:13px}
+
+/* notebook */
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px 18px}
+.stat .k{font-size:12px;color:var(--muted)}
+.stat .v{font-family:var(--f-mono);font-size:16px;font-weight:600}
+.logl{list-style:none;margin:0;padding:0;font-size:13px;max-height:220px;overflow:auto}
+.logl li{padding:4px 0;border-bottom:1px solid var(--line);color:var(--muted)}
+.logl li b{color:var(--fg);font-weight:600}
+.savebox{display:flex;flex-direction:column;gap:8px}
+.savebox textarea{width:100%;min-height:70px;resize:vertical;background:var(--bg);color:var(--fg);border:1px solid var(--line2);border-radius:8px;padding:8px;font-family:var(--f-mono);font-size:11px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(4,12,15,.72);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20;backdrop-filter:blur(3px)}
+.sheet{background:var(--bg2);border:1px solid var(--line2);border-radius:16px;padding:20px;max-width:760px;width:100%;max-height:calc(100% - 32px);overflow:auto}
+.sheet h2{font-family:var(--f-display);font-weight:400;font-size:30px;margin:2px 0 0;line-height:1.1;text-wrap:balance}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:16px 0}
+.card{display:flex;flex-direction:column;gap:6px;text-align:left;padding:14px;border-radius:12px;border:1px solid var(--line2);border-top:3px solid var(--rc,var(--amber));background:var(--panel);transition:transform .1s,border-color .1s}
+.card:hover{transform:translateY(-2px);border-color:var(--rc,var(--amber))}
+.card .cname{font-size:17px;font-weight:700}
+.card .cdesc{font-size:13px;color:var(--muted)}
+.card .have{font-size:11px;color:var(--dim);font-family:var(--f-mono)}
+.card ul{margin:2px 0 0;padding-left:16px;font-size:13px;color:var(--muted)}
+.card .era2{font-family:var(--f-display);font-style:italic;color:var(--muted);font-size:15px}
+.mfoot{display:flex;justify-content:flex-end;gap:8px}
+
+.toasts{position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:30;max-width:min(340px,calc(100% - 32px));pointer-events:none}
+.toast{background:var(--panel);border:1px solid var(--line2);border-left:3px solid var(--tc,var(--amber));border-radius:9px;padding:9px 12px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.35);animation:tin .25s ease-out}
+@keyframes tin{from{transform:translateY(8px);opacity:0}}
+
+@media (max-width:860px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .top{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .top .id{grid-column:1/-1}
+}
+@media (max-width:460px){
+  .org{grid-template-columns:22px minmax(0,1fr) 104px;gap:8px}
+  .gitem{grid-template-columns:minmax(0,1fr) 96px}
+}
+@media (prefers-reduced-motion:reduce){
+  .toast,.card,.absorb,.hp i{animation:none;transition:none}
+}
+</style>
+
+<div class="app">
+  <header class="top">
+    <div class="id">
+      <div class="eyebrow"><a class="home" href="../../index.html">← Arcade</a> · Lineage · run <span id="runNo" class="num">1</span></div>
+      <h1 class="species" id="species">Protococcus primus</h1>
+      <div class="world"><span class="chip" id="worldName">Primordial Soup</span><span id="worldEra"></span></div>
+    </div>
+    <div>
+      <div class="eyebrow">Nutrients</div>
+      <div class="big" id="nut">0</div>
+      <div class="rate" id="nps">0 / sec</div>
+    </div>
+    <div>
+      <div class="eyebrow">Genetic memory</div>
+      <div class="mid" id="gmTop">0</div>
+      <div class="rate" id="gmBonus">+0% income</div>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="left">
+      <div class="pool" id="poolWrap" title="Click the pool to absorb nutrients">
+        <canvas id="pool" aria-label="Your organisms in the pool. Click to absorb nutrients."></canvas>
+        <div class="poolhint" id="poolHint">Click the pool to absorb nutrients</div>
+        <div class="scale">100 µm</div>
+        <span class="chip tide" id="tide" hidden></span>
+      </div>
+      <button class="absorb" id="absorb" data-act="absorb"><span>Absorb</span><span class="num" id="absorbAmt">+1</span></button>
+
+      <div class="panel niche">
+        <div class="nhead">
+          <h3>Niche contest · <span id="nIdx" class="num">1</span></h3>
+          <span class="rate" id="nHeld">Holding 0 niches</span>
+        </div>
+        <div class="fight">
+          <div class="side">
+            <div class="who"><i id="nMe">Your swarm</i></div>
+            <div class="num" id="nMyP">0</div>
+            <div class="hp"><i id="hpMe" style="width:100%"></i></div>
+          </div>
+          <div class="vs">vs</div>
+          <div class="side r">
+            <div class="who"><i id="nRival">Rival</i></div>
+            <div class="num" id="nRivP">0</div>
+            <div class="hp"><i id="hpRiv" style="width:100%"></i></div>
+          </div>
+        </div>
+        <div class="nfoot">
+          <span class="verdict" id="nVerdict">Even</span>
+          <button class="btn" id="nBtn" data-act="contest">Contest niche</button>
+        </div>
+        <div class="lastfight" id="nLast">Win a niche and every nutrient you earn is multiplied. Power comes from your income.</div>
+      </div>
+    </section>
+
+    <section class="right">
+      <nav class="tabs" role="tablist" aria-label="Notebook sections">
+        <button role="tab" data-act="tab" data-arg="org">Organisms</button>
+        <button role="tab" data-act="tab" data-arg="mut">Mutations <span class="badge" id="mutBadge" hidden>0</span></button>
+        <button role="tab" data-act="tab" data-arg="inst">Instincts <span class="badge" id="instBadge" hidden>new</span></button>
+        <button role="tab" data-act="tab" data-arg="gen">Genome</button>
+        <button role="tab" data-act="tab" data-arg="note">Notebook</button>
+      </nav>
+      <div id="tabbody"></div>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="modal" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="../../shared/engine.js"></script>
+<script>
+(function(){
+'use strict';
+const KEY='primordial-save-v1';
+const $=s=>document.querySelector(s);
+const now=()=>Date.now();
+
+/* ---------- content ---------- */
+const TIERS=[
+  {name:'Protocell', plural:'Protocells', base:10,   growth:1.12},
+  {name:'Flagellate',plural:'Flagellates',base:150,  growth:1.13},
+  {name:'Colony',    plural:'Colonies',   base:4e3,  growth:1.14},
+  {name:'Sponge',    plural:'Sponges',    base:1.2e5,growth:1.15},
+  {name:'Polyp',     plural:'Polyps',     base:5e6,  growth:1.16},
+  {name:'Medusa',    plural:'Medusae',    base:3e8,  growth:1.17},
+  {name:'Reef',      plural:'Reefs',      base:4e10, growth:1.18},
+  {name:'Leviathan', plural:'Leviathans', base:8e12, growth:1.19},
+];
+const TCOL=['#f0b25a','#86dc97','#5fd0c8','#e8cf86','#ff9b85','#b892ff','#ff7d6b','#8fb6ff'];
+const TIER_REQ=[null,null,null,null,
+  {t:'Survive your first extinction',ok:()=>S.stats.ext>=1},
+  {t:'Earn 20 Genetic Memory in total',ok:()=>S.gmLife>=20},
+  {t:'Earn 200 Genetic Memory in total',ok:()=>S.gmLife>=200},
+  {t:'Earn 2,000 Genetic Memory in total',ok:()=>S.gmLife>=2000}];
+
+const MUTS={
+  membrane:{name:'Thick Membrane',r:'common',desc:'Protocells ×3',tier:{0:3}},
+  flagella:{name:'Whip Flagella',r:'common',desc:'Flagellates ×3',tier:{1:3}},
+  adhesion:{name:'Cell Adhesion',r:'common',desc:'Colonies ×3',tier:{2:3}},
+  spicules:{name:'Silica Spicules',r:'common',desc:'Sponges ×3',tier:{3:3}},
+  pseudopod:{name:'Pseudopods',r:'common',desc:'Absorb ×5',click:5},
+  vacuole:{name:'Food Vacuole',r:'common',desc:'All income ×1.5',global:1.5},
+  thrift:{name:'Lean Metabolism',r:'common',desc:'Organisms cost 25% less',cost:0.75},
+  chloroplast:{name:'Chloroplasts',r:'rare',desc:'All income ×2.5',global:2.5},
+  mitosis:{name:'Rapid Mitosis',r:'rare',desc:'Organism prices climb more slowly',growth:0.01},
+  toxin:{name:'Toxin Glands',r:'rare',desc:'Contest power ×3',power:3},
+  cnido:{name:'Stinging Cells',r:'rare',desc:'Polyps and Medusae ×5',tier:{4:5,5:5}},
+  quorum:{name:'Quorum Sensing',r:'rare',desc:'All income +1% per organism bought this run',quorum:true},
+  glow:{name:'Bioluminescence',r:'rare',desc:'Each absorb also collects 1 second of income',glow:1},
+  endo:{name:'Endosymbiosis',r:'epic',desc:'All income ×6',global:6},
+  eyespot:{name:'Eyespot',r:'epic',desc:'Contest power ×5, and each niche held is worth more',power:5,niche:0.15},
+  drift:{name:'Genetic Drift',r:'epic',desc:'Mutations arrive 4× sooner',unique:true},
+  hive:{name:'Colonial Mind',r:'epic',desc:'All income ×1.25 for every mutation you carry',unique:true},
+  radiate:{name:'Adaptive Radiation',r:'epic',desc:'Every organism ×2',tierAll:2},
+};
+const RAR_ORDER={common:0,rare:1,epic:2};
+
+const WORLDS={
+  soup:{name:'Primordial Soup',era:'Hadean',flavor:'Warm, still water. Nothing is hunting you yet.',mods:['No modifiers'],gm:1},
+  vent:{name:'Hydrothermal Vent',era:'Archean seafloor',flavor:'Black smokers pour out chemical energy.',mods:['Protocells ×4','Absorb ×0.25'],tier:{0:4},click:0.25,gm:1},
+  snowball:{name:'Snowball Earth',era:'Cryogenian',flavor:'Ice reaches the equator. Life holds on in the cracks.',mods:['All income ×0.4','Mutations arrive much sooner','Genetic Memory ×1.5'],global:0.4,mutGrowth:15,gm:1.5},
+  shallows:{name:'Sunlit Shallows',era:'Proterozoic coast',flavor:'Bright, crowded and competitive.',mods:['Colonies and Sponges ×3','Rivals 2× stronger'],tier:{2:3,3:3},rival:2,gm:1},
+  bloom:{name:'Toxic Bloom',era:'Archean lagoon',flavor:'Poisoned water forces strange adaptations.',mods:['Organisms cost 2×','+1 mutation option','Rare and epic mutations more common','Genetic Memory ×1.3'],cost:2,extraChoice:1,rareBoost:true,gm:1.3},
+  oxygen:{name:'Great Oxidation',era:'Paleoproterozoic',flavor:'Oxygen floods the sea. Big bodies thrive and small ones choke.',mods:['Flagellates and up ×3','Protocells ×0.3'],tier:{0:0.3,1:3,2:3,3:3,4:3,5:3,6:3,7:3},gm:1},
+  predator:{name:'Predator Sea',era:'Ediacaran',flavor:'Something larger is eating everything.',mods:['Rivals 3× stronger','Each niche held is worth much more','Genetic Memory ×1.3'],rival:3,niche:0.25,gm:1.3},
+  tide:{name:'Tidal Pool',era:'Archean shoreline',flavor:'The tide turns every 30 seconds.',mods:['High tide: income ×2.5','Low tide: income ×0.5'],tide:true,gm:1},
+};
+
+const GENOME=[
+  {id:'vigor',name:'Ancestral Vigor',desc:l=>`All income ×2 per level. Now ×${fmt(2**l)}.`,cost:l=>Math.ceil(3**l),max:Infinity},
+  {id:'pseudo',name:'Strong Pseudopods',desc:l=>`Absorb ×3 per level. Now ×${fmt(3**l)}.`,cost:l=>2**l,max:Infinity},
+  {id:'headstart',name:'Head Start',desc:l=>`Begin each run with ${fmt(headStart(l+1))} nutrients${l?` (now ${fmt(headStart(l))})`:''}.`,cost:l=>Math.ceil(2*4**l),max:8},
+  {id:'reflex',name:'Hardwired Reflexes',desc:l=>`Organism reflexes act 30% faster. Now every ${reflexIv(l).toFixed(2)}s.`,cost:l=>Math.ceil(3*2.5**l),max:10},
+  {id:'pool',name:'Wider Gene Pool',desc:()=>'+1 option in every mutation draft.',cost:l=>[15,150][l],max:2},
+  {id:'inherit',name:'Inherited Trait',desc:l=>`Carry ${l+1} random mutation${l?'s':''} through each extinction.`,cost:l=>Math.ceil(8*6**l),max:3},
+  {id:'spores',name:'Dormant Spores',desc:l=>`Growth while you're away: ${50+10*(l+1)}% of normal (now ${50+10*l}%).`,cost:l=>Math.ceil(4*3**l),max:5},
+];
+const headStart=l=>l?10*8**l:0;
+const reflexIv=l=>Math.max(0.1,5*Math.pow(0.7,l));
+
+const INSTINCTS=[
+  {id:'feed',name:'Feeding Reflex',desc:'Absorbs 3 times a second on its own.',req:'Absorb by hand 250 times',prog:()=>[S.stats.clicks,250]},
+  ...TIERS.map((t,i)=>({id:'buy'+i,tier:i,name:t.name+' Reflex',desc:`Buys as many ${t.plural} as you can afford, on a timer.`,req:`Buy 30 ${t.plural} in one run`,prog:()=>[S.stats.maxBought[i],30]})),
+  {id:'contest',name:'Territorial Instinct',desc:'Contests the next niche whenever your swarm has recovered.',req:'Win 5 niche contests',prog:()=>[S.stats.battlesWon,5]},
+  {id:'select',name:'Natural Selection',desc:'Picks mutations for you, rarest first.',req:'Survive 3 extinctions',prog:()=>[S.stats.ext,3]},
+  {id:'extinct',name:'Mass Extinction',desc:'Ends the run once it would pay your chosen Genetic Memory, then starts in the first world offered.',req:'Survive 10 extinctions',prog:()=>[S.stats.ext,10]},
+];
+
+const ERAS=[
+  {t:'Archean · single cells',s:'Protocells to Leviathans, extinction and Genetic Memory. You are here.'},
+  {t:'Proterozoic · multicellular bodies',s:'Design a body plan; organs become a second layer of automation.'},
+  {t:'Cambrian explosion · predators',s:'Autobattler food webs and species you keep across runs.'},
+  {t:'Land · continents',s:'Several pools running at once, each managed by its own instincts.'},
+  {t:'Sentience · tools',s:'Your lineage starts automating evolution itself.'},
+  {t:'Panspermia · the galaxy',s:'Seed other worlds. Numbers past 1e308.'},
+];
+
+/* ---------- utils ---------- */
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const GA=['Proto','Archaeo','Cyano','Thermo','Pelago','Haplo','Myxo','Chlamy','Volvo','Stromato','Halo','Litho','Bentho','Phago'];
+const GB=['coccus','bacter','monas','phyton','zoon','cystis','spora','plasma','nema','gonium'];
+const EP=['vorax','lucida','tenax','primus','ferox','minima','aurea','abyssalis','profunda','gracilis','rapax','persistens','mirabilis','obscura'];
+function binomial(r){return GA[Math.floor(r()*GA.length)]+GB[Math.floor(r()*GB.length)]+' '+EP[Math.floor(r()*EP.length)];}
+const {fmt,fmtI,fmtTime}=window.Arcade;
+
+/* ---------- state ---------- */
+function fresh(){
+  return {v:1,n:0,runTotal:0,tiers:TIERS.map(()=>({amt:0,bought:0})),muts:[],mutGranted:0,pending:0,offer:null,
+    world:'soup',worldOffer:null,won:0,battle:null,cooldown:0,lastFight:'',seed:Math.floor(Math.random()*1e9),
+    gm:0,gmLife:0,genome:{},inst:{unl:{},on:{},t:{}},extinctAt:10,seenInst:true,
+    stats:{clicks:0,autoClicks:0,ext:0,battlesWon:0,best:0,play:0,run:0,maxBought:TIERS.map(()=>0)},
+    buy:1,tab:'org',last:now(),log:[{t:0,m:'Life begins in the Primordial Soup.'}]};
+}
+function merge(o){
+  const f=fresh(); if(!o||typeof o!=='object') return f;
+  const s=Object.assign(f,o);
+  s.stats=Object.assign(fresh().stats,o.stats||{});
+  s.inst=Object.assign({unl:{},on:{},t:{}},o.inst||{});
+  s.genome=Object.assign({},o.genome||{});
+  const tiers=TIERS.map((_,i)=>(o.tiers&&o.tiers[i])||{amt:0,bought:0}); s.tiers=tiers;
+  const mb=TIERS.map((_,i)=>(s.stats.maxBought&&s.stats.maxBought[i])||0); s.stats.maxBought=mb;
+  if(!WORLDS[s.world]) s.world='soup';
+  return s;
+}
+let S=fresh();
+let D=null;
+function log(m){S.log.unshift({t:S.stats.play,m});if(S.log.length>40)S.log.length=40;}
+
+/* ---------- derived ---------- */
+function W(){return WORLDS[S.world]||WORLDS.soup;}
+function countOf(id){let k=0;for(const m of S.muts)if(m===id)k++;return k;}
+function derive(){
+  const w=W(),cnt={};for(const id of S.muts)cnt[id]=(cnt[id]||0)+1;
+  const g=id=>S.genome[id]||0;
+  let global=Math.pow(2,g('vigor'))*(1+0.02*S.gm)*(w.global||1);
+  let tierAll=1,click=Math.pow(3,g('pseudo'))*(w.click||1),costM=w.cost||1,growthD=0,power=1,nicheV=1.25+(w.niche||0),glow=0;
+  for(const id in cnt){const m=MUTS[id],k=cnt[id];if(!m)continue;
+    if(m.global)global*=Math.pow(m.global,k); if(m.click)click*=Math.pow(m.click,k); if(m.cost)costM*=Math.pow(m.cost,k);
+    if(m.growth)growthD+=m.growth*k; if(m.power)power*=Math.pow(m.power,k); if(m.niche)nicheV+=m.niche*k;
+    if(m.glow)glow+=m.glow*k; if(m.tierAll)tierAll*=Math.pow(m.tierAll,k);}
+  if(cnt.hive) global*=Math.pow(1.25,S.muts.length);
+  if(cnt.quorum){let tb=0;for(const t of S.tiers)tb+=t.bought;global*=Math.pow(1+tb*0.01,cnt.quorum);}
+  global*=Math.pow(nicheV,S.won);
+  let tide=null; if(w.tide){tide=Math.floor(S.stats.run/30)%2===0;global*=tide?2.5:0.5;}
+  const tm=TIERS.map((t,i)=>{let m=Math.pow(2,Math.floor(S.tiers[i].bought/25))*tierAll*((w.tier&&w.tier[i])||1);
+    for(const id in cnt){const mt=MUTS[id]&&MUTS[id].tier;if(mt&&mt[i])m*=Math.pow(mt[i],cnt[id]);}return m;});
+  const nps=S.tiers[0].amt*tm[0]*global;
+  const growth=TIERS.map(t=>Math.max(1.03,t.growth-growthD));
+  return {w,cnt,global,tm,nps,click,costM,growth,power,nicheV,glow,tide,mutGrowth:w.mutGrowth||40,drift:cnt.drift?0.25:1};
+}
+
+/* ---------- economy ---------- */
+function gain(x){if(!(x>0))return;S.n=Math.min(1e300,S.n+x);S.runTotal=Math.min(1e300,S.runTotal+x);}
+function step(h){
+  for(let i=TIERS.length-1;i>0;i--){const p=S.tiers[i].amt*0.25*D.tm[i]*h;if(p>0)S.tiers[i-1].amt=Math.min(1e300,S.tiers[i-1].amt+p);}
+  gain(D.nps*h);
+}
+function tierUnlocked(i){return !TIER_REQ[i]||TIER_REQ[i].ok();}
+function tierVisible(i){return tierUnlocked(i)&&(i===0||S.tiers[i-1].amt>=1||S.tiers[i].amt>0);}
+function costN(i,k){const r=D.growth[i],b=S.tiers[i].bought;return TIERS[i].base*D.costM*Math.pow(r,b)*(Math.pow(r,k)-1)/(r-1);}
+function maxAfford(i){const r=D.growth[i],c0=TIERS[i].base*D.costM*Math.pow(r,S.tiers[i].bought);if(S.n<c0)return 0;
+  let k=Math.floor(Math.log(S.n*(r-1)/c0+1)/Math.log(r));while(k>0&&costN(i,k)>S.n)k--;return k;}
+function buy(i,mode){
+  if(!tierVisible(i))return false;
+  let k=mode==='max'?maxAfford(i):Number(mode);if(k<=0)return false;
+  const c=costN(i,k);if(c>S.n)return false;
+  S.n-=c;const t=S.tiers[i];t.bought+=k;t.amt+=k;
+  if(t.bought>S.stats.maxBought[i])S.stats.maxBought[i]=t.bought;
+  if(t.bought%25<k||k>=25){/* crossed a milestone */ if(Math.floor(t.bought/25)>Math.floor((t.bought-k)/25)) toast(`${TIERS[i].plural} output doubled (${t.bought} bought)`,'var(--cyan)');}
+  D=derive();return true;
+}
+function clickValue(){return (1+D.nps*0.05)*D.click+D.nps*D.glow;}
+function absorb(){const v=clickValue();gain(v);S.stats.clicks++;return v;}
+
+/* ---------- mutations ---------- */
+function nextMut(){return 100*Math.pow(D.mutGrowth,S.mutGranted)*D.drift;}
+function checkMut(){let g=0,got=0;while(S.runTotal>=nextMut()&&g++<60){S.mutGranted++;S.pending++;got++;}
+  if(got&&!(S.inst.unl.select&&S.inst.on.select))toast(got>1?`${got} mutations ready`:'A mutation is ready','var(--violet)');}
+function ensureOffer(){
+  if(S.offer||S.pending<=0)return;
+  const n=3+(S.genome.pool||0)+(W().extraChoice||0);
+  const wt=W().rareBoost?{common:46,rare:40,epic:14}:{common:70,rare:25,epic:5};
+  const pool=Object.keys(MUTS).filter(id=>{const m=MUTS[id];if(m.unique&&S.muts.includes(id))return false;
+    return !m.tier||Object.keys(m.tier).some(i=>tierUnlocked(Number(i)));});
+  const out=[];
+  while(out.length<n&&out.length<pool.length){
+    const cand=pool.filter(id=>!out.includes(id));let tot=0;for(const id of cand)tot+=wt[MUTS[id].r];
+    let r=Math.random()*tot;for(const id of cand){r-=wt[MUTS[id].r];if(r<=0){out.push(id);break;}}
+    if(r>0)out.push(cand[cand.length-1]);
+  }
+  S.offer=out;
+}
+function pickMut(id,auto){
+  if(!S.offer||!S.offer.includes(id))return;
+  S.muts.push(id);S.pending--;S.offer=null;D=derive();
+  log(`${auto?'Natural Selection chose':'Evolved'} <b>${MUTS[id].name}</b>.`);
+  if(!auto)toast(`Evolved ${MUTS[id].name}: ${MUTS[id].desc}`,'var(--violet)');
+}
+
+/* ---------- niche contests ---------- */
+function rivalPower(i){return 8*Math.pow(7,i)*(W().rival||1);}
+function myPower(){return (Math.pow(D.nps,0.45)+1)*D.power;}
+function rivalName(i){return binomial(rng(S.seed*31+i*7919+1));}
+function canContest(){return !S.battle&&S.stats.run>=S.cooldown&&!S.worldOffer;}
+function startBattle(){if(!canContest())return;S.battle={i:S.won,you:100,them:100,acc:0};}
+function battleTick(h){
+  const b=S.battle;if(!b)return;b.acc+=h;
+  while(S.battle&&b.acc>=0.25){
+    b.acc-=0.25;const ratio=myPower()/rivalPower(b.i);
+    b.them-=Math.min(100,8*Math.pow(ratio,0.6)*(0.7+Math.random()*0.6));
+    b.you-=Math.min(100,8*Math.pow(1/ratio,0.6)*(0.7+Math.random()*0.6));
+    if(b.them<=0||b.you<=0){
+      const win=b.them<=0&&(b.you>0||b.them<=b.you);const nm=rivalName(b.i);
+      if(win){S.won++;S.stats.battlesWon++;S.cooldown=S.stats.run+2;D=derive();
+        S.lastFight=`Took niche ${b.i+1} from ${nm}. Income ×${D.nicheV.toFixed(2)}.`;log(`Won niche ${b.i+1} from <i>${nm}</i>.`);}
+      else{S.cooldown=S.stats.run+20;S.lastFight=`${nm} held its niche. Your swarm is recovering.`;}
+      S.battle=null;
+    }
+  }
+}
+
+/* ---------- extinction ---------- */
+const EXT_MIN=1e8;
+function gmFor(total){return total<EXT_MIN?0:Math.floor(Math.pow(total/EXT_MIN,0.35)*W().gm);}
+function gmGain(){return gmFor(S.runTotal);}
+function nextGmAt(){const g=gmGain()+1;return EXT_MIN*Math.pow(g/W().gm,1/0.35);}
+function extinction(auto){
+  const g=gmGain();if(g<=0||S.worldOffer)return;
+  const keepN=Math.min(S.genome.inherit||0,S.muts.length);const pool=S.muts.slice();const kept=[];
+  for(let k=0;k<keepN;k++){const j=Math.floor(Math.random()*pool.length);kept.push(pool.splice(j,1)[0]);}
+  S.gm+=g;S.gmLife+=g;S.stats.ext++;
+  log(`Extinction of <i>${binomial(rng(S.seed))}</i>. +${fmt(g)} Genetic Memory.`);
+  const prevWorld=S.world;
+  S.n=headStart(S.genome.headstart||0);S.runTotal=0;S.tiers=TIERS.map(()=>({amt:0,bought:0}));
+  S.muts=kept;S.mutGranted=0;S.pending=0;S.offer=null;S.won=0;S.battle=null;S.cooldown=0;S.lastFight='';
+  S.stats.run=0;S.seed=Math.floor(Math.random()*1e9);
+  const ids=Object.keys(WORLDS).filter(k=>k!=='soup'&&k!==prevWorld);const offer=[];
+  while(offer.length<3&&ids.length)offer.push(ids.splice(Math.floor(Math.random()*ids.length),1)[0]);
+  S.worldOffer=offer;
+  if(kept.length)log(`Inherited ${kept.map(id=>MUTS[id].name).join(', ')}.`);
+  D=derive();
+  if(auto)chooseWorld(offer[0],true);
+}
+function chooseWorld(id,auto){
+  if(!S.worldOffer||!S.worldOffer.includes(id))return;
+  S.world=id;S.worldOffer=null;D=derive();
+  log(`New lineage <i>${binomial(rng(S.seed))}</i> begins in the ${WORLDS[id].name}.`);
+  toast(`${auto?'Mass Extinction: ':''}Life begins again in the ${WORLDS[id].name}.`,'var(--violet)');
+  closeModal();
+}
+
+/* ---------- instincts ---------- */
+function on(id){return S.inst.unl[id]&&S.inst.on[id];}
+function checkInstincts(){
+  for(const it of INSTINCTS){if(S.inst.unl[it.id])continue;const [a,b]=it.prog();
+    if(a>=b){S.inst.unl[it.id]=true;S.inst.on[it.id]=it.id!=='extinct';S.seenInst=false;
+      log(`New instinct: <b>${it.name}</b>.`);toast(`New instinct evolved: ${it.name}`,'var(--good)');}}
+}
+function runInstincts(h){
+  if(on('feed')){S.inst.t.feed=(S.inst.t.feed||0)+h*3;const k=Math.floor(S.inst.t.feed);if(k>0){S.inst.t.feed-=k;gain(clickValue()*k);S.stats.autoClicks+=k;}}
+  const iv=reflexIv(S.genome.reflex||0);
+  for(let i=0;i<TIERS.length;i++){const id='buy'+i;if(!on(id)||!tierVisible(i))continue;
+    S.inst.t[id]=(S.inst.t[id]||0)+h;if(S.inst.t[id]>=iv){S.inst.t[id]=0;buy(i,'max');}}
+  if(on('contest')&&canContest()&&myPower()>=rivalPower(S.won)*0.8)startBattle();
+  if(on('select')&&S.pending>0){ensureOffer();const best=S.offer.slice().sort((a,b)=>RAR_ORDER[MUTS[b].r]-RAR_ORDER[MUTS[a].r]);pickMut(best[0],true);}
+  if(on('extinct')&&S.extinctAt>0&&gmGain()>=S.extinctAt)extinction(true);
+}
+
+/* ---------- loop ---------- */
+function advance(dt){
+  if(S.worldOffer||!(dt>0))return;
+  const steps=Math.min(400,Math.max(1,Math.ceil(dt/0.25)));const h=dt/steps;
+  for(let k=0;k<steps;k++){
+    D=derive();step(h);S.stats.play+=h;S.stats.run+=h;
+    runInstincts(h);battleTick(h);checkMut();
+    if(S.worldOffer)break;
+  }
+  if(S.runTotal>S.stats.best)S.stats.best=S.runTotal;
+  checkInstincts();
+}
+function offline(sec){
+  if(S.worldOffer||sec<30)return null;
+  sec=Math.min(sec,86400);const eff=0.5+0.1*(S.genome.spores||0);const t=sec*eff;const n0=S.runTotal;
+  const steps=300,h=t/steps;
+  for(let k=0;k<steps;k++){D=derive();step(h);S.stats.run+=h;}
+  S.stats.play+=sec;D=derive();checkMut();
+  if(S.runTotal>S.stats.best)S.stats.best=S.runTotal;
+  return {sec,eff,gain:S.runTotal-n0};
+}
+
+/* ---------- save ---------- */
+function save(){S.last=now();Arcade.save(KEY,S);Arcade.report('primordial',{summary:`Run ${S.stats.ext+1} · ${fmt(S.runTotal)} nutrients earned`,detail:`${fmt(S.gmLife)} Genetic Memory earned · ${W().name}`});}
+function load(){return Arcade.load(KEY);}
+function exportSave(){return Arcade.encode(S);}
+function importSave(txt){const o=Arcade.decode(txt);if(!o||!o.tiers)throw new Error('bad');S=merge(o);S.last=now();D=derive();save();}
+
+/* ---------- toasts / modal ---------- */
+function toast(m,c){const el=document.createElement('div');el.className='toast';el.style.setProperty('--tc',c||'var(--amber)');el.textContent=m;
+  const box=$('#toasts');box.appendChild(el);while(box.children.length>4)box.firstChild.remove();setTimeout(()=>el.remove(),4200);}
+let modalKind=null;
+function openModal(kind,html){modalKind=kind;$('#sheet').innerHTML=html;$('#modal').hidden=false;const b=$('#sheet').querySelector('button');if(b)b.focus({preventScroll:true});}
+function closeModal(){modalKind=null;$('#modal').hidden=true;}
+function draftHTML(){
+  ensureOffer();const o=S.offer||[];
+  return `<div class="eyebrow">Mutation${S.pending>1?` · ${S.pending} ready`:''}</div><h2>Choose one trait to carry forward</h2>
+  <p class="sub">Mutations stack and last until extinction.</p>
+  <div class="cards">${o.map(id=>{const m=MUTS[id],have=countOf(id);return `<button class="card r-${m.r}" data-act="pickmut" data-arg="${id}"><span class="rar">${m.r}</span><span class="cname">${m.name}</span><span class="cdesc">${m.desc}</span>${have?`<span class="have">You carry ${have}</span>`:''}</button>`;}).join('')}</div>
+  <div class="mfoot"><button class="ghost" data-act="close">Decide later</button></div>`;
+}
+function worldHTML(){
+  return `<div class="eyebrow">Extinction · Genetic Memory ${fmt(S.gm)}</div><h2>Your lineage is gone. Choose where life starts again.</h2>
+  <p class="sub">Everything resets except Genetic Memory, your instincts, your genome and any inherited traits.</p>
+  <div class="cards">${S.worldOffer.map(id=>{const w=WORLDS[id];return `<button class="card" data-act="world" data-arg="${id}"><span class="era2">${w.era}</span><span class="cname">${w.name}</span><span class="cdesc">${w.flavor}</span><ul>${w.mods.map(x=>`<li>${x}</li>`).join('')}</ul></button>`;}).join('')}</div>`;
+}
+function offlineHTML(r){
+  return `<div class="eyebrow">Dormant for ${fmtTime(r.sec)}</div><h2>Your pool kept growing while you were away</h2>
+  <p class="sub">Growth ran at ${Math.round(r.eff*100)}% of normal. Dormant Spores in the Genome raise that.</p>
+  <div class="big" style="margin:14px 0">+${fmt(r.gain)}</div>
+  ${S.pending?`<p class="sub">${S.pending} mutation${S.pending>1?'s are':' is'} waiting for you.</p>`:''}
+  <div class="mfoot"><button class="btn primary" data-act="close">Back to the pool</button></div>`;
+}
+
+/* ---------- tabs ---------- */
+const TABS={
+org:{
+  key(){return TIERS.map((_,i)=>tierVisible(i)?1:0).join('')+nextLockedTier();},
+  build(){
+    let h=`<div class="tabhead"><div><h2>Organisms</h2><p class="sub">Each kind breeds the kind below it. Every 25 bought doubles that kind's output.</p></div>
+    <div class="seg" role="group" aria-label="Buy amount">${[1,10,'max'].map(m=>`<button data-act="mode" data-arg="${m}" id="mode-${m}">${m==='max'?'Max':'×'+m}</button>`).join('')}</div></div><div class="orgs">`;
+    TIERS.forEach((t,i)=>{if(!tierVisible(i))return;
+      h+=`<div class="org"><span class="glyph" style="--c:${TCOL[i]}"></span><div style="min-width:0"><div class="oname">${t.name} <span class="num" id="o-own-${i}"></span><span class="bought" id="o-b-${i}"></span></div>
+      <div class="odesc" id="o-d-${i}"></div><div class="ms"><div class="msbar"><i id="o-ms-${i}"></i></div><span id="o-msl-${i}"></span></div></div>
+      <button class="buy" data-act="buy" data-arg="${i}" id="o-btn-${i}"><span class="l" id="o-l-${i}">Buy 1</span><span class="c" id="o-c-${i}"></span></button></div>`;});
+    const L=nextLockedTier();
+    if(L>=0)h+=`<div class="org locked"><span class="glyph"></span><div><div class="oname">${TIERS[L].name}</div><div class="odesc">Locked</div></div><div class="lock">${TIER_REQ[L].t}</div></div>`;
+    return h+'</div>';
+  },
+  update(){
+    [1,10,'max'].forEach(m=>{const b=$('#mode-'+m);if(b)b.classList.toggle('on',String(S.buy)===String(m));});
+    TIERS.forEach((t,i)=>{const own=$('#o-own-'+i);if(!own)return;const T=S.tiers[i];
+      own.textContent=fmtI(T.amt);$('#o-b-'+i).textContent=T.amt>=T.bought+1?`${fmtI(T.bought)} bought`:'';
+      const each=i===0?D.tm[0]*D.global:0.25*D.tm[i];
+      $('#o-d-'+i).textContent=i===0?`${fmt(each)} nutrients/s each · ${fmt(T.amt*each)}/s total`:`Buds ${fmt(each)} ${TIERS[i-1].plural}/s each · ${fmt(T.amt*each)}/s total`;
+      const r=T.bought%25;$('#o-ms-'+i).style.width=(r/25*100)+'%';$('#o-msl-'+i).textContent=`${r}/25 to ×2 · now ×${fmt(D.tm[i])}`;
+      let k,can;if(S.buy==='max'){k=Math.max(1,maxAfford(i));can=maxAfford(i)>0;}else{k=Number(S.buy);}
+      const c=costN(i,k);if(S.buy!=='max')can=S.n>=c;
+      $('#o-l-'+i).textContent=`Buy ${fmtI(k)}`;$('#o-c-'+i).textContent=fmt(c);
+      const btn=$('#o-btn-'+i);btn.classList.toggle('can',can);btn.disabled=!can;});
+  }
+},
+mut:{
+  key(){return S.muts.length+'|'+(S.pending>0);},
+  build(){
+    const cnt={};S.muts.forEach(id=>cnt[id]=(cnt[id]||0)+1);
+    const ids=Object.keys(cnt).sort((a,b)=>RAR_ORDER[MUTS[b].r]-RAR_ORDER[MUTS[a].r]);
+    return `<div class="tabhead"><div><h2>Mutations</h2><p class="sub">Earning nutrients unlocks a draft: pick one of several random traits. They stack, and they're lost at extinction unless inherited.</p></div></div>
+    <div class="panel"><div class="mutready"><div><div class="eyebrow">Next mutation at</div><div class="num" id="m-next"></div></div>
+    <button class="btn primary" data-act="draft" id="m-draft">Draft a mutation</button></div><div class="progress"><i id="m-bar"></i></div></div>
+    ${ids.length?`<div class="mlist">${ids.map(id=>{const m=MUTS[id];return `<div class="mut r-${m.r}"><div class="n"><span>${m.name}</span><span class="num">${cnt[id]>1?'×'+cnt[id]:''}</span></div><div class="rar">${m.r}</div><div class="d">${m.desc}</div></div>`;}).join('')}</div>`
+    :`<p class="empty">No mutations yet this run. The first arrives at 100 nutrients earned.</p>`}`;
+  },
+  update(){
+    const nx=nextMut(),prev=S.mutGranted?100*Math.pow(D.mutGrowth,S.mutGranted-1)*D.drift:0;
+    $('#m-next').textContent=`${fmt(S.runTotal)} / ${fmt(nx)} earned this run`;
+    const p=Math.max(0,Math.min(1,(Math.log10(S.runTotal+1)-Math.log10(prev+1))/(Math.log10(nx+1)-Math.log10(prev+1))));
+    $('#m-bar').style.width=(p*100)+'%';
+    const b=$('#m-draft');b.disabled=S.pending<=0;b.textContent=S.pending>0?`Draft a mutation (${S.pending})`:'No mutation ready';
+  }
+},
+inst:{
+  key(){return INSTINCTS.map(it=>S.inst.unl[it.id]?1:0).join('')+TIERS.map((_,i)=>tierUnlocked(i)?1:0).join('');},
+  build(){
+    S.seenInst=true;
+    return `<div class="tabhead"><div><h2>Instincts</h2><p class="sub">Your automation. Instincts evolve from things you do, never from purchases, and they're kept forever.</p></div></div>
+    ${INSTINCTS.filter(it=>it.tier==null||tierUnlocked(it.tier)).map(it=>{const u=S.inst.unl[it.id];
+      return `<div class="inst ${u?'':'dormant'}"><div style="min-width:0"><div class="n">${it.name} <span class="state ${u?'on':'off'}">${u?'Evolved':'Dormant'}</span></div>
+      <div class="d">${it.desc}${it.id==='extinct'&&u?` Trigger at <input class="inp" type="number" min="1" id="extAt" value="${S.extinctAt}" aria-label="Genetic Memory needed to trigger"> Genetic Memory.`:''}</div>
+      ${u?(it.tier!=null?`<div class="req" id="iv-${it.id}"></div>`:''):`<div class="req" id="rq-${it.id}"></div>`}</div>
+      ${u?`<button class="toggle" data-act="inst" data-arg="${it.id}" id="tg-${it.id}" aria-label="Turn ${it.name} on or off"></button>`:''}</div>`;}).join('')}`;
+  },
+  update(){
+    INSTINCTS.forEach(it=>{const tg=$('#tg-'+it.id);if(tg)tg.setAttribute('aria-pressed',S.inst.on[it.id]?'true':'false');
+      const rq=$('#rq-'+it.id);if(rq){const [a,b]=it.prog();rq.textContent=`${it.req}: ${fmtI(Math.min(a,b))} / ${b}`;}
+      const iv=$('#iv-'+it.id);if(iv)iv.textContent=`Acts every ${reflexIv(S.genome.reflex||0).toFixed(2)}s`;});
+  }
+},
+gen:{
+  key(){return 'g';},
+  build(){
+    const w=W();
+    return `<div class="tabhead"><div><h2>Genome</h2><p class="sub">Extinction ends the run and turns what you earned into Genetic Memory. Spend it on permanent traits, or keep it: each unspent point adds 2% to all income.</p></div></div>
+    <div class="ext"><div class="row"><div><div class="eyebrow">Extinction now pays</div><div class="gain" id="g-gain"></div></div>
+    <button class="btn danger" data-act="extinct" id="g-ext">Trigger extinction</button></div><div class="rate" id="g-next"></div></div>
+    <h4>Permanent traits</h4><div class="shop">${GENOME.map(x=>`<div class="gitem"><div style="min-width:0"><div class="n">${x.name}<span class="lv" id="g-lv-${x.id}"></span></div><div class="d" id="g-d-${x.id}"></div></div>
+      <button class="gbuy" data-act="gbuy" data-arg="${x.id}" id="g-b-${x.id}"></button></div>`).join('')}</div>
+    <h4>This world · ${w.name}</h4><p class="sub" style="font-family:var(--f-display);font-style:italic;font-size:16px">${w.era}. ${w.flavor}</p><ul class="mods">${w.mods.map(m=>`<li>${m}</li>`).join('')}</ul>
+    <h4>The long road</h4><p class="sub">Later layers, not built yet. Each one adds a new reset and a new kind of automation.</p>
+    <div class="eras">${ERAS.map((e,i)=>`<div class="era ${i===0?'here':'future'}"><span class="dot"></span><div><div class="t">${e.t}</div><div class="s">${e.s}</div></div></div>`).join('')}</div>`;
+  },
+  update(){
+    const g=gmGain();$('#g-gain').textContent=`+${fmt(g)} Genetic Memory`;
+    $('#g-next').textContent=S.runTotal<EXT_MIN?`Needs ${fmt(EXT_MIN)} nutrients earned this run (${fmt(S.runTotal)} so far).`:`Next point at ${fmt(nextGmAt())} earned this run.${W().gm!==1?` This world pays ×${W().gm}.`:''}`;
+    const eb=$('#g-ext');eb.disabled=g<=0;if(g<=0){eb.classList.remove('armed');eb.textContent='Trigger extinction';}
+    GENOME.forEach(x=>{const l=S.genome[x.id]||0;$('#g-lv-'+x.id).textContent=l?`Lv ${l}`:'';$('#g-d-'+x.id).textContent=x.desc(l);
+      const b=$('#g-b-'+x.id);if(l>=x.max){b.textContent='Maxed';b.disabled=true;b.classList.remove('can');return;}
+      const c=x.cost(l);b.textContent=`${fmt(c)} GM`;b.disabled=S.gm<c;b.classList.toggle('can',S.gm>=c);});
+  }
+},
+note:{
+  key(){return 'n';},
+  build(){
+    return `<div class="tabhead"><div><h2>Field notebook</h2><p class="sub">Progress saves in this browser every 10 seconds. Export a backup now and then: clearing site data erases it.</p></div></div>
+    <div class="stats">${[['Time played','s-play'],['This run','s-run'],['Extinctions','s-ext'],['Best run','s-best'],['Genetic Memory earned','s-gml'],['Niches won','s-bw'],['Absorbs by hand','s-cl'],['Mutations carried','s-mu']].map(([k,id])=>`<div class="stat"><div class="k">${k}</div><div class="v" id="${id}"></div></div>`).join('')}</div>
+    <h4>Recent events</h4><ul class="logl" id="logl"></ul>
+    <h4>Save</h4><div class="savebox"><textarea id="saveTxt" placeholder="Export puts your save here. Paste a save here to import it." aria-label="Save data"></textarea>
+    <div class="btnrow"><button class="btn" data-act="save">Save now</button><button class="btn" data-act="export">Export</button><button class="btn" data-act="copy">Copy</button><button class="btn" data-act="import">Import pasted save</button><button class="btn danger" data-act="reset" id="resetBtn">Erase everything</button></div>
+    <span class="rate" id="saveMsg"></span></div>`;
+  },
+  update(){
+    const s=S.stats;const set=(id,v)=>{const e=$('#'+id);if(e)e.textContent=v;};
+    set('s-play',fmtTime(s.play));set('s-run',fmtTime(s.run));set('s-ext',s.ext);set('s-best',fmt(s.best));set('s-gml',fmt(S.gmLife));set('s-bw',s.battlesWon);set('s-cl',fmtI(s.clicks));set('s-mu',S.muts.length);
+    const L=$('#logl');const html=S.log.slice(0,25).map(e=>`<li>${e.m}</li>`).join('');if(L.dataset.h!==html){L.innerHTML=html;L.dataset.h=html;}
+  }
+}};
+function nextLockedTier(){for(let i=0;i<TIERS.length;i++){if(!tierUnlocked(i))return(i===0||tierVisible(i-1))?i:-1;}return -1;}
+
+let curKey=null;
+function renderTab(force){
+  const t=TABS[S.tab]||TABS.org;const k=S.tab+':'+t.key();
+  if(force||k!==curKey){curKey=k;$('#tabbody').innerHTML=t.build();}
+  t.update();
+  document.querySelectorAll('.tabs [role=tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.arg===S.tab?'true':'false'));
+}
+
+/* ---------- static UI ---------- */
+function updateUI(){
+  const w=W();
+  $('#species').textContent=binomial(rng(S.seed));$('#runNo').textContent=S.stats.ext+1;
+  $('#worldName').textContent=w.name;$('#worldEra').textContent=w.era;
+  $('#nut').textContent=fmt(S.n);$('#nps').textContent=`${fmt(D.nps)} / sec`;
+  $('#gmTop').textContent=fmt(S.gm);$('#gmBonus').textContent=`+${fmt(S.gm*2)}% income`;
+  $('#absorbAmt').textContent='+'+fmt(clickValue());
+  $('#poolHint').hidden=S.stats.clicks>=8||S.n>=10;
+  const td=$('#tide');td.hidden=D.tide===null;if(D.tide!==null)td.textContent=D.tide?'High tide ×2.5':'Low tide ×0.5';
+  const mb=$('#mutBadge');mb.hidden=S.pending<=0;mb.textContent=S.pending;
+  $('#instBadge').hidden=S.seenInst!==false;
+  // niche
+  const b=S.battle,i=b?b.i:S.won,P=myPower(),R=rivalPower(i),ratio=P/R;
+  $('#nIdx').textContent=i+1;$('#nHeld').textContent=S.won?`Holding ${S.won} · income ×${fmt(Math.pow(D.nicheV,S.won))}`:'Holding no niches';
+  $('#nMe').textContent=binomial(rng(S.seed)).split(' ')[0];$('#nRival').textContent=rivalName(i);
+  $('#nMyP').textContent=fmt(P)+' power';$('#nRivP').textContent=fmt(R)+' power';
+  $('#hpMe').style.width=(b?Math.max(0,b.you):100)+'%';$('#hpRiv').style.width=(b?Math.max(0,b.them):100)+'%';
+  const v=$('#nVerdict');v.className='verdict '+(ratio>1.3?'v-good':ratio<0.77?'v-bad':'v-even');v.textContent=ratio>1.3?'Favored':ratio<0.77?'Outmatched':'Even';
+  const nb=$('#nBtn');
+  if(b){nb.disabled=true;nb.textContent='Contesting…';}
+  else if(S.stats.run<S.cooldown){nb.disabled=true;nb.textContent=`Recovering ${Math.ceil(S.cooldown-S.stats.run)}s`;}
+  else{nb.disabled=!!S.worldOffer;nb.textContent=on('contest')?'Contest now (auto on)':'Contest niche';}
+  if(S.lastFight)$('#nLast').textContent=S.lastFight;
+  // modals
+  if(S.worldOffer&&modalKind!=='world')openModal('world',worldHTML());
+  if(modalKind==='draft'){if(S.pending<=0)closeModal();else if(!S.offer){openModal('draft',draftHTML());}}
+  renderTab(false);
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act]');if(!el)return;const a=el.dataset.act,arg=el.dataset.arg;
+  switch(a){
+    case 'absorb':{const v=absorb();const r=$('#poolWrap').getBoundingClientRect();spawnFloat(r.width*(0.35+Math.random()*0.3),r.height*(0.4+Math.random()*0.2),v);break;}
+    case 'tab':S.tab=arg;renderTab(true);break;
+    case 'mode':S.buy=arg==='max'?'max':Number(arg);break;
+    case 'buy':buy(Number(arg),S.buy);break;
+    case 'contest':startBattle();break;
+    case 'draft':if(S.pending>0)openModal('draft',draftHTML());break;
+    case 'pickmut':pickMut(arg,false);if(S.pending>0)openModal('draft',draftHTML());else closeModal();break;
+    case 'world':chooseWorld(arg,false);break;
+    case 'close':if(modalKind!=='world')closeModal();break;
+    case 'gbuy':{const x=GENOME.find(g=>g.id===arg),l=S.genome[arg]||0;if(l>=x.max)break;const c=x.cost(l);if(S.gm<c)break;S.gm-=c;S.genome[arg]=l+1;D=derive();log(`Genome: <b>${x.name}</b> level ${l+1}.`);break;}
+    case 'extinct':if(!el.classList.contains('armed')){el.classList.add('armed');el.textContent='Click again to end this run';setTimeout(()=>{el.classList.remove('armed');el.textContent='Trigger extinction';},4000);}else{el.classList.remove('armed');extinction(false);}break;
+    case 'inst':S.inst.on[arg]=!S.inst.on[arg];break;
+    case 'save':save();$('#saveMsg').textContent='Saved.';break;
+    case 'export':$('#saveTxt').value=exportSave();$('#saveMsg').textContent='Save exported below. Copy it somewhere safe.';break;
+    case 'copy':{const t=$('#saveTxt');if(!t.value)t.value=exportSave();const done=()=>$('#saveMsg').textContent='Copied.';
+      try{navigator.clipboard.writeText(t.value).then(done,()=>{t.select();$('#saveMsg').textContent='Selected. Press Ctrl+C to copy.';});}catch(err){t.select();$('#saveMsg').textContent='Selected. Press Ctrl+C to copy.';}break;}
+    case 'import':try{importSave($('#saveTxt').value);closeModal();curKey=null;$('#saveMsg').textContent='Save imported.';}catch(err){$('#saveMsg').textContent="That text isn't a Primordial save. Paste the whole exported block.";}break;
+    case 'reset':if(!el.classList.contains('armed')){el.classList.add('armed');el.textContent='Click again to erase';setTimeout(()=>{el.classList.remove('armed');el.textContent='Erase everything';},4000);}
+      else{S=fresh();D=derive();save();closeModal();curKey=null;toast('Everything erased. Life begins again.');}break;
+  }
+  updateUI();
+});
+document.addEventListener('change',e=>{if(e.target.id==='extAt'){S.extinctAt=Math.max(1,Math.floor(Number(e.target.value)||1));e.target.value=S.extinctAt;}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modalKind&&modalKind!=='world')closeModal();});
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal'&&modalKind!=='world')closeModal();});
+
+/* ---------- pool canvas ---------- */
+const cv=$('#pool'),cx=cv.getContext('2d');let PW=0,PH=0;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function resize(){const r=cv.getBoundingClientRect();const dpr=Math.min(2,window.devicePixelRatio||1);PW=r.width;PH=r.height;cv.width=Math.round(PW*dpr);cv.height=Math.round(PH*dpr);cx.setTransform(dpr,0,0,dpr,0,0);}
+if(window.ResizeObserver)new ResizeObserver(resize).observe(cv);else addEventListener('resize',resize);
+const critters=[],floats=[],motes=Array.from({length:36},()=>({x:Math.random(),y:Math.random(),s:0.5+Math.random()*1.5,v:0.002+Math.random()*0.006}));
+const SIZE=[5,6,10,11,9,13,16,26];
+function syncCritters(){
+  for(let k=0;k<TIERS.length;k++){
+    const a=S.tiers[k].amt;const want=a>=1?Math.min(k===7?2:10,1+Math.floor(Math.log10(a)*2.2)):0;
+    let have=critters.filter(c=>c.k===k).length;
+    while(have<want){critters.push({k,x:Math.random()*PW,y:k===6?PH-10-Math.random()*20:Math.random()*PH,vx:(Math.random()-.5)*20,vy:(Math.random()-.5)*20,p:Math.random()*6.28,r:SIZE[k]*(0.8+Math.random()*0.4),a:0});have++;}
+    if(have>want){for(let j=critters.length-1;j>=0&&have>want;j--)if(critters[j].k===k){critters.splice(j,1);have--;}}
+  }
+}
+function spawnFloat(x,y,v){if(reduce)return;floats.push({x,y,t:0,txt:'+'+fmt(v)});if(floats.length>24)floats.shift();}
+cv.parentElement.addEventListener('click',e=>{if(e.target.closest('[data-act]'))return;const r=cv.getBoundingClientRect();const v=absorb();spawnFloat(e.clientX-r.left,e.clientY-r.top,v);updateUI();});
+function cell(r,col){cx.fillStyle=col+'33';cx.strokeStyle=col;cx.lineWidth=1.2;cx.beginPath();cx.arc(0,0,r,0,6.283);cx.fill();cx.stroke();cx.fillStyle=col;cx.beginPath();cx.arc(r*.25,-r*.15,r*.33,0,6.283);cx.fill();}
+function drawCritter(c,t){
+  const col=TCOL[c.k],r=c.r;cx.save();cx.translate(c.x,c.y);
+  switch(c.k){
+    case 0:cell(r,col);break;
+    case 1:{cx.rotate(c.a);cx.strokeStyle=col;cx.globalAlpha=.7;cx.lineWidth=1;cx.beginPath();cx.moveTo(-r,0);for(let s=1;s<=12;s++)cx.lineTo(-r-s*2.3,Math.sin(t*9+s*.8+c.p)*3*(s/12));cx.stroke();cx.globalAlpha=1;cx.scale(1.4,1);cell(r,col);break;}
+    case 2:{cx.rotate(t*.3+c.p);for(let j=0;j<7;j++){const an=j/7*6.283;cx.save();cx.translate(Math.cos(an)*r*.75,Math.sin(an)*r*.75);cell(r*.38,col);cx.restore();}break;}
+    case 3:{cx.fillStyle=col+'2a';cx.strokeStyle=col;cx.lineWidth=1.3;cx.beginPath();for(let j=0;j<=24;j++){const an=j/24*6.283,rr=r*(1+0.12*Math.sin(an*5+c.p+t*.6));cx.lineTo(Math.cos(an)*rr,Math.sin(an)*rr);}cx.fill();cx.stroke();
+      cx.fillStyle='#0c2229';[[-.35,-.2,.22],[.3,.1,.18],[-.05,.4,.15]].forEach(([a,b,s])=>{cx.beginPath();cx.arc(a*r,b*r,s*r,0,6.283);cx.fill();});break;}
+    case 4:{cx.strokeStyle=col;cx.lineWidth=2;cx.beginPath();cx.moveTo(0,r*1.4);cx.quadraticCurveTo(Math.sin(t+c.p)*3,r*.5,0,0);cx.stroke();cx.lineWidth=1;
+      for(let j=0;j<6;j++){const an=-Math.PI/2+(j-2.5)*0.38+Math.sin(t*2+j+c.p)*0.12;cx.beginPath();cx.moveTo(0,0);cx.lineTo(Math.cos(an)*r,Math.sin(an)*r);cx.stroke();}
+      cx.fillStyle=col;cx.beginPath();cx.arc(0,0,r*.28,0,6.283);cx.fill();break;}
+    case 5:{const pulse=1+0.08*Math.sin(t*2.4+c.p);cx.strokeStyle=col;cx.globalAlpha=.6;cx.lineWidth=1;
+      for(let j=-2;j<=2;j++){cx.beginPath();cx.moveTo(j*r*.3,0);for(let s=1;s<=8;s++)cx.lineTo(j*r*.3+Math.sin(t*3+s*.7+j)*2,s*r*.22);cx.stroke();}
+      cx.globalAlpha=1;cx.fillStyle=col+'40';cx.beginPath();cx.ellipse(0,0,r*pulse,r*.75/pulse,0,Math.PI,0);cx.closePath();cx.fill();cx.stroke();break;}
+    case 6:{cx.strokeStyle=col;cx.lineCap='round';const br=(len,ang,d)=>{if(d>3)return;const x2=Math.cos(ang)*len,y2=Math.sin(ang)*len;cx.lineWidth=4-d;cx.beginPath();cx.moveTo(0,0);cx.lineTo(x2,y2);cx.stroke();cx.save();cx.translate(x2,y2);br(len*.72,ang-0.45+Math.sin(t*.5+c.p)*.04,d+1);br(len*.72,ang+0.45,d+1);cx.restore();};br(r*.9,-Math.PI/2,0);break;}
+    case 7:{cx.rotate(c.a);cx.fillStyle=col+'30';cx.strokeStyle=col;cx.lineWidth=1.5;cx.beginPath();cx.ellipse(0,0,r*1.6,r*.55,0,0,6.283);cx.fill();cx.stroke();
+      cx.beginPath();cx.moveTo(-r*1.5,0);cx.lineTo(-r*2.2,-r*.45+Math.sin(t*2)*4);cx.lineTo(-r*2.2,r*.45+Math.sin(t*2)*4);cx.closePath();cx.stroke();cx.fillStyle=col;cx.beginPath();cx.arc(r*1.05,-r*.12,2.5,0,6.283);cx.fill();break;}
+  }
+  cx.restore();
+}
+let lastF=performance.now(),syncT=0;
+function frame(t){
+  requestAnimationFrame(frame);if(!PW||document.hidden)return;
+  const dt=Math.min(0.05,(t-lastF)/1000)*(reduce?0.25:1);lastF=t;const ts=t/1000;
+  syncT-=dt;if(syncT<=0){syncT=0.5;syncCritters();}
+  const g=cx.createRadialGradient(PW*.5,PH*.45,10,PW*.5,PH*.5,Math.max(PW,PH)*.75);g.addColorStop(0,'#123a42');g.addColorStop(1,'#091a20');cx.fillStyle=g;cx.fillRect(0,0,PW,PH);
+  // counting-chamber grid
+  cx.strokeStyle='rgba(138,169,167,0.07)';cx.lineWidth=1;const gs=48;
+  for(let x=gs/2;x<PW;x+=gs){cx.beginPath();cx.moveTo(x,0);cx.lineTo(x,PH);cx.stroke();}
+  for(let y=gs/2;y<PH;y+=gs){cx.beginPath();cx.moveTo(0,y);cx.lineTo(PW,y);cx.stroke();}
+  cx.fillStyle='rgba(220,235,231,0.18)';for(const m of motes){m.y-=m.v*dt*10;if(m.y<0)m.y=1;cx.beginPath();cx.arc(m.x*PW,m.y*PH,m.s,0,6.283);cx.fill();}
+  for(const c of critters){
+    if(c.k!==6){c.vx+=(Math.random()-.5)*40*dt;c.vy+=(Math.random()-.5)*40*dt;const sp=c.k===7?12:c.k===5?16:26;const v=Math.hypot(c.vx,c.vy)||1;if(v>sp){c.vx*=sp/v;c.vy*=sp/v;}
+      if(c.k===4){c.vx*=0.9;c.vy*=0.9;}
+      c.x+=c.vx*dt;c.y+=c.vy*dt;c.a=Math.atan2(c.vy,c.vx);const m=c.r*2;
+      if(c.x<-m)c.x=PW+m;if(c.x>PW+m)c.x=-m;if(c.y<-m)c.y=PH+m;if(c.y>PH+m)c.y=-m;}
+    else c.y=PH-6;
+    drawCritter(c,ts);
+  }
+  cx.font='600 13px "JetBrains Mono", Consolas, monospace';cx.textAlign='center';
+  for(let j=floats.length-1;j>=0;j--){const f=floats[j];f.t+=dt;if(f.t>1.2){floats.splice(j,1);continue;}cx.globalAlpha=1-f.t/1.2;cx.fillStyle='#f0b25a';cx.fillText(f.txt,f.x,f.y-f.t*40);}
+  cx.globalAlpha=1;
+}
+
+/* ---------- boot ---------- */
+let started=false;
+function start(data){
+  if(started)return;started=true;
+  let away=null;
+  if(data&&data.S){S=merge(data.S);D=derive();}
+  else{const o=load();S=merge(o);D=derive();if(o)away=offline((now()-(S.last||now()))/1000);}
+  D=derive();S.last=now();
+  if(window.claude&&window.claude.hot&&window.claude.hot.snapshot){try{window.claude.hot.snapshot(()=>({S:JSON.parse(JSON.stringify(S))}));}catch(e){}}
+  resize();renderTab(true);updateUI();
+  if(away&&away.gain>0&&!S.worldOffer)openModal('offline',offlineHTML(away));
+  let lastT=performance.now(),uiT=0;
+  setInterval(()=>{const t=performance.now();const dt=(t-lastT)/1000;lastT=t;
+    if(dt>60){const r=offline(dt);if(r&&r.gain>0&&!modalKind)openModal('offline',offlineHTML(r));}else advance(dt);
+    uiT+=dt;if(uiT>=0.2){uiT=0;updateUI();}},100);
+  setInterval(save,10000);
+  addEventListener('beforeunload',save);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
+  requestAnimationFrame(frame);
+}
+if(window.claude&&window.claude.hot&&window.claude.hot.ready)window.claude.hot.ready(start);
+else start(window.claude&&window.claude.hot&&window.claude.hot.data||{});
+})();
+</script>
