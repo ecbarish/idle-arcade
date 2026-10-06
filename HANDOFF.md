@@ -4,6 +4,9 @@ Idle Arcade is a set of plain HTML/JS browser games with no build step. The live
 https://ecbarish.github.io/idle-arcade/ (GitHub Pages serves the `main` branch).
 
 ## Rules the owner cares about
+- Git commits must use the author email 206636510+ecbarish@users.noreply.github.com (never a personal email).
+  Work on a `codex/<topic>` branch and open a pull request; the owner reviews and merges.
+- Read docs/ROADMAP.md and do only the ticket you were given.
 - Depth and gameplay come first. Automation (addons, staff, instincts) is earned by playing, never sold.
 - Active play must always be worth at least as much as Auto mode.
 - Original names and art only. Inspired by classic WoW, Pokemon and Kairosoft; never copied.
