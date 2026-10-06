@@ -193,7 +193,7 @@ textarea{width:100%;min-height:60px;background:#000;color:var(--fg);border:1px s
 
 <div class="app" id="app">
   <header class="frame top">
-    <div class="brand"><h1>Realmbound</h1><a class="home" href="../../index.html">← Arcade</a></div>
+    <div class="brand"><h1>Realmbound</h1><a class="home" href="../../index.html">← Arcade</a><button class="btn sm alt" data-act="chars">Characters</button></div>
     <div class="who" id="who"></div>
   </header>
 
@@ -487,10 +487,20 @@ function moodName(p){return p.happy>=70?'Happy':p.happy<30?'Unhappy':'Content';}
 const petXpNeed=l=>Math.round(xpNeed(l)*.6);
 
 /* =================== state =================== */
-let S={v:1,hero:null,last:Date.now(),tab:'quests',log:[]};
-const H=()=>S.hero;
+/* One save holds every character. S.cur is the id of the one being played. */
+const MAX_CHARS=8;
+const emptyS=()=>({v:2,chars:[],cur:null,last:Date.now(),tab:'quests'});
+let S=emptyS();
+const H=()=>S.chars.find(c=>c.id===S.cur)||null;
+function migrate(o){
+  if(!o||typeof o!=='object')return emptyS();
+  if(Array.isArray(o.chars))return o;
+  const s=emptyS();s.last=o.last||Date.now();s.tab=o.tab||'quests';
+  if(o.hero){const h=o.hero;h.id=h.id||uid();h.log=o.log||[];h.lastPlayed=o.last||Date.now();s.chars.push(h);s.cur=h.id;}
+  return s;
+}
 function newHero(name,faction,race,cls){
-  const h={name,faction,race,cls,lvl:1,xp:0,rested:0,money:0,zone:FACTIONS[faction].start,gear:{},bags:[],talents:{},
+  const h={id:uid(),log:[],lastPlayed:Date.now(),name,faction,race,cls,lvl:1,xp:0,rested:0,money:0,zone:FACTIONS[faction].start,gear:{},bags:[],talents:{},
     quests:{active:[],done:{},prog:{},rewards:{}},addons:{unl:{},on:{}},mode:'focus',grind:null,pets:[],activePet:null,
     stats:{kills:0,deaths:0,loots:0,junkSold:0,quests:0,equips:0,manual:0,uses:0,play:0,money:0,feeds:0,tamed:0},avg:{cycle:30,xp:20,money:5},seenAddons:true};
   const K=CLASSES[cls];
@@ -538,7 +548,7 @@ function aiEff(){return [.55,.7,.8,.9][macroRank()];}
 function line(txt,cls){C.lines.push({txt,cls});if(C.lines.length>60)C.lines.shift();}
 function fx(txt,col,who,big){if(C.fx.length>24)C.fx.shift();C.fx.push({txt,col,who,big,age:0,x:R()});}
 function err(msg){C.err=msg;C.errT=1.6;}
-function slog(m){S.log.unshift(m);if(S.log.length>40)S.log.length=40;}
+function slog(m){const h=H();if(!h)return;h.log=h.log||[];h.log.unshift(m);if(h.log.length>40)h.log.length=40;}
 
 /* ---- damage helpers ---- */
 function critRoll(extra){return R()*100<(C.buffs.vendetta?100:ST.crit+(extra||0));}
@@ -913,13 +923,14 @@ function checkAddons(){const h=H();for(const a of ADDONS){if(h.addons.unl[a.id]|
 
 /* =================== save / offline =================== */
 function save(){S.last=Date.now();const h=H();
-  if(h&&C){h.cur={hp:C.hp,res:C.res};}
+  if(h&&C){h.cur={hp:C.hp,res:C.res};h.lastPlayed=Date.now();}
   Arcade.save(KEY,S);
-  if(h)Arcade.report('realmbound',{summary:`${h.name}, level ${h.lvl} ${RACES[h.race].name} ${CLASSES[h.cls].name}`,detail:`${ZONES[h.zone].name} · ${FACTIONS[h.faction].name}`});}
-function offline(sec){
-  const h=H();if(!h||sec<60)return null;sec=Math.min(sec,86400);
-  const restedGain=Math.min(xpNeed(h.lvl)*1.5-h.rested,sec/3600*xpNeed(h.lvl)*.15);if(h.lvl<LEVEL_CAP)h.rested+=Math.max(0,restedGain);
-  const kills=Math.floor(sec*.5/Math.max(8,h.avg.cycle));const lvl0=h.lvl;let xp=0;const money=Math.round(kills*h.avg.money);
+  if(h)Arcade.report('realmbound',{summary:`${h.name}, level ${h.lvl} ${RACES[h.race].name} ${CLASSES[h.cls].name}`,detail:`${ZONES[h.zone].name} · ${S.chars.length} character${S.chars.length>1?'s':''}`});}
+/* hunt=false for characters you weren't playing: like a classic logout, they only rest at the inn */
+function offline(sec,hunt){
+  const h=H();if(!h||sec<60)return null;sec=Math.min(sec,86400);if(hunt===undefined)hunt=true;
+  const restedGain=h.lvl<LEVEL_CAP?Math.max(0,Math.min(xpNeed(h.lvl)*1.5-h.rested,sec/3600*xpNeed(h.lvl)*.15)):0;h.rested+=restedGain;
+  const kills=hunt?Math.floor(sec*.5/Math.max(8,h.avg.cycle)):0;const lvl0=h.lvl;let xp=0;const money=Math.round(kills*h.avg.money);
   if(kills>0&&h.lvl<LEVEL_CAP){xp=Math.round(kills*h.avg.xp);gainXP(xp,false);}h.money+=money;h.stats.kills+=kills;
   return {sec,kills,xp,money,levels:h.lvl-lvl0,rested:restedGain};
 }
@@ -1055,7 +1066,7 @@ journal:{
     <div class="mfoot" style="justify-content:flex-start"><button class="btn sm" data-act="export">Export</button><button class="btn sm" data-act="copy">Copy</button><button class="btn sm" data-act="import">Import pasted save</button><button class="btn sm alt" data-act="delete" id="delBtn">Delete character</button></div><p class="meta" id="saveMsg"></p>`;},
   update(){const h=H(),s=h.stats;const rows=[['Played',fmtTime(s.play)],['Monsters slain',fmtI(s.kills)],['Deaths',s.deaths],['Quests done',s.quests],['Gold earned',moneyTxt(s.money)],['Abilities pressed',fmtI(s.manual)]];
     const html=rows.map(([k,v])=>`<div><span class="meta">${k}</span><b class="num">${v}</b></div>`).join('');const el=$('#jstats');if(el.dataset.h!==html){el.innerHTML=html;el.dataset.h=html;}
-    const lg=S.log.slice(0,20).map(m=>`<div>${m}</div>`).join('');const jl=$('#jlog');if(jl.dataset.h!==lg){jl.innerHTML=lg||'Nothing yet.';jl.dataset.h=lg;}}
+    const lg=(H().log||[]).slice(0,20).map(m=>`<div>${m}</div>`).join('');const jl=$('#jlog');if(jl.dataset.h!==lg){jl.innerHTML=lg||'Nothing yet.';jl.dataset.h=lg;}}
 }};
 function renderTab(force){const t=TABS[S.tab]||TABS.quests,k=S.tab+':'+t.key();if(force||k!==curKey){curKey=k;$('#tabbody').innerHTML=t.build();}t.update();
   document.querySelectorAll('.tabs [role=tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.arg===S.tab?'true':'false'));}
@@ -1137,7 +1148,27 @@ function createHTML(){
   <h4>Race</h4><div class="choices">${f.races.map(id=>`<button class="choice ${CR.race===id?'on':''}" data-act="cr" data-arg="race:${id}"><b>${RACES[id].name}</b><span>${RACES[id].bonus}</span></button>`).join('')}</div>
   <h4>Class</h4><div class="choices">${Object.entries(CLASSES).map(([id,k])=>`<button class="choice ${CR.cls===id?'on':''}" data-act="cr" data-arg="cls:${id}"><b style="color:${k.col}">${k.name}</b><span>${k.role} · ${k.res[0].toUpperCase()+k.res.slice(1)}</span><span>${k.desc}</span></button>`).join('')}</div>
   <h4>Name</h4><input class="nameinp" id="crName" maxlength="14" value="${CR.name}" aria-label="Hero name">
-  <div class="mfoot"><button class="btn" data-act="create">Enter the world</button></div>`;
+  <div class="mfoot">${S.chars.length?'<button class="btn alt" data-act="chars">Back to characters</button>':''}<button class="btn" data-act="create">Enter the world</button></div>`;
+}
+function ago(t){const s=(Date.now()-t)/1000;if(s<90)return 'just now';if(s<3600)return Math.round(s/60)+' min ago';if(s<86400)return Math.round(s/3600)+' h ago';return Math.round(s/86400)+' days ago';}
+function charsHTML(){const cur=H();
+  return `<h2>Characters</h2><p class="sub">Each hero keeps their own gear, quests, pets and addons. Heroes you aren't playing rest at the inn and build up rested experience.</p>
+  ${S.chars.map(c=>{const K=CLASSES[c.cls],need=xpNeed(c.lvl),playing=cur&&cur.id===c.id;
+    return `<div class="rowl"><div class="l"><b style="color:${K.col};font-family:var(--f-head);font-size:19px;font-weight:400">${c.name}</b> <span class="crest" style="background:${FACTIONS[c.faction].col};margin-left:4px"></span>
+      <div class="meta">Level ${c.lvl} ${RACES[c.race].name} ${K.name} · ${ZONES[c.zone].name}${c.pets&&c.pets.length?` · ${c.pets.length} pet${c.pets.length>1?'s':''}`:''}${c.lvl<LEVEL_CAP&&c.rested>=need*.01?` · <span style="color:var(--rested)">${Math.round(c.rested/need*100)}% rested</span>`:''} · ${playing?'playing now':'last played '+ago(c.lastPlayed||S.last)}</div></div>
+      <div class="r">${playing?'<span class="pill" style="color:#7cf08a">Playing</span>':`<button class="btn sm" data-act="charplay" data-arg="${c.id}">Play</button>`}<button class="btn sm alt" data-act="chardel" data-arg="${c.id}">Delete</button></div></div>`;}).join('')||'<p class="meta">No characters yet.</p>'}
+  <div class="mfoot">${S.chars.length<MAX_CHARS?'<button class="btn" data-act="charnew">Create new character</button>':`<span class="meta">All ${MAX_CHARS} character slots are full.</span>`}${cur?'<button class="btn alt" data-act="close">Back to the game</button>':''}</div>`;}
+function switchTo(id){
+  if(H()&&C)save();
+  S.cur=id;const h=H();if(!h)return;const away=(Date.now()-(h.lastPlayed||S.last))/1000;
+  boot();const r=offline(away,false);save();
+  toast(`Welcome back, ${h.name}`);if(r&&r.rested>1)line(`${h.name} rested for ${fmtTime(r.sec)}: +${fmtI(r.rested)} rested XP.`,'l-xp');
+}
+function deleteChar(id){
+  const c=S.chars.find(x=>x.id===id);if(!c)return;S.chars=S.chars.filter(x=>x.id!==id);
+  if(S.cur===id){S.cur=null;C=null;}
+  if(!S.chars.length){Arcade.erase(KEY,'realmbound');S=emptyS();CR.name=pick(NAMES);openModal('create',createHTML());return;}
+  Arcade.save(KEY,S);openModal('chars',charsHTML());
 }
 function offlineHTML(r){return `<h2>Welcome back</h2><p class="sub">You were away for ${fmtTime(r.sec)}. Your hero rested at the inn and kept hunting while you were gone, at half pace.</p>
   <div class="stats" style="margin:10px 0"><div><span class="meta">Monsters slain</span><b>${fmtI(r.kills)}</b></div><div><span class="meta">Experience</span><b>${fmtI(r.xp)}</b></div><div><span class="meta">Money</span><b>${moneyStr(r.money)}</b></div><div><span class="meta">Rested XP gained</span><b>${fmtI(r.rested)}</b></div>${r.levels?`<div><span class="meta">Levels gained</span><b>${r.levels}</b></div>`:''}</div>
@@ -1148,9 +1179,16 @@ function arm(el,label,armedLabel){if(el.classList.contains('armed')){el.classLis
 document.addEventListener('click',e=>{
   const el=e.target.closest('[data-act]');if(!el)return;const a=el.dataset.act,arg=el.dataset.arg;
   if(a==='cr'){const [k,v]=arg.split(':');CR.name=($('#crName')||{}).value||CR.name;CR[k]=v;openModal('create',createHTML());return;}
-  if(a==='create'){const nm=(($('#crName')||{}).value||'').trim().replace(/[^A-Za-z' -]/g,'').slice(0,14)||pick(NAMES);S.hero=newHero(nm[0].toUpperCase()+nm.slice(1),CR.faction,CR.race,CR.cls);S.log=[];
-    recalc();C=freshC();C.hp=ST.hpMax;C.res=CLASSES[CR.cls].res==='mana'?ST.resMax:0;closeModal();slog(`${S.hero.name} arrived in ${ZONES[S.hero.zone].name}.`);
-    const first=QUESTS[S.hero.zone][0];accept(first.id);toast(`Welcome to ${ZONES[S.hero.zone].name}`);save();curKey=null;updateWorld();return;}
+  if(a==='create'){if(S.chars.length>=MAX_CHARS){openModal('chars',charsHTML());return;}
+    if(H()&&C)save();
+    const nm=(($('#crName')||{}).value||'').trim().replace(/[^A-Za-z' -]/g,'').slice(0,14)||pick(NAMES);const nh=newHero(nm[0].toUpperCase()+nm.slice(1),CR.faction,CR.race,CR.cls);
+    S.chars.push(nh);S.cur=nh.id;
+    recalc();C=freshC();C.hp=ST.hpMax;C.res=CLASSES[CR.cls].res==='mana'?ST.resMax:0;closeModal();slog(`${nh.name} arrived in ${ZONES[nh.zone].name}.`);
+    const first=QUESTS[nh.zone][0];accept(first.id);toast(`Welcome to ${ZONES[nh.zone].name}`);save();curKey=null;buildSlots();updateWorld();return;}
+  if(a==='chars'){openModal('chars',charsHTML());return;}
+  if(a==='charnew'){CR.name=pick(NAMES);openModal('create',createHTML());return;}
+  if(a==='charplay'){closeModal();switchTo(Number(arg));return;}
+  if(a==='chardel'){const c=S.chars.find(x=>x.id===Number(arg));if(arm(el,'Delete',`Delete ${c?c.name:''}?`))deleteChar(Number(arg));return;}
   if(!H())return;
   switch(a){
     case 'press':press(Number(arg));break;
@@ -1180,8 +1218,8 @@ document.addEventListener('click',e=>{
     case 'close':if(modalKind!=='create')closeModal();break;
     case 'export':$('#saveTxt').value=Arcade.encode(S);$('#saveMsg').textContent='Save exported. Keep a copy somewhere safe.';break;
     case 'copy':{const t=$('#saveTxt');if(!t.value)t.value=Arcade.encode(S);const fb=()=>{t.select();$('#saveMsg').textContent='Selected. Press Ctrl+C to copy.';};try{navigator.clipboard.writeText(t.value).then(()=>$('#saveMsg').textContent='Copied.',fb);}catch(x){fb();}break;}
-    case 'import':try{const o=Arcade.decode($('#saveTxt').value);if(!o||!o.hero)throw 0;S=o;boot();$('#saveMsg')&&($('#saveMsg').textContent='Save imported.');}catch(x){$('#saveMsg').textContent="That isn't a Realmbound save. Paste the whole exported block.";}break;
-    case 'delete':if(arm(el,'Delete character','Click again to delete')){Arcade.erase(KEY,'realmbound');S={v:1,hero:null,last:Date.now(),tab:'quests',log:[]};C=null;CR.name=pick(NAMES);openModal('create',createHTML());}break;
+    case 'import':try{const o=Arcade.decode($('#saveTxt').value);if(!o||!(o.hero||Array.isArray(o.chars)))throw 0;S=migrate(o);boot();$('#saveMsg')&&($('#saveMsg').textContent='Save imported.');}catch(x){$('#saveMsg').textContent="That isn't a Realmbound save. Paste the whole exported block.";}break;
+    case 'delete':if(arm(el,'Delete character','Click again to delete'))deleteChar(H().id);break;
   }
   if(H()&&C)updateWorld();
 });
@@ -1252,9 +1290,9 @@ function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidde
 
 /* =================== boot =================== */
 function boot(){
-  if(!S.log)S.log=[];
-  if(!S.hero){closeModal();CR.name=pick(NAMES);openModal('create',createHTML());return;}
-  const h=S.hero;h.addons=h.addons||{unl:{},on:{}};h.avg=h.avg||{cycle:30,xp:20,money:5};
+  const h=H();
+  if(!h){closeModal();if(S.chars.length)openModal('chars',charsHTML());else{CR.name=pick(NAMES);openModal('create',createHTML());}return;}
+  h.log=h.log||[];h.addons=h.addons||{unl:{},on:{}};h.avg=h.avg||{cycle:30,xp:20,money:5};
   for(const k of ['kills','deaths','loots','junkSold','quests','equips','manual','uses','play','money','feeds','tamed'])h.stats[k]=h.stats[k]||0;
   h.pets=h.pets||[];if(h.activePet===undefined)h.activePet=null;
   recalc();C=freshC();C.hp=h.cur?Math.min(ST.hpMax,h.cur.hp):ST.hpMax;C.res=h.cur?Math.min(ST.resMax,h.cur.res):(CLASSES[h.cls].res==='mana'?ST.resMax:0);if(C.hp<=0)C.hp=ST.hpMax*.5;
@@ -1265,8 +1303,8 @@ if(location.hostname==='localhost')window.__rb={get S(){return S;},get C(){retur
 let started=false;
 function start(data){
   if(started)return;started=true;let away=null;
-  if(data&&data.S){S=data.S;boot();}else{const o=Arcade.load(KEY);if(o)S=o;boot();if(o&&S.hero)away=offline((Date.now()-(S.last||Date.now()))/1000);}
-  if(away&&(away.kills||away.rested>0)&&S.hero)openModal('offline',offlineHTML(away));
+  if(data&&data.S){S=migrate(data.S);boot();}else{S=migrate(Arcade.load(KEY));boot();if(H())away=offline((Date.now()-(H().lastPlayed||S.last||Date.now()))/1000,true);}
+  if(away&&(away.kills||away.rested>0)&&H())openModal('offline',offlineHTML(away));
   if(window.claude&&window.claude.hot&&window.claude.hot.snapshot){try{window.claude.hot.snapshot(()=>({S:JSON.parse(JSON.stringify(S))}));}catch(e){}}
   resize();
   let lastT=performance.now(),uiT=0,chk=0;

@@ -35,6 +35,10 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-06 (night)** — Realmbound: character slots (up to 8). Characters button in the top bar; each hero
+  keeps their own gear, quests, pets, addons and log. Heroes you aren't playing earn rested XP while away.
+  Old single-hero saves upgrade automatically.
+
 - **2026-10-06 (evening)** — Realmbound: Hunter class and pets. Taming with wild rarity from common to
   legendary, 7 beast families, traits, bond levels that unlock Coordinated Strike and a pet that saves you,
   happiness and feeding, a 3-pet stable, PetCare addon, Beast Mastery talents. Playtested taming a common
