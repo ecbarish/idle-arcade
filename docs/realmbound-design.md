@@ -26,6 +26,26 @@ Original world, names and art — inspired by that era, not a copy of any game.
 - **Death: the classic sting.** A corpse run plus 10% durability loss on worn gear; broken gear gives no stats
   until repaired in town.
 
+## Hunters and pets (built 2026-10-06)
+
+The first slice of the creature system, written to be shared with the standalone creature game later.
+
+- **Taming:** fight a beast your level or lower, press Tame Beast, survive a 6-second channel. Elites can be
+  tamed. Taming counts as defeating the beast for quests. Auto never tames; it is always your choice.
+- **Wild rarity:** every beast spawns with a rarity. Common, Uncommon (Scarred, Sleek…), Rare color variants
+  (Ashen, Frostcoat, Bloodmane…), Epic named beasts (Old One-Eye, Silkmother…), Legendary zone elites
+  (Grizzlemaw, Kraska Duneclaw). Mythical is reserved for hybrids. Rarity multiplies stats and trait count.
+- **Families:** Wolf (Furious Howl), Boar (Charge, tank), Cat (Claw), Hyena (Frenzy), Lizard (Tail Whip),
+  Crocolisk (Death Roll, tank), Spider (Web). Tanks draw more enemy attacks.
+- **Traits:** Ferocious, Thick Hide, Swift, Keen, Loyal, Hardy, Vicious, Guardian.
+- **Bond:** Wary → Friendly → Loyal → Devoted → Bonded, earned by winning fights together while fed. Loyal
+  unlocks Coordinated Strike (lights up when the pet uses its ability or crits; you and the pet strike
+  together). Devoted shortens the pet ability cooldown. Bonded: the pet takes a killing blow for you once
+  per fight.
+- **Happiness:** food from beasts (meat), humanoids (bread, boars only) or the town vendor. Happy pets hit
+  harder and bond faster; unhappy pets stall. PetCare addon automates feeding (earned by feeding 20 times).
+- **Stable** of 3, swapped in town. Grishar bond 20% faster.
+
 ## The world
 
 The Sundered Reach: a continent of zones by level band, each with its own quest hub, mobs and named elites.

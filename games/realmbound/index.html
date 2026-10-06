@@ -105,7 +105,7 @@ h2,h3{font-family:var(--f-head);font-weight:400;color:var(--gold);margin:0;lette
 .lootwin ul{list-style:none;margin:0;padding:0;font-size:14px}
 .log{background:rgba(0,0,0,.45);border:1px solid #2a2218;border-radius:6px;padding:6px 10px;font-size:13px;height:118px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
 .log div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.l-hit{color:#e9e1cf} .l-crit{color:#ffd24a} .l-hurt{color:#ff8a7a} .l-sys{color:#ffe36a} .l-xp{color:#b48cff} .l-loot{color:#7cf08a} .l-heal{color:#7cf08a}
+.l-hit{color:#e9e1cf} .l-crit{color:#ffd24a} .l-hurt{color:#ff8a7a} .l-sys{color:#ffe36a} .l-xp{color:#b48cff} .l-loot{color:#7cf08a} .l-heal{color:#7cf08a} .l-pet{color:#d9f7a8}
 
 /* menus */
 .menu{min-width:0}
@@ -169,6 +169,23 @@ textarea{width:100%;min-height:60px;background:#000;color:var(--fg);border:1px s
 .toast.ding{font-family:var(--f-head);font-weight:400;font-size:26px;color:var(--gold);border-color:var(--gold)}
 @keyframes tin{from{opacity:0;transform:translateY(-6px)}}
 
+/* pets */
+.petframe{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--stone2);border:1px solid var(--bronze-d);border-radius:8px;padding:5px 10px}
+.petframe .pn{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.petframe .bar{height:10px;margin-top:2px}
+.petframe .mood{font-size:12px;font-weight:800;white-space:nowrap}
+.tamebtn{margin-top:4px;background:linear-gradient(#2f5a1e,#163010);border:1px solid #7cf08a;border-radius:5px;color:#c8ffc8;font-weight:800;padding:2px 10px;font-size:13px}
+.r0{color:#d8d8d8} .r1{color:var(--q2)} .r2{color:var(--q3)} .r3{color:var(--q4)} .r4{color:var(--q5)} .r5{color:#ff4f8b}
+.petcard{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;align-items:start;background:var(--stone2);border:1px solid var(--bronze-d);border-radius:8px;padding:10px}
+.petcard canvas{width:96px;height:72px;image-rendering:pixelated;background:#11161a;border:1px solid var(--bronze-d);border-radius:4px}
+.petname{font-family:var(--f-head);font-size:22px;line-height:1.1}
+.mini{height:10px;background:#000;border:1px solid #3a3022;border-radius:2px;overflow:hidden;margin:3px 0 6px}
+.mini i{display:block;height:100%}
+.traits{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.trait{font-size:12px;border:1px solid var(--bronze-d);border-radius:4px;padding:0 6px;background:var(--stone3)}
+.rarlegend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;font-weight:800}
+.petinp{background:#000;border:1px solid var(--bronze);border-radius:4px;color:var(--fg);padding:2px 6px;font-weight:700;width:140px}
+
 @media (max-width:980px){.grid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:520px){.units{grid-template-columns:1fr}.ab{width:46px;height:46px}.ab .ic{font-size:11px}}
 @media (prefers-reduced-motion:reduce){.ab.react{animation:none}.toast{animation:none}.bar i{transition:none}}
@@ -198,9 +215,15 @@ textarea{width:100%;min-height:60px;background:#000;color:var(--fg);border:1px s
         <div class="unit target" id="tframe">
           <div style="min-width:0;text-align:right"><div class="uname" id="tName">No target</div>
             <div class="bar b-hp"><i id="tHp"></i><span id="tHpT"></span></div>
-            <div class="bar b-cast" id="castBar" hidden><i id="castI"></i><span id="castT"></span></div></div>
+            <div class="bar b-cast" id="castBar" hidden><i id="castI"></i><span id="castT"></span></div>
+            <button class="tamebtn" data-act="tame" id="tameBtn" hidden>Tame Beast</button></div>
           <div class="portrait" id="tPort">–<span class="lvl" id="tLvl">?</span></div>
         </div>
+      </div>
+      <div class="petframe" id="petframe" hidden>
+        <span class="pn" id="pfName"></span>
+        <div class="bar b-hp"><i id="pfHp"></i><span id="pfHpT"></span></div>
+        <span class="mood" id="pfMood"></span>
       </div>
       <div class="lootwin" id="lootwin" hidden><ul id="lootList"></ul><button class="btn" data-act="loot">Loot all (L)</button></div>
       <div class="abar">
@@ -219,6 +242,7 @@ textarea{width:100%;min-height:60px;background:#000;color:var(--fg);border:1px s
         <button role="tab" data-act="tab" data-arg="quests">Quests <span class="badge" id="qBadge" hidden>!</span></button>
         <button role="tab" data-act="tab" data-arg="char">Character</button>
         <button role="tab" data-act="tab" data-arg="bags">Bags <span class="badge" id="bBadge" hidden></span></button>
+        <button role="tab" data-act="tab" data-arg="pets" id="petsTab" hidden>Pets <span class="badge" id="pBadge" hidden>!</span></button>
         <button role="tab" data-act="tab" data-arg="talents">Talents <span class="badge" id="tBadge" hidden></span></button>
         <button role="tab" data-act="tab" data-arg="addons">Addons <span class="badge" id="aBadge" hidden>new</span></button>
         <button role="tab" data-act="tab" data-arg="journal">Journal</button>
@@ -251,7 +275,7 @@ const FACTIONS={
 const RACES={
   human:{name:'Human',faction:'concord',bonus:'Quests give 5% more experience.',qxp:1.05,skin:'#f1c9a0',hair:'#6b4423'},
   stonekin:{name:'Stonekin',faction:'concord',bonus:'10% more armor, +2 Stamina.',armor:1.1,stat:{sta:2},skin:'#e0b08a',hair:'#b5662a',beard:true},
-  grishar:{name:'Grishar',faction:'wild',bonus:'5% more health. Below 30% health you deal 10% more damage.',hp:1.05,bloodrage:true,skin:'#7fa65a',hair:'#2b2b2b',tusks:true},
+  grishar:{name:'Grishar',faction:'wild',bonus:'5% more health. Below 30% health you deal 10% more damage. Bonds with tamed beasts 20% faster.',hp:1.05,bloodrage:true,beastkin:true,skin:'#7fa65a',hair:'#2b2b2b',tusks:true},
   duskelf:{name:'Duskelf',faction:'wild',bonus:'+2% critical strike chance.',crit:2,skin:'#b9a3d9',hair:'#e8e8f0',ears:true},
 };
 const CLASSES={
@@ -267,33 +291,36 @@ const CLASSES={
   priest:{name:'Priest',role:'Healer / Damage',res:'mana',armor:['cloth'],weap:['staff','mace'],off:'tome',col:'#f0f0f0',
     base:{str:11,agi:12,int:22,sta:18,spi:24},grow:{str:0,agi:.5,int:1.5,sta:1,spi:2},w:{int:1.5,spi:1.5,sta:1,str:0,agi:0,dps:.5,armor:.01},
     desc:'Holy light and shadow. Heals and shields keep you standing through long fights.'},
+  hunter:{name:'Hunter',role:'Damage · Pet tamer',res:'mana',armor:['leather','cloth'],weap:['bow'],off:'dagger',col:'#abd473',
+    base:{str:16,agi:24,int:14,sta:20,spi:14},grow:{str:.5,agi:2,int:.8,sta:1.5,spi:.5},w:{agi:2,sta:1,int:.5,str:0,spi:0,dps:4,armor:.02},
+    desc:'Tames wild beasts and fights beside them. Rarer beasts make stronger pets, and your bond grows with every fight.'},
 };
 const STAT_NAME={str:'Strength',agi:'Agility',int:'Intellect',sta:'Stamina',spi:'Spirit'};
 
 const ZONES={
   thornvale:{name:'Thornvale',lv:[1,10],faction:'concord',hub:'Thornvale Abbey',sky:['#86b7e6','#dff0d0'],hill:'#4f7a3a',ground:'#5f8f3f',
     mobs:[
-      {id:'wolf',name:'Young Wolf',lv:[1,2],kind:'beast',col:'#8a8a8a'},
+      {id:'wolf',name:'Young Wolf',lv:[1,2],kind:'beast',fam:'wolf',col:'#8a8a8a'},
       {id:'digger',name:'Tunnel Digger',lv:[2,4],kind:'humanoid',col:'#b07a3a',drop:'Waxy Candle'},
-      {id:'boar',name:'Thornback Boar',lv:[4,6],kind:'beast',col:'#7a4a2a',drop:'Thornback Tusk'},
+      {id:'boar',name:'Thornback Boar',lv:[4,6],kind:'beast',fam:'boar',col:'#7a4a2a',drop:'Thornback Tusk'},
       {id:'bandit',name:'Redkerchief Bandit',lv:[5,7],kind:'humanoid',col:'#c0392b',drop:'Red Kerchief'},
       {id:'foreman',name:'Digger Foreman',lv:[7,9],kind:'humanoid',col:'#d0a050'},
-      {id:'grizzle',name:'Grizzlemaw',lv:[10,10],kind:'beast',col:'#5a5a6a',elite:true,rare:true},
+      {id:'grizzle',name:'Grizzlemaw',lv:[10,10],kind:'beast',fam:'wolf',col:'#5a5a6a',elite:true,rare:true},
     ]},
   redsand:{name:'Redsand Steppe',lv:[1,10],faction:'wild',hub:'Bloodstone Camp',sky:['#e8a868','#f6dcb0'],hill:'#a5552e',ground:'#b8683a',
     mobs:[
-      {id:'lizard',name:'Sun Lizard',lv:[1,2],kind:'beast',col:'#c9a03a'},
-      {id:'hyena',name:'Dust Hyena',lv:[2,4],kind:'beast',col:'#b8925a',drop:'Hyena Mane'},
-      {id:'razor',name:'Razorhide Boar',lv:[4,6],kind:'beast',col:'#6a3a2a',drop:'Razorhide Pelt'},
+      {id:'lizard',name:'Sun Lizard',lv:[1,2],kind:'beast',fam:'lizard',col:'#c9a03a'},
+      {id:'hyena',name:'Dust Hyena',lv:[2,4],kind:'beast',fam:'hyena',col:'#b8925a',drop:'Hyena Mane'},
+      {id:'razor',name:'Razorhide Boar',lv:[4,6],kind:'beast',fam:'boar',col:'#6a3a2a',drop:'Razorhide Pelt'},
       {id:'outcast',name:'Outcast Raider',lv:[5,7],kind:'humanoid',col:'#5a6a3a',drop:'Raider Totem'},
       {id:'harpy',name:'Cliff Harpy',lv:[7,9],kind:'humanoid',col:'#8a5ab0'},
-      {id:'duneclaw',name:'Kraska Duneclaw',lv:[10,10],kind:'beast',col:'#a03020',elite:true,rare:true},
+      {id:'duneclaw',name:'Kraska Duneclaw',lv:[10,10],kind:'beast',fam:'cat',col:'#a03020',elite:true,rare:true},
     ]},
   fens:{name:'Greywater Fens',lv:[10,20],faction:null,hub:{concord:'Fenwatch Post',wild:'Mudtusk Camp'},sky:['#7d8f8a','#b9c4b0'],hill:'#3f5a48',ground:'#4a5e3c',
     mobs:[
       {id:'gloomfin',name:'Gloomfin Hunter',lv:[10,12],kind:'humanoid',col:'#3a8a7a',drop:'Gloomfin Scale'},
-      {id:'lurker',name:'Bog Lurker',lv:[12,14],kind:'beast',col:'#4a6a3a'},
-      {id:'spider',name:'Fen Spider',lv:[13,15],kind:'beast',col:'#3a3a4a',drop:'Bog Silk'},
+      {id:'lurker',name:'Bog Lurker',lv:[12,14],kind:'beast',fam:'croc',col:'#4a6a3a'},
+      {id:'spider',name:'Fen Spider',lv:[13,15],kind:'beast',fam:'spider',col:'#3a3a4a',drop:'Bog Silk'},
       {id:'cultist',name:'Drowned Cultist',lv:[15,17],kind:'humanoid',col:'#2a5a8a',drop:'Tide Sigil'},
       {id:'troll',name:'Mire Troll',lv:[17,19],kind:'humanoid',col:'#5a8a5a',drop:'Mire Troll Tusk'},
       {id:'prophet',name:'The Drowned Prophet',lv:[20,20],kind:'humanoid',col:'#1a4a7a',elite:true,rare:true},
@@ -348,13 +375,14 @@ const SLOT_MULT={head:1,chest:1.35,legs:1.15,feet:.8,hands:.7};
 const WEAPONS={sword:{speed:2.4,names:['Rusty Shortsword','Iron Shortsword','Steel Broadsword','Tempered Longblade']},
   dagger:{speed:1.7,names:['Chipped Dagger','Sharp Dirk','Steel Stiletto','Fine Kris']},
   mace:{speed:2.6,names:['Worn Club','Iron Mace','Flanged Mace','Spiked Morningstar']},
-  staff:{speed:2.9,names:['Gnarled Staff','Oak Staff','Runed Staff','Moonwood Staff']}};
+  staff:{speed:2.9,names:['Gnarled Staff','Oak Staff','Runed Staff','Moonwood Staff']},
+  bow:{speed:2.8,names:['Worn Shortbow','Hunting Bow','Recurve Bow','Ashwood Longbow']}};
 const OFFH={shield:['Battered Buckler','Wooden Shield','Iron Shield','Kite Shield'],tome:['Torn Notebook','Apprentice Tome','Bound Grimoire','Arcane Codex'],dagger:['Bent Knife','Parrying Dagger','Steel Main-Gauche','Fine Parrying Blade']};
 const TRINKETS=['Lucky Rabbit Foot','Carved Bone Charm','Silver Locket','Glowing Talisman'];
 const SUFFIX={bear:['Bear',['str','sta']],eagle:['Eagle',['int','sta']],monkey:['Monkey',['agi','sta']],owl:['Owl',['int','spi']],tiger:['Tiger',['str','agi']],
   whale:['Whale',['sta','spi']],wolf:['Wolf',['agi','spi']],boar:['Boar',['str','spi']],falcon:['Falcon',['agi','int']]};
-const CLASS_SFX={warrior:['bear','tiger','boar'],rogue:['monkey','tiger','wolf'],mage:['eagle','owl','falcon'],priest:['owl','whale','eagle']};
-const PRIMARY={warrior:['str','agi'],rogue:['agi','str'],mage:['int','spi'],priest:['spi','int']};
+const CLASS_SFX={hunter:['monkey','wolf','falcon'],warrior:['bear','tiger','boar'],rogue:['monkey','tiger','wolf'],mage:['eagle','owl','falcon'],priest:['owl','whale','eagle']};
+const PRIMARY={hunter:['agi','int'],warrior:['str','agi'],rogue:['agi','str'],mage:['int','spi'],priest:['spi','int']};
 const BLUE_PRE=["Fenwatcher's",'Grizzled',"Duneclaw's","Prophet's",'Tidebound','Oathsworn','Bloodstone'];
 const JUNK={beast:['Cracked Fang','Ruined Pelt','Broken Claw','Matted Fur','Chipped Tooth'],humanoid:['Torn Cloth Scrap','Dented Buckle','Bent Spoon','Rusty Key','Moldy Bread']};
 const RAR_NAME=['Poor','Common','Uncommon','Rare','Epic','Legendary'];
@@ -375,7 +403,8 @@ function genItem(ilvl,rar,slot,o){
   it.value=Math.max(1,Math.round(Math.pow(ilvl+2,1.7)*[1,2,5,12,30][it.rar]*(slot==='weapon'?1.4:1)));
   return it;
 }
-function genJunk(lvl,kind){return {id:uid(),junk:true,rar:0,name:pick(JUNK[kind]||JUNK.beast),value:Math.max(1,Math.round((lvl+1)*rint(3,9)))};}
+function genJunk(lvl,kind){const name=pick(JUNK[kind]||JUNK.beast);if(name==='Moldy Bread')return genFood('bread',lvl);return {id:uid(),junk:true,rar:0,name,value:Math.max(1,Math.round((lvl+1)*rint(3,9)))};}
+function genFood(diet,lvl){return {id:uid(),food:true,diet,rar:1,name:diet==='bread'?'Moldy Bread':pick(['Stringy Meat','Tough Jerky','Gamey Haunch']),value:Math.max(1,Math.round((lvl+1)*2))};}
 function canEquip(it){if(!it||it.junk)return false;const K=CLASSES[H().cls];
   if(it.slot==='weapon')return K.weap.includes(it.wtype);if(it.slot==='offhand')return K.off===it.otype;if(it.slot==='trinket')return true;return K.armor.includes(it.atype);}
 function score(it){if(!it||it.junk||!canEquip(it))return -1;const w=CLASSES[H().cls].w;let s=0;for(const k in it.stats)s+=(w[k]||0)*it.stats[k];
@@ -411,15 +440,59 @@ const TALENTS={
     {id:'hfocus',name:'Healing Focus',max:5,per:6,key:'heal',desc:'Your heals and wards are 6% stronger per rank.'},
     {id:'inner',name:'Inner Light',max:3,per:4,key:'procChance',desc:'+4% chance per rank for Divine Spark.'},
     {id:'voidlash',name:'Void Lash',max:1,per:1,key:'cap',req:8,desc:'Learn Void Lash: shadow damage that heals you for half. 10 second cooldown. Needs 8 points spent.'}]},
+  hunter:{tree:'Beast Mastery',list:[
+    {id:'endurance',name:'Endurance Training',max:5,per:5,key:'petHp',desc:'Your pet has 5% more health per rank.'},
+    {id:'ferocity',name:'Ferocity',max:5,per:2,key:'petCrit',desc:'+2% pet critical strike chance per rank.'},
+    {id:'lethal',name:'Lethal Shots',max:5,per:1,key:'crit',desc:'+1% critical strike chance per rank.'},
+    {id:'bestial',name:'Bestial Bond',max:3,per:20,key:'bondRate',desc:'Your bond with your pet grows 20% faster per rank.'},
+    {id:'unleashed',name:'Unleashed Fury',max:5,per:4,key:'petDmg',desc:'Your pet deals 4% more damage per rank.'},
+    {id:'packfury',name:'Pack Fury',max:1,per:1,key:'cap',req:8,desc:'Learn Pack Fury: your pet deals 50% more damage and attacks faster for 10 seconds. Needs 8 points spent.'}]},
 };
+
+/* =================== creatures =================== */
+/* The creature system: species families, rarity, traits, bond and happiness.
+   Written to be lifted out later and shared with the standalone creature game. */
+const FAMILIES={
+  wolf:{name:'Wolf',role:'Damage',hpM:1,atkM:1.1,speed:2,taunt:.35,diet:'meat',ab:'howl',abName:'Furious Howl',abDesc:'Every 20s: you deal 10% more damage for 10 seconds.'},
+  boar:{name:'Boar',role:'Tank',hpM:1.25,atkM:.9,speed:2,taunt:.7,diet:'any',ab:'charge',abName:'Charge',abDesc:'Opens each fight with a heavy hit that staggers the enemy.'},
+  cat:{name:'Cat',role:'Damage',hpM:.9,atkM:1.25,speed:2,taunt:.3,diet:'meat',ab:'claw',abName:'Claw',abDesc:'Every 6s: a raking claw for 60% extra damage.'},
+  hyena:{name:'Hyena',role:'Damage',hpM:.95,atkM:1,speed:1.6,taunt:.35,diet:'meat',ab:'frenzy',abName:'Frenzy',abDesc:'Every 15s: attacks 40% faster for 6 seconds.'},
+  lizard:{name:'Lizard',role:'Tank',hpM:1.1,atkM:.95,speed:2,taunt:.55,diet:'meat',ab:'tail',abName:'Tail Whip',abDesc:'Every 10s: a whipping strike that slows the enemy.'},
+  croc:{name:'Crocolisk',role:'Tank',hpM:1.3,atkM:1,speed:2.2,taunt:.65,diet:'meat',ab:'roll',abName:'Death Roll',abDesc:'Every 12s: drags the enemy under for double damage.'},
+  spider:{name:'Spider',role:'Damage',hpM:.9,atkM:1.05,speed:2,taunt:.35,diet:'meat',ab:'web',abName:'Web',abDesc:'Every 15s: webs the enemy, slowing its attacks.'},
+};
+const RARITY=[
+  {name:'Common',m:1,traits:[0,1]},{name:'Uncommon',m:1.1,traits:[1,1]},{name:'Rare',m:1.25,traits:[2,2]},
+  {name:'Epic',m:1.45,traits:[2,2]},{name:'Legendary',m:1.7,traits:[3,3]},{name:'Mythical',m:2,traits:[3,4]}];
+const TRAITS={
+  ferocious:{name:'Ferocious',desc:'Deals 12% more damage.'},thick:{name:'Thick Hide',desc:'15% more health.'},
+  swift:{name:'Swift',desc:'Attacks 12% faster.'},keen:{name:'Keen',desc:'+6% critical strike chance.'},
+  loyal:{name:'Loyal',desc:'Bond grows 50% faster.'},hardy:{name:'Hardy',desc:'Gets hungry half as fast.'},
+  vicious:{name:'Vicious',desc:'Critical strikes deal 30% more damage.'},guardian:{name:'Guardian',desc:'Draws enemy attacks more often.'}};
+const UNCOMMON_PRE=['Scarred','Sleek','Lean','Grizzled','Wary'];
+const RARE_VAR=[{n:'Ashen',c:'#c8c8c8'},{n:'Frostcoat',c:'#bfe3ff'},{n:'Bloodmane',c:'#b02a2a'},{n:'Duskpelt',c:'#4a3a6a'},{n:'Goldenhide',c:'#e0b030'}];
+const EPIC_NAMES={wolf:['Old One-Eye','Silverfang'],boar:['Bristleking','Old Mudwallow'],lizard:['Sunscale','Embertongue'],hyena:['Cackletooth','Laughing Ghost'],
+  croc:['Gulper','Deeptooth'],spider:['Silkmother','The Weaver'],cat:['Shadowstalk','Whisperpaw']};
+const BOND=[{n:'Wary',at:0},{n:'Friendly',at:25},{n:'Loyal',at:75},{n:'Devoted',at:175},{n:'Bonded',at:350}];
+const bondLvl=p=>{let l=0;BOND.forEach((b,i)=>{if(p.bond>=b.at)l=i;});return l;};
+const has=(p,t)=>p.traits.includes(t);
+function rollTraits(rar){const [a,b]=RARITY[rar].traits;const n=rint(a,b);const keys=Object.keys(TRAITS),out=[];while(out.length<n){const k=pick(keys);if(!out.includes(k))out.push(k);}return out;}
+function wildRarity(t){if(t.rare)return 4;const r=R();return r<.006?3:r<.036?2:r<.156?1:0;}
+function petOf(){const h=H();return h.pets&&h.pets.find(p=>p.id===h.activePet)||null;}
+function petStats(p){const F=FAMILIES[p.family],bl=bondLvl(p),rm=RARITY[p.rar].m,mood=p.happy>=70?1.15:p.happy<30?.75:1;
+  return {hpMax:Math.round((40+p.lvl*22)*F.hpM*rm*(1+.05*bl)*(has(p,'thick')?1.15:1)*(1+T('petHp')/100)),
+    atk:(4+p.lvl*2.2)*F.atkM*rm*(1+.05*bl)*(has(p,'ferocious')?1.12:1)*(1+T('petDmg')/100)*mood,
+    speed:F.speed/(has(p,'swift')?1.12:1),crit:8+(has(p,'keen')?6:0)+T('petCrit'),taunt:F.taunt+(has(p,'guardian')?.15:0),armor:p.lvl*18*F.hpM};}
+function moodName(p){return p.happy>=70?'Happy':p.happy<30?'Unhappy':'Content';}
+const petXpNeed=l=>Math.round(xpNeed(l)*.6);
 
 /* =================== state =================== */
 let S={v:1,hero:null,last:Date.now(),tab:'quests',log:[]};
 const H=()=>S.hero;
 function newHero(name,faction,race,cls){
   const h={name,faction,race,cls,lvl:1,xp:0,rested:0,money:0,zone:FACTIONS[faction].start,gear:{},bags:[],talents:{},
-    quests:{active:[],done:{},prog:{},rewards:{}},addons:{unl:{},on:{}},mode:'focus',grind:null,
-    stats:{kills:0,deaths:0,loots:0,junkSold:0,quests:0,equips:0,manual:0,uses:0,play:0,money:0},avg:{cycle:30,xp:20,money:5},seenAddons:true};
+    quests:{active:[],done:{},prog:{},rewards:{}},addons:{unl:{},on:{}},mode:'focus',grind:null,pets:[],activePet:null,
+    stats:{kills:0,deaths:0,loots:0,junkSold:0,quests:0,equips:0,manual:0,uses:0,play:0,money:0,feeds:0,tamed:0},avg:{cycle:30,xp:20,money:5},seenAddons:true};
   const K=CLASSES[cls];
   h.gear.weapon=genItem(1,1,'weapon',{cls,type:K.weap[0]});
   h.gear.chest=genItem(1,1,'chest',{cls});
@@ -440,8 +513,8 @@ function recalc(){
   for(const sl of SLOTS){const it=h.gear[sl];if(!it||it.dur<=0)continue;for(const k in it.stats)st[k]+=it.stats[k];armor+=it.armor||0;if(sl==='weapon')w={min:it.wmin,max:it.wmax,speed:it.speed};}
   st.int*=1+T('intPct')/100;for(const k in st)st[k]=Math.round(st[k]);
   armor=Math.round((armor+st.agi*2)*(r.armor||1)*(1+T('armor')/100));
-  const melee=h.cls==='warrior'||h.cls==='rogue';
-  const ap=h.cls==='warrior'?st.str*2:h.cls==='rogue'?st.str+st.agi:st.str;
+  const melee=h.cls==='warrior'||h.cls==='rogue'||h.cls==='hunter';
+  const ap=h.cls==='warrior'?st.str*2:h.cls==='rogue'?st.str+st.agi:h.cls==='hunter'?st.agi*2:st.str;
   ST={st,armor,ap,sp:st.int*.6,crit:5+(melee?st.agi/20:st.int/30)+(r.crit||0)+T('crit'),dodge:3+st.agi/25+T('dodge'),
     hpMax:Math.round((30+h.lvl*10+st.sta*5)*(r.hp||1)),resMax:K.res==='mana'?Math.round(20+h.lvl*15+st.int*15):100,w,melee};
   if(C){C.hp=Math.min(C.hp,ST.hpMax);C.res=Math.min(C.res,ST.resMax);}
@@ -470,7 +543,7 @@ function slog(m){S.log.unshift(m);if(S.log.length>40)S.log.length=40;}
 /* ---- damage helpers ---- */
 function critRoll(extra){return R()*100<(C.buffs.vendetta?100:ST.crit+(extra||0));}
 function wroll(){return ST.w.min+R()*(ST.w.max-ST.w.min)+ST.ap/14*ST.w.speed+(C.buffs.cry?C.buffs.cry.ap/14*ST.w.speed:0);}
-function dmgMods(){let m=1+T('dmg')/100;const d=C.mob.lvl-H().lvl;if(d>0)m*=1-.04*d;if(RACES[H().race].bloodrage&&C.hp<ST.hpMax*.3)m*=1.1;return m;}
+function dmgMods(){let m=(1+T('dmg')/100)*(C.mob&&C.mob.marked>0?1.1:1)*(C.buffs.howl?1.1:1);const d=C.mob.lvl-H().lvl;if(d>0)m*=1-.04*d;if(RACES[H().race].bloodrage&&C.hp<ST.hpMax*.3)m*=1.1;return m;}
 function hitMob(amount,o){
   o=o||{};const m=C.mob;if(!m)return 0;
   if(o.phys&&!o.sure&&R()<.05+.005*Math.max(0,m.lvl-H().lvl)){line(`${o.label||'Your attack'} was dodged by ${m.name}.`,'l-hit');fx('Dodge','#ccc','mob');
@@ -522,7 +595,21 @@ const ABIL={
     {id:'spark',name:'Divine Spark',lvl:1,react:'spark',cost:()=>0,desc:'Only when Divine Spark lights up. An instant, free, empowered Smite.',ai:()=>true,fn:()=>{C.win.spark=0;hitMob((12+lv()*3.9+ST.sp*.7)*1.5,{label:'Divine Spark'});}},
     {id:'voidlash',name:'Void Lash',talent:'voidlash',cd:10,cost:()=>40+lv()*4,desc:'Shadow damage that heals you for half. 10 second cooldown.',ai:()=>true,fn:()=>{const a=hitMob(30+lv()*6+ST.sp,{label:'Void Lash'});if(a)healHero(a/2,'Void Lash');}},
   ],
+  hunter:[
+    {id:'shot',name:'Steady Shot',lvl:1,cast:()=>1.5,cost:()=>10+lv()*1.5,desc:'A careful, heavy shot. 1.5 second cast.',ai:()=>true,fn:()=>hitMob(wroll()+10+lv()*1.6,{phys:1,label:'Steady Shot'})},
+    {id:'mark',name:'Mark Prey',lvl:2,cost:()=>8+lv(),desc:'The target takes 10% more damage from you and your pet for 60 seconds.',cond:()=>!(C.mob.marked>0),ai:()=>C.mob.hp>C.mob.max*.5,fn:()=>{C.mob.marked=60;line(`You mark ${C.mob.name}.`,'l-sys');}},
+    {id:'pierce',name:'Piercing Shot',lvl:4,cd:6,cost:()=>15+lv()*2,desc:'Instant. Ignores armor. 6 second cooldown.',ai:()=>true,fn:()=>hitMob(wroll()*.6+18+lv()*2.5,{label:'Piercing Shot'})},
+    {id:'sting',name:'Venom Sting',lvl:6,cost:()=>14+lv()*1.8,desc:'Poisons the target over 12 seconds.',cond:()=>!C.mob.dots.sting,ai:()=>C.mob.hp>C.mob.max*.35,fn:()=>{addDot('sting',14+lv()*3.5+ST.ap*.1,12,'Venom Sting');line(`${C.mob.name} is poisoned.`,'l-hit');}},
+    {id:'coord',name:'Coordinated Strike',lvl:1,react:'exposed',cost:()=>10,desc:'Needs a pet at Loyal bond or better. Lights up when your pet uses its special ability or lands a critical hit: you and your pet strike together.',ai:()=>true,
+      fn:()=>{C.win.exposed=0;hitMob(wroll()*1.2+20+lv()*2,{phys:1,sure:1,label:'Coordinated Strike'});if(C.mob)petHit(1.5,'Coordinated Strike');}},
+    {id:'mendpet',name:'Mend Pet',lvl:4,cast:()=>2,cost:()=>15+lv()*2,desc:'Heals your pet. 2 second cast.',cond:()=>{const p=petOf();return p&&p.hp>0&&p.hp<petStats(p).hpMax;},ai:()=>{const p=petOf();return p&&p.hp<petStats(p).hpMax*.45;},
+      fn:()=>{const p=petOf();if(!p||p.hp<=0)return;const a=Math.round(40+lv()*10);p.hp=Math.min(petStats(p).hpMax,p.hp+a);line(`Mend Pet heals ${p.name} for ${a}.`,'l-heal');fx('+'+a,'#7cf08a','pet');}},
+    {id:'packfury',name:'Pack Fury',talent:'packfury',cd:40,cost:()=>20+lv()*2,desc:'Your pet deals 50% more damage and attacks faster for 10 seconds. 40 second cooldown.',cond:()=>{const p=petOf();return p&&p.hp>0;},ai:()=>C.mob.hp>C.mob.max*.4,fn:()=>{C.buffs.packfury={t:10};line('Your pet is filled with fury!','l-sys');}},
+  ],
 };
+/* Auto mode's priority order, where it differs from the bar order */
+const ABIL_AI={hunter:['mendpet','mark','coord','packfury','sting','pierce','shot']};
+function aiList(){const o=ABIL_AI[H().cls];return o?o.map(id=>bar().find(a=>a.id===id)):bar();}
 function surgeChance(){if(R()*100<10+T('procChance'))openWin('surge',6);}
 function sparkChance(){if(R()*100<15+T('procChance'))openWin('spark',6);}
 function knows(id){const h=H(),a=ABIL[h.cls].find(x=>x.id===id);if(!a)return false;return a.talent?(h.talents[a.talent]||0)>0:h.lvl>=a.lvl;}
@@ -531,6 +618,7 @@ function canUse(a,quiet){
   const fail=m=>{if(!quiet)err(m);return false;};
   if(!knows(a.id))return fail("You haven't learned that yet.");
   if(C.phase!=='fight'||!C.mob)return fail('You have no target.');
+  if(C.taming)return fail('You are busy taming.');
   if(C.cast)return fail('You are busy casting.');
   if(C.gcd>0||(a.cd&&C.cds[a.id]>0))return fail('Ability is not ready yet.');
   if(a.react&&!(C.win[a.react]>0))return fail('That needs an opening.');
@@ -559,17 +647,76 @@ function targetMob(){
   const ok=z.filter(m=>!m.rare&&m.lv[0]<=h.lvl);return ok.length?ok[ok.length-1]:z[0];
 }
 function spawn(){
-  const t=targetMob(),lvl=rint(t.lv[0],t.lv[1]),e=!!t.elite;
-  C.mob={id:t.id,name:t.name,kind:t.kind,col:t.col,elite:e,lvl,max:Math.round((30+lvl*28)*(e?3.2:1)),dmg:(3+lvl*2.3)*(e?1.5:1),armor:lvl*25,speed:e?2.2:2,swing:1.2,dots:{},chill:0};
-  C.mob.hp=C.mob.max;C.phase='fight';C.fightT=0;C.swing=.4;C.cp=0;C.win={};
+  const t=targetMob(),lvl=rint(t.lv[0],t.lv[1]),e=!!t.elite,beast=t.kind==='beast';
+  const rar=beast?wildRarity(t):0;let name=t.name,col=t.col,petName=t.name;
+  if(rar===1)name=petName=`${pick(UNCOMMON_PRE)} ${t.name}`;
+  else if(rar===2){const v=pick(RARE_VAR);name=petName=`${v.n} ${t.name}`;col=v.c;}
+  else if(rar===3){name=petName=pick(EPIC_NAMES[t.fam]||[t.name]);col=pick(RARE_VAR).c;}
+  const rm=t.rare?1:1+.15*rar;
+  C.mob={id:t.id,name,kind:t.kind,col,elite:e,lvl,rar,fam:t.fam,species:t.name,petName,traits:beast?rollTraits(rar):[],xpM:t.rare?1:1+.25*rar,
+    max:Math.round((30+lvl*28)*(e?3.2:1)*rm),dmg:(3+lvl*2.3)*(e?1.5:1)*(t.rare?1:1+.08*rar),armor:lvl*25,speed:e?2.2:2,swing:1.2,dots:{},chill:0,marked:0};
+  C.mob.hp=C.mob.max;C.phase='fight';C.fightT=0;C.swing=.4;C.cp=0;C.win={};C.taming=null;
+  C.petSwing=.8;C.petCd=(petOf()&&FAMILIES[petOf().family].ab==='charge')?.5:4;C.guardUsed=false;C.charged=false;
   if(H().cls==='rogue'&&H().lvl>=4)openWin('opening',3);
-  line(`You attack ${C.mob.name} (level ${lvl}${e?' elite':''}).`,'l-sys');
+  line(`You attack ${name} (level ${lvl}${e?' elite':''}${beast&&rar?`, ${RARITY[rar].name.toLowerCase()}`:''}).`,'l-sys');
+  if(beast&&rar>=2&&!t.rare)toast(`A ${RARITY[rar].name} beast: ${name}!`);
+}
+/* ---- pets in combat ---- */
+function petHit(mult,label){
+  const p=petOf(),m=C.mob;if(!p||p.hp<=0||!m)return 0;const ps=petStats(p);
+  let a=ps.atk*mult*(C.buffs.packfury?1.5:1)*(m.marked>0?1.1:1)*(.9+R()*.2);a*=1-m.armor/(m.armor+400+85*p.lvl);
+  const crit=R()*100<ps.crit;if(crit)a*=has(p,'vicious')?2.6:2;a=Math.max(1,Math.round(a));
+  m.hp-=a;C.anim.pet=.15;line(`${petLabel(p)}${label?`'s ${label}`:''} ${crit?'crits':'hits'} ${m.name} for ${a}.`,crit?'l-crit':'l-pet');fx(String(a)+(crit?'!':''),crit?'#ffd24a':'#d9f7a8','mob',crit);
+  if(crit&&H().cls==='hunter'&&bondLvl(p)>=2&&H().lvl>=1)openWin('exposed',4);
+  if(m.hp<=0)onKill();return a;
+}
+function petAbility(){
+  const p=petOf(),m=C.mob;if(!p||p.hp<=0||!m)return;const F=FAMILIES[p.family],devoted=bondLvl(p)>=3?.7:1;
+  switch(F.ab){
+    case 'howl':C.buffs.howl={t:10};line(`${petLabel(p)} lets out a Furious Howl.`,'l-pet');C.petCd=20*devoted;break;
+    case 'charge':C.petCd=999;if(!C.charged){C.charged=true;m.swing+=1.5;petHit(2,'Charge');}break;
+    case 'claw':C.petCd=6*devoted;petHit(1.6,'Claw');break;
+    case 'frenzy':C.buffs.frenzy={t:6};line(`${petLabel(p)} goes into a Frenzy.`,'l-pet');C.petCd=15*devoted;break;
+    case 'tail':C.petCd=10*devoted;if(petHit(1.3,'Tail Whip')&&C.mob)C.mob.chill=Math.max(C.mob.chill,3);break;
+    case 'roll':C.petCd=12*devoted;petHit(2,'Death Roll');break;
+    case 'web':C.petCd=15*devoted;m.chill=Math.max(m.chill,6);line(`${petLabel(p)} webs ${m.name}.`,'l-pet');break;
+  }
+  if(C.mob&&H().cls==='hunter'&&bondLvl(p)>=2)openWin('exposed',4);
+}
+function petLabel(p){return p.name===p.species?'Your '+p.name:p.name;}
+function petDie(){const p=petOf();if(!p)return;p.hp=0;p.happy=Math.max(0,p.happy-15);line(`${p.name} has died.`,'l-hurt');toast(`${p.name} has fallen`);C.buffs.packfury=null;}
+function revivePet(){const p=petOf();if(!p||p.hp>0)return false;p.hp=Math.round(petStats(p).hpMax*.5);line(`You revive ${p.name}.`,'l-heal');return true;}
+function petGain(x){
+  const h=H(),p=petOf();if(!p||p.hp<=0)return;
+  if(p.lvl<h.lvl){p.xp+=x*(p.lvl<h.lvl-2?2:1);while(p.lvl<h.lvl&&p.xp>=petXpNeed(p.lvl)){p.xp-=petXpNeed(p.lvl);p.lvl++;p.hp=petStats(p).hpMax;line(`${p.name} reaches level ${p.lvl}.`,'l-xp');}}else p.xp=0;
+  if(p.happy>=30){const before=bondLvl(p);p.bond+=(1+T('bondRate')/100)*(RACES[h.race].beastkin?1.2:1)*(has(p,'loyal')?1.5:1)*(p.happy>=70?1.5:1);
+    const after=bondLvl(p);if(after>before){toast(`${p.name} is now ${BOND[after].n}`);slog(`${p.name}'s bond grew to ${BOND[after].n}.`);
+      if(after===2)line(`Coordinated Strike unlocked: it lights up when ${p.name} uses its ability or lands a critical hit.`,'l-sys');
+      if(after===4)line(`${p.name} would now take a killing blow for you, once per fight.`,'l-sys');}}
+}
+function canTame(){const h=H(),m=C.mob;if(h.cls!=='hunter'||!m||C.phase!=='fight'||C.taming||m.kind!=='beast')return false;return true;}
+function tameBlock(){const h=H(),m=C.mob;if(m.lvl>h.lvl)return `${m.name} is too high level to tame.`;if((h.pets||[]).length>=3)return 'Your stable is full (3). Release a pet first.';return '';}
+function startTame(){if(!canTame())return;const why=tameBlock();if(why){err(why);return;}C.taming={t:6,max:6};C.cast=null;C.lastInput=C.run;line(`You begin to tame ${C.mob.name}. Survive for 6 seconds.`,'l-sys');}
+function finishTame(){
+  const h=H(),m=C.mob;C.taming=null;
+  const p={id:uid(),name:m.petName,species:m.species,family:m.fam,rar:m.rar,col:m.col,lvl:m.lvl,xp:0,bond:0,happy:60,traits:m.traits,hp:0,tamedIn:ZONES[h.zone].name,tamedAt:h.lvl};
+  p.hp=petStats(p).hpMax;h.pets.push(p);if(!petOf())h.activePet=p.id;h.stats.tamed++;
+  for(const qid of h.quests.active){const q=ALLQ[qid];if(q.mob===m.id&&q.type==='kill'&&(h.quests.prog[qid]||0)<q.n){h.quests.prog[qid]=(h.quests.prog[qid]||0)+1;if(h.quests.prog[qid]>=q.n)toast(`${q.name} (Complete)`);}}
+  C.mob=null;line(`You have tamed ${p.name}!`,'l-loot');toast(`Tamed: ${p.name} (${RARITY[p.rar].name} ${FAMILIES[p.family].name})`);slog(`Tamed ${p.name}, a ${RARITY[p.rar].name.toLowerCase()} ${FAMILIES[p.family].name.toLowerCase()}, in ${p.tamedIn}.`);
+  if(h.activePet!==p.id)line(`${p.name} waits in your stable. Swap pets at a stable in town.`,'l-sys');
+  C.phase='rest';
+}
+function feedPet(id,auto){
+  const h=H(),p=petOf();if(!p){err('You have no pet.');return false;}
+  const diet=FAMILIES[p.family].diet;const i=h.bags.findIndex(it=>it.food&&(id?it.id===id:true)&&(diet==='any'||it.diet===diet));
+  if(i<0){if(!auto)err(`${p.name} won't eat that.`);return false;}
+  const it=h.bags.splice(i,1)[0];p.happy=Math.min(100,p.happy+35);if(!auto)h.stats.feeds++;line(`${p.name} eats the ${it.name}.`,'l-pet');fx('Yum','#ffd24a','pet');return true;
 }
 function onKill(){
-  const h=H(),m=C.mob;C.mob=null;C.cast=null;h.stats.kills++;
+  const h=H(),m=C.mob;C.mob=null;C.cast=null;C.taming=null;h.stats.kills++;
   line(`${m.name} dies.`,'l-sys');
   // xp
-  let x=killXP(m);if(engaged())x=Math.round(x*1.1);gainXP(x,true);
+  let x=Math.round(killXP(m)*(m.xpM||1));if(engaged())x=Math.round(x*1.1);gainXP(x,true);petGain(x);
   // quest progress
   for(const qid of h.quests.active){const q=ALLQ[qid];if(q.mob!==m.id)continue;const p=h.quests.prog[qid]||0;if(p>=q.n)continue;
     if(q.type==='kill'||R()<.6){h.quests.prog[qid]=p+1;const it=q.type==='kill'?`${m.name} slain`:ZONES[q.zone].mobs.find(x=>x.id===q.mob).drop;
@@ -578,6 +725,7 @@ function onKill(){
   const loot={money:0,items:[]};
   if(m.kind==='humanoid')loot.money=Math.round(m.lvl*rint(2,6)*(m.elite?5:1));
   if(R()<.55)loot.items.push(genJunk(m.lvl,m.kind));
+  if(m.kind==='beast'&&R()<.28)loot.items.push(genFood('meat',m.lvl));
   const rr=R();
   if(m.elite)loot.items.push(genItem(m.lvl+1,3,pick(SLOTS),{cls:h.cls}));
   else if(rr<.004)loot.items.push(genItem(m.lvl+2,3,pick(SLOTS)));
@@ -627,6 +775,17 @@ function die(){
   const h=H();h.stats.deaths++;C.mob=null;C.cast=null;C.loot=null;C.phase='dead';C.t=15+h.lvl;C.absorb=0;C.buffs={};
   for(const s of SLOTS){const it=h.gear[s];if(it)it.dur=Math.max(0,it.dur-10);}recalc();
   line('You have died. Your gear lost 10% durability.','l-hurt');toast('You have died');slog(`Died at level ${h.lvl}.`);
+  C.taming=null;const p=petOf();if(p&&p.hp>0){p.hp=0;p.happy=Math.max(0,p.happy-10);line(`${p.name} falls beside you.`,'l-hurt');}
+}
+function petTick(h,phase){
+  const he=H(),p=petOf();if(!p)return;const ps=petStats(p);
+  p.happy=Math.max(0,p.happy-h/25*(has(p,'hardy')?.5:1));
+  if(p.hp>0&&phase!=='fight')p.hp=Math.min(ps.hpMax,p.hp+ps.hpMax*(phase==='rest'?.07:.015)*h);
+  if(p.hp>ps.hpMax)p.hp=ps.hpMax;
+  if(C.reviving>0){if(phase==='fight')C.reviving=0;else{C.reviving-=h;if(C.reviving<=0)revivePet();}}
+  else if(p.hp<=0&&phase!=='fight'&&phase!=='dead'&&aiOn())C.reviving=4;
+  const care=he.addons.unl.petcare&&he.addons.on.petcare;
+  if(care&&p.happy<55)feedPet(null,true);
 }
 
 function step(h){
@@ -641,25 +800,36 @@ function step(h){
   if(K.res==='rage'&&C.phase!=='fight')C.res=Math.max(0,C.res-3*h);
   switch(C.phase){
     case 'seek':C.t-=h;C.hp=Math.min(ST.hpMax,C.hp+ST.hpMax*.01*h);if(mana)C.res=Math.min(ST.resMax,C.res+ST.resMax*.02*h);if(C.t<=0)spawn();break;
-    case 'rest':C.hp=Math.min(ST.hpMax,C.hp+ST.hpMax*.07*h);if(mana)C.res=Math.min(ST.resMax,C.res+ST.resMax*.07*h);
-      if(C.hp>=ST.hpMax*.97&&(!mana||C.res>=ST.resMax*.95)){C.phase='seek';C.t=1;}break;
+    case 'rest':{C.hp=Math.min(ST.hpMax,C.hp+ST.hpMax*.07*h);if(mana)C.res=Math.min(ST.resMax,C.res+ST.resMax*.07*h);
+      const p=petOf(),petOk=!p||p.hp<=0?!(p&&C.reviving>0):p.hp>=petStats(p).hpMax*.9;
+      if(C.hp>=ST.hpMax*.97&&(!mana||C.res>=ST.resMax*.95)&&petOk){C.phase='seek';C.t=1;}break;}
     case 'loot':C.t-=h;if(C.t<=0){if(C.loot&&aiOn()&&C.loot.money)takeLoot({money:C.loot.money,items:[]},false);if(C.loot&&C.loot.items.length)line('The corpse decays. Some loot was left behind.','l-hurt');afterFight();}break;
     case 'dead':C.t-=h;if(C.t<=0){C.hp=ST.hpMax*.5;if(mana)C.res=ST.resMax*.5;C.phase='rest';line('You return to your body.','l-sys');}break;
     case 'town':C.t-=h;if(C.t<=0){C.phase='intown';line(`You arrive at ${hubName()}.`,'l-sys');
-        if(he.addons.unl.sweep&&he.addons.on.sweep)sellJunk(true);C.townT=3;}break;
+        if(he.addons.unl.sweep&&he.addons.on.sweep)sellJunk(true);if(he.addons.unl.petcare&&he.addons.on.petcare&&he.bags.filter(i=>i.food).length<3)buyFood(true);C.townT=3;}break;
     case 'intown':if(aiOn()){C.townT-=h;if(C.townT<=0){repairAll(true);leaveTown();}}break;
     case 'fight':fight(h,mana);break;
   }
+  if(he.pets&&he.pets.length)petTick(h,C.phase);
   if(C.phase!=='fight'&&C.cast)C.cast=null;
+  C.anim.pet=Math.max(0,(C.anim.pet||0)-h);
 }
 function fight(h,mana){
   const m=C.mob,he=H();if(!m){C.phase='seek';C.t=1;return;}
   C.fightT+=h;
   if(mana)C.res=Math.min(ST.resMax,C.res+ST.st.spi*(C.fightT-C.lastCast>5?.1:.025)*(1+T('regenPct')/100)*h);
+  if(m.marked>0)m.marked-=h;
+  // taming: the hero channels, the beast keeps attacking
+  if(C.taming){C.taming.t-=h;if(C.taming.t<=0){finishTame();return;}}
+  // the pet
+  const pet=petOf();
+  if(pet&&pet.hp>0&&!C.taming){C.petSwing-=h*(C.buffs.frenzy?1.4:1)*(C.buffs.packfury?1.3:1);
+    if(C.petSwing<=0){C.petSwing=petStats(pet).speed;petHit(1);if(!C.mob)return;}
+    C.petCd-=h;if(C.petCd<=0){petAbility();if(!C.mob)return;}}
   // casting
   if(C.cast){C.cast.t-=h;if(C.cast.t<=0){const a=C.cast.a;C.cast=null;C.anim.hero=.2;a.fn();if(!C.mob)return;}}
   // auto attack (casters swing only when not casting)
-  if(!C.cast){C.swing-=h*(C.buffs.quicken?1.3:1);if(C.swing<=0){C.swing=ST.w.speed;C.anim.hero=.15;
+  if(!C.cast&&!C.taming){C.swing-=h*(C.buffs.quicken?1.3:1);if(C.swing<=0){C.swing=ST.w.speed;C.anim.hero=.15;
     hitMob(wroll(),{phys:1,auto:1,label:'Your attack'});if(!C.mob)return;
     if(he.cls==='warrior'&&he.lvl>=6&&R()<.06)openWin('counter',4+T('window'));}}
   // dots
@@ -669,17 +839,22 @@ function fight(h,mana){
   if(m.chill>0)m.chill-=h;
   m.swing-=h*(m.chill>0?.6:1);
   if(m.swing<=0){m.swing=m.speed;C.anim.mob=-.18;
-    if(R()*100<ST.dodge){line(`${m.name} attacks. You dodge.`,'l-hit');fx('Dodge','#ccc','hero');if(he.cls==='rogue'&&he.lvl>=6)openWin('riposte',4);}
+    const pp=petOf();
+    if(pp&&pp.hp>0&&R()<petStats(pp).taunt){const ps=petStats(pp);let a=m.dmg*(.85+R()*.3)*(1-ps.armor/(ps.armor+400+85*m.lvl));a=Math.max(1,Math.round(a));
+      pp.hp-=a;line(`${m.name} hits ${petLabel(pp).replace(/^Your /,"your ")} for ${a}.`,'l-hurt');fx('-'+a,'#ff9a7a','pet');if(pp.hp<=0)petDie();}
+    else if(R()*100<ST.dodge){line(`${m.name} attacks. You dodge.`,'l-hit');fx('Dodge','#ccc','hero');if(he.cls==='rogue'&&he.lvl>=6)openWin('riposte',4);}
     else if(ST.melee&&R()<.05){line(`${m.name} attacks. You parry.`,'l-hit');fx('Parry','#ccc','hero');if(he.cls==='rogue'&&he.lvl>=6)openWin('riposte',4);}
     else{let a=m.dmg*(.85+R()*.3)*(1-ST.armor/(ST.armor+400+85*m.lvl));const d=m.lvl-he.lvl;if(d>0)a*=1+.04*d;a=Math.max(1,Math.round(a));
       if(C.absorb>0){const ab=Math.min(C.absorb,a);C.absorb-=ab;a-=ab;if(ab)fx('Absorb','#9cc8ff','hero');}
       if(a>0){C.hp-=a;line(`${m.name} hits you for ${a}.`,'l-hurt');fx('-'+a,'#ff6a5a','hero');if(he.cls==='warrior')C.res=Math.min(100,C.res+a/(he.lvl*3+10)*2.5);}
-      if(C.hp<=0){die();return;}}}
+      if(C.hp<=0){const gp=petOf();
+        if(gp&&gp.hp>0&&bondLvl(gp)>=4&&!C.guardUsed){C.guardUsed=true;C.hp=Math.round(ST.hpMax*.15);gp.hp=Math.max(1,gp.hp-a);line(`${gp.name} throws itself in front of the blow!`,'l-sys');toast(`${gp.name} saved you`);}
+        else{die();return;}}}}
   // the hero's decision
-  if(aiOn()&&!C.cast&&C.gcd<=0){
+  if(aiOn()&&!C.cast&&!C.taming&&C.gcd<=0){
     if(!C.aiArmed){C.aiArmed=true;C.ai=(1-aiEff())*1.5;}
     else{C.ai-=h;if(C.ai<=0){C.aiArmed=false;
-      for(const a of bar()){if(a.react&&!C.win[a.react+'_ai'])continue;if(!canUse(a,true))continue;if(a.ai&&!a.ai())continue;useAb(a,false);break;}}}
+      for(const a of aiList()){if(a.react&&!C.win[a.react+'_ai'])continue;if(!canUse(a,true))continue;if(a.ai&&!a.ai())continue;useAb(a,false);break;}}}
   }
 }
 function hubName(){const z=ZONES[H().zone];return typeof z.hub==='string'?z.hub:z.hub[H().faction];}
@@ -697,6 +872,10 @@ function sellItem(id){if(!inTown()){err('You need to be at a vendor in town.');r
 function sellJunk(auto){const h=H();let n=0,v=0;h.bags=h.bags.filter(it=>{if(it.junk){n++;v+=it.value;return false;}return true;});h.money+=v;if(!auto)h.stats.junkSold+=n;if(n)line(`${auto?'Vendor Sweep sold':'Sold'} ${n} junk item${n>1?'s':''} for ${moneyTxt(v)}.`,'l-loot');}
 function repairCost(){const h=H();let c=0;for(const s of SLOTS){const it=h.gear[s];if(it)c+=Math.round(it.value*.12*(100-it.dur)/100);}return c;}
 function repairAll(auto){const h=H(),c=repairCost();if(!c)return;if(h.money<c){if(!auto)err("You can't afford that.");return;}h.money-=c;for(const s of SLOTS)if(h.gear[s])h.gear[s].dur=100;recalc();line(`Repaired your gear for ${moneyTxt(c)}.`,'l-loot');}
+function meatCost(){return Math.max(5,H().lvl*6);}
+function buyFood(auto){const h=H(),c=meatCost()*5;if(!inTown()){if(!auto)err('You need to be at a vendor in town.');return;}if(h.money<c){if(!auto)err("You can't afford that.");return;}
+  if(h.bags.length>11){if(!auto)err('Not enough bag space.');return;}h.money-=c;
+  for(let i=0;i<5;i++)h.bags.push({id:uid(),food:true,diet:'meat',rar:1,name:'Haunch of Meat',value:Math.round(meatCost()/4)});line(`Bought 5 Haunch of Meat for ${moneyTxt(c)}.`,'l-loot');}
 
 /* ---- quests ---- */
 function qState(q){const h=H();if(h.quests.done[q.id])return 'done';if(h.quests.active.includes(q.id))return (h.quests.prog[q.id]||0)>=q.n?'ready':'active';
@@ -728,8 +907,9 @@ const ADDONS=[
   {id:'questhelper',name:'QuestHelper',desc:'Turns in finished quests, picks the better reward, and accepts the next quests in your zone.',req:'Complete 12 quests',prog:()=>[H().stats.quests,12]},
   {id:'gearcmp',name:'GearCompare',desc:'Equips upgrades automatically when you pick them up.',req:'Equip 12 items by hand',prog:()=>[H().stats.equips,12]},
   {id:'macro',name:'Rotation Macro',desc:'Makes Auto mode play your action bar better. Rank 2 at 2,000 presses, rank 3 at 6,000 (catches openings half the time).',req:'Press 500 abilities yourself',prog:()=>[H().stats.manual,500]},
+  {id:'petcare',cls:'hunter',name:'PetCare',desc:'Feeds your pet when it gets hungry, and buys meat when you visit town.',req:'Feed your pet 20 times by hand',prog:()=>[H().stats.feeds,20]},
 ];
-function checkAddons(){const h=H();for(const a of ADDONS){if(h.addons.unl[a.id])continue;const [x,n]=a.prog();if(x>=n){h.addons.unl[a.id]=true;h.addons.on[a.id]=true;h.seenAddons=false;toast(`Addon installed: ${a.name}`);slog(`Earned the ${a.name} addon.`);line(`Addon installed: ${a.name}.`,'l-sys');}}}
+function checkAddons(){const h=H();for(const a of ADDONS){if(h.addons.unl[a.id]||(a.cls&&a.cls!==h.cls))continue;const [x,n]=a.prog();if(x>=n){h.addons.unl[a.id]=true;h.addons.on[a.id]=true;h.seenAddons=false;toast(`Addon installed: ${a.name}`);slog(`Earned the ${a.name} addon.`);line(`Addon installed: ${a.name}.`,'l-sys');}}}
 
 /* =================== save / offline =================== */
 function save(){S.last=Date.now();const h=H();
@@ -756,6 +936,7 @@ function itemSpan(it){itemIndex[it.id]=it;return `<span class="item q${it.rar}" 
 function tipHTML(it){
   let h=`<div class="tn q${it.rar}">${it.name}</div>`;
   if(it.junk)return h+`<div>Poor quality. Sell to a vendor.</div><div>Sell price: ${moneyStr(it.value)}</div>`;
+  if(it.food)return h+`<div>Pet food: ${it.diet==="bread"?"bread (boars eat anything)":"meat"}.</div><div>Feeding makes your pet happier.</div><div>Sell price: ${moneyStr(it.value)}</div>`;
   const slot=it.slot==='offhand'?(it.otype==='shield'?'Off hand · Shield':'Off hand · '+(it.otype==='tome'?'Held in off hand':'Dagger')):it.slot==='weapon'?`Main hand · ${it.wtype[0].toUpperCase()+it.wtype.slice(1)}`:it.slot==='trinket'?'Trinket':`${it.slot[0].toUpperCase()+it.slot.slice(1)} · ${it.atype[0].toUpperCase()+it.atype.slice(1)}`;
   h+=`<div>${slot}</div>`;
   if(it.slot==='weapon')h+=`<div>${it.wmin} - ${it.wmax} Damage · Speed ${it.speed.toFixed(2)}</div><div>(${((it.wmin+it.wmax)/2/it.speed).toFixed(1)} damage per second)</div>`;
@@ -804,12 +985,48 @@ bags:{
   key(){const h=H();return h.bags.map(i=>i.id).join(',')+'|'+inTown()+'|'+SLOTS.map(s=>h.gear[s]?h.gear[s].id:'').join(',');},
   build(){const h=H();const town=inTown();
     let o=`<h3>Bags ${h.bags.length}/16</h3><p class="sub">${town?`You're at the vendor in ${hubName()}.`:'Sell and repair at a vendor in town. Full bags mean loot gets left behind.'}</p>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">${town?`<button class="btn sm" data-act="selljunk">Sell junk</button><button class="btn sm" data-act="repair" id="repBtn">Repair</button><button class="btn sm alt" data-act="leavetown">Head back out</button>`:`<button class="btn sm" data-act="town">Go to town</button>`}</div>`;
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">${town?`<button class="btn sm" data-act="selljunk">Sell junk</button><button class="btn sm" data-act="repair" id="repBtn">Repair</button>${h.cls==='hunter'?`<button class="btn sm" data-act="buyfood">Buy 5 meat (${moneyTxt(meatCost()*5)})</button>`:''}<button class="btn sm alt" data-act="leavetown">Head back out</button>`:`<button class="btn sm" data-act="town">Go to town</button>`}</div>`;
+    const pet=petOf();
     o+=h.bags.length?h.bags.map(it=>{const can=canEquip(it);const up=can&&score(it)>score(h.gear[it.slot]);
-      return `<div class="rowl"><div class="l">${itemSpan(it)} ${up?'<span class="pill" style="color:#7cf08a">Upgrade</span>':''}<div class="meta">${it.junk?'Junk':`${it.slot==='offhand'?'Off hand':it.slot} · item level ${it.ilvl}`} · ${moneyStr(it.value)}</div></div>
-      <div class="r">${can?`<button class="btn sm" data-act="equip" data-arg="${it.id}">Equip</button>`:''}${town?`<button class="btn sm alt" data-act="sell" data-arg="${it.id}">Sell</button>`:''}</div></div>`;}).join(''):'<p class="meta">Your bags are empty.</p>';
+      const eats=it.food&&pet&&(FAMILIES[pet.family].diet==='any'||it.diet===FAMILIES[pet.family].diet);
+      return `<div class="rowl"><div class="l">${itemSpan(it)} ${up?'<span class="pill" style="color:#7cf08a">Upgrade</span>':''}<div class="meta">${it.junk?'Junk':it.food?'Pet food':`${it.slot==='offhand'?'Off hand':it.slot} · item level ${it.ilvl}`} · ${moneyStr(it.value)}</div></div>
+      <div class="r">${can?`<button class="btn sm" data-act="equip" data-arg="${it.id}">Equip</button>`:''}${eats?`<button class="btn sm" data-act="feed" data-arg="${it.id}">Feed ${pet.name}</button>`:''}${town?`<button class="btn sm alt" data-act="sell" data-arg="${it.id}">Sell</button>`:''}</div></div>`;}).join(''):'<p class="meta">Your bags are empty.</p>';
     return o;},
   update(){const b=$('#repBtn');if(b){const c=repairCost();b.innerHTML=c?`Repair (${moneyTxt(c)})`:'Nothing to repair';b.disabled=!c||H().money<c;}}
+},
+pets:{
+  key(){const h=H();return (h.pets||[]).map(p=>p.id+':'+p.lvl+':'+bondLvl(p)+':'+p.name).join(',')+'|'+h.activePet+'|'+inTown();},
+  build(){const h=H(),p=petOf(),town=inTown();
+    let o=`<h3>Pets</h3><p class="sub">Tame a beast your level or lower: start a fight with it, then press <b>Tame Beast</b> and survive 6 seconds. Rarer beasts make stronger pets with more traits. Your bond grows with every fight you win together, as long as your pet is fed.</p>`;
+    if(p){const F=FAMILIES[p.family];
+      o+=`<div class="petcard"><canvas width="96" height="72" data-petart="${p.id}"></canvas><div style="min-width:0">
+        <div class="petname r${p.rar}">${p.name}</div>
+        <div class="meta"><span class="r${p.rar}">${RARITY[p.rar].name}</span> ${F.name} · ${F.role} · level ${p.lvl}${p.species!==p.name?` · ${p.species}`:''} · tamed in ${p.tamedIn}</div>
+        <div class="meta" style="margin-top:6px">Health <span id="ptHpT"></span></div><div class="mini"><i id="ptHp" style="background:#2fbf3b"></i></div>
+        <div class="meta">Mood: <b id="ptMood"></b></div><div class="mini"><i id="ptHappy" style="background:#f2c14e"></i></div>
+        <div class="meta">Bond: <b id="ptBond"></b></div><div class="mini"><i id="ptBondI" style="background:#b55cf0"></i></div>
+        <div class="meta"><b>${F.abName}</b>: ${F.abDesc}</div>
+        ${p.traits.length?`<div class="traits">${p.traits.map(t=>`<span class="trait" title="${TRAITS[t].desc}">${TRAITS[t].name}</span>`).join('')}</div>`:'<div class="meta">No traits.</div>'}
+        <div class="mfoot" style="justify-content:flex-start"><button class="btn sm" data-act="feed" id="feedBtn">Feed</button><button class="btn sm" data-act="revive" id="reviveBtn">Revive (4s)</button>
+          <input class="petinp" id="petName" maxlength="18" value="${p.name}" aria-label="Pet name"><button class="btn sm alt" data-act="rename">Rename</button></div>
+      </div></div>`;}
+    else o+=`<p class="meta">${h.cls==='hunter'?'No pet yet. Find a beast your level or lower and tame it.':'Only Hunters can tame beasts for now.'}</p>`;
+    const others=(h.pets||[]).filter(x=>x.id!==h.activePet);
+    o+=`<h4>Stable ${(h.pets||[]).length}/3</h4>`;
+    o+=others.length?others.map(x=>`<div class="rowl"><div class="l"><b class="r${x.rar}">${x.name}</b><div class="meta">${RARITY[x.rar].name} ${FAMILIES[x.family].name} · level ${x.lvl} · ${BOND[bondLvl(x)].n}${x.traits.length?' · '+x.traits.map(t=>TRAITS[t].name).join(', '):''}</div></div>
+      <div class="r"><button class="btn sm" data-act="petactive" data-arg="${x.id}" ${town?'':'disabled title="Swap pets at the stable in town"'}>Make active</button><button class="btn sm alt" data-act="petrelease" data-arg="${x.id}">Release</button></div></div>`).join(''):'<p class="meta">No other pets. Swap pets at the stable in town.</p>';
+    if(p)o+=`<div style="margin-top:6px"><button class="btn sm alt" data-act="petrelease" data-arg="${p.id}">Release ${p.name}</button></div>`;
+    o+=`<h4>Rarity</h4><div class="rarlegend">${RARITY.map((r,i)=>`<span class="r${i}">${r.name}${i===5?' (hybrids, coming later)':''}</span>`).join('')}</div>
+      <p class="meta" style="margin-top:6px">Bond: ${BOND.map(b=>b.n).join(' → ')}. Loyal unlocks Coordinated Strike. Devoted shortens your pet's ability cooldown. Bonded: your pet takes a killing blow for you once per fight.</p>
+      <p class="meta">Pets tamed: ${h.stats.tamed||0}</p>`;
+    return o;},
+  update(){const p=petOf();if(!p||!$('#ptHp'))return;const ps=petStats(p);
+    $('#ptHp').style.width=(p.hp/ps.hpMax*100)+'%';$('#ptHpT').textContent=p.hp>0?`${Math.ceil(p.hp)} / ${ps.hpMax}`:'Dead';
+    $('#ptHappy').style.width=p.happy+'%';$('#ptMood').textContent=`${moodName(p)} (${Math.round(p.happy)})${p.happy>=70?': +15% damage, faster bond':p.happy<30?': -25% damage, bond stalls':''}`;
+    const bl=bondLvl(p),nx=BOND[bl+1];$('#ptBond').textContent=nx?`${BOND[bl].n} (${Math.floor(p.bond)} / ${nx.at})`:`${BOND[bl].n} (max)`;$('#ptBondI').style.width=(nx?(p.bond-BOND[bl].at)/(nx.at-BOND[bl].at)*100:100)+'%';
+    const fb=$('#feedBtn');const diet=FAMILIES[p.family].diet;const n=H().bags.filter(it=>it.food&&(diet==='any'||it.diet===diet)).length;fb.textContent=`Feed (${n} food)`;fb.disabled=!n;
+    const rb=$('#reviveBtn');rb.hidden=p.hp>0;rb.disabled=C.phase==='fight'||C.reviving>0;
+    const cv=document.querySelector('[data-petart]');if(cv&&!cv.dataset.drawn){cv.dataset.drawn=1;const c=cv.getContext('2d');c.imageSmoothingEnabled=false;drawBeast(c,30,20,4,p.col,p.family,false,0);}}
 },
 talents:{
   key(){const h=H();return h.lvl+'|'+JSON.stringify(h.talents);},
@@ -824,7 +1041,7 @@ addons:{
   key(){const h=H();return ADDONS.map(a=>h.addons.unl[a.id]?1:0).join('')+macroRank();},
   build(){H().seenAddons=true;
     return `<h3>Addons</h3><p class="sub">Your automation. Each addon installs itself once you've done its job by hand enough times. Nothing here is bought.</p>`+
-    ADDONS.map(a=>{const u=H().addons.unl[a.id];return `<div class="rowl"><div class="l"><b style="color:${u?'var(--gold)':'var(--muted)'}">${a.name}</b> ${a.id==='macro'&&u?`<span class="pill" style="color:#7cf08a">Rank ${macroRank()||1}</span>`:''}<div class="meta">${a.desc}</div>
+    ADDONS.filter(a=>!a.cls||a.cls===H().cls).map(a=>{const u=H().addons.unl[a.id];return `<div class="rowl"><div class="l"><b style="color:${u?'var(--gold)':'var(--muted)'}">${a.name}</b> ${a.id==='macro'&&u?`<span class="pill" style="color:#7cf08a">Rank ${macroRank()||1}</span>`:''}<div class="meta">${a.desc}</div>
       ${u?(a.id==='macro'?`<div class="meta" id="macroInfo"></div>`:''):`<div class="meta" id="ar-${a.id}"></div>`}</div>
       <div class="r">${u?`<button class="tgl" data-act="addon" data-arg="${a.id}" id="at-${a.id}" aria-label="${a.name} on or off"></button>`:''}</div></div>`;}).join('');},
   update(){const h=H();for(const a of ADDONS){const t=$('#at-'+a.id);if(t)t.setAttribute('aria-pressed',h.addons.on[a.id]?'true':'false');const r=$('#ar-'+a.id);if(r){const [x,n]=a.prog();r.textContent=`${a.req}: ${fmtI(Math.min(x,n))}/${n}`;}}
@@ -866,7 +1083,18 @@ function updateWorld(){
   if(m){const c=con(m.lvl);$('#tName').innerHTML=`<span style="color:var(--con-${c})">${m.name}</span>`;$('#tLvl').textContent=m.lvl;$('#tPort').firstChild.textContent=m.name[0];$('#tPort').classList.toggle('elite',m.elite);
     $('#tHp').style.width=Math.max(0,m.hp/m.max*100)+'%';$('#tHpT').textContent=`${Math.max(0,Math.ceil(m.hp))} / ${m.max}`;}
   else{$('#tName').textContent='No target';$('#tLvl').textContent='–';$('#tPort').firstChild.textContent='–';$('#tPort').classList.remove('elite');$('#tHp').style.width='0%';$('#tHpT').textContent='';}
-  const cb=$('#castBar');cb.hidden=!C.cast;if(C.cast){$('#castI').style.width=((1-C.cast.t/C.cast.max)*100)+'%';$('#castT').textContent=C.cast.a.name;}
+  if(m&&m.kind==='beast'&&m.rar)$('#tName').innerHTML+=` <span class="r${m.rar}" style="font-size:12px">${RARITY[m.rar].name}</span>`;
+  const cb=$('#castBar');const chan=C.cast||C.taming;cb.hidden=!chan;
+  if(C.cast){$('#castI').style.width=((1-C.cast.t/C.cast.max)*100)+'%';$('#castT').textContent=C.cast.a.name;}
+  else if(C.taming){$('#castI').style.width=((1-C.taming.t/C.taming.max)*100)+'%';$('#castT').textContent=`Taming ${m?m.name:''}`;}
+  // hunter: tame button, pet frame, pets tab
+  const hunter=h.cls==='hunter';$('#petsTab').hidden=!hunter;
+  const tb2=$('#tameBtn');tb2.hidden=!(hunter&&canTame());if(!tb2.hidden){const why=tameBlock();tb2.disabled=!!why;tb2.title=why||'Channel for 6 seconds while the beast attacks you. If you survive, it is yours.';}
+  const pet=petOf(),pf=$('#petframe');pf.hidden=!pet;
+  if(pet){const ps=petStats(pet);$('#pfName').innerHTML=`<span class="r${pet.rar}">${pet.name}</span> <span class="meta">${pet.lvl} · ${BOND[bondLvl(pet)].n}</span>`;
+    $('#pfHp').style.width=(Math.max(0,pet.hp)/ps.hpMax*100)+'%';$('#pfHpT').textContent=pet.hp>0?`${Math.ceil(pet.hp)} / ${ps.hpMax}`:(C.reviving>0?`Reviving… ${C.reviving.toFixed(1)}s`:'Dead');
+    const md=$('#pfMood');md.textContent=moodName(pet);md.style.color=pet.happy>=70?'#7cf08a':pet.happy<30?'#ff6a5a':'var(--muted)';}
+  $('#pBadge').hidden=!(pet&&(pet.happy<30||pet.hp<=0));
   // action bar
   const sk=h.cls+h.lvl+JSON.stringify(h.talents);if(sk!==slotsKey)buildSlots();
   bar().forEach((a,i)=>{const el=$('#ab-'+i);if(!el)return;const learned=knows(a.id);el.classList.toggle('locked',!learned);
@@ -942,6 +1170,13 @@ document.addEventListener('click',e=>{
     case 'talent':{const h=H(),t=TALENTS[h.cls].list.find(x=>x.id===arg);const r=h.talents[arg]||0;if(talentPoints()>0&&r<t.max&&(!t.req||talentSpent()>=t.req)){h.talents[arg]=r+1;recalc();}break;}
     case 'resettal':H().talents={};recalc();break;
     case 'addon':H().addons.on[arg]=!H().addons.on[arg];break;
+    case 'tame':startTame();break;
+    case 'feed':feedPet(arg?Number(arg):null,false);C.lastInput=C.run;break;
+    case 'buyfood':buyFood(false);break;
+    case 'revive':{const p=petOf();if(p&&p.hp<=0&&C.phase!=='fight'&&!(C.reviving>0)){C.reviving=4;line(`You begin reviving ${p.name}.`,'l-sys');}else if(C.phase==='fight')err("You can't do that in combat.");break;}
+    case 'rename':{const p=petOf(),v=(($('#petName')||{}).value||'').trim().replace(/[<>"&]/g,'').slice(0,18);if(p&&v){p.name=v;curKey=null;}break;}
+    case 'petactive':{if(!inTown()){err('Swap pets at the stable in town.');break;}const h=H();if(C.phase==='fight')break;h.activePet=Number(arg);curKey=null;line(`${petOf().name} joins you.`,'l-pet');break;}
+    case 'petrelease':if(arm(el,'Release','Click again')){const h=H(),id=Number(arg),p=h.pets.find(x=>x.id===id);h.pets=h.pets.filter(x=>x.id!==id);if(h.activePet===id)h.activePet=null;if(p){line(`You release ${p.name} back into the wild.`,'l-sys');slog(`Released ${p.name}.`);}curKey=null;}break;
     case 'close':if(modalKind!=='create')closeModal();break;
     case 'export':$('#saveTxt').value=Arcade.encode(S);$('#saveMsg').textContent='Save exported. Keep a copy somewhere safe.';break;
     case 'copy':{const t=$('#saveTxt');if(!t.value)t.value=Arcade.encode(S);const fb=()=>{t.select();$('#saveMsg').textContent='Selected. Press Ctrl+C to copy.';};try{navigator.clipboard.writeText(t.value).then(()=>$('#saveMsg').textContent='Copied.',fb);}catch(x){fb();}break;}
@@ -969,15 +1204,30 @@ function drawHero(x,y,p,t){const h=H(),r=RACES[h.race],K=CLASSES[h.cls];const q=
   q(1,1+dy,6,4,r.skin);q(2,3+dy,1,1,'#111');q(5,3+dy,1,1,'#111');q(1,0+dy,6,1,r.hair);q(0,1+dy,1,2,r.hair);q(7,1+dy,1,2,r.hair);
   if(r.beard)q(1,4+dy,6,2,r.hair);if(r.tusks){q(2,4+dy,1,1,'#fff');q(5,4+dy,1,1,'#fff');}if(r.ears){q(-1,2+dy,1,1,r.skin);q(8,2+dy,1,1,r.skin);}
   const sw=C.anim.hero>0?-2:0;
-  if(h.cls==='warrior'||h.cls==='rogue'){q(8,2+dy+sw,1,6,'#dfe6ee');q(7,7+dy,3,1,'#8a5a2b');}else{q(8,-1+dy,1,11,'#8a5a2b');q(7,-2+dy,3,2,h.cls==='mage'?'#69ccf0':'#f2c14e');}
+  if(h.cls==='hunter'){q(8,1+dy,1,1,'#8a5a2b');q(9,2+dy,1,6,'#8a5a2b');q(8,8+dy,1,1,'#8a5a2b');q(8,2+dy,1,6,'#e8e4d4');}
+  else if(h.cls==='warrior'||h.cls==='rogue'){q(8,2+dy+sw,1,6,'#dfe6ee');q(7,7+dy,3,1,'#8a5a2b');}else{q(8,-1+dy,1,11,'#8a5a2b');q(7,-2+dy,3,2,h.cls==='mage'?'#69ccf0':'#f2c14e');}
   if(h.cls==='warrior')q(-1,5+dy,2,4,'#9aa5b5');
   if(C.cast){cx.globalAlpha=.5+.3*Math.sin(t*12);cx.fillStyle=h.cls==='mage'?'#ff9a3a':'#fff0a0';cx.beginPath();cx.arc(x+9*p,y-1*p,p*2.2,0,7);cx.fill();}
   cx.globalAlpha=1;}
 function drawMob(m,x,y,p,t){const sc=m.elite?1.45:1;p*=sc;const q=(gx,gy,w,hh,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(x+gx*p),Math.round(y+gy*p),Math.ceil(w*p),Math.ceil(hh*p));};
   const c=m.col,b=reduce?0:(Math.sin(t*5)>0?1:0);
-  if(m.kind==='beast'){q(-1,6,10,4,c);q(-4,4+b*.3,4,4,c);q(-5,5,1,1,'#111');q(-4,5,1,1,'#ffde55');q(0,10,1,3-b,c);q(7,10,1,2+b,c);q(2,10,1,3,c);q(5,10,1,3,c);q(9,6,2,1,c);}
+  if(m.kind==='beast')drawBeast(cx,x,y,p,c,m.fam||'wolf',false,t);
   else{q(0,0,5,4,c);q(1,2,1,1,'#ff4a3a');q(3,2,1,1,'#ff4a3a');q(-1,4,7,6,c);q(-2,4,1,4,c);q(6,4,1,4,c);q(0,10,2,3+b,c);q(3,10,2,3-b,c);q(-3,1,1,8,'#7a5a3a');}
   if(m.elite){cx.strokeStyle='#f2c14e';cx.lineWidth=2;cx.strokeRect(x-6*p,y-2*p,18*p,17*p);}}
+/* One beast drawer for wild beasts, pets and portraits. Faces left unless right=true. */
+function drawBeast(c,x,y,p,col,fam,right,t){
+  c.save();c.translate(x,y);if(right){c.translate(6*p,0);c.scale(-1,1);}
+  const q=(gx,gy,w,hh,cc)=>{c.fillStyle=cc;c.fillRect(Math.round(gx*p),Math.round(gy*p),Math.ceil(w*p),Math.ceil(hh*p));};
+  const b=t&&!reduce?(Math.sin(t*5)>0?1:0):0,dk='#111';
+  switch(fam){
+    case 'spider':q(0,6,8,5,col);q(-3,5,4,4,col);q(-3,6,1,1,'#ff3a3a');q(-1,6,1,1,'#ff3a3a');for(let i=0;i<4;i++){q(-1+i*2.5,11,1,2+((i+b)%2),col);q(-2+i*2.5,4,1,2,col);}break;
+    case 'lizard':case 'croc':{const L=fam==='croc'?14:11;q(-1,8,L-3,3,col);q(-5,8,4,2,col);q(-5,8,1,1,dk);q(-3,8,1,1,'#ffde55');q(L-4,9,4,1,col);q(0,11,1,2-b,col);q(L-6,11,1,1+b,col);if(fam==='croc')q(-6,9,2,1,'#e8e4d4');break;}
+    case 'boar':q(-1,5,10,5,col);q(-4,6,4,4,col);q(-5,8,1,1,'#e8e4d4');q(-4,7,1,1,'#ffde55');q(0,10,1,3-b,col);q(7,10,1,2+b,col);q(2,10,1,3,col);q(5,10,1,3,col);q(0,4,6,1,'rgba(0,0,0,.35)');break;
+    default:q(-1,6,10,4,col);q(-4,4+b*.3,4,4,col);q(-4,3,1,1,col);q(-2,3,1,1,col);q(-5,5,1,1,dk);q(-4,5,1,1,'#ffde55');q(0,10,1,3-b,col);q(7,10,1,2+b,col);q(2,10,1,3,col);q(5,10,1,3,col);
+      if(fam==='cat'){q(9,5,1,1,col);q(10,3,1,3,col);}else if(fam==='hyena'){q(2,7,1,1,dk);q(5,8,1,1,dk);q(9,6,2,1,col);}else q(9,5,2,1,col);
+  }
+  c.restore();
+}
 function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidden)return;const t=ms/1000;const h=H(),z=ZONES[h.zone];
   const g=cx.createLinearGradient(0,0,0,PH);g.addColorStop(0,z.sky[0]);g.addColorStop(1,z.sky[1]);cx.fillStyle=g;cx.fillRect(0,0,PW,PH);
   cx.fillStyle=z.hill;cx.beginPath();cx.moveTo(0,PH*.7);for(let x=0;x<=PW;x+=PW/10)cx.lineTo(x,PH*.55+Math.sin(x*.02+1)*PH*.07);cx.lineTo(PW,PH);cx.lineTo(0,PH);cx.fill();
@@ -987,12 +1237,16 @@ function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidde
   const walk=(C.phase==='seek'||C.phase==='town')&&!reduce?Math.sin(t*8)*p*.6:0;
   const lunge=C.anim.hero>0?p*3:0;
   drawHero(PW*.28+lunge,gy-13*p+walk,p,t);
+  const pet=petOf();if(pet&&C.phase!=='dead'){const pp=Math.max(2,Math.round(p*.8));cx.globalAlpha=pet.hp>0?1:.35;
+    drawBeast(cx,PW*.4+(C.anim.pet>0?pp*3:0),gy-13*pp+(walk?walk*.6:0),pp,pet.col,pet.family,true,pet.hp>0?t:0);cx.globalAlpha=1;
+    if(C.taming&&C.mob){cx.strokeStyle='rgba(124,240,138,.8)';cx.setLineDash([4,4]);cx.beginPath();cx.moveTo(PW*.3+8*p,gy-8*p);cx.lineTo(PW*.64,gy-8*p);cx.stroke();cx.setLineDash([]);}}
+  else if(C.taming&&C.mob){cx.strokeStyle='rgba(124,240,138,.8)';cx.setLineDash([4,4]);cx.beginPath();cx.moveTo(PW*.3+8*p,gy-8*p);cx.lineTo(PW*.64,gy-8*p);cx.stroke();cx.setLineDash([]);}
   if(C.mob){const m=C.mob;const mx=PW*.64+(C.anim.mob<0?-p*3:0)+(C.anim.mob>0&&!reduce?(R()-.5)*p*2:0);drawMob(m,mx,gy-13*p*(m.elite?1.45:1),p,t);
     const c=con(m.lvl);cx.font=`700 ${Math.max(11,p*4)}px Alegreya Sans, sans-serif`;cx.textAlign='center';cx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--con-'+c);cx.fillText(`${m.name}`,mx+3*p,gy-17*p*(m.elite?1.45:1));
     cx.fillStyle='#000';cx.fillRect(mx-6*p,gy-16*p*(m.elite?1.45:1),18*p,p*1.4);cx.fillStyle='#d33';cx.fillRect(mx-6*p,gy-16*p*(m.elite?1.45:1),18*p*Math.max(0,m.hp/m.max),p*1.4);}
   if(C.phase==='rest'&&!reduce){cx.fillStyle='#fff';cx.font=`700 ${p*4}px Alegreya Sans, sans-serif`;cx.fillText('z',PW*.28+10*p,gy-16*p-(Math.floor(t*2)%3)*p*2);}
   cx.textAlign='center';
-  for(let i=C.fx.length-1;i>=0;i--){const f=C.fx[i];f.age+=1/60;if(f.age>1.1||reduce){C.fx.splice(i,1);continue;}const x=(f.who==='mob'?PW*.66:PW*.3)+(f.x-.5)*PW*.08,y=gy-20*p-f.age*p*10;
+  for(let i=C.fx.length-1;i>=0;i--){const f=C.fx[i];f.age+=1/60;if(f.age>1.1||reduce){C.fx.splice(i,1);continue;}const x=(f.who==='mob'?PW*.66:f.who==='pet'?PW*.43:PW*.3)+(f.x-.5)*PW*.08,y=gy-20*p-f.age*p*10;
     cx.globalAlpha=1-f.age/1.1;cx.font=`800 ${f.big?p*7:p*5}px Alegreya Sans, sans-serif`;cx.lineWidth=3;cx.strokeStyle='#000';cx.strokeText(f.txt,x,y);cx.fillStyle=f.col;cx.fillText(f.txt,x,y);}
   cx.globalAlpha=1;cx.textAlign='left';}
 
@@ -1001,10 +1255,13 @@ function boot(){
   if(!S.log)S.log=[];
   if(!S.hero){closeModal();CR.name=pick(NAMES);openModal('create',createHTML());return;}
   const h=S.hero;h.addons=h.addons||{unl:{},on:{}};h.avg=h.avg||{cycle:30,xp:20,money:5};
-  for(const k of ['kills','deaths','loots','junkSold','quests','equips','manual','uses','play','money'])h.stats[k]=h.stats[k]||0;
+  for(const k of ['kills','deaths','loots','junkSold','quests','equips','manual','uses','play','money','feeds','tamed'])h.stats[k]=h.stats[k]||0;
+  h.pets=h.pets||[];if(h.activePet===undefined)h.activePet=null;
   recalc();C=freshC();C.hp=h.cur?Math.min(ST.hpMax,h.cur.hp):ST.hpMax;C.res=h.cur?Math.min(ST.resMax,h.cur.res):(CLASSES[h.cls].res==='mana'?ST.resMax:0);if(C.hp<=0)C.hp=ST.hpMax*.5;
   closeModal();curKey=null;buildSlots();updateWorld();
 }
+/* test hook, local dev server only */
+if(location.hostname==='localhost')window.__rb={get S(){return S;},get C(){return C;},petStats,petOf};
 let started=false;
 function start(data){
   if(started)return;started=true;let away=null;
