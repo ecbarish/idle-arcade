@@ -40,8 +40,25 @@ Mark a ticket done in the same PR that finishes it.
   Web Audio (10-sound.js, off by default). Done 2026-10-08.
 - [ ] **T7b: Wildbond real-game feel, part 2** (Claude): a region map with Larkhaven as a real town (inn, shop, ranch,
   people to talk to), routes between areas, NPCs with side quests.
-- [ ] **T8: Game guides** (ChatGPT): see the T8 section below.
-- [ ] **T9: Wildbond guide** (ChatGPT, after T7b): same format as T8.
+- [ ] **T8: Game guides** (ChatGPT) — **parked** until games are closer to finished, so guides don't need constant
+  rewrites. Spec kept below. Meanwhile, keep lore written down in each game's design doc as it's added.
+- [ ] **T9: Wildbond guide** (ChatGPT) — parked with T8.
+- [ ] **T10: Wildbond third area, data only** (ChatGPT): see the T10 section below.
+
+### T10: Wildbond third area (data only)
+Add **Emberfall Highlands** (volcanic uplands above the coast; name places and creatures however fits) in
+games/wildbond/js/00-data.js only. Change no other file.
+- `BIOMES.emberfall`: levels `[18, 26]`, `req: 'tide'` (the Saltmarsh badge Claude adds), its own `sky`/`hill`/`ground`
+  colors and a wild table.
+- 8-10 new `SPECIES` with the same rules as T6: existing families and elements only, base stats about 300 basic /
+  420 evolved, learnsets from existing `MOVES`, a one-line `dex`. Include one two-stage evolution line (`evo`), one
+  rare species, and one `unique: 1` legendary that is not in the wild table. Evolution levels must be 25 or lower.
+- Two `STORY` beats with `biome: 'emberfall'`, written as scenes like the Saltmarsh ones: a Wren rematch at 6
+  (`team` ending with `['$rival', 24]`, levels 22-24) and the legendary encounter at 14 (`wild: [id, 25, 4]`). Each
+  needs `text` (one line for the journal), `lines` (3-4 lines of dialogue/narration) and `win` (2 lines). Speakers are
+  keys of `CAST` (`wren`, `maren`, `isolde`), `''` for narration, or `'@speciesId'` for a creature. Keep Wren's voice
+  (cheeky, competitive, warm) and match the existing tone. You may add one new `CAST` speaker if a scene needs one.
+- Claude handles the code side: raising the level cap, the Saltmarsh Warden and the `tide` badge.
 
 ### T8: Game guides
 One guide page per game, written like a good fan wiki or strategy guide: lore first, then how to play, then tips.
