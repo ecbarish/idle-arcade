@@ -35,6 +35,9 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-07 (night)** — Hub: "Reset progress" on every game card with progress, with a confirmation step.
+  Erases that game's save on this device (for Realmbound, every character).
+
 - **2026-10-07 (evening)** — Primordial rebalance from phone playtest: breeding slowed to a fraction, milestones double at
   25/50/100/200…, first extinction at 10B (simulated ~22 min for a perfect player, ~40 real), at most 3
   mutations waiting at once. Clear "← Arcade" button in Primordial and Starfall Guild.
