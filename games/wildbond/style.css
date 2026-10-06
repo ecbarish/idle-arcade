@@ -122,3 +122,20 @@ h4{margin:14px 0 6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase
 .psel select,.barn select{border:1px solid var(--line);border-radius:8px;padding:4px 6px;font:inherit;font-size:13px;background:#fff;color:var(--ink);max-width:100%}
 .barn{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
 .egg{background:#fff6dc;border:1px solid #f0d58a;border-radius:10px;padding:8px 12px;font-weight:700}
+
+/* dialogue scenes */
+.snd{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-weight:700;font-size:13px;color:var(--ink)}
+.snd[aria-pressed="true"]{border-color:var(--leaf);color:var(--leaf-d)}
+.talk{position:absolute;left:10px;right:10px;bottom:10px;display:flex;gap:12px;align-items:flex-start;background:rgba(255,253,246,.96);
+  border:3px solid #17323a;border-radius:12px;padding:10px 14px 10px 10px;box-shadow:0 4px 0 rgba(23,50,58,.35);cursor:pointer;min-height:84px}
+.scene .talk .face{position:static;inset:auto;width:64px;height:64px;flex:none;border-radius:8px;border:2px solid #17323a;image-rendering:pixelated;background:#eee}
+.talk .tbody{min-width:0;flex:1}
+.talk .who{font-family:var(--f-disp);font-size:17px;color:var(--leaf-d)}
+.talk .role{color:var(--muted);font-size:12px;margin-left:8px}
+.talk .say{margin:2px 0 0;font-size:15px;line-height:1.4;color:var(--ink);min-height:2.8em}
+.talk.narr .say{font-style:italic;color:#3a5560}
+.talk .more{position:absolute;right:12px;bottom:6px;font-size:12px;color:var(--leaf-d);opacity:0}
+.talk.ready .more{opacity:1;animation:tbob .8s ease-in-out infinite}
+@keyframes tbob{50%{transform:translateY(3px)}}
+@media (max-width:560px){.talk{left:6px;right:6px;bottom:6px;padding:8px;gap:8px;min-height:0}.scene .talk .face{width:44px;height:44px}.talk .say{font-size:13px}.talk .role{display:none}}
+@media (prefers-reduced-motion:reduce){.talk.ready .more{animation:none}}

@@ -125,19 +125,70 @@ const BIOMES = {
     wild: [['brineskit', 24], ['dunepounce', 20], ['reedtusk', 16], ['wrackjaw', 14], ['kiteskirl', 18], ['spindriftfoal', 8], ['foamglint', 3]] }
 };
 
-/* Story beats trigger on the number of times you've explored. */
 const RIVAL = { name: 'Wren', col: '#d85a8a' };
+/* Speakers in dialogue scenes. Portraits are drawn in 09-dialogue.js from these colors.
+   hair: short | long | bun | spiky | hood | hat. A line is [who, text]; who '' = narration, '@species' = a creature. */
+const CAST = {
+  maren: { name: 'Keeper Maren', skin: '#d9a77c', hair: 'bun', hairCol: '#c9c3b8', shirt: '#5b8a4a', bg: '#cfe7c4', title: 'Larkhaven ranch keeper' },
+  wren: { name: 'Wren', skin: '#f0c7a4', hair: 'spiky', hairCol: '#3a2230', shirt: '#d85a8a', bg: '#f6d3e1', title: 'Your rival' },
+  isolde: { name: 'Warden Isolde', skin: '#b98262', hair: 'long', hairCol: '#2a3b2c', shirt: '#3d6b52', bg: '#c9dfc8', title: 'Warden of Thornwood' }
+};
+/* Scenes that aren't tied to an explore count. */
+const SCENES = {
+  intro: [
+    ['', 'The supply cart stops at the edge of the trees. Larkhaven is a handful of roofs, a windmill and a ranch fence that runs right up to the forest.'],
+    ['maren', 'You made it! I\'m Maren. I keep the ranch here, and I\'ve paired more young tamers with their first partner than I can count.'],
+    ['maren', 'Out there is Thornwood. Past it, the coast, the hills, places nobody has mapped yet. The creatures out there are wild, but not cruel. Treat them well and some will choose to walk with you.'],
+    ['maren', 'That\'s the whole secret, really. Nobody owns a creature. You earn a bond, and the bond does the rest. Now, three little ones have been waiting all week to meet you.']
+  ],
+  rival1: [
+    ['', 'The ranch gate bangs open.'],
+    ['wren', 'Am I late? Maren, you said the new tamer was coming tomorrow!'],
+    ['maren', 'I said today, Wren. This is Wren. Same age as you, same first day, and twice the noise.'],
+    ['wren', 'Hey! So you picked {starter}? Then I\'m taking {rival}. Don\'t look at me like that, it\'s called strategy. Let\'s battle!']
+  ],
+  rival1Win: [
+    ['wren', 'Okay. Okay! Not bad. {rival} and I were just warming up.'],
+    ['maren', 'You two will push each other a long way. Now go on, Thornwood won\'t explore itself. Bring your team back here to rest whenever they need it.'],
+    ['maren', 'And {name}? Watch how the wild ones move. Tire one out, toss a lure, and keep it calm. If it trusts you, it will come home with you.']
+  ]
+};
+/* Story beats trigger on the number of times you've explored. `text` goes to the journal; `lines` play as a
+   scene before the fight and `win` after it. In lines, {name} {starter} {rival} are filled in. */
 const STORY = [
-  { at: 12, id: 'rival2', title: 'Wren again', text: "Wren cuts across the trail. \"Still at it? My team's been training. Let's see who's grown more!\"",
+  { at: 12, id: 'rival2', title: 'Wren again', text: 'Wren caught up with you on the Thornwood trail for a rematch.',
+    lines: [['', 'Someone is sitting on a stump in the middle of the trail, swinging their legs.'],
+      ['wren', 'Finally! I\'ve been waiting here for an hour. Okay, ten minutes. Still!'],
+      ['wren', 'I caught a Glimmerwing yesterday. It sat on my head until I gave up and said yes. Want to see what we can do?']],
+    win: [['wren', 'You and your team are really clicking. I can tell they trust you.'], ['wren', 'I won\'t lose next time. Probably. See you deeper in!']],
     team: [['glimmerwing', 6], ['$rival', 7]] },
-  { at: 20, id: 'elder', title: 'Something moves in the old trees', text: 'The forest goes quiet. Between the oldest trees stands a huge stag of moss and bark: Elderhorn, the guardian of Thornwood. It watches you.',
+  { at: 20, id: 'elder', title: 'Something moves in the old trees', text: 'Elderhorn, the guardian of Thornwood, stepped out of the oldest trees.',
+    lines: [['', 'The birds stop. Even the wind stops. The trees here are older than Larkhaven, older than anyone\'s stories about it.'],
+      ['', 'Between two trunks stands a stag of moss and bark, antlers hung with flowers. Elderhorn, the guardian of Thornwood. Maren said it shows itself only to tamers it is curious about.'],
+      ['@elderhorn', 'It lowers its antlers. Not an attack. A test.']],
+    win: [['@elderhorn', 'Elderhorn lowers its great head and breathes on your hands. The moss on its back flowers.'], ['', 'The guardian of Thornwood has chosen to walk with you.']],
     wild: ['elderhorn', 11, 4] },
-  { at: 26, id: 'warden', title: 'The Thornwood Warden', text: 'Warden Isolde waits at the forest gate. "Every tamer who wants to go further proves themselves here first. Show me your bond."',
+  { at: 26, id: 'warden', title: 'The Thornwood Warden', text: 'Warden Isolde tested your bond at the Thornwood gate.',
+    lines: [['', 'The road north ends at a gate of living hawthorn. A tall woman waits beside it, three creatures resting at her feet.'],
+      ['isolde', 'Maren wrote to me about you, {name}. She does that when she thinks someone is worth watching.'],
+      ['isolde', 'Wardens don\'t judge strength. Strength is easy. We judge whether your team fights for you or just near you.'],
+      ['isolde', 'Show me your bond. If it holds, the road north is yours.']],
+    win: [['isolde', 'Your bond is real. They looked back at you before every move. Not many teams do that.'],
+      ['isolde', 'Take the Thorn Badge. The gate will open for you now, and the coast is waiting.'],
+      ['isolde', 'One more thing. Thornwood isn\'t the only place with a guardian. Every region has something old watching it. Be kind when you meet them.']],
     trainer: 'Warden Isolde', team: [['pebblepaw', 10], ['bogsnap', 11], ['thornback', 12]] },
   /* Saltmarsh Coast: beats count explores made in that biome */
-  { biome: 'saltmarsh', at: 6, id: 'rival3', title: 'Wren on the coast', text: 'Wren is waiting where the dunes meet the marsh, hair full of salt. "I heard you beat Isolde. I got here first, though. The coast changes a team. Let me show you how much."',
+  { biome: 'saltmarsh', at: 6, id: 'rival3', title: 'Wren on the coast', text: 'Wren was waiting where the dunes meet the marsh for another battle.',
+    lines: [['', 'Where the dunes meet the marsh, a familiar figure is building a very bad sandcastle.'],
+      ['wren', 'There you are! I heard you beat Isolde. I got here first, though. Two whole days first.'],
+      ['wren', 'The coast changes a team. Wind, salt, the tide pulling at your feet. Let me show you how much.']],
+    win: [['wren', 'Ugh! Fine. Fine! You\'re good.'], ['wren', 'Hey, have you heard the howling at low tide? The old fishers say it\'s the keeper of the coast. I\'m going to find it first.']],
     team: [['kiteskirl', 14], ['brineskit', 15], ['$rival', 16]] },
-  { biome: 'saltmarsh', at: 14, id: 'tidewolf', title: 'A howl over the breakers', text: 'The tide pulls back further than it should. Out on the bare sand, a great wolf with a mane like breaking surf turns to face you: Breakwatermane, keeper of the coast. Every wave seems to wait for it.',
+  { biome: 'saltmarsh', at: 14, id: 'tidewolf', title: 'A howl over the breakers', text: 'Breakwatermane, keeper of the coast, appeared at low tide.',
+    lines: [['', 'The tide pulls back further than it should. Fish flop on the bare sand. Far out, something howls.'],
+      ['', 'A great wolf walks out of the surf, its mane breaking like a wave and reforming. Breakwatermane, keeper of the coast. Every wave seems to wait for it.'],
+      ['@breakwatermane', 'It watches your team for a long moment, then steps forward.']],
+    win: [['@breakwatermane', 'Breakwatermane shakes the sea from its mane and sits beside you, as calm as still water.'], ['', 'Somewhere up the beach, Wren yells something that sounds a lot like \"NO WAY.\"']],
     wild: ['breakwatermane', 17, 4] }
 ];
 const COUNTER = { cindercub: 'ripplet', ripplet: 'mosshog', mosshog: 'cindercub' };

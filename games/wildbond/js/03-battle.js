@@ -8,13 +8,13 @@ const ACT_AT = 2.2;
 function unit(c, side) {
   const st = stOf(c);
   if (c.hp === null || c.hp === undefined || c.hp > st.hp) c.hp = st.hp;
-  return { c, side, st, atb: Math.random() * 1.2, cds: {}, buff: {}, dots: [], anim: 0 };
+  return { c, side, st, atb: Math.random() * 1.2, cds: {}, buff: {}, dots: [], anim: 0, hit: 0 };
 }
 function startBattle(kind, foes, opts) {
   opts = opts || {};
   B = { kind, title: opts.title || '', trainer: opts.trainer || null, story: opts.story || null,
     allies: S.team.filter(c => c.hp > 0).map(c => unit(c, 'a')), foes: foes.map(c => unit(c, 'f')),
-    cmd: 1, cmdT: 0, t: 0, tele: null, lines: [], over: null, capture: null, fx: [], lastInput: -99 };
+    cmd: 1, cmdT: 0, t: 0, tele: null, lines: [], over: null, capture: null, fx: [], bursts: [], shake: 0, lastInput: -99 };
   for (const u of B.foes) S.seen[u.c.sp] = true;
   S.stats.battles++;
   const names = B.foes.map(u => `${u.c.name} (Lv ${u.c.lvl})`).join(', ');
@@ -41,7 +41,12 @@ function damage(att, def, mv, mult) {
   const crit = Math.random() < 0.06 + (att.c.traits.includes('keen') ? 0.08 : 0); if (crit) d *= 1.5;
   return { d: Math.max(1, Math.round(d)), crit, adv: advantage(mv.el, def) };
 }
-function hurt(u, d) { u.c.hp = Math.max(0, u.c.hp - d); u.anim = 0.2; B.fx.push({ u, txt: '-' + d, col: '#ffffff', age: 0 }); if (u.c.hp <= 0) bline(`${u.c.name} fainted!`, 'warn'); }
+function hurt(u, d, crit, el) { u.c.hp = Math.max(0, u.c.hp - d); u.hit = 0.3; B.fx.push({ u, txt: '-' + d, col: crit ? '#ffd23a' : '#ffffff', age: 0 });
+  if (el !== undefined) burst(u, el && ELEMENTS[el] ? ELEMENTS[el].col : '#ffffff', 'hit', crit);
+  if (crit) B.shake = 0.25; sfx(crit ? 'crit' : 'hit');
+  if (u.c.hp <= 0) { u.downAt = B.t; bline(`${u.c.name} fainted!`, 'warn'); sfx('faint'); } }
+/* a visual effect at a unit's spot: hit sparks, heal sparkles, the catch flash */
+function burst(u, col, kind, big) { const list = u.side === 'a' ? B.allies : B.foes; B.bursts.push({ side: u.side, i: list.indexOf(u), col, kind, big: !!big, age: 0 }); }
 
 function chooseMove(u) {
   const allies = living(u.side), moves = movesOf(u.c).filter(m => !(u.cds[m] > 0));
@@ -62,7 +67,7 @@ function act(u, forced, mult) {
   const target = () => (Math.random() < 0.65 ? foes[0] : pick(foes));
   // telegraph a big enemy attack so the player can Guard in time
   if (u.side === 'f' && !forced && (mv.kind === 'aoe' || mv.pow >= 80) && !B.tele) {
-    B.tele = { u, m, t: 1.6 }; bline(`${u.c.name} is gathering power for ${mv.name}!`, 'warn');
+    B.tele = { u, m, t: 1.6 }; sfx('warn'); bline(`${u.c.name} is gathering power for ${mv.name}!`, 'warn');
     if (isAuto() && Math.random() < 0.5 && B.cmd >= 1) setTimeout(() => B && B.tele && command('guard', true), 700);
     return;
   }
@@ -70,16 +75,16 @@ function act(u, forced, mult) {
 }
 function resolve(u, m, mv, foes, allies, target, mult) {
   switch (mv.kind) {
-    case 'hit': { const t = target(), r = damage(u, t, mv, mult); hurt(t, r.d);
+    case 'hit': { const t = target(), r = damage(u, t, mv, mult); hurt(t, r.d, r.crit, mv.el);
       bline(`${u.c.name} used ${mv.name}${r.crit ? ', a critical hit' : ''} on ${t.c.name} for ${r.d}${r.adv > 1 ? '. It hits hard!' : r.adv < 1 ? '. Not very effective.' : '.'}`, u.side === 'a' ? 'ally' : 'foe'); break; }
-    case 'aoe': for (const t of foes) { const r = damage(u, t, mv, (mult || 1) * 0.75); hurt(t, r.d); } bline(`${u.c.name} used ${mv.name} on everyone!`, u.side === 'a' ? 'ally' : 'foe'); break;
+    case 'aoe': for (const t of foes) { const r = damage(u, t, mv, (mult || 1) * 0.75); hurt(t, r.d, r.crit, mv.el); } bline(`${u.c.name} used ${mv.name} on everyone!`, u.side === 'a' ? 'ally' : 'foe'); break;
     case 'dot': { const t = target(); t.dots.push({ per: Math.max(1, Math.round(damage(u, t, mv, mult).d / 2)), left: 4, tick: 1 }); bline(`${u.c.name} used ${mv.name}. ${t.c.name} is poisoned.`, u.side === 'a' ? 'ally' : 'foe'); break; }
     case 'buff': for (const a of allies) a.buff.dmg = 6; bline(`${u.c.name} used ${mv.name}! Its team hits harder.`, 'sys'); break;
     case 'haste': for (const a of allies) a.buff.haste = 6; bline(`${u.c.name} used ${mv.name}! Its team speeds up.`, 'sys'); break;
     case 'guard': for (const a of allies) a.buff.guard = 4; bline(`${u.c.name} used ${mv.name}! Its team braces.`, 'sys'); break;
     case 'slow': { const t = target(); t.buff.slow = 5; bline(`${u.c.name} used ${mv.name}. ${t.c.name} slows down.`, 'sys'); break; }
     case 'heal': { const low = allies.slice().sort((a, b) => a.c.hp / a.st.hp - b.c.hp / b.st.hp)[0]; const h = Math.round(low.st.hp * 0.25);
-      low.c.hp = Math.min(low.st.hp, low.c.hp + h); B.fx.push({ u: low, txt: '+' + h, col: '#7cf08a', age: 0 }); bline(`${u.c.name} used ${mv.name}. ${low.c.name} recovers ${h}.`, 'sys'); break; }
+      low.c.hp = Math.min(low.st.hp, low.c.hp + h); B.fx.push({ u: low, txt: '+' + h, col: '#7cf08a', age: 0 }); burst(low, '#7cf08a', 'heal'); sfx('heal'); bline(`${u.c.name} used ${mv.name}. ${low.c.name} recovers ${h}.`, 'sys'); break; }
   }
 }
 
@@ -111,12 +116,12 @@ function calmNow() {
   if (S.team.some(c => c.traits.includes('gentle'))) ch *= 1.15;
   B.capture = null;
   if (Math.random() < Math.min(0.95, ch)) {
-    const c = t.c; B.foes = B.foes.filter(u => u !== t); const where = keep(c); S.stats.caught++;
+    const c = t.c; burst(t, '#7cf08a', 'catch', true); sfx('catch'); B.foes = B.foes.filter(u => u !== t); const where = keep(c); S.stats.caught++;
     bline(`${q === 'perfect' ? 'Perfect calm! ' : q === 'good' ? 'Nicely done. ' : ''}${c.name} trusts you. Caught! (sent to your ${where})`, 'good');
     toast(`Caught ${c.name}${c.rar ? ` (${Cr.RARITY[c.rar].name})` : ''}!`); slog(`Caught ${c.name} (level ${c.lvl}${c.rar ? ', ' + Cr.RARITY[c.rar].name.toLowerCase() : ''}) in ${BIOMES[S.biome].name}.`);
     if (sp(c).unique) { if (B.story) S.story[B.story] = true; if (c.sp === 'elderhorn') S.story.elderCaught = true; slog(`${c.name} chose to come with you.`); }
     if (!living('f').length) endBattle('caught');
-  } else bline(`${q === 'miss' ? 'It shies away. ' : ''}${t.c.name} broke free!`, 'warn');
+  } else { sfx('miss'); bline(`${q === 'miss' ? 'It shies away. ' : ''}${t.c.name} broke free!`, 'warn'); }
 }
 
 function battleTick(h) {
@@ -141,9 +146,11 @@ function battleTick(h) {
     if (!living('a').length) return endBattle('lost');
   }
   for (const f of B.fx) f.age += h; B.fx = B.fx.filter(f => f.age < 1);
+  for (const f of B.bursts) f.age += h; B.bursts = B.bursts.filter(f => f.age < 0.6);
+  for (const u of [...B.allies, ...B.foes]) u.hit = Math.max(0, u.hit - h); B.shake = Math.max(0, B.shake - h);
 }
 function endBattle(result) {
-  if (!B || B.over) return; B.over = result;
+  if (!B || B.over) return; B.over = result; sfx(result === 'lost' ? 'lose' : result === 'fled' ? 'select' : 'win');
   if (result === 'won' || result === 'caught') {
     const foes = B.foes.concat([]), lvSum = B.foes.reduce((s, u) => s + u.c.lvl, 0) || 3;
     const base = Math.round(lvSum * 12 * (B.kind === 'wild' ? 1 : 1.6)), coins = Math.round(lvSum * (B.kind === 'wild' ? 3 : 12));

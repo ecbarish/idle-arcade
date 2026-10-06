@@ -3,7 +3,10 @@
 function findC(uid) { uid = Number(uid); return S.team.find(c => c.uid === uid) || S.ranch.find(c => c.uid === uid); }
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-act]'); if (!el) return; const a = el.dataset.act, arg = el.dataset.arg;
+  sfx('select');
   switch (a) {
+    case 'sound': cycleSound(); break;
+    case 'skiptalk': skipTalk(); break;
     case 'starter': chooseStarter(arg, ($('#tname') || {}).value); closeModal(); break;
     case 'explore': explore(); break;
     case 'warden': challengeWarden(); break;
@@ -43,7 +46,8 @@ if (location.hostname === 'localhost') window.__wb = { get S() { return S; }, ge
 let started = false;
 function start() {
   if (started) return; started = true; load();
-  if (!S.started) openModal(startHTML()); else if (!S.team.length) openModal(startHTML());
+  if (!S.started) talk(SCENES.intro, () => openModal(startHTML())); else if (!S.team.length) openModal(startHTML());
+  renderSoundBtn();
   resize(); renderAll(); renderTabs(true);
   // time away: auto-explore keeps going at a gentle pace, manual play just rests
   const away = (Date.now() - (S.last || Date.now())) / 1000;

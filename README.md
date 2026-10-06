@@ -35,6 +35,11 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-08 (night)** — Wildbond feels like a real game, part 1: story scenes with character portraits (Keeper Maren,
+  Wren, Warden Isolde) and typewriter dialogue for every beat, from the opening cart ride to Breakwatermane; battle
+  animation (teams slide in, lunges, flinches, element sparks, crit shake, fainting); chiptune sound effects and music
+  for each area and battle type, made live in the browser (header button, off by default). Saltmarsh story beats.
+  Legendaries you knock out now slip away and return instead of vanishing.
 - **2026-10-08 (later)** — Wildbond part 2: ranch days every 5 minutes (also while away) with daily food and
   training plans, fatigue, injuries and mood; breeding barn with inherited genes, pedigree and three hidden hybrids
   (Lynxhound, Drakelet, Bramblestag); biome travel. Merged ChatGPT's 16-bit art era (PR #3).

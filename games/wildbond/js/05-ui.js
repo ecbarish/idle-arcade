@@ -19,6 +19,7 @@ function renderTop() {
 let panelKey = '';
 function renderPanel() {
   const el = $('#panel');
+  if (TALK) { if (panelKey !== 'talk') { panelKey = 'talk'; el.innerHTML = `<div class="explore"><p class="msg">Click the scene or press Space to continue.</p><div class="acts"><button class="btn alt" data-act="skiptalk">Skip scene <kbd>Esc</kbd></button></div></div>`; } return; }
   if (B) {
     const k = 'b' + B.allies.map(u => u.c.uid).join() + B.foes.map(u => u.c.uid).join() + B.over + !!B.capture + B.kind;
     if (k !== panelKey) { panelKey = k;
@@ -58,10 +59,10 @@ function renderPanel() {
 let tabKey = '';
 const TABS = {
   team: { key: () => S.team.map(c => c.uid + ':' + c.lvl + ':' + c.sp + ':' + c.name + ':' + Cr.bondLvl(c)).join() + !!B,
-    build: () => `<h3>Your team (${S.team.length}/3)</h3><p class="sub">Grades show each creature's hidden potential (F to S). Training and breeding come in the next update.</p>` +
+    build: () => `<h3>Your team (${S.team.length}/3)</h3><p class="sub">Grades show each creature's hidden potential (F to S). Train and breed them on the Ranch.</p>` +
       S.team.map((c, i) => cardHTML(c, i, true)).join('') },
   ranch: { key: () => S.ranch.map(c => c.uid + ':' + c.lvl).join() + S.team.length + !!B,
-    build: () => `<h3>Ranch (${S.ranch.length})</h3><p class="sub">Creatures you've caught beyond your team of 3 wait here. Care, training and breeding arrive with the next update.</p>` +
+    build: () => `<h3>Ranch (${S.ranch.length})</h3><p class="sub">Creatures you've caught beyond your team of 3 wait here. Feed them, set their training and pair them in the barn below.</p>` +
       (S.ranch.length ? S.ranch.map((c, i) => cardHTML(c, i, false)).join('') : '<p class="meta">Nobody here yet. Catch more creatures with lures.</p>') },
   dex: { key: () => Object.keys(S.seen).length + ':' + Object.keys(S.caught).length,
     build: () => { const ids = Object.keys(SPECIES); return `<h3>Wilddex</h3><p class="sub">${Object.keys(S.caught).length} caught · ${Object.keys(S.seen).length} seen · ${ids.length} known in this region.</p><div class="dex">` +

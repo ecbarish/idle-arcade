@@ -34,6 +34,31 @@ Mark a ticket done in the same PR that finishes it.
   one rare species (low weight in the wild table) and one unique legendary-style species with `unique: 1` that is not
   in the wild table. Each species needs base stats (sum about 300 for basic forms, 420 for evolved), a learnset using
   existing MOVES only, and a one-line `dex` entry. Data only: change no other file. Claude adds biome travel in T4b.
+- [x] **T7a: Wildbond real-game feel, part 1** (Claude): dialogue scenes with portraits and typewriter text for
+  every story beat (09-dialogue.js, CAST/SCENES/`lines`/`win` in 00-data.js), battle animation (slide-in, lunge,
+  flinch, element sparks, crit shake, faint, victory hop), chiptune sound effects and per-area music made live with
+  Web Audio (10-sound.js, off by default). Done 2026-10-08.
+- [ ] **T7b: Wildbond real-game feel, part 2** (Claude): a region map with Larkhaven as a real town (inn, shop, ranch,
+  people to talk to), routes between areas, NPCs with side quests.
+- [ ] **T8: Game guides** (ChatGPT): see the T8 section below.
+- [ ] **T9: Wildbond guide** (ChatGPT, after T7b): same format as T8.
+
+### T8: Game guides
+One guide page per game, written like a good fan wiki or strategy guide: lore first, then how to play, then tips.
+- **Files:** `guides/index.html` (lists the guides), `guides/guide.css` (shared look, readable at phone width, 16px
+  side gutter, no horizontal scroll), and one page each: `guides/primordial.html`, `guides/starfall-guild.html`,
+  `guides/realmbound.html`. Plain HTML/CSS, no build step, no JavaScript needed (use `<details>` for collapsibles).
+  On the hub (`index.html`), add a small "Guide" link to the cards of those three games. Change no game files.
+- **Sections per guide:** 1) **The world** (setting, factions, characters, places; written as lore, not
+  mechanics), 2) **Getting started** (the first 15 minutes), 3) **Systems explained** (every currency, resource and
+  screen, what it does and when it unlocks), 4) **Automation** (what you can automate, how you earn it), 5) **Tips and
+  tricks** (concrete advice: what to buy first, good builds, how to beat the hard parts), 6) **Spoilers** (bosses,
+  late content, secrets) inside a closed `<details>` with a clear spoiler warning.
+- **Facts come from the code.** Every number, unlock condition and name must match the game's source. Read the game
+  files, don't guess. If something is unclear, leave it out and list it in the PR description.
+- **Lore can be expanded** (history, legends, flavor for places and characters), but it must not contradict any
+  in-game text, and must stay original (inspired by the genre, never naming or copying real games).
+- **Tone:** friendly and plain, short paragraphs, headings and lists. Each guide 1,500-3,000 words.
 
 ## Bugs and feedback
 Add one line per issue: what happened, where (zone or screen), and the character's level/class.

@@ -10,19 +10,17 @@ function chooseStarter(id, name) {
   // the rival picks the starter that beats yours
   const rival = newCreature(COUNTER[id], 4, { rar: 1 });
   S.rivalStarter = COUNTER[id];
-  startBattle('trainer', [rival], { trainer: RIVAL.name, story: 'rival1' });
-  bline(`Wren grins. "I picked ${rival.name} on purpose. Let's see what you've got!"`, 'say');
   save();
+  talk(SCENES.rival1, () => startBattle('trainer', [rival], { trainer: RIVAL.name, story: 'rival1' }));
 }
 function storyWin(id) {
   S.story[id] = true;
-  const msgs = { rival1: 'Wren laughs. "Okay, not bad! See you out in Thornwood."', rival2: 'Wren shakes your hand. "You and your team are really clicking. I won\'t lose next time."',
-    warden: 'Warden Isolde nods. "Your bond is real. Take the Thorn Badge. The road north is yours."' };
-  if (msgs[id]) bline(msgs[id], 'say');
+  // the after-battle scene plays once the result screen closes (see finishBattle)
+  W.after = id === 'rival1' ? SCENES.rival1Win : (STORY.find(b => b.id === id) || {}).win || null;
   if (id === 'warden' && !S.badges.includes('thorn')) {
-    S.badges.push('thorn'); S.coins += 300; toast('You earned the Thorn Badge!'); slog('Earned the Thorn Badge from Warden Isolde.');
+    S.badges.push('thorn'); S.coins += 300; slog('Earned the Thorn Badge from Warden Isolde.');
     if (!S.eras.includes('bit16')) S.eras.push('bit16');
-    setTimeout(() => toast('The world shimmers... the 16-bit art style is unlocked. Switch it in the Journal.'), 2500);
+    W.afterDone = () => { toast('You earned the Thorn Badge!'); sfx('badge'); setTimeout(() => toast('The world shimmers... the 16-bit art style is unlocked. Switch it in the Journal.'), 2500); };
   }
 }
 /* Thornwood beats count all explores (older saves); other biomes count explores made in that biome. */
@@ -38,7 +36,7 @@ function wildPick() { const t = BIOMES[S.biome].wild, tot = t.reduce((s, [, w]) 
 function wildLvl() { const [a, b] = BIOMES[S.biome].lv, m = Math.round(teamAvg()); return clamp(rint(m - 2, m + 1), a, b); }
 
 function explore() {
-  if (B) return;
+  if (B || TALK) return;
   if (!alive().length) { W.msg = 'Your team is exhausted. Rest in Larkhaven first.'; return; }
   S.explored++; S.exploredIn = S.exploredIn || {}; S.exploredIn[S.biome] = (S.exploredIn[S.biome] || 0) + 1;
   const bt = beat();
@@ -55,24 +53,29 @@ function explore() {
     'Pawprints in the mud lead off between the trees.', 'A breeze rustles the old oaks.']);
 }
 function story(b) {
-  W.msg = '';
-  if (b.wild) { const [id, lvl, rar] = b.wild; slog(b.text); startBattle('wild', [newCreature(id, lvl, { rar })], { story: b.id }); bline(b.text, 'say'); return; }
+  W.msg = ''; slog(b.text);
+  talk(b.lines, () => storyFight(b));
+}
+function storyFight(b) {
+  if (b.wild) { const [id, lvl, rar] = b.wild; startBattle('wild', [newCreature(id, lvl, { rar })], { story: b.id }); return; }
   // story opponents bring no more creatures than you have (their strongest ones last)
   // trainers' creatures appear evolved once they're past their evolution level
   const grown = (id, lvl) => { let s = id; while (SPECIES[s].evo && lvl >= SPECIES[s].evo.at) s = SPECIES[s].evo.to; return s; };
   const team = b.team.slice(-Math.max(1, S.team.length)).map(([id, lvl]) => newCreature(grown(id === '$rival' ? S.rivalStarter : id, lvl), lvl, { rar: 1 }));
-  startBattle('trainer', team, { trainer: b.trainer || RIVAL.name, story: b.id }); bline(b.text, 'say');
+  startBattle('trainer', team, { trainer: b.trainer || RIVAL.name, story: b.id });
 }
-function challengeWarden() { if (!B && wardenReady() && alive().length) story(STORY[2]); }
-function seekElder() { if (!B && elderReady() && alive().length) { S.story.elderFled = false; story(STORY[1]); } }
+function challengeWarden() { if (!B && !TALK && wardenReady() && alive().length) story(STORY[2]); }
+function seekElder() { if (!B && !TALK && elderReady() && alive().length) { S.story.elderFled = false; story(STORY[1]); } }
 function restInTown() { if (B) return; healAll(); W.msg = 'You rest at the Larkhaven inn. Your team is fully healed.'; }
 function buyLures() { if (B) return; if (S.coins < 50) { W.msg = 'Lures cost 50 coins for 5.'; return; } S.coins -= 50; S.lures += 5; W.msg = 'You buy 5 lures.'; }
 
 /* After a battle: show the result briefly, then clear it. Auto mode keeps exploring on its own. */
 function worldTick(h) {
   S.stats.play += h; ranchTick(h);
+  if (TALK) return;
   if (B) { battleTick(h);
     if (B && B.over) { W.endT += h; if (W.endT > (S.auto ? 2 : 3.5)) finishBattle(); } return; }
   if (S.auto) { W.autoT += h; if (W.autoT >= 3) { W.autoT = 0; if (!alive().length || alive().length < S.team.length && alive().some(c => c.hp < stOf(c).hp * 0.3)) restInTown(); else explore(); } }
 }
-function finishBattle() { if (!B) return; if (B.over === 'lost') healAll(); B = null; W.endT = 0; save(); }
+function finishBattle() { if (!B) return; if (B.over === 'lost') healAll(); B = null; W.endT = 0; save();
+  if (W.after) { const lines = W.after, done = W.afterDone; W.after = W.afterDone = null; talk(lines, done); } else if (W.afterDone) { W.afterDone(); W.afterDone = null; } }

@@ -29,7 +29,7 @@ function keep(c, how) {
 function grow(c, xp) {
   const msgs = [], before = movesOf(c), lv = c.lvl, gained = Cr.gainXp(c, xp, LEVEL_CAP);
   if (gained) {
-    msgs.push(`${c.name} grew to level ${c.lvl}!`);
+    msgs.push(`${c.name} grew to level ${c.lvl}!`); sfx('level');
     for (const m of movesOf(c)) if (!before.includes(m)) msgs.push(`${c.name} learned ${MOVES[m].name}!`);
     const evo = sp(c).evo;
     if (evo && c.lvl >= evo.at) { const old = c.name, wasDefault = c.name === sp(c).name; c.sp = evo.to; if (wasDefault) c.name = sp(c).name;
