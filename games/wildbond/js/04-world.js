@@ -21,6 +21,7 @@ function storyWin(id) {
   if (msgs[id]) bline(msgs[id], 'say');
   if (id === 'warden' && !S.badges.includes('thorn')) {
     S.badges.push('thorn'); S.coins += 300; toast('You earned the Thorn Badge!'); slog('Earned the Thorn Badge from Warden Isolde.');
+    if (!S.eras.includes('bit16')) S.eras.push('bit16');
     setTimeout(() => toast('The world shimmers... a new art era stirs (coming in a future update).'), 2500);
   }
 }
