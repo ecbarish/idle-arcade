@@ -27,7 +27,7 @@ Mark a ticket done in the same PR that finishes it.
 - [x] **T5: Wildbond 16-bit art era** (ChatGPT): a new `ART.bit16` in games/wildbond/js/01-art.js with the same three
   functions as `ART.pixel` (creature, backdrop, tamer). Finer sprites, shading, outlines. Unlocked by the Thorn Badge
   (add 'bit16' to S.eras when the badge is earned). Gameplay files must not change.
-- [ ] **T6: Wildbond second biome, data only** (ChatGPT): add **Saltmarsh Coast** to `BIOMES` in
+- [x] **T6: Wildbond second biome, data only** (ChatGPT): add **Saltmarsh Coast** to `BIOMES` in
   games/wildbond/js/00-data.js (levels 10-18, `req: 'thorn'` so it opens after the Thorn Badge, its own sky/hill/ground
   colors and a wild table) and 8-10 new species to `SPECIES` using only the existing families (wolf, boar, cat, hyena,
   lizard, croc, spider, horse, bird, sprite) and elements. Include at least one two-stage evolution line (with `evo`),
