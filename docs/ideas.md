@@ -32,7 +32,10 @@ Overlap to watch: Starfall Guild is about running a guild; Otherworld is one pro
 
 - **Diamond Career** (baseball) — next after Realmbound. Create a player, earn a contract, spend it;
   later manage the club. Step in for key at-bats or let them simulate.
-- Hockey and American football later, as their own games or reusing the career system.
+- Broaden across sports: hockey, American football, basketball, soccer and others; separate modules or one hub are both acceptable.
+- Athlete, player/coach and team-management roles should offer different gameplay, with independent manual/assisted/full-Auto controls.
+- Contracts should finance lasting personal progression: homes, cars, services and later ownership opportunities. Keep personal wealth distinct from team funds. Avoid compulsory upkeep consuming every paycheck.
+- Desktop and phone first; VR is deferred. See [sports development plan](plans/sports-careers.md) and [baseball prototype plan](plans/diamond-career.md). Implementation remains parked until authorized.
 
 ## Creatures, companions and taming (Evan, 2026-10-06)
 

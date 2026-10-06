@@ -15,7 +15,7 @@ https://ecbarish.github.io/idle-arcade/ (GitHub Pages serves the `main` branch).
 
 ## Shared development notes
 
-Read [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for the current review, pending PRs, proposed next work and
+Read [docs/plans/README.md](docs/plans/README.md) for the six-game research, upgrade plans, sports expansion and desktop pickup checklist. Read [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for the current review, pending PRs, proposed next work and
 content inbox across all games. Keep its handoff section current after meaningful work so Evan can switch
 between Claude and Codex. Distinguish proposed, approved, PR-open and merged work; the roadmap still controls
 ticket scope. If a ticket limits editable files, leave notes in its allowed documentation or PR description

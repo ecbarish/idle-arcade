@@ -9,6 +9,10 @@ Mark a ticket done in the same PR that finishes it.
    standalone creature game (capture, raise, breed hybrids, race and battle; common to mythical).
 3. Parked: Primordial, Starfall Guild, Diamond Career (baseball), Otherworld (isekai). See docs/ideas.md.
 
+## Research and future upgrade plans
+
+See [docs/plans/README.md](plans/README.md) for comparable-game research, staged plans for each game, the expanded sports career/lifestyle direction, manual-to-automated controls, and tonight's desktop checklist. These are proposed milestones, not newly approved gameplay tickets. Desktop and phone are the current targets; VR is deferred. Keep existing ticket ownership and parked status until Evan changes them.
+
 ## Who does what
 - **Claude:** specs and design decisions, new systems with tricky game feel (creatures, raids, guilds),
   balance passes, anything that changes the save format, reviewing and merging PRs.
