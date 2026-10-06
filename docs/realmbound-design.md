@@ -46,6 +46,17 @@ The first slice of the creature system, written to be shared with the standalone
   harder and bond faster; unhappy pets stall. PetCare addon automates feeding (earned by feeding 20 times).
 - **Stable** of 3, swapped in town. Grishar bond 20% faster.
 
+## Mounts (built 2026-10-06)
+
+- Mounts shorten travel: finding the next monster, town trips, zone travel. Ghosts walk.
+- Riding skill from the trainer in town: Apprentice (level 10, 60% cap), Journeyman (level 20, 100% cap).
+- Faction vendors: Concord horses, Wildclans great wolves; swift versions at 20. Legendary elites have a 25%
+  chance to drop epic reins.
+- Training: every mount improves as you ride it (Green → Trained → Seasoned → Swift → Champion, +5% speed
+  each, on top of the riding cap), a first step toward the raising/racing fantasy.
+- Hunters can train a Devoted, level 10+ pet (not spiders) to carry them; rarity sets base speed (common 60% →
+  legendary 100%).
+
 ## The world
 
 The Sundered Reach: a continent of zones by level band, each with its own quest hub, mobs and named elites.

@@ -35,6 +35,10 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-07** — Realmbound: mounts. Riding skills, faction mount vendors, rare reins from legendary elites,
+  mounts that train as you ride them, Hunters riding their own pets. Travel between fights, to town and
+  between zones is faster when mounted.
+
 - **2026-10-06 (night)** — Realmbound: character slots (up to 8). Characters button in the top bar; each hero
   keeps their own gear, quests, pets, addons and log. Heroes you aren't playing earn rested XP while away.
   Old single-hero saves upgrade automatically.

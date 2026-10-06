@@ -242,6 +242,7 @@ textarea{width:100%;min-height:60px;background:#000;color:var(--fg);border:1px s
         <button role="tab" data-act="tab" data-arg="quests">Quests <span class="badge" id="qBadge" hidden>!</span></button>
         <button role="tab" data-act="tab" data-arg="char">Character</button>
         <button role="tab" data-act="tab" data-arg="bags">Bags <span class="badge" id="bBadge" hidden></span></button>
+        <button role="tab" data-act="tab" data-arg="mounts">Mounts <span class="badge" id="mBadge" hidden>!</span></button>
         <button role="tab" data-act="tab" data-arg="pets" id="petsTab" hidden>Pets <span class="badge" id="pBadge" hidden>!</span></button>
         <button role="tab" data-act="tab" data-arg="talents">Talents <span class="badge" id="tBadge" hidden></span></button>
         <button role="tab" data-act="tab" data-arg="addons">Addons <span class="badge" id="aBadge" hidden>new</span></button>
@@ -453,13 +454,13 @@ const TALENTS={
 /* The creature system: species families, rarity, traits, bond and happiness.
    Written to be lifted out later and shared with the standalone creature game. */
 const FAMILIES={
-  wolf:{name:'Wolf',role:'Damage',hpM:1,atkM:1.1,speed:2,taunt:.35,diet:'meat',ab:'howl',abName:'Furious Howl',abDesc:'Every 20s: you deal 10% more damage for 10 seconds.'},
-  boar:{name:'Boar',role:'Tank',hpM:1.25,atkM:.9,speed:2,taunt:.7,diet:'any',ab:'charge',abName:'Charge',abDesc:'Opens each fight with a heavy hit that staggers the enemy.'},
-  cat:{name:'Cat',role:'Damage',hpM:.9,atkM:1.25,speed:2,taunt:.3,diet:'meat',ab:'claw',abName:'Claw',abDesc:'Every 6s: a raking claw for 60% extra damage.'},
-  hyena:{name:'Hyena',role:'Damage',hpM:.95,atkM:1,speed:1.6,taunt:.35,diet:'meat',ab:'frenzy',abName:'Frenzy',abDesc:'Every 15s: attacks 40% faster for 6 seconds.'},
-  lizard:{name:'Lizard',role:'Tank',hpM:1.1,atkM:.95,speed:2,taunt:.55,diet:'meat',ab:'tail',abName:'Tail Whip',abDesc:'Every 10s: a whipping strike that slows the enemy.'},
-  croc:{name:'Crocolisk',role:'Tank',hpM:1.3,atkM:1,speed:2.2,taunt:.65,diet:'meat',ab:'roll',abName:'Death Roll',abDesc:'Every 12s: drags the enemy under for double damage.'},
-  spider:{name:'Spider',role:'Damage',hpM:.9,atkM:1.05,speed:2,taunt:.35,diet:'meat',ab:'web',abName:'Web',abDesc:'Every 15s: webs the enemy, slowing its attacks.'},
+  wolf:{name:'Wolf',pl:'Wolves',role:'Damage',hpM:1,atkM:1.1,speed:2,taunt:.35,diet:'meat',ab:'howl',abName:'Furious Howl',abDesc:'Every 20s: you deal 10% more damage for 10 seconds.'},
+  boar:{name:'Boar',pl:'Boars',role:'Tank',hpM:1.25,atkM:.9,speed:2,taunt:.7,diet:'any',ab:'charge',abName:'Charge',abDesc:'Opens each fight with a heavy hit that staggers the enemy.'},
+  cat:{name:'Cat',pl:'Cats',role:'Damage',hpM:.9,atkM:1.25,speed:2,taunt:.3,diet:'meat',ab:'claw',abName:'Claw',abDesc:'Every 6s: a raking claw for 60% extra damage.'},
+  hyena:{name:'Hyena',pl:'Hyenas',role:'Damage',hpM:.95,atkM:1,speed:1.6,taunt:.35,diet:'meat',ab:'frenzy',abName:'Frenzy',abDesc:'Every 15s: attacks 40% faster for 6 seconds.'},
+  lizard:{name:'Lizard',pl:'Lizards',role:'Tank',hpM:1.1,atkM:.95,speed:2,taunt:.55,diet:'meat',ab:'tail',abName:'Tail Whip',abDesc:'Every 10s: a whipping strike that slows the enemy.'},
+  croc:{name:'Crocolisk',pl:'Crocolisks',role:'Tank',hpM:1.3,atkM:1,speed:2.2,taunt:.65,diet:'meat',ab:'roll',abName:'Death Roll',abDesc:'Every 12s: drags the enemy under for double damage.'},
+  spider:{name:'Spider',pl:'Spiders',role:'Damage',hpM:.9,atkM:1.05,speed:2,taunt:.35,diet:'meat',ab:'web',abName:'Web',abDesc:'Every 15s: webs the enemy, slowing its attacks.'},
 };
 const RARITY=[
   {name:'Common',m:1,traits:[0,1]},{name:'Uncommon',m:1.1,traits:[1,1]},{name:'Rare',m:1.25,traits:[2,2]},
@@ -486,6 +487,29 @@ function petStats(p){const F=FAMILIES[p.family],bl=bondLvl(p),rm=RARITY[p.rar].m
 function moodName(p){return p.happy>=70?'Happy':p.happy<30?'Unhappy':'Content';}
 const petXpNeed=l=>Math.round(xpNeed(l)*.6);
 
+/* =================== mounts =================== */
+/* Mounts shorten travel: finding the next monster, trips to town, changing zones.
+   Speed = the mount's base speed (capped by riding skill) + a training bonus that grows as you ride it. */
+const RIDING=[{n:'No riding skill',cap:0},{n:'Apprentice Riding',lvl:10,cost:5000,cap:.6},{n:'Journeyman Riding',lvl:20,cost:30000,cap:1}];
+const MOUNT_SHOP={
+  concord:[{key:'chestnut',name:'Chestnut Horse',kind:'horse',col:'#8a5a2b',rar:1,base:.6,lvl:10,cost:5000},{key:'dapple',name:'Dapple Gray Horse',kind:'horse',col:'#a8a8b0',rar:1,base:.6,lvl:10,cost:5000},
+    {key:'swiftwhite',name:'Swift White Steed',kind:'horse',col:'#f0f0f0',rar:3,base:1,lvl:20,cost:40000}],
+  wild:[{key:'timber',name:'Timber Wolf',kind:'wolf',col:'#7a6a5a',rar:1,base:.6,lvl:10,cost:5000},{key:'dusk',name:'Dusk Wolf',kind:'wolf',col:'#3a3a4a',rar:1,base:.6,lvl:10,cost:5000},
+    {key:'swiftred',name:'Swift Red Wolf',kind:'wolf',col:'#a03020',rar:3,base:1,lvl:20,cost:40000}]};
+const REINS={grizzle:{name:'Reins of Grizzlemaw',kind:'wolf',col:'#5a5a6a',rar:4,base:1},duneclaw:{name:'Reins of the Dune Stalker',kind:'cat',col:'#c08040',rar:4,base:1},
+  prophet:{name:'Reins of the Tidecaller',kind:'croc',col:'#1a6a8a',rar:4,base:1}};
+const MOUNT_TRAIN=[{n:'Green',at:0},{n:'Trained',at:300},{n:'Seasoned',at:1200},{n:'Swift',at:3600},{n:'Champion',at:9000}];
+const MOUNTABLE=['wolf','boar','cat','hyena','lizard','croc'];
+const PET_MOUNT_SPEED=[.6,.65,.75,.85,1,1.1];
+const PET_MOUNT_COST=5000;
+const trainLvl=xp=>{let l=0;MOUNT_TRAIN.forEach((t,i)=>{if(xp>=t.at)l=i;});return l;};
+function petMountObj(p){return {id:'pet',name:p.name,kind:p.family,col:p.col,rar:p.rar,base:PET_MOUNT_SPEED[p.rar],get xp(){return p.rideXp||0;},set xp(v){p.rideXp=v;},pet:true};}
+function activeMount(){const h=H();if(!h||!h.riding)return null;
+  if(h.mount==='pet'){const p=petOf();return p&&p.mountTrained&&p.hp>0?petMountObj(p):null;}
+  return (h.mounts||[]).find(m=>m.id===h.mount)||null;}
+function mountSpeed(m){m=m||activeMount();if(!m)return 0;return Math.min(m.base,RIDING[H().riding].cap)+.05*trainLvl(m.xp||0);}
+function travel(t){return t/(1+mountSpeed());}
+
 /* =================== state =================== */
 /* One save holds every character. S.cur is the id of the one being played. */
 const MAX_CHARS=8;
@@ -501,7 +525,7 @@ function migrate(o){
 }
 function newHero(name,faction,race,cls){
   const h={id:uid(),log:[],lastPlayed:Date.now(),name,faction,race,cls,lvl:1,xp:0,rested:0,money:0,zone:FACTIONS[faction].start,gear:{},bags:[],talents:{},
-    quests:{active:[],done:{},prog:{},rewards:{}},addons:{unl:{},on:{}},mode:'focus',grind:null,pets:[],activePet:null,
+    quests:{active:[],done:{},prog:{},rewards:{}},addons:{unl:{},on:{}},mode:'focus',grind:null,pets:[],activePet:null,riding:0,mounts:[],mount:null,
     stats:{kills:0,deaths:0,loots:0,junkSold:0,quests:0,equips:0,manual:0,uses:0,play:0,money:0,feeds:0,tamed:0},avg:{cycle:30,xp:20,money:5},seenAddons:true};
   const K=CLASSES[cls];
   h.gear.weapon=genItem(1,1,'weapon',{cls,type:K.weap[0]});
@@ -738,6 +762,7 @@ function onKill(){
   if(m.kind==='beast'&&R()<.28)loot.items.push(genFood('meat',m.lvl));
   const rr=R();
   if(m.elite)loot.items.push(genItem(m.lvl+1,3,pick(SLOTS),{cls:h.cls}));
+  if(REINS[m.id]&&R()<.25)loot.items.push({id:uid(),mountItem:true,rar:4,name:REINS[m.id].name,mid:m.id,value:500});
   else if(rr<.004)loot.items.push(genItem(m.lvl+2,3,pick(SLOTS)));
   else if(rr<.045)loot.items.push(genItem(m.lvl,2,pick(SLOTS)));
   else if(rr<.12)loot.items.push(genItem(m.lvl,1,pick(SLOTS.filter(s=>s!=='trinket'))));
@@ -761,10 +786,10 @@ function afterFight(){
   const h=H();C.loot=null;C.buffs.vendetta=null;
   const lowGear=SLOTS.some(s=>h.gear[s]&&h.gear[s].dur<30);
   const sweep=h.addons.unl.sweep&&h.addons.on.sweep;
-  if(aiOn()&&(lowGear||(sweep&&h.bags.length>=16))){C.phase='town';C.t=10;line('Heading back to town.','l-sys');return;}
+  if(aiOn()&&(lowGear||(sweep&&h.bags.length>=16))){C.phase='town';C.t=travel(10);line('Heading back to town.','l-sys');return;}
   const mana=CLASSES[h.cls].res==='mana';
   if(C.hp<ST.hpMax*.55||(mana&&C.res<ST.resMax*.4)){C.phase='rest';line('You sit down to rest.','l-sys');return;}
-  C.phase='seek';C.t=1.2;
+  C.phase='seek';C.t=travel(2.5);
 }
 function gainXP(x,kill){
   const h=H();if(h.lvl>=LEVEL_CAP){return;}
@@ -812,7 +837,7 @@ function step(h){
     case 'seek':C.t-=h;C.hp=Math.min(ST.hpMax,C.hp+ST.hpMax*.01*h);if(mana)C.res=Math.min(ST.resMax,C.res+ST.resMax*.02*h);if(C.t<=0)spawn();break;
     case 'rest':{C.hp=Math.min(ST.hpMax,C.hp+ST.hpMax*.07*h);if(mana)C.res=Math.min(ST.resMax,C.res+ST.resMax*.07*h);
       const p=petOf(),petOk=!p||p.hp<=0?!(p&&C.reviving>0):p.hp>=petStats(p).hpMax*.9;
-      if(C.hp>=ST.hpMax*.97&&(!mana||C.res>=ST.resMax*.95)&&petOk){C.phase='seek';C.t=1;}break;}
+      if(C.hp>=ST.hpMax*.97&&(!mana||C.res>=ST.resMax*.95)&&petOk){C.phase='seek';C.t=travel(2.5);}break;}
     case 'loot':C.t-=h;if(C.t<=0){if(C.loot&&aiOn()&&C.loot.money)takeLoot({money:C.loot.money,items:[]},false);if(C.loot&&C.loot.items.length)line('The corpse decays. Some loot was left behind.','l-hurt');afterFight();}break;
     case 'dead':C.t-=h;if(C.t<=0){C.hp=ST.hpMax*.5;if(mana)C.res=ST.resMax*.5;C.phase='rest';line('You return to your body.','l-sys');}break;
     case 'town':C.t-=h;if(C.t<=0){C.phase='intown';line(`You arrive at ${hubName()}.`,'l-sys');
@@ -821,6 +846,8 @@ function step(h){
     case 'fight':fight(h,mana);break;
   }
   if(he.pets&&he.pets.length)petTick(h,C.phase);
+  if(C.phase==='seek'||C.phase==='town'){const mt=activeMount();if(mt){const b=trainLvl(mt.xp||0);mt.xp=(mt.xp||0)+h;const a=trainLvl(mt.xp);
+    if(a>b){toast(`${mt.name} is now ${MOUNT_TRAIN[a].n}`);slog(`${mt.name} reached ${MOUNT_TRAIN[a].n} training.`);}}}
   if(C.phase!=='fight'&&C.cast)C.cast=null;
   C.anim.pet=Math.max(0,(C.anim.pet||0)-h);
 }
@@ -869,8 +896,8 @@ function fight(h,mana){
 }
 function hubName(){const z=ZONES[H().zone];return typeof z.hub==='string'?z.hub:z.hub[H().faction];}
 function giver(q){return Array.isArray(q.giver)?q.giver[H().faction==='concord'?0:1]:q.giver;}
-function goTown(){if(C.phase==='fight'){err("You can't leave in the middle of a fight.");return;}C.phase='town';C.t=10;C.mob=null;line('Heading back to town.','l-sys');}
-function leaveTown(){C.phase='seek';C.t=6;line('You head back out.','l-sys');}
+function goTown(){if(C.phase==='fight'){err("You can't leave in the middle of a fight.");return;}C.phase='town';C.t=travel(10);C.mob=null;line('Heading back to town.','l-sys');}
+function leaveTown(){C.phase='seek';C.t=travel(6);line('You head back out.','l-sys');}
 
 /* ---- items & vendor ---- */
 function equip(id,auto){const h=H(),i=h.bags.findIndex(x=>x.id===id);if(i<0)return;const it=h.bags[i];if(!canEquip(it)){err("You can't use that.");return;}
@@ -947,6 +974,7 @@ function itemSpan(it){itemIndex[it.id]=it;return `<span class="item q${it.rar}" 
 function tipHTML(it){
   let h=`<div class="tn q${it.rar}">${it.name}</div>`;
   if(it.junk)return h+`<div>Poor quality. Sell to a vendor.</div><div>Sell price: ${moneyStr(it.value)}</div>`;
+  if(it.mountItem){const r=REINS[it.mid];return h+`<div>Mount: ${FAMILIES[r.kind]?FAMILIES[r.kind].name:"Horse"}, ${Math.round(r.base*100)}% base speed.</div><div>Use from your bags to add it to your mounts. Needs Journeyman Riding for full speed.</div>`;}
   if(it.food)return h+`<div>Pet food: ${it.diet==="bread"?"bread (boars eat anything)":"meat"}.</div><div>Feeding makes your pet happier.</div><div>Sell price: ${moneyStr(it.value)}</div>`;
   const slot=it.slot==='offhand'?(it.otype==='shield'?'Off hand · Shield':'Off hand · '+(it.otype==='tome'?'Held in off hand':'Dagger')):it.slot==='weapon'?`Main hand · ${it.wtype[0].toUpperCase()+it.wtype.slice(1)}`:it.slot==='trinket'?'Trinket':`${it.slot[0].toUpperCase()+it.slot.slice(1)} · ${it.atype[0].toUpperCase()+it.atype.slice(1)}`;
   h+=`<div>${slot}</div>`;
@@ -1000,10 +1028,49 @@ bags:{
     const pet=petOf();
     o+=h.bags.length?h.bags.map(it=>{const can=canEquip(it);const up=can&&score(it)>score(h.gear[it.slot]);
       const eats=it.food&&pet&&(FAMILIES[pet.family].diet==='any'||it.diet===FAMILIES[pet.family].diet);
-      return `<div class="rowl"><div class="l">${itemSpan(it)} ${up?'<span class="pill" style="color:#7cf08a">Upgrade</span>':''}<div class="meta">${it.junk?'Junk':it.food?'Pet food':`${it.slot==='offhand'?'Off hand':it.slot} · item level ${it.ilvl}`} · ${moneyStr(it.value)}</div></div>
-      <div class="r">${can?`<button class="btn sm" data-act="equip" data-arg="${it.id}">Equip</button>`:''}${eats?`<button class="btn sm" data-act="feed" data-arg="${it.id}">Feed ${pet.name}</button>`:''}${town?`<button class="btn sm alt" data-act="sell" data-arg="${it.id}">Sell</button>`:''}</div></div>`;}).join(''):'<p class="meta">Your bags are empty.</p>';
+      return `<div class="rowl"><div class="l">${itemSpan(it)} ${up?'<span class="pill" style="color:#7cf08a">Upgrade</span>':''}<div class="meta">${it.junk?'Junk':it.food?'Pet food':it.mountItem?'Mount':`${it.slot==='offhand'?'Off hand':it.slot} · item level ${it.ilvl}`} · ${moneyStr(it.value)}</div></div>
+      <div class="r">${it.mountItem?`<button class="btn sm" data-act="learnmount" data-arg="${it.id}">Learn mount</button>`:''}${can?`<button class="btn sm" data-act="equip" data-arg="${it.id}">Equip</button>`:''}${eats?`<button class="btn sm" data-act="feed" data-arg="${it.id}">Feed ${pet.name}</button>`:''}${town?`<button class="btn sm alt" data-act="sell" data-arg="${it.id}">Sell</button>`:''}</div></div>`;}).join(''):'<p class="meta">Your bags are empty.</p>';
     return o;},
   update(){const b=$('#repBtn');if(b){const c=repairCost();b.innerHTML=c?`Repair (${moneyTxt(c)})`:'Nothing to repair';b.disabled=!c||H().money<c;}}
+},
+mounts:{
+  key(){const h=H(),p=petOf();return h.riding+'|'+h.mount+'|'+(h.mounts||[]).map(m=>m.id).join(',')+'|'+inTown()+'|'+h.lvl+'|'+(p?p.id+':'+!!p.mountTrained+':'+bondLvl(p):'');},
+  build(){const h=H(),town=inTown(),am=activeMount(),p=petOf();
+    let o=`<h3>Mounts</h3><p class="sub">Mounts carry you between fights, to town and across zones faster. Every mount gets better the more you ride it.</p>`;
+    o+=`<div class="petcard"><canvas width="96" height="72" data-mountart="1"></canvas><div style="min-width:0">`;
+    if(am)o+=`<div class="petname r${am.rar}">${am.name}</div><div class="meta">${Math.round(mountSpeed(am)*100)}% travel speed${am.base>RIDING[h.riding].cap?` (held back by ${RIDING[h.riding].n}: learn ${RIDING[2].n} for full speed)`:''}</div>
+      <div class="meta" style="margin-top:6px">Training: <b id="mtLvl"></b></div><div class="mini"><i id="mtBar" style="background:#3a8bff"></i></div>
+      <div class="meta">${MOUNT_TRAIN.map(t=>t.n).join(' → ')}: each step adds 5% speed. You train a mount by riding it.</div>`;
+    else o+=`<div class="petname">On foot</div><div class="meta">${!h.riding?`You need riding training first. ${RIDING[1].n} is available at level ${RIDING[1].lvl} from the riding trainer in town.`:'Choose a mount below.'}</div>`;
+    o+=`</div></div>`;
+    // riding skill
+    o+=`<h4>Riding skill: ${RIDING[h.riding].n}</h4>`;
+    const next=RIDING[h.riding+1];
+    o+=next?`<div class="rowl"><div class="l"><b>${next.n}</b><div class="meta">Level ${next.lvl} · mounts up to ${Math.round(next.cap*100)}% speed · ${moneyStr(next.cost)}</div></div>
+      <div class="r"><button class="btn sm" data-act="buyriding" ${town&&h.lvl>=next.lvl&&h.money>=next.cost?'':'disabled'} title="${town?'':'Visit the riding trainer in town'}">${town?'Train':'In town'}</button></div></div>`:'<p class="meta">You have mastered every riding skill in this version.</p>';
+    // collection
+    const own=(h.mounts||[]).slice();const petm=p&&p.mountTrained?petMountObj(p):null;
+    o+=`<h4>Your mounts</h4>`;
+    const rows=[...(petm?[petm]:[]),...own];
+    o+=rows.length?rows.map(m=>`<div class="rowl"><div class="l"><b class="r${m.rar}">${m.name}</b>${m.pet?' <span class="pill" style="color:var(--q2)">Your pet</span>':''}<div class="meta">${m.kind[0].toUpperCase()+m.kind.slice(1)} · ${Math.round(m.base*100)}% base · ${MOUNT_TRAIN[trainLvl(m.xp||0)].n}</div></div>
+      <div class="r">${(h.mount===m.id)?'<span class="pill" style="color:#7cf08a">Riding</span>':`<button class="btn sm" data-act="ride" data-arg="${m.id}" ${h.riding?'':'disabled'}>Ride</button>`}</div></div>`).join(''):'<p class="meta">No mounts yet.</p>';
+    // vendor
+    o+=`<h4>Mount vendor · ${FACTIONS[h.faction].name}</h4>`;
+    o+=MOUNT_SHOP[h.faction].map(s=>{const owned=own.some(m=>m.key===s.key);return `<div class="rowl"><div class="l"><b class="r${s.rar}">${s.name}</b><div class="meta">Level ${s.lvl} · ${Math.round(s.base*100)}% speed · ${moneyStr(s.cost)}</div></div>
+      <div class="r">${owned?'<span class="pill" style="color:var(--muted)">Owned</span>':`<button class="btn sm" data-act="buymount" data-arg="${s.key}" ${town&&h.lvl>=s.lvl&&h.money>=s.cost&&h.riding?'':'disabled'}>${town?'Buy':'In town'}</button>`}</div></div>`;}).join('');
+    // hunter pet mounts
+    if(h.cls==='hunter'){o+=`<h4>Ride your pet</h4>`;
+      if(!p)o+='<p class="meta">Tame a pet first.</p>';
+      else if(p.mountTrained)o+=`<p class="meta">${p.name} is trained to carry you. Rarity sets its speed: ${RARITY.slice(0,5).map((r,i)=>`${r.name} ${Math.round(PET_MOUNT_SPEED[i]*100)}%`).join(', ')}.</p>`;
+      else{const okFam=MOUNTABLE.includes(p.family),okBond=bondLvl(p)>=3,okLvl=p.lvl>=10,okRide=h.riding>=1;
+        o+=`<div class="rowl"><div class="l"><b>Train ${p.name} as a mount</b><div class="meta">${okFam?'✓':'✗'} ${FAMILIES[p.family].pl} can carry a rider${okFam?'':' (spiders cannot)'} · ${okBond?'✓':'✗'} Devoted bond · ${okLvl?'✓':'✗'} Pet level 10 · ${okRide?'✓':'✗'} ${RIDING[1].n} · ${moneyStr(PET_MOUNT_COST)}</div></div>
+          <div class="r"><button class="btn sm" data-act="trainpet" ${okFam&&okBond&&okLvl&&okRide&&town&&h.money>=PET_MOUNT_COST?'':'disabled'}>${town?'Train':'In town'}</button></div></div>`;}}
+    o+=`<p class="meta" style="margin-top:8px">Rumor has it the legendary beasts of each zone sometimes leave their reins behind.</p>`;
+    return o;},
+  update(){const am=activeMount();if(am&&$('#mtLvl')){const l=trainLvl(am.xp||0),nx=MOUNT_TRAIN[l+1];$('#mtLvl').textContent=nx?`${MOUNT_TRAIN[l].n} (${fmtTime(am.xp||0)} / ${fmtTime(nx.at)} ridden)`:`${MOUNT_TRAIN[l].n} (max)`;
+      $('#mtBar').style.width=(nx?((am.xp||0)-MOUNT_TRAIN[l].at)/(nx.at-MOUNT_TRAIN[l].at)*100:100)+'%';}
+    const cv=document.querySelector('[data-mountart]');if(cv&&cv.dataset.drawn!==String(am?am.id:'none')){cv.dataset.drawn=String(am?am.id:'none');const c=cv.getContext('2d');c.clearRect(0,0,96,72);c.imageSmoothingEnabled=false;
+      if(am)drawBeast(c,am.kind==='horse'?32:30,am.kind==='horse'?6:16,am.kind==='horse'?4:4,am.col,am.kind,false,0);else{c.fillStyle='#6f6452';c.font='28px serif';c.fillText('–',40,44);}}}
 },
 pets:{
   key(){const h=H();return (h.pets||[]).map(p=>p.id+':'+p.lvl+':'+bondLvl(p)+':'+p.name).join(',')+'|'+h.activePet+'|'+inTown();},
@@ -1124,7 +1191,8 @@ function updateWorld(){
   const xl=h.lvl>=LEVEL_CAP?100:h.xp/need*100;$('#xpR').style.left=xl+'%';$('#xpR').style.width=(h.lvl>=LEVEL_CAP?0:Math.min(100-xl,h.rested/need*100))+'%';
   $('#xpT').textContent=h.lvl>=LEVEL_CAP?`Level ${h.lvl} · cap for this version`:`XP ${fmtI(h.xp)} / ${fmtI(need)}${h.rested>0?` · Rested ${fmtI(h.rested)}`:''}`;
   // status + err
-  const st={seek:`Looking for ${targetMob().name}…`,fight:m?`Fighting ${m.name}`:'',loot:'Loot the corpse (L) before it decays',rest:'Resting…',dead:`You are dead. Running back to your corpse: ${Math.ceil(C.t)}s`,town:`Travelling to ${hubName()}: ${Math.ceil(C.t)}s`,intown:`In town at ${hubName()}. Open Bags to sell and repair.`}[C.phase]||'';
+  const am=activeMount();
+  const st={seek:am?`Riding ${am.name} to find ${targetMob().name}…`:`Looking for ${targetMob().name}…`,fight:m?`Fighting ${m.name}`:'',loot:'Loot the corpse (L) before it decays',rest:'Resting…',dead:`You are dead. Running back to your corpse: ${Math.ceil(C.t)}s`,town:`Travelling to ${hubName()}: ${Math.ceil(C.t)}s`,intown:`In town at ${hubName()}. Open Bags to sell and repair.`}[C.phase]||'';
   $('#status').textContent=st;$('#err').textContent=C.errT>0?C.err:'';
   // loot window
   const lw=$('#lootwin');lw.hidden=!(C.phase==='loot'&&C.loot);if(!lw.hidden){const html=(C.loot.money?`<li>${moneyStr(C.loot.money)}</li>`:'')+C.loot.items.map(it=>`<li>${itemSpan(it)}</li>`).join('');const ll=$('#lootList');if(ll.dataset.h!==html){ll.innerHTML=html;ll.dataset.h=html;}}
@@ -1135,6 +1203,7 @@ function updateWorld(){
   const ups=h.bags.filter(it=>canEquip(it)&&score(it)>score(h.gear[it.slot])).length;const bb=$('#bBadge');bb.hidden=!ups;bb.textContent=ups;
   const tp=h.lvl>=10?talentPoints():0;const tb=$('#tBadge');tb.hidden=!tp;tb.textContent=tp;
   $('#aBadge').hidden=h.seenAddons!==false;
+  $('#mBadge').hidden=!(h.lvl>=RIDING[1].lvl&&!h.riding);
   renderTab(false);
 }
 
@@ -1204,11 +1273,20 @@ document.addEventListener('click',e=>{
     case 'repair':repairAll(false);break;
     case 'town':goTown();break;
     case 'leavetown':leaveTown();break;
-    case 'zone':if(C.phase==='fight'){err("You can't travel in the middle of a fight.");break;}if(arg==='fens'&&H().lvl<8){err('Greywater Fens is too dangerous before level 8.');break;}H().zone=arg;H().grind=null;C.phase='seek';C.t=8;C.mob=null;line(`You travel to ${ZONES[arg].name}.`,'l-sys');break;
+    case 'zone':if(C.phase==='fight'){err("You can't travel in the middle of a fight.");break;}if(arg==='fens'&&H().lvl<8){err('Greywater Fens is too dangerous before level 8.');break;}H().zone=arg;H().grind=null;C.phase='seek';C.t=travel(12);C.mob=null;line(`You travel to ${ZONES[arg].name}.`,'l-sys');break;
     case 'talent':{const h=H(),t=TALENTS[h.cls].list.find(x=>x.id===arg);const r=h.talents[arg]||0;if(talentPoints()>0&&r<t.max&&(!t.req||talentSpent()>=t.req)){h.talents[arg]=r+1;recalc();}break;}
     case 'resettal':H().talents={};recalc();break;
     case 'addon':H().addons.on[arg]=!H().addons.on[arg];break;
     case 'tame':startTame();break;
+    case 'buyriding':{const h=H(),nx=RIDING[h.riding+1];if(!nx||!inTown()||h.lvl<nx.lvl||h.money<nx.cost)break;h.money-=nx.cost;h.riding++;toast(`You learned ${nx.n}`);slog(`Learned ${nx.n}.`);line(`You learned ${nx.n}.`,'l-sys');break;}
+    case 'buymount':{const h=H(),s=MOUNT_SHOP[h.faction].find(x=>x.key===arg);if(!s||!inTown()||!h.riding||h.lvl<s.lvl||h.money<s.cost||h.mounts.some(m=>m.key===s.key))break;
+      h.money-=s.cost;const m={id:uid(),key:s.key,name:s.name,kind:s.kind,col:s.col,rar:s.rar,base:s.base,xp:0};h.mounts.push(m);if(!activeMount())h.mount=m.id;toast(`New mount: ${s.name}`);slog(`Bought a ${s.name}.`);break;}
+    case 'ride':{const h=H();if(!h.riding)break;h.mount=arg==='pet'?'pet':Number(arg);line(`You saddle up on ${activeMount()?activeMount().name:'your mount'}.`,'l-sys');break;}
+    case 'trainpet':{const h=H(),p=petOf();if(!p||!inTown()||h.money<PET_MOUNT_COST||!MOUNTABLE.includes(p.family)||bondLvl(p)<3||p.lvl<10||!h.riding)break;
+      h.money-=PET_MOUNT_COST;p.mountTrained=true;p.rideXp=p.rideXp||0;if(!activeMount())h.mount='pet';toast(`${p.name} can now carry you`);slog(`Trained ${p.name} as a mount.`);break;}
+    case 'learnmount':{const h=H(),i=h.bags.findIndex(x=>x.id===Number(arg));if(i<0)break;const it=h.bags[i],r=REINS[it.mid];
+      if(h.mounts.some(m=>m.key===it.mid)){err('You already know that mount.');break;}h.bags.splice(i,1);
+      const m={id:uid(),key:it.mid,name:r.name.replace(/^Reins of (the )?/,''),kind:r.kind,col:r.col,rar:r.rar,base:r.base,xp:0};h.mounts.push(m);if(h.riding&&!activeMount())h.mount=m.id;toast(`New mount: ${m.name}`);slog(`Learned to ride ${m.name}.`);break;}
     case 'feed':feedPet(arg?Number(arg):null,false);C.lastInput=C.run;break;
     case 'buyfood':buyFood(false);break;
     case 'revive':{const p=petOf();if(p&&p.hp<=0&&C.phase!=='fight'&&!(C.reviving>0)){C.reviving=4;line(`You begin reviving ${p.name}.`,'l-sys');}else if(C.phase==='fight')err("You can't do that in combat.");break;}
@@ -1260,6 +1338,8 @@ function drawBeast(c,x,y,p,col,fam,right,t){
   switch(fam){
     case 'spider':q(0,6,8,5,col);q(-3,5,4,4,col);q(-3,6,1,1,'#ff3a3a');q(-1,6,1,1,'#ff3a3a');for(let i=0;i<4;i++){q(-1+i*2.5,11,1,2+((i+b)%2),col);q(-2+i*2.5,4,1,2,col);}break;
     case 'lizard':case 'croc':{const L=fam==='croc'?14:11;q(-1,8,L-3,3,col);q(-5,8,4,2,col);q(-5,8,1,1,dk);q(-3,8,1,1,'#ffde55');q(L-4,9,4,1,col);q(0,11,1,2-b,col);q(L-6,11,1,1+b,col);if(fam==='croc')q(-6,9,2,1,'#e8e4d4');break;}
+    case 'horse':{const mn='rgba(0,0,0,.45)';q(-1,5,11,5,col);q(-3,1,3,6,col);q(-6,1,4,3,col);q(-6,2,1,1,dk);q(-7,3,1,1,col);q(-2,0,2,1,col);
+      q(-1,1,1,5,mn);q(10,5,2,6,mn);q(0,10,1,5-b,col);q(2,10,1,5,col);q(7,10,1,5,col);q(9,10,1,5+b-1,col);q(0,14,1,1,dk);q(9,14,1,1,dk);break;}
     case 'boar':q(-1,5,10,5,col);q(-4,6,4,4,col);q(-5,8,1,1,'#e8e4d4');q(-4,7,1,1,'#ffde55');q(0,10,1,3-b,col);q(7,10,1,2+b,col);q(2,10,1,3,col);q(5,10,1,3,col);q(0,4,6,1,'rgba(0,0,0,.35)');break;
     default:q(-1,6,10,4,col);q(-4,4+b*.3,4,4,col);q(-4,3,1,1,col);q(-2,3,1,1,col);q(-5,5,1,1,dk);q(-4,5,1,1,'#ffde55');q(0,10,1,3-b,col);q(7,10,1,2+b,col);q(2,10,1,3,col);q(5,10,1,3,col);
       if(fam==='cat'){q(9,5,1,1,col);q(10,3,1,3,col);}else if(fam==='hyena'){q(2,7,1,1,dk);q(5,8,1,1,dk);q(9,6,2,1,col);}else q(9,5,2,1,col);
@@ -1274,8 +1354,12 @@ function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidde
   const p=Math.max(2,Math.floor(PH/42));
   const walk=(C.phase==='seek'||C.phase==='town')&&!reduce?Math.sin(t*8)*p*.6:0;
   const lunge=C.anim.hero>0?p*3:0;
-  drawHero(PW*.28+lunge,gy-13*p+walk,p,t);
-  const pet=petOf();if(pet&&C.phase!=='dead'){const pp=Math.max(2,Math.round(p*.8));cx.globalAlpha=pet.hp>0?1:.35;
+  const ride=(C.phase==='seek'||C.phase==='town')?activeMount():null;
+  if(ride){const mp=Math.max(2,Math.round(p*(ride.kind==='horse'?1:1.1)));const bottom=ride.kind==='horse'?15:ride.kind==='lizard'||ride.kind==='croc'?13:13;
+    const back={horse:5,boar:5,lizard:8,croc:8}[ride.kind]||6;const gallop=reduce?0:Math.abs(Math.sin(t*10))*p*.3;const by=gy-bottom*mp-gallop;
+    drawBeast(cx,PW*.28-2*p,by,mp,ride.col,ride.kind,true,t*1.8);drawHero(PW*.28,by+back*mp-10.5*p,p,t);}
+  else drawHero(PW*.28+lunge,gy-13*p+walk,p,t);
+  const pet=petOf();if(pet&&C.phase!=='dead'&&!(ride&&ride.pet)){const pp=Math.max(2,Math.round(p*.8));cx.globalAlpha=pet.hp>0?1:.35;
     drawBeast(cx,PW*.4+(C.anim.pet>0?pp*3:0),gy-13*pp+(walk?walk*.6:0),pp,pet.col,pet.family,true,pet.hp>0?t:0);cx.globalAlpha=1;
     if(C.taming&&C.mob){cx.strokeStyle='rgba(124,240,138,.8)';cx.setLineDash([4,4]);cx.beginPath();cx.moveTo(PW*.3+8*p,gy-8*p);cx.lineTo(PW*.64,gy-8*p);cx.stroke();cx.setLineDash([]);}}
   else if(C.taming&&C.mob){cx.strokeStyle='rgba(124,240,138,.8)';cx.setLineDash([4,4]);cx.beginPath();cx.moveTo(PW*.3+8*p,gy-8*p);cx.lineTo(PW*.64,gy-8*p);cx.stroke();cx.setLineDash([]);}
@@ -1294,7 +1378,7 @@ function boot(){
   if(!h){closeModal();if(S.chars.length)openModal('chars',charsHTML());else{CR.name=pick(NAMES);openModal('create',createHTML());}return;}
   h.log=h.log||[];h.addons=h.addons||{unl:{},on:{}};h.avg=h.avg||{cycle:30,xp:20,money:5};
   for(const k of ['kills','deaths','loots','junkSold','quests','equips','manual','uses','play','money','feeds','tamed'])h.stats[k]=h.stats[k]||0;
-  h.pets=h.pets||[];if(h.activePet===undefined)h.activePet=null;
+  h.pets=h.pets||[];if(h.activePet===undefined)h.activePet=null;h.riding=h.riding||0;h.mounts=h.mounts||[];if(h.mount===undefined)h.mount=null;
   recalc();C=freshC();C.hp=h.cur?Math.min(ST.hpMax,h.cur.hp):ST.hpMax;C.res=h.cur?Math.min(ST.resMax,h.cur.res):(CLASSES[h.cls].res==='mana'?ST.resMax:0);if(C.hp<=0)C.hp=ST.hpMax*.5;
   closeModal();curKey=null;buildSlots();updateWorld();
 }
