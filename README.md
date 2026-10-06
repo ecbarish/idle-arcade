@@ -11,7 +11,7 @@ and the hub page shows where you left off in every one.
 |---|---|---|
 | [Primordial](games/primordial/) | Playable | Evolution idle game: cell to Leviathan, mutation drafts, niche fights, extinction resets |
 | [Starfall Guild](games/starfall-guild/) | Prototype | Kairosoft-style adventurer guild: recruit, class combos, dungeon autobattle, town, staff, seasons |
-| [Realmbound](games/realmbound/) | Prototype | Classic-MMO-inspired adventure: two factions, 5 classes including a pet-taming Hunter, levels 1–20, quests, loot, Focus/Auto play, addons as automation ([design](docs/realmbound-design.md)) |
+| [Realmbound](games/realmbound/) | Prototype | Classic-MMO-inspired adventure: two factions, 5 classes including a pet-taming Hunter, levels 1–30, quests, loot, Focus/Auto play, addons as automation ([design](docs/realmbound-design.md)) |
 | Diamond Career | In design | Baseball: create a player, earn a contract, spend it; later manage the club |
 | Otherworld | Idea | Anime isekai: status window, evolving skills, story arcs, guild ranks F to S, reincarnation |
 
@@ -34,6 +34,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File serve.ps1
 then open http://localhost:8765/
 
 ## Changelog
+
+- **2026-10-06** — Realmbound: level cap 30, Ashen Ridge with two faction outposts, ten quests,
+  six enemy types including the legendary Coalmaw, and the Cindervein Foundry (three bosses).
+  Dungeons now keep separate Heroic unlocks; existing Sanctum saves migrate automatically.
+  New bosses use Cinder Rain and Molten Rupture with the same active dodge controls.
 
 - **2026-10-07** — Realmbound: wandering NPC adventurers with personalities and friendship, grouping,
   combo abilities, the Drowned Sanctum (3 bosses, waves, dodgeable Tidal Surge, loot sharing, infinite Heroic
@@ -62,3 +67,13 @@ then open http://localhost:8765/
   extinction, offline catch-up, import). Starfall Guild prototype (playtested: recruiting, leveling,
   shops, bosses and relics, staff, seasons). Fixed: drafts no longer offer mutations for locked organisms;
   Starfall heal-between-fights and crit math.
+
+## Development checks
+
+Serve the repository with `python -m http.server 8765` (or `serve.ps1`). With Playwright and its
+Chromium browser installed, run `node tests/realmbound-smoke.cjs`. The check covers old dungeon
+save migration, levels 20–30, quest chains, per-dungeon Heroic gates, save/reload, group-finder
+controls and mobile layout. For a DOM-only check without Chromium, install `jsdom` in your development
+environment and run `node tests/realmbound-dom.cjs`. This executes the same progression scenarios and
+checks save/reload and group-finder interactions, but does not verify browser rendering or mobile layout.
+The games themselves still require no dependencies or build step.
