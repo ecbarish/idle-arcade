@@ -41,6 +41,8 @@ h2,h3{font-family:var(--f-head);font-weight:400;color:var(--gold);margin:0;lette
 .zonebar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .zonebar h2{font-size:24px}
 .zsub{color:var(--muted);font-size:13px}
+.zlore{margin:4px 0 0;color:var(--muted);font-size:12.5px;font-style:italic;max-width:62ch;line-height:1.4}
+.zlore:empty{display:none}
 .zbtns{display:flex;gap:6px;flex-wrap:wrap}
 .scene{position:relative;aspect-ratio:16/7;max-width:100%;border:1px solid var(--bronze-d);border-radius:6px;overflow:hidden;background:#223}
 .scene canvas{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:pixelated}
