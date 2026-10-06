@@ -34,7 +34,7 @@ function buildSlots(){const b=bar();slotsKey=H().cls+H().lvl+JSON.stringify(H().
 function updateWorld(){
   const h=H(),K=CLASSES[h.cls],z=ZONES[h.zone];
   $('#who').innerHTML=`<span><span class="crest" style="background:${FACTIONS[h.faction].col}"></span>${FACTIONS[h.faction].name}</span><span>${moneyStr(h.money)}</span>`;
-  $('#zoneName').textContent=z.name;$('#zoneSub').textContent=`Level ${z.lv[0]}–${z.lv[1]} · ${hubName()}${z.faction?'':' · Contested territory'}`;
+  $('#zoneName').textContent=z.name;$('#zoneSub').textContent=`Level ${z.lv[0]}–${z.lv[1]} · ${hubName()}${z.faction?'':' · Contested territory'} · ${z.lore}`;
   // zone buttons
   const zb=ZONE_ORDER[h.faction].map(id=>`<button class="btn sm ${id===h.zone?'':'alt'}" data-act="zone" data-arg="${id}" ${id===h.zone?'disabled':''}>${ZONES[id].name}</button>`).join('')+
     ` <select class="btn sm alt" id="grindSel" aria-label="Hunt target"><option value="">Hunt: follow quests</option>${z.mobs.filter(m=>!m.rare).map(m=>`<option value="${m.id}" ${h.grind===m.id?'selected':''}>Hunt: ${m.name} (${m.lv[0]}-${m.lv[1]})</option>`).join('')}</select>`;
