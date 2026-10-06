@@ -96,7 +96,8 @@ Realmbound Hunter.
 - **v0:** one biome, 12 species across 6 families and 3 elements, capture, a ranch with 6 stalls, daily
   feed/train/rest scheduling, bond, 3v3 auto-battles with commands, a Rookie League with 5 rival tamers,
   breeding with genes and 3 hybrid recipes.
-- **v1:** racing (tracks, strategies, the urge burst), a second biome, the first staff.
+- **v0 story:** a starter creature, a rival tamer, the first biome's story beat and challenge.
+- **v1:** racing (tracks, strategies, the urge burst), contests, a second biome, the first staff.
 - **v2:** Frontier expeditions, seasons and the Hall of Fame.
 - **v3:** Realmbound bridge: shared module, pets and mounts move onto it, creature adoption.
 
@@ -105,8 +106,22 @@ Realmbound Hunter.
   schedule, balance.
 - **ChatGPT:** species and biome data written to this spec, rival tamer dialogue, race tracks, tests.
 
-## Open questions for Evan
-1. Name: Wildbond, or something else?
-2. Which hook first in v0: battling (as planned) or racing?
-3. Battle style: auto-battle with timed commands (planned), or fully turn-based?
-4. Art: the same chunky pixel look as Realmbound?
+## Decisions (Evan, 2026-10-07)
+- **Name: Wildbond.**
+- **Several gameplay loops, with battling as the main one.** Like Pokemon, the spine is exploration plus a
+  story (regions, a rival, a league to climb), and other activities sit beside it: racing, and **contests**
+  (show off a creature's looks, temperament and tricks for prizes) like Pokemon's contests.
+- **Battles: auto-battle with timed commands.**
+- **Art: chunky pixel style for now;** the art direction may change later, so keep drawing code isolated in
+  one place (the beast drawer) so it can be swapped.
+
+## Story spine (to flesh out in v0)
+A frontier region opens up: you arrive with one starter creature, meet a rival tamer who starts the same
+day, and work through the biomes toward the region's league. Each biome has a story beat, a unique creature
+and a gym-like challenge. Contests and races are side paths with their own ladders and rewards.
+
+## Contests (new loop)
+Categories judge different things: **Grace** (Speed, Wits), **Might** (Power, Guard), **Charm** (Spirit,
+bond, variant colors), **Tricks** (abilities learned through training). Temperament and mood matter; grooming
+and practice routines raise appeal. **Active play:** time a creature's showcase move to the crowd's
+excitement. Ribbons and titles are cosmetic plus small breeding value.
