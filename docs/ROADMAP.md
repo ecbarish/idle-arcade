@@ -43,7 +43,7 @@ Mark a ticket done in the same PR that finishes it.
 - [ ] **T8: Game guides** (ChatGPT) — **parked** until games are closer to finished, so guides don't need constant
   rewrites. Spec kept below. Meanwhile, keep lore written down in each game's design doc as it's added.
 - [ ] **T9: Wildbond guide** (ChatGPT) — parked with T8.
-- [ ] **T10: Wildbond third area, data only** (ChatGPT): see the T10 section below.
+- [x] **T10: Wildbond third area, data only** (ChatGPT): see the T10 section below.
 
 ### T10: Wildbond third area (data only)
 Add **Emberfall Highlands** (volcanic uplands above the coast; name places and creatures however fits) in
