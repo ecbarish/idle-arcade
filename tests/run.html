@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Realmbound scenario checks</title>
+<style>
+body{font:16px system-ui,sans-serif;background:#131820;color:#e8edf5;max-width:900px;margin:32px auto;padding:0 20px}button{font:inherit;padding:10px 18px;cursor:pointer}li{padding:5px 0;overflow-wrap:anywhere}.pass{color:#96eba4}.fail{color:#ff9a9a}iframe{width:100%;height:500px;border:1px solid #607080}#summary{font-weight:bold}details{margin-top:20px}
+</style>
+</head>
+<body>
+<h1>Realmbound scenario checks</h1>
+<p>Run from a static server. This loads the game in a same-origin iframe and executes the unchanged scenario file without Node.js. Your Realmbound save and hub progress are restored after the test iframe closes. Close other Realmbound tabs before running.</p>
+<button id="run">Run checks</button>
+<p id="summary" role="status">Ready.</p>
+<ol id="results"></ol>
+<details><summary>Test game</summary><div id="game"></div></details>
+<script>
+'use strict';
+const button=document.querySelector('#run'),summary=document.querySelector('#summary'),results=document.querySelector('#results');
+function result(ok,label){const li=document.createElement('li');li.className=ok?'pass':'fail';li.textContent=(ok?'PASS — ':'FAIL — ')+label;results.appendChild(li);}
+button.addEventListener('click',async()=>{
+  button.disabled=true;results.replaceChildren();summary.textContent='Running…';
+  const keys=['realmbound-save-v1','arcade-index-v1'],backup=new Map();let frame;
+  try{
+    for(const key of keys)backup.set(key,localStorage.getItem(key));
+    const [scenarioResponse,bootResponse]=await Promise.all([fetch('realmbound-scenarios.cjs'),fetch('../games/realmbound/js/99-boot.js')]);
+    if(!scenarioResponse.ok||!bootResponse.ok)throw Error('Could not load scenario or boot source. Serve the repository root over HTTP.');
+    const scenarioText=await scenarioResponse.text(),bootText=await bootResponse.text();
+    frame=document.createElement('iframe');frame.title='Realmbound test instance';
+    const loaded=new Promise((resolve,reject)=>{frame.onload=resolve;frame.onerror=()=>reject(Error('Game iframe failed to load.'));});
+    frame.src='../games/realmbound/';document.querySelector('#game').appendChild(frame);await loaded;
+    const w=frame.contentWindow;
+    // Classic scripts share their global lexical scope. On non-localhost servers, expose exactly
+    // the existing debug hook inside this test iframe only, leaving the game source unchanged.
+    if(!w.__rb){const hook=bootText.split('\n').find(line=>line.startsWith("if(location.hostname==='localhost')window.__rb="));if(!hook)throw Error('Existing test hook was not found.');w.eval(hook.slice(hook.indexOf('window.__rb=')));}
+    const scenarios=w.eval('(function(){const module={exports:null};\n'+scenarioText+'\nreturn module.exports;})()');
+    const checks=scenarios();for(const label of checks)result(true,label);
+    summary.textContent='PASS — '+checks.length+' scenario checks.';summary.className='pass';
+  }catch(error){result(false,error.message);summary.textContent='FAIL — '+error.message;summary.className='fail';}
+  finally{
+    if(frame)frame.remove();
+    for(const [key,value] of backup){if(value===null)localStorage.removeItem(key);else localStorage.setItem(key,value);}
+    button.disabled=false;
+  }
+});
+</script>
+</body>
+</html>

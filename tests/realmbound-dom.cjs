@@ -3,17 +3,18 @@ const {JSDOM}=require('jsdom');
 const fs=require('node:fs');
 const path=require('node:path');
 const assert=require('node:assert/strict');
+const vm=require('node:vm');
 const root=path.join(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'games/realmbound/index.html'),'utf8');
 const engine=fs.readFileSync(path.join(root,'shared/engine.js'),'utf8');
-const script=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).join('\n');
+const scripts=[...html.matchAll(/<script src="(js\/[^"]+)"><\/script>/g)].map(m=>fs.readFileSync(path.join(root,'games/realmbound',m[1]),'utf8'));
 function create(saved){
   const dom=new JSDOM(html,{url:'http://localhost:8765/games/realmbound/',runScripts:'outside-only',pretendToBeVisual:true});
   const w=dom.window;
   w.HTMLCanvasElement.prototype.getContext=()=>new Proxy({measureText:()=>({width:20}),createLinearGradient:()=>({addColorStop(){}})},{get:(o,k)=>k in o?o[k]:()=>{}});
   w.requestAnimationFrame=()=>0;w.setInterval=()=>0;w.setTimeout=()=>0;w.matchMedia=()=>({matches:false,addEventListener(){}});
   if(saved)w.localStorage.setItem('realmbound-save-v1',saved);
-  w.eval(engine);w.eval(script);return dom;
+  const context=dom.getInternalVMContext();vm.runInContext(engine,context);for(const script of scripts)vm.runInContext(script,context);return dom;
 }
 const dom=create();
 try {
