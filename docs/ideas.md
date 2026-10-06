@@ -33,3 +33,21 @@ Overlap to watch: Starfall Guild is about running a guild; Otherworld is one pro
 - **Diamond Career** (baseball) — next after Realmbound. Create a player, earn a contract, spend it;
   later manage the club. Step in for key at-bats or let them simulate.
 - Hockey and American football later, as their own games or reusing the career system.
+
+## Creatures, companions and taming (Evan, 2026-10-06)
+
+Roots: WoW hunters and Pokemon. Kairosoft's horse racing game nailed the raising fantasy; Ashes of Creation
+promised it and never shipped. Depth here is rarely explored.
+
+- **Taming and raising:** catch creatures in the wild, then feed, train and bond with them. Use them in battle,
+  as mounts for travel, and in races.
+- **Rarity from common to mythical:** generic species plus named unique creatures. Rarer ones are harder to
+  find, tame and raise.
+- **Hybrids:** rare wild crossbreeds, and breeding for new combinations with inherited traits.
+- **Who you are matters:** classes and races interact with creatures differently (a hunter tames what a mage
+  can only bind; a druid race bonds faster with forest beasts).
+- **Companions:** party members with relationships that grow; learning to work together unlocks combined
+  abilities.
+
+Where it lives: a standalone creature game for the full depth, plus hunter pets, mounts and companions inside
+Realmbound. A shared creature system could feed both.

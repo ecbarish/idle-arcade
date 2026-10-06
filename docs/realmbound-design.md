@@ -14,13 +14,26 @@ Original world, names and art — inspired by that era, not a copy of any game.
 
 ---
 
+## Decisions (2026-10-06)
+
+- **Focus / Auto toggle.** Focus: you press the abilities. Auto: the hero plays itself. **Active play is
+  always worth at least as much as Auto:** Auto acts a beat late (55% efficiency), never catches reactive
+  windows, and doesn't get the +10% *Engaged* XP bonus. The Rotation Macro addon closes the gap over time
+  (70% → 80% → 90%, and reactive windows half the time at rank 3), and is earned only by pressing abilities
+  yourself. If you go quiet in Focus mode for 15 seconds, Auto takes over until you press something.
+- **Two factions.** The Concord (Human, Stonekin) start in Thornvale; the Wildclans (Grishar, Duskelf) start in
+  the Redsand Steppe. Both meet in the contested Greywater Fens at level 10; faction battlegrounds come later.
+- **Death: the classic sting.** A corpse run plus 10% durability loss on worn gear; broken gear gives no stats
+  until repaired in town.
+
 ## The world
 
 The Sundered Reach: a continent of zones by level band, each with its own quest hub, mobs and named elites.
 
 | Zone | Levels | Flavor |
 |---|---|---|
-| Thornvale | 1–10 | Farmland, wolves, kobold-like "Diggers" in the mines |
+| Thornvale (Concord) | 1–10 | Farmland, wolves, tunnel "Diggers" in the old mine, a bandit gang |
+| Redsand Steppe (Wildclans) | 1–10 | Red canyons, hyenas, outcast raiders, cliff harpies |
 | Greywater Fens | 10–20 | Swamps, murloc-like "Gloomfins", a sunken temple dungeon |
 | Ashen Ridge | 20–30 | Volcanic badlands, ogre camps, a fire cult |
 | Frostmere | 30–45 | Tundra, ice trolls, a necropolis |

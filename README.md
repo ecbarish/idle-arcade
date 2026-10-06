@@ -11,7 +11,7 @@ and the hub page shows where you left off in every one.
 |---|---|---|
 | [Primordial](games/primordial/) | Playable | Evolution idle game: cell to Leviathan, mutation drafts, niche fights, extinction resets |
 | [Starfall Guild](games/starfall-guild/) | Prototype | Kairosoft-style adventurer guild: recruit, class combos, dungeon autobattle, town, staff, seasons |
-| Realmbound | In design | Classic-MMO-inspired idle adventure: leveling, dungeons, raids, loot, addons as automation ([design](docs/realmbound-design.md)) |
+| [Realmbound](games/realmbound/) | Prototype | Classic-MMO-inspired adventure: two factions, 4 classes, levels 1–20, quests, loot, Focus/Auto play, addons as automation ([design](docs/realmbound-design.md)) |
 | Diamond Career | In design | Baseball: create a player, earn a contract, spend it; later manage the club |
 | Otherworld | Idea | Anime isekai: status window, evolving skills, story arcs, guild ranks F to S, reincarnation |
 
@@ -34,6 +34,12 @@ powershell -NoProfile -ExecutionPolicy Bypass -File serve.ps1
 then open http://localhost:8765/
 
 ## Changelog
+
+- **2026-10-06 (later)** — Realmbound v0: character creation (2 factions, 4 races, 4 classes), three zones to
+  level 20, 26 quests, auto-combat with a 6-button action bar and reactive openings, Focus/Auto modes (active
+  play always worth more), loot with rarities and suffixes, durability and corpse runs, town vendor, talents,
+  rested XP, 5 earned addons. Playtested all four classes. Design plan in docs/realmbound-design.md. Creature
+  and companion idea added to docs/ideas.md.
 
 - **2026-10-06** — Hub and shared engine. Primordial v1 (playtested: drafts, instincts, contests,
   extinction, offline catch-up, import). Starfall Guild prototype (playtested: recruiting, leveling,
