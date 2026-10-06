@@ -99,10 +99,10 @@ const STORY = [
 ];
 const COUNTER = { cindercub: 'ripplet', ripplet: 'mosshog', mosshog: 'cindercub' };
 
-/* Art eras: the world's look evolves as you progress. Only Pixel exists so far. */
+/* Art eras: the world's look evolves as you progress. */
 const ERAS = [
   { id: 'pixel', name: 'Pixel', unlock: 'From the start' },
-  { id: 'bit16', name: '16-bit', unlock: 'Earn the Thorn Badge', soon: true },
+  { id: 'bit16', name: '16-bit', unlock: 'Earn the Thorn Badge' },
   { id: 'hd', name: 'HD', unlock: 'A later region', soon: true },
   { id: '3d', name: '3D', unlock: 'Become Champion', soon: true }
 ];
