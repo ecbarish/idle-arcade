@@ -18,7 +18,7 @@ Mark a ticket done in the same PR that finishes it.
 ## Tickets
 - [ ] **T0: Split Realmbound into small files** (ChatGPT). No behavior change. See HANDOFF.md.
 - [ ] **T1: Specs for levels 30-60, raids and the guild** (Claude).
-- [ ] **T2: Creature game spec + shared creature module plan** (Claude).
+- [x] **T2: Creature game spec + shared creature module plan** (Claude). See docs/creature-game-design.md.
 - [ ] **T3: Content for levels 30-40** (ChatGPT, after T0 and T1).
 - [ ] **T4: Creature module + creature game v0** (Claude, after T0 and T2).
 
