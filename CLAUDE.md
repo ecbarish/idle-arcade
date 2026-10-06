@@ -1,0 +1,47 @@
+# Idle Arcade: notes for Claude
+
+Evan's personal stable of browser games, live at https://ecbarish.github.io/idle-arcade/ (GitHub Pages from `main`).
+Evan works on this from more than one computer and with ChatGPT/Codex too, so **this repo is the shared memory**:
+read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (tickets) at the start of a session.
+
+## Start of every session
+1. `git pull`, then `git fetch` and check `git branch -r` for `codex/*` branches newer than `main` (ChatGPT's work).
+2. For each: `git log --format='%h %ae %s' main..origin/<branch>`, review the diff, test it (see below), merge with
+   `git merge --no-ff`, push, and mark the ticket done if ChatGPT didn't.
+3. Pick up the next ticket from "Where we are" below.
+
+## Rules
+- **Commits use only** `206636510+ecbarish@users.noreply.github.com` (set it as repo-local `user.email`). Never a
+  personal email. End commit messages with the Co-Authored-By line the session gives you.
+- Never enter Evan's passwords or create accounts for him; he signs in himself.
+- Plain HTML/JS, no build step, no installs. Test locally with `serve.ps1` (http://localhost:8765/) in the browser
+  pane. Realmbound: `tests/run.html` must stay all-pass. Wildbond: `window.__wb` hook on localhost.
+- Ship in small playable steps with a README changelog entry. When handing work to ChatGPT, write the ticket into
+  `docs/ROADMAP.md` first and give Evan a copy-paste prompt (branch `codex/<topic>`, open a PR, don't merge,
+  noreply email).
+
+## What Evan wants (keep this in mind for every design choice)
+- **Real games, not dashboards or puzzles:** deep lore and deep gameplay, like Pokemon, Palworld, classic WoW.
+  Be *in* the world: places and people instead of menu buttons. May become an app or full game someday.
+- **Earned automation, never paywalled.** Active play is always worth at least as much as idle.
+- **The journey and the grind are the fun**, but the player picks the pace (journey-length settings, badge level
+  caps, challenge modes) and there are reasons to revisit old content (rematches, rare spawns, mastery).
+- References are inspiration, not templates. Suggest better mechanics from other games when they fit
+  (he liked IdleOn's many characters working at once, Palworld ranch jobs, DQM inheritance, fusion).
+- Guides per game come later, once games are near-finished. Record lore in docs as it's written
+  (`docs/lore/`, design docs).
+- Evan isn't a programmer: explain in plain words, show results, give clear next steps.
+
+## Where we are (update this at the end of each session)
+- **Wildbond** (creature game, the current focus): starters, rival Wren, Thornwood → Saltmarsh Coast → Emberfall
+  Highlands (Emberfall's `tide` badge doesn't exist yet), ranch/breeding, art eras (Pixel, 16-bit), dialogue
+  scenes with portraits, battle animation, chiptune sound.
+- **Next for Claude: T11 pacing overhaul** (measured problem: level 12 in 15 min, cap 20 in ~2 h on Auto). Levels
+  1-100, journey length Breezy/Classic/Long Road, badge level caps (soft/hard/off), XP share; add the Saltmarsh
+  Warden + `tide` badge; rescale Emberfall's levels. Then **T7b walkable world** (tile map kept separate from the
+  renderer), then **T13 era progression** (Game Boy → 16-bit → HD-2D → voxel diorama → 3D → VR). Plans are in
+  `docs/creature-game-design.md`.
+- **Realmbound** (classic-MMO idle, flagship): levels 1-30, two dungeons, hunters/pets/mounts, lore bible in
+  `docs/lore/realmbound.md`. Waiting on T1 (Claude: specs for 30-60, raids, guild), then T3 content for ChatGPT.
+  Big future direction: the whole roster plays at once (IdleOn-style).
+- Parked: Primordial, Starfall Guild, Diamond Career (baseball), Otherworld (isekai).

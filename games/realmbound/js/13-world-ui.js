@@ -34,13 +34,13 @@ function buildSlots(){const b=bar();slotsKey=H().cls+H().lvl+JSON.stringify(H().
 function updateWorld(){
   const h=H(),K=CLASSES[h.cls],z=ZONES[h.zone];
   $('#who').innerHTML=`<span><span class="crest" style="background:${FACTIONS[h.faction].col}"></span>${FACTIONS[h.faction].name}</span><span>${moneyStr(h.money)}</span>`;
-  $('#zoneName').textContent=z.name;$('#zoneSub').textContent=`Level ${z.lv[0]}–${z.lv[1]} · ${hubName()}${z.faction?'':' · Contested territory'} · ${z.lore}`;
+  $('#zoneName').textContent=z.name;$('#zoneSub').textContent=`Level ${z.lv[0]}–${z.lv[1]} · ${hubName()}${z.faction?'':' · Contested territory'}`;$('#zoneLore').textContent=z.lore||'';
   // zone buttons
   const zb=ZONE_ORDER[h.faction].map(id=>`<button class="btn sm ${id===h.zone?'':'alt'}" data-act="zone" data-arg="${id}" ${id===h.zone?'disabled':''}>${ZONES[id].name}</button>`).join('')+
     ` <select class="btn sm alt" id="grindSel" aria-label="Hunt target"><option value="">Hunt: follow quests</option>${z.mobs.filter(m=>!m.rare).map(m=>`<option value="${m.id}" ${h.grind===m.id?'selected':''}>Hunt: ${m.name} (${m.lv[0]}-${m.lv[1]})</option>`).join('')}</select>`;
   const d=h.dun;
   if(d){const bosses=dungeonDef().enc.slice(0,d.step).filter(e=>e.boss).length;$('#zoneName').textContent=dungeonDef().name+(d.tier?` · Heroic ${d.tier}`:'');
-    $('#zoneSub').textContent=`Pull ${Math.min(d.step+1,dungeonDef().enc.length)} of ${dungeonDef().enc.length} · Bosses ${bosses}/3${d.wipes?` · ${d.wipes} wipe${d.wipes>1?'s':''}`:''}${d.mods.length?' · '+d.mods.map(k=>DUN_MODS[k].name).join(', '):''}`;}
+    $('#zoneLore').textContent='';$('#zoneSub').textContent=`Pull ${Math.min(d.step+1,dungeonDef().enc.length)} of ${dungeonDef().enc.length} · Bosses ${bosses}/3${d.wipes?` · ${d.wipes} wipe${d.wipes>1?'s':''}`:''}${d.mods.length?' · '+d.mods.map(k=>DUN_MODS[k].name).join(', '):''}`;}
   const zk=d?'dun':h.zone+h.grind+h.faction;const zbEl=$('#zoneBtns');
   if(zbEl.dataset.k!==zk){zbEl.innerHTML=d?'<button class="btn sm alt" data-act="leavedun">Leave dungeon</button>':zb;zbEl.dataset.k=zk;}
   // player frame

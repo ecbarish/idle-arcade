@@ -35,6 +35,10 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-08 (night, later)** — Merged ChatGPT's Realmbound lore pass (PR #6): every zone has a lore paragraph (shown on its
+  own line under the zone name) and every quest giver now says something when you turn a quest in. Lore bible in
+  docs/lore/realmbound.md. Merged Wildbond Emberfall Highlands (PR #5). Added CLAUDE.md so any Claude session on any
+  computer starts with the project's rules and current status.
 - **2026-10-08 (night)** — Wildbond feels like a real game, part 1: story scenes with character portraits (Keeper Maren,
   Wren, Warden Isolde) and typewriter dialogue for every beat, from the opening cart ride to Breakwatermane; battle
   animation (teams slide in, lunges, flinches, element sparks, crit shake, fainting); chiptune sound effects and music
