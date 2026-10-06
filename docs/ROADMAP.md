@@ -46,7 +46,7 @@ Mark a ticket done in the same PR that finishes it.
   docs/creature-game-design.md. Rescale T10's Emberfall levels when merging. Challenge modes and rematches follow.
 - [ ] **T7b (revised): Walkable world** (Claude): top-down map with tall grass, route trainers, items, NPCs; towns
   you walk into (inn, shop, ranch) instead of menu buttons. Auto-explore = your tamer walks routes on their own.
-- [ ] **T10: Wildbond third area, data only** (ChatGPT): see the T10 section below.
+- [x] **T10: Wildbond third area, data only** (ChatGPT): see the T10 section below.
 
 ### T10: Wildbond third area (data only)
 Add **Emberfall Highlands** (volcanic uplands above the coast; name places and creatures however fits) in

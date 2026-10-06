@@ -114,7 +114,43 @@ const SPECIES = {
   breakwatermane: { name: 'Breakwatermane', fam: 'wolf', el: 'Tide', col: '#497a9e', unique: 1, big: 1,
     base: { hp: 95, pow: 90, grd: 85, spd: 80, wit: 85, spi: 90 },
     learn: [[1, 'bite'], [1, 'bubbleJet'], [10, 'howl'], [16, 'tidePulse']],
-    dex: 'The coast falls silent when this ancient wolf walks the breakers, its mane carrying the rhythm of every tide.' }
+    dex: 'The coast falls silent when this ancient wolf walks the breakers, its mane carrying the rhythm of every tide.' },
+  slaglet: { name: 'Slaglet', fam: 'boar', el: 'Ember', col: '#b77748',
+    base: { hp: 60, pow: 58, grd: 56, spd: 34, wit: 48, spi: 44 },
+    learn: [[1, 'charge'], [1, 'emberSnap'], [9, 'harden'], [16, 'flameRush']], evo: { at: 22, to: 'kilntusk' },
+    dex: 'It rolls in warm volcanic dust until its coat forms a snug crust that keeps out the mountain chill.' },
+  kilntusk: { name: 'Kilntusk', fam: 'boar', el: 'Ember', col: '#965338', big: 1,
+    base: { hp: 82, pow: 86, grd: 80, spd: 46, wit: 66, spi: 60 },
+    learn: [[1, 'charge'], [1, 'emberSnap'], [9, 'harden'], [16, 'flameRush']],
+    dex: 'Its glowing tusks loosen hardened lava so its herd can root for tender shoots beneath the stone.' },
+  ashskip: { name: 'Ashskip', fam: 'lizard', el: 'Ember', col: '#d99154',
+    base: { hp: 42, pow: 44, grd: 38, spd: 68, wit: 64, spi: 44 },
+    learn: [[1, 'tailWhip'], [5, 'emberSnap'], [14, 'flameRush']],
+    dex: 'It hops between cooling rocks and leaves tiny tail prints in the soft ash.' },
+  cragskein: { name: 'Cragskein', fam: 'spider', el: 'Stone', col: '#82736d',
+    base: { hp: 46, pow: 40, grd: 68, spd: 38, wit: 62, spi: 46 },
+    learn: [[1, 'bite'], [6, 'webSnare'], [10, 'rockToss'], [16, 'harden']],
+    dex: 'Its mineral-dusted webs bridge narrow cracks, giving smaller creatures a safe path across the crags.' },
+  ventwhisk: { name: 'Ventwhisk', fam: 'cat', el: 'Ember', col: '#b55e4a',
+    base: { hp: 44, pow: 60, grd: 40, spd: 68, wit: 50, spi: 38 },
+    learn: [[1, 'scratch'], [6, 'emberSnap'], [12, 'howl'], [16, 'flameRush']],
+    dex: 'It curls beside warm vents and fans little clouds of steam with its copper-coloured tail.' },
+  thermwing: { name: 'Thermwing', fam: 'bird', el: 'Gale', col: '#baa9a0',
+    base: { hp: 40, pow: 48, grd: 38, spd: 74, wit: 58, spi: 42 },
+    learn: [[1, 'peck'], [6, 'gust'], [13, 'tailwind']],
+    dex: 'It circles on rising warmth, calling out sheltered ledges to the creatures climbing below.' },
+  screegrin: { name: 'Screegrin', fam: 'hyena', el: 'Stone', col: '#8c7760',
+    base: { hp: 52, pow: 64, grd: 54, spd: 56, wit: 34, spi: 40 },
+    learn: [[1, 'bite'], [5, 'rockToss'], [11, 'howl'], [16, 'harden']],
+    dex: 'Its cheerful chatter carries down the slopes as it gathers smooth stones for its den.' },
+  glowmote: { name: 'Glowmote', fam: 'sprite', el: 'Radiant', col: '#f4cb78',
+    base: { hp: 36, pow: 30, grd: 38, spd: 62, wit: 74, spi: 60 },
+    learn: [[1, 'spark'], [8, 'regrowth'], [16, 'radiance']],
+    dex: 'This seldom-seen spark drifts through the steam, lighting the way home when mist covers the highlands.' },
+  hearthcrown: { name: 'Hearthcrown', fam: 'horse', el: 'Ember', col: '#a66e4c', antlers: 1, unique: 1, big: 1,
+    base: { hp: 95, pow: 85, grd: 90, spd: 70, wit: 90, spi: 95 },
+    learn: [[1, 'charge'], [1, 'emberSnap'], [12, 'regrowth'], [16, 'flameRush']],
+    dex: 'The guardian of Emberfall warms frozen springs with its ember-lit antlers so every creature can drink.' }
 };
 const STARTERS = ['cindercub', 'ripplet', 'mosshog'];
 
@@ -122,7 +158,9 @@ const BIOMES = {
   thornwood: { name: 'Thornwood', lv: [2, 9], sky: ['#9fd0f0', '#e0f0d0'], hill: '#4f7a3a', ground: '#6a9a48',
     wild: [['glimmerwing', 22], ['pebblepaw', 20], ['duskweaver', 16], ['bogsnap', 14], ['emberling', 12], ['gnawhound', 12], ['galefoal', 4], ['sunspark', 3]] },
   saltmarsh: { name: 'Saltmarsh Coast', lv: [10, 18], req: 'thorn', sky: ['#7dbbd8', '#d1e9ed'], hill: '#a6ae75', ground: '#7f9b6c',
-    wild: [['brineskit', 24], ['dunepounce', 20], ['reedtusk', 16], ['wrackjaw', 14], ['kiteskirl', 18], ['spindriftfoal', 8], ['foamglint', 3]] }
+    wild: [['brineskit', 24], ['dunepounce', 20], ['reedtusk', 16], ['wrackjaw', 14], ['kiteskirl', 18], ['spindriftfoal', 8], ['foamglint', 3]] },
+  emberfall: { name: 'Emberfall Highlands', lv: [18, 26], req: 'tide', sky: ['#a6a6bf', '#efd0aa'], hill: '#81756d', ground: '#a58a68',
+    wild: [['slaglet', 24], ['ashskip', 20], ['cragskein', 16], ['ventwhisk', 16], ['thermwing', 14], ['screegrin', 10], ['glowmote', 3]] }
 };
 
 const RIVAL = { name: 'Wren', col: '#d85a8a' };
@@ -189,7 +227,23 @@ const STORY = [
       ['', 'A great wolf walks out of the surf, its mane breaking like a wave and reforming. Breakwatermane, keeper of the coast. Every wave seems to wait for it.'],
       ['@breakwatermane', 'It watches your team for a long moment, then steps forward.']],
     win: [['@breakwatermane', 'Breakwatermane shakes the sea from its mane and sits beside you, as calm as still water.'], ['', 'Somewhere up the beach, Wren yells something that sounds a lot like \"NO WAY.\"']],
-    wild: ['breakwatermane', 17, 4] }
+    wild: ['breakwatermane', 17, 4] },
+  /* Emberfall Highlands: beats count explores made in that biome */
+  { biome: 'emberfall', at: 6, id: 'rival4', title: 'Wren at Warmstep Rise', text: 'Wren challenged you to a rematch on the warm stone trail above the coast.',
+    lines: [['', 'The coast is a blue ribbon far below Warmstep Rise, where Wren is trying to keep a scarf out of a Thermwing\'s beak.'],
+      ['wren', 'I beat you up here. That\'s a win. A small one. Still counts!'],
+      ['wren', 'Thermwing and I have an agreement: it gives back my scarf, and it gets the first turn. That\'s teamwork.'],
+      ['wren', 'Your team looks happy. Mine looks ready for a rematch. Come on, {name}, let\'s see what the climb taught us!']],
+    win: [['wren', 'All right, you win. I\'m blaming the hill. It was clearly on your side.'],
+      ['wren', 'Next time, I pick the hill. Come on, there\'s a warm spring ahead; both our teams have earned a rest.']],
+    team: [['thermwing', 22], ['kilntusk', 23], ['$rival', 24]] },
+  { biome: 'emberfall', at: 14, id: 'hearthstag', title: 'Hoofbeats beneath the mountain', text: 'Hearthcrown, guardian of Emberfall, emerged beside the highland springs.',
+    lines: [['', 'The trail reaches a bowl of black stone where warm water bubbles softly through the cracks. Hoofbeats sound through the steam.'],
+      ['', 'A great stag steps into view, ember light threaded through its antlers: Hearthcrown, guardian of Emberfall. The springs glow a little brighter around it.'],
+      ['@hearthcrown', 'It nudges a loose stone away from your partner\'s feet, then lowers its antlers and waits. A gentle invitation to show your bond.']],
+    win: [['@hearthcrown', 'Hearthcrown folds its legs beside your team, warming the stone beneath their tired paws.'],
+      ['', 'When you rise to leave, the guardian rises too, ready to share the next stretch of the trail.']],
+    wild: ['hearthcrown', 25, 4] }
 ];
 const COUNTER = { cindercub: 'ripplet', ripplet: 'mosshog', mosshog: 'cindercub' };
 
