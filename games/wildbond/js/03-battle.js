@@ -114,7 +114,7 @@ function calmNow() {
     const c = t.c; B.foes = B.foes.filter(u => u !== t); const where = keep(c); S.stats.caught++;
     bline(`${q === 'perfect' ? 'Perfect calm! ' : q === 'good' ? 'Nicely done. ' : ''}${c.name} trusts you. Caught! (sent to your ${where})`, 'good');
     toast(`Caught ${c.name}${c.rar ? ` (${Cr.RARITY[c.rar].name})` : ''}!`); slog(`Caught ${c.name} (level ${c.lvl}${c.rar ? ', ' + Cr.RARITY[c.rar].name.toLowerCase() : ''}) in ${BIOMES[S.biome].name}.`);
-    if (sp(c).unique) { S.story.elderCaught = true; slog('Elderhorn chose to come with you.'); }
+    if (sp(c).unique) { if (B.story) S.story[B.story] = true; if (c.sp === 'elderhorn') S.story.elderCaught = true; slog(`${c.name} chose to come with you.`); }
     if (!living('f').length) endBattle('caught');
   } else bline(`${q === 'miss' ? 'It shies away. ' : ''}${t.c.name} broke free!`, 'warn');
 }
@@ -154,11 +154,15 @@ function endBattle(result) {
     const scale = c => Math.min(1.2, Math.pow(Math.max(1, avgFoe) / c.lvl, 2));
     for (const u of B.allies) { if (u.c.hp <= 0) { msgs.push(...grow(u.c, Math.round(base * 0.3 * scale(u.c)))); continue; } msgs.push(...grow(u.c, Math.round(base * scale(u.c)))); Cr.addBond(u.c, B.kind === 'wild' ? 0.5 : 2); }
     for (const m of msgs) { bline(m, 'good'); if (/evolved|learned/.test(m)) toast(m); }
-    if (B.story) storyWin(B.story);
+    // a legendary knocked out (not befriended) slips away and can be found again later
+    const legend = B.kind === 'wild' && B.foes.find(f => sp(f.c).unique);
+    if (B.story && legend) { if (B.story === 'elder') S.story.elderFled = true; else S.story[B.story + 'Retry'] = S.explored + 6;
+      bline(`${legend.c.name} staggers up and slips away. It might let you approach another time.`, 'warn'); }
+    else if (B.story) storyWin(B.story);
   }
   if (result === 'lost' && B.story) S.story[B.story + 'Retry'] = S.explored + 4;
   if (result === 'lost') { const lost = Math.round(S.coins * 0.1); S.coins -= lost; bline(`Your team is exhausted. You hurry back to Larkhaven (−${lost} coins).`, 'warn');
     if (B.story === 'elder') S.story.elderFled = true; }
-  if (result === 'fled' && B.story === 'elder') { S.story.elderFled = true; }
+  if (result === 'fled' && B.story) { if (B.story === 'elder') S.story.elderFled = true; else S.story[B.story + 'Retry'] = S.explored + 4; }
   B.endAt = B.t;
 }

@@ -43,10 +43,10 @@ function renderPanel() {
   }
   const k = 'x' + S.biome + S.badges.length + S.explored + W.msg + S.lures + wardenReady() + elderReady() + alive().length + S.auto;
   if (k === panelKey) return; panelKey = k;
-  const nb = STORY.find(b => !S.story[b.id] && b.id !== 'warden' && !(b.id === 'elder' && S.story.elderFled));
+  const nb = STORY.find(b => beatHere(b) && !S.story[b.id] && b.id !== 'warden' && !(b.id === 'elder' && S.story.elderFled));
   el.innerHTML = `<div class="explore"><div><b>${BIOMES[S.biome].name}</b> <span class="meta">explored ${S.explored} times · wild levels ${BIOMES[S.biome].lv[0]}–${BIOMES[S.biome].lv[1]}</span></div>
     <p class="msg">${W.msg || (alive().length ? 'Where to next?' : 'Your team is exhausted. Rest in Larkhaven.')}</p>
-    ${nb && S.explored < nb.at ? `<p class="meta">Something is waiting deeper in the woods (${nb.at - S.explored} more explores).</p>` : ''}
+    ${nb && beatCount(nb) < nb.at ? `<p class="meta">Something is waiting further in (${nb.at - beatCount(nb)} more explores).</p>` : ''}
     <div class="acts"><button class="btn big" data-act="explore" ${alive().length ? '' : 'disabled'}>Explore <kbd>E</kbd></button>
       ${wardenReady() ? '<button class="btn gold" data-act="warden">Challenge the Warden</button>' : ''}
       ${elderReady() ? '<button class="btn gold" data-act="elder">Seek Elderhorn</button>' : ''}

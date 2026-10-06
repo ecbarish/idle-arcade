@@ -25,7 +25,10 @@ function storyWin(id) {
     setTimeout(() => toast('The world shimmers... the 16-bit art style is unlocked. Switch it in the Journal.'), 2500);
   }
 }
-function beat() { return STORY.find(b => S.explored >= b.at && !S.story[b.id] && !(S.explored < (S.story[b.id + 'Retry'] || 0)) && !(b.id === 'elder' && S.story.elderFled) && b.id !== 'warden'); }
+/* Thornwood beats count all explores (older saves); other biomes count explores made in that biome. */
+function beatCount(b) { return b.biome ? ((S.exploredIn || {})[b.biome] || 0) : S.explored; }
+function beatHere(b) { return (b.biome || 'thornwood') === S.biome; }
+function beat() { return STORY.find(b => beatHere(b) && beatCount(b) >= b.at && !S.story[b.id] && !(S.explored < (S.story[b.id + 'Retry'] || 0)) && !(b.id === 'elder' && S.story.elderFled) && b.id !== 'warden'); }
 function wardenReady() { return S.explored >= STORY[2].at && !S.story.warden; }
 function elderReady() { return S.story.elderFled && !S.story.elderCaught && S.badges.includes('thorn'); }
 
@@ -37,7 +40,7 @@ function wildLvl() { const [a, b] = BIOMES[S.biome].lv, m = Math.round(teamAvg()
 function explore() {
   if (B) return;
   if (!alive().length) { W.msg = 'Your team is exhausted. Rest in Larkhaven first.'; return; }
-  S.explored++;
+  S.explored++; S.exploredIn = S.exploredIn || {}; S.exploredIn[S.biome] = (S.exploredIn[S.biome] || 0) + 1;
   const bt = beat();
   if (bt) { story(bt); return; }
   const r = Math.random();
@@ -55,7 +58,9 @@ function story(b) {
   W.msg = '';
   if (b.wild) { const [id, lvl, rar] = b.wild; slog(b.text); startBattle('wild', [newCreature(id, lvl, { rar })], { story: b.id }); bline(b.text, 'say'); return; }
   // story opponents bring no more creatures than you have (their strongest ones last)
-  const team = b.team.slice(-Math.max(1, S.team.length)).map(([id, lvl]) => newCreature(id === '$rival' ? S.rivalStarter : id, lvl, { rar: 1 }));
+  // trainers' creatures appear evolved once they're past their evolution level
+  const grown = (id, lvl) => { let s = id; while (SPECIES[s].evo && lvl >= SPECIES[s].evo.at) s = SPECIES[s].evo.to; return s; };
+  const team = b.team.slice(-Math.max(1, S.team.length)).map(([id, lvl]) => newCreature(grown(id === '$rival' ? S.rivalStarter : id, lvl), lvl, { rar: 1 }));
   startBattle('trainer', team, { trainer: b.trainer || RIVAL.name, story: b.id }); bline(b.text, 'say');
 }
 function challengeWarden() { if (!B && wardenReady() && alive().length) story(STORY[2]); }

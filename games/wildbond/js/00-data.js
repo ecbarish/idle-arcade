@@ -133,7 +133,12 @@ const STORY = [
   { at: 20, id: 'elder', title: 'Something moves in the old trees', text: 'The forest goes quiet. Between the oldest trees stands a huge stag of moss and bark: Elderhorn, the guardian of Thornwood. It watches you.',
     wild: ['elderhorn', 11, 4] },
   { at: 26, id: 'warden', title: 'The Thornwood Warden', text: 'Warden Isolde waits at the forest gate. "Every tamer who wants to go further proves themselves here first. Show me your bond."',
-    trainer: 'Warden Isolde', team: [['pebblepaw', 10], ['bogsnap', 11], ['thornback', 12]] }
+    trainer: 'Warden Isolde', team: [['pebblepaw', 10], ['bogsnap', 11], ['thornback', 12]] },
+  /* Saltmarsh Coast: beats count explores made in that biome */
+  { biome: 'saltmarsh', at: 6, id: 'rival3', title: 'Wren on the coast', text: 'Wren is waiting where the dunes meet the marsh, hair full of salt. "I heard you beat Isolde. I got here first, though. The coast changes a team. Let me show you how much."',
+    team: [['kiteskirl', 14], ['brineskit', 15], ['$rival', 16]] },
+  { biome: 'saltmarsh', at: 14, id: 'tidewolf', title: 'A howl over the breakers', text: 'The tide pulls back further than it should. Out on the bare sand, a great wolf with a mane like breaking surf turns to face you: Breakwatermane, keeper of the coast. Every wave seems to wait for it.',
+    wild: ['breakwatermane', 17, 4] }
 ];
 const COUNTER = { cindercub: 'ripplet', ripplet: 'mosshog', mosshog: 'cindercub' };
 
