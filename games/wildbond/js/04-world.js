@@ -22,7 +22,7 @@ function storyWin(id) {
   if (id === 'warden' && !S.badges.includes('thorn')) {
     S.badges.push('thorn'); S.coins += 300; toast('You earned the Thorn Badge!'); slog('Earned the Thorn Badge from Warden Isolde.');
     if (!S.eras.includes('bit16')) S.eras.push('bit16');
-    setTimeout(() => toast('The world shimmers... a new art era stirs (coming in a future update).'), 2500);
+    setTimeout(() => toast('The world shimmers... the 16-bit art style is unlocked. Switch it in the Journal.'), 2500);
   }
 }
 function beat() { return STORY.find(b => S.explored >= b.at && !S.story[b.id] && !(S.explored < (S.story[b.id + 'Retry'] || 0)) && !(b.id === 'elder' && S.story.elderFled) && b.id !== 'warden'); }

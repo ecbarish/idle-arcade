@@ -45,4 +45,5 @@ function save() {
     Arcade.report('wildbond', { summary: `${S.name} · ${S.badges.length} badge${S.badges.length === 1 ? '' : 's'} · ${Object.keys(S.caught).length} species caught`,
       detail: lead ? `Lead: ${lead.name}, level ${lead.lvl} · ${BIOMES[S.biome].name}` : BIOMES[S.biome].name }); }
 }
-function load() { const o = Arcade.load(KEY); if (!o) return; S = Object.assign(fresh(), o); S.stats = Object.assign(fresh().stats, o.stats || {}); }
+function load() { const o = Arcade.load(KEY); if (!o) return; S = Object.assign(fresh(), o); S.stats = Object.assign(fresh().stats, o.stats || {});
+  if (S.badges.includes('thorn') && !S.eras.includes('bit16')) S.eras.push('bit16'); }
