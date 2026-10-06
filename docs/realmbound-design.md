@@ -57,6 +57,23 @@ The first slice of the creature system, written to be shared with the standalone
 - Hunters can train a Devoted, level 10+ pet (not spiders) to carry them; rarity sets base speed (common 60% →
   legendary 100%).
 
+## Next big direction: your whole roster plays at once (inspired by Legends of IdleOn)
+Evan's favorite idea so far. Instead of one hero at a time, every character on the account is busy:
+- **Each character has a job while you play another:** questing in a zone, gathering for a profession, crafting,
+  running a dungeon with companions, or working a guild post. Switch to any of them to play them yourself.
+- **Characters help each other:** a Miner's ore feeds a Blacksmith's crafting, an Alchemist's potions feed the
+  raider, a Hunter's tamed beasts carry goods. The account becomes a small economy you manage.
+- **Shared account progress:** a guild hall, account-wide bank, and Legacy bonuses that every character benefits
+  from. Leveling an alt is never wasted.
+- **Active play still wins:** the character you're controlling earns the Engaged bonus and catches openings;
+  the others work at their idle rate.
+- This turns the existing character slots into the core of the game and gives the raid and guild layer
+  (40-person raids) a roster to draw from.
+
+## It must feel like a real game
+Deep lore and gameplay, never a dashboard: zones with their own stories and characters, quest givers with
+personality, dungeon bosses with backstory, animated combat, and sound. Every system should feed the others.
+
 ## The world
 
 The Sundered Reach: a continent of zones by level band, each with its own quest hub, mobs and named elites.

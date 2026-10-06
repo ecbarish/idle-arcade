@@ -11,6 +11,33 @@ story, and raising one well is the game.
 4. **Many ways to use a creature:** battle, race, ride, or work on the ranch.
 5. **Automation is earned:** ranch staff join once you've done their job by hand. Active play beats Auto.
 
+## It must feel like a real game (Evan, 2026-10-08)
+Not a puzzle game, not a dashboard. Wildbond should feel like Pokemon or Palworld: a world you live in.
+- **A world, not a menu.** A region map of places to walk between (towns, routes, caves, the coast), each with
+  its own scene, music mood, people and secrets. Exploring reveals the map.
+- **People with faces and voices.** Dialogue boxes with portraits, named characters with their own wants:
+  the rival Wren, the Wardens, ranch hands, a researcher studying hybrids, a mysterious rival group.
+- **Lore you uncover.** Why creatures bond with people, where the elements come from, what the legendaries guard.
+  Told through dex entries, ruins, NPC stories and the main plot, not walls of text.
+- **Battles with life.** Move animations and hit effects per element, creatures reacting, screen shake on big hits,
+  victory poses.
+- **Sound.** Simple chiptune music per area and battle, plus sound effects (generated in the browser).
+- **Depth that compounds:** every system (raising, breeding, jobs, battles) feeds the others.
+
+## Next layers (inspired by Palworld, Dragon Quest Monsters, Monster Rancher, Cassette Beasts)
+- **Creatures work the ranch (Palworld).** Each creature has job aptitudes from its family and element: Ember
+  cooks and smelts, Tide waters crops, Grove farms, Stone mines, Gale hauls and scouts, Shade guards at night,
+  Radiant lights and heals. Assign them to ranch buildings; they produce food, materials and coins over time.
+  This replaces human staff as the automation layer, and it makes every creature useful, not just the strong ones.
+- **Skill inheritance (Dragon Quest Monsters).** Children can inherit a move from each parent, so building a
+  dream creature takes planned generations. Some moves only exist through breeding.
+- **Careers (Monster Rancher, softened).** Creatures peak, then slow down and eventually retire to the ranch,
+  where they keep working and become prized breeding stock. No death; a gentle arc that gives choices weight.
+- **Fusion (Cassette Beasts).** A Bonded pair can fuse in battle into a combined form for a few turns, with a
+  look and moveset drawn from both.
+- **A real region and plot.** Several towns and routes, eight Wardens, a rival group with motives, legendaries
+  tied to the plot, and a post-game.
+
 ## Core loop
 Explore a biome → find and capture → raise on the ranch → compete (battle league, races) → earn money,
 reputation and rare items → breed better creatures → unlock deeper biomes and higher leagues.
