@@ -11,8 +11,11 @@ and the hub page shows where you left off in every one.
 |---|---|---|
 | [Primordial](games/primordial/) | Playable | Evolution idle game: cell to Leviathan, mutation drafts, niche fights, extinction resets |
 | [Starfall Guild](games/starfall-guild/) | Prototype | Kairosoft-style adventurer guild: recruit, class combos, dungeon autobattle, town, staff, seasons |
-| Realmbound | In design | Classic-MMO-inspired idle adventure: leveling, dungeons, raids, loot, addons as automation |
+| Realmbound | In design | Classic-MMO-inspired idle adventure: leveling, dungeons, raids, loot, addons as automation ([design](docs/realmbound-design.md)) |
 | Diamond Career | In design | Baseball: create a player, earn a contract, spend it; later manage the club |
+| Otherworld | Idea | Anime isekai: status window, evolving skills, story arcs, guild ranks F to S, reincarnation |
+
+Design plans live in [docs/](docs/): [Realmbound](docs/realmbound-design.md), [idea backlog](docs/ideas.md).
 
 ## Layout
 

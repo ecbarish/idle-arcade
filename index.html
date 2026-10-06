@@ -32,7 +32,7 @@ a{color:inherit}
 .sign span{color:var(--neon);text-shadow:0 0 18px rgba(255,111,168,.35),0 3px 0 #9c3466}
 .tag{color:var(--muted);max-width:60ch;margin:0;font-size:16px}
 
-.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:18px}
 .cab{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
 .cover{position:relative;aspect-ratio:16/9;max-width:100%;overflow:hidden;border-bottom:1px solid var(--line)}
 .cover canvas{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:pixelated}
@@ -41,6 +41,7 @@ a{color:inherit}
 .t-starfall{font-family:'DotGothic16',monospace;font-size:28px;color:#fff;text-shadow:0 3px 0 #2b3550}
 .t-mmo{font-family:var(--f-sign);font-size:26px;color:#ffd27a}
 .t-baseball{font-family:var(--f-sign);font-size:24px;color:#fff}
+.t-otherworld{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:34px;color:#fff;text-shadow:0 0 14px rgba(140,200,255,.8)}
 .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
 .status{align-self:flex-start;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 9px;border-radius:999px;border:1px solid currentColor}
 .s-play{color:var(--ok)} .s-proto{color:var(--proto)} .s-design{color:var(--dim)}
@@ -95,6 +96,9 @@ const GAMES=[
   {id:'baseball',title:'Diamond Career',tcls:'t-baseball',status:['In design','s-design'],
    blurb:'Create a player, climb from the minors on your contract, spend what you earn, and later run the whole club. Step in for key at-bats or let them simulate.',
    tags:['Baseball','Career','Team management'],cover:'baseball'},
+  {id:'otherworld',title:'Otherworld',tcls:'t-otherworld',status:['Idea','s-design'],
+   blurb:'Reborn in another world. Grow through story arcs, evolve skills into Unique Skills, climb the guild ranks from F to S, and carry your powers into the next life.',
+   tags:['Isekai','Story arcs','Reincarnation'],cover:'otherworld'},
 ];
 const ago=t=>{const s=(Date.now()-t)/1000;if(s<90)return'just now';if(s<3600)return Math.round(s/60)+' min ago';if(s<86400)return Math.round(s/3600)+' h ago';return Math.round(s/86400)+' days ago';};
 
@@ -129,6 +133,13 @@ const covers={
     c.fillStyle='#1f6a3a';c.beginPath();c.moveTo(cx,cy-18);c.lineTo(cx+s-22,cy-s);c.lineTo(cx,cy-2*s+22);c.lineTo(cx-s+22,cy-s);c.closePath();c.fill();
     c.fillStyle='#fff';[[cx,cy-6],[cx+s-6,cy-s],[cx,cy-2*s+6],[cx-s+6,cy-s]].forEach(([x,y])=>c.fillRect(x-4,y-4,8,8));
     const bx=cx+Math.sin(t*1.5)*s*.6,by=cy-s-Math.abs(Math.cos(t*1.5))*s*.5;c.beginPath();c.arc(bx,by,5,0,7);c.fill();},
+  otherworld(c,w,h,t){const g=c.createLinearGradient(0,0,0,h);g.addColorStop(0,'#1b2a6b');g.addColorStop(1,'#e98bb0');c.fillStyle=g;c.fillRect(0,0,w,h);
+    const cx=w*.3,cy=h*.5,R=h*.36;c.save();c.translate(cx,cy);c.rotate(t*.3);c.strokeStyle='rgba(180,230,255,.85)';c.lineWidth=1.5;
+    [1,.78].forEach(k=>{c.beginPath();c.arc(0,0,R*k,0,7);c.stroke();});c.beginPath();for(let i=0;i<=6;i++){const a=i*Math.PI*2/6*2;c.lineTo(Math.cos(a)*R*.78,Math.sin(a)*R*.78);}c.stroke();c.restore();
+    const px=w*.56,py=h*.16,pw=w*.38,ph=h*.56;c.fillStyle='rgba(40,110,220,.55)';c.fillRect(px,py,pw,ph);c.strokeStyle='#bfe9ff';c.lineWidth=1.5;c.strokeRect(px,py,pw,ph);
+    c.fillStyle='#e8f7ff';c.font='bold 11px Figtree, sans-serif';c.fillText('STATUS',px+8,py+15);c.font='10px Figtree, sans-serif';
+    ['LV  1','HP  ??','SKILL  ???'].forEach((s,i)=>c.fillText(s,px+8,py+32+i*14));
+    c.fillStyle='rgba(255,255,255,.8)';for(let i=0;i<10;i++){const x=(i*71+t*10)%w,y=(i*37)%(h*.6);c.fillRect(x,y,2,2);}},
 };
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const items=[...document.querySelectorAll('canvas[data-cover]')].map(cv=>({cv,ctx:cv.getContext('2d'),fn:covers[cv.dataset.cover]}));
