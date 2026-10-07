@@ -45,6 +45,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
   Wide and Far, so a big monitor shows more of the map instead of bigger tiles; desktops and ultrawides start on Wide,
   phones on Close. Works in every art style. Also: arrow keys inside the Feedback menu no longer walk your tamer.
 - **Wildbond v1.2.0 (2026-10-07)** — **The Returning Light League**, the story finale after all eight badges: Wren at the gate, four themed courts with healing rests, Champion Avenne, and a homecoming with Wren, Maren, Isolde and the guardians. Earn the Champion title and record the fully restored colour in the Journal. Cleared courts survive losses and reloads for the current ranch day; leaving ends the attempt. Post-game adventures remain future work.
+- **Wildbond v1.1.1 (2026-10-07)** — **Stillreed ferry landing:** visible raised board crossings, a moored reed-green skiff and a landing sign in every art era. The jetty is walkable, the boat stays moored, and existing routes, trainers and saves keep working. W7 town interiors remain to do.
 
 - **2026-10-10** — **Save doctor** in the Studio: pick a game to see its save at a glance (heroes, team, badges, coins),
   a health check that spots broken values (an empty level, negative coins, a missing current hero) with a one-click

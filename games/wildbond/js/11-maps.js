@@ -2,8 +2,8 @@
 /* The walkable world (T7b): one tile map per place. Data only. 12-walk.js moves you around these maps and
    ART[era].tile / ART[era].walker draw them, so a later era (HD-2D, voxel, 3D) can render the same maps.
    Tiles: '.' path  ',' grass  '"' tall grass (wild creatures hide here)  'f' flowers  '_' sand
-          'T' tree  '~' water  'o' hot spring  'R' rock  'r' roof  '#' wall  'D' door  '=' fence  'P' signpost
-          (T ~ o R r # = P are solid)   'N' 'S' 'E' 'W' an exit on that side, drawn as path.
+          'T' tree  '~' water  'o' hot spring  'R' rock  'r' roof  '#' wall  'D' door  '=' fence  'P' signpost  'b' boardwalk  'j' moored skiff  'q' mooring sign
+          (T ~ o R r # = P j q are solid)   'N' 'S' 'E' 'W' an exit on that side, drawn as path.
    A map: rows (all the same length), biome (wild creatures and levels; none for towns), start [x, y, facing],
    exits { N: { to, x, y, dir, locked } } (locked = what you're told if the next area's badge isn't earned yet),
    doors { 'x,y': 'inn' | 'shop' | 'ranch' }, signs { 'x,y': text }, npcs [{ who (a CAST key), at: [x, y], dir, lines, act }],
@@ -14,7 +14,7 @@
 const TILES = {
   '.': {}, ',': {}, '"': { tall: 1 }, f: {}, _: {}, N: { exit: 1 }, S: { exit: 1 }, E: { exit: 1 }, W: { exit: 1 },
   T: { solid: 1 }, '~': { solid: 1 }, o: { solid: 1 }, R: { solid: 1 }, r: { solid: 1 }, '#': { solid: 1 }, '=': { solid: 1 }, D: { door: 1 },
-  P: { solid: 1, sign: 1 }
+  P: { solid: 1, sign: 1 }, b: {}, j: { solid: 1 }, q: { solid: 1, sign: 1 } // boardwalk and moored skiff (water beneath)
 };
 
 /* Townsfolk and passers-by: speakers for map conversations. Wardens and story speakers live in 00-data.js. */
@@ -225,19 +225,19 @@ const MAPS = {
       "T,,,,,,,,,,\"~~~\",,,,,,,,,,,,,T",
       "T,\"\"\"\"\",,,,\"~~~\",,,T,T,T,T,,,T",
       "T,\"\"\"\"\",,,,\"~~~\",,,T,T,T,T,,,T",
-      "T,,,........................,T",
+      "T,,,........bbb.............,T",
       "T,\"\"\"\"\",,,,\"~~~\",,,,,,,,\"\"\"\",T",
       "T,\"\"\"\"\",,,,\"~~~\",,,,,,,,\"\"\"\",T",
-      "T,,,,,,,,,,\"~~~\",,,,,,,,\"\"\"\",T",
-      "W..P.......\"~~~\",,,,,,,,,,,,,T",
-      "T,,,.........................E",
+      "T,,,,,,,,,,\"qj~\",,,,,,,,\"\"\"\",T",
+      "W..P.......bbb~\",,,,,,,,,,,,,T",
+      "T,,,........bbb..............E",
       "T,\"\"\"\"\",,,,\"~~~\",,,,,,,,,,,,,T",
       "T,\"\"\"\"\",,,,\"~~~\",,,,,,,,,,,,,T",
       "T,,,,,,,,,,\"~~~\",,,,,,,,,,,,,T",
       "TTTTTTTTTTTT~~~TTTTTTTTTTTTTTT"
     ],
     exits: { W: { to: 'cloudglass', x: 27, y: 8, dir: 'left' }, E: { to: 'hollowecho', x: 1, y: 9, dir: 'right', locked: 'The hill survey trail requires the Reed Badge. Leave the basin crossing safe before exploring the caverns.' } },
-    signs: { '3,8': 'Stillreed Basin. West: Cloudglass Pass. Leave the ferry landing open for small creatures; orchard paths cross the channels on raised boards.' },
+    signs: { '12,7': 'Stillreed ferry landing. Walk onto the boards below. The skiff is tied up while the rope is mended; leave the end of the landing clear for small creatures.', '3,8': 'Stillreed Basin. West: Cloudglass Pass. Leave the ferry landing open for small creatures; orchard paths cross the channels on raised boards.' },
     items: [{ id: 'sr1', at: [4, 3], give: { fish: 6 } }, { id: 'sr2', at: [24, 6], give: { lures: 6 } }, { id: 'sr3', at: [27, 11], give: { berries: 8 } }],
     npcs: [
       { who: 'evren', at: [8, 5], dir: 'right',

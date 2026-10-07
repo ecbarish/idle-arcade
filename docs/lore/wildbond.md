@@ -113,7 +113,7 @@ The Beacon Badge opens the descending ferry path. Rain can last for days, then s
 becomes audible. Boat families leave landing space for wild creatures. People know the water by what moves beneath
 it and make room for neighboring livelihoods rather than treating the basin as an obstacle to drain.
 
-The walkable basin has reed-grass banks around water channels, raised board crossings, a ferry landing and an orchard.
+The walkable basin has reed-grass banks around water channels, raised board crossings, a ferry landing and an orchard. The landing now has a reachable wooden jetty, a moored reed-green skiff with pale bench seats and an oar, and a water-edge sign asking visitors to keep space for small creatures (W7, 2026-10-07). Both channel crossings show their boards in every art era; the skiff is scenery, with no new travel system.
 Its west exit returns to Cloudglass; the route has two friendly trainers and three supplies to find. **Evren**, an
 orchard keeper, leaves fallen fruit for the herd before filling baskets. **Tavil**, a ferry rope-mender, values a
 sound knot that still opens and promises a ride even to the losing team.

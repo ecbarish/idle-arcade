@@ -178,8 +178,35 @@ function wildbondChecks() {
     for(let y=0;y<14;y++)for(let x=0;x<30;x++)if(walkable(m,x,y)&&!npcAt(m,x,y)&&!seen.has(x+','+y))return false;
     return m.items.every(it=>seen.has(it.at.join(',')))&&seen.has('0,8')&&seen.has('23,8')&&m.rows.some(r=>r.includes('~')&&r.includes('"'));
   });
-  check('Stillreed has a sign, three unique items and two route trainers at 52-56', () => {
-    const m=MAPS.stillreed;return Object.keys(m.signs).length===1&&m.items.length===3&&new Set(Object.values(MAPS).flatMap(m=>(m.items||[]).map(it=>it.id))).size===Object.values(MAPS).flatMap(m=>m.items||[]).length&&m.npcs.filter(n=>n.trainer).length===2&&m.npcs.every(n=>n.trainer.team.every(([id,l])=>SPECIES[id]&&l>=52&&l<=56));
+  check('Stillreed has two signs, three unique items and two route trainers at 52-56', () => {
+    const m=MAPS.stillreed;return Object.keys(m.signs).length===2&&m.items.length===3&&new Set(Object.values(MAPS).flatMap(m=>(m.items||[]).map(it=>it.id))).size===Object.values(MAPS).flatMap(m=>m.items||[]).length&&m.npcs.filter(n=>n.trainer).length===2&&m.npcs.every(n=>n.trainer.team.every(([id,l])=>SPECIES[id]&&l>=52&&l<=56));
+  });
+  check('Stillreed landing is reachable on dry boards while the moored skiff stays solid', () => {
+    ready();S.badges=badges.slice();wb.placeAt('stillreed',11,9,'up');const explored=S.explored;
+    for(const dir of ['up','right','right'])wb.tryStep(dir);
+    if(S.pos.x!==13||S.pos.y!==8||TALK||B||S.explored!==explored)return false;
+    wb.tryStep('up');if(S.pos.x!==13||S.pos.y!==8||!TILES.j.solid)return false;
+    wb.tryStep('down');wb.tryStep('right');return S.pos.x===14&&S.pos.y===9&&!TALK&&!B&&S.explored===explored;
+  });
+  check('Landing sign explains the mooring and asks visitors to leave creature space', () => {
+    ready();S.badges=badges.slice();wb.placeAt('stillreed',12,8,'up');wb.tryStep('up');
+    return S.pos.x===12&&S.pos.y===8&&W.msg.includes('skiff')&&W.msg.includes('small creatures');
+  });
+  check('Both Stillreed channel crossings are boards with open water beside the ferry', () => {
+    const m=MAPS.stillreed;return [4,9].every(y=>[12,13,14].every(x=>tile(m,x,y)==='b'&&walkable(m,x,y)))&&tile(m,13,7)==='j'&&tile(m,12,7)==='q'&&tile(m,14,7)==='~';
+  });
+  check('An old saved position on the lower crossing loads onto the new boards', () => {
+    ready();S.badges=badges.slice();wb.placeAt('stillreed',13,9,'right');S.items={sr1:true};S.beaten={tavil:true};save();reset();load();ensurePos();
+    return S.pos.map==='stillreed'&&S.pos.x===13&&S.pos.y===9&&tile(MAPS.stillreed,13,9)==='b'&&S.items.sr1&&S.beaten.tavil;
+  });
+  check('An old saved position beside the landing stays walkable', () => {
+    ready();S.badges=badges.slice();wb.placeAt('stillreed',11,7,'down');save();reset();load();ensurePos();
+    return S.pos.map==='stillreed'&&walkable(MAPS.stillreed,S.pos.x,S.pos.y)&&!blocked(MAPS.stillreed,S.pos.x,S.pos.y);
+  });
+  for(const era of ['pocket','pixel','bit16'])check(era+' paints distinct ferry and board tiles rather than fallback grass', () => {
+    const c=document.createElement('canvas');c.width=c.height=32;const g=c.getContext('2d'),P=worldPal(MAPS.stillreed);
+    if(!P)return false;const pixels=ch=>{g.clearRect(0,0,32,32);ART[era].tile(g,ch,0,0,32,P,0,13,7);return Array.from(g.getImageData(0,0,32,32).data).join(',');};
+    return pixels('b')!==pixels(',')&&pixels('j')!==pixels('~')&&pixels('q')!==pixels('~');
   });
   check('Stillreed wild table excludes its guardian and keeps Glassbill rare', () => {
     const w=BIOMES.stillreed.wild;return w.every(([id,n])=>basinSpecies.includes(id)&&n>0&&!SPECIES[id].unique)&&w.find(([id])=>id==='glassbill')[1]===3&&w.filter(([id])=>id!=='glassbill').every(([,n])=>n>3)&&SPECIES.stillwake.fam==='croc'&&SPECIES.stillwake.el==='Tide'&&SPECIES.stillwake.big===1&&SPECIES.stillwake.unique===1;
@@ -593,7 +620,7 @@ function wildbondChecks() {
     for (const [at, words] of Object.entries(m.signs || {})) check(id + ': sign ' + at + ' shows its text and blocks movement', () => {
       ready(); const [x, y] = at.split(',').map(Number), [px, py, dir] = beside(m, x, y);
       wb.placeAt(id, px, py, dir); wb.tryStep(dir);
-      return tile(m, x, y) === 'P' && S.pos.x === px && S.pos.y === py && W.msg === 'The sign reads: "' + words + '"';
+      return !!TILES[tile(m, x, y)].sign && S.pos.x === px && S.pos.y === py && W.msg === 'The sign reads: "' + words + '"';
     });
   }
   check('Riding requires the Ember Badge and a conscious partner', () => {

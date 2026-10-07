@@ -94,7 +94,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | W4 | **Contests and races** at the ranch | M | System | — | open | docs/creature-game-design.md |
 | W5 | **Ranch jobs** on the shared roster (S3) | M | System | — | open | shared/roster.js; docs/research/decisions.md |
 | W6 | **Modern 3D era** after the Diorama | XL | Art | G5 | open | Split into parts |
-| W7 | Map polish: Stillreed's ferry landing you can see; interiors for town buildings | S | Art | — | open | |
+| W7 | Map polish: Stillreed's ferry landing you can see; interiors for town buildings | S | Art | — | Ferry landing done: Codex, 2026-10-07, `codex/wildbond-ferry-landing`, awaiting review; interiors open | Raised crossings, reachable jetty, moored skiff and sign in all five eras; no transport mechanic |
 | W8 | Pacing pass for areas 5-8 (sim) and tuning | M | Polish | W1 | open | creature-game-design.md pacing method |
 | W9 | **Baby forms and growth (design)**: creatures hatch or are found as babies and grow through more stages (baby, young, adult, elder?), giving more room to raise them; how it meets eggs, evolution levels, caps, and old saves | M | Design | — | proposal written 2026-10-07 (Claude), waiting for Evan | Evan, 2026-10-09; write `docs/proposals/creature-growth.md` first (CREATIVE.md: new system) |
 | W10 | **Baby forms (build)**: the growth stages, baby art from the existing families, ranch care that matters more for babies | L | System+Art | W9 | open | Old saves keep their creatures as they are |
