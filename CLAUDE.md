@@ -35,7 +35,7 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
 
 ## Where we are (update this at the end of each session)
 - **Wildbond** (creature game, the current focus): starters, rival Wren, Thornwood (2-12) → Saltmarsh Coast
-  (12-22, Warden Nerys, Tide Badge) → Emberfall Highlands (22-32, no Warden yet), ranch/breeding, art eras (Pixel,
+  (12-22, Warden Nerys, Tide Badge) → Emberfall Highlands (22-32, Warden Toren, Ember Badge), ranch/breeding, art eras (Pixel,
   16-bit), dialogue scenes with portraits, battle animation, chiptune sound. T11 pacing is done: levels to 100,
   journey length, badge caps, XP share (numbers and measured times in `docs/creature-game-design.md`). Pacing is
   checked with a fast Auto simulation in the browser (call `worldTick(0.1)` in a loop, skipping scenes).
@@ -43,8 +43,8 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
   grass = exploring, walk-in inn/shop/ranch, Wardens and townsfolk stand in the world, Auto walks the grass. Pacing
   measured unchanged. **Next for Claude:** T7b part 2 (route trainers, items, follower), then **T13 era progression**
   (Game Boy → 16-bit → HD-2D → voxel diorama → 3D; VR deferred), then T11b (challenge modes, rematches).
-  ChatGPT has T14 (Wildbond lore bible, docs only) and T15 (Emberfall Warden + badge, data only in 00-data.js;
-  its Warden appears on the Emberfall map automatically at `warden: [20, 6]`).
+  Emberfall now has Warden Toren and the Ember Badge (T15, ChatGPT, merged), so the cap is 45 after three
+  badges and area 4 needs a map and a `req: 'ember'` biome. ChatGPT still has T14 (Wildbond lore bible, docs only).
 - **Realmbound** (classic-MMO idle, flagship): levels 1-40, two dungeons, hunters/pets/mounts, lore bible in
   `docs/lore/realmbound.md`. Frostmere / The Winter Road (30-40, PR #7) is merged; its necropolis dungeon and levels
   41+ wait on the rest of T1 (Claude: specs for 40-60, raids, guild).

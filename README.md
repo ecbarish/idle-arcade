@@ -35,6 +35,9 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-06 (later still)** — Merged ChatGPT's Emberfall Warden (T15): Warden Toren waits above the highland
+  springs and tests your patience; beating him earns the Ember Badge and raises the level cap to 45.
+
 - **2026-10-06 (late night)** — Wildbond walkable world, part 1 (T7b): Larkhaven, Thornwood, the Saltmarsh Coast and
   the Emberfall Highlands are now places you walk around, top-down, with the arrow keys/WASD or by tapping where to go.
   Wild creatures hide in the tall grass. Walk into the inn to rest, the shop for lures and Maren's barn for your
