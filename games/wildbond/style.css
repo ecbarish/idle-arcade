@@ -126,3 +126,10 @@ h4{margin:14px 0 6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase
 /* sound button (dialogue scenes are styled by shared/dialogue.js) */
 .snd{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-weight:700;font-size:13px;color:var(--ink)}
 .snd[aria-pressed="true"]{border-color:var(--leaf);color:var(--leaf-d)}
+
+/* Challenge pennants are static, so reduced-motion players see the same decoration. */
+.pennants{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-bottom:14px}
+.pennant{display:flex;align-items:center;gap:8px;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--card2)}
+.pennant.earned{border-color:var(--leaf)}
+.pennant-art{width:56px;height:66px;flex:none}
+.pennant b{font-family:var(--f-disp);font-weight:600}

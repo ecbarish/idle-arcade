@@ -297,6 +297,26 @@ function wildbondChecks() {
         if(a.some((n,i)=>n!==b[i]))return false;}
       return true;
     }finally{cx=oldCx;PW=oldPW;PH=oldPH;reduceMotion=oldReduce;}
+  // Challenge cosmetics use saved titles, never statistics or a new reward currency.
+  check('A new ranch shows four locked pennants without changing the save', () => {
+    ready();const before=JSON.stringify(S),node=document.createElement('div');node.innerHTML=ranchPennantsHTML();
+    return node.querySelectorAll('[data-earned="false"]').length===4&&node.querySelectorAll('[data-earned="true"]').length===0&&node.textContent.includes('0/4 displayed')&&JSON.stringify(S)===before;
+  });
+  for(const [mode,data] of Object.entries(MODES))check(mode+': only its earned title displays the matching pennant', () => {
+    ready();S.titles=[data.title];const before=JSON.stringify(S),node=document.createElement('div');node.innerHTML=ranchPennantsHTML();
+    return node.querySelectorAll('[data-earned="true"]').length===1&&node.querySelector('[data-earned="true"]').dataset.pennant===mode&&node.textContent.includes(data.title)&&JSON.stringify(S)===before;
+  });
+  check('The real title award refreshes Ranch pennants without waiting for a new day', () => {
+    ready();S.tab='ranch';S.modes={solo:true};S.badges=Object.keys(BADGES);renderTabs(true);
+    if($('#tabbody').querySelector('[data-earned="true"]'))return false;checkTitles();renderTabs(false);
+    return S.titles.includes(MODES.solo.title)&&$('#tabbody').querySelector('[data-earned="true"]').dataset.pennant==='solo'&&$('#tabbody').querySelectorAll('[data-earned="true"]').length===1;
+  });
+  check('Earned pennants persist through loading and do not require the mode to stay active', () => {
+    ready();S.titles=Object.values(MODES).map(m=>m.title);S.modes={};save();reset();load();const node=document.createElement('div');node.innerHTML=ranchPennantsHTML();
+    return node.querySelectorAll('[data-earned="true"]').length===4&&S.titles.length===4;
+  });
+  check('An old save without titles loads locked pennants and unknown titles unlock none', () => {
+    ready();delete S.titles;save();reset();load();if(S.titles.length!==0)return false;S.titles=['A future title'];const node=document.createElement('div');node.innerHTML=ranchPennantsHTML();return node.querySelectorAll('[data-earned="true"]').length===0;
   });
   // T24: exercise the same walking, dialogue and battle paths as the game.
   function finishFight() {

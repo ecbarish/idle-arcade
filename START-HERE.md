@@ -75,6 +75,8 @@ All three browser test pages pass (Wildbond 748, Realmbound 1434, Starfall 48). 
 follow-ups. Shows the next two periods for unlocked routes; preserves the existing deterministic weather and saves.
 **Battle scenery ready for review:** `codex/wildbond-battle-backdrops` carries regional scenery, weather and night
 into battles in 16-bit, HD-2D and Diorama. Pocket and Pixel retain their existing appearance; combat is unchanged.
+**Challenge pennants ready for review:** `codex/wildbond-challenge-pennants` displays four original ranch
+pennants earned from the existing challenge titles. Cosmetics only; old title records work, no new save fields.
 
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
@@ -123,7 +125,7 @@ into battles in 16-bit, HD-2D and Diorama. Pocket and Pixel retain their existin
    Wildbond: drums on four themes, echo, crossfades. A new zone needs a track in `TRACKS` in `17-sound.js`
    (a check fails without one).
 14. **Then:** the guild, Hollow Crown part 2 and the raid (Realmbound); Wildbond areas 5-8 (bands 52-60, 58-64, 62-68,
-   66-72) and the league, contests and races, ranch cosmetics for challenge titles, Modern 3D.
+   66-72) and the league, contests and races, ranch cosmetics for challenge titles (done by Codex 2026-10-07, awaiting review: `codex/wildbond-challenge-pennants`), Modern 3D.
 15. ~~**S3: shared roster and jobs**~~ — done by Claude 2026-10-08 with R1; Herbalism (potions) and Questing added 2026-10-09; **the guild done 2026-10-09** (`js/21-guild.js`; rules in docs/realmbound-40-60.md, "The guild as built"). Next guild ideas: members' requests, a walkable guild hall (S4 world kit), guild members filling raid rosters. Originally: assign members to jobs, cap the
    earnings like rested XP, one return report when you come back. Realmbound's guild uses it first, then Starfall
    Guild's adventurers, Wildbond ranch jobs, and Diamond Career's team. Plan: `docs/research/decisions.md` (the
@@ -185,6 +187,11 @@ a default so work never waits.
   Shared the current weather schedule with predictions, hid locked routes, added live boundary/rollover checks.
 - 2026-10-07 Codex: implemented the S5 regional battle-backdrop follow-up under Evan's lunch-session authorization.
   Shared ambience behind fighters; no save/combat changes. Reduced motion freezes the new scenery. Awaiting review.
+- 2026-10-07 Codex: picked the planned ranch cosmetics while Claude prepares to return. Four original static
+  pennants display automatically from earned challenge titles, no stats or save-format changes. Branch
+  `codex/wildbond-challenge-pennants`, awaiting review; no merge. Tests: Wildbond 627, Realmbound 1434, Starfall 48,
+  saves restored; desktop/phone checked. Combined with all five earlier PRs: Realmbound 1465, Wildbond 769,
+  Starfall 48, sound 21, all pass. Earlier PRs #22–26 are ready for review; S4 remains claimed by Claude.
 
 - 2026-10-09 Claude: merged ChatGPT's T27 (Wildbond area 5, Stillreed Basin, levels 52-60, Warden Olan, Reed Badge,
   Stillwake) and gave the basin its own mist and fireflies. Tests: Wildbond 619, Realmbound 1434, Starfall 48.
