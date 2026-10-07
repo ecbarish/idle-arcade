@@ -76,7 +76,8 @@ module.exports = function scenarios() {
       check(barrows.minLvl===42&&barrows.zone==='barrowfield','Silent Barrows unlocks at 42 in the Barrowfields');
       check(barrows.enc.filter(e=>!e.boss).length===4&&barrows.enc.filter(e=>e.boss).length===3,'Silent Barrows has four packs and three bosses');
       check(barrows.enc.at(-1).final&&barrows.enc.at(-1).name==='The Last Wayward'&&barrows.enc.at(-1).lvl===45,'Last Wayward is the level-45 finale');
-      check(barrows.enc.every(e=>e.lvl>=42&&e.lvl<=45&&(!e.mech||Object.keys(e.mech).every(k=>['wave','surge','enrage'].includes(k)))),'Barrows uses existing encounter mechanics only');
+      check(barrows.enc.every(e=>e.lvl>=42&&e.lvl<=45&&(!e.mech||Object.keys(e.mech).every(k=>['wave','surge','enrage','chill'].includes(k)))),'Barrows uses known encounter mechanics (Grave Chill added in T1-B)');
+      check(barrows.enc.filter(e=>e.boss).every(e=>e.mech&&e.mech.chill>0),'every Barrows boss uses Grave Chill');
       for(const faction of ['concord','wild']){
         const b=rb.newHero('Barrowcheck',faction,faction==='concord'?'human':'grishar','hunter');
         rb.S.chars.push(b);rb.S.cur=b.id;
@@ -168,6 +169,17 @@ module.exports = function scenarios() {
       tw.talents={cruelty:1};check(rb.respecCost()===20000,'resets in a row cost more');
       tw.lvl=30;tw.talents={cruelty:2};check(rb.respecCost()===0,'resets are free below level 40');
       rb.S.chars=rb.S.chars.filter(c=>c!==tw);
+      // T1-B: Grave Chill in the Silent Barrows
+      {const g=rb.newHero('Chillcheck','concord','human','priest');g.lvl=45;g.zone='barrowfield';g.talents={circle:1};rb.S.chars.push(g);rb.S.cur=g.id;rb.boot();
+        g.party=g.npcs.slice(0,4).map(n=>n.id);syncParty();const C=rb.C,boss={name:'Test Wayward',hp:1e6,max:1e6,dmg:1,lvl:45,dots:{},armor:0,mech:{chill:5}};C.mob=boss;
+        C.chill=0;for(const p of C.party){p.chill=0;p.hp=compStats(p.n).hpMax;}C.hp=rb.ST.hpMax;C.chillT=.05;C.chillTick=0;graveChill(boss,.1);
+        check(C.chill===1&&partyAlive().every(p=>p.chill===1),'Grave Chill lays a stack on you and every companion');
+        const hp0=C.hp;C.chillTick=.95;graveChill(boss,.1);check(C.hp<hp0,'Grave Chill hurts every second');
+        const before=C.chill+partyAlive().reduce((s,p)=>s+p.chill,0);C.hp=1;healLowest(10,'Test');
+        check(C.chill+partyAlive().reduce((s,p)=>s+p.chill,0)===before-1,'a heal takes one Grave Chill stack off');
+        C.hp=rb.ST.hpMax;for(let i=0;i<10;i++){C.chillT=0;graveChill(boss,.001);}check(C.chill===5&&partyAlive().every(p=>p.chill===5),'Grave Chill stacks up to five');
+        ABIL.priest.find(a=>a.id==='circle').fn();check(C.chill===0&&partyAlive().every(p=>!p.chill),'Circle of Light clears every stack');
+        C.mob=null;rb.S.chars=rb.S.chars.filter(c=>c!==g);}
       // T21: every generated item category follows the widened name bands.
       check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');
       check(BLUE_PRE.length===17&&new Set(BLUE_PRE).size===17,'rare prefix pool retains seven names and adds ten distinct dungeon names');

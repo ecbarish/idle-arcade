@@ -66,7 +66,7 @@ function hitMob(amount,o){
   if(H().cls==='warrior'&&o.phys&&o.auto)C.res=Math.min(100,C.res+clamp(a/(H().lvl*3+10)*7.5,3,25));
   if(m.hp<=0)onKill();return a;
 }
-function healHero(n,label){const a=Math.round(n*(1+T('heal')/100));C.hp=Math.min(ST.hpMax,C.hp+a);line(`${label} heals you for ${a}.`,'l-heal');fx('+'+a,'#7cf08a','hero');}
+function healHero(n,label){const a=Math.round(n*(1+T('heal')/100));C.hp=Math.min(ST.hpMax,C.hp+a);warmUp('hero');line(`${label} heals you for ${a}.`,'l-heal');fx('+'+a,'#7cf08a','hero');}
 function addDot(id,total,dur,label){if(!C.mob)return;C.mob.dots[id]={per:total/(dur/3),left:Math.round(dur/3),t:3,label};}
 function openWin(id,dur){C.win[id]=dur;C.win[id+'_ai']=macroRank()>=3&&R()<.5;}
 
@@ -212,12 +212,13 @@ function compsAct(h){
     if(s.role==='heal'){p.healT-=h;if(p.healT<=0){p.healT=2.5;healLowest(s.hps*2.5,p.n.name);}}}
 }
 function healLowest(amount,who){
-  const opts=[{k:'hero',pct:C.hp/ST.hpMax}];for(const p of partyAlive())opts.push({k:p,pct:p.hp/compStats(p.n).hpMax});
+  const opts=[{k:'hero',pct:C.hp/ST.hpMax,chill:C.chill||0}];for(const p of partyAlive())opts.push({k:p,pct:p.hp/compStats(p.n).hpMax,chill:p.chill||0});
   const pet=petOf();if(pet&&pet.hp>0)opts.push({k:'pet',pct:pet.hp/petStats(pet).hpMax});
-  opts.sort((a,b)=>a.pct-b.pct);const t=opts[0];if(t.pct>=.98)return;const a=Math.round(amount);
-  if(t.k==='hero'){C.hp=Math.min(ST.hpMax,C.hp+a);fx('+'+a,'#7cf08a','hero');line(`${who} heals you for ${a}.`,'l-heal');}
+  // healers go for the most hurt, counting each Grave Chill stack as 8% missing health
+  opts.sort((a,b)=>(a.pct-.08*(a.chill||0))-(b.pct-.08*(b.chill||0)));const t=opts[0];if(t.pct>=.98&&!t.chill)return;const a=Math.round(amount);
+  if(t.k==='hero'){C.hp=Math.min(ST.hpMax,C.hp+a);warmUp('hero');fx('+'+a,'#7cf08a','hero');line(`${who} heals you for ${a}.`,'l-heal');}
   else if(t.k==='pet'){pet.hp=Math.min(petStats(pet).hpMax,pet.hp+a);fx('+'+a,'#7cf08a','pet');}
-  else{t.k.hp=Math.min(compStats(t.k.n).hpMax,t.k.hp+a);fx('+'+a,'#7cf08a','party');if(R()<.3)line(`${who} heals ${t.k.n.name===who?'themselves':t.k.n.name} for ${a}.`,'l-heal');}
+  else{t.k.hp=Math.min(compStats(t.k.n).hpMax,t.k.hp+a);warmUp(t.k);fx('+'+a,'#7cf08a','party');if(R()<.3)line(`${who} heals ${t.k.n.name===who?'themselves':t.k.n.name} for ${a}.`,'l-heal');}
 }
 function pickTarget(){
   const opts=[],tankUp=hasRole('tank');opts.push({k:'hero',w:(heroRole()==='tank'?(tankUp?2:6)*(1+T('threat')/100):1)*(C.buffs.taunt?3:1)});
@@ -246,6 +247,21 @@ function bossSurge(m){const raw=m.dmg*3;
   for(const p of partyAlive()){if(R()>=.45+.1*affLvl(p.n))hitComp(p,raw*.8);}
   if(C.dodged){line(`You dodge ${dungeonDef().surgeName}.`,'l-sys');fx('Dodged!','#7cf08a','hero');return false;}
   return hitHero(raw,`${dungeonDef().surgeName} slams you`);}
+/* Grave Chill (the Silent Barrows, T1-B): every mech.chill seconds the boss lays one stack on you and every companion
+   (max 5). Each stack costs 1.5% of max health per second. Any heal on someone takes one of their stacks off
+   (healLowest, healHero); Circle of Light clears them all. A party without a healer slowly freezes.
+   Returns true if the cold killed you. */
+const CHILL_MAX=5,CHILL_PCT=.015;
+function graveChill(m,h){
+  C.chillT-=h;if(C.chillT<=0){C.chillT=m.mech.chill*(m.tidal?.7:1);C.chill=Math.min(CHILL_MAX,(C.chill||0)+1);
+    for(const p of partyAlive())p.chill=Math.min(CHILL_MAX,(p.chill||0)+1);
+    line(`${m.name} breathes Grave Chill over the party.`,'l-warn');if((C.chill||0)===1)toast('Grave Chill! Heal it off.');}
+  C.chillTick=(C.chillTick||0)+h;if(C.chillTick<1)return false;C.chillTick-=1;
+  for(const p of partyAlive())if(p.chill){const mx=compStats(p.n).hpMax;p.hp-=mx*CHILL_PCT*p.chill;if(p.hp<=0){p.hp=0;p.dead=true;line(`${p.n.name} freezes and falls.`,'l-hurt');}}
+  if(C.chill){const a=Math.max(1,Math.round(ST.hpMax*CHILL_PCT*C.chill));C.hp-=a;fx('-'+a,'#bfe3ff','hero');if(C.hp<=0){die();return true;}}
+  return false;
+}
+function warmUp(who){if(who==='hero'){if(C.chill)C.chill--;}else if(who&&who.chill)who.chill--;}
 function dodgeNow(){if(!(C.win.dodge>0&&C.surge))return;C.dodged=true;C.win.dodge=0;C.lastInput=C.run;line('You brace and leap clear.','l-sys');}
 function doCombo(manual){
   const p=C.party.find(x=>x.id===C.comboWith&&!x.dead);if(!p||!(C.win.combo>0)||!C.mob)return;C.win.combo=0;if(manual)C.lastInput=C.run;
@@ -284,11 +300,13 @@ function fight(h,mana){
   // companions
   if(C.party.length){compsAct(h);if(!C.mob||C.phase!=='fight')return;}
   // boss mechanics
+  if(!(m.mech&&m.mech.chill))C.chill=0; // Grave Chill only lives in the Silent Barrows' boss fights
   if(m.mech){
     if(m.mech.wave){C.waveT-=h;if(C.waveT<=0){C.waveT=m.mech.wave*(m.tidal?.7:1);if(bossWave(m))return;}}
     if(m.mech.surge&&!C.surge){C.surgeT-=h;if(C.surgeT<=0){C.surgeT=m.mech.surge*(m.tidal?.7:1);C.surge={t:2.5};C.dodged=false;openWin('dodge',2.5);
       line(`${m.name} begins to cast ${dungeonDef().surgeName}!`,'l-warn');toast(`${dungeonDef().surgeName}! Press D to dodge`);if(aiOn()&&R()<aiEff()*.75)C.dodged=true;}}
     if(C.surge){C.surge.t-=h;if(C.surge.t<=0){C.surge=null;C.win.dodge=0;if(bossSurge(m))return;}}
+    if(m.mech.chill&&graveChill(m,h))return;
     if(m.mech.enrage&&!m.enraged&&C.fightT>m.mech.enrage){m.enraged=true;line(`${m.name} becomes enraged!`,'l-warn');toast(`${m.name} is enraged`);}
   }
   // combined abilities with friends

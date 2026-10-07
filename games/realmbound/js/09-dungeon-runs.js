@@ -32,7 +32,8 @@ function spawnDungeon(){
     tidal:d.mods.includes('tidal'),raging:d.mods.includes('raging'),lootN:e.loot||0};
   C.mob.hp=C.mob.max;C.phase='fight';C.fightT=0;C.swing=.4;C.cp=0;C.win={};C.taming=null;C.surge=null;C.guardUsed=false;C.charged=false;
   C.petSwing=.8;C.petCd=(petOf()&&FAMILIES[petOf().family].ab==='charge')?.5:4;
-  if(C.mob.mech){C.waveT=(C.mob.mech.wave||0)*.6;C.surgeT=(C.mob.mech.surge||0)*.7;}
+  if(C.mob.mech){C.waveT=(C.mob.mech.wave||0)*.6;C.surgeT=(C.mob.mech.surge||0)*.7;C.chillT=(C.mob.mech.chill||0)*.8;}
+  C.chill=0;for(const p of C.party)p.chill=0; // Grave Chill never carries over between fights
   if(H().cls==='rogue'&&H().lvl>=4)openWin('opening',3);
   line(`${e.boss?'Boss: ':''}${C.mob.name} (level ${lvl}).`,e.boss?'l-warn':'l-sys');if(e.boss)toast(`Boss: ${e.name}`);
 }

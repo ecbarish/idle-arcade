@@ -155,7 +155,7 @@ const ABIL={
     {id:'shadowform',name:'Shadowform',talent:'shadowform',cd:45,cost:()=>30+lv()*3,desc:'For 15 seconds deal 30% more damage and take 15% less. 45 second cooldown.',ai:()=>C.mob.hp>C.mob.max*.4,fn:()=>{C.buffs.shadowform={t:15};line('You slip into Shadowform.','l-sys');}},
     {id:'circle',name:'Circle of Light',talent:'circle',cd:20,cast:()=>1.5,cost:()=>(60+lv()*5)*healCostMult(),desc:'Heal you, your pet and your whole party for 35% of their health. 20 second cooldown.',
       ai:()=>C.hp<ST.hpMax*.6||partyAlive().filter(p=>p.hp<compStats(p.n).hpMax*.6).length>=2,
-      fn:()=>{const k=.35*(1+T('heal')/100);C.hp=Math.min(ST.hpMax,C.hp+ST.hpMax*k);for(const p of partyAlive())p.hp=Math.min(compStats(p.n).hpMax,p.hp+compStats(p.n).hpMax*k);
+      fn:()=>{const k=.35*(1+T('heal')/100);C.hp=Math.min(ST.hpMax,C.hp+ST.hpMax*k);C.chill=0;for(const p of C.party)p.chill=0;for(const p of partyAlive())p.hp=Math.min(compStats(p.n).hpMax,p.hp+compStats(p.n).hpMax*k);
         const pet=petOf();if(pet&&pet.hp>0)pet.hp=Math.min(petStats(pet).hpMax,pet.hp+petStats(pet).hpMax*k);fx('+heal','#7cf08a','hero');line('A Circle of Light washes over everyone.','l-heal');}},
   ],
   hunter:[

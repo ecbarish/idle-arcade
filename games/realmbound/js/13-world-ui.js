@@ -45,7 +45,7 @@ function updateWorld(){
   if(zbEl.dataset.k!==zk){zbEl.innerHTML=d?'<button class="btn sm alt" data-act="leavedun">Leave dungeon</button>':zb;zbEl.dataset.k=zk;}
   // player frame
   $('#pName').textContent=h.name;$('#pLvl').textContent=h.lvl;$('#pPort').firstChild.textContent=h.name[0];$('#pPort').style.borderColor=K.col;
-  $('#pHp').style.width=(Math.max(0,C.hp)/ST.hpMax*100)+'%';$('#pHpT').textContent=`${Math.max(0,Math.ceil(C.hp))} / ${ST.hpMax}`;
+  $('#pHp').style.width=(Math.max(0,C.hp)/ST.hpMax*100)+'%';$('#pHpT').textContent=`${Math.max(0,Math.ceil(C.hp))} / ${ST.hpMax}${C.chill?' · Grave Chill '+C.chill:''}`;
   const rb=$('#pResBar');rb.className='bar b-'+K.res;$('#pRes').style.width=(C.res/ST.resMax*100)+'%';$('#pResT').textContent=`${Math.floor(C.res)} / ${ST.resMax}`;
   const cps=$('#pCps');cps.hidden=h.cls!=='rogue';if(h.cls==='rogue')[...cps.children].forEach((b,i)=>b.classList.toggle('on',i<C.cp));
   // target frame
@@ -69,7 +69,7 @@ function updateWorld(){
   const pfr=$('#partyframes');pfr.hidden=!C.party.length;
   if(C.party.length){const pk=C.party.map(p=>p.id).join(',');if(pfr.dataset.k!==pk){pfr.dataset.k=pk;
       pfr.innerHTML=C.party.map(p=>`<div class="pm" id="pm-${p.id}"><div class="pn"><span style="color:${CLASSES[p.n.cls].col}">${p.n.name}</span><span class="role">${ROLE_NAME[ROLE_OF[p.n.cls]]} · ${npcLvl(p.n)}</span></div><div class="bar b-hp"><i id="pmh-${p.id}"></i><span id="pmt-${p.id}"></span></div></div>`).join('');}
-    for(const p of C.party){const mx=compStats(p.n).hpMax;$('#pm-'+p.id).classList.toggle('dead',p.dead);$('#pmh-'+p.id).style.width=(p.hp/mx*100)+'%';$('#pmt-'+p.id).textContent=p.dead?'Fallen':`${Math.ceil(p.hp)} / ${mx}`;}}
+    for(const p of C.party){const mx=compStats(p.n).hpMax;$('#pm-'+p.id).classList.toggle('dead',p.dead);$('#pmh-'+p.id).style.width=(p.hp/mx*100)+'%';$('#pmt-'+p.id).textContent=p.dead?'Fallen':`${Math.ceil(p.hp)} / ${mx}${p.chill?' · Chill '+p.chill:''}`;}}
   // someone you meet on the road
   const ec=$('#enccard'),e=C.enc,en=e&&npcOf(e.id);ec.hidden=!en;
   if(en){const ek=e.id+e.kind+e.waved+h.party.length;if(ec.dataset.k!==ek){ec.dataset.k=ek;const K2=CLASSES[en.cls];
