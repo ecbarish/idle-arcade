@@ -48,6 +48,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
   world kit, and Wildbond's HD-2D view now draws through the same engine.
 - 2026-10-07: Wildbond Hollowecho Hills (58–64): nine species, Wren's listening rematch, Undertone and Warden Senna's Echo Badge (cap 65), a winding map beyond Stillreed with two trainers, mist and an original tune.
 - 2026-10-07: Wildbond's Journal shows current weather and the next two periods for unlocked routes after the Tide Badge, with notes on which creatures favor each condition.
+- 2026-10-07: Wildbond battles in 16-bit and later styles keep their region's scenery, weather and night: woods, coast water, highland stone, cloud peaks and basin reeds. Combat and earlier art styles are unchanged.
 
 - **2026-10-07** — Wildbond area 5: Stillreed Basin (52–60), beyond Cloudglass Pass. Nine new species include
   Reedlet's evolution into Ferrycrest and the guardian Stillwake. Wren helps free a ferry rope before the rematch;

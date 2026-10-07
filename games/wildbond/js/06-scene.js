@@ -14,7 +14,7 @@ function frame(ms) {
   cx.save();
   if (B && B.shake > 0 && mo) cx.translate((Math.random() - 0.5) * p * 3, (Math.random() - 0.5) * p * 2);
   if (S.started && !B && S.pos && MAPS[S.pos.map]) { drawWorld(t, A); cx.restore(); return; }
-  const gy = A.backdrop(cx, PW, PH, BIOMES[S.biome], t);
+  const gy = B && A.light ? drawBattleBackdrop(t) : A.backdrop(cx, PW, PH, BIOMES[S.biome], t);
   if (!S.started) { cx.restore(); return; }
   if (B) {
     const ent = mo ? Math.max(0, 1 - B.t / 0.5) : 0;
@@ -44,6 +44,46 @@ function frame(ms) {
     S.team.forEach((c, i) => A.creature(cx, PW * (0.32 + i * 0.13), gy, p, sp(c), true, c.hp > 0 ? t + i : 0, { alpha: c.hp > 0 ? 1 : 0.35 }));
   }
   cx.restore();
+}
+/* Regional battle scenery in light-enabled eras. The Pocket and Pixel scenes keep their original look.
+   Weather and night come from the walking clock; this paints behind creatures and never changes a battle. */
+const BATTLE_AMB = Ambience.create({ reduce: () => reduceMotion });
+const BATTLE_PLACES = {
+  thornwood: { far: 'oaks', near: 'pines', leaves: .25 },
+  saltmarsh: { far: 'dunes', near: 'stones', water: true },
+  emberfall: { far: 'mesas', near: 'stones', embers: .3 },
+  cloudglass: { far: 'peaks', near: 'stones', fog: .45, snow: true },
+  stillreed: { far: 'oaks', near: 'reeds', water: true, fog: .35 }
+};
+function drawBattleBackdrop(t) {
+  const b = BIOMES[S.biome], place = BATTLE_PLACES[S.biome] || { far: 'dunes', near: 'stones' };
+  const night = darkness(), weather = weatherNow(), time = reduceMotion ? 0 : t;
+  const px = Math.max(2, Math.round(PH / 160)), gy = PH * .8;
+  cx.save();
+  BATTLE_AMB.sky(cx, PW, PH, time, { top: b.sky[0], bottom: b.sky[1], h: gy, night, sun: true,
+    storm: weather === 'rain' ? .45 : 0, clouds: { n: 4, speed: 3, alpha: .6 }, px });
+  BATTLE_AMB.far(cx, PW, PH, time, { night, px, wind: .15, layers: [
+    { kind: place.far, col: tint(b.hill, b.sky[1], .35), base: .68, h: .24, seed: 11, snow: place.snow },
+    { kind: place.near, col: b.hill, base: .76, h: .12, seed: 23 }
+  ] });
+  if (place.water) {
+    cx.fillStyle = tint('#559baf', '#15233c', night * .55); cx.fillRect(0, PH * .7, PW, PH * .1);
+    cx.fillStyle = tint('#a7c8cf', '#35435b', night * .55);
+    for (let i = 0; i < 12; i++) {
+      const x = ((i * PW / 9 + time * 5) % (PW + 50)) - 30, y = PH * (.715 + (i % 3) * .025);
+      cx.fillRect(Math.round(x / px) * px, Math.round(y / px) * px, px * (4 + i % 4), px);
+    }
+  }
+  cx.fillStyle = tint(b.ground, '#152036', night * .45); cx.fillRect(0, gy, PW, PH - gy);
+  cx.fillStyle = tint(b.ground, b.hill, .35);
+  for (let i = 0; i < 18; i++) cx.fillRect(Math.round(PW * (i + .3) / 18), gy + px * (3 + i % 5 * 2), px * 3, px);
+  BATTLE_AMB.weather(cx, PW, PH, time, { px, ground: gy, wind: .15,
+    rain: weather === 'rain' ? .55 : 0, fog: weather === 'mist' ? Math.max(.8, place.fog || 0) : place.fog || 0,
+    ash: weather === 'ash' ? .7 : 0, embers: place.embers || 0,
+    leaves: weather === 'clear' ? place.leaves || 0 : 0, fireflies: night > .3 && weather !== 'rain' ? .35 : 0 });
+  // A subdued dusk glow stays behind the fighters, health bars and reaction prompt.
+  if (night > 0) BATTLE_AMB.lights(cx, PW, PH, time, { dark: night, max: .16, tint: '#121838', lights: [] });
+  cx.restore(); return gy;
 }
 /* ---- the walkable world, seen from above, the camera following your tamer ---- */
 const PALS = {};

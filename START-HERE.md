@@ -73,6 +73,8 @@ rematch, Undertone and Senna's Echo Badge (cap 65), a winding map, trainers, cle
 All three browser test pages pass (Wildbond 748, Realmbound 1434, Starfall 48). Claude's cave ambience remains separate.
 **Weather forecast ready for review:** `codex/wildbond-weather-forecast` adds the Journal forecast from the S5
 follow-ups. Shows the next two periods for unlocked routes; preserves the existing deterministic weather and saves.
+**Battle scenery ready for review:** `codex/wildbond-battle-backdrops` carries regional scenery, weather and night
+into battles in 16-bit, HD-2D and Diorama. Pocket and Pixel retain their existing appearance; combat is unchanged.
 
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
@@ -136,6 +138,7 @@ follow-ups. Shows the next two periods for unlocked routes; preserves the existi
    sets. Plan: `docs/realmbound-40-60.md` ("Raids") and decision 5 in `docs/research/decisions.md`. Gate it on the
    Hollow Key (T23's last quest) but build it so it can be tested before T23 lands.
 19. ~~**S5: shared ambience kit**~~ — done by Claude 2026-10-09 (`shared/ambience.js`; all three games use it; layout in HANDOFF.md). Journal weather forecast: done by Codex 2026-10-07, awaiting PR review (`codex/wildbond-weather-forecast`). Ideas for later: Wildbond battle backdrops and rain sounds. Evan asked for it after seeing a living pixel-art
+19. ~~**S5: shared ambience kit**~~ — done by Claude 2026-10-09 (`shared/ambience.js`; all three games use it; layout in HANDOFF.md). Battle backdrops: done by Codex 2026-10-07, awaiting PR review (`codex/wildbond-battle-backdrops`). Ideas for later: a weather forecast in the Journal and rain sounds. Evan asked for it after seeing a living pixel-art
    scene (a floating island at night with rain, lightning, smoke, flickering windows, a campfire, fireflies, a waterfall,
    swaying trees, drifting clouds, a moving character; "the lightning and other moving elements made it most
    impressive"). `shared/ambience.js`, drawn on the games' existing canvases, quality first, used by every game:
@@ -180,6 +183,8 @@ a default so work never waits.
   Starfall 48 pass with saves restored. Senna/Echo/Undertone are canon; desktop and phone map verified.
 - 2026-10-07 Codex: used Evan's lunch-session development authorization for the S5 Journal weather forecast; no merge.
   Shared the current weather schedule with predictions, hid locked routes, added live boundary/rollover checks.
+- 2026-10-07 Codex: implemented the S5 regional battle-backdrop follow-up under Evan's lunch-session authorization.
+  Shared ambience behind fighters; no save/combat changes. Reduced motion freezes the new scenery. Awaiting review.
 
 - 2026-10-09 Claude: merged ChatGPT's T27 (Wildbond area 5, Stillreed Basin, levels 52-60, Warden Olan, Reed Badge,
   Stillwake) and gave the basin its own mist and fireflies. Tests: Wildbond 619, Realmbound 1434, Starfall 48.

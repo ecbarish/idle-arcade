@@ -277,6 +277,26 @@ function wildbondChecks() {
   check('Five-badge saves preserve progress; Hollowecho saves reload the Echo Badge', () => {
     ready();S.badges=[...badges,'reed'];S.story.warden5=true;save();load();if(levelCap()!==60||!S.story.warden5||S.badges.length!==5)return false;
     S.badges.push('echo');wb.placeAt('hollowecho',27,9,'right');S.items={he1:true};S.beaten={veslin:true};save();reset();load();ensurePos();return S.pos.map==='hollowecho'&&S.pos.x===27&&S.biome==='hollowecho'&&levelCap()===65&&S.items.he1&&S.beaten.veslin;
+  // Living battle backdrops: real canvas calls across routes, eras, weather and reduced motion.
+  check('Battle scenery draws each route and weather without changing the save or battle', () => {
+    ready();S.badges=Object.keys(BADGES);const canvas=document.createElement('canvas');canvas.width=320;canvas.height=180;
+    const oldCx=cx,oldPW=PW,oldPH=PH;try{cx=canvas.getContext('2d');PW=320;PH=180;
+      for(const id of Object.keys(BIOMES)){
+        wb.placeAt(id);startBattle('wild',[wb.newCreature('ripplet',2)]);
+        for(const day of [1,3,6])for(const part of [0,.5,.8]){S.day=day;S.ranchT=part*DAY_SECONDS;const before=JSON.stringify({S,B});
+          if(drawBattleBackdrop(12)!==144||JSON.stringify({S,B})!==before)return false;}
+        B=null;
+      }return true;
+    }finally{cx=oldCx;PW=oldPW;PH=oldPH;B=null;}
+  });
+  check('Reduced-motion battle backgrounds stay identical at different animation times', () => {
+    ready();S.badges=Object.keys(BADGES);const canvas=document.createElement('canvas');canvas.width=320;canvas.height=180;
+    const oldCx=cx,oldPW=PW,oldPH=PH,oldReduce=reduceMotion;try{cx=canvas.getContext('2d');PW=320;PH=180;reduceMotion=true;
+      for(const id of Object.keys(BIOMES)){wb.placeAt(id);S.day=3;S.ranchT=.8*DAY_SECONDS;drawBattleBackdrop(1);
+        const a=Array.from(cx.getImageData(0,0,320,180).data);drawBattleBackdrop(90);const b=cx.getImageData(0,0,320,180).data;
+        if(a.some((n,i)=>n!==b[i]))return false;}
+      return true;
+    }finally{cx=oldCx;PW=oldPW;PH=oldPH;reduceMotion=oldReduce;}
   });
   // T24: exercise the same walking, dialogue and battle paths as the game.
   function finishFight() {
