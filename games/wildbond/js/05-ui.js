@@ -71,8 +71,9 @@ const TABS = {
     build: () => { const ids = Object.keys(SPECIES); return `<h3>Wilddex</h3><p class="sub">${Object.keys(S.caught).length} caught · ${Object.keys(S.seen).length} seen · ${ids.length} known in this region.</p><div class="dex">` +
       ids.map(id => { const s = SPECIES[id], seen = S.seen[id], got = S.caught[id];
         return `<div class="dx ${got ? '' : 'faded'}"><canvas class="pic sm" width="56" height="44" data-sp="${id}" data-seen="${seen ? 1 : 0}"></canvas><div><b>${seen ? s.name : '???'}</b> ${seen ? elChip(s.el) : ''}<div class="meta">${got ? s.dex : seen ? 'Seen, not caught.' : 'Not yet seen.'}</div></div></div>`; }).join('') + '</div>'; } },
-  journal: { key: () => S.log.length + S.era + S.journey + S.capMode + S.xpShare + !!B + S.badges.length,
+  journal: { key: () => S.log.length + S.era + S.journey + S.capMode + S.xpShare + !!B + S.badges.length + ':' + (S.day || 1) + ':' + Math.floor(dayPart() * 3) + ':' + (S.pos && S.pos.map),
     build: () => `<h3>Journal</h3><div class="stats"><div>Battles <b>${S.stats.battles}</b></div><div>Wins <b>${S.stats.wins}</b></div><div>Caught <b>${S.stats.caught}</b></div><div>Played <b>${fmtTime(S.stats.play)}</b></div></div>
+      ${forecastHTML()}
       <h4>Larkhaven inn: your journey</h4><p class="sub">Choose how long the road is. You can change these any time you're not in a battle.${S.auto ? ' Auto-explore earns a little less XP than exploring yourself.' : ''}</p>
       ${settingRow('journey', Object.keys(JOURNEY).map(k => [k, JOURNEY[k].name, JOURNEY[k].desc]), S.journey)}
       <p class="sub" style="margin-top:10px">Badge level cap: right now your creatures can reach level <b>${levelCap()}</b>. Each badge raises it: by 10 for the first four, then by 5, up to 75 with all eight; the post-game goes on to 100.</p>
@@ -84,6 +85,17 @@ const TABS = {
         return `<button class="era ${S.era === e.id ? 'cur' : ''}" data-act="era" data-arg="${e.id}" ${on ? '' : 'disabled'}><b>${e.name}</b><span>${on ? (S.era === e.id ? 'In use' : 'Use this style') : e.soon ? `Coming soon · ${e.unlock}` : e.unlock}</span></button>`; }).join('')}</div>
       <h4>Story so far</h4><div class="logl">${S.log.slice(0, 20).map(m => `<div>${m}</div>`).join('')}</div>` }
 };
+/* Weather forecasts use the same three periods per ranch day as the walking scene. */
+function forecastHTML() {
+  if (!S.badges.includes('tide')) return '<h4>Trail forecast</h4><p class="sub">Earn the Tide Badge to read the changing weather on your routes.</p>';
+  const names = { clear: 'Clear', rain: 'Rain', mist: 'Mist', ash: 'Falling ash' };
+  return '<h4>Trail forecast</h4><p class="sub">Weather changes three times each ranch day. Now, the next period, then the following one. Rain favors Tide, mist favors Shade and Gale, and ash favors Ember; these change wild encounters, not battle damage.</p><div class="eras">' +
+    Object.keys(BIOMES).filter(biomeOpen).map(id => {
+      const current = S.pos && MAPS[S.pos.map].biome === id;
+      return '<div class="era' + (current ? ' cur' : '') + '"><b>' + BIOMES[id].name + (current ? ' · here' : '') + '</b>' +
+        weatherForecast(id).map((f, i) => '<span>' + ['Now', 'Next', 'Then'][i] + ': <strong>' + names[f.weather] + '</strong> · day ' + f.day + ', period ' + (f.segment + 1) + '</span>').join('') + '</div>';
+    }).join('') + '</div>';
+}
 /* a row of choice cards for a setting: opts = [[value, name, description]] */
 function settingRow(kind, opts, cur) {
   return `<div class="eras">${opts.map(([v, n, d]) => `<button class="era ${cur === v ? 'cur' : ''}" data-act="set" data-arg="${kind}:${v}" aria-pressed="${cur === v}" ${B ? 'disabled' : ''}><b>${n}</b><span>${d}</span></button>`).join('')}</div>`;

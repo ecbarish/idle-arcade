@@ -66,10 +66,22 @@ function isNight() { return darkness() >= 1; }
 const WEATHER = { thornwood: ['clear', 'clear', 'rain'], saltmarsh: ['clear', 'rain', 'mist'], emberfall: ['clear', 'clear', 'ash'], stillreed: ['rain', 'clear', 'rain', 'mist'], hollowecho: ['clear', 'mist', 'clear'] };
 const WEATHER_FX = { rain: { Tide: 2, Ember: 0.5 }, mist: { Shade: 1.5, Gale: 1.5 }, ash: { Ember: 1.6, Gale: 0.6 } };
 const WEATHER_NAME = { rain: 'Rain: Tide creatures are out.', mist: 'Mist: Shade and Gale creatures drift out of it.', ash: 'Falling ash: Ember creatures love it.' };
+/* One schedule serves both the scene and Journal; reading it never advances the ranch clock. */
+function weatherAt(biome, day, segment) {
+  const list = WEATHER[biome] || ['clear', 'mist'], h = (day * 7 + segment * 13 + biome.length * 5) % 97;
+  return list[h % list.length];
+}
 function weatherNow() {
   if (!S.badges.includes('tide') || !S.pos || !curMap().biome) return 'clear';
-  const list = WEATHER[S.biome] || ['clear', 'mist'], seg = Math.floor(dayPart() * 3), h = ((S.day || 1) * 7 + seg * 13 + S.biome.length * 5) % 97;
-  return list[h % list.length];
+  return weatherAt(S.biome, S.day || 1, Math.floor(dayPart() * 3));
+}
+function weatherForecast(biome) {
+  if (!S.badges.includes('tide') || !BIOMES[biome] || !biomeOpen(biome)) return [];
+  const day = S.day || 1, segment = Math.floor(dayPart() * 3);
+  return [0, 1, 2].map(offset => {
+    const next = segment + offset, d = day + Math.floor(next / 3), part = next % 3;
+    return { day: d, segment: part, weather: weatherAt(biome, d, part) };
+  });
 }
 /* Visible wild creatures (arrive with the Tide Badge): a few wander the tall grass. Walk into one to battle it;
    they're a little more likely to be rare than what the grass turns up. Finds in the grass still happen as before. */
