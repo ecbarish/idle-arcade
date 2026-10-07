@@ -34,7 +34,7 @@ h1{font-family:var(--f-head);font-weight:400;font-size:clamp(48px,9vw,96px);line
 .note{color:var(--muted);font-size:15px}
 h2{font-family:var(--f-head);font-weight:400;font-size:clamp(28px,4vw,38px);color:var(--gold);margin:0 0 4px}
 .sub{color:var(--muted);margin:0 0 16px;max-width:60ch}
-.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:14px}
 .feat{background:var(--stone);border:1px solid var(--bronze-d);border-radius:10px;padding:16px 18px;min-width:0}
 .feat h3{margin:0 0 6px;font-size:19px;font-weight:800}
 .feat p{margin:0;color:#d5c9ac;font-size:16px}
@@ -59,7 +59,7 @@ footer{color:var(--muted);font-size:14px;border-top:1px solid var(--bronze-d);pa
     <div>
       <div class="kicker">IDLE ARCADE PRESENTS</div>
       <h1>Realmbound</h1>
-      <p class="lede">The classic MMO you remember, rebuilt as a game you can play at your desk. Quest, tame, ride and raid your way up, playing it yourself when you have a minute and letting it run when you don't.</p>
+      <p class="lede">A classic-MMO adventure you can play at your desk. Quest, tame, ride and explore dungeons, playing it yourself when you have a minute and letting it run when you don't.</p>
     </div>
     <div class="scene"><canvas id="scene" aria-label="A hunter riding a wolf with her party, facing a dungeon boss"></canvas></div>
     <div class="cta">
@@ -71,15 +71,17 @@ footer{color:var(--muted);font-size:14px;border-top:1px solid var(--bronze-d);pa
 
   <section>
     <h2>What's in it today</h2>
-    <p class="sub">Two factions, five classes, three zones and two dungeons, levels 1 to 30.</p>
+    <p class="sub">Two factions, five classes, five zones across the world and two dungeons, levels 1 to 40.</p>
     <div class="feats">
       <div class="feat"><h3>Play it, or let it play</h3><p>Flip between Focus and Auto any time. Pressing your abilities yourself always pays better: you catch openings, dodge boss attacks and earn bonus XP. Auto keeps you leveling while you work.</p></div>
-      <div class="feat"><h3>Automation you earn</h3><p>No shop, ever. Loot by hand 60 times and AutoLoot installs itself. Press your rotation enough and the Rotation Macro learns it. Every helper is earned by doing the chore first.</p></div>
-      <div class="feat"><h3>Tame anything wild</h3><p>Hunters tame beasts their level or lower, then fight together until they're bonded. Every wild beast rolls a rarity:</p>
+      <div class="feat"><h3>Automation you earn</h3><p>Helpers unlock through play. Loot by hand 60 times to earn AutoLoot. Use your abilities to earn the Rotation Macro. Each addon takes a chore off your hands because you've done it yourself.</p></div>
+      <div class="feat"><h3>Tame wild beasts</h3><p>Hunters tame beasts their level or lower, then fight together until they're bonded. Wild beasts come in rarities:</p>
         <div class="rar"><span style="color:#d8d8d8">Common</span><span style="color:var(--q2)">Uncommon</span><span style="color:var(--q3)">Rare</span><span style="color:var(--q4)">Epic</span><span style="color:var(--q5)">Legendary</span></div></div>
       <div class="feat"><h3>Mounts that get better</h3><p>Save up for your first horse or wolf, or teach your bonded pet to carry you. Every mount trains as you ride it, from Green all the way to Champion.</p></div>
       <div class="feat"><h3>People who remember you</h3><p>Named adventurers wander the world beside you, each with their own personality. Help them, group up, share loot. Friends unlock combined attacks mid-fight.</p></div>
       <div class="feat"><h3>Dungeons that never end</h3><p>Gather five, learn the bosses, dodge the big hits. Every clear unlocks a harder Heroic tier with random twists and better loot. There is no top.</p></div>
+      <div class="feat"><h3>The Winter Road</h3><p>Continue into Frostmere for levels 30–40. Take ten quests from the people of Lanternrest Lodge or Whitebough Hearth, face ice trolls, and seek Hushfang, a legendary wolf elite.</p></div>
+      <div class="feat"><h3>A world with a voice</h3><p>Each zone has its own lore, and quest givers answer in their own words when you turn in their quests. Meet the people behind the work, from your faction's first outpost to the snowbound highlands.</p></div>
     </div>
   </section>
 
@@ -87,12 +89,10 @@ footer{color:var(--muted);font-size:14px;border-top:1px solid var(--bronze-d);pa
     <h2>Where it's headed</h2>
     <p class="sub">Built a layer at a time. This is the plan.</p>
     <div class="road">
-      <div class="step now"><b>Now: levels 1–30</b><span>Quests, pets, mounts, companions, two dungeons with endless Heroic tiers.</span></div>
-      <div class="step"><b>To level 60</b><span>New zones, more classes, talent trees for every role.</span></div>
-      <div class="step"><b>Raids and your guild</b><span>Recruit a roster of 40, earn DKP, and take down raid bosses together.</span></div>
-      <div class="step"><b>Faction battlegrounds</b><span>Concord against Wildclans.</span></div>
-      <div class="step"><b>Hardcore seasons</b><span>Permadeath realms with a new rule set each season.</span></div>
-      <div class="step"><b>Alts and Legacy</b><span>Every hero you finish makes the next one stronger.</span></div>
+      <div class="step now"><b>Now: levels 1–40</b><span>Frostmere, voiced quests, pets, mounts, companions and two dungeons with endless Heroic tiers.</span></div>
+      <div class="step"><b>Onward to level 60</b><span>More progression and content after the next design pass.</span></div>
+      <div class="step"><b>Raids and your guild</b><span>Planned group adventures and a guild to build. These systems are still being designed.</span></div>
+      <div class="step"><b>Faction battlegrounds</b><span>A later plan for Concord against Wildclans.</span></div>
     </div>
   </section>
 
@@ -102,7 +102,7 @@ footer{color:var(--muted);font-size:14px;border-top:1px solid var(--bronze-d);pa
     <div class="games">
       <div class="game"><b>Primordial</b><span class="pill" style="color:var(--q2)">Playable</span><span>Evolve from a single cell. Mutation drafts, extinctions, endless progress.</span></div>
       <div class="game"><b>Starfall Guild</b><span class="pill" style="color:var(--q3)">Prototype</span><span>Run an anime adventurer guild, Kairosoft style.</span></div>
-      <div class="game"><b>Creature game</b><span class="pill" style="color:var(--muted)">Planned</span><span>Catch, raise, breed and race creatures, from common to mythical hybrids.</span></div>
+      <div class="game"><b><a href="promo-wildbond.html">Wildbond</a></b><span class="pill" style="color:var(--q3)">Early access</span><span>Walk the world with a creature partner. Catch, raise, breed and battle; earn badges and watch the world change.</span></div>
       <div class="game"><b>Diamond Career</b><span class="pill" style="color:var(--muted)">Planned</span><span>Create a baseball player, earn your contract, run the club.</span></div>
       <div class="game"><b>Otherworld</b><span class="pill" style="color:var(--muted)">Planned</span><span>Reborn in another world. Each life is a new run.</span></div>
     </div>
@@ -118,7 +118,7 @@ footer{color:var(--muted);font-size:14px;border-top:1px solid var(--bronze-d);pa
 const cv=document.getElementById('scene'),cx=cv.getContext('2d');let W=0,H=0;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function size(){const r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=Math.round(W*d);cv.height=Math.round(H*d);cx.setTransform(d,0,0,d,0,0);cx.imageSmoothingEnabled=false;}
-size();addEventListener('resize',size);
+size();addEventListener('resize',()=>{size();if(reduce)requestAnimationFrame(frame);});
 function person(x,y,p,skin,hair,col,weapon,t){const q=(a,b,w,h,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(x+a*p),Math.round(y+b*p),Math.ceil(w*p),Math.ceil(h*p));};const bob=!reduce&&Math.sin(t*6)>0?1:0;
   q(2,10,1,3,'#2b2b3a');q(5,10,1,3,'#2b2b3a');q(1,5-bob*.2,6,5,col);q(0,6,1,3,col);q(7,6,1,3,col);q(1,1,6,4,skin);q(2,3,1,1,'#111');q(5,3,1,1,'#111');q(1,0,6,1,hair);q(0,1,1,2,hair);q(7,1,1,2,hair);
   if(weapon==='bow'){q(9,2,1,6,'#8a5a2b');q(8,2,1,6,'#e8e4d4');}else if(weapon==='staff'){q(8,-1,1,11,'#8a5a2b');q(7,-2,3,2,'#69ccf0');}else if(weapon==='shield'){q(-1,5,2,4,'#9aa5b5');q(8,2,1,6,'#dfe6ee');}else q(8,2,1,6,'#dfe6ee');}

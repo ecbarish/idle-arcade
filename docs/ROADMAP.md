@@ -74,7 +74,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T15: Emberfall Warden and badge, data only** (ChatGPT): see the T15 section below.
 - [x] **T16: Wildbond browser checks** (ChatGPT, tests only): see the T16 section below.
 - [ ] **T17: Wildbond area 4, Cloudglass Pass** (ChatGPT, data + map): see the T17 section below.
-- [ ] **T19: Promo pages for friends** (ChatGPT, pages only): see the T19 section below.
+- [x] **T19: Promo pages for friends** (ChatGPT, pages only): see the T19 section below.
 
 ### T19: Promo pages for friends (pages only)
 `promo.html` (linked from the hub) is a "game box back cover" for Realmbound, but it's out of date: it lists Wildbond
