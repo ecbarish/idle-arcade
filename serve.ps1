@@ -1,7 +1,7 @@
 # Local test server for the arcade: serves this folder at http://localhost:8765/
 # Run: powershell -NoProfile -ExecutionPolicy Bypass -File serve.ps1
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
-$types = @{ '.html'='text/html; charset=utf-8'; '.js'='text/javascript; charset=utf-8'; '.css'='text/css; charset=utf-8'; '.json'='application/json'; '.png'='image/png'; '.svg'='image/svg+xml' }
+$types = @{ '.html'='text/html; charset=utf-8'; '.js'='text/javascript; charset=utf-8'; '.css'='text/css; charset=utf-8'; '.json'='application/json'; '.webmanifest'='application/manifest+json; charset=utf-8'; '.png'='image/png'; '.svg'='image/svg+xml' }
 $l = New-Object System.Net.HttpListener
 $l.Prefixes.Add('http://localhost:8765/')
 $l.Start()
