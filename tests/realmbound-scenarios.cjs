@@ -139,5 +139,34 @@ module.exports = function scenarios() {
         check(old.dun.id==='barrows'&&old.dun.mods.length===1,'Barrows earned Heroic uses existing modifiers: '+faction);
         old.dun=null;rb.boot();rb.save();
       }
+      // T1-A: two talent trees, roles from your build, capstones, respec
+      for(const [cls,trees] of Object.entries(rb.TALENTS)){
+        check(trees.length===2,'two talent trees: '+cls);
+        trees.forEach(tr=>{const cap=tr.list.filter(t=>t.req===25),ranks=tr.list.filter(t=>t.req!==25).reduce((s,t)=>s+t.max,0);
+          check(ranks===25&&cap.length===1&&cap[0].max===1,'25 ranks and one capstone: '+cls+' '+tr.tree);});
+        const ids=rb.TALENT_LIST[cls].map(t=>t.id);check(new Set(ids).size===ids.length,'talent ids unique: '+cls);
+      }
+      check(Math.max(0,60-9)<2*26,'51 points at level 60 cannot reach both capstones');
+      const tw=rb.newHero('Treecheck','concord','human','warrior');tw.lvl=45;rb.S.chars.push(tw);rb.S.cur=tw.id;rb.boot();
+      check(rb.talentPoints()===36,'level 45 has 36 talent points to spend');
+      check(rb.heroRole()==='tank','a warrior with no talents still tanks by default');
+      tw.talents={cruelty:5,wmastery:3};rb.boot();check(rb.heroRole()==='dps','an Arms warrior deals damage in groups');
+      tw.talents={cruelty:2,defiance:5,shieldspec:3};rb.boot();check(rb.heroRole()==='tank','a Protection warrior tanks');
+      const learn=id=>{const b=document.createElement('button');b.dataset.act='talent';b.dataset.arg=id;document.body.appendChild(b);b.click();b.remove();};
+      tw.talents={};rb.boot();learn('shieldwall');check(!tw.talents.shieldwall,'a capstone needs 25 points in its tree');
+      learn('defiance');check(tw.talents.defiance===1,'second-tree talents can be learned');
+      tw.talents={defiance:5,shieldspec:5,anticipation:5,toughened:5,shieldslam:1,impbulwark:4};rb.boot();learn('shieldwall');check(tw.talents.shieldwall===1,'capstone learnable at 25 points in its tree');
+      check(rb.bar().some(a=>a.id==='shieldwall')&&rb.bar().some(a=>a.id==='shieldslam')&&!rb.bar().some(a=>a.id==='mortal'),'the bar shows learned talent abilities only');
+      for(const [cls,trees] of Object.entries(rb.TALENTS)){const n=rb.newHero('Barcheck','concord','human',cls);n.lvl=60;rb.S.chars.push(n);rb.S.cur=n.id;rb.boot();
+        const most=rb.bar().length+trees.flatMap(tr=>tr.list.filter(t=>t.key==='cap'&&t.req<25)).length+1;rb.S.chars=rb.S.chars.filter(c=>c!==n);
+        check(most<=9,'every learnable ability fits keys 1-9: '+cls);}
+      rb.S.cur=tw.id;rb.boot();
+      tw.talents={};rb.boot();const hp0=rb.ST.hpMax;tw.talents={toughened:5};rb.boot();check(rb.ST.hpMax>hp0,'Toughened raises maximum health');
+      tw.money=0;tw.freeRespecUsed=false;tw.talents={cruelty:3};rb.respec();check(!Object.keys(tw.talents).length,'the first reset after the new trees is free');
+      tw.talents={cruelty:3};check(rb.respecCost()===10000,'the next reset costs 1 gold');rb.respec();check(tw.talents.cruelty===3,'no reset without the gold');
+      tw.money=10000;rb.respec();check(!Object.keys(tw.talents).length&&tw.money===0,'a paid reset clears talents');
+      tw.talents={cruelty:1};check(rb.respecCost()===20000,'resets in a row cost more');
+      tw.lvl=30;tw.talents={cruelty:2};check(rb.respecCost()===0,'resets are free below level 40');
+      rb.S.chars=rb.S.chars.filter(c=>c!==tw);
       rb.S.cur=h.id;rb.boot();rb.save();return checks;
     };

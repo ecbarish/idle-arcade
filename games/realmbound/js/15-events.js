@@ -30,8 +30,8 @@ document.addEventListener('click',e=>{
     case 'town':goTown();break;
     case 'leavetown':leaveTown();break;
     case 'zone':if(H().dun){err('Leave the dungeon first.');break;}if(C.phase==='fight'){err("You can't travel in the middle of a fight.");break;}if(!ZONE_ORDER[H().faction].includes(arg))break;if(H().lvl<ZONES[arg].lv[0]-2){err(`${ZONES[arg].name} is too dangerous before level ${ZONES[arg].lv[0]-2}.`);break;}H().zone=arg;H().grind=null;C.phase='seek';C.t=travel(12);C.mob=null;line(`You travel to ${ZONES[arg].name}.`,'l-sys');break;
-    case 'talent':{const h=H(),t=TALENTS[h.cls].list.find(x=>x.id===arg);const r=h.talents[arg]||0;if(talentPoints()>0&&r<t.max&&(!t.req||talentSpent()>=t.req)){h.talents[arg]=r+1;recalc();}break;}
-    case 'resettal':H().talents={};recalc();break;
+    case 'talent':{const h=H(),t=TALENT_LIST[h.cls].find(x=>x.id===arg);if(!t)break;const r=h.talents[arg]||0;if(talentPoints()>0&&r<t.max&&(!t.req||treePoints(t.ti)>=t.req)){h.talents[arg]=r+1;recalc();}break;}
+    case 'resettal':respec();break;
     case 'addon':H().addons.on[arg]=!H().addons.on[arg];break;
     case 'tame':startTame();break;
     case 'encwave':encAct('wave');break;
@@ -47,7 +47,7 @@ document.addEventListener('click',e=>{
     case 'lfg':{const h=H();LFG.id=DUNGEONS[arg]?arg:'sanctum';LFG.sel=h.party.filter(id=>lfgOk(npcOf(id))).slice(0,4);LFG.tier=Math.max(0,dungeonStats(LFG.id).best+1);openModal('lfg',lfgHTML());break;}
     case 'lfgsel':{const id=Number(arg);if(LFG.sel.includes(id))LFG.sel=LFG.sel.filter(x=>x!==id);else if(LFG.sel.length<4)LFG.sel.push(id);openModal('lfg',lfgHTML());break;}
     case 'lfgfill':{const h=H();const pool=h.npcs.filter(n=>lfgOk(n)&&!LFG.sel.includes(n.id)).sort(()=>R()-.5);
-      const need=r=>!LFG.sel.some(id=>ROLE_OF[npcOf(id).cls]===r)&&!(r==='tank'&&h.cls==='warrior')&&!(r==='heal'&&h.cls==='priest');
+      const need=r=>!LFG.sel.some(id=>ROLE_OF[npcOf(id).cls]===r)&&heroRole()!==r;
       for(const r of ['tank','heal']){if(LFG.sel.length<4&&need(r)){const n=pool.find(x=>ROLE_OF[x.cls]===r&&!LFG.sel.includes(x.id));if(n)LFG.sel.push(n.id);}}
       for(const n of pool){if(LFG.sel.length>=4)break;if(!LFG.sel.includes(n.id))LFG.sel.push(n.id);}openModal('lfg',lfgHTML());break;}
     case 'lfgtier':LFG.tier=Number(arg);openModal('lfg',lfgHTML());break;

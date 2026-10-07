@@ -35,6 +35,15 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-08** — Merged ChatGPT's Realmbound chapter (T20): the Barrowfields beyond the winter road, twelve voiced
+  quests about the Wayfolk and their road-stones, Paleweft the Lamp-Eater, and a third dungeon, The Silent Barrows,
+  ending with the Last Wayward. The level cap is 45. Talents, part 1 (T1-A): every class gets a second tree
+  (Warrior Protection, Rogue Combat, Mage Frost, Priest Holy, Hunter Marksmanship) and each tree grows to 25 ranks
+  plus a capstone ability that needs 25 points in it, so you can only ever have one. Points no longer go to waste
+  after level 31. Your role in dungeons follows your build: a Protection warrior tanks, a Holy priest heals. New
+  talent abilities appear on your bar when you learn them. Resetting talents is free below 40 and once for
+  everyone with this update, then costs a little gold.
+
 - **2026-10-07** — Realmbound Frostmere II (T20): The Barrowfields extends the journey to level 45 with twelve
   voiced quests, grave-cold beasts and restless Wayfolk wardens, and Paleweft, a legendary tameable spider.
   The Silent Barrows opens at level 42: four packs and three bosses ending with the Last Wayward, plus existing

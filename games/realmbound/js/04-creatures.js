@@ -39,7 +39,7 @@ const petXpNeed=l=>Math.round(xpNeed(l)*.6);
 /* ---- pets in combat ---- */
 function petHit(mult,label){
   const p=petOf(),m=C.mob;if(!p||p.hp<=0||!m)return 0;const ps=petStats(p);
-  let a=ps.atk*mult*(C.buffs.packfury?1.5:1)*(m.marked>0?1.1:1)*(.9+R()*.2);a*=1-m.armor/(m.armor+400+85*p.lvl);
+  let a=ps.atk*mult*(C.buffs.packfury?1.5:1)*(C.buffs.wrath?2:1)*(m.marked>0?1.1:1)*(.9+R()*.2);a*=1-m.armor/(m.armor+400+85*p.lvl);
   const crit=R()*100<ps.crit;if(crit)a*=has(p,'vicious')?2.6:2;a=Math.max(1,Math.round(a));
   m.hp-=a;C.anim.pet=.15;line(`${petLabel(p)}${label?`'s ${label}`:''} ${crit?'crits':'hits'} ${m.name} for ${a}.`,crit?'l-crit':'l-pet');fx(String(a)+(crit?'!':''),crit?'#ffd24a':'#d9f7a8','mob',crit);
   if(crit&&H().cls==='hunter'&&bondLvl(p)>=2&&H().lvl>=1)openWin('exposed',4);

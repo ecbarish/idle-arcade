@@ -12,7 +12,7 @@ function boot(){
   closeModal();curKey=null;buildSlots();updateWorld();
 }
 /* test hook, local dev server only */
-if(location.hostname==='localhost')window.__rb={get S(){return S;},get C(){return C;},petStats,petOf,newHero,boot,gainXP,xpNeed,startDungeon,spawnDungeon,finishDungeon,dungeonStats,migrateDungeons,questHelper,qState,accept,turnIn,ZONES,QUESTS,DUNGEONS,npcZone,step,save,spawn,startTame,finishTame,migrate};
+if(location.hostname==='localhost')window.__rb={get S(){return S;},get C(){return C;},petStats,petOf,newHero,boot,gainXP,xpNeed,startDungeon,spawnDungeon,finishDungeon,dungeonStats,migrateDungeons,questHelper,qState,accept,turnIn,ZONES,QUESTS,DUNGEONS,npcZone,step,save,spawn,startTame,finishTame,migrate,TALENTS,TALENT_LIST,treePoints,heroRole,respecCost,respec,talentPoints,bar,get ST(){return ST;}};
 let started=false;
 function start(data){
   if(started)return;started=true;let away=null;

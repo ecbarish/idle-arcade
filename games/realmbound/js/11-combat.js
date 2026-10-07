@@ -1,7 +1,17 @@
 'use strict';
-function T(key){const h=H();if(!h)return 0;let s=0;for(const t of TALENTS[h.cls].list)if(t.key===key)s+=(h.talents[t.id]||0)*t.per;return s;}
+function T(key){const h=H();if(!h)return 0;let s=0;for(const t of TALENT_LIST[h.cls])if(t.key===key)s+=(h.talents[t.id]||0)*t.per;return s;}
+/* points spent in one talent tree, and the role your build gives you in groups (T1-A) */
+function treePoints(ti,h){h=h||H();let s=0;for(const t of TALENT_LIST[h.cls])if(t.ti===ti)s+=h.talents[t.id]||0;return s;}
+function heroRole(h){h=h||H();const pts=TALENTS[h.cls].map((tr,ti)=>treePoints(ti,h)),best=Math.max(...pts);return best>0?TALENTS[h.cls][pts.indexOf(best)].role:ROLE_OF[h.cls];}
 function talentSpent(){const h=H();let s=0;for(const k in h.talents)s+=h.talents[k];return s;}
 function talentPoints(){return Math.max(0,H().lvl-9)-talentSpent();}
+/* Resetting talents: free below level 40, and one more free reset for everyone when the second trees arrived (T1-A).
+   After that 1 gold, +1 gold for each recent reset; the count drops by one for every real day without a reset. */
+function respecCount(h){const days=Math.floor((Date.now()-(h.respecAt||0))/864e5);return Math.max(0,(h.respecs||0)-days);}
+function respecCost(){const h=H();return h.lvl<40||!h.freeRespecUsed?0:10000*(respecCount(h)+1);}
+function respec(){const h=H(),c=respecCost();if(!talentSpent()||h.money<c)return;h.money-=c;
+  if(h.lvl>=40){if(!h.freeRespecUsed)h.freeRespecUsed=true;else{h.respecs=respecCount(h)+1;h.respecAt=Date.now();}}
+  h.talents={};recalc();slog(c?`Reset your talents for ${moneyTxt(c)}.`:'Reset your talents.');}
 
 /* =================== derived stats =================== */
 let ST=null;
@@ -15,7 +25,7 @@ function recalc(){
   const melee=h.cls==='warrior'||h.cls==='rogue'||h.cls==='hunter';
   const ap=h.cls==='warrior'?st.str*2:h.cls==='rogue'?st.str+st.agi:h.cls==='hunter'?st.agi*2:st.str;
   ST={st,armor,ap,sp:st.int*.6,crit:5+(melee?st.agi/20:st.int/30)+(r.crit||0)+T('crit'),dodge:3+st.agi/25+T('dodge'),
-    hpMax:Math.round((30+h.lvl*10+st.sta*5)*(r.hp||1)),resMax:K.res==='mana'?Math.round(20+h.lvl*15+st.int*15):100,w,melee};
+    hpMax:Math.round((30+h.lvl*10+st.sta*5)*(r.hp||1)*(1+T('hpPct')/100)),resMax:K.res==='mana'?Math.round(20+h.lvl*15+st.int*15):100,w,melee};
   if(C){C.hp=Math.min(C.hp,ST.hpMax);C.res=Math.min(C.res,ST.resMax);}
 }
 const xpNeed=l=>Math.round(200*l+25*l*l);
@@ -40,15 +50,16 @@ function err(msg){C.err=msg;C.errT=1.6;}
 function slog(m){const h=H();if(!h)return;h.log=h.log||[];h.log.unshift(m);if(h.log.length>40)h.log.length=40;}
 
 /* ---- damage helpers ---- */
-function critRoll(extra){return R()*100<(C.buffs.vendetta?100:ST.crit+(extra||0));}
+function critRoll(extra){return R()*100<(C.buffs.vendetta?100:ST.crit+(extra||0)+(C.buffs.combustion?50:0)+(C.buffs.trueshot?15:0));}
 function wroll(){return ST.w.min+R()*(ST.w.max-ST.w.min)+ST.ap/14*ST.w.speed+(C.buffs.cry?C.buffs.cry.ap/14*ST.w.speed:0);}
-function dmgMods(){let m=(1+T('dmg')/100)*(C.mob&&C.mob.marked>0?1.1:1)*(C.buffs.howl?1.1:1)*(C.buffs.pack?1.2:1);const d=C.mob.lvl-H().lvl;if(d>0)m*=1-.04*d;if(RACES[H().race].bloodrage&&C.hp<ST.hpMax*.3)m*=1.1;return m;}
+function dmgMods(){let m=(1+T('dmg')/100)*(C.mob&&C.mob.marked>0?1.1:1)*(C.buffs.howl?1.1:1)*(C.buffs.pack?1.2:1)*(C.buffs.shadowform?1.3:1)*(C.buffs.trueshot?1.25:1);const d=C.mob.lvl-H().lvl;if(d>0)m*=1-.04*d;if(RACES[H().race].bloodrage&&C.hp<ST.hpMax*.3)m*=1.1;return m;}
 function hitMob(amount,o){
   o=o||{};const m=C.mob;if(!m)return 0;
   if(o.phys&&!o.sure&&R()<.05+.005*Math.max(0,m.lvl-H().lvl)){line(`${o.label||'Your attack'} was dodged by ${m.name}.`,'l-hit');fx('Dodge','#ccc','mob');
     if(H().cls==='warrior'&&H().lvl>=6)openWin('counter',4+T('window'));return 0;}
-  let a=amount*dmgMods();if(o.phys)a*=1-m.armor/(m.armor+400+85*H().lvl);
-  const crit=o.noCrit?false:critRoll(o.critBonus);if(crit)a*=2*(1+T('critDmg')/100);a=Math.max(1,Math.round(a*(.92+R()*.16)));
+  let a=amount*dmgMods()*(o.auto&&C.buffs.flurry?1.5:1);if(o.phys)a*=1-m.armor/(m.armor+400+85*H().lvl);
+  const cold=!o.noCrit&&!!C.buffs.coldblood;if(cold)C.buffs.coldblood=null; // Cold Blood: a sure crit at double crit damage
+  const crit=cold||(o.noCrit?false:critRoll(o.critBonus));if(crit)a*=2*(1+T('critDmg')/100)*(cold?2:1);a=Math.max(1,Math.round(a*(.92+R()*.16)));
   m.hp-=a;C.anim.mob=.15;
   line(`${o.label||'Your attack'} ${crit?'crits':'hits'} ${m.name} for ${a}.`,crit?'l-crit':'l-hit');fx(String(a)+(crit?'!':''),crit?'#ffd24a':'#fff','mob',crit);
   if(crit&&T('bleed'))addDot('ignite',a*T('bleed')/100,6,'Ignite');
@@ -162,7 +173,7 @@ function step(h){
   if(C.errT>0)C.errT-=h;C.anim.hero=Math.max(0,C.anim.hero-h);C.anim.mob=Math.max(0,C.anim.mob-h);
   const K=CLASSES[he.cls],mana=K.res==='mana';
   // resource regen
-  if(K.res==='energy')C.res=Math.min(100,C.res+10*(1+T('energyRegen')/100)*h);
+  if(K.res==='energy')C.res=Math.min(100,C.res+10*(1+T('energyRegen')/100)*(C.buffs.adrenaline?3:1)*h);
   if(K.res==='rage'&&C.phase!=='fight')C.res=Math.max(0,C.res-3*h);
   switch(C.phase){
     case 'seek':C.t-=h;C.hp=Math.min(ST.hpMax,C.hp+ST.hpMax*.01*h);if(mana)C.res=Math.min(ST.resMax,C.res+ST.resMax*.02*h);if(C.t<=0)spawn();break;
@@ -209,8 +220,8 @@ function healLowest(amount,who){
   else{t.k.hp=Math.min(compStats(t.k.n).hpMax,t.k.hp+a);fx('+'+a,'#7cf08a','party');if(R()<.3)line(`${who} heals ${t.k.n.name===who?'themselves':t.k.n.name} for ${a}.`,'l-heal');}
 }
 function pickTarget(){
-  const opts=[],tankUp=hasRole('tank');opts.push({k:'hero',w:H().cls==='warrior'?(tankUp?2:6):1});
-  const pet=petOf();if(pet&&pet.hp>0)opts.push({k:'pet',w:petStats(pet).taunt*4});
+  const opts=[],tankUp=hasRole('tank');opts.push({k:'hero',w:(heroRole()==='tank'?(tankUp?2:6)*(1+T('threat')/100):1)*(C.buffs.taunt?3:1)});
+  const pet=petOf();if(pet&&pet.hp>0)opts.push({k:'pet',w:petStats(pet).taunt*4*(1+T('petThreat')/100)});
   for(const p of partyAlive()){const r=ROLE_OF[p.n.cls];opts.push({k:p,w:r==='tank'?8:r==='heal'?1.3:1});}
   let r=R()*opts.reduce((s,o)=>s+o.w,0);for(const o of opts){r-=o.w;if(r<=0)return o.k;}return 'hero';
 }
@@ -219,7 +230,10 @@ function hitComp(p,raw){const s=compStats(p.n);let a=raw*(1-s.armor/(s.armor+400
 function hitPet(raw){const pp=petOf(),ps=petStats(pp);let a=raw*(1-ps.armor/(ps.armor+400+85*C.mob.lvl))*(C.buffs.bulwark?.7:1);a=Math.max(1,Math.round(a));
   pp.hp-=a;line(`${C.mob.name} hits ${petLabel(pp).replace(/^Your /,'your ')} for ${a}.`,'l-hurt');fx('-'+a,'#ff9a7a','pet');if(pp.hp<=0)petDie();}
 /* returns true if the hit killed you */
-function hitHero(raw,label){const m=C.mob,he=H();let a=raw*(1-ST.armor/(ST.armor+400+85*m.lvl));const d=m.lvl-he.lvl;if(d>0)a*=1+.04*d;if(C.buffs.bulwark)a*=.7;a=Math.max(1,Math.round(a));
+function hitHero(raw,label){const m=C.mob,he=H();let a=raw*(1-ST.armor/(ST.armor+400+85*m.lvl));const d=m.lvl-he.lvl;if(d>0)a*=1+.04*d;if(C.buffs.bulwark)a*=.7;
+  if(C.buffs.shieldwall)a*=.4;if(C.buffs.shadowform)a*=.85;
+  if(T('block')&&hasShield()&&R()*100<T('block')){a*=.5;fx('Block','#cfd8e3','hero');}
+  a=Math.max(1,Math.round(a));
   if(C.absorb>0){const ab=Math.min(C.absorb,a);C.absorb-=ab;a-=ab;if(ab)fx('Absorb','#9cc8ff','hero');}
   if(a>0){C.hp-=a;line(`${label||m.name+' hits you'} for ${a}.`,'l-hurt');fx('-'+a,'#ff6a5a','hero');if(he.cls==='warrior')C.res=Math.min(100,C.res+a/(he.lvl*3+10)*2.5);}
   if(C.hp<=0){const gp=petOf();
@@ -261,7 +275,7 @@ function fight(h,mana){
   // casting
   if(C.cast){C.cast.t-=h;if(C.cast.t<=0){const a=C.cast.a;C.cast=null;C.anim.hero=.2;a.fn();if(!C.mob)return;}}
   // auto attack (casters swing only when not casting)
-  if(!C.cast&&!C.taming){C.swing-=h*(C.buffs.quicken?1.3:1);if(C.swing<=0){C.swing=ST.w.speed;C.anim.hero=.15;
+  if(!C.cast&&!C.taming){C.swing-=h*(C.buffs.quicken?1.3:1)*(1+T('swingSpeed')/100);if(C.swing<=0){C.swing=ST.w.speed;C.anim.hero=.15;
     hitMob(wroll(),{phys:1,auto:1,label:'Your attack'});if(!C.mob)return;
     if(he.cls==='warrior'&&he.lvl>=6&&R()<.06)openWin('counter',4+T('window'));}}
   // dots
@@ -282,7 +296,11 @@ function fight(h,mana){
   if(friends.length&&!(C.win.combo>0)){C.comboT=(C.comboT===undefined?8:C.comboT)-h;if(C.comboT<=0){C.comboT=14+R()*6;const p=pick(friends);C.comboWith=p.id;openWin('combo',5);say(p.n,'combo');}}
   // mob swing: the enemy picks a target, and tanks draw most attacks
   if(m.chill>0)m.chill-=h;
-  m.swing-=h*(m.chill>0?.6:1);
+  // Renew: healing over time on whoever is hurt worst
+  const rn=C.buffs.renew;if(rn){rn.tick-=h;if(rn.tick<=0){rn.tick=3;healLowest(rn.amt,'Renew');}}
+  // Deep Freeze: a frozen enemy can't swing
+  if(m.frozen>0){m.frozen-=h;m.swing=Math.max(m.swing,.3);}
+  m.swing-=h*(m.chill>0?.6:1)*(m.frozen>0?0:1);
   if(m.swing<=0){m.swing=m.speed;C.anim.mob=-.18;
     const raw=m.dmg*(.85+R()*.3)*(m.raging&&m.hp<m.max*.3?1.4:1)*(m.enraged?2.5:1);const tg=pickTarget();
     if(tg==='pet')hitPet(raw);

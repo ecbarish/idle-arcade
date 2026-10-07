@@ -157,12 +157,12 @@ function lfgOk(n){return n&&npcLvl(n)>=dungeonDef(LFG.id).minLvl-2;}
 function lfgHTML(){const h=H(),def=dungeonDef(LFG.id),record=dungeonStats(LFG.id);
   const friends=h.npcs.filter(n=>n.met&&affLvl(n)>=1&&lfgOk(n)).sort((a,b)=>b.aff-a.aff);
   const sel=LFG.sel.map(npcOf).filter(Boolean),roles=sel.map(n=>ROLE_OF[n.cls]);
-  const tank=roles.includes('tank')||h.cls==='warrior',heal=roles.includes('heal')||h.cls==='priest';
+  const me=heroRole(),tank=roles.includes('tank')||me==='tank',heal=roles.includes('heal')||me==='heal'; // your role follows your talents (T1-A)
   const tiers=[];for(let t=0;t<=record.best+1;t++)tiers.push(t);
   return `<h2>${def.name}</h2><p class="sub">Pick four companions. Friends fight better, dodge ${def.surgeName} more often and unlock combos. Strangers fill empty spots.</p>
   <h4>Your group ${sel.length}/4</h4>
   ${sel.length?sel.map(n=>`<button class="lfgrow on" data-act="lfgsel" data-arg="${n.id}"><span><b style="color:${CLASSES[n.cls].col}">${n.name}</b> <span class="meta">${ROLE_NAME[ROLE_OF[n.cls]]} · level ${npcLvl(n)} · ${n.met?AFFINITY[affLvl(n)].n:'Stranger'}</span></span><span class="meta">Remove</span></button>`).join(''):'<p class="meta">Nobody picked yet.</p>'}
-  <p class="meta" style="margin:6px 0">${tank?'✓':'✗'} Tank ${h.cls==='warrior'?'(you)':''} · ${heal?'✓':'✗'} Healer ${h.cls==='priest'?'(you)':''}${!tank||!heal?' · Missing roles make bosses much harder.':''}</p>
+  <p class="meta" style="margin:6px 0">${tank?'✓':'✗'} Tank ${me==='tank'?'(you)':''} · ${heal?'✓':'✗'} Healer ${me==='heal'?'(you)':''}${!tank||!heal?' · Missing roles make bosses much harder.':''}</p>
   <h4>Friends available</h4>
   ${friends.filter(n=>!LFG.sel.includes(n.id)).map(n=>`<button class="lfgrow" data-act="lfgsel" data-arg="${n.id}"><span><b style="color:${CLASSES[n.cls].col}">${n.name}</b> <span class="meta">${ROLE_NAME[ROLE_OF[n.cls]]} · level ${npcLvl(n)} · ${AFFINITY[affLvl(n)].n}</span></span><span class="meta">Add</span></button>`).join('')||'<p class="meta">No friends at the right level yet. Strangers can fill the group.</p>'}
   <div class="mfoot" style="justify-content:flex-start"><button class="btn alt" data-act="lfgfill" ${sel.length>=4?'disabled':''}>Fill with strangers</button></div>

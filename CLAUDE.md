@@ -62,11 +62,14 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
   badges. The lore bible is `docs/lore/wildbond.md` (T14); areas 4-8 there are proposals. ChatGPT has T17 (area 4,
   Cloudglass Pass: 00-data.js + 11-maps.js); while it's open Claude only touches `SCENES` and `ERAS` in 00-data.js
   and nothing in 11-maps.js.
-- **Realmbound** (classic-MMO idle, flagship): levels 1-40, two dungeons, hunters/pets/mounts, lore bible in
-  `docs/lore/realmbound.md`. Frostmere / The Winter Road (30-40, PR #7) is merged. **T1 is done:** the plan for
-  40-60, the guild and raids is `docs/realmbound-40-60.md` (chapters, talents, loot, pacing, guild, raid, build
-  order, owner questions with defaults). **Next for Claude:** T1-A (second talent trees, roles from your build,
-  respec), then T1-B. ChatGPT: T20 (Frostmere II + The Silent Barrows) and T21 (item name tiers).
+- **Realmbound** (classic-MMO idle, flagship): levels 1-45, three dungeons, hunters/pets/mounts, lore bible in
+  `docs/lore/realmbound.md`. Frostmere / The Winter Road (30-40) and the Barrowfields + Silent Barrows (40-45, T20,
+  ChatGPT) are merged. **T1 is done:** the plan for 40-60, the guild and raids is `docs/realmbound-40-60.md`.
+  **T1-A is done:** two talent trees per class (`TALENTS[cls]` is a list of trees; `TALENT_LIST` flattens them with
+  a tree index `ti`; `h.talents` is still keyed by id), capstones at 25 points in a tree, `heroRole()` from the
+  tree with most points (no points = the class default), learned-only talent abilities on the bar, `respec()` with
+  `respecCost()`. **Next for Claude:** T1-B (the Silent Barrows' Grave Chill mechanic, pacing sim 40-45), then R1.
+  ChatGPT: T21 (item name tiers).
   Big future direction: the whole roster plays at once (IdleOn-style); the guild section of the plan is where it lands.
 - Parked: Primordial, Starfall Guild, Diamond Career (baseball), Otherworld (isekai).
 

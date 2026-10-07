@@ -144,11 +144,15 @@ pets:{
     const cv=document.querySelector('[data-petart]');if(cv&&!cv.dataset.drawn){cv.dataset.drawn=1;const c=cv.getContext('2d');c.imageSmoothingEnabled=false;drawBeast(c,30,20,4,p.col,p.family,false,0);}}
 },
 talents:{
-  key(){const h=H();return h.lvl+'|'+JSON.stringify(h.talents);},
-  build(){const h=H(),tr=TALENTS[h.cls];const pts=talentPoints(),spent=talentSpent();
-    let o=`<h3>${tr.tree}</h3><p class="sub">${h.lvl<10?'Talents unlock at level 10: one point per level after that.':`${pts} point${pts===1?'':'s'} to spend. ${spent} spent.`} More trees arrive in the next update.</p>`;
-    o+=tr.list.map(t=>{const r=h.talents[t.id]||0;const ok=pts>0&&r<t.max&&(!t.req||spent>=t.req);return `<div class="tal"><div><b>${t.name}</b> <span class="rank">${r}/${t.max}</span><div class="meta">${t.desc}</div></div><button class="btn sm" data-act="talent" data-arg="${t.id}" ${ok?'':'disabled'}>Learn</button></div>`;}).join('');
-    o+=`<p class="meta" style="margin-top:8px"><button class="btn sm alt" data-act="resettal">Reset talents</button> Free for now.</p>`;
+  key(){const h=H();return h.lvl+'|'+JSON.stringify(h.talents)+'|'+(h.respecs||0)+'|'+(h.money>=respecCost());},
+  build(){const h=H(),pts=talentPoints(),spent=talentSpent(),role=heroRole(),cost=respecCost();
+    let o=`<h3>Talents</h3><p class="sub">${h.lvl<10?'Talents unlock at level 10: one point per level after that.':`${pts} point${pts===1?'':'s'} to spend. ${spent} spent.`}
+      Each tree's capstone needs 25 points in that tree, so you can only ever have one. Your role in groups follows the tree with the most points:
+      <b>${ROLE_NAME[role]}</b>. A third tree arrives with the Hollow Crown.</p>`;
+    o+=TALENTS[h.cls].map((tr,ti)=>{const tp=treePoints(ti);
+      return `<h4>${tr.tree} <span class="meta">${ROLE_NAME[tr.role]} · ${tp} point${tp===1?'':'s'}</span></h4>`+tr.list.map(t=>{const r=h.talents[t.id]||0;const ok=pts>0&&r<t.max&&(!t.req||tp>=t.req);
+        return `<div class="tal"><div><b>${t.name}</b> <span class="rank">${r}/${t.max}</span><div class="meta">${t.desc}</div></div><button class="btn sm" data-act="talent" data-arg="${t.id}" ${ok?'':'disabled'}>Learn</button></div>`;}).join('');}).join('');
+    o+=`<p class="meta" style="margin-top:8px"><button class="btn sm alt" data-act="resettal" ${spent&&h.money>=cost?'':'disabled'}>Reset talents</button> ${cost?`Costs ${moneyTxt(cost)}; the price drops a step for each day without a reset.`:h.lvl<40?'Free until level 40.':'Your first reset with the new trees is free.'}</p>`;
     return o;},
   update(){}
 },
