@@ -77,7 +77,7 @@ function finishTame(){
   const p={id:uid(),name:m.petName,species:m.species,family:m.fam,rar:m.rar,col:m.col,lvl:m.lvl,xp:0,bond:0,happy:60,traits:m.traits,hp:0,tamedIn:ZONES[h.zone].name,tamedAt:h.lvl};
   p.hp=petStats(p).hpMax;h.pets.push(p);if(!petOf())h.activePet=p.id;h.stats.tamed++;
   for(const qid of h.quests.active){const q=ALLQ[qid];if(q.mob===m.id&&q.type==='kill'&&(h.quests.prog[qid]||0)<q.n){h.quests.prog[qid]=(h.quests.prog[qid]||0)+1;if(h.quests.prog[qid]>=q.n)toast(`${q.name} (Complete)`);}}
-  C.mob=null;line(`You have tamed ${p.name}!`,'l-loot');toast(`Tamed: ${p.name} (${RARITY[p.rar].name} ${FAMILIES[p.family].name})`);slog(`Tamed ${p.name}, a ${RARITY[p.rar].name.toLowerCase()} ${FAMILIES[p.family].name.toLowerCase()}, in ${p.tamedIn}.`);
+  C.mob=null;sfx('catch');line(`You have tamed ${p.name}!`,'l-loot');toast(`Tamed: ${p.name} (${RARITY[p.rar].name} ${FAMILIES[p.family].name})`);slog(`Tamed ${p.name}, a ${RARITY[p.rar].name.toLowerCase()} ${FAMILIES[p.family].name.toLowerCase()}, in ${p.tamedIn}.`);
   if(h.activePet!==p.id)line(`${p.name} waits in your stable. Swap pets at a stable in town.`,'l-sys');
   C.phase='rest';
 }

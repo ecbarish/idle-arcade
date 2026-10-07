@@ -39,6 +39,12 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-08 (night)** — One sound system for the whole arcade (`shared/sound.js`). **Realmbound has sound now**
+  (off by default; the header button cycles off / effects / effects + music): its own tune for every zone, from
+  Thornvale's flute to the Barrowfields' lament, plus dungeon, boss and spirit-walk music, and effects for levels,
+  quests, tames, rare drops, warnings, dodges, deaths and dungeon clears. Quest givers each have their own voice.
+  **Wildbond sounds better too:** drums on the Warden, battle, trainer and legend themes, a light echo, and music
+  that crossfades between places instead of cutting.
 - **2026-10-08 (late)** — One scene system for the whole arcade (`shared/dialogue.js`): pixel portraits that blink, talk
   and show moods, more faces (braids, hoods, beards, pointed ears, tusks), and choices at the end of a scene. Wildbond's
   scenes now use it. **Realmbound's quest givers now speak in portrait scenes:** accept a quest by hand to hear the

@@ -116,6 +116,7 @@ function onKill(){
   else if(rr<.004)loot.items.push(genItem(m.lvl+2,3,pick(SLOTS)));
   else if(rr<.045)loot.items.push(genItem(m.lvl,2,pick(SLOTS)));
   else if(rr<.12)loot.items.push(genItem(m.lvl,1,pick(SLOTS.filter(s=>s!=='trinket'))));
+  if(loot.items.some(i=>i.rar>=2))sfx('loot');
   // timing stats for offline estimates
   const cyc=Math.max(5,C.run-C.lastKill);C.lastKill=C.run;const a=h.avg;a.cycle=a.cycle*.8+cyc*.2;a.xp=a.xp*.8+x*.2;a.money=a.money*.8+(loot.money+loot.items.filter(i=>i.junk).reduce((s,i)=>s+i.value,0))*.2;
   // ordering: elites end the fight with a guaranteed look at the loot
@@ -159,7 +160,7 @@ function gainXP(x,kill){
 }
 function onLevel(){
   const h=H();recalc();C.hp=ST.hpMax;if(CLASSES[h.cls].res==='mana')C.res=ST.resMax;
-  toast(`Ding! Level ${h.lvl}`,'ding');slog(`Reached level ${h.lvl}.`);
+  toast(`Ding! Level ${h.lvl}`,'ding');sfx('level');slog(`Reached level ${h.lvl}.`);
   const learned=bar().filter(a=>!a.talent&&a.lvl===h.lvl);for(const a of learned){toast(`New ability: ${a.name}`);line(`You have learned ${a.name}.`,'l-sys');}
   if(h.lvl>=10)line('You have a talent point to spend.','l-sys');
   if(h.lvl===10)toast('Talents unlocked');
@@ -169,7 +170,7 @@ function onLevel(){
 function die(){
   const h=H();h.stats.deaths++;C.mob=null;C.cast=null;C.loot=null;C.phase='dead';C.t=15+h.lvl;C.absorb=0;C.buffs={};
   for(const s of SLOTS){const it=h.gear[s];if(it)it.dur=Math.max(0,it.dur-10);}recalc();
-  line('You have died. Your gear lost 10% durability.','l-hurt');toast('You have died');slog(`Died at level ${h.lvl}.`);
+  line('You have died. Your gear lost 10% durability.','l-hurt');sfx('lose');toast('You have died');slog(`Died at level ${h.lvl}.`);
   C.taming=null;C.surge=null;const p=petOf();if(p&&p.hp>0){p.hp=0;p.happy=Math.max(0,p.happy-10);line(`${p.name} falls beside you.`,'l-hurt');}
   if(h.dun){h.dun.wipes++;line('The party wipes. Everyone runs back in.','l-hurt');for(const q of C.party){q.dead=false;q.hp=compStats(q.n).hpMax;}if(C.party.length)say(pick(C.party).n,'wipe');}
 }
@@ -253,7 +254,7 @@ function bossWave(m){line(`${m.name} calls ${dungeonDef().waveName}!`,'l-warn');
   for(const p of partyAlive())hitComp(p,raw*(.9+R()*.2));const pet=petOf();if(pet&&pet.hp>0)hitPet(raw);return hitHero(raw,`The ${dungeonDef().waveName} hits you`);}
 function bossSurge(m){const raw=m.dmg*3;
   for(const p of partyAlive()){if(R()>=.45+.1*affLvl(p.n))hitComp(p,raw*.8);}
-  if(C.dodged){line(`You dodge ${dungeonDef().surgeName}.`,'l-sys');fx('Dodged!','#7cf08a','hero');return false;}
+  if(C.dodged){line(`You dodge ${dungeonDef().surgeName}.`,'l-sys');sfx('dodge');fx('Dodged!','#7cf08a','hero');return false;}
   return hitHero(raw,`${dungeonDef().surgeName} slams you`);}
 /* Grave Chill (the Silent Barrows, T1-B): every mech.chill seconds the boss lays one stack on you and every companion
    (max 5). Each stack costs 1.5% of max health per second. Any heal on someone takes one of their stacks off
@@ -312,7 +313,7 @@ function fight(h,mana){
   if(m.mech){
     if(m.mech.wave){C.waveT-=h;if(C.waveT<=0){C.waveT=m.mech.wave*(m.tidal?.7:1);if(bossWave(m))return;}}
     if(m.mech.surge&&!C.surge){C.surgeT-=h;if(C.surgeT<=0){C.surgeT=m.mech.surge*(m.tidal?.7:1);C.surge={t:2.5};C.dodged=false;openWin('dodge',2.5);
-      line(`${m.name} begins to cast ${dungeonDef().surgeName}!`,'l-warn');toast(`${dungeonDef().surgeName}! Press D to dodge`);if(aiOn()&&R()<aiEff()*.75)C.dodged=true;}}
+      line(`${m.name} begins to cast ${dungeonDef().surgeName}!`,'l-warn');toast(`${dungeonDef().surgeName}! Press D to dodge`);sfx('warn');if(aiOn()&&R()<aiEff()*.75)C.dodged=true;}}
     if(C.surge){C.surge.t-=h;if(C.surge.t<=0){C.surge=null;C.win.dodge=0;if(bossSurge(m))return;}}
     if(m.mech.chill&&graveChill(m,h))return;
     if(m.mech.enrage&&!m.enraged&&C.fightT>m.mech.enrage){m.enraged=true;line(`${m.name} becomes enraged!`,'l-warn');toast(`${m.name} is enraged`);}

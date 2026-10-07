@@ -29,6 +29,11 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
 - `shared/dialogue.js`: the arcade's one scene system (portraits with moods, typewriter text, choices, per-game themes,
   stable faces from any name via `Dialogue.lookFor`). Wildbond uses it through `09-dialogue.js`, Realmbound through
   `js/16-scenes.js`. New games should use it too: it's part of the arcade's shared look.
+- `shared/sound.js`: the arcade's one sound system (Web Audio chiptune, no audio files): `ArcadeSound.create({tracks,
+  voices, mode, setMode, musicKey, button})`. Music and effects on their own volumes, an echo on the lead, square /
+  25% pulse / triangle / saw leads, drum lines, crossfades between tracks, and one shared set of effects (level,
+  quest, catch, loot, warn, win, lose...). Each game writes its own tunes: Wildbond in `js/10-sound.js`, Realmbound
+  in `js/17-sound.js`. Sound is always off until the player turns it on.
 - `games/realmbound/index.html`: Realmbound markup and ordered classic script tags; no build step.
 - `games/realmbound/style.css`: the unchanged MMO interface styles.
 - `games/realmbound/js/00-core.js`: save key, selectors, formatting aliases, random helpers and level cap.
@@ -47,6 +52,8 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
 - `games/realmbound/js/13-world-ui.js`: modals, tooltips, world UI, character screens and group finder.
 - `games/realmbound/js/14-scene.js`: canvas setup and original procedural pixel art rendering.
 - `games/realmbound/js/15-events.js`: mouse, keyboard and input event handlers.
+- `games/realmbound/js/16-scenes.js`: quest-giver portrait scenes (shared/dialogue.js).
+- `games/realmbound/js/17-sound.js`: Realmbound tunes per zone, dungeon, boss and spirit walk (shared/sound.js); `musicKey()`, `voiceOf()`, `sfx()`.
 - `games/realmbound/js/99-boot.js`: startup, load, timers and the unchanged localhost-only `window.__rb` hook.
 - `docs/realmbound-design.md`: design decisions. `docs/ideas.md`: parked backlog.
 

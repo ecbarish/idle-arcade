@@ -11,6 +11,7 @@ document.addEventListener('click',e=>{
     recalc();C=freshC();C.hp=ST.hpMax;C.res=CLASSES[CR.cls].res==='mana'?ST.resMax:0;closeModal();slog(`${nh.name} arrived in ${ZONES[nh.zone].name}.`);
     const first=QUESTS[nh.zone][0];accept(first.id);toast(`Welcome to ${ZONES[nh.zone].name}`);save();curKey=null;buildSlots();updateWorld();return;}
   if(a==='chars'){openModal('chars',charsHTML());return;}
+  if(a==='sound'){SND.cycle();return;}
   if(a==='charnew'){CR.name=pick(NAMES);openModal('create',createHTML());return;}
   if(a==='charplay'){closeModal();switchTo(Number(arg));return;}
   if(a==='chardel'){const c=S.chars.find(x=>x.id===Number(arg));if(arm(el,'Delete',`Delete ${c?c.name:''}?`))deleteChar(Number(arg));return;}

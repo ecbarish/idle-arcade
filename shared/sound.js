@@ -15,7 +15,7 @@
      musicKey(),        which track should play right now (or null for silence)
      button             optional: the element that shows and cycles the setting
    });
-   SFX.sfx(name, arg)   any effect below; safe to call any time (silent when sound is off)
+   SFX.sfx(name, arg)   any effect below; safe to call any time (silent when sound is off); 'blip' takes a speaker or a pitch in Hz
    SFX.cycle(), SFX.render()                                                                              */
 (function () {
   'use strict';
@@ -79,7 +79,7 @@
       if (!mode() || document.hidden || !audio()) return;
       var t = A.ac.currentTime, arp = function (ns, d, ty, v) { ns.forEach(function (n, i) { tone(hz(n), d, ty || 'square', t + i * d, v || 0.35); }); };
       switch (name) {
-        case 'blip': tone(((o.voices && o.voices[arg]) || 440) * (0.95 + Math.random() * 0.1), 0.04, 'square', t, 0.12); break;
+        case 'blip': tone((typeof arg === 'number' ? arg : (o.voices && o.voices[arg]) || 440) * (0.95 + Math.random() * 0.1), 0.04, 'square', t, 0.12); break;
         case 'select': tone(880, 0.05, 'square', t, 0.15); break;
         case 'hit': noise(0.08, t, 0.35); tone(180, 0.08, 'square', t, 0.25, 0.5); break;
         case 'crit': noise(0.16, t, 0.5); tone(240, 0.16, 'sawtooth', t, 0.35, 0.3); break;

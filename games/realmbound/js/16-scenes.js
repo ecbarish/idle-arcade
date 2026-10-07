@@ -16,6 +16,7 @@ const SCN = Dialogue.create({
   host: $('.scene'), theme: 'realmbound',
   get: () => RTALK, set: s => { RTALK = s; },
   cast: who => giverLook(who),
+  blip: who => sfx('blip', voiceOf(who)),
   auto: () => !!H() && H().mode === 'auto'
 });
 /* the Accept button in the quest log: hear the request first */

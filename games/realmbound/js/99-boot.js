@@ -2,6 +2,7 @@
 /* =================== boot =================== */
 function boot(){
   const h=H();
+  SND.render();
   if(!h){closeModal();if(S.chars.length)openModal('chars',charsHTML());else{CR.name=pick(NAMES);openModal('create',createHTML());}return;}
   h.log=h.log||[];h.addons=h.addons||{unl:{},on:{}};h.avg=h.avg||{cycle:30,xp:20,money:5};
   for(const k of ['kills','deaths','loots','junkSold','quests','equips','manual','uses','play','money','feeds','tamed'])h.stats[k]=h.stats[k]||0;

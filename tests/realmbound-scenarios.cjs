@@ -200,6 +200,21 @@ module.exports = function scenarios() {
         SCN.skip();check(!RTALK,'a scene can be skipped');
         const a=giverLook('Pathkeeper Dorr'),b=giverLook('Pathkeeper Dorr');check(JSON.stringify(a)===JSON.stringify(b)&&a.tusks,'a giver always gets the same face, from their faction\'s peoples');
         rb.S.chars=rb.S.chars.filter(c=>c!==s);}
+      // S2: the shared chiptune engine plays Realmbound's own music per zone, off by default
+      {check(Object.keys(rb.ZONES).every(z=>SND.tracks[z]&&SND.tracks[z].mel.length)&&['dungeon','boss','ghost'].every(k=>SND.tracks[k]),'every zone, dungeons, bosses and the spirit walk have their own tune');
+        check(Object.values(SND.tracks).every(t=>t.mel.concat(t.bass).every(n=>n==='.'||SND.hz(n)>0)),'every note in every tune is a real pitch');
+        const g=rb.newHero('Soundcheck','concord','human','priest');g.zone='fens';rb.S.chars.push(g);rb.S.cur=g.id;rb.boot();const C=rb.C;
+        check(musicKey()==='fens','out in the world the zone\'s tune plays');C.phase='dead';check(musicKey()==='ghost','after a death the spirit tune plays');C.phase='fight';
+        g.dun={id:'x'};C.mob={boss:false};check(musicKey()==='dungeon','in a dungeon the dungeon tune plays');C.mob={boss:true};check(musicKey()==='boss','a boss gets its own tune');g.dun=null;C.mob=null;
+        const was=rb.S.snd;delete rb.S.snd;SND.render();const btn=document.querySelector('#sndBtn');
+        check(!!btn&&btn.textContent==='Sound: off','sound starts off, shown in the header');
+        btn.click();check(rb.S.snd===1&&btn.textContent==='Sound: effects','the header button turns on effects');
+        btn.click();check(rb.S.snd===2&&btn.textContent==='Sound: effects + music','and then music');
+        let ok=true;try{for(const n of ['level','quest','lose','warn','dodge','loot','catch','win','blip'])sfx(n,n==='blip'?voiceOf('Pathkeeper Dorr'):undefined);}catch(e){ok=false;}
+        check(ok,'every Realmbound sound effect plays without error');
+        btn.click();check(rb.S.snd===0,'a third press turns sound off again');
+        check(voiceOf('Pathkeeper Dorr')===voiceOf('Pathkeeper Dorr:happy')&&voiceOf('Pathkeeper Dorr')>=260&&voiceOf('Pathkeeper Dorr')<540,'each giver keeps one voice pitch whatever their mood');
+        if(was===undefined)delete rb.S.snd;else rb.S.snd=was;rb.S.chars=rb.S.chars.filter(c=>c!==g);}
       // T21: every generated item category follows the widened name bands.
       check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');
       check(BLUE_PRE.length===17&&new Set(BLUE_PRE).size===17,'rare prefix pool retains seven names and adds ten distinct dungeon names');

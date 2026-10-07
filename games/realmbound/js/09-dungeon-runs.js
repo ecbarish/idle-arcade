@@ -35,7 +35,7 @@ function spawnDungeon(){
   if(C.mob.mech){C.waveT=(C.mob.mech.wave||0)*.6;C.surgeT=(C.mob.mech.surge||0)*.7;C.chillT=(C.mob.mech.chill||0)*.8;}
   C.chill=0;for(const p of C.party)p.chill=0; // Grave Chill never carries over between fights
   if(H().cls==='rogue'&&H().lvl>=4)openWin('opening',3);
-  line(`${e.boss?'Boss: ':''}${C.mob.name} (level ${lvl}).`,e.boss?'l-warn':'l-sys');if(e.boss)toast(`Boss: ${e.name}`);
+  line(`${e.boss?'Boss: ':''}${C.mob.name} (level ${lvl}).`,e.boss?'l-warn':'l-sys');if(e.boss){toast(`Boss: ${e.name}`);sfx('warn');}
 }
 function dunKill(m){
   const h=H(),d=h.dun;for(const p of C.party)addAff(p.n,m.boss?2:.5);
@@ -65,7 +65,7 @@ function finishDungeon(){
   for(const p of C.party){addAff(p.n,10,`Cleared ${dungeonDef().name}${d.tier?` (Heroic ${d.tier})`:''} together at level ${h.lvl}.`);}
   if(C.party.length)say(pick(C.party).n,'clear');
   slog(`Cleared ${dungeonDef().name}${d.tier?` on Heroic ${d.tier}`:''}${d.wipes?` after ${d.wipes} wipe${d.wipes>1?'s':''}`:' without a wipe'}.`);
-  toast(`${dungeonDef().name} cleared!${first?` Heroic ${d.tier+1} unlocked.`:''}`);
+  sfx('win');toast(`${dungeonDef().name} cleared!${first?` Heroic ${d.tier+1} unlocked.`:''}`);
   const tier=d.tier;
   if(h.addons.unl.lfg&&h.addons.on.lfg&&C.party.length===4){leaveDungeon();startDungeon(tier,h.party,d.id);line('LFG Tool: queued your group for another run.','l-sys');}
   else leaveDungeon(`You leave ${dungeonDef().name}.`);

@@ -37,17 +37,18 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
   Session log so Claude can double-check later. Design calls normally made by Claude (marked *design* below) can be
   made by Codex using the defaults written here; record any decision in the Session log.
 
-## Where we are (2026-10-08)
+## Where we are (2026-10-08, night)
 
 **Wildbond** (creature game): four areas, Thornwood (2-12), Saltmarsh Coast (12-22), Emberfall Highlands (22-32),
 Cloudglass Pass (32-42), each with a Warden and badge (cap 15 + 10 per badge, so 55 after four); a walkable world
 with towns, trainers, items and riding; art eras Pocket → Pixel/16-bit → HD-2D → Diorama (3D, three.js) unlocked by
 badges; day/night, weather, visible wild creatures; ranch and breeding; challenge modes (Nuzlocke, Randomizer, Solo,
-Hardcore), rematches, area mastery stars; music. Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
+Hardcore), rematches, area mastery stars; music and effects from the shared sound system. Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
 
 **Realmbound** (classic-MMO idle, flagship): levels 1-45, five classes, two talent trees each with roles that follow
 your build, three 5-person dungeons (Drowned Sanctum, Cindervein Foundry, Silent Barrows with its Grave Chill
-mechanic that needs a healer), pets, mounts, companions, earned addons. Item names change every 10 levels to 60. The plan to 60 with the guild and the first raid: `docs/realmbound-40-60.md`; lore:
+mechanic that needs a healer), pets, mounts, companions, earned addons, quest givers in portrait scenes, music
+per zone and sound effects (off by default). Item names change every 10 levels to 60. The plan to 60 with the guild and the first raid: `docs/realmbound-40-60.md`; lore:
 `docs/lore/realmbound.md`.
 
 **Hub and promo pages:** `index.html`, `promo.html` (Realmbound), `promo-wildbond.html`.
@@ -96,10 +97,18 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    both use it). Originally: move Wildbond's `09-dialogue.js` into `shared/dialogue.js` (portrait
    drawing, typewriter, auto-advance) with a small game-specific adapter, keep Wildbond identical (both test pages
    pass), then use it for Realmbound quest givers' offer/turn-in lines (portraits from a small cast list).
-13. **S2: shared sound** (any assistant): same for `10-sound.js` → `shared/sound.js`; give Realmbound effects and
-   per-zone music (original tunes), sound off by default.
+13. ~~**S2: shared sound**~~ — done by Claude 2026-10-08 (`shared/sound.js`; Wildbond's `10-sound.js` and
+   Realmbound's new `17-sound.js` are thin adapters with each game's own tunes). Realmbound: a tune per zone plus
+   dungeon / boss / ghost, a header sound button (off by default, saved in `S.snd`), effects on level, quest,
+   tame, rare loot, surge and boss warnings, dodge, death and dungeon clear; givers have their own blip voice.
+   Wildbond: drums on four themes, echo, crossfades. A new zone needs a track in `TRACKS` in `17-sound.js`
+   (a check fails without one).
 14. **Then:** the guild, Hollow Crown part 2 and the raid (Realmbound); Wildbond areas 5-8 (bands 52-60, 58-64, 62-68,
    66-72) and the league, contests and races, ranch cosmetics for challenge titles, Modern 3D.
+15. **S3: shared roster and jobs** (`shared/roster.js`; build it *with* R1, item 4): assign members to jobs, cap the
+   earnings like rested XP, one return report when you come back. Realmbound's guild uses it first, then Starfall
+   Guild's adventurers, Wildbond ranch jobs, and Diamond Career's team. Plan: `docs/research/decisions.md` (the
+   shared-systems table). After that, S4: the world kit (`shared/world/`, Wildbond's walking world for every game).
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
@@ -117,6 +126,11 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (night, Evan asleep): S2 done, the shared sound system. Realmbound now has its own music and
+  effects, and Wildbond's sound improved. All test pages pass: Realmbound 600, Wildbond 488, Starfall 24.
+  **Next chat, start here:** (1) `git fetch`; if `origin/codex/realmbound-hollowcrown` exists, review T22 and
+  merge it (check the author email, read the diff, run all three test pages, `merge --no-ff`); (2) give
+  ChatGPT the next side-lane ticket; (3) Claude builds R1 together with S3 (items 4 and 15).
 - 2026-10-08 Claude (late): merged T24 + T25; built S1, the shared scene system (moods, blinking, choices, faces
   from names): Wildbond switched over unchanged, Realmbound quest givers now speak in portrait scenes with Accept
   / Not now. Sent T22 (Hollow Crown) to ChatGPT. Next for Claude: S2 shared sound.
