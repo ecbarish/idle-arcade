@@ -36,6 +36,15 @@ const ROOTROT={name:'Rootrot Hollow',minLvl:49,zone:'hollowcrown',sky:['#17271b'
     {boss:true,name:'Ossavine, the Tangled Span',lvl:51,kind:'beast',fam:'spider',col:'#b4a363',hpM:9.5,dmgM:2.4,mech:{surge:15,wave:23},loot:2},
     {name:'Ashwing Rootwardens',n:2,lvl:51,kind:'beast',fam:'lizard',col:'#766d44'},
     {boss:true,final:true,name:'Arveth, the Hoard Below',lvl:52,kind:'beast',fam:'lizard',col:'#a58c52',hpM:12.5,dmgM:2.6,mech:{wave:15,surge:18,enrage:150},loot:3}]};
-const DUNGEONS={sanctum:SANCTUM,foundry:FOUNDRY,barrows:BARROWS,rootrot:ROOTROT};
+const HEARTWOOD={name:'The Heartwood Vault',minLvl:56,zone:'crownheart',sky:['#142218','#75643a'],hill:'#253024',ground:'#312b20',waveName:'Choirfall',surgeName:'Golden Rootbreak',
+  enc:[
+    {name:'Veilweft Vault Brood',n:3,lvl:56,kind:'beast',fam:'spider',col:'#ad985c'},
+    {name:'Rootbound Versekeepers',n:2,lvl:56,kind:'humanoid',col:'#697847'},
+    {boss:true,name:'Thessurel, the Inward Voice',lvl:57,kind:'humanoid',col:'#89924e',hpM:9,dmgM:2.4,mech:{wave:14},loot:2},
+    {name:'Hearttusk Rootbreakers',n:3,lvl:57,kind:'beast',fam:'boar',col:'#746443'},
+    {boss:true,name:'Vaulkris, the Goldweb Veil',lvl:58,kind:'beast',fam:'spider',col:'#c0a665',hpM:10,dmgM:2.5,mech:{surge:15,wave:22},loot:2},
+    {name:'Ashwing Vaultwardens',n:2,lvl:59,kind:'beast',fam:'lizard',col:'#a38a54'},
+    {boss:true,final:true,name:'Orethul, the Hoardfast',lvl:60,kind:'beast',fam:'lizard',col:'#cead69',hpM:13.5,dmgM:2.7,mech:{wave:14,surge:18,enrage:150},loot:3}]};
+const DUNGEONS={sanctum:SANCTUM,foundry:FOUNDRY,barrows:BARROWS,rootrot:ROOTROT,heartwood:HEARTWOOD};
 const DUN_MODS={fortified:{name:'Fortified',desc:'Non-boss enemies have 30% more health.'},tyrannical:{name:'Tyrannical',desc:'Bosses have 30% more health and hit 15% harder.'},
   raging:{name:'Raging',desc:'Enemies below 30% health deal 40% more damage.'},tidal:{name:'Tidal',desc:'Boss waves and surges come 30% more often.'}};

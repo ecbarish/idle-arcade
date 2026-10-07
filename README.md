@@ -39,6 +39,12 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-07** — Realmbound: the Crown's Heart (T23) extends the journey from 52 to the level-60 cap.
+  Heartwatch Camp, six ordinary threats, Aurethyn the legendary tameable drake, fourteen voiced quests and the
+  Heartwood Vault (56+) lead to the Hollow Key. Its final three quests require clears of the Silent Barrows and
+  Rootrot Hollow; completing the last unlocks the existing Hollow Throne raid. Includes original zone music and
+  measured Focus pacing. Locked attunement quests remain hidden in the log pending a separate UI change.
+
 - **2026-10-09 (later)** — **Realmbound's first raid: The Hollow Throne.** Ten people: you plus nine from your
   companions and your own other characters (two tanks and two healers at least). Four bosses, each with one thing to
   watch for: the Bark Warden shreds its tank (call **Swap!**), the Ashwing Brood hatches adds (**Adds!**), the

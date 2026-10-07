@@ -52,6 +52,11 @@ per zone and sound effects (off by default), Rootrot Hollow (49-52), and a Suppl
 mine ore for repair kits (R1). Item names change every 10 levels to 60. The plan to 60 with the guild and the first raid: `docs/realmbound-40-60.md`; lore:
 `docs/lore/realmbound.md`.
 
+**T23 ready for review:** `codex/realmbound-crownheart` adds levels 52-60, Heartwatch Camp, fourteen voiced quests,
+the Heartwood Vault (56+), an original zone tune and the Hollow Key gates. `ch14` unlocks the existing raid.
+Pacing is recorded in `docs/realmbound-40-60.md`. Evan kept the strict file list: the quest-log message for missing
+dungeon clears remains a separate UI follow-up; `qState()` enforces the gate.
+
 **Hub and promo pages:** `index.html`, `promo.html` (Realmbound), `promo-wildbond.html`.
 
 **Starfall Guild:** split into small files with browser checks (T25) and its own music and effects (T26, off by default); still parked for new features.
@@ -113,7 +118,7 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    shared-systems table). After that, S4: the world kit (`shared/world/`, Wildbond's walking world for every game).
 16. ~~**T26: Starfall Guild sound**~~ — done by Codex, merged by Claude 2026-10-09 (Starfall 48 checks) (branch
    `codex/starfall-sound`; ticket in `docs/ROADMAP.md`, "T26"). Music and effects through `shared/sound.js`.
-17. **T23: Realmbound Hollow Crown II, the Crown's Heart** (any assistant; data) — **sent to ChatGPT 2026-10-09**
+17. ~~**T23: Realmbound Hollow Crown II, the Crown's Heart**~~ — **done by Codex 2026-10-07; awaiting Claude's PR review**
    (branch `codex/realmbound-crownheart`; ticket in `docs/ROADMAP.md`, "T23"): levels 52-60, `LEVEL_CAP = 60`, 14
    quests with the Hollow Key attunement (`attune`, `needDun`), dungeon `heartwood` (56+), pacing numbers.
 18. ~~**R2: the raid system and The Hollow Throne**~~ — done by Claude 2026-10-09 (`js/19-raid.js`; tuned with an Auto sim: ~11 minutes a clear with good calls, Seraveth ~205 s against a 240 s enrage; Auto without Raid Leader wipes on Choir/Seraveth until it learns). Retune once T23 raises the cap to 60 (raid levels follow `LEVEL_CAP`). Originally: 10 raiders from your characters and companions, a plan
@@ -137,6 +142,9 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-07 Codex: T23 complete on `codex/realmbound-crownheart` for Claude's review; no merge. All browser checks
+  pass (Realmbound 1404, Wildbond 488, Starfall 48), saves restored. Focus Warrior: 45-52 282.19 min; 52-55 98.29 min.
+  Evan chose to retain the strict file list: locked attunement reasons need a later quest-log UI change.
 - 2026-10-09 Claude: merged T26 (Starfall sound); built T1-C (third talent trees for all five classes) and new jobs
   (Herbalism → healing potions, Questing for benched heroes); sent T23 (Crown's Heart 52-60, the Hollow Key) to
   ChatGPT. Evan asked for **larger chunks per prompt**. Tests: Realmbound 972, Wildbond 488, Starfall 48.

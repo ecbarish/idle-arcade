@@ -362,3 +362,60 @@ the factions' obligations to the road.
 The final surface quest, **Under the Claiming Roots**, clears wardens from the descent and asks for four
 companions to enter Rootrot Hollow. Turning it in readies the approach; it is not a dungeon clear. The Crown's
 Heart, Seraveth, attunement and the Hollow Throne remain the next chapter.
+
+## The Hollow Crown II: the Crown's Heart
+
+**The Crown's Heart** continues the journey from 52 to 60. Older trunks close around gold light falling on the
+Hollow Throne. Thornmantle's watch has moved inward to **Heartwatch Camp**, a shared camp for the two factions.
+This is another practical arrangement for returning travelers, not a peace treaty. The Outer Wood and its
+Thornmantle hub remain available behind the new camp.
+
+The forest still tries to fill the empty seat even though **Seraveth**, the Ashwing matriarch, now sits upon it.
+Scouts glimpse her through a break in the canopy and hear her voice; the Hoard-Sign scales support the Ashwing
+claim. Occupying the throne has not ended the wood's hunger. She is not fought in the surface chapter or the
+Heartwood Vault. Facing her belongs to the existing Hollow Throne raid, and this chapter does not claim its victory.
+
+The inward road has six ordinary threats with distinct duties in the chapter:
+
+- **Crownfang Wolves** hunt the returning watch; their pelts mend the camp's worn winter linings.
+- **Hearttusk Boars** root through the cart's turning place; their tusks brace platforms around living roots.
+- **Veilweft Spiders** curtain the old ring; their cords lash spans above the shifting ground.
+- **Rootbound Choir-Treants** repeat an inward chant around the seat. Under it, Return-Road verses preserve older
+  duties of shelter, crossing and return. They use the existing humanoid visual kind, without a new race.
+- **Ashwing Broodguards** defend the gold-lit crossings and carry Broodward scales. Their hoard defense remains
+  distinct from the forest's hunger.
+- **Ashwing Gilded Elders** carry the Hoard-Sign scales and guard the last approach to the throne.
+
+**Aurethyn, the Unbound Wing** is an old Ashwing drake above the last outward branch. This level-60 legendary
+beast can be fought or tamed under the existing lizard-family rules. No parentage or command relationship to
+Seraveth is established; facing Aurethyn is not a substitute for facing the matriarch in the raid.
+
+Aven and Neral keep a return watch; Tessa and Ghor mend equipment and flexible platforms; Ilyen and Sova compare
+carvings and hoard signs before drawing conclusions. Their faction voices continue the Outer Wood's duties.
+The fourteen quests move from a safe inward camp to the choir's forgotten outward verses, the matriarch's claim,
+and the Hollow Key. A quiet **Archivist** in a grey coat appears once in Ilyen's account of the Key's first step:
+they copy the record and ask whether everyone returned, without explaining their origin. This cameo supplies
+neither a required crossover nor a new power behind the forest.
+
+### The Heartwood Vault
+
+The level-56 dungeon guards the inward passage with four packs: Veilweft Vault Brood, Rootbound Versekeepers,
+Hearttusk Rootbreakers and Ashwing Vaultwardens. **Choirfall** shakes the party; **Golden Rootbreak** threatens
+travelers who fail to dodge. These are the existing wave and surge mechanics, without the Barrows' Grave Chill.
+
+**Thessurel, the Inward Voice** is a choir-treant guarding the first descent. **Vaulkris, the Goldweb Veil** is a
+great spider spanning its gold-lit passage. **Orethul, the Hoardfast** is the level-60 Ashwing drake defending the
+vault's final approach, using waves, rootbreaks and eventual fury. Orethul is not Seraveth. Clearing the vault
+records its own dungeon victory; it does not clear the raid or occupy the throne.
+
+### The Hollow Key
+
+The final three quests, **Remember the Crossings**, **Unbind the Claim** and **A Road Past the Throne**, follow
+Aurethyn's quest and each require recorded clears of **both the Silent Barrows and Rootrot Hollow**. They collect
+Return-Road verses and Broodward scales, then clear gilded elders from the last approach. A surface quest preparing
+a dungeon entrance does not satisfy a clear. The Heartwood Vault is a separate expedition, not another Key gate.
+
+Aven or Neral hands over **the Hollow Key** on the final turn-in and asks for ten raiders to face Seraveth at
+**the Hollow Throne**. The recorded completion of `ch14` unlocks the already-built raid; no new physical Key item,
+raid system or save field is added. The road must remain open for people returning from the throne rather than
+become another claim to its crown. Whether the factions keep that road together remains the raid's closing question.

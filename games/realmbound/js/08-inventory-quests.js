@@ -43,7 +43,9 @@ function buyFood(auto){const h=H(),c=meatCost()*5;if(!inTown()){if(!auto)err('Yo
   for(let i=0;i<5;i++)h.bags.push({id:uid(),food:true,diet:'meat',rar:1,name:'Haunch of Meat',value:Math.round(meatCost()/4)});line(`Bought 5 Haunch of Meat for ${moneyTxt(c)}.`,'l-loot');}
 
 /* ---- quests ---- */
-function qState(q){const h=H();if(h.quests.done[q.id])return 'done';if(h.quests.active.includes(q.id))return (h.quests.prog[q.id]||0)>=q.n?'ready':'active';
+function qState(q){const h=H();if(h.quests.done[q.id])return 'done';
+  if(q.needDun&&q.needDun.some(id=>dungeonStats(id).clears<=0))return 'locked';
+  if(h.quests.active.includes(q.id))return (h.quests.prog[q.id]||0)>=q.n?'ready':'active';
   if(h.lvl>=q.lvl-2&&(!q.req||h.quests.done[q.req]))return 'avail';return 'locked';}
 function qReward(q){const h=H();if(!h.quests.rewards[q.id]){const s1=pick(['head','chest','legs','feet','hands','weapon']);let s2=pick(['head','chest','legs','feet','hands','offhand']);if(s2===s1)s2='trinket';
     h.quests.rewards[q.id]=q.elite?[genItem(q.lvl+2,3,s1,{cls:h.cls}),genItem(q.lvl+2,3,s2==='trinket'?'trinket':s2,{cls:h.cls})]:[genItem(q.lvl+1,2,s1,{cls:h.cls}),genItem(q.lvl+1,2,s2,{cls:h.cls})];}
