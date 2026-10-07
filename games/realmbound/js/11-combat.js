@@ -180,6 +180,7 @@ function die(){
 function step(h){
   const he=H();C.run+=h;he.stats.play+=h;
   C.gcd=Math.max(0,C.gcd-h);for(const k in C.cds)C.cds[k]=Math.max(0,C.cds[k]-h);
+  if(C.phase==='fight')autoPotion(); // healing potions from the supply bank (18-supplies.js)
   for(const k in C.win)if(typeof C.win[k]==='number')C.win[k]=Math.max(0,C.win[k]-h);
   for(const k in C.buffs){const b=C.buffs[k];if(!b)continue;b.t-=h;if(b.t<=0){C.buffs[k]=null;if(k==='absorb')C.absorb=0;}}
   if(C.errT>0)C.errT-=h;C.anim.hero=Math.max(0,C.anim.hero-h);C.anim.mob=Math.max(0,C.anim.mob-h);

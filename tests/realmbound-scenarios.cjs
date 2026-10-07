@@ -338,6 +338,19 @@ module.exports = function scenarios() {
         check(!ROSTER.jobOf(B.id)&&rb.S.bank.ore===1+Math.floor(1800/per),'switching to a miner pays their work and takes them off the job');
         check(JSON.stringify(B.bags)===bBags,'heroes keep their own bags; nothing moves between characters');
         const old=rb.migrate({v:2,chars:[JSON.parse(JSON.stringify(A))],cur:A.id,last:Date.now(),tab:'quests'});check(!old.bank&&!old.guild,'saves from before supplies load unchanged');
+        // more jobs: herbs and potions, questing for the worker's own XP
+        const W=rb.newHero('Supplyw','concord','human','mage');W.lvl=30;rb.S.chars.push(W);rb.S.cur=A.id;rb.boot();
+        check(ROSTER.assign(W.id,'herb')&&ROSTER.busy()===1,'a hero can gather herbs');rb.S.guild.jobs[String(W.id)].since-=3600e3;supplyTick();
+        check(rb.S.bank.herb===Math.floor(3600/JOBS.herb.every(W.id)),'herbs arrive in the shared bank');
+        rb.S.bank.herb=8;check(craftPotion()&&craftPotion()&&rb.S.bank.potion===2&&rb.S.bank.herb===0,'four herbs brew a healing potion');
+        rb.spawn();rb.C.mob.max=rb.C.mob.hp=1e7;rb.C.hp=ST.hpMax*.25;rb.step(.1);check(rb.S.bank.potion===1&&rb.C.hp>ST.hpMax*.5,'below 30% health in a fight you drink a potion');
+        rb.C.hp=ST.hpMax*.25;rb.step(.1);check(rb.S.bank.potion===1,'only one potion a minute');
+        rb.C.cds.potion=0;rb.S.bank.autoPot=false;rb.C.hp=ST.hpMax*.25;rb.step(.1);check(rb.S.bank.potion===1,'potion drinking can be switched off');rb.S.bank.autoPot=true;rb.C.hp=ST.hpMax;rb.C.mob=null;rb.C.phase='seek';
+        ROSTER.stop(W.id);const lv0=W.lvl,xp0=W.xp,need=rb.xpNeed(W.lvl);ROSTER.assign(W.id,'quest');rb.S.guild.jobs[String(W.id)].since-=3600e3;supplyTick();
+        check(W.lvl===lv0&&W.xp-xp0===3*Math.round(need*.02)&&W.money>0,'an hour of questing gives the worker about 6% of a level and some coin');
+        check((W.xp-xp0)/need<.1,'questing stays far slower than playing the hero');
+        W.xp=rb.xpNeed(W.lvl)-1;rb.S.guild.jobs[String(W.id)].since-=1200e3;supplyTick();check(W.lvl===lv0+1,'questing workers can level up');
+        rb.S.chars=rb.S.chars.filter(c=>c!==W);
         rb.S.cur=A.id;rb.boot();deleteChar(B.id);check(!rb.S.guild.jobs[B.id],'deleting a character takes them off the jobs board');
         rb.S.chars=rb.S.chars.filter(c=>c!==A&&c!==B);rb.S.bank=keep.bank;rb.S.guild=keep.guild;if(!keep.bank)delete rb.S.bank;if(!keep.guild)delete rb.S.guild;rb.S.tab='quests';}
       // T21: every generated item category follows the widened name bands.
