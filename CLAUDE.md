@@ -40,8 +40,7 @@ the very end, so running out of usage never strands work.
 - **Build strong shared assets, never cheap ones** (Evan, 2026-10-08): prefer work that genuinely improves several
   games at once ("two birds with one stone") and builds a recognisable arcade look and feel, but only if it makes each
   game better, never as a shortcut. Shared systems live in `shared/` (engine, creatures, dialogue, sound, roster,
-  ambience; the world kit next; was: sound, roster and
-  the world kit next).
+  ambience; the world kit next).
 - **One light shared universe** (decided 2026-10-08): recurring characters and a few deliberate links between games,
   every game playable alone. Canon: `docs/lore/multiverse.md`. Big decisions and their research:
   `docs/research/decisions.md`.
