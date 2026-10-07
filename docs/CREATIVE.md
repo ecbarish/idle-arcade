@@ -29,7 +29,7 @@ changes, what "good" looks like, and how much each kind of decision is yours to 
   contradict established canon; record what you add.
 - **Outside assets** (art, sound, music, fonts): allowed and encouraged when they raise quality, but only with a
   licence that allows it (CC0, CC-BY with credit, or a free-for-games licence); record each in `CREDITS.md` with
-  source and licence. Tweak them to fit the arcade's look.
+  source and licence. Tweak them to fit the arcade's look. The inventory is [CREDITS.md](../CREDITS.md), the player page is [credits.html](../credits.html), and full third-party notices live in `licenses/`.
 - **Accessibility and comfort:** respect `prefers-reduced-motion` (no flashes, no sweeping motion), keep text readable.
 - **No real-money anything**, no ads, no dark patterns, no daily-chore traps.
 

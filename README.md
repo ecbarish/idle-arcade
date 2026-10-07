@@ -49,6 +49,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 - **Realmbound v1.0.1 (2026-10-07)** — **Frostmere winter light:** low snow haze on the road and in its walkable hubs, cooler reflected light and clearer blue mountain layers. Warm night fires and windows remain visible; dawn, weather and the shared day/night shadows still shape the scene.
 - **Arcade v1.0.1 (2026-10-07)** — **What to try (F4):** the homepage links to short version-stamped playtest routes for Wildbond and Realmbound, with optional prototype checks and feedback links. New players and existing saves have separate starting points. See [playtest notes](playtest.html) and [maintainer guide](docs/playtesting.md).
+- **Arcade v1.0.1 (2026-10-07)** — A Credits page linked from the hub thanks the contributors and lists the ten font families and three.js used by the arcade. CREDITS.md records sources and usage; full third-party notices are included under licenses/. The page works without JavaScript.
 
 - **2026-10-10** — **Save doctor** in the Studio: pick a game to see its save at a glance (heroes, team, badges, coins),
   a health check that spots broken values (an empty level, negative coins, a missing current hero) with a one-click
