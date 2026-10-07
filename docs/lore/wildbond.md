@@ -184,9 +184,53 @@ even when it contradicts a good plan. Her Flintroot, Bellmote and Hushmane are l
 the **Echo Badge** and raises the existing cap from 60 to 65. Senna asks teams to ring before dusk and answer others.
 These events do not explain the fading or Toren's warm stones, nor establish a new origin for Shade.
 
-## Proposed areas 7–8 — awaiting Evan's approval
+## Area 7 canon: Sunthread Commons — levels 62–68 (T29)
 
-Areas 7–8 remain proposals. Their old T14 level bands below are historical; the decided bands are 62–68 and 66–72. Guardian names describe prospective new species within existing families. No maps, species, battles or badges are implemented by this document.
+The Echo Badge opens the east gathering trail from Hollowecho Hills into broad upland meadows. Paths wind
+between irregular tall-grass fields, shelter ties and flowering nursery ground. A meeting hall stands above a
+shared forecourt, welcoming teams from several settlements. Clear mornings can give way to sudden storms;
+strong partners carry the cloth while smaller ones hold loose ties and guide late arrivals beneath it.
+
+**Mirel**, a shelter mender, works with Clovercolt and Hemglow and offers a friendly battle on the meadow path.
+**Aldren**, a gathering runner, brings Pennantlark, Hearthrunner and Ribbonstride: carrying messages, drying
+ribbons and keeping track of the last returning teams. Both trainers battle at levels 64–67. Three supplies lie
+beside the western field, the lower path and the nursery. **Pell**, the visiting peddler, keeps the shelter ties
+together while his patient mule Brisket rests in the shade. He is a townsperson to talk to, with no new shop.
+
+Nine species enter the record:
+
+- **Clovercolt**, a Grove horse, carries shelter ties and waits for slower partners. It evolves at 64 into
+  **Bloomcourser**, a Grove horse whose flowering mane shelters small creatures leaning against it.
+- **Tilthtusk**, a Grove boar, loosens worn soil while leaving marked nursery beds undisturbed.
+- **Hemglow**, a Radiant sprite, lights the edge of shelter cloth for tired arrivals.
+- **Pennantlark**, a Radiant bird, flashes its wings when the last returning team reaches the hall.
+- **Hearthrunner**, an Ember wolf, warms cold paws beneath benches and carries messages between teams.
+- **Ribbonstride**, a Gale horse, collects wind-loosened ribbons and brings them back to their posts.
+- **Dawntassel**, a rare Radiant sprite, leaves gold glimmers on well-mended shelter knots at first light.
+  It has a low wild-table weight and is not a unique guardian.
+- **Meadowmantle**, the unique Grove boar guardian, rests along the windward edge of nursery ground to shelter
+  tender roots and sleeping young. Its level-67 story encounter is outside the ordinary wild table. A lure and
+  calm can earn its companionship; knocking it out leaves the existing later retry.
+
+At six local explores, **Wren** helps a nervous young tamer find a role: their small partner holds a loose tie
+while hers makes the knot. Then she brings Hearthrunner, Ribbonstride and her original partner to a varied
+level-64–67 rematch. She still intends to win, but notices useful work beyond the biggest performer.
+
+At fourteen, Meadowmantle waits for a sudden wind to ease and the gathered teams to settle before inviting
+the player's team onto a clear patch of ground. Its companionship does not explain the fading, resolve Toren's
+warm-stone clue or establish a new origin for Grove. Neighboring teams continue sheltering the nursery.
+
+At twenty-four, **Warden Halen**, a patient organizer who greets returning tamers by name, tests making room
+for partners with different strengths. His Tilthtusk, Hemglow and Bloomcourser are levels 65, 66 and 68.
+Victory awards the **Loom Badge**, raising the existing cap from 65 to 70. He encourages the player to remember
+those beside them and leave a place to rest, without declaring an unbuilt final route open.
+
+Sunthread has its own original, open G-major zone tune and green meadow hills with drifting leaves behind
+battles. It introduces no new art era, journey setting, save fields or interpretation of the fading.
+
+## Proposed area 8 — awaiting Evan's approval
+
+Area 8 remains a proposal, with the decided band 66–72. Sunthread was approved by Evan through T29 and is recorded as canon above; its older proposal is retained below as design history. The remaining guardian proposal uses an existing family and is not implemented by this document.
 
 ### Area 4 proposal (now built, see above): Cloudglass Pass — levels 32–42
 
@@ -194,7 +238,7 @@ A high pass beyond Emberfall opens into hanging mist, pale rock and terraces of 
 
 **Mix:** Gale birds and horses, Stone cats and spiders, Radiant sprites. **Warden:** Vessa, a cheerful guide who admits when visibility beats her; she judges asking for help and sharing responsibility. **Badge:** Beacon Badge. **Guardian:** Lanterncrest, a Radiant bird whose proposed light reveals sheltered resting places. **Wren beat:** she takes a shortcut to arrive first, then returns for a lost traveler; her rematch celebrates getting everyone through rather than winning the race.
 
-### Area 7 proposal: Sunthread Commons — levels 62–70
+### Area 7 proposal (now built, see above): Sunthread Commons — historical levels 62–70
 
 Wide upland meadows gather routes from several settlements. Clear mornings give way to sudden winds, and meeting halls double as storm shelters. A regional gathering could bring ranch keepers and traveling teams together before the final stretch. Fields should show cooperation at an ordinary scale: sharing paths, repairing a shelter and letting tired creatures rest while others finish the work.
 

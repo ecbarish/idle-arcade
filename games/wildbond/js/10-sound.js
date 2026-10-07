@@ -19,6 +19,9 @@ const TRACKS = {
   // Hollowecho: original D-minor call and answering fragments between quiet rests.
   hollowecho: { bpm: 72, lead: 'pulse', mel: 'D5 . A4 . F5 . E5 D5 . A4 . C5 . . D5 . F5 . G5 F5 . E5 . A4 C5 . E5 D5 . A4 . .',
     bass: 'D3 . . A2 . . D3 . C3 . . G2 . . A2 .' },
+  // Sunthread: original G-major answering phrases over G-C-Em-D, bright and open.
+  sunthread: { bpm: 104, lead: 'triangle', mel: 'G4 B4 D5 . E5 D5 B4 A4 C5 E5 G5 E5 D5 . C5 . B4 D5 E5 G5 F#5 E5 D5 B4 A4 C5 D5 F#5 E5 D5 A4 .',
+    bass: 'G2 . D3 . G2 . B2 . C3 . G2 . C3 . E3 . E3 . B2 . E3 . G3 . D3 . A2 . D3 . F#3 .' },
   // Wardens: A minor, a firm march resolving through E back to A.
   warden: { bpm: 180, mel: 'A4 E5 A5 C6 B5 A5 E5 . F5 A5 C6 A5 G5 F5 E5 D5 G5 D5 B5 A5 G5 E5 D5 B4 E5 G#5 B5 E6 D6 B5 G#5 E5',
     bass: 'A2 E3 A3 E3 A2 E3 A3 E3 F2 C3 F3 C3 F2 C3 F3 C3 G2 D3 G3 D3 G2 D3 G3 D3 E2 B2 E3 B2 E2 B2 E3 B2',

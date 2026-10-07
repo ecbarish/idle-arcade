@@ -74,7 +74,7 @@ function dayPart() { return ((S.ranchT || 0) / DAY_SECONDS) % 1; }
 function darkness() { if (!S.badges.includes('thorn')) return 0; const k = dayPart(); return k < 0.65 ? 0 : k < 0.75 ? (k - 0.65) / 0.1 : k < 0.95 ? 1 : (1 - k) / 0.05; }
 function isNight() { return darkness() >= 1; }
 /* Weather (arrives with the Tide Badge): it changes three times a ranch day and tips which creatures come out. */
-const WEATHER = { thornwood: ['clear', 'clear', 'rain'], saltmarsh: ['clear', 'rain', 'mist'], emberfall: ['clear', 'clear', 'ash'], stillreed: ['rain', 'clear', 'rain', 'mist'], hollowecho: ['clear', 'mist', 'clear'] };
+const WEATHER = { thornwood: ['clear', 'clear', 'rain'], saltmarsh: ['clear', 'rain', 'mist'], emberfall: ['clear', 'clear', 'ash'], stillreed: ['rain', 'clear', 'rain', 'mist'], hollowecho: ['clear', 'mist', 'clear'], sunthread: ['clear', 'clear', 'rain'] };
 const WEATHER_FX = { rain: { Tide: 2, Ember: 0.5 }, mist: { Shade: 1.5, Gale: 1.5 }, ash: { Ember: 1.6, Gale: 0.6 } };
 const WEATHER_NAME = { rain: 'Rain: Tide creatures are out.', mist: 'Mist: Shade and Gale creatures drift out of it.', ash: 'Falling ash: Ember creatures love it.' };
 /* One schedule serves both the scene and Journal; reading it never advances the ranch clock. */
