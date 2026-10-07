@@ -50,7 +50,8 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
   **Next for Claude:** T13 part 2, the HD-2D era (Tide Badge: lit, tilted view, weather, visible wild creatures),
   then part 3 Diorama (three.js voxels from the same maps, Ember Badge), then T11b (challenge modes, rematches).
   Emberfall now has Warden Toren and the Ember Badge (T15, ChatGPT, merged), so the cap is 45 after three
-  badges and area 4 needs a map and a `req: 'ember'` biome. ChatGPT still has T14 (Wildbond lore bible, docs only).
+  badges and area 4 needs a map and a `req: 'ember'` biome. The lore bible is `docs/lore/wildbond.md` (T14); areas 4-8 there are proposals. ChatGPT has T17 (area 4,
+  Cloudglass Pass: 00-data.js + 11-maps.js), so Claude stays out of those two files' content until it's merged.
 - **Realmbound** (classic-MMO idle, flagship): levels 1-40, two dungeons, hunters/pets/mounts, lore bible in
   `docs/lore/realmbound.md`. Frostmere / The Winter Road (30-40, PR #7) is merged; its necropolis dungeon and levels
   41+ wait on the rest of T1 (Claude: specs for 40-60, raids, guild).

@@ -69,6 +69,35 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T14: Wildbond lore bible and region outline** (ChatGPT, docs only): see the T14 section below.
 - [x] **T15: Emberfall Warden and badge, data only** (ChatGPT): see the T15 section below.
 - [x] **T16: Wildbond browser checks** (ChatGPT, tests only): see the T16 section below.
+- [ ] **T17: Wildbond area 4, Cloudglass Pass** (ChatGPT, data + map): see the T17 section below.
+
+### T17: Wildbond area 4, Cloudglass Pass (data + map)
+Build area 4 from the "Area 4 proposal: Cloudglass Pass" in docs/lore/wildbond.md (Evan approved it by sending
+this ticket). **Change only games/wildbond/js/00-data.js and games/wildbond/js/11-maps.js** (plus ticking T17 here
+and adding Cloudglass to docs/lore/wildbond.md as canon). Claude is building the HD-2D era in other files meanwhile;
+in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
+- **00-data.js:** `BADGES.beacon` (Beacon Badge); a `CAST.vessa` speaker (Warden Vessa, 'Warden of Cloudglass Pass';
+  `hair` one of short, long, bun, spiky, hat); `BIOMES.cloudglass` with `lv: [32, 42]`, `req: 'ember'`, its own
+  `sky`/`hill`/`ground` colors (misty, pale rock) and a wild table; 8-10 new `SPECIES` mixing Gale birds and horses,
+  Stone cats and spiders, Radiant sprites, with the T6 rules (existing families, elements and `MOVES` only; base
+  stats about 300 basic / 420 evolved; a one-line `dex`), one two-stage evolution line (`evo.at` 40 or lower), one rare
+  species (low weight) and **Lanterncrest** (Radiant bird, `unique: 1`, `big: 1`, not in the wild table).
+- **STORY** (after the Emberfall beats, same shape as theirs, `biome: 'cloudglass'`): a Wren rematch at 6 following
+  the lore's Wren beat (`team` ending `['$rival', 39]`, levels 37-39); the Lanterncrest encounter at 14
+  (`wild: ['lanterncrest', 41, 4]`); Warden Vessa at 24 (`gate: 'beacon'`, `trainer: 'Warden Vessa'`, team at levels
+  41, 42, 44, judging asking for help and sharing responsibility). Each with `title`, `text`, `lines` (3-4), `win` (2-3).
+- **11-maps.js:** a new `MAPS.cloudglass` (`name: 'Cloudglass Pass'`, `biome: 'cloudglass'`), about 30 wide and 14
+  tall, using only the tile letters in the legend at the top of the file (rock `R` edges suit a mountain pass), with
+  tall grass patches, a path, an `S` exit at the bottom back to Emberfall, `start`, `warden` spot, one signpost (`P`
+  + `signs`), three `items`, and two route trainers (`npcs` with `trainer`, teams at levels 34-40, short warm
+  dialogue like the existing ones; add their speakers to the `Object.assign(CAST, ...)` list in that file).
+  **Emberfall gets a way up:** change Emberfall's row 0 columns 13-14 from `RR` to `NN` and row 1 columns 13-14 from
+  `RR` to `..`, and add `N: { to: 'cloudglass', x: <arrival x>, y: <arrival y>, dir: 'up', locked: '<a line about
+  needing the Ember Badge>' }` to Emberfall's `exits`. The Cloudglass `S` exit returns to Emberfall at x 13, y 1.
+- **Check:** serve the repo with serve.ps1 and open http://localhost:8765/tests/wildbond.html: every check must pass
+  (it validates maps, exits, NPC spots, speakers and moves). Then play it: give a save the first three badges with
+  `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
+  trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
 ### T16: Wildbond browser checks (tests only)
 Realmbound has `tests/run.html` (click **Run checks**, get PASS/FAIL, no Node.js). Give Wildbond the same, so every
