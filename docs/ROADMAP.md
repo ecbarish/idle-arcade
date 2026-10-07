@@ -74,7 +74,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T15: Emberfall Warden and badge, data only** (ChatGPT): see the T15 section below.
 - [x] **T16: Wildbond browser checks** (ChatGPT, tests only): see the T16 section below.
 - [ ] **T17: Wildbond area 4, Cloudglass Pass** (ChatGPT, data + map): see the T17 section below.
-- [ ] **T18: Wildbond music for every place** (ChatGPT, sound only): see the T18 section below.
+- [x] **T18: Wildbond music for every place** (ChatGPT, sound only): see the T18 section below.
 
 ### T18: Wildbond music for every place (sound only)
 Wildbond's chiptune music (games/wildbond/js/10-sound.js) has tracks for Thornwood, the Saltmarsh, battles, trainer
