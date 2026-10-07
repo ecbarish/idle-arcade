@@ -161,8 +161,30 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
-- [x] T31 merged 2026-10-07 by Claude (Wildbond v1.3.0, 1176 checks).
+- [ ] T32 open for ChatGPT on `codex/wildbond-area-light` (G2, every other Wildbond area).
+- [x] Saltmarsh lighting merged 2026-10-07 by Claude (Wildbond v1.3.1, 1194 checks).
+
+### T32: Wildbond lighting for every other area (G2)
+Your Saltmarsh pass (docs/saltmarsh-lighting.md) added optional `AREA_AIR` settings in 06-scene.js (`fogTop`, `mist`,
+`dawnFog`, `mistFx`, `nightCol`, `grade`, `shafts`, `bounceSky`, `bounceGround`). Give each remaining place its own
+character the same careful way, in one PR: **Thornwood** (green woodland light through leaves, soft morning haze),
+**Emberfall** (warm ash haze, ember glow, smoky dusk), **Cloudglass Pass** (thin bright mountain air, crisp shadows,
+cold blue shade), **Stillreed Basin** (wet green reed light, low water mist), **Hollowecho Hills** (hushed lavender
+dusk, mist in the hollows), **Sunthread Commons** (golden open meadow, long evening shafts), **Farwatch Reach**
+(clear sea air, bright horizon, harbour lamps at night), the **league** and the **Lighthouse Spire** (warm stone,
+a beacon feel at night), and **Larkhaven** (town: warm windows and lamps at night). Add new optional settings only if a
+place truly needs them, keeping every default unchanged.
+- **Quality bar** (docs/CREATIVE.md "Light first"): before/after screenshots per area at noon, dusk and night, plus
+  one at 3440x1440 and one at 375 px; check Pocket (no light), 16-bit, HD-2D and Diorama; Graphics Low and High;
+  reduced motion. Night must stay readable.
+- **Checks:** each area's settings are valid numbers/colours; the scene calls receive them; unchanged defaults for
+  any area you don't touch; old saves load. All four test pages and tests/offline.html pass.
+- **Version:** Wildbond 1.3.2 (both places). Merge main into your branch first (main has your merged Saltmarsh work).
+- **Don't touch:** shared/, Realmbound, Starfall, the maps' layouts or game rules.
+
 - [x] T30 merged 2026-10-07 by Claude (1120 Wildbond checks; full league run played through to the Champion title).
+
+- [x] T31 merged 2026-10-07 by Claude (Wildbond v1.3.0, 1176 checks).
 
 ### T31: Wildbond post-game, part 1: the Lighthouse Spire and league rematches (W3)
 After the Champion, players need a reason to keep raising their team toward level 100 (CLAUDE.md: "reasons to revisit

@@ -87,7 +87,7 @@ rain sounds; walkable Realmbound towns.
 4. **Wildbond's ending:** W1 and T30/W2 are merged. T31/W3 part 1, the Lighthouse Spire and daily league rematches, is merged (v1.3.0). Next: roaming legendaries (W3 part 2), contests and races, and the Modern 3D era.
 5. **Realmbound next:** members' personal stories in the guild; battlegrounds (faction rivalry, the raid's closing
    hook); a second raid tier later.
-   **G2:** Frostmere is merged; Saltmarsh is in progress (ChatGPT, `codex/wildbond-saltmarsh-light`); pick another zone for the next lighting PR.
+   **G2:** Frostmere is merged; Saltmarsh is merged; the other Wildbond areas are T32 (ChatGPT); Realmbound zones remain.
 6. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines (a living scene on the
    ambience kit, shared sound, dialogue and creature art, a taste of each game). Build it once the games are further
    along.
@@ -111,6 +111,7 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-07 Claude: merged G2 Saltmarsh lighting (ChatGPT; Wildbond v1.3.1, 1194 checks); wrote T32 (lighting for  every other Wildbond area, `codex/wildbond-area-light`) for ChatGPT. **Next for Claude:** G2 for Realmbound zones and  dungeons (not Frostmere), or W3 part 2 (roaming legendaries).
 - 2026-10-07 Claude: merged six ChatGPT branches: T31 post-game (Spire + league rematches, v1.3.0), W7 ferry landing,
   G2 Frostmere lighting, F4 playtest notes, L6 credits, L5 offline. **Changed L5 to online first** (sw.js: network
   first with a 4 s fallback to the kept copy, no `CACHE_VERSION` bumps, takes over at once; docs/offline.md says why).
