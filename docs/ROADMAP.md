@@ -66,6 +66,29 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T12: Realmbound lore pass** (ChatGPT): see the T12 section below.
 - [ ] **T14: Wildbond lore bible and region outline** (ChatGPT, docs only): see the T14 section below.
 - [x] **T15: Emberfall Warden and badge, data only** (ChatGPT): see the T15 section below.
+- [ ] **T16: Wildbond browser checks** (ChatGPT, tests only): see the T16 section below.
+
+### T16: Wildbond browser checks (tests only)
+Realmbound has `tests/run.html` (click **Run checks**, get PASS/FAIL, no Node.js). Give Wildbond the same, so every
+future change can be checked in a minute. **Create only `tests/wildbond.html` and `tests/wildbond-checks.js`** (plus
+ticking T16 here). Don't change games/, shared/ or other docs: Claude is building T7b part 2 in Wildbond meanwhile.
+- **How it runs:** like tests/run.html: served by `serve.ps1`, it loads games/wildbond/index.html in a same-origin
+  iframe, uses the localhost hook `window.__wb` plus the game's globals (`iframe.contentWindow`), runs every check,
+  and lists each as PASS/FAIL with a summary line `PASS — N checks.` or `FAIL — x of N failed.` in `#summary`.
+  **Back up `localStorage['wildbond-save-v1']` and the hub's progress first and restore them afterwards**, even
+  when a check throws. Battles can be finished by calling `worldTick(0.1)` in a loop; skip scenes with `skipTalk()`.
+- **Data checks** (read the data, no playing): every map in `MAPS` has rows of equal length; every exit letter in a
+  map's rows has an `exits` entry whose `to` map exists and whose arrival tile is walkable; every `doors` key sits on a
+  `D` tile; every NPC's `who` is in `CAST` and stands on a walkable tile; every `warden` spot is walkable and its
+  area has a Warden beat in `STORY`; every `STORY` speaker and every `win`/`lines` speaker is a `CAST` key, `''` or
+  `'@<species id>'`; every species' learnset uses moves in `MOVES`; every `evo.to` and every wild-table id is a
+  species; every `gate` is a key of `BADGES`; every biome `req` is a badge some Warden gives.
+- **Play checks** (through `__wb` on a fresh save): choosing a starter puts you in Larkhaven; walking north reaches
+  Thornwood; the Thornwood north gate is locked without the Thorn Badge and open with it; soft/hard/off caps behave
+  (soft: a creature at the cap still gains a little XP; hard: none; off: grows past it); `levelCap()` is 15, 25, 35,
+  45 with 0-3 badges; each Warden can be challenged on their own map (not in town), beating them awards their badge;
+  an old save without `pos`, `journey` or `capMode` loads with defaults; the inn heals; the shop sells 5 lures for 50.
+- Add one line to the top of the page saying what it checks, and keep the file plain HTML/JS (no build, no installs).
 
 ### T15: Emberfall Warden and badge (data only)
 Emberfall Highlands (levels 22-32) is the only area without a Warden. Add one, using the Warden system T11 built.
