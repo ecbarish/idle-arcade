@@ -48,11 +48,11 @@ bags:{
   update(){const b=$('#repBtn');if(b){const c=repairCost();b.innerHTML=c?`Repair (${moneyTxt(c)})`:'Nothing to repair';b.disabled=!c||H().money<c;}}
 },
 friends:{
-  key(){const h=H();return h.party.join(',')+'|'+raidKey(h)+(h.raidLock?h.raidLock.killed.length:0)+S.chars.length+'|'+(h.npcs||[]).filter(n=>n.met).map(n=>n.id+':'+affLvl(n)+':'+npcLvl(n)).join(',')+'|'+!!h.dun+'|'+h.zone+'|'+h.lvl+'|'+h.dstats.clears;},
+  key(){const h=H();return h.party.join(',')+'|'+raidKey(h)+(h.raidLock?h.raidLock.killed.length:0)+S.chars.length+'|'+(h.npcs||[]).filter(n=>n.met).map(n=>n.id+':'+affLvl(n)+':'+npcLvl(n)).join(',')+'|'+!!h.dun+'|'+h.zone+'|'+h.lvl+'|'+h.dstats.clears+'|'+raidCandidates().map(n=>n.id+':'+npcLvl(n)+':'+roleOf(n)).join(',');},
   build(){const h=H();const met=(h.npcs||[]).filter(n=>n.met).sort((a,b)=>b.aff-a.aff);const unmet=(h.npcs||[]).length-met.length;
     let o=`<h3>Friends</h3><p class="sub">Adventurers wander the world beside you. Meet them on the road, group up, and they'll remember you. Friends unlock combined abilities in a fight.</p>`;
     o+=`<h4>Party ${h.party.length}/${h.dun&&h.dun.raid?9:4}</h4>`;
-    o+=h.party.length?h.party.map(id=>{const n=npcOf(id);if(!n)return '';const al=affLvl(n);return `<div class="rowl"><div class="l"><b style="color:${CLASSES[n.cls].col}">${n.name}</b> <span class="meta">${ROLE_NAME[ROLE_OF[n.cls]]} · level ${npcLvl(n)}</span>
+    o+=h.party.length?h.party.map(id=>{const n=npcOf(id);if(!n)return '';const al=affLvl(n);return `<div class="rowl"><div class="l"><b style="color:${CLASSES[n.cls].col}">${n.name}</b> <span class="meta">${ROLE_NAME[roleOf(n)]} · level ${npcLvl(n)}${n.guildKey ? ' · guild adventurer' : ''}</span>
       <div class="meta">${AFFINITY[al].n}${al>=2?` · Combo: <b>${COMBO[n.cls].name}</b>`:` · combos unlock at Friend`}</div></div>
       <div class="r">${h.dun?'':`<button class="btn sm alt" data-act="kick" data-arg="${id}">Part ways</button>`}</div></div>`;}).join(''):'<p class="meta">Nobody with you. Invite people you meet on the road, or friends from the list below.</p>';
     // Each dungeon has its own Heroic progression.

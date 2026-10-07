@@ -277,6 +277,7 @@ function wildbondChecks() {
   check('Five-badge saves preserve progress; Hollowecho saves reload the Echo Badge', () => {
     ready();S.badges=[...badges,'reed'];S.story.warden5=true;save();load();if(levelCap()!==60||!S.story.warden5||S.badges.length!==5)return false;
     S.badges.push('echo');wb.placeAt('hollowecho',27,9,'right');S.items={he1:true};S.beaten={veslin:true};save();reset();load();ensurePos();return S.pos.map==='hollowecho'&&S.pos.x===27&&S.biome==='hollowecho'&&levelCap()===65&&S.items.he1&&S.beaten.veslin;
+  });
   // Living battle backdrops: real canvas calls across routes, eras, weather and reduced motion.
   check('Battle scenery draws each route and weather without changing the save or battle', () => {
     ready();S.badges=Object.keys(BADGES);const canvas=document.createElement('canvas');canvas.width=320;canvas.height=180;
@@ -297,6 +298,7 @@ function wildbondChecks() {
         if(a.some((n,i)=>n!==b[i]))return false;}
       return true;
     }finally{cx=oldCx;PW=oldPW;PH=oldPH;reduceMotion=oldReduce;}
+  });
   // Challenge cosmetics use saved titles, never statistics or a new reward currency.
   check('A new ranch shows four locked pennants without changing the save', () => {
     ready();const before=JSON.stringify(S),node=document.createElement('div');node.innerHTML=ranchPennantsHTML();
@@ -317,6 +319,7 @@ function wildbondChecks() {
   });
   check('An old save without titles loads locked pennants and unknown titles unlock none', () => {
     ready();delete S.titles;save();reset();load();if(S.titles.length!==0)return false;S.titles=['A future title'];const node=document.createElement('div');node.innerHTML=ranchPennantsHTML();return node.querySelectorAll('[data-earned="true"]').length===0;
+  });
   check('Rain audio follows the route and stops in town, before Tide and before starting', () => {
     ready();wb.placeAt('saltmarsh');S.day=1;S.ranchT=0;if(rainLevel()!==0)return false;
     S.badges=['thorn','tide'];for(let day=1;day<=97;day++){S.day=day;const expected=weatherNow()==='rain'?(stormy()?1:.65):0;if(rainLevel()!==expected)return false;}

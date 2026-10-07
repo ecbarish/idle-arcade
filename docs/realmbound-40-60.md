@@ -300,3 +300,20 @@ time. It survives dismissal, mood departure, re-invitation and hero switching, s
 by recruiting again. Older founded-guild saves default the ledger to an empty object in migrate(); pre-guild
 saves remain unchanged. New guilds start with an empty ledger. This is a first supply favor, not a new personal
 quest chain; larger stories and the world-kit hall remain separate work.
+kit), guild-wide raid rosters, members' requests and personal stories.
+
+
+## Guild-wide raid rosters (Codex, 2026-10-07; awaiting PR review)
+
+A founded guild adds invited adventurers from every hero to the existing ten-person Hollow Throne pool.
+They remain in their owning hero's companion list: level is that hero's level plus the existing offset, capped
+at 60, with the same level-58 minimum and Acquaintance requirement as local raiders. Each adventurer appears
+once, using the guild's existing owner-qualified member key; local companions retain their numeric ids.
+Heroes who are in a dungeon, their adventurers, and members reserved by another saved raid are unavailable.
+The Hollow Key, two-tank/two-healer requirement, encounters, raid size, calls and loot balance are unchanged.
+
+Gathering pays all whole units earned on the selected raiders' jobs and stops those jobs before entry.
+Members cannot take jobs or be dismissed while their saved raid is open, including when you switch heroes.
+Leaving or finishing restores the leader's previous party and frees the members; jobs stay stopped until
+you assign them again. Raid friendship, memories and mood write to the original adventurer, so a different
+guild hero's run is remembered after saving and reloading. No extra save fields or migration are needed.

@@ -9,8 +9,8 @@ let RTALK = null;
 const FACTION_LOOK = { concord: { palette: 'cool', races: ['human', 'human', 'stonekin'] }, wild: { palette: 'warm', races: ['grishar', 'duskelf'] } };
 const GIVER_LOOKS = {}; // name -> { skin, hair, hairCol, hatCol, shirt, bg, beard, ears, tusks } to override a generated face
 function giverLook(name) {
-  const h = H(), f = FACTION_LOOK[h.faction] || FACTION_LOOK.concord;
-  return Object.assign(Dialogue.lookFor(name, { palette: f.palette, races: f.races }), GIVER_LOOKS[name] || {}, { name, title: hubName() });
+  const h = H(), f = (h && FACTION_LOOK[h.faction]) || FACTION_LOOK.concord; // a scene can outlive its hero (switching, tests)
+  return Object.assign(Dialogue.lookFor(name, { palette: f.palette, races: f.races }), GIVER_LOOKS[name] || {}, { name, title: h ? hubName() : '' });
 }
 const SCN = Dialogue.create({
   host: $('.scene'), theme: 'realmbound',
