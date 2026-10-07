@@ -53,7 +53,8 @@ const BATTLE_PLACES = {
   saltmarsh: { far: 'dunes', near: 'stones', water: true },
   emberfall: { far: 'mesas', near: 'stones', embers: .3 },
   cloudglass: { far: 'peaks', near: 'stones', fog: .45, snow: true },
-  stillreed: { far: 'oaks', near: 'reeds', water: true, fog: .35 }
+  stillreed: { far: 'oaks', near: 'reeds', water: true, fog: .35 },
+  hollowecho: { far: 'peaks', near: 'stones', fog: .2 }
 };
 function drawBattleBackdrop(t) {
   const b = BIOMES[S.biome], place = BATTLE_PLACES[S.biome] || { far: 'dunes', near: 'stones' };
@@ -165,10 +166,12 @@ function drawAmbience(t, A, v) {
     if (m.biome === 'thornwood' && w === 'clear') fx.leaves = .3;
     if (m.biome === 'emberfall') fx.embers = Math.max(fx.embers || 0, .3);
     if (m.biome === 'cloudglass') Object.assign(fx, { dust: .9, dustCol: '#ffffff', fog: Math.max(fx.fog || 0, .5), ground: PH * 1.05 });
+    if (m.biome === 'hollowecho') { fx.dust = Math.max(fx.dust || 0, .6); fx.dustCol = '#e8e0cc'; if (w === 'mist') fx.fogCol = '#c8ccd4'; }
     if (m.biome === 'stillreed') { fx.fog = Math.max(fx.fog || 0, .45); fx.fogCol = '#e2ecdc'; fx.ground = PH * 1.05; if (w === 'clear') fx.fireflies = Math.max(fx.fireflies || 0, .35); }
     if (dk > .3 && m.biome !== 'emberfall' && w !== 'rain') fx.fireflies = dk;
   }
   AMB.weather(cx, PW, PH, t, fx);
+  if (A.light && m.biome === 'hollowecho' && dk > .2) AMB.life(cx, PW, PH, t, { bats: 3, col: '#1a1820', y0: .05, y1: .35 }); // bats out of the caves at dusk
   if (dk > 0) {
     const lights = [], cam = WK.cam, at = (x, y) => cam && cam.fwd ? cam.fwd(x, y) : null;
     const me = at(WK.fx + .5, WK.fy + .5); lights.push(me ? { x: me[0], y: me[1], r: Math.max(PH * .22, me[2] * 2.6), col: '#ffe2b0' } : { x: PW / 2, y: PH * .6, r: PH * .3, col: '#ffe2b0' });

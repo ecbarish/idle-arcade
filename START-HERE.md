@@ -37,144 +37,54 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
   Session log so Claude can double-check later. Design calls normally made by Claude (marked *design* below) can be
   made by Codex using the defaults written here; record any decision in the Session log.
 
-## Where we are (2026-10-08, night)
+## Where we are (2026-10-09)
 
-**Wildbond** (creature game): four areas, Thornwood (2-12), Saltmarsh Coast (12-22), Emberfall Highlands (22-32),
-Cloudglass Pass (32-42), each with a Warden and badge (cap 15 + 10 per badge, so 55 after four); a walkable world
-with towns, trainers, items and riding; art eras Pocket → Pixel/16-bit → HD-2D → Diorama (3D, three.js) unlocked by
-badges; day/night, weather, visible wild creatures; ranch and breeding; challenge modes (Nuzlocke, Randomizer, Solo,
-Hardcore), rematches, area mastery stars; music and effects from the shared sound system. Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
+**Wildbond** (creature game): six areas, each with a Warden and badge: Thornwood (2-12), Saltmarsh Coast (12-22),
+Emberfall Highlands (22-32), Cloudglass Pass (32-42), Stillreed Basin (52-60), Hollowecho Hills (58-64); caps follow
+`CAP_TABLE` (65 after six badges). A walkable world with towns, trainers, items and riding; art eras Pocket (the
+faded start, explained in the intro) → Pixel/16-bit → HD-2D (on the shared world kit) → Diorama (3D); day/night,
+weather with a Journal forecast, thunderstorms, living ambience and regional battle backdrops; visible wild
+creatures; ranch and breeding; challenge modes with ranch pennants, rematches, area mastery; music, effects and rain
+sounds. Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
 
-**Realmbound** (classic-MMO idle, flagship): levels 1-52 (the Hollow Crown, 45-52, is the newest zone), five classes, three talent trees each with roles that follow
-your build, four 5-person dungeons (Drowned Sanctum, Cindervein Foundry, Silent Barrows with its Grave Chill
-mechanic that needs a healer), pets, mounts, companions, earned addons, quest givers in portrait scenes, music
-per zone and sound effects (off by default), Rootrot Hollow (49-52), and a Supplies tab where heroes you aren't playing
-mine ore for repair kits (R1). Item names change every 10 levels to 60. The plan to 60 with the guild and the first raid: `docs/realmbound-40-60.md`; lore:
-`docs/lore/realmbound.md`.
+**Realmbound** (classic-MMO idle, flagship): levels 1-60 across eight zones, five classes with three talent trees
+each, five 5-person dungeons, the 10-person raid **The Hollow Throne** (opened by the Hollow Key; guild adventurers
+from any hero can join), pets, mounts, companions, earned addons, quest givers in portrait scenes, music, effects and
+rain per zone, living backdrops with weather and a day/night cycle, **walkable towns** (inn, smithy, trainer, stable,
+guild hall, Pell and Brisket), the **Guild** (founding, members with mood and favors, guild levels, a jobs board with
+Mining, Herbalism, Questing and Guard duty, the supply bank with repair kits and potions). Plans:
+`docs/realmbound-40-60.md`; lore: `docs/lore/realmbound.md`.
 
-**T23 ready for review:** `codex/realmbound-crownheart` adds levels 52-60, Heartwatch Camp, fourteen voiced quests,
-the Heartwood Vault (56+), an original zone tune and the Hollow Key gates. `ch14` unlocks the existing raid.
-Pacing is recorded in `docs/realmbound-40-60.md`. Evan kept the strict file list: the quest-log message for missing
-dungeon clears remains a separate UI follow-up; `qState()` enforces the gate.
+**Starfall Guild:** small files with checks, its own music, living torches and a night window with falling stars;
+parked for new features. **Hub and promo pages:** `index.html`, `promo.html`, `promo-wildbond.html`.
 
-**Guild raid rosters ready for review:** `codex/realmbound-guild-raiders` lets invited adventurers from every
-hero join the Hollow Throne. Their original levels, friendship and memories persist; gathering settles and
-stops jobs, and saved raid members remain reserved across hero switches. No new save fields.
+**Shared systems** (`shared/`): engine, creatures, dialogue (S1), sound with rain (S2), roster/jobs (S3), world kit
+(S4: walker + HD-2D renderer), ambience (S5). Test pages: `tests/run.html`, `tests/wildbond.html`,
+`tests/starfall.html`, `tests/sound.html`.
 
-**Hub and promo pages:** `index.html`, `promo.html` (Realmbound), `promo-wildbond.html`.
-
-**T27 ready for review:** `codex/wildbond-stillreed` adds Stillreed Basin (52-60), nine species, Wren's ferry rematch,
-Stillwake and Warden Olan's Reed Badge (cap 60), a connected walkable map, two route trainers, weather and music.
-Claude's Stillreed ambience work remains separate after merge.
-
-**Starfall Guild:** split into small files with browser checks (T25) and its own music and effects (T26, off by default); still parked for new features.
-
-**Parked:** Starfall Guild, Diamond Career (baseball), Otherworld (side lane: structural and polish tasks only), and
-Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
-
-**T28 ready for review:** `codex/wildbond-hollowecho` adds Hollowecho Hills (58–64), nine species, Wren's listening
-rematch, Undertone and Senna's Echo Badge (cap 65), a winding map, trainers, clear/mist weather and an original tune.
-All three browser test pages pass (Wildbond 748, Realmbound 1434, Starfall 48). Claude's cave ambience remains separate.
-**Weather forecast ready for review:** `codex/wildbond-weather-forecast` adds the Journal forecast from the S5
-follow-ups. Shows the next two periods for unlocked routes; preserves the existing deterministic weather and saves.
-**Battle scenery ready for review:** `codex/wildbond-battle-backdrops` carries regional scenery, weather and night
-into battles in 16-bit, HD-2D and Diorama. Pocket and Pixel retain their existing appearance; combat is unchanged.
-**Challenge pennants ready for review:** `codex/wildbond-challenge-pennants` displays four original ranch
-pennants earned from the existing challenge titles. Cosmetics only; old title records work, no new save fields.
-**Rain audio ready for review:** `codex/shared-rain-audio` adds quiet rain through the shared sound engine.
-Wildbond follows the route weather (including battles), Realmbound follows rain/drizzle/storm outdoors; towns in
-Wildbond and Realmbound dungeons stay dry. Sound remains off by default; either enabled mode includes the rain.
-**Guild member requests ready for review:** `codex/realmbound-member-requests` gives adventurers a first supply
-favor with their own voice. Town handoff grants mood/friendship/guild XP once; the account ledger prevents repeat
-rewards after dismissal. Design and migration rules are recorded in `docs/realmbound-40-60.md`.
+**Parked:** Diamond Career (baseball), Otherworld (side lane: structural and polish tasks only), Primordial (back
+burner). Plans in `docs/plans/`.
 
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
-1. ~~**T21: Realmbound item name tiers**~~ — done by ChatGPT, merged 2026-10-08.
-2. ~~**T1-B: Grave Chill and pacing 40-45**~~ — done by Claude 2026-10-08. Grave Chill is `graveChill()` in
-   11-combat.js (`mech.chill` on the Barrows bosses); pacing results and the sim method are in
-   `docs/realmbound-40-60.md` ("Measured: the Barrowfields"). To re-measure a later chapter, copy that method:
-   loop `window.__rb.step(0.1)`, keep the quest log full with `accept`/`turnIn`, loot by hand (`lootAll()`) and
-   empty bags in "Focus", and replace gear at each level.
-3. ~~**T22: Realmbound Hollow Crown, part 1**~~ — merged by Claude 2026-10-08 after all three test pages passed (929 / 488 / 24); implemented by Codex 2026-10-07, including the owner-approved
-   original tune in `17-sound.js`. Awaiting PR review; branch
-   `codex/realmbound-hollowcrown`; full ticket in `docs/ROADMAP.md`, "T22"). Same shape as T20 (see its ticket in
-   `docs/ROADMAP.md`): zone `hollowcrown`, "The Hollow Crown", `lv: [45, 52]`, shared hub *Thornmantle Camp*, a lore
-   paragraph, 5 mob types 45-52 (Ashwing drakes use the `lizard` family; corrupted treants as humanoids; wolves,
-   spiders, boars of the rotting wood), a legendary tameable elite at 52, 12 voiced quests (`hc1`…) following "The
-   Hollow Crown" in `docs/realmbound-40-60.md`, dungeon `rootrot` "Rootrot Hollow" (`minLvl: 49`, levels 49-52,
-   4 packs, 3 bosses, existing `mech` keys), `LEVEL_CAP = 52`, `npcZone` 45+ → `hollowcrown`, lore record, checks.
-4. ~~**R1: two-hero supply trial**~~ — done by Claude 2026-10-08 with S3 (`shared/roster.js`, Realmbound `js/18-supplies.js`, Supplies tab; rules in its header and in `docs/realmbound-40-60.md`, "R1 as built"). Originally: See `docs/plans/realmbound.md` ("First proposed
-   system ticket") and the guild section of `docs/realmbound-40-60.md`. Defaults: 3 job slots; one gathering job
-   (Mining ore) and one recipe (ore → repair kits); a shared account bank; jobs capped like rested XP; the hero you're
-   playing always earns more than one on a job.
-5. ~~**T1-C: third talent trees**~~ — done by Claude 2026-10-09 (`TALENTS[cls][2]`; checks in the T1-C block). Originally: Warrior Fury, Rogue Subtlety, Mage Arcane, Priest Discipline, Hunter
-   Survival, same shape as T1-A (25 ranks + capstone at 25 in that tree), plus talents that open new reactive windows.
-6. ~~**T24: Wildbond test coverage**~~ — done by Codex, merged by Claude 2026-10-08: trainers, items, signs,
-   riding/running, era unlocks, weather, visible wild creatures, challenge modes, rematches and mastery.
-7. ~~**T25: Split Starfall Guild into files + a test page**~~ — done by Codex, merged by Claude 2026-10-08. Layout in
-   HANDOFF.md ("Starfall Guild layout"); checks in `tests/starfall.html` (parked games side lane).
-8. ~~**Research brief for the big decisions**~~ — done by Claude 2026-10-08: `docs/research/decisions.md` (sources,
-   recommendations, and the shared-systems plan: dialogue → sound → roster → world kit).
-9. ~~**D1: Wildbond cap table**~~ — done by Claude 2026-10-08. `levelCap()` in 02-state.js uses a table
-   (`CAP_TABLE` in 00-data.js): 15, 25, 35, 45, 55, 60, 65, 70, then 75 with all eight badges.
-10. ~~**D2+D3: Realmbound group XP split and journey length**~~ — done by Claude 2026-10-08 (measured: groups
-   1.0-1.3× solo speed; numbers in `docs/realmbound-40-60.md`). Kill XP ÷
-   group size × (1, 1, 1.166, 1.3, 1.4); quest XP whole. A Breezy/Classic/Long Road setting scaling kill and quest XP
-   (×1.6 / ×1 / ×0.6), chosen at character creation and changeable in town; re-run the pacing sim afterwards.
-11. ~~**D7: shared multiverse record**~~ — done by Claude 2026-10-08: `docs/lore/multiverse.md` (rules, how the worlds
-   connect, recurring characters Pell the peddler and the Archivist). Use it whenever writing new lore.
-12. ~~**S1: shared dialogue scenes**~~ — done by Claude 2026-10-08 (`shared/dialogue.js`; Wildbond and Realmbound
-   both use it). Originally: move Wildbond's `09-dialogue.js` into `shared/dialogue.js` (portrait
-   drawing, typewriter, auto-advance) with a small game-specific adapter, keep Wildbond identical (both test pages
-   pass), then use it for Realmbound quest givers' offer/turn-in lines (portraits from a small cast list).
-13. ~~**S2: shared sound**~~ — done by Claude 2026-10-08 (`shared/sound.js`; Wildbond's `10-sound.js` and
-   Realmbound's new `17-sound.js` are thin adapters with each game's own tunes). Realmbound: a tune per zone plus
-   dungeon / boss / ghost, a header sound button (off by default, saved in `S.snd`), effects on level, quest,
-   tame, rare loot, surge and boss warnings, dodge, death and dungeon clear; givers have their own blip voice.
-   Wildbond: drums on four themes, echo, crossfades. A new zone needs a track in `TRACKS` in `17-sound.js`
-   (a check fails without one).
-14. **Then:** the guild, Hollow Crown part 2 and the raid (Realmbound); Wildbond areas 5-8 (bands 52-60, 58-64, 62-68,
-   66-72) and the league, contests and races, ranch cosmetics for challenge titles (done by Codex 2026-10-07, awaiting review: `codex/wildbond-challenge-pennants`), Modern 3D.
-15. ~~**S3: shared roster and jobs**~~ — done by Claude 2026-10-08 with R1; Herbalism (potions) and Questing added 2026-10-09; **the guild done 2026-10-09** (`js/21-guild.js`; rules in docs/realmbound-40-60.md, "The guild as built"). Next guild ideas: members' requests, a walkable guild hall (S4 world kit), guild members filling raid rosters. Originally: assign members to jobs, cap the
-   66-72) and the league, contests and races, ranch cosmetics for challenge titles, Modern 3D.
-15. ~~**S3: shared roster and jobs**~~ — done by Claude 2026-10-08 with R1; Herbalism (potions) and Questing added 2026-10-09; **the guild done 2026-10-09** (`js/21-guild.js`; rules in docs/realmbound-40-60.md, "The guild as built"). First member requests: done by Codex 2026-10-07, awaiting review (`codex/realmbound-member-requests`). Next guild ideas: personal stories, a walkable guild hall (S4 world kit), guild members filling raid rosters. Originally: assign members to jobs, cap the
-   66-72) and the league, contests and races, ranch cosmetics for challenge titles, Modern 3D.
-15. ~~**S3: shared roster and jobs**~~ — done by Claude 2026-10-08 with R1; Herbalism (potions) and Questing added 2026-10-09; **the guild done 2026-10-09** (`js/21-guild.js`; rules in docs/realmbound-40-60.md, "The guild as built"). **Guild-wide raid rosters done by Codex, 2026-10-07; awaiting review** (`codex/realmbound-guild-raiders`); members' requests are ready in PR #25. Next guild ideas: a walkable guild hall (S4 world kit), guild members filling raid rosters. Originally: assign members to jobs, cap the
-   earnings like rested XP, one return report when you come back. Realmbound's guild uses it first, then Starfall
-   Guild's adventurers, Wildbond ranch jobs, and Diamond Career's team. Plan: `docs/research/decisions.md` (the
-   shared-systems table). After that, S4: the world kit (`shared/world/`, Wildbond's walking world for every game).
-16. ~~**T26: Starfall Guild sound**~~ — done by Codex, merged by Claude 2026-10-09 (Starfall 48 checks) (branch
-   `codex/starfall-sound`; ticket in `docs/ROADMAP.md`, "T26"). Music and effects through `shared/sound.js`.
-17. ~~**T23: Realmbound Hollow Crown II, the Crown's Heart**~~ — **done by Codex 2026-10-07; awaiting Claude's PR review**
-   (branch `codex/realmbound-crownheart`; ticket in `docs/ROADMAP.md`, "T23"): levels 52-60, `LEVEL_CAP = 60`, 14
-   quests with the Hollow Key attunement (`attune`, `needDun`), dungeon `heartwood` (56+), pacing numbers.
-18. ~~**R2: the raid system and The Hollow Throne**~~ — done by Claude 2026-10-09 (`js/19-raid.js`; tuned with an Auto sim: ~11 minutes a clear with good calls, Seraveth ~205 s against a 240 s enrage; Auto without Raid Leader wipes on Choir/Seraveth until it learns). Retune once T23 raises the cap to 60 (raid levels follow `LEVEL_CAP`). Originally: 10 raiders from your characters and companions, a plan
-   before each pull, raid calls during it, four bosses, weekly-style lockout (every 3 days), epic loot with tier
-   sets. Plan: `docs/realmbound-40-60.md` ("Raids") and decision 5 in `docs/research/decisions.md`. Gate it on the
-   Hollow Key (T23's last quest) but build it so it can be tested before T23 lands.
-19. ~~**S5: shared ambience kit**~~ — done by Claude 2026-10-09 (`shared/ambience.js`; all three games use it; layout in HANDOFF.md). Journal weather forecast: done by Codex 2026-10-07, awaiting PR review (`codex/wildbond-weather-forecast`). Ideas for later: Wildbond battle backdrops and rain sounds. Evan asked for it after seeing a living pixel-art
-19. ~~**S5: shared ambience kit**~~ — done by Claude 2026-10-09 (`shared/ambience.js`; all three games use it; layout in HANDOFF.md). Battle backdrops: done by Codex 2026-10-07, awaiting PR review (`codex/wildbond-battle-backdrops`). Ideas for later: a weather forecast in the Journal and rain sounds. Evan asked for it after seeing a living pixel-art
-19. ~~**S5: shared ambience kit**~~ — done by Claude 2026-10-09 (`shared/ambience.js`; all three games use it; layout in HANDOFF.md). Ideas for later: Wildbond battle backdrops, a weather forecast in the Journal, rain sounds (done by Codex 2026-10-07, awaiting review: `codex/shared-rain-audio`). Evan asked for it after seeing a living pixel-art
-   scene (a floating island at night with rain, lightning, smoke, flickering windows, a campfire, fireflies, a waterfall,
-   swaying trees, drifting clouds, a moving character; "the lightning and other moving elements made it most
-   impressive"). `shared/ambience.js`, drawn on the games' existing canvases, quality first, used by every game:
-   weather (rain with splashes, snow, fog, wind-blown leaves/spores), **lightning storms** (a flash that lights the
-   scene, thunder a beat later), fire (embers, smoke bending in the wind, glow), light (flickering windows, lanterns,
-   torches, crystals, fireflies, moonlight), **moving scenery** (drifting clouds, swaying trees, running water) and
-   **background life** (birds, bats at dusk). Realmbound: a living backdrop per zone and dungeon; Wildbond: richer
-   weather and day/night; Starfall: starry sky and torches. Respect reduced motion; cheap on phones.
-20. ~~**T27: Wildbond area 5, Stillreed Basin**~~ — **done by Codex 2026-10-07; awaiting Claude's PR review** (branch
-   `codex/wildbond-stillreed`; ticket in `docs/ROADMAP.md`, "T27"): levels 52-60, Warden Olan, Reed Badge, Stillwake.
-   After merging: Claude adds Stillreed's air to `drawAmbience` (06-scene.js: mist over the water, fireflies, rain).
-21. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines: a living scene on the
-   shared ambience kit, the shared sound, dialogue and creature art, a taste of each game. Wait until the games are
-   further along so it's built once; then make it the arcade's showcase.
-22. ~~**T28: Wildbond area 6, Hollowecho Hills**~~ — **done by Codex 2026-10-07; awaiting Claude's PR review** (branch
-   `codex/wildbond-hollowecho`; ticket in `docs/ROADMAP.md`, "T28"): levels 58-64, Warden Senna, Echo Badge,
-   Undertone. After merging: Claude adds its ambience (cave drips, dust, bats at dusk) in `drawAmbience`.
-23. **S4: the world kit** — part 1 done by Claude 2026-10-09 (`shared/world.js`; Wildbond HD-2D on it; walkable Realmbound towns in `js/22-town.js`). **Part 2 (next):** move Wildbond's walking (12-walk.js) onto `World.walker`; a layout per hub (camps for the Wildclans, the abbey for Thornvale); the guild hall as an interior you enter; then Starfall's guild hall. Originally: walkable places shared across games (see the plan in
-   HANDOFF.md, "World kit", once written). First use: a walkable Realmbound town and guild hall.
+**Done so far** (details in `docs/ROADMAP.md`, the design docs and git history): T20-T28 content tickets; T1, T1-A,
+T1-B, T1-C (talents and pacing); R1 + the guild (with member favors and guild raiders); R2 (the raid); D1-D7
+decisions; S1-S5 shared systems (S4 part 1); Wildbond weather forecast, battle backdrops, challenge pennants; shared
+rain sounds; walkable Realmbound towns.
+
+1. ~~**Hollowecho ambience**~~ — done by Claude 2026-10-09 (dust, mist colour, bats at dusk, battle scenery).
+2. **S4 part 2: the world kit** (Claude): move Wildbond's walking (12-walk.js) onto `World.walker` (its 769 checks
+   guard it); a layout per Realmbound hub (Wildclan camps, Thornvale's abbey); the guild hall as an interior you
+   walk into; then a walkable guild hall for Starfall Guild.
+3. **T29: Wildbond area 7, Sunthread Commons** (ChatGPT; data) — **sent to ChatGPT 2026-10-09** (branch `codex/wildbond-sunthread`): levels 62-68; ticket in
+   `docs/ROADMAP.md`, "T29".
+4. **Wildbond's ending:** area 8 (66-72), then the league and the Champion (around 72-75), the post-game (battle
+   tower, legendaries, the road to 100); contests and races; the Modern 3D era.
+5. **Realmbound next:** members' personal stories in the guild; battlegrounds (faction rivalry, the raid's closing
+   hook); a second raid tier later.
+6. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines (a living scene on the
+   ambience kit, shared sound, dialogue and creature art, a taste of each game). Build it once the games are further
+   along.
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
@@ -192,6 +102,11 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude: reviewed and merged seven ChatGPT branches (T28 Hollowecho Hills, guild member favors, guild
+  raiders, shared rain sounds, Wildbond battle backdrops, Journal forecast, challenge pennants); fixed three check
+  closings lost in the merge and a portrait crash without a hero; tidied this file; gave Hollowecho its ambience and
+  battle scenery; sent T29 (Sunthread Commons) to ChatGPT. Tests: Realmbound 1506, Wildbond 769, Starfall 48, sound 21.
+  **Next:** S4 part 2 (item 2).
 - 2026-10-07 Codex: pulled Claude's S4 towns and completed guild-wide raid rosters on
   `codex/realmbound-guild-raiders`, awaiting review, no merge. All browser checks pass: Realmbound 1475,
   Wildbond 619, Starfall 48; saves/hub restored, zero errors. Gather button, nine health frames, reserved

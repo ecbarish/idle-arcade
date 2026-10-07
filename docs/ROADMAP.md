@@ -160,6 +160,28 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
+### T29: Wildbond area 7, Sunthread Commons (data + map + tune)
+Build area 7 from the "Area 7 proposal: Sunthread Commons" in docs/lore/wildbond.md at the **decided level band
+62-68** (decision 1; six badges cap at 65, seven at 70). Same shape as your T28 (Hollowecho Hills): read its ticket
+and your own code and copy the structure, including T28's map quality (winding paths, irregular fields, a real place).
+- **Change only:** games/wildbond/js/00-data.js, games/wildbond/js/11-maps.js, one `WEATHER` entry in 12-walk.js
+  (`sunthread: ['clear', 'clear', 'rain']`: clear mornings, sudden storms), one `TRACKS` entry in 10-sound.js (original,
+  open and bright), one `BATTLE_PLACES` entry in 06-scene.js (the battle backdrop you built: meadow hills, `leaves`),
+  tests/wildbond-checks.js, docs/lore/wildbond.md (Sunthread into canon), README.md, ticking T29 here and in
+  START-HERE.md. Don't touch `ERAS`, `JOURNEY` or the caps.
+- **Content:** `BADGES.loom` (Loom Badge); `CAST.halen` (Warden Halen, 'Warden of Sunthread Commons', remembers
+  everyone's name); `BIOMES.sunthread` (`lv: [62, 68]`, `req: 'echo'`); 8-10 species mixing Grove horses and boars,
+  Radiant sprites and birds, Ember wolves and Gale horses (T6 rules), one two-stage line (`evo.at` 66 or lower), one
+  rare species, and **Meadowmantle** (Grove boar guardian, unique, big). STORY: Wren at 6 (she helps a nervous young
+  tamer find a role at the gathering; her varied team, `['$rival', 67]`, levels 64-67), Meadowmantle at 14 (`wild:
+  ['meadowmantle', 67, 4]`), Warden Halen at 24 (`gate: 'loom'`, team 65, 66, 68, judging making space for partners
+  with different strengths). Map: `MAPS.sunthread` ~30 x 14 joined to Hollowecho (locked until the Echo Badge), a
+  meeting hall corner (walls `#` and a door is not needed; a sign will do), a signpost, three items, two trainers
+  (64-67). Pell the peddler fits a gathering well, as a townsperson.
+- **Checks:** mirror your Hollowecho checks (map valid and connected, exits both ways, species rules, Halen gives the
+  Loom Badge and the cap becomes 70, story beats). All four test pages must pass (`tests/wildbond.html`,
+  `tests/run.html`, `tests/starfall.html`, `tests/sound.html`).
+
 ### T28: Wildbond area 6, Hollowecho Hills (data + map + tune)
 Build area 6 from the "Area 6 proposal: Hollowecho Hills" in docs/lore/wildbond.md at the **decided level band
 58-64** (docs/research/decisions.md, decision 1; the proposal's 52-62 is outdated: five badges cap your team at 60, six
