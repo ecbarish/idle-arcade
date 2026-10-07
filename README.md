@@ -43,6 +43,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
   whenever you're online and uses its saved copy only without internet (or on a very slow connection), so updates
   never get stuck. The homepage header now has What to try, Credits and Install together.
 - **Wildbond v1.3.0 (2026-10-07)** — **The Lighthouse Spire:** Champions climb themed trainer floors from level 75 to 100, rest every five floors, and keep a best-floor record. Coins and lures each floor; once-only ten-floor milestones give Lantern seed, titles and rare ranch eggs. Auto earns less and waits at rest choices. All five league trainers offer one rematch per ranch day. Existing badge caps and saves stay intact.
+- **Wildbond v1.3.1 (2026-10-07)** — **Saltmarsh Coast lighting:** lower, thinner sea mist, blue-and-sand bounce light, gentler shafts and a softer colour grade in the lit art eras. Paths stay clearer in mist; other areas keep their original lighting.
 
 - **2026-10-07** — **Wildbond: see more of the world.** A new **View** button (or the V key) switches between Close,
   Wide and Far, so a big monitor shows more of the map instead of bigger tiles; desktops and ultrawides start on Wide,

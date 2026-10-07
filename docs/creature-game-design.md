@@ -277,3 +277,6 @@ art eras (actual three.js renderer included), phone/laptop/desktop/ultrawide, an
 league connection changes outside the new Spire. See docs/lore/wildbond.md for the new names and dialogue.
 
 Entry smoke check: a level-75 Tidewyrm/Bloomcourser/Hushmane team with rarity 1, potential 16, no traits or training, and No cap cleared floors 1-3 before losing on 4 using Focus/Guard/Rally. Its earned rewards and best floor were kept. This is one untrained entry fixture, not a pacing or balance conclusion; stronger ranch-raised teams and a full player playthrough remain part of L7.
+### Saltmarsh lighting pass (G2, 2026-10-07)
+
+Saltmarsh's lit eras use a lower, lighter sea-mist layer, cool sky bounce and pale sand bounce, with softer shafts and colour grading. The shared day/night clock still controls shadow direction; player and door lamps stay warm at night. Early art eras retain their existing weather appearance. This is an atmosphere pass, with no changes to weather schedules, encounters, maps or saves. Profile values and comparisons: [Saltmarsh lighting](saltmarsh-lighting.md).

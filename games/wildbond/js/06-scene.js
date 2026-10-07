@@ -172,19 +172,23 @@ function drawTopDown(v, t, A) {
    arrives (the Thorn Badge; before that it's always a bright late morning), so shadows swing and lengthen through the
    day and fall away from lit doors at night; each area has its own fog and the colour of the hour grades the scene. */
 const WLT = Light.create({ reduce: () => reduceMotion, quality: () => (S.gfx || ((navigator.hardwareConcurrency || 8) <= 4 || Math.min(screen.width, screen.height) < 500 ? 'low' : 'high')) });
-const AREA_AIR = { thornwood: { fog: .12, col: '#e6eee0' }, saltmarsh: { fog: .2, col: '#e0ecf0', tint: '#a8d0e0' }, emberfall: { fog: .22, col: '#9a8078', tint: '#ff9050' },
+// Optional area settings leave the original defaults intact everywhere else. Saltmarsh uses
+// sea-blue skylight, sand bounce and low mist; clock, shadow direction and lamps stay shared.
+const AREA_AIR = { thornwood: { fog: .12, col: '#e6eee0' }, saltmarsh: { fog: .17, col: '#d4e5e4', tint: '#b6d4d5', fogTop: .58, mist: .26, dawnFog: .05, mistFx: .85,
+    nightCol: '#23394c', grade: .72, shafts: .48, bounceSky: '#9cbecb', bounceGround: '#c8c5a0' }, emberfall: { fog: .22, col: '#9a8078', tint: '#ff9050' },
   cloudglass: { fog: .4, col: '#f2f6fa', tint: '#c8d8f0' }, stillreed: { fog: .35, col: '#dfe8d8', tint: '#b0c8a0' }, hollowecho: { fog: .3, col: '#c8ccd4', tint: '#a8a0c0' } };
 function wbSun() {
-  const bio = BIOMES[S.biome] || BIOMES.thornwood, o = { sky: bio.sky[1], ground: bio.ground || '#5a8a4a' };
+  const bio = BIOMES[S.biome] || BIOMES.thornwood, air = AREA_AIR[S.biome] || {};
+  const o = { sky: air.bounceSky || bio.sky[1], ground: air.bounceGround || bio.ground || '#5a8a4a' };
   if (!S.badges.includes('thorn')) return WLT.time(.18, o);
   return WLT.time(Light.cycle(dayPart(), .965, .70), o);
 }
 function doorLamps(m) { const out = []; m.rows.forEach((r, y) => [...r].forEach((ch, x) => { if (ch === 'D') out.push({ x: x + .5, y: y + .9, h: .6, reach: 4 }); })); return out; }
 function wbAtmosphere(t, A, m, lights) {
   if (!A.light) return; const st = wbSun(), air = AREA_AIR[m.biome] || { fog: .1, col: '#e8eef0' }, w = weatherNow();
-  WLT.fog(cx, PW, PH, t, { ground: PH, top: PH * .2, density: air.fog + (w === 'mist' ? .35 : 0) + (st.day && st.p < .12 ? .08 : 0), col: Light.css(Light.mix(air.col, '#1a2040', st.day ? 0 : .5)), lights });
-  WLT.grade(cx, PW, PH, st, { tint: air.tint, amount: .9 });
-  if (w !== 'rain') WLT.shafts(cx, PW, PH, t, st, { strength: .8 + air.fog });
+  WLT.fog(cx, PW, PH, t, { ground: PH, top: PH * (air.fogTop ?? .2), density: air.fog + (w === 'mist' ? (air.mist ?? .35) : 0) + (st.day && st.p < .12 ? (air.dawnFog ?? .08) : 0), col: Light.css(Light.mix(air.col, air.nightCol || '#1a2040', st.day ? 0 : .5)), lights });
+  WLT.grade(cx, PW, PH, st, { tint: air.tint, amount: air.grade ?? .9 });
+  if (w !== 'rain') WLT.shafts(cx, PW, PH, t, st, { strength: air.shafts ?? (.8 + air.fog) });
 }
 const AMB = Ambience.create({ reduce: () => reduceMotion });
 function stormy() { return weatherNow() === 'rain' && (S.day || 1) % 3 === 0; }
@@ -194,6 +198,9 @@ function drawAmbience(t, A, v) {
   else if (w === 'mist') Object.assign(fx, { fog: 1.3, ground: PH * 1.05 });
   else if (w === 'ash') Object.assign(fx, { ash: 1, embers: .45 });
   if (A.light && m.biome) {
+    // Coastal mist stays translucent: the light engine supplies the low, coloured layer.
+    const air = AREA_AIR[m.biome];
+    if (w === 'mist' && air && air.mistFx !== undefined) Object.assign(fx, { fog: air.mistFx, fogCol: air.col });
     if (m.biome === 'thornwood' && w === 'clear') fx.leaves = .3;
     if (m.biome === 'emberfall') fx.embers = Math.max(fx.embers || 0, .3);
     if (m.biome === 'cloudglass') Object.assign(fx, { dust: .9, dustCol: '#ffffff', fog: Math.max(fx.fog || 0, .5), ground: PH * 1.05 });
