@@ -54,10 +54,16 @@ function frame(t){
   cx.fillStyle='#3b3552';cx.fillRect(0,0,PW,floorY);
   cx.fillStyle='#463f63';const bw=p*12,bh=p*6;
   for(let y=0,row=0;y<floorY;y+=bh,row++)for(let x=(row%2)*bw/2-bw;x<PW;x+=bw)cx.fillRect(Math.round(x)+p/2,y+p/2,bw-p,bh-p);
-  // torches
+  // a window on the night sky (S5, shared/ambience.js): stars, the moon, and now and then a falling star
+  const wx=Math.round(PW*.5-p*15),wy=Math.round(floorY*.1),ww=p*30,wh=Math.round(floorY*.42);
+  cx.save();cx.beginPath();cx.rect(wx,wy,ww,wh);cx.clip();cx.translate(wx,wy);
+  AMB.sky(cx,ww,wh,ts,{top:'#0a0d2a',bottom:'#2c2156',night:1,moonX:.74,moonY:.3,px:Math.max(1,Math.round(p/2)),clouds:{n:2,speed:3,y0:.55,y1:.85,col:'#6a5a9a',alpha:.5}});
+  fallingStar(ww,wh,ts,p);cx.restore();
+  cx.fillStyle='#2b2540';cx.fillRect(wx-p,wy-p,ww+p*2,p);cx.fillRect(wx-p,wy+wh,ww+p*2,p*2);cx.fillRect(wx-p,wy,p,wh);cx.fillRect(wx+ww,wy,p,wh);cx.fillRect(wx+ww/2-p/2,wy,p,wh);cx.fillRect(wx,wy+wh*.45,ww,p);
+  // torches: living flames with embers and smoke, and light that flickers
+  const lights=[{x:wx+ww/2,y:wy+wh/2,r:wh*.9,col:'#8a9aff'}];
   [0.2,0.8].forEach((fxp,i)=>{const tx=Math.round(PW*fxp),ty=Math.round(floorY*0.35);cx.fillStyle='#8a5a2b';cx.fillRect(tx-p,ty,p*2,p*6);
-    const fl=reduce?0:Math.sin(ts*12+i*3)*p;cx.fillStyle='#f2a91a';cx.fillRect(tx-p*2,ty-p*4+fl,p*4,p*4);cx.fillStyle='#ffe28a';cx.fillRect(tx-p,ty-p*3+fl,p*2,p*2);
-    const g=cx.createRadialGradient(tx,ty,2,tx,ty,PW*0.18);g.addColorStop(0,'rgba(242,169,26,.18)');g.addColorStop(1,'rgba(242,169,26,0)');cx.fillStyle=g;cx.fillRect(tx-PW*.2,ty-PW*.2,PW*.4,PW*.4);});
+    const l=AMB.fire(cx,tx,ty+p,p,ts,{id:'t'+i,size:.8,logs:false,smoke:true});l.r=PW*.3;lights.push(l);});
   // floor
   cx.fillStyle='#5a4a3a';cx.fillRect(0,floorY,PW,PH-floorY);cx.fillStyle='#6b5946';for(let x=0;x<PW;x+=p*10)cx.fillRect(x,floorY,p*9,p);
   cx.fillStyle='#4a3c2f';for(let x=p*5;x<PW;x+=p*10)cx.fillRect(x,floorY+p*4,p*8,p);
@@ -75,6 +81,8 @@ function frame(t){
   const m=S.mon;
   if(m&&n){const sc=m.boss?Math.round(p*1.6):p;const mx=Math.round(PW*0.72)+(fx.monHit>0&&!reduce?(Math.random()-.5)*p*3:0);
     cx.save();if(fx.monHit>0){cx.globalAlpha=0.6;}monsterArt(cx,mx,floorY,sc,m,ts);cx.restore();}
+  AMB.weather(cx,PW,PH,ts,{dust:.7,px:Math.max(2,Math.round(p/2)),ground:floorY});
+  AMB.lights(cx,PW,PH,ts,{dark:1,max:.42,tint:'#140c24',lights:lights.concat([{x:PW*.15,y:floorY-p*8,r:PW*.24,col:'#ffe2b0'},{x:PW*.72,y:floorY-p*8,r:PW*.18,col:'#d8c8ff'}])});
   // floaters
   cx.font=`${p*5}px DotGothic16, monospace`;cx.textAlign='center';
   for(let j=fx.hits.length-1;j>=0;j--){const h=fx.hits[j];h.age+=dt;if(h.age>0.9||reduce){fx.hits.splice(j,1);continue;}
@@ -84,3 +92,10 @@ function frame(t){
   if(!n){cx.fillStyle='#fff';cx.font=`${p*5}px DotGothic16, monospace`;cx.textAlign='center';cx.fillText('The dungeon waits. Hire a party.',PW/2,floorY*0.5);cx.textAlign='left';}
 }
 
+const AMB=Ambience.create({reduce:()=>reduce});
+/* a falling star crosses the window every so often */
+const STAR={next:3,t:-1,x:0,y:0};
+function fallingStar(w,h,ts,p){if(reduce)return;const dt=1/60;if(STAR.t<0){STAR.next-=dt;if(STAR.next<=0){STAR.t=0;STAR.x=w*(.2+Math.random()*.6);STAR.y=h*(.05+Math.random()*.25);STAR.next=5+Math.random()*9;}return;}
+  STAR.t+=dt;const k=STAR.t/.7;if(k>=1){STAR.t=-1;return;}const x=STAR.x+k*w*.45,y=STAR.y+k*h*.35;
+  for(let i=0;i<12;i++){cx.fillStyle=`rgba(255,250,220,${((1-i/12)*(1-k*.6)).toFixed(3)})`;cx.fillRect(Math.round(x-i*p*.9),Math.round(y-i*p*.7),Math.max(1,p/2),Math.max(1,p/2));}
+  cx.fillStyle=`rgba(255,255,255,${(1-k*.5).toFixed(3)})`;cx.fillRect(Math.round(x-p/2),Math.round(y-p/2),p,p);}

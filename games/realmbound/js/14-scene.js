@@ -47,11 +47,8 @@ function drawBeast(c,x,y,p,col,fam,right,t){
   c.restore();
 }
 function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidden)return;const t=ms/1000;const h=H(),z=h.dun?dungeonDef():ZONES[h.zone];
-  const g=cx.createLinearGradient(0,0,0,PH);g.addColorStop(0,z.sky[0]);g.addColorStop(1,z.sky[1]);cx.fillStyle=g;cx.fillRect(0,0,PW,PH);
-  cx.fillStyle=z.hill;cx.beginPath();cx.moveTo(0,PH*.7);for(let x=0;x<=PW;x+=PW/10)cx.lineTo(x,PH*.55+Math.sin(x*.02+1)*PH*.07);cx.lineTo(PW,PH);cx.lineTo(0,PH);cx.fill();
-  const gy=PH*.78;cx.fillStyle=z.ground;cx.fillRect(0,gy,PW,PH-gy);cx.fillStyle='rgba(0,0,0,.12)';for(let x=0;x<PW;x+=18)cx.fillRect(x+(Math.floor(x/18)%2)*6,gy+6,8,3);
-  if(C.phase==='intown'||C.phase==='town'){cx.fillStyle='#6b4a2a';const bx=PW*.62;cx.fillRect(bx,gy-PH*.36,PH*.4,PH*.36);cx.fillStyle='#8a2a1a';cx.beginPath();cx.moveTo(bx-10,gy-PH*.36);cx.lineTo(bx+PH*.2,gy-PH*.55);cx.lineTo(bx+PH*.4+10,gy-PH*.36);cx.fill();cx.fillStyle='#f2c14e';cx.fillRect(bx+PH*.15,gy-PH*.16,PH*.1,PH*.16);}
-  const p=Math.max(2,Math.floor(PH/42));
+  const gy=PH*.78,p=Math.max(2,Math.floor(PH/42));const AMBS=ambBack(t,gy,p); // sky, scenery, ground, torches, campfire (20-ambience.js)
+  if(C.phase==='intown'||C.phase==='town')ambTown(gy,t,AMBS);
   const walk=(C.phase==='seek'||C.phase==='town')&&!reduce?Math.sin(t*8)*p*.6:0;
   const lunge=C.anim.hero>0?p*3:0;
   const ride=!h.dun&&(C.phase==='seek'||C.phase==='town')?activeMount():null;
@@ -69,6 +66,7 @@ function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidde
   // companions stand behind you
   C.party.forEach((q,i)=>{const pp=Math.max(2,Math.round(p*.85));const x=PW*.28-(i+1)*PW*(C.party.length>4?.027:.065),y=gy-13*pp+((i%2)?pp:0)-(C.party.length>4&&i%2?3*pp:0)+(walk?walk*.5:0);
     drawPerson(x,y,pp,{cls:q.n.cls,race:q.n.race,hair:q.n.hair,dead:q.dead||C.phase==='dead'},t+i);});
+  ambFront(t,gy,p,AMBS); // weather, night and lightning
   if(C.surge&&C.mob){cx.font=`800 ${p*5}px Alegreya Sans, sans-serif`;cx.textAlign='center';cx.fillStyle='#ff8a2a';cx.fillText(dungeonDef().surgeName.toUpperCase(),PW*.66,gy-22*p);
     cx.fillStyle='rgba(60,140,220,.25)';cx.fillRect(PW*.1,gy-4*p,PW*.6*(1-C.surge.t/2.5),4*p);cx.textAlign='left';}
   if(C.phase==='rest'&&!reduce){cx.fillStyle='#fff';cx.font=`700 ${p*4}px Alegreya Sans, sans-serif`;cx.fillText('z',PW*.28+10*p,gy-16*p-(Math.floor(t*2)%3)*p*2);}

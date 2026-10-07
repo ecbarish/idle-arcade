@@ -38,6 +38,14 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
   members you aren't playing work jobs that pay whole units by the clock (the same time pays the same whether you
   played, were away or switched characters; reloading never pays twice; time away is capped like rested XP).
   Realmbound's Supplies tab uses it first; Starfall's adventurers, Wildbond's ranch jobs and the Realmbound guild next.
+- `shared/ambience.js`: the arcade's living scenes (S5), drawn in code: `Ambience.create({reduce})` gives `sky` (day/night,
+  stars, moon, sun, aurora, pixel clouds), `far` (parallax scenery that sways: pines, oaks, dead trees, peaks, mesas,
+  stones, canopy, reeds, ruins), `weather` (rain with splashes, snow, ash, embers, spores, leaves, dust, fireflies,
+  wisps, fog, lightning storms with an `onThunder` callback), `flash` (draw last), `lights` (night with pools of light),
+  `fire`/`smoke`/`embers`, `life` (birds, bats, drakes). Respects reduced motion (no flashes); skips unsized canvases.
+  Realmbound: `js/20-ambience.js` (zone profiles `AMB_ZONES`, `AMB_DUNGEONS`, 24-minute day `realmNight`, weather every 6
+  minutes `zoneWeather`). Wildbond: `drawAmbience` in `js/06-scene.js` (cameras expose `WK.cam.fwd` for lights).
+  Starfall: `06-render.js` (the night window with falling stars, living torches). Thunder is `sfx('thunder', vol)`.
 - `games/realmbound/index.html`: Realmbound markup and ordered classic script tags; no build step.
 - `games/realmbound/style.css`: the unchanged MMO interface styles.
 - `games/realmbound/js/00-core.js`: save key, selectors, formatting aliases, random helpers and level cap.
@@ -60,6 +68,7 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
 - `games/realmbound/js/17-sound.js`: Realmbound tunes per zone, dungeon, boss and spirit walk (shared/sound.js); `musicKey()`, `voiceOf()`, `sfx()`.
 - `games/realmbound/js/18-supplies.js`: R1, the supply bank and jobs board (shared/roster.js): `JOBS` (Mining, Herbalism, Questing), `ROSTER`, `bank()`, `craftKit()`, `craftPotion()`, `useKit()`, `autoPotion()` (called from `step()`), `supplyCheckIn()` (called by `boot()`), `supplyTick()` (every second), and the Supplies tab.
 - `games/realmbound/js/19-raid.js`: R2, raids: `RAIDS.throne` (The Hollow Throne), `startRaid()`/`autoRaid()`, plans (`choosePlan`), tells and raid calls (`raidStep`, `raidCall`, keys S/A/Q/W), lockout (`raidLock`), set loot and bonuses (`raidLoot`, `setT` added to `T()`), your other characters as raiders (`raidAlt`, found by `npcOf`). Hooks in 09-dungeon-runs.js (spawn, kill, finish, leave) and `step()`.
+- `games/realmbound/js/20-ambience.js`: S5 living scenes for Realmbound (`ambBack`, `ambTown`, `ambFront`, called from `frame()` in 14-scene.js).
 - `games/realmbound/js/99-boot.js`: startup, load, timers and the unchanged localhost-only `window.__rb` hook.
 - `docs/realmbound-design.md`: design decisions. `docs/ideas.md`: parked backlog.
 

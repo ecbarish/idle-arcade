@@ -120,6 +120,15 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    before each pull, raid calls during it, four bosses, weekly-style lockout (every 3 days), epic loot with tier
    sets. Plan: `docs/realmbound-40-60.md` ("Raids") and decision 5 in `docs/research/decisions.md`. Gate it on the
    Hollow Key (T23's last quest) but build it so it can be tested before T23 lands.
+19. ~~**S5: shared ambience kit**~~ — done by Claude 2026-10-09 (`shared/ambience.js`; all three games use it; layout in HANDOFF.md). Ideas for later: Wildbond battle backdrops, a weather forecast in the Journal, rain sounds. Evan asked for it after seeing a living pixel-art
+   scene (a floating island at night with rain, lightning, smoke, flickering windows, a campfire, fireflies, a waterfall,
+   swaying trees, drifting clouds, a moving character; "the lightning and other moving elements made it most
+   impressive"). `shared/ambience.js`, drawn on the games' existing canvases, quality first, used by every game:
+   weather (rain with splashes, snow, fog, wind-blown leaves/spores), **lightning storms** (a flash that lights the
+   scene, thunder a beat later), fire (embers, smoke bending in the wind, glow), light (flickering windows, lanterns,
+   torches, crystals, fireflies, moonlight), **moving scenery** (drifting clouds, swaying trees, running water) and
+   **background life** (birds, bats at dusk). Realmbound: a living backdrop per zone and dungeon; Wildbond: richer
+   weather and day/night; Starfall: starry sky and torches. Respect reduced motion; cheap on phones.
 
 ## Questions for Evan (work continues on the defaults until he answers)
 

@@ -96,6 +96,13 @@
         case 'coin': tone(988, 0.06, 'square', t, 0.18); tone(1319, 0.14, 'square', t + 0.06, 0.18); break;
         case 'loot': arp(['E5', 'G#5', 'B5', 'E6'], 0.06, 'pulse', 0.28); break;
         case 'dodge': noise(0.12, t, 0.18, null, 2500); tone(600, 0.1, 'triangle', t, 0.15, 1.6); break;
+        case 'thunder': { /* a crack, then a long low rumble; arg 0..1 is how close the strike was */
+          const v = typeof arg === 'number' ? arg : .7, ac = A.ac, s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+          s.buffer = A.noiseBuf; s.loop = true; f.type = 'lowpass'; f.frequency.setValueAtTime(900, t); f.frequency.exponentialRampToValueAtTime(140, t + 1.2);
+          g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(.9 * v, t + .04); g.gain.exponentialRampToValueAtTime(.35 * v, t + .5);
+          g.gain.linearRampToValueAtTime(.45 * v, t + .9); g.gain.exponentialRampToValueAtTime(0.0001, t + 2.6);
+          s.connect(f); f.connect(g); g.connect(A.fx); s.start(t, Math.random() * .4); s.stop(t + 2.7);
+          tone(55, 1.8, 'sine', t + .05, .3 * v, .6); break; }
       }
     }
 

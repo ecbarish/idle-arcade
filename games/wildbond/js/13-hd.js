@@ -84,7 +84,7 @@ ART.hd = (() => {
     }
     light(c, W, H);
     // tapping the ground: screen -> tile
-    WK.cam = { inv(mx, my) { if (my <= C.yh + 2) return []; const d = C.K / (my - C.yh), s = C.F / d; return [Math.floor(C.px + (mx - W / 2) / s), Math.floor(C.py - (d - C.dp))]; } };
+    WK.cam = { fwd(wx, wy) { const p = project(C, wx, wy); return p && [p.x, p.y, p.s]; }, inv(mx, my) { if (my <= C.yh + 2) return []; const d = C.K / (my - C.yh), s = C.F / d; return [Math.floor(C.px + (mx - W / 2) / s), Math.floor(C.py - (d - C.dp))]; } };
   }
   /* battles: the 16-bit scene with the background softly out of focus and the same light */
   function backdrop(c, w, h, bio, t) {

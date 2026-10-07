@@ -86,11 +86,7 @@ function drawMark(sx, sy, ts, t) {
 function drawWorld(t, A) {
   const m = curMap(), v = worldView(m, t);
   if (A.world) A.world(cx, PW, PH, v, t); else drawTopDown(v, t, A);
-  drawWeather(t);
-  // dusk and night, in eras that show light
-  const dk = A.light ? darkness() : 0;
-  if (dk > 0) { cx.fillStyle = `rgba(18,24,64,${(0.42 * dk).toFixed(3)})`; cx.fillRect(0, 0, PW, PH);
-    if (dk < 1) { cx.fillStyle = `rgba(255,140,60,${(0.14 * Math.sin(dk * Math.PI)).toFixed(3)})`; cx.fillRect(0, 0, PW, PH); } }
+  drawAmbience(t, A, v);
   // where you are
   const fs = Math.max(12, Math.round(PH / 19)); cx.font = `700 ${fs}px Fredoka, sans-serif`; const label = m.name, w = cx.measureText(label).width + 16;
   cx.fillStyle = 'rgba(23,50,58,.72)'; cx.fillRect(8, 8, w, fs * 1.65); cx.fillStyle = '#fff'; cx.textBaseline = 'middle'; cx.fillText(label, 16, 8 + fs * 0.85); cx.textBaseline = 'alphabetic';
@@ -102,7 +98,7 @@ function drawTopDown(v, t, A) {
   const camX = cols <= vw ? (cols - vw) / 2 : clamp(v.px + 0.5 - vw / 2, 0, cols - vw);
   const camY = rows <= vh ? (rows - vh) / 2 : clamp(v.py + 0.5 - vh / 2, 0, rows - vh);
   const ox = Math.round(-camX * ts), oy = Math.round(-camY * ts), tile = A.tile || ART.pixel.tile, walker = A.walker || ART.pixel.walker, item = A.item || ART.pixel.item;
-  WK.cam = { ox, oy, ts };
+  WK.cam = { ox, oy, ts, fwd: (wx, wy) => [ox + wx * ts, oy + wy * ts, ts] };
   for (let y = Math.floor(camY); y < camY + vh; y++) for (let x = Math.floor(camX); x < camX + vw; x++) {
     const inside = x >= 0 && y >= 0 && x < cols && y < rows;
     tile(cx, inside ? m.rows[y][x] : (m.biome === 'saltmarsh' && y < 4 ? '~' : v.edge), ox + x * ts, oy + y * ts, ts, P, t, x, y);
@@ -112,20 +108,35 @@ function drawTopDown(v, t, A) {
     else if (q.kind === 'pet') { const pp = ts / (q.wild ? 17 : 18); A.creature(cx, sx + ts / 2 - 2 * pp, sy + ts * 0.92, pp, q.sp, q.right, q.t); }
     else { const ry = q.ride ? sy - ts * 0.35 : sy; walker(cx, sx, ry, ts, q.look, q.dir, q.step); if (q.mark) drawMark(sx, ry, ts, t); } }
 }
-/* rain, mist and falling ash (the weather arrives with the Tide Badge; see weatherNow in 12-walk.js) */
-function drawWeather(t) {
-  const w = weatherNow(); if (w === 'clear') return;
-  const mo = reduceMotion ? 0 : 1;
-  if (w === 'rain') { cx.strokeStyle = 'rgba(190,215,255,.55)'; cx.lineWidth = 1; cx.beginPath();
-    for (let i = 0; i < 90; i++) { const x = (i * 97.3 + t * 260 * mo) % (PW + 40) - 20, y = (i * 53.7 + t * 520 * mo) % (PH + 30) - 15; cx.moveTo(x, y); cx.lineTo(x - 4, y + 11); }
-    cx.stroke(); cx.fillStyle = 'rgba(40,60,90,.12)'; cx.fillRect(0, 0, PW, PH); }
-  else if (w === 'mist') { for (let i = 0; i < 5; i++) { const y = PH * (0.15 + i * 0.18), x = ((t * 12 * mo + i * 170) % (PW + 300)) - 300;
-      const g = cx.createLinearGradient(x, 0, x + 300, 0); g.addColorStop(0, 'rgba(235,242,245,0)'); g.addColorStop(0.5, 'rgba(235,242,245,.32)'); g.addColorStop(1, 'rgba(235,242,245,0)');
-      cx.fillStyle = g; cx.fillRect(x, y, 300, PH * 0.14); }
-    cx.fillStyle = 'rgba(225,232,236,.16)'; cx.fillRect(0, 0, PW, PH); }
-  else if (w === 'ash') { cx.fillStyle = 'rgba(70,64,62,.55)';
-    for (let i = 0; i < 60; i++) { const x = (i * 61.1 + Math.sin(t + i) * 12 * mo) % PW, y = (i * 37.9 + t * 30 * mo) % PH; cx.fillRect(x, y, 2, 2); }
-    cx.fillStyle = 'rgba(120,80,60,.08)'; cx.fillRect(0, 0, PW, PH); }
+/* The weather, the night and the life in it (S5), on the arcade's shared ambience kit (shared/ambience.js).
+   Weather arrives with the Tide Badge (see weatherNow in 12-walk.js): rain with splashes, and on every third ranch
+   day the rain brings a thunderstorm (lightning, then thunder through the sound system); mist; falling ash with
+   embers. Each area has its own air in eras that show light: leaves on the Thornwood wind, embers over Emberfall,
+   glittering cloud in Cloudglass Pass, fireflies in the grass at night. Night is a dark layer with real pools of
+   light: around you, and at every door in town. Purely visual: nothing here changes what creatures appear. */
+const AMB = Ambience.create({ reduce: () => reduceMotion });
+function stormy() { return weatherNow() === 'rain' && (S.day || 1) % 3 === 0; }
+function drawAmbience(t, A, v) {
+  const w = weatherNow(), dk = A.light ? darkness() : 0, m = v.m, px = Math.max(2, Math.round(PH / 170)), fx = { px, splashAnywhere: true, wind: .15 };
+  if (w === 'rain') Object.assign(fx, { rain: stormy() ? 1.15 : .75, storm: stormy() ? 1 : 0, wind: stormy() ? .55 : .2, onThunder: vol => sfx('thunder', vol) });
+  else if (w === 'mist') Object.assign(fx, { fog: 1.3, ground: PH * 1.05 });
+  else if (w === 'ash') Object.assign(fx, { ash: 1, embers: .45 });
+  if (A.light && m.biome) {
+    if (m.biome === 'thornwood' && w === 'clear') fx.leaves = .3;
+    if (m.biome === 'emberfall') fx.embers = Math.max(fx.embers || 0, .3);
+    if (m.biome === 'cloudglass') Object.assign(fx, { dust: .9, dustCol: '#ffffff', fog: Math.max(fx.fog || 0, .5), ground: PH * 1.05 });
+    if (dk > .3 && m.biome !== 'emberfall' && w !== 'rain') fx.fireflies = dk;
+  }
+  AMB.weather(cx, PW, PH, t, fx);
+  if (dk > 0) {
+    const lights = [], cam = WK.cam, at = (x, y) => cam && cam.fwd ? cam.fwd(x, y) : null;
+    const me = at(WK.fx + .5, WK.fy + .5); lights.push(me ? { x: me[0], y: me[1], r: Math.max(PH * .22, me[2] * 2.6), col: '#ffe2b0' } : { x: PW / 2, y: PH * .6, r: PH * .3, col: '#ffe2b0' });
+    if (cam && cam.fwd) for (let y = 0; y < m.rows.length; y++) for (let x = 0; x < m.rows[y].length; x++) if (m.rows[y][x] === 'D') {
+      const p = at(x + .5, y + .5); if (p && p[0] > -PW * .2 && p[0] < PW * 1.2 && p[1] > -PH * .2 && p[1] < PH * 1.2) lights.push({ x: p[0], y: p[1] - p[2] * .3, r: p[2] * 2.4, col: '#ffc860', flick: true }); }
+    AMB.lights(cx, PW, PH, t, { dark: dk, max: .58, tint: '#121838', lights });
+    if (dk < 1) { cx.fillStyle = `rgba(255,140,60,${(0.14 * Math.sin(dk * Math.PI)).toFixed(3)})`; cx.fillRect(0, 0, PW, PH); }
+  }
+  AMB.flash(cx, PW, PH, t);
 }
 /* sparks fly outward for hits, sparkles rise for heals, a ring flashes for a catch */
 function drawBurst(b, gy, p) {

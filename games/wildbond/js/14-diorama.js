@@ -120,7 +120,7 @@ ART.diorama = (() => {
     c.clearRect(0, 0, W, H);
     // tapping the ground: screen -> tile, through the camera
     const ray = new T.Raycaster(), plane = new T.Plane(new T.Vector3(0, 1, 0), 0), hit = new T.Vector3();
-    WK.cam = { inv(mx, my) { ray.setFromCamera({ x: mx / W * 2 - 1, y: -(my / H) * 2 + 1 }, camera); return ray.ray.intersectPlane(plane, hit) ? [Math.floor(hit.x), Math.floor(hit.z)] : []; } };
+    WK.cam = { fwd(wx, wy) { const v = new T.Vector3(wx, 0.5, wy).project(camera); return v.z < 1 ? [(v.x + 1) / 2 * W, (1 - v.y) / 2 * H, H / 12] : null; }, inv(mx, my) { ray.setFromCamera({ x: mx / W * 2 - 1, y: -(my / H) * 2 + 1 }, camera); return ray.ray.intersectPlane(plane, hit) ? [Math.floor(hit.x), Math.floor(hit.z)] : []; } };
     return true;
   }
   return Object.assign({}, hd, { world });

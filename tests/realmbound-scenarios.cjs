@@ -385,6 +385,16 @@ module.exports = function scenarios() {
         R0.raidLock.at=Date.now()-4*864e5;check(raidLock().killed.length===0,'the lockout resets after 3 days');
         R0.dun={id:'throne',tier:0,step:6,mods:[],wipes:0,raid:true,plans:{},prev:[]};syncParty();raidFinish();check(R0.raidLeader&&dungeonStats('throne').clears===1&&!R0.dun,'a clear earns Raid Leader');
         rb.S.chars=rb.S.chars.filter(c=>c!==R0&&c!==alt);if(modalKind)closeModal();rb.S.cur=rb.S.chars.length?rb.S.chars[0].id:null;}
+      // S5: living scenes. Every zone and dungeon has a backdrop, and drawing every one of them never fails
+      {check(Object.keys(rb.ZONES).every(z=>AMB_ZONES[z]&&AMB_ZONES[z].far&&AMB_ZONES[z].weather.every(w=>AMB_WEATHER[w])),'every zone has its own scenery and weather');
+        check(Object.keys(rb.DUNGEONS).every(d=>AMB_DUNGEONS[d])&&AMB_DUNGEONS.throne,'every dungeon and the raid has its own air');
+        const ns=[0,.3,.62,.7,.8,.95].map(k=>realmNight(k*AMB_DAY*1000));check(ns[0]===0&&ns[3]>0&&ns[4]===1&&ns.every(n=>n>=0&&n<=1),'a 24-minute day: day, dusk, night, dawn');
+        const v=rb.newHero('Scenecheck2','wild','duskelf','mage');v.lvl=40;rb.S.chars.push(v);rb.S.cur=v.id;rb.boot();let ok=true,err='';
+        const keepW=window.zoneWeather,keepN=window.realmNight;let tt=1000;const drawAmb=()=>{tt+=.05;const gy=(PH||200)*.78,p=4,A=ambBack(tt,gy,p);if(rb.C.phase==='intown')ambTown(gy,tt,A);ambFront(tt,gy,p,A);};
+        try{for(const z of Object.keys(rb.ZONES))for(const w of Object.keys(AMB_WEATHER))for(const n of [0,1]){v.zone=z;zoneWeather=()=>w;realmNight=()=>n;for(const ph of ['seek','rest','intown']){rb.C.phase=ph;drawAmb();}}
+          for(const d of Object.keys(AMB_DUNGEONS)){v.dun={id:d,tier:0,step:0,mods:[],wipes:0,raid:d==='throne',plans:{}};drawAmb();}}catch(e){ok=false;err=String(e);}
+        zoneWeather=keepW;realmNight=keepN;v.dun=null;check(ok,'every zone, weather, time of day and dungeon draws without error'+(err?': '+err:''));
+        rb.S.chars=rb.S.chars.filter(c=>c!==v);}
       // T21: every generated item category follows the widened name bands.
       check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');
       check(BLUE_PRE.length===17&&new Set(BLUE_PRE).size===17,'rare prefix pool retains seven names and adds ten distinct dungeon names');

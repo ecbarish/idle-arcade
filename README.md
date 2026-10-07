@@ -39,6 +39,17 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-09 (evening)** — **The worlds come alive** (a new shared ambience system, inspired by a living pixel-art
+  scene Evan saw). **Realmbound:** every zone has its own sky and distant scenery that scrolls past as you travel
+  and sways in the wind (Thornvale's oaks, Redsand's mesas, dead trees and reeds in the Fens, glowing volcanic peaks
+  on Ashen Ridge, snowy peaks and pines in Frostmere, standing stones in the Barrowfields, giant canopy trees in the
+  Hollow Crown); weather that changes every few minutes, including **thunderstorms with lightning and thunder**,
+  blizzards, fog, dust and ashfall; birds, bats at dusk, fireflies, grave-wisps, spores and a distant drake; a day and
+  night every 24 minutes with stars, the moon and the aurora over Frostmere; a campfire when you rest, the inn's
+  windows glowing at night, flickering torches in dungeons and braziers in the Hollow Throne. **Wildbond:** rain
+  with splashes and thunderstorms, embers over Emberfall, glittering cloud in Cloudglass Pass, fireflies at night and
+  real pools of light around you and at every door in town. **Starfall Guild:** living torches and a window on the
+  night sky where a star falls now and then.
 - **2026-10-09 (later)** — **Realmbound's first raid: The Hollow Throne.** Ten people: you plus nine from your
   companions and your own other characters (two tanks and two healers at least). Four bosses, each with one thing to
   watch for: the Bark Warden shreds its tank (call **Swap!**), the Ashwing Brood hatches adds (**Adds!**), the
