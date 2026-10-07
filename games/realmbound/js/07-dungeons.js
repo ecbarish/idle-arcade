@@ -27,6 +27,15 @@ const BARROWS={name:'The Silent Barrows',minLvl:42,zone:'barrowfield',sky:['#152
     {boss:true,name:'Selnith, the Doorweaver',lvl:44,kind:'beast',fam:'spider',col:'#a4b6c8',hpM:9.5,dmgM:2.4,mech:{surge:15,wave:23,chill:12},loot:2},
     {name:'Keepers of the Return Path',n:2,lvl:44,kind:'humanoid',col:'#637c90'},
     {boss:true,final:true,name:'The Last Wayward',lvl:45,kind:'humanoid',col:'#b5cedc',hpM:12.5,dmgM:2.6,mech:{wave:15,surge:18,enrage:150,chill:10},loot:3}]};
-const DUNGEONS={sanctum:SANCTUM,foundry:FOUNDRY,barrows:BARROWS};
+const ROOTROT={name:'Rootrot Hollow',minLvl:49,zone:'hollowcrown',sky:['#17271b','#68733b'],hill:'#263525',ground:'#302d20',waveName:'Canopy Shudder',surgeName:'Rootheave',
+  enc:[
+    {name:'Rotgnaw Scavengers',n:3,lvl:49,kind:'beast',fam:'wolf',col:'#737b45'},
+    {name:'Hollowroot Gatekeepers',n:2,lvl:49,kind:'humanoid',col:'#667443'},
+    {boss:true,name:'Neldrath, the Ringkeeper',lvl:50,kind:'humanoid',col:'#89954e',hpM:8.5,dmgM:2.3,mech:{wave:14},loot:2},
+    {name:'Giltweb Brood',n:3,lvl:50,kind:'beast',fam:'spider',col:'#a99b4e'},
+    {boss:true,name:'Ossavine, the Tangled Span',lvl:51,kind:'beast',fam:'spider',col:'#b4a363',hpM:9.5,dmgM:2.4,mech:{surge:15,wave:23},loot:2},
+    {name:'Ashwing Rootwardens',n:2,lvl:51,kind:'beast',fam:'lizard',col:'#766d44'},
+    {boss:true,final:true,name:'Arveth, the Hoard Below',lvl:52,kind:'beast',fam:'lizard',col:'#a58c52',hpM:12.5,dmgM:2.6,mech:{wave:15,surge:18,enrage:150},loot:3}]};
+const DUNGEONS={sanctum:SANCTUM,foundry:FOUNDRY,barrows:BARROWS,rootrot:ROOTROT};
 const DUN_MODS={fortified:{name:'Fortified',desc:'Non-boss enemies have 30% more health.'},tyrannical:{name:'Tyrannical',desc:'Bosses have 30% more health and hit 15% harder.'},
   raging:{name:'Raging',desc:'Enemies below 30% health deal 40% more damage.'},tidal:{name:'Tidal',desc:'Boss waves and surges come 30% more often.'}};

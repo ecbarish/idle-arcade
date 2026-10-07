@@ -45,10 +45,11 @@ with towns, trainers, items and riding; art eras Pocket → Pixel/16-bit → HD-
 badges; day/night, weather, visible wild creatures; ranch and breeding; challenge modes (Nuzlocke, Randomizer, Solo,
 Hardcore), rematches, area mastery stars; music and effects from the shared sound system. Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
 
-**Realmbound** (classic-MMO idle, flagship): levels 1-45, five classes, two talent trees each with roles that follow
-your build, three 5-person dungeons (Drowned Sanctum, Cindervein Foundry, Silent Barrows with its Grave Chill
+**Realmbound** (classic-MMO idle, flagship): levels 1-52 (the Hollow Crown, 45-52, is the newest zone), five classes, two talent trees each with roles that follow
+your build, four 5-person dungeons (Drowned Sanctum, Cindervein Foundry, Silent Barrows with its Grave Chill
 mechanic that needs a healer), pets, mounts, companions, earned addons, quest givers in portrait scenes, music
-per zone and sound effects (off by default). Item names change every 10 levels to 60. The plan to 60 with the guild and the first raid: `docs/realmbound-40-60.md`; lore:
+per zone and sound effects (off by default), Rootrot Hollow (49-52), and a Supplies tab where heroes you aren't playing
+mine ore for repair kits (R1). Item names change every 10 levels to 60. The plan to 60 with the guild and the first raid: `docs/realmbound-40-60.md`; lore:
 `docs/lore/realmbound.md`.
 
 **Hub and promo pages:** `index.html`, `promo.html` (Realmbound), `promo-wildbond.html`.
@@ -66,7 +67,8 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    `docs/realmbound-40-60.md` ("Measured: the Barrowfields"). To re-measure a later chapter, copy that method:
    loop `window.__rb.step(0.1)`, keep the quest log full with `accept`/`turnIn`, loot by hand (`lootAll()`) and
    empty bags in "Focus", and replace gear at each level.
-3. **T22: Realmbound Hollow Crown, part 1** (any assistant; data) — **sent to ChatGPT 2026-10-08** (branch
+3. ~~**T22: Realmbound Hollow Crown, part 1**~~ — merged by Claude 2026-10-08 after all three test pages passed (929 / 488 / 24); implemented by Codex 2026-10-07, including the owner-approved
+   original tune in `17-sound.js`. Awaiting PR review; branch
    `codex/realmbound-hollowcrown`; full ticket in `docs/ROADMAP.md`, "T22"). Same shape as T20 (see its ticket in
    `docs/ROADMAP.md`): zone `hollowcrown`, "The Hollow Crown", `lv: [45, 52]`, shared hub *Thornmantle Camp*, a lore
    paragraph, 5 mob types 45-52 (Ashwing drakes use the `lizard` family; corrupted treants as humanoids; wolves,
@@ -127,6 +129,16 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-08 Claude (night, Evan asleep, later): built R1 + S3, the shared roster (`shared/roster.js`) and Realmbound's
+  Supplies tab (other heroes mine ore → repair kits); merged ChatGPT's T22 (Hollow Crown 45-52, Rootrot Hollow).
+  Tests: Realmbound 929, Wildbond 488, Starfall 24, all pass. **Next chat, start here:** (1) `git fetch`; review
+  and merge `codex/starfall-sound` (T26) if it's there; (2) give ChatGPT T23 = Hollow Crown part 2 (the Crown's
+  Heart, 52-56, see `docs/realmbound-40-60.md`), writing the ticket in `docs/ROADMAP.md` like T22; (3) Claude:
+  T1-C third talent trees (item 5), or the next roster jobs (Questing, Herbalism; item 15), then the guild.
+- 2026-10-07 Codex: T22 adds the Hollow Crown (45-52), twelve voiced quests, Veskareth and Rootrot Hollow.
+  Evan approved the original zone tune in `17-sound.js` after S2 added per-zone music checks.
+  Checks pass: Realmbound 911, Wildbond 488, Starfall 24. `codex/realmbound-hollowcrown` awaits PR review; no merge.
 
 - 2026-10-08 Claude (night, Evan asleep): S2 done, the shared sound system. Realmbound now has its own music and
   effects, and Wildbond's sound improved. All test pages pass: Realmbound 600, Wildbond 488, Starfall 24.

@@ -76,7 +76,7 @@ the very end, so running out of usage never strands work.
   badges. The lore bible is `docs/lore/wildbond.md` (T14); areas 4-8 there are proposals. ChatGPT has T17 (area 4,
   Cloudglass Pass: 00-data.js + 11-maps.js); while it's open Claude only touches `SCENES` and `ERAS` in 00-data.js
   and nothing in 11-maps.js.
-- **Realmbound** (classic-MMO idle, flagship): levels 1-45, three dungeons, hunters/pets/mounts, lore bible in
+- **Realmbound** (classic-MMO idle, flagship): levels 1-52 (Hollow Crown, T22), four dungeons, hunters/pets/mounts, sound, the Supplies tab (R1: other heroes mine ore for repair kits on `shared/roster.js`), lore bible in
   `docs/lore/realmbound.md`. Frostmere / The Winter Road (30-40) and the Barrowfields + Silent Barrows (40-45, T20,
   ChatGPT) are merged. **T1 is done:** the plan for 40-60, the guild and raids is `docs/realmbound-40-60.md`.
   **T1-A is done:** two talent trees per class (`TALENTS[cls]` is a list of trees; `TALENT_LIST` flattens them with

@@ -21,9 +21,9 @@ module.exports = function scenarios() {
         rb.accept(q.id);h.quests.prog[q.id]=q.n;rb.turnIn(q.id,0,false);
         check(h.quests.done[q.id],'quest completed: '+q.id);
       }
-      h.lvl=44;h.xp=0;rb.boot();rb.gainXP(rb.xpNeed(44)*10,false);
-      check(h.lvl===45&&h.xp===0,'XP stops at level 45');
-      check(h.npcs.every(n=>rb.npcZone(n)==='barrowfield'),'high-level companions visit the Barrowfields');
+      h.lvl=51;h.xp=0;rb.boot();rb.gainXP(rb.xpNeed(51)*10,false);
+      check(h.lvl===52&&h.xp===0,'XP stops at level 52');
+      check(h.npcs.every(n=>rb.npcZone(n)==='hollowcrown'),'high-level companions visit the Hollow Crown');
       h.lvl=27;for(const n of h.npcs)n.offset=0;
       check(h.npcs.every(n=>rb.npcZone(n)==='ashen'),'level-27 companions still visit Ashen Ridge');
       h.lvl=30;rb.boot();
@@ -139,6 +139,78 @@ module.exports = function scenarios() {
         rb.startDungeon(1,team,'barrows');
         check(old.dun.id==='barrows'&&old.dun.mods.length===1,'Barrows earned Heroic uses existing modifiers: '+faction);
         old.dun=null;rb.boot();rb.save();
+      }
+      // T22: the Hollow Crown, old level-45 saves and Rootrot Hollow.
+      {
+        const crown=rb.ZONES.hollowcrown,rootrot=rb.DUNGEONS.rootrot,chain=rb.QUESTS.hollowcrown;
+        check(crown.name==='The Hollow Crown'&&crown.lv[0]===45&&crown.lv[1]===52&&crown.faction===null,'Hollow Crown is a shared level 45-52 zone');
+        check(crown.hub.concord==='Thornmantle Camp'&&crown.hub.wild===crown.hub.concord,'both factions share Thornmantle Camp');
+        check(crown.lore.includes('empty throne')&&crown.lore.includes('Sundering')&&crown.lore.includes('Ashwing'),'Hollow Crown lore follows the Wayfolk and Ashwing story');
+        check(crown.mobs.length===6&&crown.mobs.filter(m=>m.elite).length===1,'Hollow Crown has five ordinary mobs and one elite');
+        check(crown.mobs.every(m=>m.lv[0]>=45&&m.lv[1]<=52&&m.lv[0]<=m.lv[1]),'Hollow Crown mob bands stay within 45-52');
+        check(crown.mobs.find(m=>m.id==='ashwing').fam==='lizard'&&crown.mobs.find(m=>m.id==='hollowroot').kind==='humanoid','drakes and treants use existing visual kinds');
+        check(['wolf','spider','boar'].every(fam=>crown.mobs.some(m=>m.fam===fam&&!m.elite)),'rotting wood contains wolves, spiders and boars');
+        check(new Set(Object.values(rb.ZONES).flatMap(z=>z.mobs.map(m=>m.id))).size===Object.values(rb.ZONES).flatMap(z=>z.mobs).length,'surface mob IDs stay unique');
+        check(chain.length===12&&chain.every((q,i)=>q.id==='hc'+(i+1)&&q.lvl>=45&&q.lvl<=52),'twelve hc quests cover levels 45-52');
+        check(chain.every(q=>Array.isArray(q.giver)&&q.giver.length===2&&q.giver.every(Boolean)&&Array.isArray(q.done)&&q.done.length===2&&q.done.every(Boolean)),'all Hollow Crown quests have paired givers and turn-in voices');
+        check(chain.every(q=>['kill','collect'].includes(q.type)&&q.n>0&&(!q.req||(chain.findIndex(p=>p.id===q.req)>=0&&chain.findIndex(p=>p.id===q.req)<chain.indexOf(q)))),'Hollow Crown objectives and prerequisite order are valid');
+        check(chain.at(-1).text.includes('Rootrot Hollow')&&chain.at(-1).text.includes('Seraveth'),'final quest points to the dungeon and the later Crown heart');
+        const elite=crown.mobs.find(m=>m.elite);
+        check(elite.id==='veskareth'&&elite.rare&&elite.lv[0]===52&&elite.lv[1]===52&&elite.fam==='lizard','Veskareth is a level-52 legendary tameable drake');
+        check(rootrot.name==='Rootrot Hollow'&&rootrot.minLvl===49&&rootrot.zone==='hollowcrown','Rootrot opens at 49 in the Hollow Crown');
+        check(rootrot.enc.filter(e=>!e.boss).length===4&&rootrot.enc.filter(e=>e.boss).length===3,'Rootrot has four packs and three bosses');
+        check(rootrot.enc.every(e=>e.lvl>=49&&e.lvl<=52&&(!e.mech||Object.keys(e.mech).every(k=>['wave','surge','enrage'].includes(k)))),'Rootrot uses existing warm-wood mechanics, without Grave Chill');
+        check(rootrot.enc.at(-1).final&&rootrot.enc.at(-1).lvl===52&&!rootrot.enc.some(e=>e.name.includes('Seraveth')),'level-52 Rootrot finale leaves Seraveth for the later chapter');
+        for(const faction of ['concord','wild']){
+          const c=rb.newHero('Crowncheck',faction,faction==='concord'?'human':'grishar','hunter');rb.S.chars.push(c);rb.S.cur=c.id;
+          Object.assign(c,{lvl:42,zone:'barrowfield',xp:0});for(const n of c.npcs)n.offset=0;rb.boot();
+          const travel=()=>document.querySelector('[data-act="zone"][data-arg="hollowcrown"]').click();
+          travel();check(c.zone==='barrowfield','Hollow Crown refuses travel at 42: '+faction);
+          c.lvl=43;rb.boot();travel();rb.boot();
+          check(c.zone==='hollowcrown','Hollow Crown accepts travel at 43: '+faction);
+          check(document.querySelector('#zoneLore').textContent===crown.lore,'Hollow Crown lore visible: '+faction);
+          check(document.body.textContent.includes('Thornmantle Camp'),'shared camp visible: '+faction);
+          c.lvl=44;check(c.npcs.every(n=>rb.npcZone(n)==='barrowfield'),'level-44 companions retain Barrowfields: '+faction);
+          c.lvl=45;check(c.npcs.every(n=>rb.npcZone(n)==='hollowcrown'),'level-45 companions visit Hollow Crown: '+faction);
+          c.zone='barrowfield';c.quests.done.bf12=true;c.drecords={sanctum:{clears:2,best:1,runs:3},foundry:{clears:1,best:0,runs:1},barrows:{clears:1,best:0,runs:1}};
+          rb.boot();rb.save();const resumed=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1')));
+          const old=resumed.chars.find(h=>h.id===c.id);rb.S.chars=resumed.chars;rb.S.cur=old.id;rb.boot();
+          check(old.lvl===45&&old.zone==='barrowfield'&&old.quests.done.bf12&&rb.dungeonStats('barrows').clears===1&&rb.dungeonStats('sanctum').best===1,'level-45 save preserves chapter, zone and separate dungeon records: '+faction);
+          rb.gainXP(rb.xpNeed(45),false);check(old.lvl===46,'old level-45 save earns XP to 46: '+faction);
+          travel();rb.boot();
+          for(const q of chain){
+            old.bags=[];old.grind=null;
+            check(q.type!=='collect'||crown.mobs.find(m=>m.id===q.mob).drop,'Hollow Crown collection target has its item: '+q.id+' '+faction);
+            if(q.req){delete old.quests.done[q.req];old.lvl=52;check(rb.qState(q)==='locked','Hollow Crown prerequisite actually gates quest: '+q.id+' '+faction);old.quests.done[q.req]=true;}
+            old.lvl=q.lvl-3;check(rb.qState(q)==='locked','Hollow Crown quest locked below level-minus-two: '+q.id+' '+faction);
+            old.lvl=q.lvl-2;check(rb.qState(q)==='avail','Hollow Crown quest opens at level-minus-two: '+q.id+' '+faction);
+            questOffer(q.id);check(!!RTALK&&RTALK.lines[0][1]===q.text&&RTALK.choices.length===2,'Hollow Crown voiced offer and choices: '+q.id+' '+faction);
+            SCN.choose(0);rb.boot();rb.spawn();
+            check(old.quests.active.includes(q.id)&&rb.C.mob.id===q.mob,'Hollow Crown quest accepts and selects target: '+q.id+' '+faction);
+            old.quests.prog[q.id]=q.n;rb.turnIn(q.id,0,false);const i=faction==='concord'?0:1;
+            check(old.quests.done[q.id]&&rb.C.lines.some(l=>l.txt.includes(q.giver[i]+': "'+q.done[i]+'"')),'Hollow Crown turn-in voice: '+q.id+' '+faction);
+            questThanks(q.id);check(!!RTALK&&RTALK.lines[0][1]===q.done[i],'Hollow Crown portrait thanks uses faction voice: '+q.id+' '+faction);SCN.skip();
+            check(old.bags.length===1&&old.bags[0].ilvl===q.lvl+(q.elite?2:1)&&old.bags[0].rar===(q.elite?3:2),'Hollow Crown exact scaled reward: '+q.id+' '+faction);
+          }
+          rb.S.tab='quests';rb.boot();check(document.body.textContent.includes('12/12 quests done in The Hollow Crown'),'Hollow Crown completion visible: '+faction);
+          old.lvl=52;old.grind=elite.id;rb.boot();rb.spawn();
+          check(rb.C.mob.id===elite.id&&rb.C.mob.elite&&rb.C.mob.rar===4,'Veskareth spawns legendary: '+faction);
+          rb.startTame();check(!!rb.C.taming,'Veskareth taming begins: '+faction);rb.finishTame();
+          check(old.pets.some(p=>p.family==='lizard'&&p.rar===4),'Veskareth joins Hunter stable: '+faction);
+          old.grind=null;old.lvl=48;rb.boot();document.querySelector('[data-act="tab"][data-arg="friends"]').click();
+          check(document.querySelector('[data-act="lfg"][data-arg="rootrot"]').disabled,'Rootrot group finder locked at 48: '+faction);
+          const team=old.npcs.slice(0,4).map(n=>n.id);rb.startDungeon(0,team,'rootrot');check(!old.dun,'Rootrot entry rejected below level 49: '+faction);
+          old.lvl=49;rb.boot();document.querySelector('[data-act="tab"][data-arg="friends"]').click();
+          check(!document.querySelector('[data-act="lfg"][data-arg="rootrot"]').disabled,'Rootrot group finder enabled at 49: '+faction);
+          old.zone='barrowfield';rb.boot();rb.startDungeon(0,team,'rootrot');check(!old.dun,'Rootrot requires its own zone: '+faction);
+          old.zone='hollowcrown';rb.boot();rb.startDungeon(1,team,'rootrot');check(!old.dun,'Rootrot Heroic requires a normal clear: '+faction);
+          rb.startDungeon(0,team,'rootrot');check(old.dun&&old.dun.id==='rootrot','Rootrot normal entry at 49: '+faction);
+          for(let i=0;i<rootrot.enc.length;i++){old.dun.step=i;rb.spawnDungeon();const e=rootrot.enc[i];check(rb.C.mob.name.includes(e.name)&&rb.C.mob.lvl===e.lvl&&rb.C.mob.boss===!!e.boss,'Rootrot encounter identity: '+i+' '+faction);}
+          rb.finishDungeon();check(rb.dungeonStats('rootrot').clears===1&&rb.dungeonStats('rootrot').best===0,'Rootrot clear unlocks Heroic: '+faction);
+          check(rb.dungeonStats('sanctum').best===1&&rb.dungeonStats('foundry').clears===1&&rb.dungeonStats('barrows').clears===1,'Rootrot clear preserves earlier dungeon records: '+faction);
+          rb.startDungeon(1,team,'rootrot');check(old.dun.id==='rootrot'&&old.dun.mods.length===1,'Rootrot earned Heroic uses existing modifiers: '+faction);
+          old.dun=null;rb.boot();rb.save();
+        }
       }
       // T1-A: two talent trees, roles from your build, capstones, respec
       for(const [cls,trees] of Object.entries(rb.TALENTS)){

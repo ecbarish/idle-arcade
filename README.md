@@ -44,6 +44,11 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
   a time; higher levels mine faster), and their ore arrives even while you're away, up to 8 hours, with one report
   when you come back. Ore makes **repair kits** that mend all your gear anywhere, and Auto uses a kit instead of
   walking back to town. Each hero keeps their own bags. Built on a new shared roster system the guild will use next.
+- **2026-10-07** — Realmbound: The Hollow Crown's Outer Wood (T22) extends the journey to level 52.
+  Both factions share Thornmantle Camp, twelve voiced quests follow the empty throne and Ashwing claim,
+  Veskareth is a legendary tameable drake, and Rootrot Hollow opens at 49 with four packs and three bosses.
+  Old level-45 saves resume earning XP. Seraveth and the Crown's Heart remain ahead.
+
 - **2026-10-08 (night)** — One sound system for the whole arcade (`shared/sound.js`). **Realmbound has sound now**
   (off by default; the header button cycles off / effects / effects + music): its own tune for every zone, from
   Thornvale's flute to the Barrowfields' lament, plus dungeon, boss and spirit-walk music, and effects for levels,

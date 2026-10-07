@@ -32,6 +32,11 @@ const TRACKS = {
     mel: 'F#4 . . A4 G#4 . . . F#4 . . C#5 D5 . C#5 . A4 . . . G#4 . . . F#4 . . . . . . .',
     bass: 'F#2 . . . . . . . D2 . . . . . . . E2 . . . . . . . C#2 . . . . . . .',
     drum: 'k . . . . . . . k . . . . . . h' },
+  /* Hollow Crown: an uneasy canopy tune with gaps around the empty seat */
+  hollowcrown: { bpm: 88, lead: 'triangle',
+    mel: 'E5 . F5 B4 C5 . G5 F5 E5 D5 . B4 A4 . . . C5 . E5 G5 F5 E5 D5 . B4 C5 . A4 B4 . E5 .',
+    bass: 'E2 . . B2 C3 . G2 . A2 . . E3 F2 . C3 . E2 . B2 . C3 . . G2 A2 . E3 . B2 . . .',
+    drum: 'k . . . . . h . k . . . . . . h' },
   /* any dungeon: low stone halls */
   dungeon: { bpm: 96, lead: 'pulse',
     mel: 'D4 . F4 . A4 . G#4 . A4 . . . F4 . E4 . D4 . F4 . A4 . C5 . A#4 . A4 . G4 . E4 .',
