@@ -92,7 +92,8 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    (×1.6 / ×1 / ×0.6), chosen at character creation and changeable in town; re-run the pacing sim afterwards.
 11. ~~**D7: shared multiverse record**~~ — done by Claude 2026-10-08: `docs/lore/multiverse.md` (rules, how the worlds
    connect, recurring characters Pell the peddler and the Archivist). Use it whenever writing new lore.
-12. **S1: shared dialogue scenes** (any assistant) — **claimed by Claude, 2026-10-08**: move Wildbond's `09-dialogue.js` into `shared/dialogue.js` (portrait
+12. ~~**S1: shared dialogue scenes**~~ — done by Claude 2026-10-08 (`shared/dialogue.js`; Wildbond and Realmbound
+   both use it). Originally: move Wildbond's `09-dialogue.js` into `shared/dialogue.js` (portrait
    drawing, typewriter, auto-advance) with a small game-specific adapter, keep Wildbond identical (both test pages
    pass), then use it for Realmbound quest givers' offer/turn-in lines (portraits from a small cast list).
 13. **S2: shared sound** (any assistant): same for `10-sound.js` → `shared/sound.js`; give Realmbound effects and
@@ -116,6 +117,9 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (late): merged T24 + T25; built S1, the shared scene system (moods, blinking, choices, faces
+  from names): Wildbond switched over unchanged, Realmbound quest givers now speak in portrait scenes with Accept
+  / Not now. Sent T22 (Hollow Crown) to ChatGPT. Next for Claude: S2 shared sound.
 - 2026-10-08 Codex: T24 (Wildbond checks) and T25 (Starfall Guild split, a three-minute main save loads
   identically); both merged by Claude after all four test pages passed.
 - 2026-10-08 Claude (night): Evan accepted all research recommendations and a light shared universe. Built D1

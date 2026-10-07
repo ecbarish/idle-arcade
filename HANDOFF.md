@@ -26,6 +26,9 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
 
 ## Layout
 - `index.html`: the hub. `shared/engine.js`: shared save and formatting helpers.
+- `shared/dialogue.js`: the arcade's one scene system (portraits with moods, typewriter text, choices, per-game themes,
+  stable faces from any name via `Dialogue.lookFor`). Wildbond uses it through `09-dialogue.js`, Realmbound through
+  `js/16-scenes.js`. New games should use it too: it's part of the arcade's shared look.
 - `games/realmbound/index.html`: Realmbound markup and ordered classic script tags; no build step.
 - `games/realmbound/style.css`: the unchanged MMO interface styles.
 - `games/realmbound/js/00-core.js`: save key, selectors, formatting aliases, random helpers and level cap.

@@ -191,6 +191,15 @@ module.exports = function scenarios() {
         const b=document.createElement('button');b.dataset.act='pace';b.dataset.arg='breezy';document.body.appendChild(b);b.click();b.remove();
         check(p.pace==='breezy','the Journal can change the journey length');
         rb.S.chars=rb.S.chars.filter(c=>c!==p);}
+      // S1: quest givers speak in shared portrait scenes when you accept or turn in by hand
+      {const s=rb.newHero('Scenecheck','wild','grishar','hunter');s.lvl=40;s.zone='barrowfield';rb.S.chars.push(s);rb.S.cur=s.id;rb.boot();
+        const q=rb.QUESTS.barrowfield[0];questOffer(q.id);check(!!RTALK&&RTALK.lines[0][0]===giver(q)&&RTALK.choices.length===2,'Accept opens the giver\'s scene with two choices');
+        SCN.choose(1);check(!RTALK&&!s.quests.active.includes(q.id),'"Not now" leaves the quest unaccepted');
+        questOffer(q.id);SCN.choose(0);check(s.quests.active.includes(q.id),'"Accept" takes the quest');
+        s.quests.prog[q.id]=q.n;rb.turnIn(q.id,0,false);questThanks(q.id);check(!!RTALK&&RTALK.lines[0][1]===q.done[1],'turning in plays the giver\'s thanks in their voice');
+        SCN.skip();check(!RTALK,'a scene can be skipped');
+        const a=giverLook('Pathkeeper Dorr'),b=giverLook('Pathkeeper Dorr');check(JSON.stringify(a)===JSON.stringify(b)&&a.tusks,'a giver always gets the same face, from their faction\'s peoples');
+        rb.S.chars=rb.S.chars.filter(c=>c!==s);}
       // T21: every generated item category follows the widened name bands.
       check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');
       check(BLUE_PRE.length===17&&new Set(BLUE_PRE).size===17,'rare prefix pool retains seven names and adds ten distinct dungeon names');

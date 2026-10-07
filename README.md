@@ -39,6 +39,12 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-08 (late)** — One scene system for the whole arcade (`shared/dialogue.js`): pixel portraits that blink, talk
+  and show moods, more faces (braids, hoods, beards, pointed ears, tusks), and choices at the end of a scene. Wildbond's
+  scenes now use it. **Realmbound's quest givers now speak in portrait scenes:** accept a quest by hand to hear the
+  request and choose Accept or Not now; turn one in to hear their thanks. Every giver gets their own face, the same
+  every time, drawn from their faction's peoples. QuestHelper and Auto skip the scenes.
+
 - **2026-10-08 (night, ChatGPT)** — Starfall Guild is split into small classic scripts and its unchanged stylesheet (T25).
   Wildbond has 76 new browser checks for its newer systems (T24).
   Adds a browser check page for old saves, recruiting, combat, town purchases and seasons; gameplay and saves are unchanged.

@@ -20,9 +20,9 @@ document.addEventListener('click',e=>{
     case 'mode':H().mode=arg;C.lastInput=arg==='focus'?C.run:-99;break;
     case 'tab':S.tab=arg;renderTab(true);break;
     case 'loot':lootAll();break;
-    case 'accept':accept(arg);break;
+    case 'accept':questOffer(arg);break; // hear the giver first (16-scenes.js)
     case 'abandon':abandon(arg);break;
-    case 'turnin':{const [id,c]=arg.split(':');turnIn(id,Number(c),false);break;}
+    case 'turnin':{const [id,c]=arg.split(':');turnIn(id,Number(c),false);questThanks(id);break;}
     case 'equip':equip(Number(arg),false);break;
     case 'sell':sellItem(Number(arg));break;
     case 'selljunk':sellJunk(false);break;
