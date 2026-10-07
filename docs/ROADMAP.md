@@ -158,6 +158,38 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
+### T27: Wildbond area 5, Stillreed Basin (data + map + tune)
+Build area 5 from the "Area 5 proposal: Stillreed Basin" in docs/lore/wildbond.md (Evan approved continuing the journey
+by sending this ticket), at the **decided level band 52-60** (docs/research/decisions.md, decision 1; the proposal's
+42-52 is outdated: four badges already cap your team at 55). Same shape as T17 (Cloudglass Pass, below): read it and
+your own T17 code and copy the structure.
+- **Change only:** games/wildbond/js/00-data.js and games/wildbond/js/11-maps.js (as T17), plus: one `WEATHER` entry in
+  games/wildbond/js/12-walk.js (`stillreed: ['rain', 'clear', 'rain', 'mist']`, it's a rainy basin), one `TRACKS` entry
+  in games/wildbond/js/10-sound.js (`stillreed`, an original tune in the same format as the others: calm water, reeds,
+  32-token `mel`), tests/wildbond-checks.js (a block of checks), docs/lore/wildbond.md (move Stillreed into canon),
+  README.md changelog, and ticking T27 here and in START-HERE.md. In 00-data.js don't touch `ERAS`, `JOURNEY` or the
+  cap constants (`CAP_TABLE` already gives 60 with five badges). Claude is building other systems meanwhile.
+- **00-data.js:** `BADGES.reed` (Reed Badge); `CAST.olan` (Warden Olan, 'Warden of Stillreed Basin', a ferryman);
+  `BIOMES.stillreed` with `lv: [52, 60]`, `req: 'beacon'`, its own `sky`/`hill`/`ground` colours (grey-green water,
+  reed gold, orchard green) and a wild table; 8-10 new `SPECIES` mixing Tide crocs and lizards, Grove boars, Gale
+  birds and Shade spiders, with the T6 rules (existing families, elements and `MOVES` only; base stats about 300 basic
+  / 420 evolved; a one-line `dex`), one two-stage evolution line (`evo.at` 54 or lower), one rare species (low weight)
+  and **Stillwake** (Tide croc guardian, `unique: 1`, `big: 1`, not in the wild table).
+- **STORY** (after the Cloudglass beats, `biome: 'stillreed'`): a Wren rematch at 6 following the lore's Wren beat
+  (the tangled ferry rope, then a fair restart on dry ground; `team` ending `['$rival', 55]`, levels 52-55); the
+  Stillwake encounter at 14 (`wild: ['stillwake', 57, 4]`); Warden Olan at 24 (`gate: 'reed'`, `trainer: 'Warden
+  Olan'`, team at levels 54, 55, 57, judging restraint when the stronger team could win carelessly). Each with
+  `title`, `text`, `lines` (3-4), `win` (2-3), in the characters' voices.
+- **11-maps.js:** `MAPS.stillreed` (`name: 'Stillreed Basin'`, `biome: 'stillreed'`), about 30 wide and 14 tall, only
+  the legend's tile letters (water `~` channels with reed-grass `"` banks, a ferry landing, an orchard of `T`), an exit
+  back to Cloudglass Pass and Cloudglass gets a way on into the basin (as T17 did for Emberfall), `start`, `warden`
+  spot, one signpost, three `items`, two route trainers (teams at levels 52-56, short warm dialogue; add their speakers
+  to the `Object.assign(CAST, ...)` list in that file). Follow docs/lore/multiverse.md: Pell the peddler may appear as
+  a townsperson or a sign if it fits.
+- **Checks** (tests/wildbond-checks.js, mirroring the area-4 checks): the map is valid and walkable, exits join both
+  ways, the new species follow the rules, the Warden gives the Reed Badge and the cap becomes 60, the story beats run.
+  All three test pages must pass (`tests/wildbond.html`, `tests/run.html`, `tests/starfall.html`).
+
 ### T23: Realmbound Hollow Crown II, the Crown's Heart (data, levels 52-60)
 The last chapter before the raid: docs/realmbound-40-60.md ("The journey", "Story thread", "Raids"). Same shape and rules
 as T22 (read its ticket below and your own T22 code: copy the structure), building on everything T22 added.

@@ -134,6 +134,9 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    torches, crystals, fireflies, moonlight), **moving scenery** (drifting clouds, swaying trees, running water) and
    **background life** (birds, bats at dusk). Realmbound: a living backdrop per zone and dungeon; Wildbond: richer
    weather and day/night; Starfall: starry sky and torches. Respect reduced motion; cheap on phones.
+20. **T27: Wildbond area 5, Stillreed Basin** (any assistant; data) — **sent to ChatGPT 2026-10-09** (branch
+   `codex/wildbond-stillreed`; ticket in `docs/ROADMAP.md`, "T27"): levels 52-60, Warden Olan, Reed Badge, Stillwake.
+   After merging: Claude adds Stillreed's air to `drawAmbience` (06-scene.js: mist over the water, fireflies, rain).
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
@@ -154,7 +157,7 @@ a default so work never waits.
 - 2026-10-09 Claude (evening): built S5, the shared ambience kit (living skies, scenery, weather with lightning and
   thunder, night lighting, fire, life) in all three games; merged ChatGPT's T23 (Crown's Heart, cap 60, Hollow Key);
   the quest log now says which dungeons an attunement quest waits on; raid re-measured at 60 (no retune). Tests:
-  Realmbound 1408, Wildbond 488, Starfall 48. **Next:** the guild (members, mood, guild level, more job slots) and
+  Realmbound 1408, Wildbond 488, Starfall 48. Sent T27 (Wildbond Stillreed Basin) to ChatGPT. **Next:** the guild (members, mood, guild level, more job slots); review T27 when it lands. Older note:
   Wildbond area 5 (Claude); give ChatGPT a new ticket (ideas: Wildbond battle backdrops on the ambience kit, a
   Realmbound pacing pass for 52-60, or Starfall polish).
 - 2026-10-07 Codex: T23 complete on `codex/realmbound-crownheart` for Claude's review; no merge. All browser checks
