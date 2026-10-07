@@ -29,7 +29,9 @@ Object.assign(CAST, {
   orsk: { name: 'Orsk', skin: '#8a5a3e', hair: 'short', hairCol: '#1e1e22', shirt: '#9a5a3a', bg: '#ecd4c0', title: 'Ridge hiker' },
   sela: { name: 'Sela', skin: '#c88a64', hair: 'spiky', hairCol: '#e8e0d0', shirt: '#6a4a8a', bg: '#e0d4ec', title: 'Spring keeper' },
   ilka: { name: 'Ilka', skin: '#e2b48c', hair: 'long', hairCol: '#5a3a24', shirt: '#7a8c5a', bg: '#e0e6d0', title: 'Rope-mender' },
-  teodor: { name: 'Teodor', skin: '#a87452', hair: 'hat', hairCol: '#2a2a2a', hatCol: '#5a6a7a', shirt: '#c8b48a', bg: '#e6e0d0', title: 'Cloud-watcher' }
+  teodor: { name: 'Teodor', skin: '#a87452', hair: 'hat', hairCol: '#2a2a2a', hatCol: '#5a6a7a', shirt: '#c8b48a', bg: '#e6e0d0', title: 'Cloud-watcher' },
+  evren: { name: 'Evren', skin: '#d4a27a', hair: 'bun', hairCol: '#493a2c', shirt: '#6c8650', bg: '#e0dfb9', title: 'Orchard keeper' },
+  tavil: { name: 'Tavil', skin: '#946749', hair: 'short', hairCol: '#b8b49a', shirt: '#5a7d85', bg: '#d0dfd5', title: 'Ferry rope-mender' }
 });
 
 const MAPS = {
@@ -186,14 +188,15 @@ const MAPS = {
       'RR,,RRR,"""",..,"""",RRR,,,,RR',
       'R"""",,,"""""..""""",,,,,"""RR',
       'R"""",RR,,,,,..,,,,,RR,"""""RR',
-      'RR,,,,,,,,,,,..,,,,,,,,,,,,,RR',
+      'RR,,,,,,,,,,,..,,,,,,,,,,,,,EE',
       'R""""""",,RR,..,RR,,""""""",RR',
       'RR"""""",,,,P..,,,,,""""""RRRR',
       'RRR""""",,,,,..,,,,,"""""RRRRR',
       'RRRRRRRRRRRRR..RRRRRRRRRRRRRRR',
       'RRRRRRRRRRRRRSSRRRRRRRRRRRRRRR'
     ],
-    exits: { S: { to: 'emberfall', x: 13, y: 1, dir: 'down' } },
+    exits: { S: { to: 'emberfall', x: 13, y: 1, dir: 'down' },
+      E: { to: 'stillreed', x: 1, y: 8, dir: 'right', locked: 'The basin ferry path waits for the Beacon Badge. Vessa asks every team to learn the pass before descending.' } },
     signs: { '12,10': 'Cloudglass Pass. South: Emberfall. Up top: Warden Vessa\'s shelter. If the cloud comes down, stop and shout.' },
     items: [{ id: 'cg1', at: [2, 8], give: { coins: 300 } }, { id: 'cg2', at: [27, 8], give: { lures: 5 } }, { id: 'cg3', at: [3, 2], give: { berries: 6 } }],
     npcs: [
@@ -208,5 +211,38 @@ const MAPS = {
           after: [['teodor', 'I count the clouds every morning. Yesterday, four hundred and twelve. Vessa says I made that up. I did not.']] },
         lines: [['teodor', 'Stand still. You\'re in my view of the cloud. ...Well, now that you\'re here, a battle.']] }
     ],
-    wardenDone: 'The cloud always lifts in the end, {name}. Bring a friend next time anyway.' }
+    wardenDone: 'The cloud always lifts in the end, {name}. Bring a friend next time anyway.' },
+  stillreed: { name: 'Stillreed Basin', biome: 'stillreed', start: [1, 8, 'right'], warden: [23, 9],
+    rows: [
+      "TTTTTTTTTTTT~~~TTTTTTTTTTTTTTT",
+      "T,,,,,,,,,,\"~~~\",,,,,,,,,,,,,T",
+      "T,\"\"\"\"\",,,,\"~~~\",,,T,T,T,T,,,T",
+      "T,\"\"\"\"\",,,,\"~~~\",,,T,T,T,T,,,T",
+      "T,,,........................,T",
+      "T,\"\"\"\"\",,,,\"~~~\",,,,,,,,\"\"\"\",T",
+      "T,\"\"\"\"\",,,,\"~~~\",,,,,,,,\"\"\"\",T",
+      "T,,,,,,,,,,\"~~~\",,,,,,,,\"\"\"\",T",
+      "W..P.......\"~~~\",,,,,,,,,,,,,T",
+      "T,,,........................,T",
+      "T,\"\"\"\"\",,,,\"~~~\",,,,,,,,,,,,,T",
+      "T,\"\"\"\"\",,,,\"~~~\",,,,,,,,,,,,,T",
+      "T,,,,,,,,,,\"~~~\",,,,,,,,,,,,,T",
+      "TTTTTTTTTTTT~~~TTTTTTTTTTTTTTT"
+    ],
+    exits: { W: { to: 'cloudglass', x: 27, y: 8, dir: 'left' } },
+    signs: { '3,8': 'Stillreed Basin. West: Cloudglass Pass. Leave the ferry landing open for small creatures; orchard paths cross the channels on raised boards.' },
+    items: [{ id: 'sr1', at: [4, 3], give: { fish: 6 } }, { id: 'sr2', at: [24, 6], give: { lures: 6 } }, { id: 'sr3', at: [27, 11], give: { berries: 8 } }],
+    npcs: [
+      { who: 'evren', at: [8, 5], dir: 'right',
+        trainer: { sight: 3, team: [['orchardroot', 52], ['gustreed', 53]],
+          win: [['evren', 'Lovely footing. Not one fallen apple squashed! Both teams have earned a rest.']],
+          after: [['evren', 'Orchardroot turns the fallen fruit into good soil. We leave some for the herd before we fill our baskets.']] },
+        lines: [['evren', 'Welcome to the orchard path. A friendly battle while the ferry comes back? We can keep the landing clear.']] },
+      { who: 'tavil', at: [21, 10], dir: 'up',
+        trainer: { sight: 2, team: [['rillwhisk', 54], ['duskcord', 55], ['ferrycrest', 56]],
+          win: [['tavil', 'Well held. Your partners gave each other room, like a good knot that still opens.']],
+          after: [['tavil', 'Wren and a new tamer freed a ferry rope today. The passengers thanked them; the rope had no comment.']] },
+        lines: [['tavil', 'The boards are dry enough for a battle. Shall we? I promise the losing team still gets a ferry ride.']] }
+    ],
+    wardenDone: 'The landing stays open, {name}. Keep winning with room for your neighbors.' }
 };

@@ -59,6 +59,10 @@ dungeon clears remains a separate UI follow-up; `qState()` enforces the gate.
 
 **Hub and promo pages:** `index.html`, `promo.html` (Realmbound), `promo-wildbond.html`.
 
+**T27 ready for review:** `codex/wildbond-stillreed` adds Stillreed Basin (52-60), nine species, Wren's ferry rematch,
+Stillwake and Warden Olan's Reed Badge (cap 60), a connected walkable map, two route trainers, weather and music.
+Claude's Stillreed ambience work remains separate after merge.
+
 **Starfall Guild:** split into small files with browser checks (T25) and its own music and effects (T26, off by default); still parked for new features.
 
 **Parked:** Starfall Guild, Diamond Career (baseball), Otherworld (side lane: structural and polish tasks only), and
@@ -134,7 +138,7 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    torches, crystals, fireflies, moonlight), **moving scenery** (drifting clouds, swaying trees, running water) and
    **background life** (birds, bats at dusk). Realmbound: a living backdrop per zone and dungeon; Wildbond: richer
    weather and day/night; Starfall: starry sky and torches. Respect reduced motion; cheap on phones.
-20. **T27: Wildbond area 5, Stillreed Basin** (any assistant; data) — **sent to ChatGPT 2026-10-09** (branch
+20. ~~**T27: Wildbond area 5, Stillreed Basin**~~ — **done by Codex 2026-10-07; awaiting Claude's PR review** (branch
    `codex/wildbond-stillreed`; ticket in `docs/ROADMAP.md`, "T27"): levels 52-60, Warden Olan, Reed Badge, Stillwake.
    After merging: Claude adds Stillreed's air to `drawAmbience` (06-scene.js: mist over the water, fireflies, rain).
 21. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines: a living scene on the
@@ -156,6 +160,10 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-07 Codex: T27 complete on `codex/wildbond-stillreed` for Claude's review, no merge. Browser checks pass:
+  Wildbond 619, Realmbound 1434, Starfall 48; saves restored, zero errors. Desktop/phone map checked. Existing
+  species, story, eras, journey settings and cap constants are preserved; Claude can add Stillreed ambience next.
 
 - 2026-10-09 Claude (late): Wildbond's intro now explains the faded green start (Evan took it for a bug); recorded
   Evan's notes (outside assets allowed with a license and CREDITS.md; an immersive homepage later, item 21); built

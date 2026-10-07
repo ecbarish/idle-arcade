@@ -39,6 +39,11 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-07** — Wildbond area 5: Stillreed Basin (52–60), beyond Cloudglass Pass. Nine new species include
+  Reedlet's evolution into Ferrycrest and the guardian Stillwake. Wren helps free a ferry rope before the rematch;
+  ferryman Warden Olan awards the Reed Badge, raising the existing cap to 60. Walk the reed banks, board crossings
+  and orchard, meet two route trainers, find three supplies, and hear an original basin tune between rain showers.
+
 - **2026-10-09 (late)** — **Realmbound: found a guild.** At level 40, in town, buy a charter (5 gold) and gather five
   signatures from your other characters and companions who are your Friends. One guild for your whole account: every
   character is a member and you can invite the adventurers you trust. Adventurers have a **mood**: group with them,
