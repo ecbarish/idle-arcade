@@ -215,6 +215,37 @@ module.exports = function scenarios() {
         btn.click();check(rb.S.snd===0,'a third press turns sound off again');
         check(voiceOf('Pathkeeper Dorr')===voiceOf('Pathkeeper Dorr:happy')&&voiceOf('Pathkeeper Dorr')>=260&&voiceOf('Pathkeeper Dorr')<540,'each giver keeps one voice pitch whatever their mood');
         if(was===undefined)delete rb.S.snd;else rb.S.snd=was;rb.S.chars=rb.S.chars.filter(c=>c!==g);}
+      // S3 + R1: the shared roster pays by the clock, and other heroes mine ore for the account's supply bank
+      {const mk=(o)=>{const st={},got={n:0};return {st,got,R:Roster.create(Object.assign({get:()=>st,jobs:{dig:{every:()=>60,give:(w,n)=>{got.n+=n;}}},slots:()=>2},o||{}))};};
+        const t0=1e12,H1=3600e3;
+        const a=mk();a.R.assign('x','dig',t0);for(let t=t0;t<=t0+H1;t+=10e3)a.R.collect(t);
+        const b=mk();b.R.assign('x','dig',t0);b.R.collect(t0+H1);
+        check(a.got.n===60&&b.got.n===60,'an hour of work pays the same whether collected every few seconds or once on return');
+        const c=mk();c.R.assign('x','dig',t0);c.R.collect(t0+20*H1);check(c.got.n===480,'time away is capped at 8 hours, like rested XP');
+        c.R.collect(t0+20*H1+30e3);check(c.got.n===480,'after the cap the clock restarts from the return, not from the start');
+        const d=mk();d.R.assign('x','dig',t0);d.R.collect(t0+90e3);const saved=JSON.parse(JSON.stringify(d.st));
+        const d2=mk();Object.assign(d2.st,saved);d2.R.collect(t0+120e3);check(d.got.n===1&&d2.got.n===1,'a save made partway through a unit keeps the part-finished work after reloading');
+        d2.R.collect(t0+120e3);check(d2.got.n===1,'collecting twice never pays twice');
+        const e=mk({canWork:w=>w!=='me'});check(!e.R.assign('me','dig',t0),'the member being played can\'t take a job');
+        e.R.assign('x','dig',t0);e.R.assign('y','dig',t0);check(!e.R.assign('z','dig',t0)&&e.R.free()===0,'jobs are limited to the open slots');
+        check(e.R.stop('x',t0+150e3)===2&&!e.R.jobOf('x'),'stopping a job pays what was earned first');}
+      {const A=rb.newHero('Supplya','concord','human','warrior');A.lvl=40;const B=rb.newHero('Supplyb','concord','stonekin','priest');B.lvl=20;
+        const keep={bank:rb.S.bank,guild:rb.S.guild};rb.S.bank={ore:0,kit:0};rb.S.guild={jobs:{}};
+        rb.S.chars.push(A,B);rb.S.cur=A.id;rb.boot();const bBags=JSON.stringify(B.bags);
+        check(!ROSTER.assign(A.id,'mine')&&ROSTER.assign(B.id,'mine'),'only the heroes you aren\'t playing can mine');
+        rb.S.guild.jobs[B.id].since-=3600e3;supplyTick();const per=JOBS.mine.every(B.id);
+        check(rb.S.bank.ore===Math.floor(3600/per)&&per===400,'a level-20 miner sends about 9 ore an hour to the shared bank');
+        rb.S.tab='supplies';renderTab(true);check(/Jobs board/.test(document.querySelector('#tabbody').innerHTML)&&/Supplyb/.test(document.querySelector('#tabbody').innerHTML),'the Supplies tab shows the bank and the jobs board');
+        rb.S.bank.ore=7;check(craftKit()&&rb.S.bank.ore===1&&rb.S.bank.kit===1,'six ore make a repair kit');
+        A.gear.weapon.dur=20;rb.C.run=100;rb.C.lastInput=100;A.mode='auto';afterFight();
+        check(A.gear.weapon.dur===100&&rb.S.bank.kit===0&&rb.C.phase!=='town','Auto mends worn gear with a kit instead of walking to town');
+        A.gear.weapon.dur=20;afterFight();check(rb.C.phase==='town','with no kits left Auto walks back to town as before');A.mode='focus';
+        rb.S.guild.jobs[B.id].since-=1800e3;switchTo(B.id);
+        check(!ROSTER.jobOf(B.id)&&rb.S.bank.ore===1+Math.floor(1800/per),'switching to a miner pays their work and takes them off the job');
+        check(JSON.stringify(B.bags)===bBags,'heroes keep their own bags; nothing moves between characters');
+        const old=rb.migrate({v:2,chars:[JSON.parse(JSON.stringify(A))],cur:A.id,last:Date.now(),tab:'quests'});check(!old.bank&&!old.guild,'saves from before supplies load unchanged');
+        rb.S.cur=A.id;rb.boot();deleteChar(B.id);check(!rb.S.guild.jobs[B.id],'deleting a character takes them off the jobs board');
+        rb.S.chars=rb.S.chars.filter(c=>c!==A&&c!==B);rb.S.bank=keep.bank;rb.S.guild=keep.guild;if(!keep.bank)delete rb.S.bank;if(!keep.guild)delete rb.S.guild;rb.S.tab='quests';}
       // T21: every generated item category follows the widened name bands.
       check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');
       check(BLUE_PRE.length===17&&new Set(BLUE_PRE).size===17,'rare prefix pool retains seven names and adds ten distinct dungeon names');

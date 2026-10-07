@@ -73,7 +73,7 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    spiders, boars of the rotting wood), a legendary tameable elite at 52, 12 voiced quests (`hc1`…) following "The
    Hollow Crown" in `docs/realmbound-40-60.md`, dungeon `rootrot` "Rootrot Hollow" (`minLvl: 49`, levels 49-52,
    4 packs, 3 bosses, existing `mech` keys), `LEVEL_CAP = 52`, `npcZone` 45+ → `hollowcrown`, lore record, checks.
-4. **R1: two-hero supply trial** (*design*; Claude preferred). See `docs/plans/realmbound.md` ("First proposed
+4. ~~**R1: two-hero supply trial**~~ — done by Claude 2026-10-08 with S3 (`shared/roster.js`, Realmbound `js/18-supplies.js`, Supplies tab; rules in its header and in `docs/realmbound-40-60.md`, "R1 as built"). Originally: See `docs/plans/realmbound.md` ("First proposed
    system ticket") and the guild section of `docs/realmbound-40-60.md`. Defaults: 3 job slots; one gathering job
    (Mining ore) and one recipe (ore → repair kits); a shared account bank; jobs capped like rested XP; the hero you're
    playing always earns more than one on a job.
@@ -105,7 +105,7 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    (a check fails without one).
 14. **Then:** the guild, Hollow Crown part 2 and the raid (Realmbound); Wildbond areas 5-8 (bands 52-60, 58-64, 62-68,
    66-72) and the league, contests and races, ranch cosmetics for challenge titles, Modern 3D.
-15. **S3: shared roster and jobs** (`shared/roster.js`; build it *with* R1, item 4): assign members to jobs, cap the
+15. ~~**S3: shared roster and jobs**~~ — done by Claude 2026-10-08 with R1. Next jobs to add: *Questing* (a little XP for the worker, always less than playing them), *Herbalism* + potions, then the guild (members, mood, guild level, more slots). Originally: assign members to jobs, cap the
    earnings like rested XP, one return report when you come back. Realmbound's guild uses it first, then Starfall
    Guild's adventurers, Wildbond ranch jobs, and Diamond Career's team. Plan: `docs/research/decisions.md` (the
    shared-systems table). After that, S4: the world kit (`shared/world/`, Wildbond's walking world for every game).

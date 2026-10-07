@@ -198,3 +198,16 @@ and reasoning in `docs/research/decisions.md`. Job slots: 3 growing to 5-6, neve
    at first; addons and guild perks soften them over time, as now.]
 6. **Names:** Wayfolk, the Silent Barrows, the Last Wayward, the Hollow Crown's Ashwing and Seraveth, Thornmantle
    Camp, Rootrot Hollow, The Hollow Throne. Keep, or rename any? [Keep.]
+
+## R1 as built (2026-10-08)
+
+The two-hero supply trial, on the shared roster (`shared/roster.js`), in Realmbound's **Supplies** tab:
+- **Bank:** account-wide, holds only supplies (`S.bank = { ore, kit }`). Heroes keep their own bags and gear;
+  nothing moves between characters and `migrate()` is unchanged (old saves get an empty bank when first opened).
+- **Jobs:** 3 slots (`S.guild.jobs`). One job, *Mining*: one ore every 600 / (1 + level / 40) seconds (level 20:
+  about 9 an hour; level 40: 12). The hero being played can't hold a job; switching to a miner pays them and takes
+  them off it. Uncollected time caps at 8 hours. Paid by timestamps, so active, offline and switching give the same.
+- **Recipe:** 6 ore → a repair kit; a kit mends all gear anywhere; Auto uses a kit instead of a town trip when
+  gear drops below 30%. A convenience, never required: town repairs work exactly as before.
+- **Next:** Questing (small XP for the worker, below active play), Herbalism and potions, then the guild founding
+  at 40 with members' mood, guild level, more slots and the guild hall.

@@ -32,10 +32,10 @@ char:{
     const html=rows.map(([k,v])=>`<div><span class="meta">${k}</span><b class="num">${v}</b></div>`).join('');const el=$('#cstats');if(el.dataset.h!==html){el.innerHTML=html;el.dataset.h=html;}}
 },
 bags:{
-  key(){const h=H();return h.bags.map(i=>i.id).join(',')+'|'+inTown()+'|'+SLOTS.map(s=>h.gear[s]?h.gear[s].id:'').join(',');},
+  key(){const h=H();return h.bags.map(i=>i.id).join(',')+'|'+inTown()+'|'+bank().kit+canRepair()+'|'+SLOTS.map(s=>h.gear[s]?h.gear[s].id:'').join(',');},
   build(){const h=H();const town=inTown();
     let o=`<h3>Bags ${h.bags.length}/16</h3><p class="sub">${town?`You're at the vendor in ${hubName()}.`:'Sell and repair at a vendor in town. Full bags mean loot gets left behind.'}</p>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">${town?`<button class="btn sm" data-act="selljunk">Sell junk</button><button class="btn sm" data-act="repair" id="repBtn">Repair</button>${h.cls==='hunter'?`<button class="btn sm" data-act="buyfood">Buy 5 meat (${moneyTxt(meatCost()*5)})</button>`:''}<button class="btn sm alt" data-act="leavetown">Head back out</button>`:`<button class="btn sm" data-act="town">Go to town</button>`}</div>`;
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">${town?`<button class="btn sm" data-act="selljunk">Sell junk</button><button class="btn sm" data-act="repair" id="repBtn">Repair</button>${h.cls==='hunter'?`<button class="btn sm" data-act="buyfood">Buy 5 meat (${moneyTxt(meatCost()*5)})</button>`:''}<button class="btn sm alt" data-act="leavetown">Head back out</button>`:`<button class="btn sm" data-act="town">Go to town</button>`}${bank().kit&&canRepair()?`<button class="btn sm alt" data-act="usekit">Use a repair kit (${bank().kit})</button>`:''}</div>`;
     const pet=petOf();
     o+=h.bags.length?h.bags.map(it=>{const can=canEquip(it);const up=can&&score(it)>score(h.gear[it.slot]);
       const eats=it.food&&pet&&(FAMILIES[pet.family].diet==='any'||it.diet===FAMILIES[pet.family].diet);

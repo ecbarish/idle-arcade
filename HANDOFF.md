@@ -34,6 +34,10 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
   25% pulse / triangle / saw leads, drum lines, crossfades between tracks, and one shared set of effects (level,
   quest, catch, loot, warn, win, lose...). Each game writes its own tunes: Wildbond in `js/10-sound.js`, Realmbound
   in `js/17-sound.js`. Sound is always off until the player turns it on.
+- `shared/roster.js`: the arcade's shared roster and jobs (`Roster.create({get, jobs, slots, canWork, capHours})`):
+  members you aren't playing work jobs that pay whole units by the clock (the same time pays the same whether you
+  played, were away or switched characters; reloading never pays twice; time away is capped like rested XP).
+  Realmbound's Supplies tab uses it first; Starfall's adventurers, Wildbond's ranch jobs and the Realmbound guild next.
 - `games/realmbound/index.html`: Realmbound markup and ordered classic script tags; no build step.
 - `games/realmbound/style.css`: the unchanged MMO interface styles.
 - `games/realmbound/js/00-core.js`: save key, selectors, formatting aliases, random helpers and level cap.
@@ -54,6 +58,7 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
 - `games/realmbound/js/15-events.js`: mouse, keyboard and input event handlers.
 - `games/realmbound/js/16-scenes.js`: quest-giver portrait scenes (shared/dialogue.js).
 - `games/realmbound/js/17-sound.js`: Realmbound tunes per zone, dungeon, boss and spirit walk (shared/sound.js); `musicKey()`, `voiceOf()`, `sfx()`.
+- `games/realmbound/js/18-supplies.js`: R1, the supply bank and jobs board (shared/roster.js): `JOBS` (Mining), `ROSTER`, `bank()`, `craftKit()`, `useKit()`, `supplyCheckIn()` (called by `boot()`), `supplyTick()` (every second), and the Supplies tab.
 - `games/realmbound/js/99-boot.js`: startup, load, timers and the unchanged localhost-only `window.__rb` hook.
 - `docs/realmbound-design.md`: design decisions. `docs/ideas.md`: parked backlog.
 

@@ -144,7 +144,7 @@ function switchTo(id){
   toast(`Welcome back, ${h.name}`);if(r&&r.rested>1)line(`${h.name} rested for ${fmtTime(r.sec)}: +${fmtI(r.rested)} rested XP.`,'l-xp');
 }
 function deleteChar(id){
-  const c=S.chars.find(x=>x.id===id);if(!c)return;S.chars=S.chars.filter(x=>x.id!==id);
+  const c=S.chars.find(x=>x.id===id);if(!c)return;S.chars=S.chars.filter(x=>x.id!==id);ROSTER.forget(id);
   if(S.cur===id){S.cur=null;C=null;}
   if(!S.chars.length){Arcade.erase(KEY,'realmbound');S=emptyS();CR.name=pick(NAMES);openModal('create',createHTML());return;}
   Arcade.save(KEY,S);openModal('chars',charsHTML());

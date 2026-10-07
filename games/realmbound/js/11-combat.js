@@ -136,7 +136,7 @@ function takeLoot(loot,manual){
 function afterFight(){
   if(H().dun){afterDungeonPull();return;}
   const h=H();C.loot=null;C.buffs.vendetta=null;
-  const lowGear=SLOTS.some(s=>h.gear[s]&&h.gear[s].dur<30);
+  let lowGear=SLOTS.some(s=>h.gear[s]&&h.gear[s].dur<30);if(lowGear&&aiOn()&&useKit(true))lowGear=false;
   const sweep=h.addons.unl.sweep&&h.addons.on.sweep;
   if(aiOn()&&(lowGear||(sweep&&h.bags.length>=16))){C.phase='town';C.t=travel(10);line('Heading back to town.','l-sys');return;}
   const mana=CLASSES[h.cls].res==='mana';

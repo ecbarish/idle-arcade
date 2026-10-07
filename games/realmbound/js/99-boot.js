@@ -10,7 +10,7 @@ function boot(){
   if(!h.npcs)h.npcs=genNpcs(h.faction);h.party=h.party||[];if(h.dun===undefined)h.dun=null;migrateDungeons(h);
   recalc();C=freshC();C.hp=h.cur?Math.min(ST.hpMax,h.cur.hp):ST.hpMax;C.res=h.cur?Math.min(ST.resMax,h.cur.res):(CLASSES[h.cls].res==='mana'?ST.resMax:0);if(C.hp<=0)C.hp=ST.hpMax*.5;
   syncParty();
-  closeModal();curKey=null;buildSlots();updateWorld();
+  closeModal();curKey=null;buildSlots();supplyCheckIn();updateWorld();
 }
 /* test hook, local dev server only */
 if(location.hostname==='localhost')window.__rb={get S(){return S;},get C(){return C;},petStats,petOf,newHero,boot,gainXP,xpNeed,startDungeon,spawnDungeon,finishDungeon,dungeonStats,migrateDungeons,questHelper,qState,accept,turnIn,ZONES,QUESTS,DUNGEONS,npcZone,step,save,spawn,startTame,finishTame,migrate,TALENTS,TALENT_LIST,treePoints,heroRole,respecCost,respec,talentPoints,bar,get ST(){return ST;}};
@@ -26,7 +26,7 @@ function start(data){
     if(dt>60){const r=offline(dt);if(r&&!modalKind)openModal('offline',offlineHTML(r));dt=0;}
     let guard=0;while(dt>0&&guard++<700){const st=Math.min(.1,dt);dt-=st;step(st);}
     if(H().addons.unl.questhelper&&H().addons.on.questhelper)questHelper();
-    chk+=.1;if(chk>=1){chk=0;checkAddons();}
+    chk+=.1;if(chk>=1){chk=0;checkAddons();supplyTick();}
     uiT+=.1;if(uiT>=.1){uiT=0;updateWorld();}},100);
   setInterval(save,10000);addEventListener('beforeunload',save);document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
   requestAnimationFrame(frame);
