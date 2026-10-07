@@ -161,6 +161,25 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
+### T30: Wildbond's ending: the league and the Champion (W2)
+The story's finale after the eighth badge (docs/research/decisions.md decision 1: the main story ends around level 70-75,
+the Champion near 72-75; the post-game, W3, comes later). Read docs/lore/wildbond.md first and keep the tone: kind,
+cooperative, Wren as the heart of the journey. You have real creative freedom here (docs/CREATIVE.md); put a short
+"Design" section at the top of the PR explaining your choices.
+- **The place:** a new walkable map, the league (name it to fit the lore), reached from Farwatch once all eight badges
+  are held (locked before), with its own tune, weather, BATTLE_PLACES entry and ambience-friendly layout.
+- **The gauntlet:** four league trainers (each with a theme, a voice and a team at 70-74) fought in a row, then the
+  Champion (team 74-76). No ranch trips in between, but a short rest scene between rooms that heals; losing sends you
+  back to the league's entrance with your progress through the gauntlet kept for the day only. Use the existing battle
+  and trainer code (`startBattle('trainer', ...)`, STORY beats, `talk()` scenes) rather than a new battle system.
+- **Wren:** her last battle happens at the league's gate before the gauntlet (her strongest varied team, `$rival` at
+  73), and she is there in the ending.
+- **The ending:** scenes after the Champion (the world's colour fully restored, Maren and Isolde, the guardians), a
+  title in `S.titles` ("Champion"), and a gentle message that the post-game is coming. Record it in the Journal.
+- **Saves:** new fields default safely; old saves load unchanged. **Checks** for the lock, each room, losing and
+  retrying, the Champion victory, the ending flags and old saves. All four test pages pass. Bump Wildbond's VERSION to
+  1.2.0 (both places). Check desktop and ultrawide as well as phone (docs/CREATIVE.md quality bar).
+
 ### T29: Wildbond area 7, Sunthread Commons (data + map + tune)
 Build area 7 from the "Area 7 proposal: Sunthread Commons" in docs/lore/wildbond.md at the **decided level band
 62-68** (decision 1; six badges cap at 65, seven at 70). Same shape as your T28 (Hollowecho Hills): read its ticket
