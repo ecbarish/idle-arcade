@@ -1,12 +1,18 @@
 'use strict';
-const VERSION = '1.2.0'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
+const VERSION = '1.3.0'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
 /* Clicks, keys, the game loop and startup. */
 function findC(uid) { uid = Number(uid); return S.team.find(c => c.uid === uid) || S.ranch.find(c => c.uid === uid); }
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-act]'); if (!el) return; const a = el.dataset.act, arg = el.dataset.arg;
-  if (leagueLocked() && ['toranch','toteam','release','buyfood','breed'].includes(a)) { W.msg = 'Your league team stays together. Leave the attempt before visiting the ranch.'; renderAll(); return; }
+  if (challengeLocked() && ['toranch','toteam','release','buyfood','breed'].includes(a)) { W.msg = 'Your challenge team stays together. Leave the attempt before visiting the ranch.'; renderAll(); return; }
   sfx('select');
   switch (a) {
+    case 'towerstart': towerStart(); break;
+    case 'towercontinue': towerContinue(); break;
+    case 'towerleave': towerLeave(); break;
+    case 'leaguerematch': startLeagueRematch(Number(arg)); break;
+    case 'leaguerest': leagueTalk('keeper'); break;
+    case 'spirevisit': if (!B && !TALK && towerOpen() && !leagueLocked()) { placeAt('league',1,15,'left'); useExit(curMap(),'W'); } break;
     case 'league': leagueContinue(); break;
     case 'leagueleave': leagueLeave(); break;
     case 'sound': cycleSound(); break;

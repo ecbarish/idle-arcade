@@ -695,11 +695,12 @@ const MAPS = {
     "R,,.,,,,,,,,f,,,,,,,,,,,,,,f,,,,,,,,,,,R",
     "R,,.,,,,~~~~~~~,,,,,,,,~~~~~~~~,,,,,,,,R",
     "R,,.,,,,~~~~~~~,,,,,,,,~~~~~~~~,,,,,,,,R",
-    "R,,.,====,,,,,,,,,,,,,,,,,,,,,,,,====,,R",
+    "W...,====,,,,,,,,,,,,,,,,,,,,,,,,====,,R",
     "R,,.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,R",
     "RRRSRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"
   ],
   "exits": {
+    "W": { "to": "spire", "x": 17, "y": 14, "dir": "left", "locked": "The Spire opens after the Champion ending. Take your team home in the story first." },
     "S": {
       "to": "farwatch",
       "x": 12,
@@ -779,5 +780,48 @@ const MAPS = {
       "league": 4
     }
   ]
+},
+  spire: {
+  "name": "The Lighthouse Spire",
+  "tower": true,
+  "pal": "farwatch",
+  "start": [
+    9,
+    14,
+    "up"
+  ],
+  "rows": [
+    "RRRRRRRRRRRRRRRRRRR",
+    "R~~~~~~~~~~~~~~~~~R",
+    "R~~,,,rrrrrrr,,,~~R",
+    "R~~,,,#######,,,~~R",
+    "R~~,,,_______,,,~~R",
+    "R~~,,,_______,,,~~R",
+    "R~~,,,__f_f__,,,~~R",
+    "R~~,,,.......,,,~~R",
+    "R~~,,,.......,,,~~R",
+    "R~~,,,.......,,,~~R",
+    "R~~,,,,,...,,,,,~~R",
+    "R~~,,,,P...P,,,,~~R",
+    "R~~,,,,,...,,,,,~~R",
+    "R~~,====...====,~~R",
+    "R~~,..............E",
+    "R~~,,,,,...,,,,,~~R",
+    "R~~~~~~~~~~~~~~~~~R",
+    "RRRRRRRRRRRRRRRRRRR"
+  ],
+  "exits": {
+    "E": {
+      "to": "league",
+      "x": 1,
+      "y": 15,
+      "dir": "right"
+    }
+  },
+  "signs": {
+    "7,11": "The Lighthouse Spire. Champions climb together; every fifth floor has a healing bench.",
+    "11,11": "Leave with what you earned. Milestone gifts are yours once; the Journal remembers your best floor."
+  },
+  "npcs": []
 }
 };

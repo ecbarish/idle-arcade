@@ -42,6 +42,7 @@ function renderPanel() {
     $('#bhint').textContent = B.over ? '' : isAuto() ? (S.auto ? 'Auto-explore is on: your team fights on its own.' : 'Autopilot took over. Press any command to take charge.') : 'Command points refill every 5 seconds.';
     return;
   }
+  if (S.pos && curMap().tower) { const t = towerState(), key = "spire:" + t.floor + t.rest + t.active + W.msg + S.auto; if (panelKey !== key) { panelKey = key; el.innerHTML = towerPanel(); } return; }
   if (S.pos && curMap().league) { const key = 'league:' + W.msg + leagueState().room + leagueState().active + S.day + !!S.story.leagueWren + !!S.story.leagueChampion + !!S.story.leagueEnding; if (panelKey !== key) { panelKey = key; el.innerHTML = leaguePanel(); } return; }
   const town = S.pos && !curMap().biome;
   const k = 'x' + S.biome + S.badges.length + S.explored + W.msg + S.lures + wardenReady() + elderReady() + alive().length + S.auto + (S.pos && S.pos.map) + isNight() + weatherNow() + !!S.ride + S.era;
@@ -61,7 +62,7 @@ function renderPanel() {
 /* ---- tabs ---- */
 let tabKey = '';
 const TABS = {
-  team: { key: () => S.team.map(c => c.uid + ':' + c.lvl + ':' + c.sp + ':' + c.name + ':' + Cr.bondLvl(c)).join() + !!B + leagueLocked() + levelCap() + S.capMode,
+  team: { key: () => S.team.map(c => c.uid + ':' + c.lvl + ':' + c.sp + ':' + c.name + ':' + Cr.bondLvl(c)).join() + !!B + challengeLocked() + levelCap() + S.capMode,
     build: () => `<h3>Your team (${S.team.length}/3)</h3><p class="sub">Grades show each creature's hidden potential (F to S). Train and breed them on the Ranch.
       ${S.capMode === 'off' ? '' : `Badge level cap: <b>${levelCap()}</b>.`}</p>` +
       S.team.map((c, i) => cardHTML(c, i, true)).join('') },
@@ -72,7 +73,7 @@ const TABS = {
     build: () => { const ids = Object.keys(SPECIES); return `<h3>Wilddex</h3><p class="sub">${Object.keys(S.caught).length} caught · ${Object.keys(S.seen).length} seen · ${ids.length} known in this region.</p><div class="dex">` +
       ids.map(id => { const s = SPECIES[id], seen = S.seen[id], got = S.caught[id];
         return `<div class="dx ${got ? '' : 'faded'}"><canvas class="pic sm" width="56" height="44" data-sp="${id}" data-seen="${seen ? 1 : 0}"></canvas><div><b>${seen ? s.name : '???'}</b> ${seen ? elChip(s.el) : ''}<div class="meta">${got ? s.dex : seen ? 'Seen, not caught.' : 'Not yet seen.'}</div></div></div>`; }).join('') + '</div>'; } },
-  journal: { key: () => S.log.length + S.era + S.journey + S.capMode + S.xpShare + !!B + S.badges.length + ':' + (S.day || 1) + ':' + Math.floor(dayPart() * 3) + ':' + (S.pos && S.pos.map) + ':' + leagueState().room + ':' + !!S.story.leagueEnding,
+  journal: { key: () => S.log.length + S.era + S.journey + S.capMode + S.xpShare + !!B + S.badges.length + ':' + (S.day || 1) + ':' + Math.floor(dayPart() * 3) + ':' + (S.pos && S.pos.map) + ':' + leagueState().room + ':' + !!S.story.leagueEnding + ':' + towerState().best + ':' + towerState().floor + ':' + towerState().rest,
     build: () => `<h3>Journal</h3><div class="stats"><div>Battles <b>${S.stats.battles}</b></div><div>Wins <b>${S.stats.wins}</b></div><div>Caught <b>${S.stats.caught}</b></div><div>Played <b>${fmtTime(S.stats.play)}</b></div></div>
       ${forecastHTML()}
       <h4>Larkhaven inn: your journey</h4><p class="sub">Choose how long the road is. You can change these any time you're not in a battle.${S.auto ? ' Auto-explore earns a little less XP than exploring yourself.' : ''}</p>
@@ -84,7 +85,7 @@ const TABS = {
       ${challengeHTML()}
       <h4>Art style</h4><p class="sub">The world's look evolves as you progress. Unlocked styles can be switched any time.</p><div class="eras">${ERAS.map(e => { const on = S.eras.includes(e.id) && ART[e.id];
         return `<button class="era ${S.era === e.id ? 'cur' : ''}" data-act="era" data-arg="${e.id}" ${on ? '' : 'disabled'}><b>${e.name}</b><span>${on ? (S.era === e.id ? 'In use' : 'Use this style') : e.soon ? `Coming soon · ${e.unlock}` : e.unlock}</span></button>`; }).join('')}</div>
-      ${leagueJournal()}<h4>Story so far</h4><div class="logl">${S.log.slice(0, 20).map(m => `<div>${m}</div>`).join('')}</div>` }
+      ${leagueJournal()}${towerJournal()}<h4>Story so far</h4><div class="logl">${S.log.slice(0, 20).map(m => `<div>${m}</div>`).join('')}</div>` }
 };
 /* Weather forecasts use the same three periods per ranch day as the walking scene. */
 function forecastHTML() {
@@ -115,7 +116,7 @@ function cardHTML(c, i, inTeam) {
     ${bar(c.hp, st.hp, 'hp')}<div class="meta">${c.hp <= 0 ? 'Fainted, needs rest' : `${c.hp}/${st.hp} health`} · ${capNote(c)}${s.evo && c.lvl < s.evo.at ? ` · evolves at ${s.evo.at}` : ''}</div>
     <div class="grades">${Cr.STATS.map(k => `<span title="${Cr.STAT_NAME[k]}: ${st[k]} (potential ${Cr.grade(c.pot[k])})">${Cr.STAT_NAME[k].slice(0, 3)} <b>${st[k]}</b> <i class="g${Cr.grade(c.pot[k])}">${Cr.grade(c.pot[k])}</i></span>`).join('')}</div>
     <div class="meta">Moves: ${mv.map(m => MOVES[m].name).join(', ')}</div>
-    <div class="cacts">${inTeam ? (S.team.length > 1 && !B && !leagueLocked() ? `<button class="btn sm alt" data-act="toranch" data-arg="${c.uid}">Send to ranch</button>` : '') :
+    <div class="cacts">${inTeam ? (S.team.length > 1 && !B && !challengeLocked() ? `<button class="btn sm alt" data-act="toranch" data-arg="${c.uid}">Send to ranch</button>` : '') :
       `<button class="btn sm" data-act="toteam" data-arg="${c.uid}" ${S.team.length >= teamMax() || B ? 'disabled' : ''}>Add to team</button><button class="btn sm alt" data-act="release" data-arg="${c.uid}">Release</button>`}
       <button class="btn sm alt" data-act="rename" data-arg="${c.uid}">Rename</button></div></div></div>`;
 }

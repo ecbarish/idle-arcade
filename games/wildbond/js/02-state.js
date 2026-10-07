@@ -10,7 +10,7 @@ function fresh() {
   return { v: 1, started: false, name: 'Tamer', starter: null, team: [], ranch: [], coins: 120, lures: 5, biome: 'thornwood',
     explored: 0, story: {}, badges: [], seen: {}, caught: {}, auto: false, era: 'pocket', eras: ['pocket'],
     stats: { battles: 0, wins: 0, caught: 0, play: 0 }, log: [], last: Date.now(), tab: 'team',
-    journey: 'classic', capMode: 'soft', xpShare: false, pos: null, modes: {}, rematch: {}, titles: [], league: { day: 0, room: 0, active: false, rest: false } };
+    journey: 'classic', capMode: 'soft', xpShare: false, pos: null, modes: {}, rematch: {}, titles: [], tower: { best: 0, floor: 0, active: false, rest: false, claimed: [], serial: 0 }, league: { day: 0, room: 0, active: false, rest: false } };
 }
 let S = fresh();
 
@@ -56,7 +56,7 @@ function save() {
 function load() { const o = Arcade.load(KEY); if (!o) return; S = Object.assign(fresh(), o); S.stats = Object.assign(fresh().stats, o.stats || {});
   S.league = Object.assign({ day: 0, room: 0, active: false, rest: false }, o.league || {});
   S.league.room = Math.max(0, Math.min(5, Math.floor(Number(S.league.room) || 0)));
-  leagueState();
+  leagueState(); towerState();
   // older saves began in color: they keep it, and get the faded Pocket look as an extra
   if (!S.eras.includes('pocket')) S.eras.unshift('pocket');
   if (S.badges.includes('thorn')) { for (const e of ['pixel', 'bit16']) if (!S.eras.includes(e)) S.eras.push(e); S.shoes = true; }
