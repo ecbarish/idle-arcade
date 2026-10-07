@@ -2,7 +2,9 @@
 
 Evan's personal stable of browser games, live at https://ecbarish.github.io/idle-arcade/ (GitHub Pages from `main`).
 Evan works on this from more than one computer and with ChatGPT/Codex too, so **this repo is the shared memory**:
-read **`START-HERE.md`** (where we are, the ordered task queue, the session log, shared by every assistant), this
+read **`START-HERE.md`** (where we are, what's next, the session log, shared by every assistant), **`docs/PROJECTS.md`**
+(the master list of every outlined project, with the launch track), **`docs/CREATIVE.md`** (ground rules and how much
+creative freedom assistants have), this
 file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (full tickets) at the start of a session.
 
 ## Start of every session

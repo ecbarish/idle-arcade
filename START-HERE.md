@@ -67,6 +67,9 @@ burner). Plans in `docs/plans/`.
 
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
+**The master list is `docs/PROJECTS.md`** (every outlined project, sizes, dependencies, claims, the launch track);
+**ground rules and creative freedom: `docs/CREATIVE.md`**. Below are only the next few items in flight.
+
 **Done so far** (details in `docs/ROADMAP.md`, the design docs and git history): T20-T28 content tickets; T1, T1-A,
 T1-B, T1-C (talents and pacing); R1 + the guild (with member favors and guild raiders); R2 (the raid); D1-D7
 decisions; S1-S5 shared systems (S4 part 1); Wildbond weather forecast, battle backdrops, challenge pennants; shared
