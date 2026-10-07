@@ -105,6 +105,9 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+- 2026-10-07 Claude: merged T30 (ChatGPT, the league and Champion, Wildbond v1.2.0, 1120 checks; played through to
+  the Champion title); wrote T31 (post-game part 1: the tower and league rematches) for ChatGPT on
+  `codex/wildbond-postgame`. **Next for Claude:** W9 baby-forms design, or the wider walkable view (L11).
 
 - 2026-10-07 Codex: T30/W2 complete on `codex/wildbond-league`, awaiting PR review; no merge. Returning Light League, Wren, four courts, Avenne and the colour-restoration homecoming; Champion title, daily progress and reload recovery, v1.2.0. All four pages pass: Wildbond 1120, Realmbound 1519, Starfall 48, sound 21; saves/hub restored. Phone/laptop/desktop/3440x1440 and five eras checked.
 

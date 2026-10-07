@@ -161,7 +161,30 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
-- [x] T30 implemented on `codex/wildbond-league`, awaiting review (v1.2.0).
+- [ ] T31 open for ChatGPT on `codex/wildbond-postgame` (W3 part 1).
+- [x] T30 merged 2026-10-07 by Claude (1120 Wildbond checks; full league run played through to the Champion title).
+
+### T31: Wildbond post-game, part 1: the Lighthouse Spire and league rematches (W3)
+After the Champion, players need a reason to keep raising their team toward level 100 (CLAUDE.md: "reasons to revisit
+old content"). Build on your own T30 league code (04-world.js `league*` functions, the league map) and the rematch
+code in 15-challenge.js. You have creative freedom (docs/CREATIVE.md); put a short "Design" section at the top of the PR.
+- **The tower:** a new walkable place for Champions only (name it to fit the lore; a lighthouse or tower near Farwatch
+  or the league is a good fit), locked before `S.story.leagueEnding`. Battles in a row against trainers with themed
+  teams; each floor's levels climb from about 75 toward 100 (floor N: min(100, 74 + N)), healing every 5 floors,
+  a short rest choice ("keep climbing" or "leave with your rewards"). A loss ends the climb. Save your best floor
+  (`S.tower = { best: 0, ... }` with safe defaults) and show it in the Journal.
+- **Rewards that matter but never pay-to-win:** coins and lures every floor; at milestone floors (10, 20, 30...) a
+  rare food, a title (e.g. "Spire Climber" at 10, "Lightkeeper" at 30), and the rare creature eggs the ranch can hatch
+  (use the existing egg code). Auto can climb, but earns less than climbing yourself (the same rule as Auto-explore).
+- **League rematches:** once a ranch day, the four league trainers and Champion Avenne can be rematched in the league
+  at higher tiers (teams scale with yours, like `S.rematch`), with new short lines for each.
+- **Trainer variety:** the tower's trainers use teams drawn from every area's species (a pool by floor band), with
+  a few named regulars who return every 10 floors and have a line or two (kind, curious voices).
+- **Saves:** new fields default safely; old saves load unchanged. **Checks:** the lock, floor levels, healing every 5,
+  losing ends the climb, best-floor saving, milestone rewards (once only), Auto's smaller rewards, rematches once a day,
+  old saves. All four test pages pass. Bump Wildbond's VERSION to 1.3.0. Check phone, desktop and ultrawide.
+- **Don't touch:** shared/ files, `ERAS`, the caps, or Realmbound/Starfall.
+
 
 ### T30: Wildbond's ending: the league and the Champion (W2)
 The story's finale after the eighth badge (docs/research/decisions.md decision 1: the main story ends around level 70-75,
