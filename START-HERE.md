@@ -68,6 +68,9 @@ Claude's Stillreed ambience work remains separate after merge.
 **Parked:** Starfall Guild, Diamond Career (baseball), Otherworld (side lane: structural and polish tasks only), and
 Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
 
+**Weather forecast ready for review:** `codex/wildbond-weather-forecast` adds the Journal forecast from the S5
+follow-ups. Shows the next two periods for unlocked routes; preserves the existing deterministic weather and saves.
+
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
 1. ~~**T21: Realmbound item name tiers**~~ — done by ChatGPT, merged 2026-10-08.
@@ -129,7 +132,7 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    before each pull, raid calls during it, four bosses, weekly-style lockout (every 3 days), epic loot with tier
    sets. Plan: `docs/realmbound-40-60.md` ("Raids") and decision 5 in `docs/research/decisions.md`. Gate it on the
    Hollow Key (T23's last quest) but build it so it can be tested before T23 lands.
-19. ~~**S5: shared ambience kit**~~ — done by Claude 2026-10-09 (`shared/ambience.js`; all three games use it; layout in HANDOFF.md). Ideas for later: Wildbond battle backdrops, a weather forecast in the Journal, rain sounds. Evan asked for it after seeing a living pixel-art
+19. ~~**S5: shared ambience kit**~~ — done by Claude 2026-10-09 (`shared/ambience.js`; all three games use it; layout in HANDOFF.md). Journal weather forecast: done by Codex 2026-10-07, awaiting PR review (`codex/wildbond-weather-forecast`). Ideas for later: Wildbond battle backdrops and rain sounds. Evan asked for it after seeing a living pixel-art
    scene (a floating island at night with rain, lightning, smoke, flickering windows, a campfire, fireflies, a waterfall,
    swaying trees, drifting clouds, a moving character; "the lightning and other moving elements made it most
    impressive"). `shared/ambience.js`, drawn on the games' existing canvases, quality first, used by every game:
@@ -165,6 +168,9 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-07 Codex: used Evan's lunch-session development authorization for the S5 Journal weather forecast; no merge.
+  Shared the current weather schedule with predictions, hid locked routes, added live boundary/rollover checks.
 
 - 2026-10-09 Claude: merged ChatGPT's T27 (Wildbond area 5, Stillreed Basin, levels 52-60, Warden Olan, Reed Badge,
   Stillwake) and gave the basin its own mist and fireflies. Tests: Wildbond 619, Realmbound 1434, Starfall 48.

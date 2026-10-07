@@ -349,6 +349,34 @@ function wildbondChecks() {
     if (!dayFor('clear')) return false; const clear = shareOf('Tide');
     return dayFor('rain') && shareOf('Tide') > clear;
   });
+  // Trail forecast: compare predicted conditions to the live walking scene across day rollover.
+  check('Forecast stays locked before Tide and hides unopened routes', () => {
+    ready();if(weatherForecast('thornwood').length||!forecastHTML().includes('Earn the Tide Badge'))return false;
+    S.badges=['thorn','tide'];return weatherForecast('stillreed').length===0&&weatherForecast('missing').length===0&&!forecastHTML().includes('Stillreed Basin');
+  });
+  check('Reading route forecasts leaves the save and clock untouched, including in town', () => {
+    ready();S.badges=badges.slice();wb.placeAt('larkhaven');S.day=9;S.ranchT=245;const before=JSON.stringify(S);
+    for(const id of Object.keys(BIOMES))weatherForecast(id);forecastHTML();return JSON.stringify(S)===before&&weatherNow()==='clear'&&weatherForecast('cloudglass').length===3;
+  });
+  for(const id of Object.keys(BIOMES))check(id+': every forecast period matches the live scene, including day rollover', () => {
+    ready();S.badges=Object.keys(BADGES);wb.placeAt(id);
+    for(const day of [1,4,13,97,98])for(let segment=0;segment<3;segment++){
+      S.day=day;S.ranchT=(segment+0.2)*DAY_SECONDS/3;const forecast=weatherForecast(id);
+      if(forecast.length!==3)return false;
+      for(let i=0;i<3;i++){const f=forecast[i];if(f.day!==day+Math.floor((segment+i)/3)||f.segment!==(segment+i)%3)return false;
+        S.day=f.day;S.ranchT=(f.segment+0.2)*DAY_SECONDS/3;if(weatherNow()!==f.weather)return false;}
+    }return true;
+  });
+  check('Journal forecast refreshes at the period boundary without a new log entry', () => {
+    ready();S.badges=badges.slice();wb.placeAt('saltmarsh');S.tab='journal';S.day=4;S.ranchT=DAY_SECONDS/3-0.05;renderTabs(true);
+    const before=$('#tabbody').innerHTML;wb.worldTick(0.1);renderTabs(false);
+    return before!==$('#tabbody').innerHTML&&$('#tabbody').textContent.includes('Now:')&&$('#tabbody').textContent.includes('period 2')&&$('#tabbody').textContent.includes('Saltmarsh Coast · here');
+  });
+  check('Journal forecast follows travel and refreshes over the ranch day boundary', () => {
+    ready();S.badges=badges.slice();S.tab='journal';S.day=4;S.ranchT=DAY_SECONDS-0.05;wb.placeAt('cloudglass');renderTabs(true);
+    wb.worldTick(0.1);wb.placeAt('stillreed');renderTabs(false);const text=$('#tabbody').textContent;
+    return text.includes('Stillreed Basin · here')&&!text.includes('Cloudglass Pass · here')&&text.includes('Now:')&&text.includes('day 5, period 1');
+  });
   check('Visible wild creatures appear only after Tide and outside town', () => {
     ready(); wb.placeAt('thornwood'); roamTick(13); if (WK.roam.length) return false;
     S.badges = ['tide']; for (let i = 0; i < 3; i++) roamTick(13);
