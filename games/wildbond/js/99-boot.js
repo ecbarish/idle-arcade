@@ -1,11 +1,14 @@
 'use strict';
-const VERSION = '1.1.0'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
+const VERSION = '1.2.0'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
 /* Clicks, keys, the game loop and startup. */
 function findC(uid) { uid = Number(uid); return S.team.find(c => c.uid === uid) || S.ranch.find(c => c.uid === uid); }
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-act]'); if (!el) return; const a = el.dataset.act, arg = el.dataset.arg;
+  if (leagueLocked() && ['toranch','toteam','release','buyfood','breed'].includes(a)) { W.msg = 'Your league team stays together. Leave the attempt before visiting the ranch.'; renderAll(); return; }
   sfx('select');
   switch (a) {
+    case 'league': leagueContinue(); break;
+    case 'leagueleave': leagueLeave(); break;
     case 'sound': cycleSound(); break;
     case 'skiptalk': skipTalk(); break;
     case 'starter': chooseStarter(arg, ($('#tname') || {}).value, S.journey, PICKED); closeModal(); break;

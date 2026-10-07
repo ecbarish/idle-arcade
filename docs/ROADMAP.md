@@ -161,6 +161,8 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
+- [x] T30 implemented on `codex/wildbond-league`, awaiting review (v1.2.0).
+
 ### T30: Wildbond's ending: the league and the Champion (W2)
 The story's finale after the eighth badge (docs/research/decisions.md decision 1: the main story ends around level 70-75,
 the Champion near 72-75; the post-game, W3, comes later). Read docs/lore/wildbond.md first and keep the tone: kind,

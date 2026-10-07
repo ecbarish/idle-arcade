@@ -41,11 +41,12 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
 
 **Wildbond** (creature game): eight areas, each with a Warden and badge: Thornwood (2-12), Saltmarsh Coast (12-22),
 Emberfall Highlands (22-32), Cloudglass Pass (32-42), Stillreed Basin (52-60), Hollowecho Hills (58-64), Sunthread Commons (62-68),
-Farwatch Reach (66-72; W1 ready for review); caps follow `CAP_TABLE` (75 with all eight badges). A walkable world with towns, trainers, items and riding; art eras Pocket (the
+Farwatch Reach (66-72; W1 merged); caps follow `CAP_TABLE` (75 with all eight badges). A walkable world with towns, trainers, items and riding; art eras Pocket (the
 faded start, explained in the intro) → Pixel/16-bit → HD-2D (on the shared world kit) → Diorama (3D); day/night,
 weather with a Journal forecast, thunderstorms, living ambience and regional battle backdrops; visible wild
 creatures; ranch and breeding; challenge modes with ranch pennants, rematches, area mastery; music, effects and rain
-sounds. Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
+sounds. T30 adds the Returning Light League, Wren's gate battle, four courts and Champion Avenne, with a
+Champion title and the colour-restoration ending (v1.2.0; awaiting review). Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
 
 **Realmbound** (classic-MMO idle, flagship): levels 1-60 across eight zones, five classes with three talent trees
 each, five 5-person dungeons, the 10-person raid **The Hollow Throne** (opened by the Hollow Key; guild adventurers
@@ -81,7 +82,7 @@ rain sounds; walkable Realmbound towns.
    walk into; then a walkable guild hall for Starfall Guild.
 3. ~~**T29: Wildbond area 7, Sunthread Commons**~~ (Codex; data) — done by ChatGPT, merged by Claude 2026-10-10 (branch `codex/wildbond-sunthread`): levels 62-68; ticket in
    `docs/ROADMAP.md`, "T29".
-4. **Wildbond's ending:** W1 Farwatch Reach (66-72) is complete on `codex/wildbond-area8`, awaiting Claude's review; next W2, the league and the Champion (around 72-75), the post-game (battle
+4. **Wildbond's ending:** W1 is merged; T30/W2, the league and Champion, is complete on `codex/wildbond-league`, awaiting review. Next: the post-game (battle
    tower, legendaries, the road to 100); contests and races; the Modern 3D era.
 5. **Realmbound next:** members' personal stories in the guild; battlegrounds (faction rivalry, the raid's closing
    hook); a second raid tier later.
@@ -104,6 +105,8 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-07 Codex: T30/W2 complete on `codex/wildbond-league`, awaiting PR review; no merge. Returning Light League, Wren, four courts, Avenne and the colour-restoration homecoming; Champion title, daily progress and reload recovery, v1.2.0. All four pages pass: Wildbond 1120, Realmbound 1519, Starfall 48, sound 21; saves/hub restored. Phone/laptop/desktop/3440x1440 and five eras checked.
 
 - 2026-10-10 Claude: E3 save doctor in studio.html (summary, health check with fixes, searchable editor; per-game
   rules in `DOCTOR`, labels in `LABELS`; backs up before writing). **Next:** review T30 when it lands; W9 design or

@@ -523,7 +523,7 @@ const MAPS = {
     3
   ],
   "rows": [
-    "RRRRRRRRRRRRRRRRRRRRRRRR~~~~~~",
+    "RRRRRRRRRRRRNRRRRRRRRRRR~~~~~~",
     "R,,,,,,rrrr,,,,,\"\"\",,,RR~~~~~~",
     "R,,\"\"\",rrrr,,,,\"\"\"\",,,RR~~~~~~",
     "R,\"\"\"\",####,,,,,,,______~~~~~~",
@@ -539,6 +539,7 @@ const MAPS = {
     "RRRRRRRRRRRRRRRRRRRRRRRR~~~~~~"
   ],
   "exits": {
+    "N": { "to": "league", "x": 3, "y": 16, "dir": "up", "locked": "The league requires all eight badges. Every road has something to teach your team." },
     "W": {
       "to": "sunthread",
       "x": 28,
@@ -667,5 +668,116 @@ const MAPS = {
     }
   ],
   "wardenDone": "Eight badges, {name}. Take time to rest before the league, and leave clear notes for the teams behind you."
+},
+  league: {
+  "name": "Returning Light League",
+  "league": true,
+  "pal": "cloudglass",
+  "edge": "R",
+  "start": [
+    3,
+    16,
+    "up"
+  ],
+  "rows": [
+    "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
+    "R~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~R",
+    "R~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~R",
+    "R,,,,rrrrr,,rrrrr,,rrrrr,,rrrrr,,rrrrr,R",
+    "R,,,,#####,,#####,,#####,,#####,,#####,R",
+    "R,,,,_____,,_____,,_____,,_____,,_____,R",
+    "R,,,,_____,,_____,,_____,,_____,,_____,R",
+    "R,,,,f_._f,,f_._f,,f_._f,,f_._f,,f_._f,R",
+    "R,,..................................,,R",
+    "R,,..................................,,R",
+    "R,,..................................,,R",
+    "R,,.,,,P,,,,,,P,,,,,,P,,,,,,P,,,,,,P,,,R",
+    "R,,.,,,,,,,,f,,,,,,,,,,,,,,f,,,,,,,,,,,R",
+    "R,,.,,,,~~~~~~~,,,,,,,,~~~~~~~~,,,,,,,,R",
+    "R,,.,,,,~~~~~~~,,,,,,,,~~~~~~~~,,,,,,,,R",
+    "R,,.,====,,,,,,,,,,,,,,,,,,,,,,,,====,,R",
+    "R,,.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,R",
+    "RRRSRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"
+  ],
+  "exits": {
+    "S": {
+      "to": "farwatch",
+      "x": 12,
+      "y": 1,
+      "dir": "down"
+    }
+  },
+  "signs": {
+    "7,11": "Listening court: listen while the plan changes.",
+    "14,11": "Shelter court: strength leaves somewhere safe to rest.",
+    "21,11": "Shared-work court: every partner has a part.",
+    "28,11": "Honest-record court: corrections belong where others can see them.",
+    "35,11": "Champion terrace: bring the whole journey with you."
+  },
+  "npcs": [
+    {
+      "who": "wren",
+      "at": [
+        3,
+        12
+      ],
+      "dir": "down",
+      "league": "wren"
+    },
+    {
+      "who": "nelva",
+      "at": [
+        4,
+        15
+      ],
+      "dir": "left",
+      "league": "keeper"
+    },
+    {
+      "who": "edrin",
+      "at": [
+        7,
+        6
+      ],
+      "dir": "down",
+      "league": 0
+    },
+    {
+      "who": "maela",
+      "at": [
+        14,
+        6
+      ],
+      "dir": "down",
+      "league": 1
+    },
+    {
+      "who": "corven",
+      "at": [
+        21,
+        6
+      ],
+      "dir": "down",
+      "league": 2
+    },
+    {
+      "who": "liora",
+      "at": [
+        28,
+        6
+      ],
+      "dir": "down",
+      "league": 3
+    },
+    {
+      "who": "avenne",
+      "at": [
+        35,
+        6
+      ],
+      "dir": "down",
+      "league": 4
+    }
+  ]
 }
 };

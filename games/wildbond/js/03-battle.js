@@ -13,7 +13,7 @@ function unit(c, side) {
 function startBattle(kind, foes, opts) {
   opts = opts || {};
   B = { kind, title: opts.title || '', trainer: opts.trainer || null, story: opts.story || null, npc: opts.npc || null,
-    rematch: opts.rematch || null, tier: opts.tier || 0, firstMeet: kind === 'wild' && firstMetHere(), // 15-challenge.js
+    leagueDay: opts.leagueDay || null, rematch: opts.rematch || null, tier: opts.tier || 0, firstMeet: kind === 'wild' && firstMetHere(), // 15-challenge.js
     allies: S.team.filter(c => c.hp > 0).map(c => unit(c, 'a')), foes: foes.map(c => unit(c, 'f')),
     cmd: 1, cmdT: 0, t: 0, tele: null, lines: [], over: null, capture: null, fx: [], bursts: [], shake: 0, lastInput: -99 };
   for (const u of B.foes) S.seen[u.c.sp] = true;
@@ -178,8 +178,9 @@ function endBattle(result) {
   if (B.rematch) rematchResult(B.rematch, B.tier, result); // 15-challenge.js
   nuzlockeAfter();
   if (result === 'lost' && B.story) S.story[B.story + 'Retry'] = S.explored + 4;
-  if (result === 'lost') { const lost = Math.round(S.coins * 0.1); S.coins -= lost; bline(`Your team is exhausted. You hurry back to Larkhaven (−${lost} coins).`, 'warn');
+  if (result === 'lost') { const lost = Math.round(S.coins * 0.1); S.coins -= lost; bline(`Your team is exhausted. ${B.leagueDay ? "You return to the league entrance" : "You hurry back to Larkhaven"} (−${lost} coins).`, 'warn');
     if (B.story === 'elder') S.story.elderFled = true; }
   if (result === 'fled' && B.story) { if (B.story === 'elder') S.story.elderFled = true; else S.story[B.story + 'Retry'] = S.explored + 4; }
+  if (B.leagueDay && result !== 'won') leagueDefeat();
   B.endAt = B.t;
 }

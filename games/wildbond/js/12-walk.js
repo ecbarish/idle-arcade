@@ -74,7 +74,7 @@ function dayPart() { return ((S.ranchT || 0) / DAY_SECONDS) % 1; }
 function darkness() { if (!S.badges.includes('thorn')) return 0; const k = dayPart(); return k < 0.65 ? 0 : k < 0.75 ? (k - 0.65) / 0.1 : k < 0.95 ? 1 : (1 - k) / 0.05; }
 function isNight() { return darkness() >= 1; }
 /* Weather (arrives with the Tide Badge): it changes three times a ranch day and tips which creatures come out. */
-const WEATHER = { thornwood: ['clear', 'clear', 'rain'], saltmarsh: ['clear', 'rain', 'mist'], emberfall: ['clear', 'clear', 'ash'], stillreed: ['rain', 'clear', 'rain', 'mist'], hollowecho: ['clear', 'mist', 'clear'], sunthread: ['clear', 'clear', 'rain'], farwatch: ['clear', 'mist', 'clear', 'mist'] };
+const WEATHER = { thornwood: ['clear', 'clear', 'rain'], saltmarsh: ['clear', 'rain', 'mist'], emberfall: ['clear', 'clear', 'ash'], stillreed: ['rain', 'clear', 'rain', 'mist'], hollowecho: ['clear', 'mist', 'clear'], sunthread: ['clear', 'clear', 'rain'], farwatch: ['clear', 'mist', 'clear', 'mist'], league: ['clear', 'clear', 'mist'] };
 const WEATHER_FX = { rain: { Tide: 2, Ember: 0.5 }, mist: { Shade: 1.5, Gale: 1.5 }, ash: { Ember: 1.6, Gale: 0.6 } };
 const WEATHER_NAME = { rain: 'Rain: Tide creatures are out.', mist: 'Mist: Shade and Gale creatures drift out of it.', ash: 'Falling ash: Ember creatures love it.' };
 /* One schedule serves both the scene and Journal; reading it never advances the ranch clock. */
@@ -83,6 +83,7 @@ function weatherAt(biome, day, segment) {
   return list[h % list.length];
 }
 function weatherNow() {
+  if (S.pos && curMap().league) return weatherAt('league', S.day || 1, Math.floor(dayPart() * 3));
   if (!S.badges.includes('tide') || !S.pos || !curMap().biome) return 'clear';
   return weatherAt(S.biome, S.day || 1, Math.floor(dayPart() * 3));
 }
@@ -168,6 +169,8 @@ function trainerResult(who, result) {
 function useExit(m, ch) {
   const ex = m.exits[ch]; if (!ex) return; WK.path = [];
   const to = MAPS[ex.to];
+  if (to.league && !leagueOpen()) { W.msg = ex.locked; return; }
+  if (m.league && leagueLocked()) { W.msg = 'Tell Nelva you are leaving this attempt before returning to Farwatch.'; return; }
   if (to.biome && !biomeOpen(to.biome)) { W.msg = ex.locked || 'The way ahead is closed for now.'; return; }
   placeAt(ex.to, ex.x, ex.y, ex.dir); W.msg = `You walk on to ${to.name}.`; slog(`Travelled to ${to.name}.`); save();
 }
@@ -177,6 +180,7 @@ function enterDoor(kind) {
   else if (kind === 'ranch') { S.tab = 'ranch'; renderTabs(true); W.msg = 'Maren waves you into the barn. Your ranch is open on the right.'; }
 }
 function talkTo(n) {
+  if (n.league !== undefined) { leagueTalk(n.league); return; }
   const face = { up: 'down', down: 'up', left: 'right', right: 'left' }[S.pos.dir]; if (!n.trainer) n.dir = face; // trainers keep watching their path
   if (n.warden) {
     const g = n.warden;
