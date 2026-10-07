@@ -1,0 +1,29 @@
+name: Bug report
+description: Something broke, looked wrong, or lost progress.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: game
+    attributes:
+      label: Which game?
+      options: [Wildbond, Realmbound, Starfall Guild, The arcade homepage, Other]
+    validations: { required: true }
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations: { required: true }
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can we see it happen? (steps, where you were, what you clicked)
+  - type: input
+    id: device
+    attributes:
+      label: Device and browser
+      placeholder: "Windows laptop, Chrome / iPhone, Safari"
+  - type: textarea
+    id: save
+    attributes:
+      label: Your save (optional; use the game's Export button and paste it here so we can reproduce it)

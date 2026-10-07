@@ -105,6 +105,12 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude (night, low on credits, planning only): Evan's new notes are now projects in docs/PROJECTS.md:
+  the **Studio** (E1-E7: GM panel, save doctor, text/creature/quest editors, map painter, lighting tuner), the
+  **feedback loop** (F1 done: GitHub issue forms for feedback, bugs, suggestions, docs/FEEDBACK.md; F2 in-game button),
+  **baby forms and a larger creature roster** (W9 design first, W10-W12), **reactive light** (G7: walls block light,
+  sprites lit on the light side, moving lights, cloud shadows, reflections). T29 (Sunthread) not pushed yet.
+  **Next:** merge T29 when it lands; then pick from PROJECTS.md (suggested: E1+E2, W9, G2, L-track).
 - 2026-10-09 Claude (evening): Evan asked for (1) WoW: Forever-quality lighting, (2) a master project list any
   assistant can work from, (3) room for other assistants' creativity. Wrote `docs/PROJECTS.md` and `docs/CREATIVE.md`
   (linked from AGENTS.md, CLAUDE.md, here); built G1, the light engine (`shared/light.js`) in Realmbound (side view,

@@ -55,6 +55,32 @@ move with the time of day, bounce light that carries colour into shadows, real t
 | G4 | **Graphics quality setting** (Low / High) and a performance budget for phones | M | System | G1 | open | Auto-pick Low on slow devices |
 | G5 | **Diorama lighting**: real shadows, fog and torchlight in Wildbond's three.js era | M | Art | G1 | open | three.js r134 shadows and fog |
 | G6 | **Weather polish**: puddles that gather in rain, wet sheen, snow that settles, wind you can see in grass | M | Art | G1 | open | |
+| G7 | **Reactive light** (Evan: light should react to the world, not be a drawn-on shadow): walls and buildings *block* light (2D ray-cast visibility from every lamp and fire, so light spills through doorways and stops at walls); each sprite is lit on the side facing the light and dark on the other (and rim-lit at sunset); moving lights (your torch, a mage's spell, lightning) re-light everything they pass; cloud shadows drift over the ground; bright surfaces reflect colour onto their neighbours | L | System+Art | G1 | open | Today G1 already recomputes every shadow each frame from the sprite's real shape and the current sun or nearest lamp; G7 adds occlusion, per-sprite shading, moving lights and reflections |
+
+## Studio: editing, GM and repair tools (Evan, 2026-10-09)
+
+A place where Evan can change things himself without code, and fix problems quickly. No server: edits are saved as
+small "patch" files that the games load on top of the built-in data, and an Export button turns them into a file an
+assistant commits for everyone. Build in this order; each step is useful alone.
+
+| ID | Project | Size | Kind | Depends | Status | Spec / notes |
+|---|---|---|---|---|---|---|
+| E1 | **Studio shell** (`studio.html`): one page with tabs per game, a search box, and an "export my changes" button; patch format in `shared/patch.js` that every game reads at start | M | System | — | open | Write the patch format first; patches never replace saves |
+| E2 | **GM panel** (local only, behind a toggle): give gold, items, levels, creatures; teleport; set time of day and weather; heal; unlock areas; spawn a boss; all logged | M | System | E1 | open | Reuses the test hooks (`window.__rb`, `__wb`); never in normal play |
+| E3 | **Save doctor**: load any save, see it as readable fields, fix values with checks, restore from automatic backups, export/import | M | System | L2 | open | Never edits a save without making a backup first |
+| E4 | **Text editor**: every line of dialogue, quest text, item and creature name, with a live preview in the scene style | M | System | E1 | open | |
+| E5 | **Creature and quest editors**: stats, moves, evolutions, wild tables; quest goals and rewards; validates against the same rules the tests use | L | System | E1 | open | Reuse the checks from tests/ as validators |
+| E6 | **Map painter**: paint tiles, place people, signs, items and exits; walk the map right there; export | L | System | E1 | open | Or import maps from the free LDtk/Tiled editors |
+| E7 | **Lighting and music tuner**: sliders for a zone's fog, shadow strength, colour grade; play and tweak a tune | M | System | G1, E1 | open | Good for G2 |
+
+## Feedback and suggestions (Evan, 2026-10-09)
+
+| ID | Project | Size | Kind | Depends | Status | Spec / notes |
+|---|---|---|---|---|---|---|
+| F1 | **Issue forms** for playtest feedback, bugs and suggestions | S | Polish | — | done 2026-10-09 | `.github/ISSUE_TEMPLATE/`, docs/FEEDBACK.md |
+| F2 | **In-game "Send feedback" button** in every game: opens the right form with game, version, place and a small summary filled in (no personal data) | S | Polish | F1 | open | |
+| F3 | **Triage habit**: assistants read open issues at the start of a session (docs/FEEDBACK.md) | S | Process | F1 | done 2026-10-09 | In CLAUDE.md's start-of-session steps |
+| F4 | **Tester build notes**: a short "what to try" page for each release, linked from the homepage | S | Polish | L9 | open | |
 
 ## Wildbond (creature game, current focus)
 
@@ -69,6 +95,10 @@ move with the time of day, bounce light that carries colour into shadows, real t
 | W6 | **Modern 3D era** after the Diorama | XL | Art | G5 | open | Split into parts |
 | W7 | Map polish: Stillreed's ferry landing you can see; interiors for town buildings | S | Art | — | open | |
 | W8 | Pacing pass for areas 5-8 (sim) and tuning | M | Polish | W1 | open | creature-game-design.md pacing method |
+| W9 | **Baby forms and growth (design)**: creatures hatch or are found as babies and grow through more stages (baby, young, adult, elder?), giving more room to raise them; how it meets eggs, evolution levels, caps, and old saves | M | Design | — | open | Evan, 2026-10-09; write `docs/proposals/creature-growth.md` first (CREATIVE.md: new system) |
+| W10 | **Baby forms (build)**: the growth stages, baby art from the existing families, ranch care that matters more for babies | L | System+Art | W9 | open | Old saves keep their creatures as they are |
+| W11 | **A larger roster**: batches of 10-12 new species per element, filling every family and element pairing (target about 150 to start), each with a dex line; ChatGPT-friendly data work | L (batches) | Data | W9 | open | T6 rules in creature-game-design.md; one batch per PR |
+| W12 | **New creature families** (body shapes beyond the current ones: serpents, golems, insects, jellyfish...) with their own art | L | Art | — | open | shared/creatures.js and 01-art.js |
 
 ## Realmbound (classic-MMO idle, flagship)
 

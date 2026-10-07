@@ -13,7 +13,9 @@ file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (full tickets
    `git merge --no-ff`, push, and mark the ticket done if ChatGPT didn't. Evan confirmed on 2026-10-06 that Claude
    merges after checking; ChatGPT/Codex still opens PRs and never merges its own work (unless Claude is
    unavailable: then START-HERE.md lets it merge after both test pages pass; double-check those merges).
-3. Read START-HERE.md's Session log for anything done elsewhere, then take the first task in its "Up next".
+3. Check open GitHub issues (testers' feedback, bugs, suggestions; see docs/FEEDBACK.md): bugs first.
+4. Read START-HERE.md's Session log for anything done elsewhere, then take the first task in its "Up next"
+   (or any open project in docs/PROJECTS.md).
 
 ## End of every session (Evan may switch to another assistant at any moment)
 Commit and push everything that works; update START-HERE.md ("Where we are", "Up next" with enough detail for

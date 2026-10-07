@@ -1,0 +1,16 @@
+name: Suggestion
+description: An idea for a game, a feature, a creature, a story, anything.
+title: "[Idea] "
+labels: ["suggestion"]
+body:
+  - type: dropdown
+    id: game
+    attributes:
+      label: For which game?
+      options: [Wildbond, Realmbound, Starfall Guild, A new game, The whole arcade]
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: What would the player see and do? Why would it be fun?
+    validations: { required: true }

@@ -1,0 +1,28 @@
+name: Playtest feedback
+description: Tell us how a game felt to play, what you liked, what confused you.
+title: "[Feedback] "
+labels: ["feedback"]
+body:
+  - type: dropdown
+    id: game
+    attributes:
+      label: Which game?
+      options: [Wildbond, Realmbound, Starfall Guild, The arcade homepage, Other]
+    validations: { required: true }
+  - type: input
+    id: time
+    attributes:
+      label: About how long did you play?
+      placeholder: "20 minutes, two evenings, ..."
+  - type: textarea
+    id: liked
+    attributes:
+      label: What did you enjoy?
+  - type: textarea
+    id: confusing
+    attributes:
+      label: What confused you, felt slow, or made you want to stop?
+  - type: textarea
+    id: other
+    attributes:
+      label: Anything else? (device, screenshots welcome)
