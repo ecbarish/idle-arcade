@@ -81,7 +81,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | F1 | **Issue forms** for playtest feedback, bugs and suggestions | S | Polish | — | done 2026-10-09 | `.github/ISSUE_TEMPLATE/`, docs/FEEDBACK.md |
 | F2 | **In-game "Send feedback" button** in every game: opens the right form with game, version, place and a small summary filled in (no personal data) | S | Polish | F1 | done 2026-10-10 (Jules) | shared/feedback.js |
 | F3 | **Triage habit**: assistants read open issues at the start of a session (docs/FEEDBACK.md) | S | Process | F1 | done 2026-10-09 | In CLAUDE.md's start-of-session steps |
-| F4 | **Tester build notes**: a short "what to try" page for each release, linked from the homepage | S | Polish | L9 | open | |
+| F4 | **Tester build notes**: a short "what to try" page for each release, linked from the homepage | S | Polish | L9 | claimed: Codex, 2026-10-07, `codex/playtest-notes` | |
 
 ## Wildbond (creature game, current focus)
 
