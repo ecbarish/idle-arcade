@@ -137,6 +137,9 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
 20. **T27: Wildbond area 5, Stillreed Basin** (any assistant; data) — **sent to ChatGPT 2026-10-09** (branch
    `codex/wildbond-stillreed`; ticket in `docs/ROADMAP.md`, "T27"): levels 52-60, Warden Olan, Reed Badge, Stillwake.
    After merging: Claude adds Stillreed's air to `drawAmbience` (06-scene.js: mist over the water, fireflies, rain).
+21. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines: a living scene on the
+   shared ambience kit, the shared sound, dialogue and creature art, a taste of each game. Wait until the games are
+   further along so it's built once; then make it the arcade's showcase.
 
 ## Questions for Evan (work continues on the defaults until he answers)
 

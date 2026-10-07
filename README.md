@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-09 (late)** — Wildbond's opening now explains its faded green look: the world lost its colour long ago,
+  and it comes back with the first badge. (Evan saw green sprites on a fresh start and took it for a bug.)
 - **2026-10-09 (night)** — Realmbound's quest log now tells you when an attunement quest is waiting: "will offer this
   once you have cleared the Silent Barrows and Rootrot Hollow". The raid was re-tested at the new level cap of 60.
 - **2026-10-09 (evening)** — **The worlds come alive** (a new shared ambience system, inspired by a living pixel-art
