@@ -52,6 +52,9 @@ mechanic that needs a healer), pets, mounts, companions, earned addons. Item nam
 
 **Hub and promo pages:** `index.html`, `promo.html` (Realmbound), `promo-wildbond.html`.
 
+**Starfall Guild:** T25 structural split and browser checks are on `codex/starfall-split`, awaiting PR review.
+The game remains parked; existing gameplay, text, balance and saves are unchanged.
+
 **Parked:** Starfall Guild, Diamond Career (baseball), Otherworld (side lane: structural and polish tasks only), and
 Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
 
@@ -79,9 +82,9 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    `codex/wildbond-more-checks`). Full ticket in `docs/ROADMAP.md` ("T24"). Extend `tests/wildbond-checks.js` for route
    trainers and items (T7b part 2), challenge modes, rematches and mastery (`15-challenge.js`), eras and weather
    (`weatherNow`, the Pocket/16-bit/HD/Diorama unlocks), and riding.
-7. **T25: Split Starfall Guild into files + a test page** (any assistant; no behavior change) — **sent to ChatGPT
-   2026-10-08** (branch `codex/starfall-split`). Full ticket in `docs/ROADMAP.md` ("T25"). This is the "parked games
-   side lane": parked games get structural and polish work while Claude focuses on the two main games.
+7. ~~**T25: Split Starfall Guild into files + a test page**~~ — implemented by Codex 2026-10-07 on
+   `codex/starfall-split`, awaiting PR review and merge. Existing code, styles and saves preserved; browser checks
+   added in `tests/starfall.html`. This is structural work in the parked games side lane.
 8. ~~**Research brief for the big decisions**~~ — done by Claude 2026-10-08: `docs/research/decisions.md` (sources,
    recommendations, and the shared-systems plan: dialogue → sound → roster → world kit).
 9. ~~**D1: Wildbond cap table**~~ — done by Claude 2026-10-08. `levelCap()` in 02-state.js uses a table
@@ -115,6 +118,9 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-07 Codex: T25 split Starfall Guild; a three-minute main save loads identically. Browser checks pass:
+  Starfall 24, Realmbound 582, Wildbond 412. `codex/starfall-split` awaits PR review; no merge.
 
 - 2026-10-08 Claude (night): Evan accepted all research recommendations and a light shared universe. Built D1
   (Wildbond cap table), D2+D3 (Realmbound group XP split, journey length; groups now ~1.3× solo) and D7

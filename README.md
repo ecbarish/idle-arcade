@@ -39,6 +39,9 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-07** — Starfall Guild is split into small classic scripts and its unchanged stylesheet (T25).
+  Adds a browser check page for old saves, recruiting, combat, town purchases and seasons; gameplay and saves are unchanged.
+
 - **2026-10-08 (night, later)** — Decisions from the research brief (`docs/research/decisions.md`). Wildbond: the main
   story will end near level 70, so badge caps now rise 10 a badge for the first four and 5 after (55, 60, 65, 70, then
   75 with all eight); nothing changes for the four badges that exist today.
