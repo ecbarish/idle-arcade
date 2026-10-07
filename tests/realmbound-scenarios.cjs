@@ -21,9 +21,9 @@ module.exports = function scenarios() {
         rb.accept(q.id);h.quests.prog[q.id]=q.n;rb.turnIn(q.id,0,false);
         check(h.quests.done[q.id],'quest completed: '+q.id);
       }
-      h.lvl=39;h.xp=0;rb.boot();rb.gainXP(rb.xpNeed(39)*10,false);
-      check(h.lvl===40&&h.xp===0,'XP stops at level 40');
-      check(h.npcs.every(n=>rb.npcZone(n)==='frostmere'),'high-level companions visit Frostmere');
+      h.lvl=44;h.xp=0;rb.boot();rb.gainXP(rb.xpNeed(44)*10,false);
+      check(h.lvl===45&&h.xp===0,'XP stops at level 45');
+      check(h.npcs.every(n=>rb.npcZone(n)==='barrowfield'),'high-level companions visit the Barrowfields');
       h.lvl=27;for(const n of h.npcs)n.offset=0;
       check(h.npcs.every(n=>rb.npcZone(n)==='ashen'),'level-27 companions still visit Ashen Ridge');
       h.lvl=30;rb.boot();
@@ -67,6 +67,77 @@ module.exports = function scenarios() {
         check(rb.C.mob.id==='hushfang'&&rb.C.mob.rar===4&&rb.C.mob.elite,'Hushfang spawns legendary: '+faction);
         rb.startTame();check(!!rb.C.taming,'Hushfang tame begins: '+faction);rb.finishTame();
         check(winter.pets.length===1&&winter.pets[0].family==='wolf'&&winter.pets[0].rar===4,'Hushfang joins stable: '+faction);
+      }
+      const barrows=rb.DUNGEONS.barrows,field=rb.ZONES.barrowfield;
+      check(field.lv[0]===40&&field.lv[1]===45&&field.faction===null,'Barrowfields is a shared level 40-45 zone');
+      check(field.mobs.length===6&&field.mobs.filter(m=>m.elite).length===1,'Barrowfields has five ordinary mobs and one elite');
+      check(new Set(Object.values(rb.QUESTS).flat().map(q=>q.id)).size===Object.values(rb.QUESTS).flat().length,'quest IDs stay unique across chapters');
+      check(rb.QUESTS.barrowfield.length===12,'Barrowfields has twelve quests');
+      check(barrows.minLvl===42&&barrows.zone==='barrowfield','Silent Barrows unlocks at 42 in the Barrowfields');
+      check(barrows.enc.filter(e=>!e.boss).length===4&&barrows.enc.filter(e=>e.boss).length===3,'Silent Barrows has four packs and three bosses');
+      check(barrows.enc.at(-1).final&&barrows.enc.at(-1).name==='The Last Wayward'&&barrows.enc.at(-1).lvl===45,'Last Wayward is the level-45 finale');
+      check(barrows.enc.every(e=>e.lvl>=42&&e.lvl<=45&&(!e.mech||Object.keys(e.mech).every(k=>['wave','surge','enrage'].includes(k)))),'Barrows uses existing encounter mechanics only');
+      for(const faction of ['concord','wild']){
+        const b=rb.newHero('Barrowcheck',faction,faction==='concord'?'human':'grishar','hunter');
+        rb.S.chars.push(b);rb.S.cur=b.id;
+        Object.assign(b,{lvl:37,zone:'frostmere',xp:0});rb.boot();
+        const travel=()=>document.querySelector('[data-act="zone"][data-arg="barrowfield"]').click();
+        travel();check(b.zone==='frostmere','Barrowfields refuses travel at 37: '+faction);
+        b.lvl=38;rb.boot();travel();rb.boot();
+        check(b.zone==='barrowfield','Barrowfields accepts travel at 38: '+faction);
+        check(document.querySelector('#zoneLore').textContent===field.lore,'Barrowfields lore visible: '+faction);
+        check(document.body.textContent.includes(field.hub[faction]),'Barrowfields faction hub visible: '+faction);
+        for(const n of b.npcs)n.offset=0;
+        b.lvl=39;check(b.npcs.every(n=>rb.npcZone(n)==='frostmere'),'level-39 companions retain Frostmere: '+faction);
+        b.lvl=40;check(b.npcs.every(n=>rb.npcZone(n)==='barrowfield'),'level-40 companions visit Barrowfields: '+faction);
+        // Round-trip an old-cap save with completed quests and separate dungeon records.
+        b.quests.done.fm10=true;b.drecords={sanctum:{clears:2,best:1,runs:3},foundry:{clears:1,best:0,runs:1}};
+        rb.boot();rb.save();
+        const resumed=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1')));
+        const old=resumed.chars.find(c=>c.id===b.id);rb.S.chars=resumed.chars;rb.S.cur=old.id;rb.boot();
+        check(old.lvl===40&&old.quests.done.fm10&&rb.dungeonStats('foundry').clears===1&&rb.dungeonStats('sanctum').best===1,'level-40 save preserves chapter and dungeon progress: '+faction);
+        rb.gainXP(rb.xpNeed(40),false);
+        check(old.lvl===41,'old level-40 save earns XP to 41: '+faction);
+        old.lvl=45;rb.boot();
+        for(const q of rb.QUESTS.barrowfield){
+          old.bags=[];old.grind=null;
+          check(q.type!=='collect'||field.mobs.find(m=>m.id===q.mob).drop,'collection target carries its quest item: '+q.id+' '+faction);
+          check(!q.req||old.quests.done[q.req],'Barrowfields chain prerequisite completed: '+q.id+' '+faction);
+          old.lvl=q.lvl-3;check(rb.qState(q)==='locked','quest locked below level-minus-two: '+q.id+' '+faction);
+          old.lvl=q.lvl-2;check(rb.qState(q)==='avail','quest opens at level-minus-two: '+q.id+' '+faction);
+          rb.accept(q.id);rb.boot();rb.spawn();
+          check(old.quests.active.includes(q.id)&&rb.C.mob.id===q.mob,'Barrowfields quest accepted and selects target: '+q.id+' '+faction);
+          old.quests.prog[q.id]=q.n;rb.turnIn(q.id,0,false);
+          const i=faction==='concord'?0:1;
+          check(old.quests.done[q.id]&&rb.C.lines.some(l=>l.txt.includes(q.giver[i]+': "'+q.done[i]+'"')),'Barrowfields turn-in voice: '+q.id+' '+faction);
+          check(old.bags.length===1&&old.bags[0].ilvl===q.lvl+(q.elite?2:1)&&old.bags[0].rar===(q.elite?3:2),'Barrowfields exact scaled reward: '+q.id+' '+faction);
+        }
+        check(rb.QUESTS.barrowfield.at(-1).text.includes('Silent Barrows'),'last quest sends player to Silent Barrows: '+faction);
+        old.lvl=45;old.grind='paleweft';rb.boot();rb.spawn();
+        check(rb.C.mob.id==='paleweft'&&rb.C.mob.elite&&rb.C.mob.rar===4,'Paleweft spawns legendary: '+faction);
+        rb.startTame();check(!!rb.C.taming,'Paleweft taming begins: '+faction);rb.finishTame();
+        check(old.pets.some(p=>p.family==='spider'&&p.rar===4),'Paleweft joins Hunter stable: '+faction);
+        old.grind=null;old.lvl=41;rb.boot();document.querySelector('[data-act="tab"][data-arg="friends"]').click();
+        check(document.querySelector('[data-act="lfg"][data-arg="barrows"]').disabled,'Barrows group finder locked at 41: '+faction);
+        old.lvl=42;rb.boot();document.querySelector('[data-act="tab"][data-arg="friends"]').click();
+        check(!document.querySelector('[data-act="lfg"][data-arg="barrows"]').disabled,'Barrows appears enabled at 42 in its zone: '+faction);
+        const team=old.npcs.slice(0,4).map(n=>n.id);
+        old.zone='frostmere';rb.boot();rb.startDungeon(0,team,'barrows');
+        check(!old.dun,'Barrows requires its own zone: '+faction);
+        old.zone='barrowfield';rb.boot();rb.startDungeon(1,team,'barrows');
+        check(!old.dun,'Barrows Heroic requires a normal clear: '+faction);
+        rb.startDungeon(0,team,'barrows');
+        check(old.dun&&old.dun.id==='barrows','Barrows normal entry at 42: '+faction);
+        for(let i=0;i<barrows.enc.length;i++){
+          old.dun.step=i;rb.spawnDungeon();const e=barrows.enc[i];
+          check(rb.C.mob.name.includes(e.name)&&rb.C.mob.lvl===e.lvl&&rb.C.mob.boss===!!e.boss,'Barrows encounter identity: '+i+' '+faction);
+        }
+        rb.finishDungeon();
+        check(rb.dungeonStats('barrows').clears===1&&rb.dungeonStats('barrows').best===0,'Barrows normal clear unlocks Heroic: '+faction);
+        check(rb.dungeonStats('sanctum').best===1&&rb.dungeonStats('foundry').clears===1,'Barrows clear preserves other dungeon records: '+faction);
+        rb.startDungeon(1,team,'barrows');
+        check(old.dun.id==='barrows'&&old.dun.mods.length===1,'Barrows earned Heroic uses existing modifiers: '+faction);
+        old.dun=null;rb.boot();rb.save();
       }
       rb.S.cur=h.id;rb.boot();rb.save();return checks;
     };

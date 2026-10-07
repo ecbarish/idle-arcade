@@ -18,6 +18,15 @@ const FOUNDRY={name:'The Cindervein Foundry',minLvl:27,zone:'ashen',sky:['#2e172
     {boss:true,name:'The Crucible Matron',lvl:29,kind:'beast',fam:'spider',col:'#c95736',hpM:9,dmgM:2.3,mech:{surge:15,wave:23},loot:2},
     {name:'Covenant Flameguards',n:2,lvl:29,kind:'humanoid',col:'#b53d26'},
     {boss:true,final:true,name:'Veyr, Heart of the Mountain',lvl:30,kind:'humanoid',col:'#ee873c',hpM:12,dmgM:2.5,mech:{wave:15,surge:18,enrage:150},loot:3}]};
-const DUNGEONS={sanctum:SANCTUM,foundry:FOUNDRY};
+const BARROWS={name:'The Silent Barrows',minLvl:42,zone:'barrowfield',sky:['#152331','#425567'],hill:'#283542',ground:'#3a4b59',waveName:'Gravewind',surgeName:'Stonewake Rupture',
+  enc:[
+    {name:'Barrow Lampkeepers',n:3,lvl:42,kind:'humanoid',col:'#869dad'},
+    {name:'Cairnweft Brood',n:2,lvl:42,kind:'beast',fam:'spider',col:'#6a7e91'},
+    {boss:true,name:'Ordel, Keeper of the Unlit Wick',lvl:43,kind:'humanoid',col:'#8aa5b9',hpM:8.5,dmgM:2.3,mech:{wave:14},loot:2},
+    {name:'Waystone Bearers',n:3,lvl:43,kind:'humanoid',col:'#7894a5'},
+    {boss:true,name:'Selnith, the Doorweaver',lvl:44,kind:'beast',fam:'spider',col:'#a4b6c8',hpM:9.5,dmgM:2.4,mech:{surge:15,wave:23},loot:2},
+    {name:'Keepers of the Return Path',n:2,lvl:44,kind:'humanoid',col:'#637c90'},
+    {boss:true,final:true,name:'The Last Wayward',lvl:45,kind:'humanoid',col:'#b5cedc',hpM:12.5,dmgM:2.6,mech:{wave:15,surge:18,enrage:150},loot:3}]};
+const DUNGEONS={sanctum:SANCTUM,foundry:FOUNDRY,barrows:BARROWS};
 const DUN_MODS={fortified:{name:'Fortified',desc:'Non-boss enemies have 30% more health.'},tyrannical:{name:'Tyrannical',desc:'Bosses have 30% more health and hit 15% harder.'},
   raging:{name:'Raging',desc:'Enemies below 30% health deal 40% more damage.'},tidal:{name:'Tidal',desc:'Boss waves and surges come 30% more often.'}};

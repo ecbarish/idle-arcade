@@ -35,6 +35,11 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-07** — Realmbound Frostmere II (T20): The Barrowfields extends the journey to level 45 with twelve
+  voiced quests, grave-cold beasts and restless Wayfolk wardens, and Paleweft, a legendary tameable spider.
+  The Silent Barrows opens at level 42: four packs and three bosses ending with the Last Wayward, plus existing
+  Heroic tiers. Old level-40 heroes can resume earning XP. Grave Chill and pacing measurement follow in T1-B.
+
 - **2026-10-07 (night, later)** — Realmbound plan for levels 40-60, the guild and raids (T1): docs/realmbound-40-60.md.
   Three chapters (the Barrowfields and the Silent Barrows, then the Hollow Crown in two parts), second and third
   talent trees with roles that follow your build, item names for every level band, a guild that is your whole
