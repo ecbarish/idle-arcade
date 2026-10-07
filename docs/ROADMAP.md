@@ -65,7 +65,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 
 - [x] **T12: Realmbound lore pass** (ChatGPT): see the T12 section below.
 - [ ] **T14: Wildbond lore bible and region outline** (ChatGPT, docs only): see the T14 section below.
-- [ ] **T15: Emberfall Warden and badge, data only** (ChatGPT): see the T15 section below.
+- [x] **T15: Emberfall Warden and badge, data only** (ChatGPT): see the T15 section below.
 
 ### T15: Emberfall Warden and badge (data only)
 Emberfall Highlands (levels 22-32) is the only area without a Warden. Add one, using the Warden system T11 built.

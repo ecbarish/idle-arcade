@@ -13,7 +13,7 @@ const JOURNEY = {
   long: { name: 'Long Road', xp: 0.08, coins: 0.8, rare: -0.3, desc: 'For the grind: less XP and rarer finds. Every level is earned.' }
 };
 const AUTO_XP = 0.8;
-const BADGES = { thorn: { name: 'Thorn Badge' }, tide: { name: 'Tide Badge' } };
+const BADGES = { thorn: { name: 'Thorn Badge' }, tide: { name: 'Tide Badge' }, ember: { name: 'Ember Badge' } };
 
 /* Element wheel: each element is strong against the ones listed. */
 const ELEMENTS = {
@@ -182,7 +182,8 @@ const CAST = {
   maren: { name: 'Keeper Maren', skin: '#d9a77c', hair: 'bun', hairCol: '#c9c3b8', shirt: '#5b8a4a', bg: '#cfe7c4', title: 'Larkhaven ranch keeper' },
   wren: { name: 'Wren', skin: '#f0c7a4', hair: 'spiky', hairCol: '#3a2230', shirt: '#d85a8a', bg: '#f6d3e1', title: 'Your rival' },
   isolde: { name: 'Warden Isolde', skin: '#b98262', hair: 'long', hairCol: '#2a3b2c', shirt: '#3d6b52', bg: '#c9dfc8', title: 'Warden of Thornwood' },
-  nerys: { name: 'Warden Nerys', skin: '#8a5a3c', hair: 'hat', hairCol: '#9a948a', hatCol: '#3c5a6a', shirt: '#2f5e78', bg: '#cfe3ea', title: 'Warden of the Saltmarsh' }
+  nerys: { name: 'Warden Nerys', skin: '#8a5a3c', hair: 'hat', hairCol: '#9a948a', hatCol: '#3c5a6a', shirt: '#2f5e78', bg: '#cfe3ea', title: 'Warden of the Saltmarsh' },
+  toren: { name: 'Warden Toren', skin: '#b87d59', hair: 'short', hairCol: '#ddd0bd', shirt: '#98543c', bg: '#ead0b2', title: 'Warden of Emberfall' }
 };
 /* Scenes that aren't tied to an explore count. */
 const SCENES = {
@@ -266,7 +267,16 @@ const STORY = [
       ['@hearthcrown', 'It nudges a loose stone away from your partner\'s feet, then lowers its antlers and waits. A gentle invitation to show your bond.']],
     win: [['@hearthcrown', 'Hearthcrown folds its legs beside your team, warming the stone beneath their tired paws.'],
       ['', 'When you rise to leave, the guardian rises too, ready to share the next stretch of the trail.']],
-    wild: ['hearthcrown', 31, 4] }
+    wild: ['hearthcrown', 31, 4] },
+  { biome: 'emberfall', at: 24, id: 'warden3', gate: 'ember', title: 'The Emberfall Warden', text: 'Warden Toren tested your patience on the warm stone above the springs.',
+    lines: [['', 'Above the springs, steam drifts across a ring of warm stone. A grey-haired man waits with three creatures, letting a Glowmote finish its nap on his sleeve.'],
+      ['toren', 'Welcome, {name}. Give us a moment. My smallest partner takes punctuality as a suggestion.'],
+      ['toren', 'Up here, rushing across a hot ledge gets everyone hurt. I judge patience: can you wait for a safe opening when every part of you wants to push ahead?'],
+      ['toren', 'Keep a steady pace, and give your team room to breathe. The mountain will still be here when we finish.']],
+    win: [['toren', 'You waited without giving up. Even under pressure, you left your partners time to find their footing. Well done.'],
+      ['toren', 'Take the Ember Badge. Your creatures can grow stronger now. You have earned it, and a sit by the springs.'],
+      ['toren', 'Further on, beyond the high pass, there are old stones that stay warm through winter. Something was keeping watch there long before we Wardens arrived. Walk slowly, and listen.']],
+    trainer: 'Warden Toren', team: [['cragskein', 31], ['glowmote', 32], ['kilntusk', 34]] }
 ];
 const COUNTER = { cindercub: 'ripplet', ripplet: 'mosshog', mosshog: 'cindercub' };
 
