@@ -52,7 +52,7 @@ function dunKill(m){
   C.loot={money:0,items:gear,dun:true};C.phase='loot';C.t=40;
 }
 function giveLoot(it){const ps=partyAlive().length?partyAlive():C.party;if(!ps.length)return;const p=pick(ps);
-  addAff(p.n,5,`You gave them [${it.name}].`);say(p.n,'thanks');line(`You give [${it.name}] to ${p.n.name}.`,'l-loot');}
+  addAff(p.n,5,`You gave them [${it.name}].`);moodBump(p.n,10);say(p.n,'thanks');line(`You give [${it.name}] to ${p.n.name}.`,'l-loot');}
 function dunLootAct(id,give){if(!C.loot||!C.loot.dun)return;const i=C.loot.items.findIndex(x=>x.id===id);if(i<0)return;const it=C.loot.items.splice(i,1)[0];C.lastInput=C.run;
   if(give)giveLoot(it);else takeLoot({money:0,items:[it]},true);if(!C.loot.items.length)afterDungeonPull();}
 function afterDungeonPull(){
@@ -65,7 +65,7 @@ function afterDungeonPull(){
 function finishDungeon(){
   if(H().dun.raid){raidFinish();return;}
   const h=H(),d=h.dun;h.dstats.clears++;const record=dungeonStats(d.id);record.clears++;const first=d.tier>record.best;record.best=Math.max(record.best,d.tier);h.dstats.best=Math.max(h.dstats.best,d.tier);
-  for(const p of C.party){addAff(p.n,10,`Cleared ${dungeonDef().name}${d.tier?` (Heroic ${d.tier})`:''} together at level ${h.lvl}.`);}
+  guildXP(60);for(const p of C.party){moodBump(p.n,8);addAff(p.n,10,`Cleared ${dungeonDef().name}${d.tier?` (Heroic ${d.tier})`:''} together at level ${h.lvl}.`);}
   if(C.party.length)say(pick(C.party).n,'clear');
   slog(`Cleared ${dungeonDef().name}${d.tier?` on Heroic ${d.tier}`:''}${d.wipes?` after ${d.wipes} wipe${d.wipes>1?'s':''}`:' without a wipe'}.`);
   sfx('win');toast(`${dungeonDef().name} cleared!${first?` Heroic ${d.tier+1} unlocked.`:''}`);

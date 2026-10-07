@@ -166,7 +166,7 @@ function raidLoot(m) {
   const il = RAID_LVL() + 4 + (e.final ? 2 : 0), out = [];
   for (const s of e.slots) { const it = genItem(il, 4, s, { cls: h.cls }); it.set = h.cls; it.name = `${TIER[h.cls]} ${TIER_SLOT[s]}`; out.push(it); }
   for (let i = e.slots.length; i < m.lootN; i++) out.push(genItem(il, 4, pick(['weapon', 'trinket', 'offhand']), { cls: R() < .5 ? h.cls : undefined }));
-  slog(`Defeated ${e.name} in ${THRONE.name}.`);
+  slog(`Defeated ${e.name} in ${THRONE.name}.`); guildXP(150); for (const p of C.party) moodBump(p.n, 6);
   return out;
 }
 function raidFinish() {

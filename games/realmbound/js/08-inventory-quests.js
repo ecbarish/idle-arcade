@@ -56,7 +56,7 @@ function accept(id){const h=H(),q=ALLQ[id];if(qState(q)!=='avail')return;if(h.qu
 function abandon(id){const h=H();h.quests.active=h.quests.active.filter(x=>x!==id);delete h.quests.prog[id];}
 function turnIn(id,choice,auto){const h=H(),q=ALLQ[id];if(qState(q)!=='ready')return;const rw=qReward(q)[choice];
   if(rw&&h.bags.length>=16){err('Inventory is full.');return;}
-  h.quests.active=h.quests.active.filter(x=>x!==id);h.quests.done[id]=true;h.stats.quests++;sfx('quest');
+  h.quests.active=h.quests.active.filter(x=>x!==id);h.quests.done[id]=true;h.stats.quests++;sfx('quest');guildXP(10);
   h.money+=qMoney(q);line(`${q.name} completed. You receive ${moneyTxt(qMoney(q))}. ${giver(q)}: "${Array.isArray(q.done)?q.done[h.faction==='concord'?0:1]:q.done}"`,'l-sys');gainXP(qXP(q),false);
   if(rw){h.bags.push(rw);line(`You receive [${rw.name}].`,'l-loot');if(h.addons.unl.gearcmp&&h.addons.on.gearcmp)autoEquip(rw);}
   toast(`Quest complete: ${q.name}`);slog(`Completed ${q.name}.`);

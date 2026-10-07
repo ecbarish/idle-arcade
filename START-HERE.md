@@ -112,7 +112,7 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    (a check fails without one).
 14. **Then:** the guild, Hollow Crown part 2 and the raid (Realmbound); Wildbond areas 5-8 (bands 52-60, 58-64, 62-68,
    66-72) and the league, contests and races, ranch cosmetics for challenge titles, Modern 3D.
-15. ~~**S3: shared roster and jobs**~~ — done by Claude 2026-10-08 with R1; Herbalism (potions) and Questing added 2026-10-09. Next: the guild (members, mood, guild level, more slots). Originally: assign members to jobs, cap the
+15. ~~**S3: shared roster and jobs**~~ — done by Claude 2026-10-08 with R1; Herbalism (potions) and Questing added 2026-10-09; **the guild done 2026-10-09** (`js/21-guild.js`; rules in docs/realmbound-40-60.md, "The guild as built"). Next guild ideas: members' requests, a walkable guild hall (S4 world kit), guild members filling raid rosters. Originally: assign members to jobs, cap the
    earnings like rested XP, one return report when you come back. Realmbound's guild uses it first, then Starfall
    Guild's adventurers, Wildbond ranch jobs, and Diamond Career's team. Plan: `docs/research/decisions.md` (the
    shared-systems table). After that, S4: the world kit (`shared/world/`, Wildbond's walking world for every game).
@@ -157,6 +157,12 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude (late): Wildbond's intro now explains the faded green start (Evan took it for a bug); recorded
+  Evan's notes (outside assets allowed with a license and CREDITS.md; an immersive homepage later, item 21); built
+  the Realmbound guild (founding, members with mood, guild levels, adventurers on the jobs board, Guard duty).
+  Tests: Realmbound 1434, Wildbond 490, Starfall 48. **Next:** review T27 (Wildbond Stillreed) when it lands and add
+  its ambience; then S4, the world kit (walkable towns for Realmbound, starting with a guild hall), or Wildbond
+  areas 6-8 with ChatGPT.
 - 2026-10-09 Claude (evening): built S5, the shared ambience kit (living skies, scenery, weather with lightning and
   thunder, night lighting, fire, life) in all three games; merged ChatGPT's T23 (Crown's Heart, cap 60, Hollow Key);
   the quest log now says which dungeons an attunement quest waits on; raid re-measured at 60 (no retune). Tests:

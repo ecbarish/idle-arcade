@@ -272,3 +272,14 @@ real travel to vendors will differ. Claude's cap-60 raid retune remains separate
 Re-measured at cap 60 after T23 (2026-10-09, same sim, rare gear at 60): good calls or Raid Leader 11-13 min with no
 wipes (Seraveth 190-225 s against the 240 s enrage); Auto without Raid Leader: warrior and rogue clear in ~12 min, a
 healer hero wipes about 4 times and clears in ~24 min as the raid learns. No retune needed.
+
+## The guild as built (2026-10-09)
+
+`js/21-guild.js`. Founding: level 40, in town, 5 g, five signatures (other characters + companions at Friend). Members:
+all characters, plus invited adventurers (Friend+), keyed `adv:<hero>:<npc>` and still living in their hero's
+companion list. Mood 0-100 (starts 60): in your party +6/h, on a job +2/h up to 85, benched -1/h, at most 24 hours
+counted at once; loot +10, a dungeon clear together +8, a raid boss +6; below 30 a warning, below 10 they leave;
+70+ works 10% faster, below 30 20% slower. Jobs: adventurers mine, gather, guard (12 guild XP a watch, a watch every
+15 min); characters can also quest. Guild XP: quest 10, dungeon clear 60, raid boss 150. Levels at 0/600/1800/4200/8400
+guild XP (1-5): +2% XP per level for every character, job slots 3/3/4/4/5/6. Not yet: a walkable guild hall (the world
+kit), guild-wide raid rosters, members' requests and personal stories.

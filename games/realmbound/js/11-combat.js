@@ -156,7 +156,7 @@ function paceMult(){return (PACE[H().pace]||PACE.classic).xp;}
 function groupXP(x){const n=1+(C&&C.party?C.party.length:0);return n<2?x:Math.max(1,Math.round(x*GROUP_BONUS[Math.min(5,n)]/n));}
 function gainXP(x,kill){
   const h=H();if(h.lvl>=LEVEL_CAP){return;}
-  x=Math.round(x*paceMult());let bonus=0;if(kill&&h.rested>0){bonus=Math.min(x,h.rested);h.rested-=bonus;}
+  x=Math.round(x*paceMult()*guildXPMult());let bonus=0;if(kill&&h.rested>0){bonus=Math.min(x,h.rested);h.rested-=bonus;}
   h.xp+=x+bonus;line(`You gain ${x} experience${bonus?` (+${Math.round(bonus)} rested)`:''}.`,'l-xp');
   while(h.lvl<LEVEL_CAP&&h.xp>=xpNeed(h.lvl)){h.xp-=xpNeed(h.lvl);h.lvl++;onLevel();}
   if(h.lvl>=LEVEL_CAP){h.xp=0;h.rested=0;}

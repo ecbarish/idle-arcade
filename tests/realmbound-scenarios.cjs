@@ -460,6 +460,35 @@ module.exports = function scenarios() {
           for(const d of Object.keys(AMB_DUNGEONS)){v.dun={id:d,tier:0,step:0,mods:[],wipes:0,raid:d==='throne',plans:{}};drawAmb();}}catch(e){ok=false;err=String(e);}
         zoneWeather=keepW;realmNight=keepN;v.dun=null;check(ok,'every zone, weather, time of day and dungeon draws without error'+(err?': '+err:''));
         rb.S.chars=rb.S.chars.filter(c=>c!==v);}
+      // Guild: founding, members and mood, guild levels, adventurers on the jobs board
+      {const keepG=rb.S.guild,keepB=rb.S.bank;rb.S.guild={jobs:{}};rb.S.bank={};
+        const A=rb.newHero('Guildlead','concord','human','warrior');A.lvl=45;const B1=rb.newHero('Guildalt','concord','stonekin','priest');B1.lvl=30;const B2=rb.newHero('Guildalt2','concord','human','mage');B2.lvl=20;
+        const keepC=rb.S.chars,keepCur=rb.S.cur;rb.S.chars=[A,B1,B2];rb.S.cur=A.id;rb.boot();
+        check(guildXPMult()===1&&jobSlots()===3&&/Found a guild/.test(guildHTML()),'without a guild: no bonus, three job slots, an offer to found one');
+        A.lvl=35;check(/level 40/.test(foundProblem()),'a charter needs a level 40 hero');A.lvl=45;rb.C.phase='seek';check(/in town/.test(foundProblem()),'the charter is bought in town');
+        rb.C.phase='intown';A.money=0;check(/costs/.test(foundProblem()),'the charter costs gold');A.money=60000;
+        check(/signatures/.test(foundProblem()),'a charter needs five signatures');
+        const fr=A.npcs.slice(0,3);for(const n of fr){n.met=true;n.aff=AFFINITY[2].at;}
+        check(foundProblem()===''&&foundGuild('The Testers')&&guildOn()&&A.money===10000&&rb.S.guild.name==='The Testers'&&rb.S.guild.level===1,'founding the guild takes the charter fee');
+        check(Object.keys(rb.S.guild.members).length===3&&fr.every(n=>isMember(n,A)),'friends who signed join as members');
+        const x0=A.xp;rb.gainXP(1000,false);check(A.xp-x0===1020,'guild level 1 gives every character 2% more experience');
+        guildXP(600);check(rb.S.guild.level===2&&jobSlots()===4,'guild experience raises the guild level and adds a job slot');
+        guildXP(1e6);check(rb.S.guild.level===5&&jobSlots()===6&&guildXPMult()===1.1,'guild level 5: +10% experience and six job slots');
+        const k=memberKey(A.id,fr[0].id);check(workerOf(k).name===fr[0].name&&workers().includes(k),'guild adventurers can work the jobs board');
+        A.party=[fr[0].id];syncParty();check(!workerCanWork(k),'but not while they travel with you');A.party=[];syncParty();
+        check(jobsFor(k).includes('guard')&&!jobsFor(k).includes('quest')&&jobsFor(String(B1.id)).includes('quest'),'adventurers mine, gather and guard; your characters can also quest');
+        check(ROSTER.assign(k,'mine'),'an adventurer takes a job');rb.S.guild.jobs[k].since-=3600e3;const ore0=rb.S.bank.ore;supplyTick();check(rb.S.bank.ore>ore0,'their ore reaches the shared bank');
+        const k2=memberKey(A.id,fr[1].id);ROSTER.assign(k2,'guard');const gx=rb.S.guild.xp;rb.S.guild.jobs[k2].since-=3600e3;supplyTick();check(rb.S.guild.xp>gx,'guard duty earns guild experience');
+        const k3=memberKey(A.id,fr[2].id),m3=rb.S.guild.members[k3];m3.mood=60;m3.at-=30*36e5;guildTick();check(Math.round(m3.mood)===36,'a benched adventurer loses mood, at most a day\'s worth while you are away');
+        m3.mood=25;m3.at-=36e5;guildTick();check(m3.warned,'a low mood brings a warning');
+        m3.mood=9.5;m3.at-=36e5;guildTick();check(!rb.S.guild.members[k3],'ignored too long, they leave the guild');
+        const m1=rb.S.guild.members[k];m1.mood=50;m1.at-=36e5;guildTick();check(m1.mood>50,'working a job keeps a member content');
+        check(inviteToGuild(fr[2].id)&&isMember(fr[2],A),'friends can be invited (back) to the guild');check(dismissMember(k3)&&!isMember(fr[2],A),'and dismissed');
+        moodBump(fr[0],10);check(rb.S.guild.members[k].mood>=60,'loot and shared clears lift a member\'s mood');
+        const g0=rb.S.guild.xp,q=rb.QUESTS.thornvale[0];A.quests.active.push(q.id);A.quests.prog[q.id]=q.n;rb.turnIn(q.id,0,false);check(rb.S.guild.xp===g0+10,'turning in a quest earns guild experience');
+        rb.S.tab='supplies';renderTab(true);check(/The Testers/.test(document.querySelector('#tabbody').innerHTML)&&/Jobs board/.test(document.querySelector('#tabbody').innerHTML),'the Guild tab shows the guild hall and the jobs board');
+        const old=rb.migrate({v:2,chars:[JSON.parse(JSON.stringify(B2))],cur:B2.id,last:Date.now(),tab:'quests'});check(!old.guild,'saves from before the guild load unchanged');
+        rb.S.chars=keepC;rb.S.cur=keepCur;rb.S.guild=keepG;rb.S.bank=keepB;if(!keepG)delete rb.S.guild;if(!keepB)delete rb.S.bank;rb.S.tab='quests';if(H())rb.boot();}
       // T21: every generated item category follows the widened name bands.
       check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');
       check(BLUE_PRE.length===17&&new Set(BLUE_PRE).size===17,'rare prefix pool retains seven names and adds ten distinct dungeon names');

@@ -39,6 +39,13 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-09 (late)** — **Realmbound: found a guild.** At level 40, in town, buy a charter (5 gold) and gather five
+  signatures from your other characters and companions who are your Friends. One guild for your whole account: every
+  character is a member and you can invite the adventurers you trust. Adventurers have a **mood**: group with them,
+  give them loot and clear dungeons together and they're happy (and work faster); leave them benched too long and
+  they'll tell you, then leave. Members can work the jobs board, including the new **Guard duty**. The guild levels up
+  from quests, dungeon clears, raid bosses and guard duty: up to +10% experience for every character and six job slots.
+  The Supplies tab is now the **Guild** tab.
 - **2026-10-09 (late)** — Wildbond's opening now explains its faded green look: the world lost its colour long ago,
   and it comes back with the first badge. (Evan saw green sprites on a fresh start and took it for a bug.)
 - **2026-10-09 (night)** — Realmbound's quest log now tells you when an attunement quest is waiting: "will offer this
