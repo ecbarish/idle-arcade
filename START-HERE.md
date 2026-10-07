@@ -82,11 +82,14 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
 7. **T25: Split Starfall Guild into files + a test page** (any assistant; no behavior change) — **sent to ChatGPT
    2026-10-08** (branch `codex/starfall-split`). Full ticket in `docs/ROADMAP.md` ("T25"). This is the "parked games
    side lane": parked games get structural and polish work while Claude focuses on the two main games.
-8. **Research brief for the big decisions** — **claimed by Claude, 2026-10-08**: `docs/research/decisions.md`.
+8. ~~**Research brief for the big decisions**~~ — done by Claude 2026-10-08: `docs/research/decisions.md` (sources,
+   recommendations, and the shared-systems plan: dialogue → sound → roster → world kit).
 9. **Then:** the guild, Hollow Crown part 2 and the raid (Realmbound); Wildbond area 5 (after Evan answers the cap
    question), contests and races, ranch cosmetics for challenge titles, Modern 3D.
 
 ## Questions for Evan (work continues on the defaults until he answers)
+
+**All of these have a researched recommendation in `docs/research/decisions.md` ("Decisions for Evan").**
 
 - **Wildbond level cap:** eight badges would allow level 95 but the plan says the main story ends near 70.
   [Default: decide before area 5; nothing to change yet.]
@@ -107,6 +110,9 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (evening): research brief `docs/research/decisions.md` (level caps, group XP, pace, roster size,
+  raids, shared systems and a shared universe). Sent T25 (split Starfall Guild) to ChatGPT; Primordial to the back
+  burner at Evan's request.
 - 2026-10-08 Claude (later): merged T21 (item names, ChatGPT); built T1-B (Grave Chill; pacing 40-45 measured, no XP
   change; found group questing ~5x faster, added as a question). Sent T24 (Wildbond checks) to ChatGPT. Fixed a
   Frostmere check that depended on which tab a local save was left on.
