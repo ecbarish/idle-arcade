@@ -23,7 +23,7 @@ function slog(m) { S.log.unshift(m); if (S.log.length > 40) S.log.length = 40; }
 function newCreature(id, lvl, opts) { const c = Cr.make({ id, name: SPECIES[id].name }, lvl, opts); c.hp = Cr.stats(c, SPECIES[id].base).hp; return c; }
 function keep(c, how) {
   S.caught[c.sp] = true; S.seen[c.sp] = true;
-  if (S.team.length < teamMax()) { S.team.push(c); return 'team'; }
+  if (S.team.length < teamMax() && !challengeLocked()) { S.team.push(c); return 'team'; }
   S.ranch.push(c); return 'ranch';
 }
 /* Pacing: the badge level cap and the XP/coin multipliers from the journey setting. */

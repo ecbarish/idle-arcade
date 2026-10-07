@@ -46,7 +46,7 @@ faded start, explained in the intro) → Pixel/16-bit → HD-2D (on the shared w
 weather with a Journal forecast, thunderstorms, living ambience and regional battle backdrops; visible wild
 creatures; ranch and breeding; challenge modes with ranch pennants, rematches, area mastery; music, effects and rain
 sounds. T30 adds the Returning Light League, Wren's gate battle, four courts and Champion Avenne, with a
-Champion title and the colour-restoration ending (v1.2.0; awaiting review). Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
+Champion title and the colour-restoration ending (v1.2.0; merged). T31/W3 part 1 adds the Lighthouse Spire and daily league rematches (v1.3.0 on `codex/wildbond-postgame`, PR #37, awaiting review). Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
 
 **Realmbound** (classic-MMO idle, flagship): levels 1-60 across eight zones, five classes with three talent trees
 each, five 5-person dungeons, the 10-person raid **The Hollow Throne** (opened by the Hollow Key; guild adventurers
@@ -82,8 +82,7 @@ rain sounds; walkable Realmbound towns.
    walk into; then a walkable guild hall for Starfall Guild.
 3. ~~**T29: Wildbond area 7, Sunthread Commons**~~ (Codex; data) — done by ChatGPT, merged by Claude 2026-10-10 (branch `codex/wildbond-sunthread`): levels 62-68; ticket in
    `docs/ROADMAP.md`, "T29".
-4. **Wildbond's ending:** W1 is merged; T30/W2, the league and Champion, is complete on `codex/wildbond-league`, awaiting review. Next: the post-game (battle
-   tower, legendaries, the road to 100); contests and races; the Modern 3D era.
+4. **Wildbond's ending:** W1 and T30/W2 are merged. T31/W3 part 1, the Lighthouse Spire and daily league rematches, is complete on `codex/wildbond-postgame`, awaiting review (PR #37). Next: roaming legendaries (W3 part 2), contests and races, and the Modern 3D era.
 5. **Realmbound next:** members' personal stories in the guild; battlegrounds (faction rivalry, the raid's closing
    hook); a second raid tier later.
 6. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines (a living scene on the
@@ -108,6 +107,7 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+- 2026-10-07 Codex: T31/W3 part 1 complete on `codex/wildbond-postgame` (PR #37), awaiting review, no merge. Wildbond v1.3.0; Spire, safe persistent rewards/eggs, daily league rematches. All four browser pages pass; real 30-floor command-driven max-level climb completed, all five art styles (including actual 3D) and four screen sizes checked. Preserved Claude’s wider view/feedback keyboard changes. Next: review pending PRs; W3 roaming legendaries remains open.
 
 - 2026-10-07 Claude: Wildbond view distance (L11: `VIEWS`, `viewMult()`, `cycleView()` in 06-scene.js; header button
   and V key; `S.view` optional, no `fresh()` change so T31 merges cleanly); feedback menu keys no longer walk. 1123

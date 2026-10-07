@@ -62,7 +62,7 @@ function renderPanel() {
 /* ---- tabs ---- */
 let tabKey = '';
 const TABS = {
-  team: { key: () => S.team.map(c => c.uid + ':' + c.lvl + ':' + c.sp + ':' + c.name + ':' + Cr.bondLvl(c)).join() + !!B + challengeLocked() + levelCap() + S.capMode,
+  team: { key: () => S.team.map(c => c.uid + ':' + c.lvl + ':' + c.sp + ':' + (!B ? c.hp : '') + ':' + c.name + ':' + Cr.bondLvl(c)).join() + !!B + challengeLocked() + levelCap() + S.capMode,
     build: () => `<h3>Your team (${S.team.length}/3)</h3><p class="sub">Grades show each creature's hidden potential (F to S). Train and breed them on the Ranch.
       ${S.capMode === 'off' ? '' : `Badge level cap: <b>${levelCap()}</b>.`}</p>` +
       S.team.map((c, i) => cardHTML(c, i, true)).join('') },
