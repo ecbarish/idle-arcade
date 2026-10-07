@@ -789,6 +789,63 @@ function wildbondChecks() {
     box.querySelector('button').dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
     const ok = JSON.stringify(S.pos) === before && !wb.WK.held.length; wb.WK.held = []; return ok;
   });
+
+  // G2 Saltmarsh: inspect the real scene calls, then restore every rendering hook.
+  function coastalAir(weather, part, light = true, biome = 'saltmarsh') {
+    ready(); S.badges = ['thorn', 'tide']; wb.placeAt(biome); S.ranchT = DAY_SECONDS * part;
+    for (S.day = 1; S.day < 100 && weatherNow() !== weather; S.day++);
+    if (weatherNow() !== weather) throw Error('No fixture weather');
+    const out = {}, hooks = [], size = [PW, PH], cam = WK.cam; PW = 320; PH = 180; WK.cam = null;
+    const hook = (obj, key, fn) => { hooks.push([obj, key, obj[key]]); obj[key] = fn; };
+    for (const key of ['fog', 'grade', 'shafts']) hook(WLT, key, (...args) => { out[key] = args.at(-1); });
+    hook(WLT, 'bloom', () => {});
+    hook(AMB, 'weather', (...args) => { out.weather = args.at(-1); });
+    for (const key of ['lights', 'life', 'flash']) hook(AMB, key, () => {});
+    const before = JSON.stringify(S);
+    try { drawAmbience(0, { light }, { m: curMap() }); out.unchanged = JSON.stringify(S) === before; out.height = PH; return out; }
+    finally { for (const [obj, key, fn] of hooks) obj[key] = fn; [PW, PH] = size; WK.cam = cam; }
+  }
+  check('Saltmarsh clear fog stays low and translucent', () => {
+    const a = coastalAir('clear', .33); return a.fog.top === a.height * .58 && a.fog.ground === a.height && a.fog.density === .17 && a.unchanged;
+  });
+  check('Saltmarsh mist uses a low sea-coloured layer and lighter weather veil', () => {
+    const a = coastalAir('mist', .33); return Math.abs(a.fog.density - .43) < 1e-9 && a.weather.fog === .85 && a.weather.fogCol === '#d4e5e4';
+  });
+  check('Saltmarsh sunrise adds gentle mist without changing the ranch clock', () => {
+    const a = coastalAir('clear', .97); return wbSun().day && wbSun().p < .12 && Math.abs(a.fog.density - .22) < 1e-9 && a.unchanged;
+  });
+  check('Saltmarsh night fog keeps the player lamp and cool coastal colour', () => {
+    const a = coastalAir('clear', .83); return !wbSun().day && a.fog.col === Light.css(Light.mix('#d4e5e4', '#23394c', .5)) && a.fog.lights.some(l => l.col === '#ffe2b0' && l.r > 0);
+  });
+  check('Saltmarsh softened grade and shafts reach the shared renderer', () => {
+    const a = coastalAir('clear', .33); return a.grade.amount === .72 && a.grade.tint === '#b6d4d5' && a.shafts.strength === .48;
+  });
+  check('Saltmarsh rain retains rain effects and suppresses sun shafts', () => {
+    const a = coastalAir('rain', .33); return !a.shafts && a.weather.rain > 0 && a.weather.onThunder && a.fog.density === .17;
+  });
+  check('Saltmarsh early art eras keep their existing mist and skip lighting', () => {
+    const a = coastalAir('mist', .33, false); return !a.fog && !a.grade && !a.shafts && a.weather.fog === 1.3 && !a.weather.fogCol;
+  });
+  check('Saltmarsh bounce light uses sky and sand without altering shadow direction', () => {
+    coastalAir('clear', .33); const tuned = wbSun(), original = WLT.time(Light.cycle(dayPart(), .965, .70), { sky: BIOMES.saltmarsh.sky[1], ground: BIOMES.saltmarsh.ground || '#5a8a4a' });
+    return JSON.stringify(tuned.shadow) === JSON.stringify(original.shadow) && JSON.stringify(tuned.shade) !== JSON.stringify(original.shade) && JSON.stringify(tuned.ambient) === JSON.stringify(Light.mix('#9cbecb', '#c8c5a0', .35));
+  });
+  check('Saltmarsh before the clock badge still uses fixed late morning', () => {
+    ready(); wb.placeAt('saltmarsh'); S.ranchT = DAY_SECONDS * .83; return wbSun().t === WLT.time(.18).t && wbSun().day;
+  });
+  for (const biome of Object.keys(BIOMES).filter(id => id !== 'saltmarsh')) {
+    check(biome + ': original bounce light remains unchanged', () => {
+      ready(); S.badges = ['thorn', 'tide']; wb.placeAt(biome); S.ranchT = DAY_SECONDS * .33; const bio = BIOMES[biome];
+      return JSON.stringify(wbSun()) === JSON.stringify(WLT.time(Light.cycle(dayPart(), .965, .70), { sky: bio.sky[1], ground: bio.ground || '#5a8a4a' }));
+    });
+  }
+  check('Thornwood keeps its original fog height, grade and shafts', () => {
+    const a = coastalAir('clear', .33, true, 'thornwood'); return a.fog.top === a.height * .2 && a.fog.density === .12 && a.grade.amount === .9 && a.shafts.strength === .8 + .12;
+  });
+  check('Stillreed keeps its original mist density and weather veil', () => {
+    const a = coastalAir('mist', .33, true, 'stillreed'); return a.fog.top === a.height * .2 && Math.abs(a.fog.density - .7) < 1e-9 && a.weather.fog === 1.3 && a.weather.fogCol === '#e2ecdc';
+  });
+
   return checks;
 }
 

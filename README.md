@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Wildbond v1.2.1 (2026-10-07)** — **Saltmarsh Coast lighting:** lower, thinner sea mist, blue-and-sand bounce light, gentler shafts and a softer colour grade in the lit art eras. Paths stay clearer in mist; other areas keep their original lighting.
+
 - **2026-10-07** — **Wildbond: see more of the world.** A new **View** button (or the V key) switches between Close,
   Wide and Far, so a big monitor shows more of the map instead of bigger tiles; desktops and ultrawides start on Wide,
   phones on Close. Works in every art style. Also: arrow keys inside the Feedback menu no longer walk your tamer.

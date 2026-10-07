@@ -242,3 +242,8 @@ then light, then depth). People notice and joke about it:
 - Wren: "Is it me, or can you see further than you could yesterday?"
 - An old fisher who refuses to admit anything changed.
 This ties the art upgrades to the plot instead of being a settings menu, and gives each era a story moment.
+
+
+### Saltmarsh lighting pass (G2, 2026-10-07)
+
+Saltmarsh's lit eras use a lower, lighter sea-mist layer, cool sky bounce and pale sand bounce, with softer shafts and colour grading. The shared day/night clock still controls shadow direction; player and door lamps stay warm at night. Early art eras retain their existing weather appearance. This is an atmosphere pass, with no changes to weather schedules, encounters, maps or saves. Profile values and comparisons: [Saltmarsh lighting](saltmarsh-lighting.md).

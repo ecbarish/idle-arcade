@@ -46,7 +46,7 @@ faded start, explained in the intro) → Pixel/16-bit → HD-2D (on the shared w
 weather with a Journal forecast, thunderstorms, living ambience and regional battle backdrops; visible wild
 creatures; ranch and breeding; challenge modes with ranch pennants, rematches, area mastery; music, effects and rain
 sounds. T30 adds the Returning Light League, Wren's gate battle, four courts and Champion Avenne, with a
-Champion title and the colour-restoration ending (v1.2.0; awaiting review). Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
+Champion title and the colour-restoration ending (v1.2.0; merged). Saltmarsh lighting v1.2.1 is complete on `codex/wildbond-saltmarsh-light` (PR #38 awaiting review). Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
 
 **Realmbound** (classic-MMO idle, flagship): levels 1-60 across eight zones, five classes with three talent trees
 each, five 5-person dungeons, the 10-person raid **The Hollow Throne** (opened by the Hollow Key; guild adventurers
@@ -82,13 +82,14 @@ rain sounds; walkable Realmbound towns.
    walk into; then a walkable guild hall for Starfall Guild.
 3. ~~**T29: Wildbond area 7, Sunthread Commons**~~ (Codex; data) — done by ChatGPT, merged by Claude 2026-10-10 (branch `codex/wildbond-sunthread`): levels 62-68; ticket in
    `docs/ROADMAP.md`, "T29".
-4. **Wildbond's ending:** W1 is merged; T30/W2, the league and Champion, is complete on `codex/wildbond-league`, awaiting review. Next: the post-game (battle
-   tower, legendaries, the road to 100); contests and races; the Modern 3D era.
+4. **Wildbond's ending:** W1 is merged; T30/W2, the league and Champion, is merged. T31/W3 part 1 (tower and daily league rematches) is complete on `codex/wildbond-postgame`, PR #37 awaiting review. Next: later post-game parts; contests and races; the Modern 3D era.
 5. **Realmbound next:** members' personal stories in the guild; battlegrounds (faction rivalry, the raid's closing
    hook); a second raid tier later.
 6. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines (a living scene on the
    ambience kit, shared sound, dialogue and creature art, a taste of each game). Build it once the games are further
    along.
+
+**G2 lighting:** Saltmarsh Coast is complete on `codex/wildbond-saltmarsh-light` (PR #38); the Frostmere pass is also awaiting review (PR #32). Pick another area for the next lighting pass.
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
@@ -108,6 +109,8 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-07 Codex: G2 Saltmarsh lighting complete on `codex/wildbond-saltmarsh-light`, PR #38 awaiting review; no merge. Wildbond v1.2.1; low sea mist, coastal bounce light and softer shafts. All four browser pages pass (Wildbond 1141, Realmbound 1519, Starfall 48, sound 21), saves/hub restored. Before/after screenshots, four widths, Low/High, reduced motion, five eras and a main-save reload verified. Keep the newer version if integrating postgame PR #37 first.
 
 - 2026-10-07 Claude: Wildbond view distance (L11: `VIEWS`, `viewMult()`, `cycleView()` in 06-scene.js; header button
   and V key; `S.view` optional, no `fresh()` change so T31 merges cleanly); feedback menu keys no longer walk. 1123
