@@ -116,7 +116,7 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
 17. **T23: Realmbound Hollow Crown II, the Crown's Heart** (any assistant; data) — **sent to ChatGPT 2026-10-09**
    (branch `codex/realmbound-crownheart`; ticket in `docs/ROADMAP.md`, "T23"): levels 52-60, `LEVEL_CAP = 60`, 14
    quests with the Hollow Key attunement (`attune`, `needDun`), dungeon `heartwood` (56+), pacing numbers.
-18. **R2: the raid system and The Hollow Throne** (Claude): 10 raiders from your characters and companions, a plan
+18. ~~**R2: the raid system and The Hollow Throne**~~ — done by Claude 2026-10-09 (`js/19-raid.js`; tuned with an Auto sim: ~11 minutes a clear with good calls, Seraveth ~205 s against a 240 s enrage; Auto without Raid Leader wipes on Choir/Seraveth until it learns). Retune once T23 raises the cap to 60 (raid levels follow `LEVEL_CAP`). Originally: 10 raiders from your characters and companions, a plan
    before each pull, raid calls during it, four bosses, weekly-style lockout (every 3 days), epic loot with tier
    sets. Plan: `docs/realmbound-40-60.md` ("Raids") and decision 5 in `docs/research/decisions.md`. Gate it on the
    Hollow Key (T23's last quest) but build it so it can be tested before T23 lands.

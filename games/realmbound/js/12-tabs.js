@@ -45,10 +45,10 @@ bags:{
   update(){const b=$('#repBtn');if(b){const c=repairCost();b.innerHTML=c?`Repair (${moneyTxt(c)})`:'Nothing to repair';b.disabled=!c||H().money<c;}}
 },
 friends:{
-  key(){const h=H();return h.party.join(',')+'|'+(h.npcs||[]).filter(n=>n.met).map(n=>n.id+':'+affLvl(n)+':'+npcLvl(n)).join(',')+'|'+!!h.dun+'|'+h.zone+'|'+h.lvl+'|'+h.dstats.clears;},
+  key(){const h=H();return h.party.join(',')+'|'+raidKey(h)+(h.raidLock?h.raidLock.killed.length:0)+S.chars.length+'|'+(h.npcs||[]).filter(n=>n.met).map(n=>n.id+':'+affLvl(n)+':'+npcLvl(n)).join(',')+'|'+!!h.dun+'|'+h.zone+'|'+h.lvl+'|'+h.dstats.clears;},
   build(){const h=H();const met=(h.npcs||[]).filter(n=>n.met).sort((a,b)=>b.aff-a.aff);const unmet=(h.npcs||[]).length-met.length;
     let o=`<h3>Friends</h3><p class="sub">Adventurers wander the world beside you. Meet them on the road, group up, and they'll remember you. Friends unlock combined abilities in a fight.</p>`;
-    o+=`<h4>Party ${h.party.length}/4</h4>`;
+    o+=`<h4>Party ${h.party.length}/${h.dun&&h.dun.raid?9:4}</h4>`;
     o+=h.party.length?h.party.map(id=>{const n=npcOf(id);if(!n)return '';const al=affLvl(n);return `<div class="rowl"><div class="l"><b style="color:${CLASSES[n.cls].col}">${n.name}</b> <span class="meta">${ROLE_NAME[ROLE_OF[n.cls]]} · level ${npcLvl(n)}</span>
       <div class="meta">${AFFINITY[al].n}${al>=2?` · Combo: <b>${COMBO[n.cls].name}</b>`:` · combos unlock at Friend`}</div></div>
       <div class="r">${h.dun?'':`<button class="btn sm alt" data-act="kick" data-arg="${id}">Part ways</button>`}</div></div>`;}).join(''):'<p class="meta">Nobody with you. Invite people you meet on the road, or friends from the list below.</p>';
@@ -59,6 +59,7 @@ friends:{
       o+=`<h4>${def.name}</h4><p class="meta">Four packs and three bosses · level ${def.minLvl}+. ${def.waveName} hits the party; press D to dodge ${def.surgeName}. Each clear unlocks the next Heroic tier.</p>
         <p class="meta">Cleared ${r.clears} times${r.best>=0?` · best: ${r.best?'Heroic '+r.best:'Normal'}`:''}</p>
         <button class="btn" data-act="lfg" data-arg="${id}" ${ok&&here?'':'disabled'}>Find a group</button> ${!ok?`<span class="meta">Needs level ${def.minLvl}.</span>`:!here?`<span class="meta">Travel to ${ZONES[def.zone].name} first.</span>`:''}`;}
+    if(!h.dun)o+=raidSection();
     // people
     o+=`<h4>People you've met (${met.length})</h4>`;
     o+=met.length?met.map(n=>{const al=affLvl(n),nx=AFFINITY[al+1],inP=h.party.includes(n.id);return `<div class="rowl" style="align-items:flex-start"><div class="l"><b style="color:${CLASSES[n.cls].col}">${n.name}</b>

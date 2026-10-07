@@ -211,3 +211,16 @@ The two-hero supply trial, on the shared roster (`shared/roster.js`), in Realmbo
   gear drops below 30%. A convenience, never required: town repairs work exactly as before.
 - **Next:** Questing (small XP for the worker, below active play), Herbalism and potions, then the guild founding
   at 40 with members' mood, guild level, more slots and the guild hall.
+
+## R2 as built (2026-10-09): The Hollow Throne
+
+`js/19-raid.js`. Entry: the Hollow Key (`h.hollowKey`, or quest `ch14` from T23) and the level cap. Raiders: you + 9
+(companions at Acquaintance+ within 2 levels of the cap, and your other characters at the cap - 2, who join at their
+own level and role); at least 2 tanks and 2 healers counting you. Seven pulls: three trash packs and four bosses.
+Plans before each boss (two each), tells during it (4 s windows, 3.5 s for the Choir), raid calls S/A/Q/W. Auto's call
+success: 85% with Raid Leader (first clear), otherwise `aiEff() x 0.6 + 8% per wipe` (capped at 85%). Lockout: bosses
+stay dead 3 days. Loot: rarity-4 items at cap + 4 (+6 from Seraveth); each boss drops your class set piece for its
+slot (hands, feet, legs, chest + head) plus an epic. Set bonuses: 2 pieces +5% health; 4: tank +10% armor / healer
++10% healing / damage +5%; 5: tank +3% dodge / healer +20% mana regen / damage +3% crit.
+Measured (Auto sim, cap 52, rare gear): perfect calls or Raid Leader ~11 min, no deaths; Auto without Raid Leader:
+warrior and rogue usually clear, a healer hero wipes on Seraveth until the raid learns. Retune when the cap is 60.

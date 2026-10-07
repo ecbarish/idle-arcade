@@ -39,6 +39,13 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-09 (later)** — **Realmbound's first raid: The Hollow Throne.** Ten people: you plus nine from your
+  companions and your own other characters (two tanks and two healers at least). Four bosses, each with one thing to
+  watch for: the Bark Warden shreds its tank (call **Swap!**), the Ashwing Brood hatches adds (**Adds!**), the
+  Rootbound Choir sings two songs (**Spread!** or **Stack!**), and Seraveth does all three before an enrage. Before
+  each boss you pick a plan; during the fight you make the calls (buttons or S, A, Q, W). Auto makes calls too, badly
+  at first but better after each wipe, and reliably once you've cleared it (Raid Leader). Bosses stay dead for 3 days.
+  Epic loot and a five-piece set for your class with set bonuses. It opens with the Hollow Key from the Crown's Heart.
 - **2026-10-09** — **Realmbound: a third talent tree for every class** (Warrior Fury, Rogue Subtlety, Mage Arcane,
   Priest Discipline, Hunter Survival), each with new abilities (Bloodthirst, Death Wish, Shadow Dance, Arcane
   Missiles, Penance, Pain Suppression, Explosive Shot...) and talents that change how you play: a wider Finishing Blow

@@ -24,12 +24,12 @@ function genNpcs(faction){const names=NPC_NAMES[faction].slice().sort(()=>R()-.5
     hair:pick(['#6b4423','#e8c070','#2b2b2b','#a03020','#d8d8d8','#4a2a1a','#7a5ab0'])}));}
 function npcLvl(n){return clamp(H().lvl+n.offset,1,LEVEL_CAP);}
 function npcZone(n){return npcLvl(n)<10?FACTIONS[H().faction].start:npcLvl(n)<20?'fens':npcLvl(n)<30?'ashen':npcLvl(n)<40?'frostmere':npcLvl(n)<45?'barrowfield':'hollowcrown';}
-function npcOf(id){return (H().npcs||[]).find(n=>n.id===id);}
+function npcOf(id){return (H().npcs||[]).find(n=>n.id===id)||raidAlt(id);} // raidAlt: your other characters as raiders (19-raid.js)
 function noteNpc(n,t){n.notes=n.notes||[];n.notes.unshift(t);if(n.notes.length>6)n.notes.length=6;}
 function say(n,kind){const L=PERSONALITY[n.pers].lines[kind];if(L)line(`${n.name}: ${pick(L)}`,'l-say');}
 function addAff(n,v,note){const b=affLvl(n);n.aff=Math.max(0,n.aff+v);n.met=true;if(note)noteNpc(n,note);const a=affLvl(n);
   if(a>b){toast(`${n.name} is now your ${AFFINITY[a].n}`);slog(`${n.name} became your ${AFFINITY[a].n.toLowerCase()}.`);if(a===2)line(`You and ${n.name} can now combine abilities in a fight.`,'l-sys');}}
-function compStats(n){const l=npcLvl(n),role=ROLE_OF[n.cls],g=1+.08*Math.max(0,(H().dstats?H().dstats.best:-1)+1),am=1+.03*affLvl(n);
+function compStats(n){const l=npcLvl(n),role=n.role||ROLE_OF[n.cls],g=1+.08*Math.max(0,(H().dstats?H().dstats.best:-1)+1),am=1+.03*affLvl(n);
   return {lvl:l,role,hpMax:Math.round((60+l*26)*(role==='tank'?1.9:1)*g),dps:(6+l*2.6)*(role==='dps'?1.4:role==='tank'?.75:.45)*g*am,hps:(5+l*2.6)*g*am,armor:l*30*(role==='tank'?3:1)};}
 
 /* ---- meeting people in the world ---- */

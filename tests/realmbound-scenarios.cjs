@@ -353,6 +353,38 @@ module.exports = function scenarios() {
         rb.S.chars=rb.S.chars.filter(c=>c!==W);
         rb.S.cur=A.id;rb.boot();deleteChar(B.id);check(!rb.S.guild.jobs[B.id],'deleting a character takes them off the jobs board');
         rb.S.chars=rb.S.chars.filter(c=>c!==A&&c!==B);rb.S.bank=keep.bank;rb.S.guild=keep.guild;if(!keep.bank)delete rb.S.bank;if(!keep.guild)delete rb.S.guild;rb.S.tab='quests';}
+      // R2: raids. The Hollow Throne: plans, raid calls, lockout, set loot (raid levels follow the level cap)
+      {const th=RAIDS.throne,bosses=th.enc.filter(e=>e.boss);
+        check(bosses.length===4&&bosses.every(e=>e.mech&&e.mech.raid&&e.plans.length>=2&&e.tell),'four raid bosses, each with a tell and plans');
+        check(bosses.flatMap(e=>e.slots).sort().join()==='chest,feet,hands,head,legs','the bosses drop a full five-piece set between them');
+        check(!rb.DUNGEONS.throne&&dungeonDef('throne')===th,'the raid is not listed among the 5-person dungeons');
+        const R0=rb.newHero('Raidcheck','concord','human','warrior');R0.lvl=LEVEL_CAP;rb.S.chars.push(R0);rb.S.cur=R0.id;rb.boot();
+        for(const n of R0.npcs){n.met=true;n.aff=AFFINITY[2].at;n.offset=Math.max(n.offset,-1);}
+        check(/Hollow Key/.test(raidProblem(autoRaid()))&&!startRaid(),'the raid is sealed without the Hollow Key');R0.hollowKey=true;
+        const few=R0.npcs.slice(0,5).map(n=>n.id);check(/nine/.test(raidProblem(few)),'a raid needs nine others');
+        const healers=R0.npcs.filter(n=>ROLE_OF[n.cls]==='heal').map(n=>n.id),noheal=autoRaid().filter(id=>!healers.includes(id));
+        const pool=R0.npcs.filter(n=>!healers.includes(n.id)&&!noheal.includes(n.id)).map(n=>n.id);const nh=noheal.concat(pool).slice(0,9);
+        if(nh.length===9)check(/two healers/.test(raidProblem(nh)),'a raid needs two healers');
+        const alt=rb.newHero('Altraider','concord','stonekin','priest');alt.lvl=LEVEL_CAP;rb.S.chars.push(alt);
+        check(autoRaid().includes('alt'+alt.id)&&npcOf('alt'+alt.id).name==='Altraider','your other characters can join the raid');
+        const prev=R0.party.slice();check(startRaid()&&R0.dun.raid&&R0.party.length===9&&rb.C.party.length===9,'Gather the raid starts a ten-person run');
+        R0.mode='focus';R0.dun.step=1;rb.C.lastInput=rb.C.run;rb.C.t=0;rb.step(.1);check(rb.C.phase==='plan'&&modalKind==='raidplan','before a boss the raid stops for a plan');
+        choosePlan(1);check(R0.dun.plans[1]===1&&rb.C.phase==='seek','choosing a plan sends the raid in');
+        rb.C.t=0;rb.C.lastInput=rb.C.run;rb.step(.1);const boss=rb.C.mob;check(boss&&boss.boss&&boss.raidStep===1&&rb.C.plan.swapAt===5,'the boss fight uses the chosen plan');
+        boss.max=boss.hp=1e9;rb.C.shred=4;rb.C.shredT=.05;rb.C.lastInput=rb.C.run;rb.step(.1);check(rb.C.tell&&rb.C.tell.kind==='swap','enough shred stacks call for a tank swap');
+        raidCall('swap');rb.C.tell.t=0;rb.C.lastInput=rb.C.run;rb.step(.1);check(rb.C.shred===0&&!rb.C.tell,'calling Swap in time resets the stacks');
+        const hp1=rb.C.hp;rb.C.tell={kind:'stack',t:0,called:null};rb.C.lastInput=rb.C.run;rb.step(.1);check(rb.C.hp<hp1-ST.hpMax*.2,'a missed Choir call hurts everyone');
+        rb.C.hp=ST.hpMax;const hp2=rb.C.hp;rb.C.tell={kind:'spread',t:1,called:null};check(raidKeyPress('q')&&rb.C.tell.called==='spread','Q calls Spread');rb.C.tell.t=0;rb.C.lastInput=rb.C.run;rb.step(.1);check(rb.C.hp>hp2-ST.hpMax*.2,'the right call avoids it');
+        check(autoCallChance()<.6,'without Raid Leader, Auto calls poorly');R0.dun.wipes=5;check(autoCallChance()>.6,'each wipe teaches the raid the fight');R0.dun.wipes=0;
+        boss.hp=1;boss.lootN=2;rb.C.lastInput=rb.C.run;const items=raidLoot(boss);check(items.some(it=>it.set==='warrior'&&it.rar===4&&it.slot==='hands'&&/^Thornwarden/.test(it.name)),'bosses drop your class set');
+        check(raidLock().killed.includes(1),'a killed boss is locked out');
+        const hpA=(R0.gear.hands=items.find(i=>i.set),rb.boot(),ST.hpMax);R0.gear.feet=Object.assign(genItem(LEVEL_CAP+4,4,'feet',{cls:'warrior'}),{set:'warrior'});rb.boot();
+        check(setPieces()===2&&ST.hpMax>hpA,'two set pieces give the two-piece bonus');
+        leaveDungeon();check(!R0.dun&&R0.party.join()===prev.join(),'leaving the raid restores your old party');
+        startRaid();R0.dun.step=1;rb.C.t=0;rb.C.lastInput=rb.C.run;rb.step(.1);check(R0.dun.step===2&&rb.C.mob&&rb.C.mob.raidStep===2,'bosses killed this lockout stay dead');leaveDungeon();
+        R0.raidLock.at=Date.now()-4*864e5;check(raidLock().killed.length===0,'the lockout resets after 3 days');
+        R0.dun={id:'throne',tier:0,step:6,mods:[],wipes:0,raid:true,plans:{},prev:[]};syncParty();raidFinish();check(R0.raidLeader&&dungeonStats('throne').clears===1&&!R0.dun,'a clear earns Raid Leader');
+        rb.S.chars=rb.S.chars.filter(c=>c!==R0&&c!==alt);if(modalKind)closeModal();rb.S.cur=rb.S.chars.length?rb.S.chars[0].id:null;}
       // T21: every generated item category follows the widened name bands.
       check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');
       check(BLUE_PRE.length===17&&new Set(BLUE_PRE).size===17,'rare prefix pool retains seven names and adds ten distinct dungeon names');

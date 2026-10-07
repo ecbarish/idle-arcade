@@ -59,6 +59,7 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
 - `games/realmbound/js/16-scenes.js`: quest-giver portrait scenes (shared/dialogue.js).
 - `games/realmbound/js/17-sound.js`: Realmbound tunes per zone, dungeon, boss and spirit walk (shared/sound.js); `musicKey()`, `voiceOf()`, `sfx()`.
 - `games/realmbound/js/18-supplies.js`: R1, the supply bank and jobs board (shared/roster.js): `JOBS` (Mining, Herbalism, Questing), `ROSTER`, `bank()`, `craftKit()`, `craftPotion()`, `useKit()`, `autoPotion()` (called from `step()`), `supplyCheckIn()` (called by `boot()`), `supplyTick()` (every second), and the Supplies tab.
+- `games/realmbound/js/19-raid.js`: R2, raids: `RAIDS.throne` (The Hollow Throne), `startRaid()`/`autoRaid()`, plans (`choosePlan`), tells and raid calls (`raidStep`, `raidCall`, keys S/A/Q/W), lockout (`raidLock`), set loot and bonuses (`raidLoot`, `setT` added to `T()`), your other characters as raiders (`raidAlt`, found by `npcOf`). Hooks in 09-dungeon-runs.js (spawn, kill, finish, leave) and `step()`.
 - `games/realmbound/js/99-boot.js`: startup, load, timers and the unchanged localhost-only `window.__rb` hook.
 - `docs/realmbound-design.md`: design decisions. `docs/ideas.md`: parked backlog.
 

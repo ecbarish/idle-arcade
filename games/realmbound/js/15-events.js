@@ -85,5 +85,6 @@ document.addEventListener('keydown',e=>{if(!H()||!C||(e.target.matches&&e.target
   else if(e.key==='l'||e.key==='L'){lootAll();updateWorld();}
   else if(e.key==='c'||e.key==='C'){doCombo(true);updateWorld();}
   else if(e.key==='d'||e.key==='D'){dodgeNow();updateWorld();}
+  else if(raidKeyPress(e.key)){updateWorld();}
   else if(e.key==='Escape'&&modalKind&&modalKind!=='create')closeModal();});
 

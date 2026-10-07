@@ -67,7 +67,7 @@ function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidde
     const c=con(m.lvl);cx.font=`700 ${Math.max(11,p*4)}px Alegreya Sans, sans-serif`;cx.textAlign='center';cx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--con-'+c);cx.fillText(`${m.name}`,mx+3*p,gy-17*p*(m.elite?1.45:1));
     cx.fillStyle='#000';cx.fillRect(mx-6*p,gy-16*p*(m.elite?1.45:1),18*p,p*1.4);cx.fillStyle='#d33';cx.fillRect(mx-6*p,gy-16*p*(m.elite?1.45:1),18*p*Math.max(0,m.hp/m.max),p*1.4);}
   // companions stand behind you
-  C.party.forEach((q,i)=>{const pp=Math.max(2,Math.round(p*.85));const x=PW*.28-(i+1)*PW*.065,y=gy-13*pp+((i%2)?pp:0)+(walk?walk*.5:0);
+  C.party.forEach((q,i)=>{const pp=Math.max(2,Math.round(p*.85));const x=PW*.28-(i+1)*PW*(C.party.length>4?.027:.065),y=gy-13*pp+((i%2)?pp:0)-(C.party.length>4&&i%2?3*pp:0)+(walk?walk*.5:0);
     drawPerson(x,y,pp,{cls:q.n.cls,race:q.n.race,hair:q.n.hair,dead:q.dead||C.phase==='dead'},t+i);});
   if(C.surge&&C.mob){cx.font=`800 ${p*5}px Alegreya Sans, sans-serif`;cx.textAlign='center';cx.fillStyle='#ff8a2a';cx.fillText(dungeonDef().surgeName.toUpperCase(),PW*.66,gy-22*p);
     cx.fillStyle='rgba(60,140,220,.25)';cx.fillRect(PW*.1,gy-4*p,PW*.6*(1-C.surge.t/2.5),4*p);cx.textAlign='left';}

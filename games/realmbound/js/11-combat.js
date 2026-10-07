@@ -1,5 +1,5 @@
 'use strict';
-function T(key){const h=H();if(!h)return 0;let s=0;for(const t of TALENT_LIST[h.cls])if(t.key===key)s+=(h.talents[t.id]||0)*t.per;return s;}
+function T(key){const h=H();if(!h)return 0;let s=0;for(const t of TALENT_LIST[h.cls])if(t.key===key)s+=(h.talents[t.id]||0)*t.per;return s+setT(key);} // setT: raid set bonuses (19-raid.js)
 /* points spent in one talent tree, and the role your build gives you in groups (T1-A) */
 function treePoints(ti,h){h=h||H();let s=0;for(const t of TALENT_LIST[h.cls])if(t.ti===ti)s+=h.talents[t.id]||0;return s;}
 function heroRole(h){h=h||H();const pts=TALENTS[h.cls].map((tr,ti)=>treePoints(ti,h)),best=Math.max(...pts);return best>0?TALENTS[h.cls][pts.indexOf(best)].role:ROLE_OF[h.cls];}
@@ -54,7 +54,7 @@ function slog(m){const h=H();if(!h)return;h.log=h.log||[];h.log.unshift(m);if(h.
 /* ---- damage helpers ---- */
 function critRoll(extra){return R()*100<(C.buffs.vendetta?100:ST.crit+(extra||0)+(C.buffs.combustion?50:0)+(C.buffs.trueshot?15:0));}
 function wroll(){return ST.w.min+R()*(ST.w.max-ST.w.min)+ST.ap/14*ST.w.speed+(C.buffs.cry?C.buffs.cry.ap/14*ST.w.speed:0);}
-function dmgMods(){let m=(1+T('dmg')/100)*(C.buffs.enrage?1+T('enrageDmg')/100:1)*(C.buffs.deathwish?1.4:1)*(C.buffs.arcpower?1.35:1)*(C.mob&&C.mob.marked>0?1.1:1)*(C.buffs.howl?1.1:1)*(C.buffs.pack?1.2:1)*(C.buffs.shadowform?1.3:1)*(C.buffs.trueshot?1.25:1);const d=C.mob.lvl-H().lvl;if(d>0)m*=1-.04*d;if(RACES[H().race].bloodrage&&C.hp<ST.hpMax*.3)m*=1.1;return m;}
+function dmgMods(){let m=(1+T('dmg')/100)*(C.raidDmg||1)*(C.buffs.enrage?1+T('enrageDmg')/100:1)*(C.buffs.deathwish?1.4:1)*(C.buffs.arcpower?1.35:1)*(C.mob&&C.mob.marked>0?1.1:1)*(C.buffs.howl?1.1:1)*(C.buffs.pack?1.2:1)*(C.buffs.shadowform?1.3:1)*(C.buffs.trueshot?1.25:1);const d=C.mob.lvl-H().lvl;if(d>0)m*=1-.04*d;if(RACES[H().race].bloodrage&&C.hp<ST.hpMax*.3)m*=1.1;return m;}
 function hitMob(amount,o){
   o=o||{};const m=C.mob;if(!m)return 0;
   if(o.phys&&!o.sure&&R()<.05+.005*Math.max(0,m.lvl-H().lvl)){line(`${o.label||'Your attack'} was dodged by ${m.name}.`,'l-hit');fx('Dodge','#ccc','mob');
@@ -181,6 +181,7 @@ function step(h){
   const he=H();C.run+=h;he.stats.play+=h;
   C.gcd=Math.max(0,C.gcd-h);for(const k in C.cds)C.cds[k]=Math.max(0,C.cds[k]-h);
   if(C.phase==='fight')autoPotion(); // healing potions from the supply bank (18-supplies.js)
+  if(he.dun&&he.dun.raid&&raidStep(h))return; // raid plans, tells and calls (19-raid.js)
   for(const k in C.win)if(typeof C.win[k]==='number')C.win[k]=Math.max(0,C.win[k]-h);
   for(const k in C.buffs){const b=C.buffs[k];if(!b)continue;b.t-=h;if(b.t<=0){C.buffs[k]=null;if(k==='absorb')C.absorb=0;}}
   if(C.errT>0)C.errT-=h;C.anim.hero=Math.max(0,C.anim.hero-h);C.anim.mob=Math.max(0,C.anim.mob-h);
@@ -216,10 +217,10 @@ function step(h){
 function syncParty(){const h=H();C.party=(h.party||[]).map(id=>{const n=npcOf(id);if(!n)return null;const old=(C.party||[]).find(p=>p.id===id);
   return old?Object.assign(old,{n}):{id,n,hp:compStats(n).hpMax,swing:1+R(),healT:1.5,dead:false};}).filter(Boolean);}
 function partyAlive(){return (C&&C.party||[]).filter(p=>!p.dead);}
-function hasRole(r){return partyAlive().some(p=>ROLE_OF[p.n.cls]===r);}
+function hasRole(r){return partyAlive().some(p=>(p.n.role||ROLE_OF[p.n.cls])===r);}
 function compsAct(h){
   for(const p of C.party){if(p.dead)continue;const s=compStats(p.n);
-    p.swing-=h;if(p.swing<=0&&C.mob){p.swing=2;let a=s.dps*2*(.85+R()*.3)*(C.buffs.pack?1.2:1)*(C.mob.marked>0?1.1:1);const crit=R()<.1;if(crit)a*=2;a=Math.max(1,Math.round(a*.85));
+    p.swing-=h;if(p.swing<=0&&C.mob){p.swing=2;let a=s.dps*2*(.85+R()*.3)*(C.buffs.pack?1.2:1)*(C.mob.marked>0?1.1:1);const crit=R()<.1;if(crit)a*=2;a=Math.max(1,Math.round(a*.85*(C.raidDmg||1)));
       C.mob.hp-=a;fx(String(a)+(crit?'!':''),crit?'#ffd24a':'#cfe3ff','mob',crit);if(crit||R()<.25)line(`${p.n.name} ${crit?'crits':'hits'} ${C.mob.name} for ${a}.`,'l-party');
       if(C.mob.hp<=0){onKill();return;}}
     if(s.role==='heal'){p.healT-=h;if(p.healT<=0){p.healT=2.5;healLowest(s.hps*2.5,p.n.name);}}}
@@ -239,13 +240,13 @@ function pickTarget(){
   for(const p of partyAlive()){const r=ROLE_OF[p.n.cls];opts.push({k:p,w:r==='tank'?8:r==='heal'?1.3:1});}
   let r=R()*opts.reduce((s,o)=>s+o.w,0);for(const o of opts){r-=o.w;if(r<=0)return o.k;}return 'hero';
 }
-function hitComp(p,raw){const s=compStats(p.n);let a=raw*(1-s.armor/(s.armor+400+85*C.mob.lvl))*(C.buffs.bulwark?.7:1)*(C.buffs.painsup?.6:1);a=Math.max(1,Math.round(a));
+function hitComp(p,raw){const s=compStats(p.n);let a=raw*(1-s.armor/(s.armor+400+85*C.mob.lvl))*(C.buffs.bulwark?.7:1)*(C.buffs.painsup?.6:1)*(C.raidTaken||1);a=Math.max(1,Math.round(a));
   p.hp-=a;fx('-'+a,'#ffb38a','party');if(p.hp<=0){p.hp=0;p.dead=true;line(`${p.n.name} has fallen!`,'l-hurt');}}
-function hitPet(raw){const pp=petOf(),ps=petStats(pp);let a=raw*(1-ps.armor/(ps.armor+400+85*C.mob.lvl))*(C.buffs.bulwark?.7:1)*(C.buffs.painsup?.6:1);a=Math.max(1,Math.round(a));
+function hitPet(raw){const pp=petOf(),ps=petStats(pp);let a=raw*(1-ps.armor/(ps.armor+400+85*C.mob.lvl))*(C.buffs.bulwark?.7:1)*(C.buffs.painsup?.6:1)*(C.raidTaken||1);a=Math.max(1,Math.round(a));
   pp.hp-=a;line(`${C.mob.name} hits ${petLabel(pp).replace(/^Your /,'your ')} for ${a}.`,'l-hurt');fx('-'+a,'#ff9a7a','pet');if(pp.hp<=0)petDie();}
 /* returns true if the hit killed you */
 function hitHero(raw,label){const m=C.mob,he=H();let a=raw*(1-ST.armor/(ST.armor+400+85*m.lvl));const d=m.lvl-he.lvl;if(d>0)a*=1+.04*d;if(C.buffs.bulwark)a*=.7;
-  if(C.buffs.shieldwall)a*=.4;if(C.buffs.shadowform)a*=.85;if(C.buffs.deathwish)a*=1.1;if(C.buffs.painsup)a*=.6;
+  if(C.buffs.shieldwall)a*=.4;if(C.buffs.shadowform)a*=.85;if(C.buffs.deathwish)a*=1.1;if(C.buffs.painsup)a*=.6;a*=C.raidTaken||1;
   if(T('block')&&hasShield()&&R()*100<T('block')){a*=.5;fx('Block','#cfd8e3','hero');}
   a=Math.max(1,Math.round(a));
   if(C.absorb>0){const ab=Math.min(C.absorb,a);C.absorb-=ab;a-=ab;if(ab)fx('Absorb','#9cc8ff','hero');}

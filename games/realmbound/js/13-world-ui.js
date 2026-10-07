@@ -40,7 +40,7 @@ function updateWorld(){
     ` <select class="btn sm alt" id="grindSel" aria-label="Hunt target"><option value="">Hunt: follow quests</option>${z.mobs.filter(m=>!m.rare).map(m=>`<option value="${m.id}" ${h.grind===m.id?'selected':''}>Hunt: ${m.name} (${m.lv[0]}-${m.lv[1]})</option>`).join('')}</select>`;
   const d=h.dun;
   if(d){const bosses=dungeonDef().enc.slice(0,d.step).filter(e=>e.boss).length;$('#zoneName').textContent=dungeonDef().name+(d.tier?` · Heroic ${d.tier}`:'');
-    $('#zoneLore').textContent='';$('#zoneSub').textContent=`Pull ${Math.min(d.step+1,dungeonDef().enc.length)} of ${dungeonDef().enc.length} · Bosses ${bosses}/3${d.wipes?` · ${d.wipes} wipe${d.wipes>1?'s':''}`:''}${d.mods.length?' · '+d.mods.map(k=>DUN_MODS[k].name).join(', '):''}`;}
+    $('#zoneLore').textContent='';$('#zoneSub').textContent=`Pull ${Math.min(d.step+1,dungeonDef().enc.length)} of ${dungeonDef().enc.length} · Bosses ${bosses}/${dungeonDef().enc.filter(e=>e.boss).length}${d.wipes?` · ${d.wipes} wipe${d.wipes>1?'s':''}`:''}${d.mods.length?' · '+d.mods.map(k=>DUN_MODS[k].name).join(', '):''}`;}
   const zk=d?'dun':h.zone+h.grind+h.faction;const zbEl=$('#zoneBtns');
   if(zbEl.dataset.k!==zk){zbEl.innerHTML=d?'<button class="btn sm alt" data-act="leavedun">Leave dungeon</button>':zb;zbEl.dataset.k=zk;}
   // player frame
@@ -78,7 +78,7 @@ function updateWorld(){
       $('#encActs').innerHTML=`${e.waved?'':'<button class="btn sm alt" data-act="encwave">Wave</button>'}${e.kind==='fighting'?'<button class="btn sm" data-act="enchelp">Help them</button>':''}<button class="btn sm" data-act="encinvite" ${h.party.length>=4?'disabled':''}>Invite to group</button>`;}}
   // combo + dodge
   const cbn=$('#comboBtn'),cp=C.party.find(x=>x.id===C.comboWith);cbn.hidden=!(C.win.combo>0&&cp&&!cp.dead&&C.phase==='fight');if(!cbn.hidden){$('#comboTxt').textContent=`${COMBO[cp.n.cls].name}`;cbn.title=`Combo with ${cp.n.name}: ${COMBO[cp.n.cls].desc}`;}
-  $('#dodgeBtn').hidden=!(C.win.dodge>0&&C.surge);
+  $('#dodgeBtn').hidden=!(C.win.dodge>0&&C.surge);raidUI();
   // action bar
   const sk=h.cls+h.lvl+JSON.stringify(h.talents);if(sk!==slotsKey)buildSlots();
   bar().forEach((a,i)=>{const el=$('#ab-'+i);if(!el)return;const learned=knows(a.id);el.classList.toggle('locked',!learned);
