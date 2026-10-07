@@ -7,7 +7,8 @@ document.addEventListener('click', e => {
   switch (a) {
     case 'sound': cycleSound(); break;
     case 'skiptalk': skipTalk(); break;
-    case 'starter': chooseStarter(arg, ($('#tname') || {}).value, S.journey); closeModal(); break;
+    case 'starter': chooseStarter(arg, ($('#tname') || {}).value, S.journey, PICKED); closeModal(); break;
+    case 'mode': PICKED[arg] = !PICKED[arg]; el.classList.toggle('cur', PICKED[arg]); el.setAttribute('aria-pressed', PICKED[arg]); return;
     case 'set': { const [k, v] = arg.split(':'); if (B) break;
       if (k === 'pace' && JOURNEY[v]) { S.journey = v; el.parentNode.querySelectorAll('.era').forEach(b => { const on = b === el; b.classList.toggle('cur', on); b.setAttribute('aria-pressed', on); }); return; }
       if (k === 'journey' && JOURNEY[v] && S.journey !== v) { S.journey = v; toast(`Journey length: ${JOURNEY[v].name}.`); slog(`Chose a ${JOURNEY[v].name} journey at the Larkhaven inn.`); }
@@ -26,7 +27,7 @@ document.addEventListener('click', e => {
     case 'continue': finishBattle(); break;
     case 'tab': S.tab = arg; renderTabs(true); break;
     case 'toranch': { const c = findC(arg); if (c && S.team.length > 1 && !B) { S.team = S.team.filter(x => x !== c); S.ranch.push(c); } break; }
-    case 'toteam': { const c = findC(arg); if (c && S.team.length < 3 && !B) { S.ranch = S.ranch.filter(x => x !== c); S.team.push(c); } break; }
+    case 'toteam': { const c = findC(arg); if (c && S.team.length < teamMax() && !B) { S.ranch = S.ranch.filter(x => x !== c); S.team.push(c); } break; }
     case 'release': { if (!el.classList.contains('armed')) { el.classList.add('armed'); el.textContent = 'Click again to release'; setTimeout(() => { if (el.isConnected) { el.classList.remove('armed'); el.textContent = 'Release'; } }, 4000); return; }
       const c = findC(arg); if (c) { S.ranch = S.ranch.filter(x => x !== c); slog(`Released ${c.name} back into ${BIOMES[S.biome].name}.`); toast(`${c.name} returns to the wild.`); } break; }
     case 'rename': { const c = findC(arg); if (!c) break; const card = el.closest('.cbody'); if (card.querySelector('.rn')) break;

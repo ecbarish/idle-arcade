@@ -164,12 +164,13 @@ function talkTo(n) {
   const face = { up: 'down', down: 'up', left: 'right', right: 'left' }[S.pos.dir]; if (!n.trainer) n.dir = face; // trainers keep watching their path
   if (n.warden) {
     const g = n.warden;
-    if (S.story[g.id]) talk([[n.who, MAPS[S.pos.map].wardenDone || 'You\'ve earned my badge. The road ahead is yours.']]);
+    if (S.story[g.id]) startRematch(g.id, n.who); // beaten Wardens offer rematches (15-challenge.js)
     else if (wardenReady()) challengeWarden();
     else talk([[n.who, `Not yet, {name}. Walk ${MAPS[S.pos.map].name} a while longer and let your team learn its ways. Come back to me after about ${Math.max(1, g.at - beatCount(g))} more finds in the grass.`]]);
     return;
   }
   if (n.trainer) { if (S.beaten && S.beaten[n.who]) talk(n.trainer.after || n.trainer.win); else challengeTrainer(n); return; }
+  if (n.rematch) { startRematch(n.rematch, n.who); return; }
   // townsfolk notice how the world changes: byBadge lines replace their usual ones once you hold that badge
   const later = Object.keys(n.byBadge || {}).filter(b => S.badges.includes(b)).pop();
   talk(later ? n.byBadge[later] : n.lines, n.act === 'ranch' ? () => enterDoor('ranch') : null);

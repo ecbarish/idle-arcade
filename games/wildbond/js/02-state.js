@@ -10,7 +10,7 @@ function fresh() {
   return { v: 1, started: false, name: 'Tamer', starter: null, team: [], ranch: [], coins: 120, lures: 5, biome: 'thornwood',
     explored: 0, story: {}, badges: [], seen: {}, caught: {}, auto: false, era: 'pocket', eras: ['pocket'],
     stats: { battles: 0, wins: 0, caught: 0, play: 0 }, log: [], last: Date.now(), tab: 'team',
-    journey: 'classic', capMode: 'soft', xpShare: false, pos: null };
+    journey: 'classic', capMode: 'soft', xpShare: false, pos: null, modes: {}, rematch: {}, titles: [] };
 }
 let S = fresh();
 
@@ -23,7 +23,7 @@ function slog(m) { S.log.unshift(m); if (S.log.length > 40) S.log.length = 40; }
 function newCreature(id, lvl, opts) { const c = Cr.make({ id, name: SPECIES[id].name }, lvl, opts); c.hp = Cr.stats(c, SPECIES[id].base).hp; return c; }
 function keep(c, how) {
   S.caught[c.sp] = true; S.seen[c.sp] = true;
-  if (S.team.length < 3) { S.team.push(c); return 'team'; }
+  if (S.team.length < teamMax()) { S.team.push(c); return 'team'; }
   S.ranch.push(c); return 'ranch';
 }
 /* Pacing: the badge level cap and the XP/coin multipliers from the journey setting. */

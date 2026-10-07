@@ -31,7 +31,7 @@ function renderPanel() {
         `<div class="cmds"><span class="pts" id="pts"></span>
           <button class="btn" data-act="cmd" data-arg="focus" title="An ally acts right now, 30% harder. Costs 1.">Focus <kbd>F</kbd></button>
           <button class="btn" data-act="cmd" data-arg="guard" title="Your team takes half damage for 3 seconds. Use it on telegraphed attacks. Costs 1.">Guard <kbd>G</kbd></button>
-          <button class="btn" data-act="cmd" data-arg="rally" title="Heal your whole team 20%. Costs 2.">Rally <kbd>R</kbd></button>
+          ${modeOn("hardcore") ? "" : `<button class="btn" data-act="cmd" data-arg="rally" title="Heal your whole team 20%. Costs 2.">Rally <kbd>R</kbd></button>`}
           ${B.kind === 'wild' ? `<button class="btn lure" data-act="cmd" data-arg="lure">Lure (${S.lures}) <kbd>L</kbd></button><button class="btn alt" data-act="cmd" data-arg="flee">Flee</button>` : ''}</div>`}
         <div class="hint" id="bhint"></div>`; }
     B.foes.forEach((u, i) => { const c = $('#fu' + i); if (!c) return; c.classList.toggle('down', u.c.hp <= 0); c.querySelector('.hpw').innerHTML = bar(u.c.hp, u.st.hp, 'hp') + `<span class="hpt">${u.c.hp}/${u.st.hp}</span>`; });
@@ -79,6 +79,7 @@ const TABS = {
       ${settingRow('cap', [['soft', 'Soft cap', 'Above the cap, XP slows to a trickle.'], ['hard', 'Hard cap', 'No XP at all above the cap.'], ['off', 'No cap', 'Grow freely up to level 100.']], S.capMode)}
       <p class="sub" style="margin-top:10px">XP share: creatures resting on the ranch learn from your battles.</p>
       ${settingRow('share', [['off', 'XP share off', 'Only your team of three gains XP.'], ['on', 'XP share on', 'Ranch creatures get a quarter of the XP.']], S.xpShare ? 'on' : 'off')}
+      ${challengeHTML()}
       <h4>Art style</h4><p class="sub">The world's look evolves as you progress. Unlocked styles can be switched any time.</p><div class="eras">${ERAS.map(e => { const on = S.eras.includes(e.id) && ART[e.id];
         return `<button class="era ${S.era === e.id ? 'cur' : ''}" data-act="era" data-arg="${e.id}" ${on ? '' : 'disabled'}><b>${e.name}</b><span>${on ? (S.era === e.id ? 'In use' : 'Use this style') : e.soon ? `Coming soon · ${e.unlock}` : e.unlock}</span></button>`; }).join('')}</div>
       <h4>Story so far</h4><div class="logl">${S.log.slice(0, 20).map(m => `<div>${m}</div>`).join('')}</div>` }
@@ -102,7 +103,7 @@ function cardHTML(c, i, inTeam) {
     <div class="grades">${Cr.STATS.map(k => `<span title="${Cr.STAT_NAME[k]}: ${st[k]} (potential ${Cr.grade(c.pot[k])})">${Cr.STAT_NAME[k].slice(0, 3)} <b>${st[k]}</b> <i class="g${Cr.grade(c.pot[k])}">${Cr.grade(c.pot[k])}</i></span>`).join('')}</div>
     <div class="meta">Moves: ${mv.map(m => MOVES[m].name).join(', ')}</div>
     <div class="cacts">${inTeam ? (S.team.length > 1 && !B ? `<button class="btn sm alt" data-act="toranch" data-arg="${c.uid}">Send to ranch</button>` : '') :
-      `<button class="btn sm" data-act="toteam" data-arg="${c.uid}" ${S.team.length >= 3 || B ? 'disabled' : ''}>Add to team</button><button class="btn sm alt" data-act="release" data-arg="${c.uid}">Release</button>`}
+      `<button class="btn sm" data-act="toteam" data-arg="${c.uid}" ${S.team.length >= teamMax() || B ? 'disabled' : ''}>Add to team</button><button class="btn sm alt" data-act="release" data-arg="${c.uid}">Release</button>`}
       <button class="btn sm alt" data-act="rename" data-arg="${c.uid}">Rename</button></div></div></div>`;
 }
 function renderTabs(force) {
@@ -118,7 +119,21 @@ function startHTML() {
     <div class="starters">${STARTERS.map(id => { const s = SPECIES[id]; return `<button class="starter" data-act="starter" data-arg="${id}">${portrait(id)}<b>${s.name}</b>${elChip(s.el)}<span>${s.dex}</span></button>`; }).join('')}</div>
     <label class="meta">Your name <input id="tname" maxlength="14" value="${S.name === 'Tamer' ? '' : S.name}" placeholder="Tamer"></label>
     <h4>How long a journey?</h4><p class="sub">You can change this later at the Larkhaven inn (Journal tab).</p>
-    ${settingRow('pace', Object.keys(JOURNEY).map(k => [k, JOURNEY[k].name, JOURNEY[k].desc]), S.journey)}`;
+    ${settingRow('pace', Object.keys(JOURNEY).map(k => [k, JOURNEY[k].name, JOURNEY[k].desc]), S.journey)}
+    <h4>Challenge modes <span class="meta">(optional, mix any)</span></h4><p class="sub">Picked now, kept for the whole journey. Collect every badge with a mode on to earn its title.</p>
+    <div class="eras">${Object.keys(MODES).map(k => `<button class="era ${PICKED[k] ? 'cur' : ''}" data-act="mode" data-arg="${k}" aria-pressed="${!!PICKED[k]}"><b>${MODES[k].name}</b><span>${MODES[k].desc}</span></button>`).join('')}</div>`;
+}
+/* the Journal's challenge section: modes, titles, rematch tiers and area mastery stars */
+function challengeHTML() {
+  const on = Object.keys(MODES).filter(modeOn), star = n => '★'.repeat(n) + '☆'.repeat(3 - n);
+  const areas = Object.keys(BIOMES).filter(id => S.exploredIn && S.exploredIn[id] || id === S.biome).map(id => { const m = masteryOf(id);
+    return `<div>${BIOMES[id].name} <b title="Wilddex · Warden rematch tier 3 · every item and trainer">${star(m.stars)}</b> <span class="meta">${m.dex ? 'Wilddex ✓' : 'Wilddex'} · ${m.hasWarden ? (m.warden ? 'Warden tier 3 ✓' : 'Warden tier 3') : 'no Warden yet'} · ${m.secrets ? 'secrets ✓' : 'items and trainers'}</span></div>`; }).join('');
+  const tiers = Object.entries(S.rematch || {}).map(([id, t]) => `${id === 'wren' ? 'Wren' : STORY.find(b => b.id === id).trainer} tier ${t}`).join(' · ');
+  return `<h4>Challenges and mastery</h4>
+    <p class="sub">${on.length ? 'Modes: <b>' + on.map(k => MODES[k].name).join(', ') + '</b>.' : 'No challenge modes on this journey.'}${S.modes && S.modes.nuzlockeEnded ? ' (Your Nuzlocke run ended.)' : ''}
+      ${(S.titles || []).length ? ' Titles: <b>' + S.titles.join(', ') + '</b>.' : ''}</p>
+    <p class="sub">Beaten Wardens (and Wren, in Larkhaven) take one rematch a day, each tier stronger and better paid.${tiers ? ' Best: ' + tiers + '.' : ''}</p>
+    <div class="logl">${areas}</div>`;
 }
 function openModal(html) { $('#sheet').innerHTML = html; $('#modal').hidden = false; drawPortraits($('#sheet')); }
 function closeModal() { $('#modal').hidden = true; }

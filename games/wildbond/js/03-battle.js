@@ -13,6 +13,7 @@ function unit(c, side) {
 function startBattle(kind, foes, opts) {
   opts = opts || {};
   B = { kind, title: opts.title || '', trainer: opts.trainer || null, story: opts.story || null, npc: opts.npc || null,
+    rematch: opts.rematch || null, tier: opts.tier || 0, firstMeet: kind === 'wild' && firstMetHere(), // 15-challenge.js
     allies: S.team.filter(c => c.hp > 0).map(c => unit(c, 'a')), foes: foes.map(c => unit(c, 'f')),
     cmd: 1, cmdT: 0, t: 0, tele: null, lines: [], over: null, capture: null, fx: [], bursts: [], shake: 0, lastInput: -99 };
   for (const u of B.foes) S.seen[u.c.sp] = true;
@@ -57,6 +58,7 @@ function chooseMove(u) {
     if (k === 'haste' && !allies.some(x => x.buff.haste > 0)) return m;
     if (k === 'guard' && !allies.some(x => x.buff.guard > 0) && Math.random() < 0.6) return m;
     if (k === 'slow' || k === 'dot') { if (Math.random() < 0.5) return m; } }
+  if (u.side === 'f' && modeOn('hardcore')) { const m = hardcoreMove(u, moves); if (m) return m; }
   const dmg = moves.filter(m => ['hit', 'aoe'].includes(MOVES[m].kind)).sort((a, b) => MOVES[b].pow - MOVES[a].pow);
   return dmg[0] || movesOf(u.c)[0];
 }
@@ -64,7 +66,8 @@ function act(u, forced, mult) {
   const m = forced || chooseMove(u), mv = MOVES[m], foes = living(u.side === 'a' ? 'f' : 'a'), allies = living(u.side);
   if (!foes.length) return;
   u.cds[m] = mv.cd; u.anim = 0.25;
-  const target = () => (Math.random() < 0.65 ? foes[0] : pick(foes));
+  const aim = u.focus && u.focus.c.hp > 0 ? u.focus : null; u.focus = null; // Hardcore foes go for your weakest
+  const target = () => aim || (Math.random() < 0.65 ? foes[0] : pick(foes));
   // telegraph a big enemy attack so the player can Guard in time
   if (u.side === 'f' && !forced && (mv.kind === 'aoe' || mv.pow >= 80) && !B.tele) {
     B.tele = { u, m, t: 1.6 }; sfx('warn'); bline(`${u.c.name} is gathering power for ${mv.name}!`, 'warn');
@@ -97,6 +100,7 @@ function command(kind, auto) {
     const best = movesOf(u.c).filter(m => ['hit', 'aoe'].includes(MOVES[m].kind)).sort((a, b) => MOVES[b].pow - MOVES[a].pow)[0];
     bline(`You call to ${u.c.name}: now!`, 'cmd'); u.cds[best] = 0; act(u, best, 1.3); u.atb = 0; Cr.addBond(u.c, 1); }
   if (kind === 'guard') { B.cmd -= 1; for (const a of living('a')) { a.buff.guard = 3; a.buff.guardCmd = 1; } bline(auto ? 'Your team braces.' : 'Guard! Your team braces for the hit.', 'cmd'); }
+  if (kind === 'rally' && modeOn('hardcore')) { bline('Hardcore: no Rally. Your team has to hold on by itself.', 'warn'); return; }
   if (kind === 'rally') { B.cmd -= 2; for (const a of living('a')) { const h = Math.round(a.st.hp * 0.2); a.c.hp = Math.min(a.st.hp, a.c.hp + h); Cr.addBond(a.c, 1); } bline('You rally your team. Everyone recovers.', 'cmd'); }
   if (kind === 'flee' && B.kind === 'wild') { bline('You slip away.', 'sys'); endBattle('fled'); }
   if (kind === 'lure') startCapture();
@@ -106,6 +110,7 @@ function startCapture() {
   if (B.kind !== 'wild') { bline("You can't catch another tamer's creature.", 'warn'); return; }
   if (S.lures <= 0) { bline('You are out of lures. Buy more in Larkhaven.', 'warn'); return; }
   const t = living('f').sort((a, b) => a.c.hp / a.st.hp - b.c.hp / b.st.hp)[0]; if (!t) return;
+  if (!canLure(t.c)) { bline(`Nuzlocke: you've already met your one creature in ${BIOMES[S.biome].name}. ${t.c.name} can't be caught.`, 'warn'); return; }
   S.lures--; B.capture = { t, pos: 0, dir: 1, zone: 0.62 + Math.random() * 0.2 }; bline(`You throw a lure at ${t.c.name}. Calm it: press Calm when the marker is in the green.`, 'cmd');
 }
 function calmNow() {
@@ -170,6 +175,8 @@ function endBattle(result) {
     else if (B.story) storyWin(B.story);
   }
   if (B.npc) trainerResult(B.npc, result); // a route trainer (12-walk.js)
+  if (B.rematch) rematchResult(B.rematch, B.tier, result); // 15-challenge.js
+  nuzlockeAfter();
   if (result === 'lost' && B.story) S.story[B.story + 'Retry'] = S.explored + 4;
   if (result === 'lost') { const lost = Math.round(S.coins * 0.1); S.coins -= lost; bline(`Your team is exhausted. You hurry back to Larkhaven (−${lost} coins).`, 'warn');
     if (B.story === 'elder') S.story.elderFled = true; }

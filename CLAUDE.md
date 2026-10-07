@@ -53,7 +53,10 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
 - **T13 part 3 (Diorama) is done:** the Ember Badge unlocks `ART.diorama` (14-diorama.js: three.js r134 from cdnjs,
   loaded on first use, HD-2D stands in until then or offline; the maps as instanced blocks, sprites extruded into
   voxels; drag to orbit, wheel to zoom, arrow keys follow the camera via `turnDir`) and riding (`S.ride`, R key).
-  **Next for Claude:** T11b (challenge modes, rematches), or Modern 3D when Evan wants it. Open owner question from the lore bible: 8 badges give a cap of 95, the design says the main
+- **T11b is done:** challenge modes picked at a new game (`S.modes`: Nuzlocke, Randomizer, Solo, Hardcore; titles
+  for collecting every badge), rematches with beaten Wardens and Wren in Larkhaven (one a day, tiers scale to your
+  team, `S.rematch`), area mastery stars (Journal). All in 15-challenge.js. **Next for Claude:** T1 for Realmbound
+  (specs for 40-60, raids, guild), or Wildbond contests/races, or Modern 3D, whichever Evan picks. Open owner question from the lore bible: 8 badges give a cap of 95, the design says the main
   journey ends near 70; decide before area 5.
   Emberfall now has Warden Toren and the Ember Badge (T15, ChatGPT, merged), so the cap is 45 after three
   badges. The lore bible is `docs/lore/wildbond.md` (T14); areas 4-8 there are proposals. ChatGPT has T17 (area 4,

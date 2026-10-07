@@ -35,6 +35,14 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-07 (evening)** — Wildbond challenges and rematches (T11b). Starting a new journey you can switch on
+  challenge modes, alone or mixed: **Nuzlocke** (a creature that faints goes home to the wild, and only the first
+  creature you meet in each area can be caught), **Randomizer** (wild creatures shuffled between the areas),
+  **Solo Run** (just you and your first partner) and **Hardcore** (smarter opponents, no Rally). Collect every badge
+  with a mode on to earn its title. Beaten Wardens now take a rematch once a day, and Wren hangs around Larkhaven
+  wanting one too: each tier is tougher, scales to your team and pays better. Each area has three mastery stars
+  (Journal): fill its Wilddex, beat its Warden's tier 3, and find every item and beat every trainer.
+
 - **2026-10-07 (later)** — Merged ChatGPT's Wildbond music (T18): original tunes for Larkhaven, Emberfall, Cloudglass,
   Warden battles, night and rain, chosen by where you are and what the sky is doing; voices for the newer characters.
 

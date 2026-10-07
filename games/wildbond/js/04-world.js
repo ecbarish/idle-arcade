@@ -2,9 +2,10 @@
 /* Exploring, the story, and the town of Larkhaven. */
 const W = { msg: '', autoT: 0, endT: 0 };
 
-function chooseStarter(id, name, pace) {
+function chooseStarter(id, name, pace, modes) {
   S.name = (name || 'Tamer').replace(/[<>&"]/g, '').slice(0, 14) || 'Tamer';
   if (JOURNEY[pace]) S.journey = pace;
+  S.modes = Object.assign({}, modes || {}); if (S.modes.randomizer) S.modes.seed = 1 + Math.floor(Math.random() * 2e9); // challenge modes (15-challenge.js)
   const c = newCreature(id, 5, { rar: 1, born: 'Your first partner, from Larkhaven.' });
   S.started = true; S.starter = id; S.team = [c]; S.seen[id] = S.caught[id] = true; placeAt('larkhaven');
   slog(`${S.name} arrived in Larkhaven and chose ${c.name}.`);
@@ -21,7 +22,7 @@ function storyWin(id) {
   const g = STORY.find(b => b.id === id && b.gate);
   if (g && !S.badges.includes(g.gate)) {
     const badge = BADGES[g.gate].name;
-    S.badges.push(g.gate); S.coins += 300 * S.badges.length; slog(`Earned the ${badge} from ${g.trainer}.`);
+    S.badges.push(g.gate); S.coins += 300 * S.badges.length; slog(`Earned the ${badge} from ${g.trainer}.`); checkTitles();
     // the first badge brings the world's color back (Pocket -> 16-bit), and Warden's boots for running
     const newEra = g.gate === 'thorn' && !S.eras.includes('bit16');
     if (g.gate === 'thorn') { for (const e of ['pixel', 'bit16']) if (!S.eras.includes(e)) S.eras.push(e); S.shoes = true; }
@@ -58,7 +59,7 @@ function elderReady() { return S.story.elderFled && !S.story.elderCaught && S.ba
 
 function teamAvg() { return S.team.length ? S.team.reduce((s, c) => s + c.lvl, 0) / S.team.length : 1; }
 /* at night, Shade creatures come out more and Radiant ones hide; weather tips the odds too (12-walk.js) */
-function wildPick() { const n = isNight(), fx = WEATHER_FX[weatherNow()] || {}, t = BIOMES[S.biome].wild.map(([id, w]) => [id, (n && SPECIES[id].el === 'Shade' ? w * 3 : n && SPECIES[id].el === 'Radiant' ? w * 0.5 : w) * (fx[SPECIES[id].el] || 1)]), tot = t.reduce((s, [, w]) => s + w, 0); let r = Math.random() * tot; for (const [id, w] of t) { r -= w; if (r <= 0) return id; } return t[0][0]; }
+function wildPick() { const n = isNight(), fx = WEATHER_FX[weatherNow()] || {}, t = BIOMES[S.biome].wild.map(([id, w]) => [id, (n && SPECIES[id].el === 'Shade' ? w * 3 : n && SPECIES[id].el === 'Radiant' ? w * 0.5 : w) * (fx[SPECIES[id].el] || 1)]), tot = t.reduce((s, [, w]) => s + w, 0); let r = Math.random() * tot; for (const [id, w] of t) { r -= w; if (r <= 0) return randomized(id); } return randomized(t[0][0]); }
 /* wild creatures match your team, within the biome's range */
 function wildLvl() { const [a, b] = BIOMES[S.biome].lv, m = Math.round(teamAvg()); return clamp(rint(m - 2, m + 1), a, b); }
 

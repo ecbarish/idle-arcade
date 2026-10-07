@@ -50,7 +50,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T11: Wildbond pacing overhaul** (Claude): levels 1-100, journey length (Breezy/Classic/Long Road),
   badge level caps (soft/hard/off), XP share toggle, Saltmarsh Warden + Tide Badge, Saltmarsh/Emberfall rescaled.
   Done 2026-10-06. See "Pacing, level caps and journey settings" in docs/creature-game-design.md.
-- [ ] **T11b: Challenge modes and rematches** (Claude, later): Nuzlocke/Randomizer/Solo/Hardcore at a new game,
+- [x] **T11b: Challenge modes and rematches** (Claude, done 2026-10-07; ranch cosmetics for titles still to come): Nuzlocke/Randomizer/Solo/Hardcore at a new game,
   Warden and Wren rematch tiers, area mastery stars.
 - [x] **T13 part 3** (Claude): the Diorama era (Ember Badge): the same maps as a voxel model in three.js, sprites
   extruded into voxels, an orbiting camera; riding your lead creature. Done 2026-10-07. Modern 3D and VR later.
