@@ -269,3 +269,6 @@ faster than the ~45-minute target, as in the Barrowfields; the last two levels t
 approaching the ~75-minute late target. No XP tuning was applied: the curve, previous chapter and existing XP
 formulas are unchanged. This one-class, no-talents, seeded sample is a baseline; other builds, party play and
 real travel to vendors will differ. Claude's cap-60 raid retune remains separate from T23.
+Re-measured at cap 60 after T23 (2026-10-09, same sim, rare gear at 60): good calls or Raid Leader 11-13 min with no
+wipes (Seraveth 190-225 s against the 240 s enrage); Auto without Raid Leader: warrior and rogue clear in ~12 min, a
+healer hero wipes about 4 times and clears in ~24 min as the raid learns. No retune needed.

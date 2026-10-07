@@ -3,7 +3,7 @@
 let curKey=null;
 const TABS={
 quests:{
-  key(){const h=H();return h.zone+'|'+h.lvl+'|'+h.quests.active.join(',')+'|'+Object.keys(h.quests.done).length+'|'+h.quests.active.map(id=>qState(ALLQ[id])).join('');},
+  key(){const h=H();return h.zone+'|'+h.lvl+'|'+h.quests.active.join(',')+'|'+Object.keys(h.quests.done).length+'|'+Object.values(h.drecords||{}).map(r=>r.clears>0?1:0).join('')+'|'+h.quests.active.map(id=>qState(ALLQ[id])).join('');},
   build(){const h=H();const z=ZONES[h.zone];
     const route=ZONE_ORDER[h.faction],next=route.slice(route.indexOf(h.zone)+1).find(id=>h.lvl>=ZONES[id].lv[0]-2);
     const act=h.quests.active.map(id=>ALLQ[id]);const avail=QUESTS[h.zone].filter(q=>qState(q)==='avail');
@@ -15,6 +15,9 @@ quests:{
     o+=`<h4>Available at ${hubName()}</h4>`;
     o+=avail.length?avail.map(q=>`<div class="rowl" style="align-items:flex-start"><div class="l"><div class="qtitle">[${q.lvl}] ${q.name}${q.elite?' <span class="pill" style="color:var(--gold)">Elite</span>':''}</div><div class="qtext">"${q.text}"</div><div class="meta">${giver(q)} · ${q.type==='kill'?`Slay ${q.n} ${ZONES[q.zone].mobs.find(m=>m.id===q.mob).name}`:`Collect ${q.n} ${ZONES[q.zone].mobs.find(m=>m.id===q.mob).drop}`}</div></div>
       <div class="r"><button class="btn sm" data-act="accept" data-arg="${q.id}">Accept</button></div></div>`).join(''):`<p class="meta">No more quests here at your level.${next?' '+ZONES[next].name+' has work for you.':''}</p>`;
+    // attunement quests waiting on dungeon clears say what they need (T23's needDun)
+    const waiting=QUESTS[h.zone].filter(q=>q.needDun&&!h.quests.done[q.id]&&h.lvl>=q.lvl-2&&(!q.req||h.quests.done[q.req])&&q.needDun.some(id=>dungeonStats(id).clears<=0));
+    if(waiting.length)o+=waiting.map(q=>`<div class="rowl"><div class="l"><div class="qtitle">[${q.lvl}] ${q.name} <span class="pill" style="color:var(--gold)">Attunement</span></div><div class="meta">${giver(q)} will offer this once you have cleared ${q.needDun.filter(id=>dungeonStats(id).clears<=0).map(id=>DUNGEONS[id].name).join(' and ')} at least once.</div></div></div>`).join('');
     const nDone=QUESTS[h.zone].filter(q=>h.quests.done[q.id]).length;o+=`<p class="meta" style="margin-top:8px">${nDone}/${QUESTS[h.zone].length} quests done in ${z.name}.</p>`;
     return o;},
   update(){const h=H();for(const id of h.quests.active){const el=$('#qp-'+id);if(!el)continue;const q=ALLQ[id],p=h.quests.prog[id]||0,mob=ZONES[q.zone].mobs.find(m=>m.id===q.mob);

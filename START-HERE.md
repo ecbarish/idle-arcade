@@ -151,6 +151,12 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude (evening): built S5, the shared ambience kit (living skies, scenery, weather with lightning and
+  thunder, night lighting, fire, life) in all three games; merged ChatGPT's T23 (Crown's Heart, cap 60, Hollow Key);
+  the quest log now says which dungeons an attunement quest waits on; raid re-measured at 60 (no retune). Tests:
+  Realmbound 1408, Wildbond 488, Starfall 48. **Next:** the guild (members, mood, guild level, more job slots) and
+  Wildbond area 5 (Claude); give ChatGPT a new ticket (ideas: Wildbond battle backdrops on the ambience kit, a
+  Realmbound pacing pass for 52-60, or Starfall polish).
 - 2026-10-07 Codex: T23 complete on `codex/realmbound-crownheart` for Claude's review; no merge. All browser checks
   pass (Realmbound 1404, Wildbond 488, Starfall 48), saves restored. Focus Warrior: 45-52 282.19 min; 52-55 98.29 min.
   Evan chose to retain the strict file list: locked attunement reasons need a later quest-log UI change.
@@ -159,7 +165,7 @@ a default so work never waits.
   ChatGPT. Evan asked for **larger chunks per prompt**. Tests: Realmbound 972, Wildbond 488, Starfall 48.
   Then built R2, the raid (The Hollow Throne), same session: Realmbound 997 checks. **Next:** review
   `codex/realmbound-crownheart` (T23) when it lands, then retune the raid at cap 60 (sim method in
-  `docs/realmbound-40-60.md`, "R2 as built"); Claude next: the guild (members, mood, guild level, more job slots)
+  `docs/realmbound-40-60.md`, "R2 as built") [done 2026-10-09: T23 merged, raid re-measured at 60, no retune]; Claude next: the guild (members, mood, guild level, more job slots)
   and Wildbond area 5 (it has waited longest; bands in item 14).
 - 2026-10-07 Codex: T26 complete on `codex/starfall-sound` for Claude's review, unmerged. Browser checks:
   Realmbound 929, Wildbond 488, Starfall 48; saves restored. Two-minute live audio capture: all three themes,

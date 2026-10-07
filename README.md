@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-09 (night)** — Realmbound's quest log now tells you when an attunement quest is waiting: "will offer this
+  once you have cleared the Silent Barrows and Rootrot Hollow". The raid was re-tested at the new level cap of 60.
 - **2026-10-09 (evening)** — **The worlds come alive** (a new shared ambience system, inspired by a living pixel-art
   scene Evan saw). **Realmbound:** every zone has its own sky and distant scenery that scrolls past as you travel
   and sways in the wind (Thornvale's oaks, Redsand's mesas, dead trees and reeds in the Fens, glowing volcanic peaks
