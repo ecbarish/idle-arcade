@@ -34,7 +34,7 @@ function spawnDungeon(){
   C.petSwing=.8;C.petCd=(petOf()&&FAMILIES[petOf().family].ab==='charge')?.5:4;
   if(C.mob.mech){C.waveT=(C.mob.mech.wave||0)*.6;C.surgeT=(C.mob.mech.surge||0)*.7;C.chillT=(C.mob.mech.chill||0)*.8;}
   C.chill=0;for(const p of C.party)p.chill=0; // Grave Chill never carries over between fights
-  if(H().cls==='rogue'&&H().lvl>=4)openWin('opening',3);
+  if(H().cls==='rogue'&&H().lvl>=4)openWin('opening',3+T('openWin'));
   line(`${e.boss?'Boss: ':''}${C.mob.name} (level ${lvl}).`,e.boss?'l-warn':'l-sys');if(e.boss){toast(`Boss: ${e.name}`);sfx('warn');}
 }
 function dunKill(m){

@@ -212,9 +212,9 @@ module.exports = function scenarios() {
           old.dun=null;rb.boot();rb.save();
         }
       }
-      // T1-A: two talent trees, roles from your build, capstones, respec
+      // T1-A + T1-C: three talent trees, roles from your build, capstones, respec
       for(const [cls,trees] of Object.entries(rb.TALENTS)){
-        check(trees.length===2,'two talent trees: '+cls);
+        check(trees.length===3,'three talent trees: '+cls);
         trees.forEach(tr=>{const cap=tr.list.filter(t=>t.req===25),ranks=tr.list.filter(t=>t.req!==25).reduce((s,t)=>s+t.max,0);
           check(ranks===25&&cap.length===1&&cap[0].max===1,'25 ranks and one capstone: '+cls+' '+tr.tree);});
         const ids=rb.TALENT_LIST[cls].map(t=>t.id);check(new Set(ids).size===ids.length,'talent ids unique: '+cls);
@@ -238,6 +238,28 @@ module.exports = function scenarios() {
       tw.money=0;tw.freeRespecUsed=false;tw.talents={cruelty:3};rb.respec();check(!Object.keys(tw.talents).length,'the first reset after the new trees is free');
       tw.talents={cruelty:3};check(rb.respecCost()===10000,'the next reset costs 1 gold');rb.respec();check(tw.talents.cruelty===3,'no reset without the gold');
       tw.money=10000;rb.respec();check(!Object.keys(tw.talents).length&&tw.money===0,'a paid reset clears talents');
+      // T1-C: the third trees, each with abilities and talents that change how you play
+      {const third={warrior:'Fury',rogue:'Subtlety',mage:'Arcane',priest:'Discipline',hunter:'Survival'};
+        for(const [cls,name] of Object.entries(third)){const tr=rb.TALENTS[cls][2];check(tr.tree===name,'third tree: '+cls+' '+name);
+          check(tr.list.filter(t=>t.key==='cap').every(t=>ABIL[cls].some(a=>a.talent===t.id)),'every learnable ability in '+name+' exists');
+          check(tr.list.filter(t=>t.key!=='cap'&&t.key!=='crit'&&t.key!=='dmg'&&t.key!=='hpPct'&&t.key!=='dodge'&&t.key!=='intPct'&&t.key!=='regenPct'&&t.key!=='heal').length>=2,name+' has at least two talents that change an ability or open a window');}
+        check(rb.TALENTS.priest[2].role==='heal','Discipline is a healing tree');
+        const t=rb.newHero('Thirdcheck','wild','duskelf','priest');t.lvl=60;rb.S.chars.push(t);rb.S.cur=t.id;rb.boot();
+        t.talents={twindisc:5,atonement:5};rb.boot();check(rb.heroRole()==='heal','a Discipline priest heals in groups');
+        rb.spawn();const C=rb.C;C.mob.max=C.mob.hp=1e7;C.hp=ST.hpMax*.5;const hp0=C.hp;ABIL.priest.find(a=>a.id==='smite').fn();check(C.hp>hp0,'Atonement: Holy Smite heals you when you are hurt worst');
+        t.talents={atonement:5,twindisc:5,mentalstr:5,divfury:5,dgrace:4,penance:1,painsup:1};C.buffs={};rb.boot();const raw=ST.hpMax*.2;rb.spawn();rb.C.mob.max=rb.C.mob.hp=1e7;rb.C.hp=ST.hpMax;
+        const before=rb.C.hp;hitHero(raw);const plain=before-rb.C.hp;rb.C.hp=ST.hpMax;rb.C.buffs.painsup={t:8};const b2=rb.C.hp;hitHero(raw);check(b2-rb.C.hp<plain*.75,'Pain Suppression cuts the damage you take');rb.C.buffs={};
+        check(ABIL.priest.find(a=>a.id==='smite').cast()<2,'Divine Fury makes Holy Smite faster');
+        t.cls='warrior';t.talents={rampage:4};rb.boot();rb.spawn();rb.C.mob.hp=rb.C.mob.max*.27;check(ABIL.warrior.find(a=>a.id==='finish').cond(),'Rampage lets Finishing Blow land below 30%');
+        t.talents={};rb.boot();rb.spawn();rb.C.mob.hp=rb.C.mob.max*.27;check(!ABIL.warrior.find(a=>a.id==='finish').cond(),'without Rampage Finishing Blow still waits for 20%');
+        t.cls='rogue';t.talents={shadowdance:1};rb.boot();rb.spawn();rb.C.mob.max=rb.C.mob.hp=1e7;rb.C.buffs.dance={t:8};openWin('opening',8);ABIL.rogue.find(a=>a.id==='backstab').fn();
+        check(rb.C.win.opening>0,'Shadow Dance keeps the Backstab opening after a Backstab');rb.C.buffs={};
+        t.cls='hunter';t.talents={lockload:1};rb.boot();rb.spawn();rb.C.buffs.lnl={t:12};check(ABIL.hunter.find(a=>a.id==='shot').cast()===0,'Lock and Load makes the next Steady Shot instant');
+        rb.C.mob.max=rb.C.mob.hp=1e7;ABIL.hunter.find(a=>a.id==='shot').fn();check(!rb.C.buffs.lnl,'and is used up by that shot');
+        t.cls='mage';t.talents={};rb.boot();rb.spawn();rb.C.mob.max=rb.C.mob.hp=1e7;const m0=dmgMods();rb.C.buffs.arcpower={t:15};check(dmgMods()>m0*1.3,'Arcane Power raises your damage');rb.C.buffs={};
+        t.cls='priest';t.lvl=45;t.talents={twindisc:3};t.freeRespecUsed=true;delete t.freeTreesV;t.money=0;rb.boot();check(rb.respecCost()===0,'everyone gets one more free reset for the third trees');
+        rb.respec();check(!Object.keys(t.talents).length&&t.freeTreesV===3,'that reset is used once');t.talents={twindisc:1};check(rb.respecCost()===10000,'later resets cost gold again');
+        rb.S.chars=rb.S.chars.filter(c=>c!==t);rb.S.cur=tw.id;rb.boot();}
       tw.talents={cruelty:1};check(rb.respecCost()===20000,'resets in a row cost more');
       tw.lvl=30;tw.talents={cruelty:2};check(rb.respecCost()===0,'resets are free below level 40');
       rb.S.chars=rb.S.chars.filter(c=>c!==tw);

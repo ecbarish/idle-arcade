@@ -148,7 +148,7 @@ talents:{
   build(){const h=H(),pts=talentPoints(),spent=talentSpent(),role=heroRole(),cost=respecCost();
     let o=`<h3>Talents</h3><p class="sub">${h.lvl<10?'Talents unlock at level 10: one point per level after that.':`${pts} point${pts===1?'':'s'} to spend. ${spent} spent.`}
       Each tree's capstone needs 25 points in that tree, so you can only ever have one. Your role in groups follows the tree with the most points:
-      <b>${ROLE_NAME[role]}</b>. A third tree arrives with the Hollow Crown.</p>`;
+      <b>${ROLE_NAME[role]}</b>. Three trees and 51 points at level 60: pick a direction, or mix two.</p>`;
     o+=TALENTS[h.cls].map((tr,ti)=>{const tp=treePoints(ti);
       return `<h4>${tr.tree} <span class="meta">${ROLE_NAME[tr.role]} · ${tp} point${tp===1?'':'s'}</span></h4>`+tr.list.map(t=>{const r=h.talents[t.id]||0;const ok=pts>0&&r<t.max&&(!t.req||tp>=t.req);
         return `<div class="tal"><div><b>${t.name}</b> <span class="rank">${r}/${t.max}</span><div class="meta">${t.desc}</div></div><button class="btn sm" data-act="talent" data-arg="${t.id}" ${ok?'':'disabled'}>Learn</button></div>`;}).join('');}).join('');
