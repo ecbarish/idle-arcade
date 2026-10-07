@@ -78,6 +78,31 @@ test iframe. Existing Node DOM and Playwright checks remain in `tests/` for deve
   color wrapper, as Pocket's four greens) and `light` (shows the day/night clock). Never draw outside it; get a
   canvas context through `eraCtx()`.
 
+## Starfall Guild layout
+
+`games/starfall-guild/index.html` keeps the existing markup and loads `style.css` (the original styles),
+`shared/engine.js`, then these classic scripts in order, without modules, async, defer or a build step:
+
+- `00-data.js`: save key, helpers, classes, names, monsters, town buildings, relics, regions, crest and staff data.
+- `01-state-save.js`: fresh state, merge defaults, derived stats, save/load and portable saves.
+- `02-dungeon.js`: monsters, combat, effects and relic choices.
+- `03-town-staff.js`: purchases, leveling, tavern, seasons, region choices and earned staff.
+- `04-loop.js`: the main tick, farming and offline progress.
+- `05-ui.js`: toasts, modals, tabs and HUD updates.
+- `06-render.js`: original procedural pixel art, canvas setup and animation.
+- `07-events.js`: existing mouse, keyboard and input handlers.
+- `99-boot.js`: startup, loading, timers and localhost-only `window.__sg`.
+
+Classic scripts share lexical bindings. Data callbacks refer to state and UI helpers only when called;
+state/save functions refer to later dungeon, town and UI functions only when called. Rendering needs the
+existing DOM and dungeon effects. Boot must load last, after every binding and event handler. All original
+top-level names, formulas and text are retained. The key remains `starfall-guild-save-v1`, with the same v1 save.
+
+Run `tests/starfall.html` on localhost and click **Run checks**. It loads a same-origin iframe, checks a
+three-minute save from unsplit main plus fresh starts, recruiting, combat, purchases, seasons and rendering,
+then removes the game iframe before restoring both the game save and `arcade-index-v1`, including failures.
+Close other Starfall Guild and hub tabs first. Also run the existing Realmbound and Wildbond test pages.
+
 ## Next steps
 1. Promo page for friends (hub card + screenshots).
 2. Realmbound: professions and expanded talent trees, then levels 30-60, more dungeons, raids and guild, faction battlegrounds.
