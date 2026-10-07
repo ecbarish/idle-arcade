@@ -90,7 +90,8 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    1.0-1.3× solo speed; numbers in `docs/realmbound-40-60.md`). Kill XP ÷
    group size × (1, 1, 1.166, 1.3, 1.4); quest XP whole. A Breezy/Classic/Long Road setting scaling kill and quest XP
    (×1.6 / ×1 / ×0.6), chosen at character creation and changeable in town; re-run the pacing sim afterwards.
-11. **D7: shared multiverse record** — claimed by Claude, 2026-10-08: `docs/lore/multiverse.md`.
+11. ~~**D7: shared multiverse record**~~ — done by Claude 2026-10-08: `docs/lore/multiverse.md` (rules, how the worlds
+   connect, recurring characters Pell the peddler and the Archivist). Use it whenever writing new lore.
 12. **S1: shared dialogue scenes** (any assistant): move Wildbond's `09-dialogue.js` into `shared/dialogue.js` (portrait
    drawing, typewriter, auto-advance) with a small game-specific adapter, keep Wildbond identical (both test pages
    pass), then use it for Realmbound quest givers' offer/turn-in lines (portraits from a small cast list).
@@ -115,6 +116,9 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (night): Evan accepted all research recommendations and a light shared universe. Built D1
+  (Wildbond cap table), D2+D3 (Realmbound group XP split, journey length; groups now ~1.3× solo) and D7
+  (`docs/lore/multiverse.md`). Next open: S1 shared dialogue, S2 shared sound, T22 Hollow Crown.
 - 2026-10-08 Claude (evening): research brief `docs/research/decisions.md` (level caps, group XP, pace, roster size,
   raids, shared systems and a shared universe). Sent T25 (split Starfall Guild) to ChatGPT; Primordial to the back
   burner at Evan's request.

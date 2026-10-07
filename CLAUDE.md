@@ -37,6 +37,9 @@ the very end, so running out of usage never strands work.
   caps, challenge modes) and there are reasons to revisit old content (rematches, rare spawns, mastery).
 - References are inspiration, not templates. Suggest better mechanics from other games when they fit
   (he liked IdleOn's many characters working at once, Palworld ranch jobs, DQM inheritance, fusion).
+- **One light shared universe** (decided 2026-10-08): recurring characters and a few deliberate links between games,
+  every game playable alone. Canon: `docs/lore/multiverse.md`. Big decisions and their research:
+  `docs/research/decisions.md`.
 - Guides per game come later, once games are near-finished. Record lore in docs as it's written
   (`docs/lore/`, design docs).
 - Evan isn't a programmer: explain in plain words, show results, give clear next steps.
