@@ -56,7 +56,7 @@ Mining, Herbalism, Questing and Guard duty, the supply bank with repair kits and
 `docs/realmbound-40-60.md`; lore: `docs/lore/realmbound.md`.
 
 **Starfall Guild:** small files with checks, its own music, living torches and a night window with falling stars;
-parked for new features. **Hub and promo pages:** `index.html`, `promo.html`, `promo-wildbond.html`.
+parked for new features. **Hub and promo pages:** `index.html`, `promo.html`, `promo-wildbond.html`. L6 credits (`credits.html`, source inventory in `CREDITS.md`) ready for review on `codex/arcade-credits`; arcade v1.0.1.
 
 **Shared systems** (`shared/`): engine, creatures, dialogue (S1), sound with rain (S2), roster/jobs (S3), world kit
 (S4: walker + HD-2D renderer), ambience (S5). Test pages: `tests/run.html`, `tests/wildbond.html`,
@@ -85,6 +85,7 @@ rain sounds; walkable Realmbound towns.
    tower, legendaries, the road to 100); contests and races; the Modern 3D era.
 5. **Realmbound next:** members' personal stories in the guild; battlegrounds (faction rivalry, the raid's closing
    hook); a second raid tier later.
+   **L6 credits** ready for review on `codex/arcade-credits`; the hub links to the static page and local license notices.
 6. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines (a living scene on the
    ambience kit, shared sound, dialogue and creature art, a taste of each game). Build it once the games are further
    along.
@@ -104,6 +105,8 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-07 Codex: L6 credits complete on `codex/arcade-credits`, awaiting review; no merge. Static player page linked from the hub (arcade v1.0.1), source/usage inventory and full notices for ten OFL fonts and three.js r134 MIT. All four browser pages pass (Realmbound 1519, Wildbond 1044, Starfall 48, sound 21); saves/hub restored. Credits and hub checked at 375/1366/1920/3440, with JavaScript disabled and all local notice links verified. Earlier PRs #31–33 remain separate.
 
 - 2026-10-10 Claude: E3 save doctor in studio.html (summary, health check with fixes, searchable editor; per-game
   rules in `DOCTOR`, labels in `LABELS`; backs up before writing). **Next:** review T30 when it lands; W9 design or

@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Arcade v1.0.1 (2026-10-07)** — A Credits page linked from the hub thanks the contributors and lists the ten font families and three.js used by the arcade. CREDITS.md records sources and usage; full third-party notices are included under licenses/. The page works without JavaScript.
+
 - **2026-10-10** — **Save doctor** in the Studio: pick a game to see its save at a glance (heroes, team, badges, coins),
   a health check that spots broken values (an empty level, negative coins, a missing current hero) with a one-click
   fix, and every field in plain words, searchable and editable. Nothing is written until you press Save, and the old

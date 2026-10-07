@@ -35,7 +35,7 @@ and the arcade's homepage shows them off. Any assistant may push these forward w
 | L3 | **Mobile pass**: layouts, tap targets, the walkable worlds on touch, performance on a mid phone | L | Polish | G4 | open | Test at 375 px wide; scenes must stay above ~40 fps; see L11 for big screens |
 | L4 | **Onboarding**: a gentle first 10 minutes per game (what to click, what Auto does) | M | Design+Polish | — | open | Realmbound and Wildbond first; use the shared dialogue scenes |
 | L5 | **Install and offline** (web app manifest + service worker), so the arcade works like an app | S | System | — | open | GitHub Pages friendly; cache-bust on release |
-| L6 | **Credits** page and `CREDITS.md` for any outside assets | S | Polish | — | claimed: Codex, 2026-10-07, `codex/arcade-credits` | See CREATIVE.md "Outside assets" |
+| L6 | **Credits** page and `CREDITS.md` for any outside assets | S | Polish | — | done 2026-10-07 (Codex), awaiting review on `codex/arcade-credits` | credits.html, CREDITS.md and full notices in licenses/; see CREATIVE.md "Outside assets" |
 | L7 | **Bug bash and balance pass**: full playthrough sims of both games, fix what they find | L | Polish | W1, W2 | open | Use the pacing sim methods in the design docs |
 | L8 | **Immersive homepage** that shows off the engines (living scene, sound, dialogue, creatures) | L | Art | G1, W2 | open | Evan: build once the games are further along (START-HERE) |
 | L9 | **Versioning and release notes**: a version number in each game, a release checklist | S | Polish | — | done 2026-10-10 (Jules) | HANDOFF.md "Releasing a version" |
