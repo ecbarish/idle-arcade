@@ -4,9 +4,10 @@ const cv=$('#scene'),cx=cv.getContext('2d');let PW=0,PH=0;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function resize(){const r=cv.getBoundingClientRect();const d=Math.min(2,devicePixelRatio||1);PW=r.width;PH=r.height;cv.width=Math.round(PW*d);cv.height=Math.round(PH*d);cx.setTransform(d,0,0,d,0,0);cx.imageSmoothingEnabled=false;}
 if(window.ResizeObserver)new ResizeObserver(resize).observe(cv);else addEventListener('resize',resize);
-function drawHero(x,y,p,t){const h=H(),r=RACES[h.race],K=CLASSES[h.cls];const q=(gx,gy,w,hh,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(x+gx*p),Math.round(y+gy*p),Math.ceil(w*p),Math.ceil(hh*p));};
+function drawHero(x,y,p,t,g){g=g||cx; // g: the canvas to draw on (the light engine redraws sprites as shadows)
+const h=H(),r=RACES[h.race],K=CLASSES[h.cls];const q=(gx,gy,w,hh,c)=>{g.fillStyle=c;g.fillRect(Math.round(x+gx*p),Math.round(y+gy*p),Math.ceil(w*p),Math.ceil(hh*p));};
   const sit=C.phase==='rest'||(C.phase==='intown'&&!TOWN.on);const dy=sit?3:0; // in a walkable town (22-town.js) you stand and walk
-  if(C.phase==='dead')cx.globalAlpha=.4;
+  if(C.phase==='dead')g.globalAlpha=.4;
   q(2,10+dy,1,sit?1:3,'#2b2b3a');q(5,10+dy,1,sit?1:3,'#2b2b3a');
   q(1,5+dy,6,5,K.col);q(1,9+dy,6,1,'#3a2a1a');q(0,6+dy,1,3,K.col);q(7,6+dy,1,3,K.col);
   q(1,1+dy,6,4,r.skin);q(2,3+dy,1,1,'#111');q(5,3+dy,1,1,'#111');q(1,0+dy,6,1,r.hair);q(0,1+dy,1,2,r.hair);q(7,1+dy,1,2,r.hair);
@@ -15,21 +16,21 @@ function drawHero(x,y,p,t){const h=H(),r=RACES[h.race],K=CLASSES[h.cls];const q=
   if(h.cls==='hunter'){q(8,1+dy,1,1,'#8a5a2b');q(9,2+dy,1,6,'#8a5a2b');q(8,8+dy,1,1,'#8a5a2b');q(8,2+dy,1,6,'#e8e4d4');}
   else if(h.cls==='warrior'||h.cls==='rogue'){q(8,2+dy+sw,1,6,'#dfe6ee');q(7,7+dy,3,1,'#8a5a2b');}else{q(8,-1+dy,1,11,'#8a5a2b');q(7,-2+dy,3,2,h.cls==='mage'?'#69ccf0':'#f2c14e');}
   if(h.cls==='warrior')q(-1,5+dy,2,4,'#9aa5b5');
-  if(C.cast){cx.globalAlpha=.5+.3*Math.sin(t*12);cx.fillStyle=h.cls==='mage'?'#ff9a3a':'#fff0a0';cx.beginPath();cx.arc(x+9*p,y-1*p,p*2.2,0,7);cx.fill();}
-  cx.globalAlpha=1;}
-function drawMob(m,x,y,p,t){const sc=m.elite?1.45:1;p*=sc;const q=(gx,gy,w,hh,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(x+gx*p),Math.round(y+gy*p),Math.ceil(w*p),Math.ceil(hh*p));};
+  if(C.cast){g.globalAlpha=.5+.3*Math.sin(t*12);g.fillStyle=h.cls==='mage'?'#ff9a3a':'#fff0a0';g.beginPath();g.arc(x+9*p,y-1*p,p*2.2,0,7);g.fill();}
+  g.globalAlpha=1;}
+function drawMob(m,x,y,p,t,g){g=g||cx;const sc=m.elite?1.45:1;p*=sc;const q=(gx,gy,w,hh,c)=>{g.fillStyle=c;g.fillRect(Math.round(x+gx*p),Math.round(y+gy*p),Math.ceil(w*p),Math.ceil(hh*p));};
   const c=m.col,b=reduce?0:(Math.sin(t*5)>0?1:0);
-  if(m.kind==='beast')drawBeast(cx,x,y,p,c,m.fam||'wolf',false,t);
+  if(m.kind==='beast')drawBeast(g,x,y,p,c,m.fam||'wolf',false,t);
   else{q(0,0,5,4,c);q(1,2,1,1,'#ff4a3a');q(3,2,1,1,'#ff4a3a');q(-1,4,7,6,c);q(-2,4,1,4,c);q(6,4,1,4,c);q(0,10,2,3+b,c);q(3,10,2,3-b,c);q(-3,1,1,8,'#7a5a3a');}
-  if(m.elite){cx.strokeStyle='#f2c14e';cx.lineWidth=2;cx.strokeRect(x-6*p,y-2*p,18*p,17*p);}}
+  if(m.elite){g.strokeStyle='#f2c14e';g.lineWidth=2;g.strokeRect(x-6*p,y-2*p,18*p,17*p);}}
 /* Companions and other adventurers */
-function drawPerson(x,y,p,o,t){const r=RACES[o.race],K=CLASSES[o.cls];const q=(gx,gy,w,hh,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(x+gx*p),Math.round(y+gy*p),Math.ceil(w*p),Math.ceil(hh*p));};
-  if(o.dead)cx.globalAlpha=.3;const b=!reduce&&!o.dead&&Math.sin(t*6)>0?1:0;
+function drawPerson(x,y,p,o,t,g){g=g||cx;const r=RACES[o.race],K=CLASSES[o.cls];const q=(gx,gy,w,hh,c)=>{g.fillStyle=c;g.fillRect(Math.round(x+gx*p),Math.round(y+gy*p),Math.ceil(w*p),Math.ceil(hh*p));};
+  if(o.dead)g.globalAlpha=.3;const b=!reduce&&!o.dead&&Math.sin(t*6)>0?1:0;
   q(2,10,1,3,'#2b2b3a');q(5,10,1,3,'#2b2b3a');q(1,5-b*.2,6,5,K.col);q(1,9,6,1,'#3a2a1a');q(0,6,1,3,K.col);q(7,6,1,3,K.col);
   q(1,1,6,4,r.skin);q(2,3,1,1,'#111');q(5,3,1,1,'#111');q(1,0,6,1,o.hair);q(0,1,1,2,o.hair);q(7,1,1,2,o.hair);if(r.tusks){q(2,4,1,1,'#fff');q(5,4,1,1,'#fff');}if(r.ears){q(-1,2,1,1,r.skin);q(8,2,1,1,r.skin);}
   if(o.cls==='warrior'){q(-1,5,2,4,'#9aa5b5');q(8,2,1,6,'#dfe6ee');}else if(o.cls==='rogue')q(8,6,2,1,'#dfe6ee');else if(o.cls==='hunter'){q(9,2,1,6,'#8a5a2b');q(8,2,1,6,'#e8e4d4');}
   else{q(8,-1,1,11,'#8a5a2b');q(7,-2,3,2,o.cls==='mage'?'#69ccf0':'#f2c14e');}
-  cx.globalAlpha=1;}
+  g.globalAlpha=1;}
 /* One beast drawer for wild beasts, pets and portraits. Faces left unless right=true. */
 function drawBeast(c,x,y,p,col,fam,right,t){
   c.save();c.translate(x,y);if(right){c.translate(6*p,0);c.scale(-1,1);}
@@ -49,6 +50,7 @@ function drawBeast(c,x,y,p,col,fam,right,t){
 function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidden)return;const t=ms/1000;if(townActive()){drawTown(t);return;}TOWN.on=false;TOWN.last=null;const h=H(),z=h.dun?dungeonDef():ZONES[h.zone];
   const gy=PH*.78,p=Math.max(2,Math.floor(PH/42));const AMBS=ambBack(t,gy,p); // sky, scenery, ground, torches, campfire (20-ambience.js)
   if(C.phase==='intown'||C.phase==='town')ambTown(gy,t,AMBS);
+  AMBS.sun=realmSun();realmShadows(gy,p,t,AMBS.sun,AMBS.lights); // real shadows along the sun, or away from the fire (23-light.js)
   const walk=(C.phase==='seek'||C.phase==='town')&&!reduce?Math.sin(t*8)*p*.6:0;
   const lunge=C.anim.hero>0?p*3:0;
   const ride=!h.dun&&(C.phase==='seek'||C.phase==='town')?activeMount():null;

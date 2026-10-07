@@ -39,6 +39,14 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-09 (evening)** — **Light and shadow, inspired by WoW: Forever.** A new shared light engine: the sun and
+  moon cross the sky with each game's clock, and every hero, creature, tree, lamp post and building casts its own
+  silhouette as a shadow that swings and stretches through the day (long and golden at dawn and dusk, faint under the
+  moon, and away from torches and lit doors at night). Shadows carry colour from the sky and ground instead of flat
+  black. Each zone and area has its own fog you move through (thick in the Fens, golden in the Hollow Crown, smoky on
+  Ashen Ridge, cloud in Cloudglass Pass) with light scattering through it, low sun throws light shafts, the colour of
+  the hour grades every scene, and bright lights bloom softly. Realmbound's header has a Graphics High/Low button.
+  Also new: `docs/PROJECTS.md`, the master list of everything planned, and `docs/CREATIVE.md`, the ground rules.
 - **2026-10-09 (later)** — **Realmbound's hubs get their own character.** Wildclan hubs are now camps: hide tents
   around a great firepit with real flames and smoke, torches, a palisade and a painted totem (the Longhouse, Forge,
   Guild lodge and Corral). Thornvale's inn is the Abbey, with a bell tower. **You can walk into your guild hall:** a

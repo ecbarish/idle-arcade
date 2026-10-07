@@ -155,6 +155,24 @@ function drawTopDown(v, t, A) {
    embers. Each area has its own air in eras that show light: leaves on the Thornwood wind, embers over Emberfall,
    glittering cloud in Cloudglass Pass, fireflies in the grass at night. Night is a dark layer with real pools of
    light: around you, and at every door in town. Purely visual: nothing here changes what creatures appear. */
+/* Light and shadow (S6), on the arcade's light engine (shared/light.js): the sun follows the ranch day once the clock
+   arrives (the Thorn Badge; before that it's always a bright late morning), so shadows swing and lengthen through the
+   day and fall away from lit doors at night; each area has its own fog and the colour of the hour grades the scene. */
+const WLT = Light.create({ reduce: () => reduceMotion, quality: () => (S.gfx || ((navigator.hardwareConcurrency || 8) <= 4 || Math.min(screen.width, screen.height) < 500 ? 'low' : 'high')) });
+const AREA_AIR = { thornwood: { fog: .12, col: '#e6eee0' }, saltmarsh: { fog: .2, col: '#e0ecf0', tint: '#a8d0e0' }, emberfall: { fog: .22, col: '#9a8078', tint: '#ff9050' },
+  cloudglass: { fog: .4, col: '#f2f6fa', tint: '#c8d8f0' }, stillreed: { fog: .35, col: '#dfe8d8', tint: '#b0c8a0' }, hollowecho: { fog: .3, col: '#c8ccd4', tint: '#a8a0c0' } };
+function wbSun() {
+  const bio = BIOMES[S.biome] || BIOMES.thornwood, o = { sky: bio.sky[1], ground: bio.ground || '#5a8a4a' };
+  if (!S.badges.includes('thorn')) return WLT.time(.18, o);
+  return WLT.time(Light.cycle(dayPart(), .965, .70), o);
+}
+function doorLamps(m) { const out = []; m.rows.forEach((r, y) => [...r].forEach((ch, x) => { if (ch === 'D') out.push({ x: x + .5, y: y + .9, h: .6, reach: 4 }); })); return out; }
+function wbAtmosphere(t, A, m, lights) {
+  if (!A.light) return; const st = wbSun(), air = AREA_AIR[m.biome] || { fog: .1, col: '#e8eef0' }, w = weatherNow();
+  WLT.fog(cx, PW, PH, t, { ground: PH, top: PH * .2, density: air.fog + (w === 'mist' ? .35 : 0) + (st.day && st.p < .12 ? .08 : 0), col: Light.css(Light.mix(air.col, '#1a2040', st.day ? 0 : .5)), lights });
+  WLT.grade(cx, PW, PH, st, { tint: air.tint, amount: .9 });
+  if (w !== 'rain') WLT.shafts(cx, PW, PH, t, st, { strength: .8 + air.fog });
+}
 const AMB = Ambience.create({ reduce: () => reduceMotion });
 function stormy() { return weatherNow() === 'rain' && (S.day || 1) % 3 === 0; }
 function drawAmbience(t, A, v) {
@@ -172,15 +190,18 @@ function drawAmbience(t, A, v) {
   }
   AMB.weather(cx, PW, PH, t, fx);
   if (A.light && m.biome === 'hollowecho' && dk > .2) AMB.life(cx, PW, PH, t, { bats: 3, col: '#1a1820', y0: .05, y1: .35 }); // bats out of the caves at dusk
+  if (!(dk > 0)) wbAtmosphere(t, A, m, []); // fog, the colour of the hour, light shafts
   if (dk > 0) {
     const lights = [], cam = WK.cam, at = (x, y) => cam && cam.fwd ? cam.fwd(x, y) : null;
     const me = at(WK.fx + .5, WK.fy + .5); lights.push(me ? { x: me[0], y: me[1], r: Math.max(PH * .22, me[2] * 2.6), col: '#ffe2b0' } : { x: PW / 2, y: PH * .6, r: PH * .3, col: '#ffe2b0' });
     if (cam && cam.fwd) for (let y = 0; y < m.rows.length; y++) for (let x = 0; x < m.rows[y].length; x++) if (m.rows[y][x] === 'D') {
       const p = at(x + .5, y + .5); if (p && p[0] > -PW * .2 && p[0] < PW * 1.2 && p[1] > -PH * .2 && p[1] < PH * 1.2) lights.push({ x: p[0], y: p[1] - p[2] * .3, r: p[2] * 2.4, col: '#ffc860', flick: true }); }
+    wbAtmosphere(t, A, m, lights);
     AMB.lights(cx, PW, PH, t, { dark: dk, max: .58, tint: '#121838', lights });
     if (dk < 1) { cx.fillStyle = `rgba(255,140,60,${(0.14 * Math.sin(dk * Math.PI)).toFixed(3)})`; cx.fillRect(0, 0, PW, PH); }
   }
   AMB.flash(cx, PW, PH, t);
+  if (A.light) WLT.bloom(cxRaw, cv, PW, PH, wbSun());
 }
 /* sparks fly outward for hits, sparkles rise for heals, a ring flashes for a catch */
 function drawBurst(b, gy, p) {

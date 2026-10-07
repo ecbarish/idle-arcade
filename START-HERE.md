@@ -105,6 +105,11 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude (evening): Evan asked for (1) WoW: Forever-quality lighting, (2) a master project list any
+  assistant can work from, (3) room for other assistants' creativity. Wrote `docs/PROJECTS.md` and `docs/CREATIVE.md`
+  (linked from AGENTS.md, CLAUDE.md, here); built G1, the light engine (`shared/light.js`) in Realmbound (side view,
+  towns, hall) and Wildbond (HD-2D, ambience). Tests: Realmbound 1519, Wildbond 769, Starfall 48, sound 21.
+  **Next:** G2 zone lighting passes (any assistant, one zone per PR), review T29, then W1/W2 or R3 (see PROJECTS.md).
 - 2026-10-09 Claude (later): S4 part 2: Wildbond's walking on the shared walker; Wildclan camps (tents, firepit,
   torches, totem), Thornvale's Abbey; the guild hall interior with members, favors, chest and jobs board. Tests:
   Realmbound 1513, Wildbond 769, Starfall 48. **Next:** review T29 (Sunthread) when it lands; Starfall's walkable hall.

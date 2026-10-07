@@ -593,6 +593,16 @@ module.exports = function scenarios() {
         check(!fulfillMemberRequest('adv:missing:missing')&&!fulfillMemberRequest(String(lead.id)),'stale or character keys cannot claim adventurer favors');
         check(Object.keys(PERSONALITY).every(k=>REQUEST_VOICE[k]&&REQUEST_VOICE[k].hello&&REQUEST_VOICE[k].thanks),'every existing personality has original offer and thanks dialogue');
         rb.S.chars=keepChars;rb.S.cur=keepCur;rb.S.guild=keepG;rb.S.bank=keepB;if(!keepG)delete rb.S.guild;if(!keepB)delete rb.S.bank;rb.S.tab='quests';if(H())rb.boot();}
+      // S6: the light engine. The sun crosses the sky, shadows follow it, and a cast shadow really darkens the ground
+      {const m=LT.time(.03),n=LT.time(.25),e=LT.time(.47),nt=LT.time(.75);
+        check(m.day&&n.day&&e.day&&!nt.day&&n.elev>.99&&m.elev<.2,'the sun rises, peaks at noon and sets; the moon rules the night');
+        check(m.shadow.sx>0&&e.shadow.sx<0&&Math.abs(m.shadow.sx)>Math.abs(n.shadow.sx),'shadows point away from the sun and are longest at dawn and dusk');
+        check(e.golden>.5&&n.golden<.2&&nt.grade.col,'golden hour, and a night grade');
+        check(Math.abs(Light.cycle(.955,.955,.645))<1e-9&&Math.abs(Light.cycle(.645,.955,.645)-.5)<1e-9,'a game clock maps onto sunrise and sunset');
+        const c=document.createElement('canvas');c.width=200;c.height=200;const g=c.getContext('2d');g.fillStyle='#88ff88';g.fillRect(0,0,200,200);
+        LT.cast(g,cc=>{cc.fillStyle='#f00';cc.fillRect(90,60,20,80);},[90,60,20,80],140,LT.time(.06),{});const d=g.getImageData(125,150,1,1).data;
+        check(d[1]<230&&d[0]<130,'a cast shadow darkens the ground where it falls');
+        check(typeof realmSun()==='object'&&ZONE_LIGHT.fens.fog>ZONE_LIGHT.redsand.fog,'every zone has its own air: the Fens are foggier than the Redsand Steppe');}
       // T21: every generated item category follows the widened name bands.
       check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');
       check(BLUE_PRE.length===17&&new Set(BLUE_PRE).size===17,'rare prefix pool retains seven names and adds ten distinct dungeon names');

@@ -177,8 +177,10 @@ function townFlat(g, ch, X, Y, s, t, x, y) {
   if (ch === 'f') for (let i = 0; i < 5; i++) { g.fillStyle = ['#e85a7a', '#f2c14e', '#ffffff', '#b48aff'][(hsh >> i) & 3]; g.fillRect(X + (hsh >> (i * 3)) % 13 + 1, Y + (hsh >> (i * 4)) % 13 + 1, 2, 2); }
 }
 function buildingAt(x, y) { return TOWN_BUILDINGS.find(b => x >= b.x && x < b.x + b.w && y >= b.y && y < b.y + b.h); }
-function label(c, text, cxp, y, s) { const sz = Math.max(9, Math.round(s * .28)); c.font = `700 ${sz}px Alegreya Sans, sans-serif`; c.textAlign = 'center'; c.fillStyle = 'rgba(0,0,0,.55)'; c.fillText(text, cxp + 1, y + 1); c.fillStyle = '#ffe9b0'; c.fillText(text, cxp, y); c.textAlign = 'left'; }
-function townStand(c, ch, left, base, s, t, x, y) {
+/* labels don't cast shadows */
+function label(c, text, cxp, y, s) { if (TOWN.pass === 'shadow') return; const sz = Math.max(9, Math.round(s * .28)); c.font = `700 ${sz}px Alegreya Sans, sans-serif`; c.textAlign = 'center'; c.fillStyle = 'rgba(0,0,0,.55)'; c.fillText(text, cxp + 1, y + 1); c.fillStyle = '#ffe9b0'; c.fillText(text, cxp, y); c.textAlign = 'left'; }
+function townStand(c, ch, left, base, s, t, x, y, pass) {
+  TOWN.pass = pass;
   const P = TOWN.pal, u = s / 8, R = (a, b, w, h, col) => { c.fillStyle = col; c.fillRect(Math.floor(left + a * u), Math.floor(base - (b + h) * u), Math.ceil(w * u), Math.ceil(h * u)); };
   const night = realmNight(), camp = townKind() === 'camp' && !TOWN.inside, px = Math.max(2, Math.round(u));
   if (ch === 'T') { const sw = reduce ? 0 : Math.sin(t * 1.3 + x) * .3; R(3, 0, 2, 4.5, '#5a3c22'); R(-.3, 4, 8.6, 5.4, P.treeDk); R(.2, 4.4, 7.6, 4.8, P.tree); R(.8 + sw, 8.8, 6.4, 3.2, P.treeDk); R(1.2 + sw, 9.1, 5.6, 2.7, P.tree); R(2 + sw * 1.5, 11.6, 4, 2, P.treeDk); R(2.4 + sw * 1.5, 11.8, 3.2, 1.6, P.tree); return; }
@@ -232,9 +234,9 @@ function drawTown(t) {
   if (!TOWN.on) { TOWN.on = true; townEnter(); }
   TOWN_WALK.tick(dt); townAutoTick(); TOWN.pal = townPal(); TOWN.hearth = TOWN.firepit = null;
   const z = ZONES[h.zone], night = realmNight(), wk = zoneWeather(h.zone), W = AMB_WEATHER[wk] || {}, p = TOWN_WALK, people = townPeople(), inside = TOWN.inside;
-  const things = people.map(n => ({ x: n.at[0], y: n.at[1], draw(c, left, base, s) { const pp = s / 11; drawPerson(left + s * .14, base - 13 * pp, pp, { race: n.look.race, cls: n.look.cls, hair: n.look.hair }, t + n.at[0]); } }));
-  for (const n of people) if (n.mule) things.push({ x: n.mule[0], y: n.mule[1], draw(c, left, base, s) { const pp = s / 16; drawBeast(cx, left + s * .3, base - 14 * pp, pp, '#7a5a3a', 'horse', true, t * .5); } });
-  things.push({ x: p.fx, y: p.fy, draw(c, left, base, s) { const pp = s / 11; drawHero(left + s * .14, base - 13 * pp, pp, t); } });
+  const things = people.map(n => ({ x: n.at[0], y: n.at[1], draw(c, left, base, s) { const pp = s / 11; drawPerson(left + s * .14, base - 13 * pp, pp, { race: n.look.race, cls: n.look.cls, hair: n.look.hair }, t + n.at[0], c); } }));
+  for (const n of people) if (n.mule) things.push({ x: n.mule[0], y: n.mule[1], draw(c, left, base, s) { const pp = s / 16; drawBeast(c, left + s * .3, base - 14 * pp, pp, '#7a5a3a', 'horse', true, t * .5); } });
+  things.push({ x: p.fx, y: p.fy, draw(c, left, base, s) { const pp = s / 11; drawHero(left + s * .14, base - 13 * pp, pp, t, c); } });
   const view = { rows: TOWN.map.rows, px: p.fx, py: p.fy, flat: townFlat, under: inside ? '_' : ',', stand: townStand, things,
     stands: { T: 1, '#': 1, D: 1, L: 1, P: 1, O: 1, '=': 1, F: 1, Y: 1, H: 1, B: 1, C: 1, J: 1 }, noShadow: { '#': 1, D: 1, H: 1 } };
   if (inside) Object.assign(view, { sky: ['#1a1008', '#2a1a10'], hill: '#2a1a10', edgeFill: '#1a1008', haze: '#2a1a10', dof: false, horizon: .12, zoom: 5.2,
@@ -242,20 +244,27 @@ function drawTown(t) {
   else { const sky = [Ambience.mix(z.sky[0], '#070b22', night * .85), Ambience.mix(z.sky[1], '#2e3868', night * .8)];
     Object.assign(view, { sky, hill: TOWN.pal.treeDk, edgeFill: TOWN.pal.treeDk, haze: sky[1],
       skyDraw: (g, w, hh, tt) => AMB.sky(g, w, hh, tt, { top: z.sky[0], bottom: z.sky[1], h: hh, night, clouds: { n: 4, speed: 6 }, storm: W.storm ? 1 : W.rain ? .45 : 0, px: 2 }) }); }
+  const sun = inside ? Object.assign(LT.time(.75), { elev: 0 }) : realmSun(), camp = townKind() === 'camp' && !inside, lamps = [];
+  TOWN.map.rows.forEach((r, y) => [...r].forEach((ch, x) => { if (ch === 'L') lamps.push({ x: x + .5, y: y + .9, h: 1.3, reach: 4 }); else if (ch === 'F') lamps.push({ x: x + .5, y: y + .9, h: .4, reach: 6.5 }); else if (ch === 'H' && x % 2 === 0) lamps.push({ x, y: y + 1.2, h: .5, reach: 8 }); }));
+  Object.assign(view, { lt: LT, sun, lamps, noCast: { H: 1, F: 1, L: camp ? 1 : 0 } }); // shadows from the sun, moon, lamps and fires (23-light.js)
   TOWN.cam = TOWN_HD.draw(cx, PW, PH, t, view);
-  // where you are, top left
-  const fs = Math.max(12, Math.round(PH / 17)); cx.font = `700 ${fs}px Alegreya Sans, sans-serif`; const text = inside ? `${G().name} · guild hall` : hubName(), lw = cx.measureText(text).width + 16;
-  cx.fillStyle = 'rgba(20,16,12,.72)'; cx.fillRect(8, 8, lw, fs * 1.6); cx.fillStyle = '#f2c14e'; cx.textBaseline = 'middle'; cx.fillText(text, 16, 8 + fs * .82); cx.textBaseline = 'alphabetic';
   // light: lamps, torches, windows, doors, the firepit and hearth, you; weather outdoors only
   const lights = [], at = (x, y) => TOWN.cam.fwd(x, y);
   TOWN.map.rows.forEach((r, y) => [...r].forEach((ch, x) => { if (ch === 'L' || ch === 'D' || (inside && ch === '#' && y === 0 && x % 3 === 2)) { const q = at(x + .5, y + .9); if (q) lights.push({ x: q[0], y: q[1] - q[2] * (ch === 'L' ? 1.25 : ch === '#' ? 1 : .5), r: q[2] * (ch === '#' ? 1.6 : 2.6), col: '#ffc860', flick: true }); } }));
   if (TOWN.firepit) lights.push(Object.assign(TOWN.firepit, { r: TOWN.firepit.r * 2.2 }));
   if (TOWN.hearth) lights.push(Object.assign(TOWN.hearth, { r: TOWN.hearth.r * 2.6 }));
   const me = at(p.fx + .5, p.fy + .5); if (me) lights.push({ x: me[0], y: me[1] - me[2] * .6, r: me[2] * 2.2, col: '#ffe2b0' });
+  const air = inside ? { fog: .12, col: '#c09060' } : (ZONE_LIGHT[h.zone] || { fog: .15, col: '#e0e6ea' }); // fog you move through, light shafts, the colour of the hour
+  LT.fog(cx, PW, PH, t, { ground: PH, top: PH * .25, density: air.fog * (inside ? 1 : .8) + (W.fog ? .3 : 0) + (sun.day && sun.p < .12 ? .06 : 0), col: Light.css(Light.mix(air.col, '#1a2040', !inside && !sun.day ? .55 : 0)), lights });
+  if (!inside) { LT.grade(cx, PW, PH, sun, { tint: air.tint }); if (!W.rain) LT.shafts(cx, PW, PH, t, sun, { strength: 1 }); }
   if (!inside) AMB.weather(cx, PW, PH, t, Object.assign({}, W, { px: 2, splashAnywhere: true, fireflies: night > .4 && !W.rain ? .5 : 0, onThunder: v => sfx('thunder', v) }));
   else AMB.weather(cx, PW, PH, t, { dust: .5, px: 2 });
   const dark = inside ? .8 : night; if (dark > .02) AMB.lights(cx, PW, PH, t, { dark, max: inside ? .5 : .55, tint: inside ? '#140a04' : '#0a0e2a', lights });
   if (!inside) AMB.flash(cx, PW, PH, t);
+  LT.bloom(cx, cv, PW, PH, sun);
+  // where you are, top left
+  const fs = Math.max(12, Math.round(PH / 17)); cx.font = `700 ${fs}px Alegreya Sans, sans-serif`; const text = inside ? `${G().name} · guild hall` : hubName(), lw = cx.measureText(text).width + 16;
+  cx.fillStyle = 'rgba(20,16,12,.72)'; cx.fillRect(8, 8, lw, fs * 1.6); cx.fillStyle = '#f2c14e'; cx.textBaseline = 'middle'; cx.fillText(text, 16, 8 + fs * .82); cx.textBaseline = 'alphabetic';
   const hint = Math.max(10, Math.round(PH / 22)); cx.font = `600 ${hint}px Alegreya Sans, sans-serif`; cx.fillStyle = 'rgba(255,240,210,.75)'; cx.textAlign = 'right';
   cx.fillText(aiOn() ? 'Auto: off to the smithy, then the road' : inside ? 'Talk to your guild · the door: back to town' : 'Walk: arrows / WASD or tap · Enter: talk · the gate: back on the road', PW - 10, PH - 10); cx.textAlign = 'left';
 }

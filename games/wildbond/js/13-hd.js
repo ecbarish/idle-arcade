@@ -38,14 +38,15 @@ ART.hd = (() => {
   const HD = World.hd({ src: SRC });
   function world(c, W, H, v, t) {
     const { m, P } = v, bio = BIOMES[m.pal || m.biome];
-    const things = v.things.map(q => ({ x: q.x, y: q.y, shadow: q.kind === 'item' ? 0.6 : 1, draw(cc, left, baseY, s, p) {
+    const things = v.things.map(q => ({ x: q.x, y: q.y, shadow: q.kind === 'item' ? 0.6 : 1, draw(cc, left, baseY, s, p, pass) {
       if (q.kind === 'item') base.item(cc, left, baseY - s * 0.95, s, t);
       else if (q.kind === 'pet') { const pp = s / (q.wild ? 15 : 17); base.creature(cc, p.x - 2 * pp, baseY - s * 0.02, pp, q.sp, q.right, q.t); }
-      else { const top = baseY - s * (q.ride ? 1.3 : 0.95); base.walker(cc, left, top, s, q.look, q.dir, q.step); if (q.mark) drawMark(left, top, s, t); } } }));
+      else { const top = baseY - s * (q.ride ? 1.3 : 0.95); base.walker(cc, left, top, s, q.look, q.dir, q.step); if (q.mark && pass !== 'shadow') drawMark(left, top, s, t); } } }));
     WK.cam = HD.draw(c, W, H, t, { rows: m.rows, px: v.px, py: v.py, sky: bio.sky, hill: bio.hill, haze: bio.sky[1],
       edgeFill: v.edge === 'R' ? P.rock : m.biome === 'saltmarsh' ? P.water : P.tree,
       flat: (g, ch, x, y, src, tt, tx, ty) => paintTile(g, ch, x, y, src, P, tt, tx, ty, true), under: ch => under(ch, P),
-      stands: STAND, noShadow: { '#': 1, D: 1 }, stand: (cc, ch, left, baseY, s, tt, tx) => stand(cc, ch, left, baseY, s, P, tt, tx), things });
+      stands: STAND, noShadow: { '#': 1, D: 1 }, stand: (cc, ch, left, baseY, s, tt, tx) => stand(cc, ch, left, baseY, s, P, tt, tx), things,
+      lt: WLT, sun: wbSun(), lamps: doorLamps(m) }); // real shadows along the sun and from lit doors at night (06-scene.js)
   }
   /* battles: the 16-bit scene with the background softly out of focus and the same light */
   function backdrop(c, w, h, bio, t) {

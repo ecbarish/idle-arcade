@@ -143,11 +143,29 @@
       for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) { const ch = v.rows[y][x]; if (stands[ch]) list.push({ tile: ch, x, y }); }
       for (const q of v.things || []) list.push(q);
       list.sort((a, b) => a.y - b.y || (a.tile ? -1 : 1));
+      const vis = [];
       for (const q of list) {
         const p = project(C, q.x + .5, q.y + .92); if (!p || p.d > 17 || p.y - p.s * 2.5 > H) continue;
-        const s = p.s, left = p.x - s / 2; if (left > W + s || left + s < -s) continue;
-        if (q.tile) { if (!(v.noShadow || {})[q.tile]) shadow(c, p.x, p.y, s); v.stand(c, q.tile, left, p.y, s, t, q.x, q.y); continue; }
-        if (q.shadow !== false) shadow(c, p.x, p.y, s * (q.shadow || 1));
+        const s = p.s, left = p.x - s / 2; if (left > W + s || left + s < -s) continue; vis.push({ q, p, s, left });
+      }
+      // 5a. with the light engine (shared/light.js): every shadow on the ground first, along the sun or moon, and at
+      // night away from nearby lamps and torches, so they never fall on top of the things behind them
+      const lt = v.lt, sun = v.sun;
+      if (lt && sun) {
+        const lamps = (v.lamps || []).map(l => { const p = project(C, l.x, l.y); return p && { x: p.x, y: p.y - p.s * (l.h || 1), reach: p.s * (l.reach || 4) }; }).filter(Boolean);
+        for (const { q, p, s, left } of vis) {
+          if (q.tile && (v.noCast || {})[q.tile]) continue; if (!q.tile && q.shadow === false) continue;
+          const draw = q.tile ? cc => v.stand(cc, q.tile, left, p.y, s, t, q.x, q.y, 'shadow') : cc => q.draw(cc, left, p.y, s, p, 'shadow');
+          const box = q.tile ? [left - s * .45, p.y - s * 2.9, s * 1.9, s * 2.95] : [left - s * .35, p.y - s * 1.8, s * 1.7, s * 1.85];
+          if (sun.day || sun.elev > .15) lt.cast(c, draw, box, p.y, sun, { k: q.tile ? 1 : (q.shadow || 1) });
+          if (!sun.day && lamps.length) { let best = null, bd = 1e9; for (const l of lamps) { const d = Math.hypot(l.x - p.x, l.y - p.y); if (d < l.reach && d < bd && d > s * .3) { bd = d; best = l; } }
+            if (best) lt.cast(c, draw, box, p.y, sun, { from: [best.x, best.y], reach: best.reach }); }
+        }
+      }
+      // 5b. the things themselves, far to near, each sitting on a soft contact shadow
+      for (const { q, p, s, left } of vis) {
+        if (q.tile) { if (!(v.noShadow || {})[q.tile]) lt && sun ? lt.contact(c, p.x, p.y, s * .5, sun) : shadow(c, p.x, p.y, s); v.stand(c, q.tile, left, p.y, s, t, q.x, q.y); continue; }
+        if (q.shadow !== false) lt && sun ? lt.contact(c, p.x, p.y, s * .45 * (q.shadow || 1), sun) : shadow(c, p.x, p.y, s * (q.shadow || 1));
         q.draw(c, left, p.y, s, p);
       }
       if (v.light !== false) light(c, W, H);

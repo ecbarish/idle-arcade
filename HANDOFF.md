@@ -57,6 +57,14 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
   the game supplies `flat`, `stand`, `things`; returns a camera with `fwd`/`inv`). Wildbond's HD-2D era
   (`js/13-hd.js`) and Realmbound's towns (`js/22-town.js`) both draw through it. Wildbond's own walking (12-walk.js)
   runs on `World.walker` too (S4 part 2), keeping its own grass, trainers, roamers and items.
+- `shared/light.js`: the light engine (S6/G1, inspired by WoW: Forever). `Light.create({reduce, quality})` gives
+  `time(t01)` (the sun or moon at a time of day: direction, height, light colour, bounce-light shade, shadow vector,
+  grade; t01 0 sunrise, .25 noon, .5 sunset, .75 midnight; `Light.cycle(k, sunrise, sunset)` maps a game clock),
+  `cast` (a sprite's real silhouette laid along the light, or away from a point light; soft on High), `contact`,
+  `fog` (drifting volumetric-looking fog, heavier low, with light scattering), `shafts`, `grade`, `bloom`. World.hd
+  takes `lt`, `sun`, `lamps`, `noCast` and draws every shadow before anything stands up; stand/draw callbacks get a
+  `'shadow'` pass flag (skip labels and live fires). Realmbound: `js/23-light.js` (`realmSun`, `ZONE_LIGHT`, the
+  Graphics High/Low button `S.gfx`); Wildbond: `wbSun`, `AREA_AIR`, `wbAtmosphere` in `js/06-scene.js`.
 - `games/realmbound/index.html`: Realmbound markup and ordered classic script tags; no build step.
 - `games/realmbound/style.css`: the unchanged MMO interface styles.
 - `games/realmbound/js/00-core.js`: save key, selectors, formatting aliases, random helpers and level cap.
@@ -82,6 +90,7 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
 - `games/realmbound/js/20-ambience.js`: S5 living scenes for Realmbound (`ambBack`, `ambTown`, `ambFront`, called from `frame()` in 14-scene.js).
 - `games/realmbound/js/21-guild.js`: the guild (account-wide, in `S.guild` beside the jobs board): founding (`foundProblem`, `foundGuild`), members and mood (`memberKey`, `addMember`, `inviteToGuild`, `dismissMember`, `moodBump`, `guildTick`), guild XP and levels (`guildXP`, `guildXPMult` used by `gainXP`, `jobSlots`), workers for the jobs board (`workerOf`, `workerCanWork`), and `guildHTML()` at the top of the Guild tab (TABS.supplies in 18-supplies.js).
 - `games/realmbound/js/22-town.js`: walkable towns (S4): `TOWN_BUILDINGS`, `townKind()` (Concord `town` / Wildclan `camp`), `TOWN_MAPS`, `HUB_NAMES` (Thornvale's Abbey), `GUILD_HALL` (the interior; `TOWN.inside`), `townPeople()`/`hallPeople()`, `memberTalk` (favors and mood lines in the hall), `TOWN_WALK` (World.walker), `townDoor`/`townSign`/`townExit`, Auto stroll (`townAutoTick`), and `drawTown()` (World.hd), which `frame()` uses while `townActive()`.
+- `games/realmbound/js/23-light.js`: light and shadow (S6): the sun from the 24-minute day, `realmShadows` (side view), `realmAtmosphere` (fog, grade, shafts), `ZONE_LIGHT`/`DUN_LIGHT`, the Graphics button.
 - `games/realmbound/js/99-boot.js`: startup, load, timers and the unchanged localhost-only `window.__rb` hook.
 - `docs/realmbound-design.md`: design decisions. `docs/ideas.md`: parked backlog.
 
