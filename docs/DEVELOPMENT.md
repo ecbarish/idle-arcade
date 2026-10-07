@@ -2,6 +2,20 @@
 
 This is the shared status and decision record for Evan, Claude and Codex. Read this with `HANDOFF.md` and `docs/ROADMAP.md` before taking work. The roadmap controls ticket scope and priorities; these notes distinguish observed code, pending work and proposals. Recheck main and open PRs before relying on an older status entry.
 
+## Latest handoff — research and portfolio plans, 2026-10-06
+
+**Request:** research all planned games, record what comparable games do well/poorly, and propose development stages. Evan clarified that sports spans multiple sports and athlete/team-management roles, salaries must fund meaningful homes/cars/purchases, all games need manual through full automation, and desktop/phone matter more than VR.
+
+**Deliverables:** [master plan](plans/README.md), [research and 27-reference ledger](plans/RESEARCH.md), six individual game plans, a separate [shared sports direction](plans/sports-careers.md), and [desktop pickup checklist](plans/DESKTOP.md). Research covers 19 distinct comparable titles, using critics, developer descriptions and sampled player reviews; this is desk research, not personal playtesting or a representative market survey. Recommendations are hypotheses with concrete milestone gates. No parked game is unparked by these plans.
+
+**Current source status:** main was refreshed to `e4c10f6f53999d38bec770991f8543316ad96efd`. T12 PR #6 is now merged. Local `codex/realmbound-winter-road` integrates main, including Claude's separate zone-lore paragraph; two test selectors were updated to `#zoneLore`. The earlier 231 browser/236 DOM passes predate this integration. A rerun was attempted, but temporary Chromium/jsdom installations were gone. Syntax checks pass; rerun `tests/run.html` on the desktop before approving the chapter.
+
+**Branches/publication:** Winter Road remains local and unpublished; open its PR against main. `codex/arcade-development-plan` adds only documentation above Winter Road; open a stacked PR against that branch, then retarget after its merge. Every new commit uses the required noreply author email. Git CLI publishing lacks credentials here; the previously blocked website route was not bypassed. The supplied Git bundle retains both branches and commits; the source ZIP is for immediate local play, not history. No PR was opened by this session.
+
+**Recommended next work:** publish/review Winter Road, then finish T1's remaining progression/raid/guild design and specify a bounded two-hero supply-economy proof. Keep Claude's current Wildbond pacing/walkable-world lane separate. Sports starts later with a baseball first-payday slice: contract, playable match moments, salary ledger, first lasting purchase. Manual/Auto settings should delegate individual layers. Full-Auto unlock timing, the second sport and purchase benefits remain owner decisions.
+
+**Desktop needs:** project path and branch, Claude's latest unpushed work, authenticated Git/client publishing, backed-up saves, actual desktop/phone browsers, and one next active ticket. Do not copy over uncommitted files or assume moving source moves browser progress. VR/backend setup is unnecessary tonight. Current notes above supersede the historical baseline below.
+
 ## Active work — The Winter Road, 2026-10-06
 
 **Owner authorization:** Evan said to proceed with the recommendation while Claude was unavailable, then reiterated that all games need a path from their basic foundation to richer mechanics and capabilities. Codex therefore wrote the narrow T1 progression decisions required for T3 instead of waiting for Claude. This does not transfer or complete the wider T1 raid/guild/30–60 design.

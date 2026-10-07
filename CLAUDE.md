@@ -6,8 +6,8 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
 
 ## Start of every session
 1. `git pull`, then `git fetch` and check `git branch -r` for `codex/*` branches newer than `main` (ChatGPT's work).
-2. For each: `git log --format='%h %ae %s' main..origin/<branch>`, review the diff, test it (see below), merge with
-   `git merge --no-ff`, push, and mark the ticket done if ChatGPT didn't.
+2. For each: `git log --format='%h %ae %s' main..origin/<branch>`, review the diff and test it (see below).
+   Keep feature work in a PR for Evan to review. Do not merge automatically; Evan explicitly requested PRs without merging.
 3. Pick up the next ticket from "Where we are" below.
 
 ## Rules
@@ -45,3 +45,11 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
   `docs/lore/realmbound.md`. Waiting on T1 (Claude: specs for 30-60, raids, guild), then T3 content for ChatGPT.
   Big future direction: the whole roster plays at once (IdleOn-style).
 - Parked: Primordial, Starfall Guild, Diamond Career (baseball), Otherworld (isekai).
+
+## Latest owner direction and Codex handoff — 2026-10-06
+
+Read [docs/plans/README.md](docs/plans/README.md) and [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md). The plans cover six games and a broader sports framework, based on 19 comparable titles. All games should eventually support manual through full automation, with independent delegation settings. Earned automation remains the current rule; whether full Auto is available immediately is still an owner decision. Desktop and phone come first; VR is deferred.
+
+Sports should support athlete careers and team management across sports. Salaries should fund lasting personal progress (homes, cars, other purchases). Baseball remains the recommended first module; do not silently unpark implementation.
+
+T12 is merged in main `e4c10f6`. Local `codex/realmbound-winter-road` implements levels 30–40 and integrates that main; it has not been pushed. `codex/arcade-development-plan` adds documentation above it. Wider T1 remains open. Preserve Claude's Wildbond lane; no Wildbond files were edited. Desktop publishing and a fresh post-integration browser run are needed. See the desktop checklist before copying files or importing saves.
