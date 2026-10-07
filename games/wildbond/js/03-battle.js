@@ -13,6 +13,7 @@ function unit(c, side) {
 function startBattle(kind, foes, opts) {
   opts = opts || {};
   B = { kind, title: opts.title || '', trainer: opts.trainer || null, story: opts.story || null, npc: opts.npc || null,
+    towerFloor: opts.towerFloor || 0, towerSerial: opts.towerSerial || 0, towerAuto: !!opts.towerAuto,
     leagueDay: opts.leagueDay || null, rematch: opts.rematch || null, tier: opts.tier || 0, firstMeet: kind === 'wild' && firstMetHere(), // 15-challenge.js
     allies: S.team.filter(c => c.hp > 0).map(c => unit(c, 'a')), foes: foes.map(c => unit(c, 'f')),
     cmd: 1, cmdT: 0, t: 0, tele: null, lines: [], over: null, capture: null, fx: [], bursts: [], shake: 0, lastInput: -99 };
@@ -131,7 +132,7 @@ function calmNow() {
 
 function battleTick(h) {
   if (!B || B.over) return;
-  B.t += h;
+  B.t += h; if (B.towerFloor && S.auto) B.towerAuto = true;
   if (B.capture) { const c = B.capture; c.pos += c.dir * h * 0.9; if (c.pos > 1) { c.pos = 1; c.dir = -1; } if (c.pos < 0) { c.pos = 0; c.dir = 1; }
     if (isAuto() && B.t - B.lastInput > 12) calmNow(); return; }
   B.cmdT += h; if (B.cmdT >= 5) { B.cmdT = 0; B.cmd = Math.min(3, B.cmd + 1); }
@@ -158,8 +159,8 @@ function endBattle(result) {
   if (!B || B.over) return; B.over = result; sfx(result === 'lost' ? 'lose' : result === 'fled' ? 'select' : 'win');
   if (result === 'won' || result === 'caught') {
     const foes = B.foes.concat([]), lvSum = B.foes.reduce((s, u) => s + u.c.lvl, 0) || 3;
-    const base = lvSum * 12 * (B.kind === 'wild' ? 1 : 1.6) * xpMult(), coins = Math.round(lvSum * (B.kind === 'wild' ? 3 : 12) * journey().coins);
-    if (result === 'won') { S.stats.wins++; S.coins += coins; bline(`You win! +${coins} coins.`, 'good'); }
+    const base = lvSum * 12 * (B.kind === 'wild' ? 1 : 1.6) * (B.towerFloor ? journey().xp * (B.towerAuto ? AUTO_XP : 1) : xpMult()), coins = B.towerFloor ? 0 : Math.round(lvSum * (B.kind === 'wild' ? 3 : 12) * journey().coins);
+    if (result === 'won') { S.stats.wins++; S.coins += coins; bline(B.towerFloor ? 'Spire floor cleared!' : `You win! +${coins} coins.`, 'good'); }
     const msgs = [];
     const avgFoe = lvSum / Math.max(1, B.foes.length + (result === 'caught' ? 1 : 0));
     // much less xp from foes far below your level, so you move on instead of grinding
@@ -177,8 +178,9 @@ function endBattle(result) {
   if (B.npc) trainerResult(B.npc, result); // a route trainer (12-walk.js)
   if (B.rematch) rematchResult(B.rematch, B.tier, result); // 15-challenge.js
   nuzlockeAfter();
+  if (B.towerFloor) towerResult(result);
   if (result === 'lost' && B.story) S.story[B.story + 'Retry'] = S.explored + 4;
-  if (result === 'lost') { const lost = Math.round(S.coins * 0.1); S.coins -= lost; bline(`Your team is exhausted. ${B.leagueDay ? "You return to the league entrance" : "You hurry back to Larkhaven"} (−${lost} coins).`, 'warn');
+  if (result === 'lost') { const lost = B.towerFloor ? 0 : Math.round(S.coins * 0.1); S.coins -= lost; bline(`Your team is exhausted. ${B.towerFloor ? "You return to the Spire bench" : B.leagueDay ? "You return to the league entrance" : "You hurry back to Larkhaven"} (−${lost} coins).`, 'warn');
     if (B.story === 'elder') S.story.elderFled = true; }
   if (result === 'fled' && B.story) { if (B.story === 'elder') S.story.elderFled = true; else S.story[B.story + 'Retry'] = S.explored + 4; }
   if (B.leagueDay && result !== 'won') leagueDefeat();

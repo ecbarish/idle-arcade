@@ -242,3 +242,38 @@ then light, then depth). People notice and joke about it:
 - Wren: "Is it me, or can you see further than you could yesterday?"
 - An old fisher who refuses to admit anything changed.
 This ties the art upgrades to the plot instead of being a settings menu, and gives each era a story moment.
+
+
+## T31 as built: the Lighthouse Spire and league rematches (Wildbond v1.3.0)
+
+The league ending opens a west path to a walkable coastal training terrace. `17-postgame.js` owns the Spire
+state and trainer themes; it calls the existing battle, dialogue, rematch and ranch egg functions. Floors
+use `min(100, 74 + N)`; early/middle/late floor bands cover all eight areas. Named regulars return every ten floors.
+Five cleared floors bring a healing rest and two explicit choices. Auto starts subsequent fights but waits
+at those choices. Losing, fleeing or leaving ends the climb and keeps earned rewards and best floor.
+
+Save addition: `S.tower = { best: 0, floor: 0, active: false, rest: false, claimed: [], serial: 0 }`, with fresh
+and old-save defaults and bounded numeric normalization. A reload retries an unfinished floor with saved health,
+or resumes a completed floor's rest; completed rewards cannot replay. The team stays together until the run
+ends, including when eggs hatch. A run serial rejects stale callbacks/results. Existing save keys are unchanged.
+
+Floor reward: `180 + 20*N` coins and 2 lures; Auto receives 60% coins (rounded down), 1 lure and the existing
+Auto XP multiplier. Tower battles omit the ordinary trainer coin payout, so the reduction applies to the whole
+floor reward. Auto use during a fight remains recorded even if switched off before the result. Every tenth
+floor grants its first-completion food, title and rare egg once, with identical milestone gifts for Auto.
+Lantern seed trains ordinary Wits and costs 90 coins in the existing food controls. Eggs use the ranch's
+existing two-day hatch queue. The Journal records best/current floor and explains the existing cap choices.
+
+Each league trainer and Avenne uses the existing `S.rematch` and `S.rematchDay` dictionaries, team evolution
+and tier scaling. The day's attempt is saved at battle start, so reloading or losing cannot replay it.
+The Spire reuses the league tune and coastal battle backdrop in every existing art era; no shared engine or
+art-era changes. No cap change: hard 75 / soft trickle / existing No cap to 100 remain player choices.
+
+Validation: all four browser runners pass, including floor locks/levels, reward accounting, rest healing,
+loss/flee/leave, once-only gifts and two-day hatch, Auto reductions, daily rematches, old-save defaults and
+unchanged caps. A real command-driven max-level three-creature team completed 30 floors; this verifies the
+full run and milestone transitions, rather than pacing for a newly crowned level-75 team. Checked all five
+art eras (actual three.js renderer included), phone/laptop/desktop/ultrawide, and existing maps: only the dry
+league connection changes outside the new Spire. See docs/lore/wildbond.md for the new names and dialogue.
+
+Entry smoke check: a level-75 Tidewyrm/Bloomcourser/Hushmane team with rarity 1, potential 16, no traits or training, and No cap cleared floors 1-3 before losing on 4 using Focus/Guard/Rally. Its earned rewards and best floor were kept. This is one untrained entry fixture, not a pacing or balance conclusion; stronger ranch-raised teams and a full player playthrough remain part of L7.

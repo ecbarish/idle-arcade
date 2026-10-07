@@ -318,6 +318,34 @@ are permanent and recorded in the Journal. The cap remains 75 with all eight bad
 3D remain W3/W6, with a gentle message that more adventures after the league are coming. A reload after the
 Champion result can resume the ending, and repeated visits never duplicate the title.
 
+## Post-game canon: the Lighthouse Spire (T31 / W3 part 1)
+
+After the league ending, a dry west path from the league reaches **the Lighthouse Spire**, a coastal training
+terrace watched by keeper **Orla**. It does not explain the fading or replace the league ending. Orla counts
+partners before floors: every fifth floor offers water, healing and a choice to continue or leave with rewards.
+The same team climbs together. Losing or fleeing ends the climb; its best floor stays in the Journal.
+
+Floor themes draw on all eight areas: the early roads for floors 1–10, the middle routes for 11–20 and the last
+two areas from 21 onward. Trainer levels follow min(100, 74 + floor). **Selven**, **Niva** and **Brannic** return
+at tenth-floor intervals, remembering route sketches, listening and watching for a tired partner. They are
+friendly regulars rather than another set of Wardens. The walkable terrace uses the current coastal palette,
+art era and the league's original tune.
+
+Floor victories give coins and lures. Ten-floor milestones give two **Lantern seed** (ordinary Wits food), a
+rare regional creature egg that hatches after two ranch days, and a title: **Spire Climber** at 10,
+**Beacon Companion** at 20 and **Lightkeeper** at 30. Each milestone is claimed once per save; later tens have
+their own floor title. Eggs can share the barn's hatch queue, and hatchlings stay on the ranch during a climb.
+The seed can also be bought for 90 coins through existing food controls; it has no special stat multiplier.
+
+Edrin, Maela, Corven, Liora and Avenne each offer one higher-tier rematch per ranch day after the ending. An
+attempt is counted when the battle starts, including a loss or reload. Wren's last gate battle remains a
+story milestone. The Champion title and colour restoration remain permanent.
+
+Existing badge caps are unchanged. Soft-cap growth still slows above 75, hard cap still stops at 75, and the
+Journal's existing No cap choice grows freely toward 100. Auto earns 60% of each floor's coins, one lure instead
+of two, and the existing reduced Auto XP; it pauses at the five-floor rest choice. Milestone gifts are the same
+for everyone. Roaming legendaries and Modern 3D remain future work.
+
 ## Open questions
 
 - What is the region called, and how long have Larkhaven and the Wardens existed?
