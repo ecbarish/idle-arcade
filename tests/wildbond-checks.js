@@ -213,6 +213,11 @@ function wildbondChecks() {
     ready();S.badges=badges.slice();S.story.warden4=true;save();load();if(levelCap()!==55||!S.story.warden4||S.badges.length!==4)return false;
     S.badges.push('reed');wb.placeAt('stillreed',19,9,'right');S.items={sr1:true};S.beaten={evren:true};save();reset();load();ensurePos();return S.pos.map==='stillreed'&&S.pos.x===19&&S.biome==='stillreed'&&levelCap()===60&&S.items.sr1&&S.beaten.evren;
   });
+  check('Rain audio follows the route and stops in town, before Tide and before starting', () => {
+    ready();wb.placeAt('saltmarsh');S.day=1;S.ranchT=0;if(rainLevel()!==0)return false;
+    S.badges=['thorn','tide'];for(let day=1;day<=97;day++){S.day=day;const expected=weatherNow()==='rain'?(stormy()?1:.65):0;if(rainLevel()!==expected)return false;}
+    wb.placeAt('larkhaven');if(rainLevel()!==0)return false;wb.placeAt('saltmarsh');S.started=false;return rainLevel()===0;
+  });
   // T24: exercise the same walking, dialogue and battle paths as the game.
   function finishFight() {
     let ticks = 0;

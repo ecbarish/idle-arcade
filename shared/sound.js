@@ -13,10 +13,11 @@
      voices,            optional { speaker: pitch in Hz } for dialogue blips
      mode, setMode,     read/write the game's sound setting: 0 off, 1 effects, 2 effects + music
      musicKey(),        which track should play right now (or null for silence)
+     rain()             optional: current rain strength 0..1 (quiet ambience in either sound-on mode)
      button             optional: the element that shows and cycles the setting
    });
    SFX.sfx(name, arg)   any effect below; safe to call any time (silent when sound is off); 'blip' takes a speaker or a pitch in Hz
-   SFX.cycle(), SFX.render()                                                                              */
+   SFX.cycle(), SFX.render(), SFX.dispose() (release a player when removing it)                                                                              */
 (function () {
   'use strict';
   var NOTE = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };
@@ -24,7 +25,8 @@
   var MUSIC_VOL = 0.9, SFX_VOL = 1, MASTER = 0.14;
 
   function create(o) {
-    var A = { ac: null, master: null, music: null, fx: null, echo: null, pulse: null, noiseBuf: null, next: 0, step: 0, track: null, switching: 0 };
+    var A = { ac: null, master: null, music: null, fx: null, echo: null, pulse: null, noiseBuf: null, next: 0, step: 0, track: null, switching: 0, rain: null };
+    var disposed = false;
     var tracks = {};
     Object.keys(o.tracks || {}).forEach(function (k) {
       var t = o.tracks[k], sp = function (s) { return s ? s.split(' ') : []; };
@@ -33,6 +35,7 @@
     var mode = function () { return o.mode() || 0; };
 
     function audio() {
+      if (disposed) return null;
       if (!A.ac) {
         try {
           var ac = A.ac = new (window.AudioContext || window.webkitAudioContext)();
@@ -53,6 +56,34 @@
       }
       if (A.ac.state === 'suspended') A.ac.resume();
       return A.ac;
+    }
+    /* One filtered noise loop, below the tunes and effects. No context is created by the scheduler.
+       Dry weather fades the loop to silence; off/hidden/disposed releases it immediately. */
+    function stopRain() {
+      if (!A.rain) return;
+      A.rain.gain.gain.cancelScheduledValues(A.ac.currentTime); A.rain.gain.gain.setValueAtTime(0, A.ac.currentTime);
+      A.rain.source.stop(); A.rain.source.disconnect(); A.rain.high.disconnect(); A.rain.low.disconnect(); A.rain.gain.disconnect();
+      A.rain = null;
+    }
+    function syncRain() {
+      if (disposed || !mode() || document.hidden || !A.ac || A.ac.state !== 'running') { stopRain(); return; }
+      var level = o.rain ? Number(o.rain()) : 0;
+      level = isFinite(level) ? Math.max(0, Math.min(1, level)) : 0;
+      if (!A.rain && level > 0) {
+        var ac = A.ac, source = ac.createBufferSource(), high = ac.createBiquadFilter(), low = ac.createBiquadFilter(), gain = ac.createGain();
+        source.buffer = A.noiseBuf; source.loop = true;
+        high.type = 'highpass'; high.frequency.value = 400; low.type = 'lowpass'; low.frequency.value = 2500;
+        gain.gain.value = 0; source.connect(high); high.connect(low); low.connect(gain); gain.connect(A.master);
+        A.rain = { source: source, high: high, low: low, gain: gain, level: -1 }; source.start();
+      }
+      if (A.rain && level !== A.rain.level) {
+        A.rain.gain.gain.setTargetAtTime(level * .35, A.ac.currentTime, .35); A.rain.level = level;
+      }
+    }
+    function dispose() {
+      if (disposed) return; disposed = true;
+      clearInterval(timer); document.removeEventListener('visibilitychange', syncRain); stopRain();
+      if (A.ac && A.ac.state !== 'closed') { var closing = A.ac.close(); if (closing && closing.catch) closing.catch(function () {}); }
     }
     function tone(f, dur, type, at, vol, slide, bus, echo) {
       var ac = A.ac, osc = ac.createOscillator(), g = ac.createGain(), t = at || ac.currentTime;
@@ -107,7 +138,8 @@
     }
 
     /* the look-ahead sequencer, with a short crossfade whenever the track changes */
-    setInterval(function () {
+    var timer = setInterval(function () {
+      syncRain();
       if (mode() < 2 || document.hidden || !A.ac || A.ac.state !== 'running') { A.track = null; return; }
       var ac = A.ac, now = ac.currentTime, k = o.musicKey(); if (k && !tracks[k]) k = null;
       if (k !== A.track && !A.switching) {
@@ -129,12 +161,15 @@
       }
     }, 60);
 
+    document.addEventListener('visibilitychange', syncRain);
+
     function render() {
+      syncRain();
       var b = o.button && o.button(); if (!b) return;
       b.textContent = ['Sound: off', 'Sound: effects', 'Sound: effects + music'][mode()]; b.setAttribute('aria-pressed', mode() ? 'true' : 'false');
     }
     function cycle() { o.setMode((mode() + 1) % 3); if (mode()) { audio(); sfx('select'); } render(); }
-    return { sfx: sfx, cycle: cycle, render: render, hz: hz, tracks: tracks };
+    return { sfx: sfx, cycle: cycle, render: render, dispose: dispose, hz: hz, tracks: tracks };
   }
   window.ArcadeSound = { create: create, hz: hz };
 })();

@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- 2026-10-07: Quiet rain sound follows the weather in Wildbond and Realmbound through the shared sound engine. Off by default; fades between conditions and stops on hidden pages or sound off. Shared sound checks: tests/sound.html.
+
 - **2026-10-07** — Wildbond area 5: Stillreed Basin (52–60), beyond Cloudglass Pass. Nine new species include
   Reedlet's evolution into Ferrycrest and the guardian Stillwake. Wren helps free a ferry rope before the rematch;
   ferryman Warden Olan awards the Reed Badge, raising the existing cap to 60. Walk the reed banks, board crossings

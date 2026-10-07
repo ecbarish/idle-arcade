@@ -489,6 +489,12 @@ module.exports = function scenarios() {
         rb.S.tab='supplies';renderTab(true);check(/The Testers/.test(document.querySelector('#tabbody').innerHTML)&&/Jobs board/.test(document.querySelector('#tabbody').innerHTML),'the Guild tab shows the guild hall and the jobs board');
         const old=rb.migrate({v:2,chars:[JSON.parse(JSON.stringify(B2))],cur:B2.id,last:Date.now(),tab:'quests'});check(!old.guild,'saves from before the guild load unchanged');
         rb.S.chars=keepC;rb.S.cur=keepCur;rb.S.guild=keepG;rb.S.bank=keepB;if(!keepG)delete rb.S.guild;if(!keepB)delete rb.S.bank;rb.S.tab='quests';if(H())rb.boot();}
+      // Rain audio follows outdoor ambience and never invents dungeon rain.
+      {const hero=rb.newHero('Raincheck','concord','human','mage'),keepCur=rb.S.cur,keepWeather=zoneWeather;rb.S.chars.push(hero);rb.S.cur=hero.id;rb.boot();
+        try{hero.dun=null;for(const [weather,level] of [['clear',0],['rain',.65],['drizzle',.3],['storm',1],['snow',0],['fog',0],['ashfall',0]]){
+          zoneWeather=()=>weather;check(rainLevel()===level,'rain sound level follows '+weather);}
+          zoneWeather=()=> 'storm';hero.dun={id:'sanctum'};check(rainLevel()===0,'dungeon ambience has no outdoor rain sound');
+        }finally{zoneWeather=keepWeather;rb.S.chars=rb.S.chars.filter(c=>c!==hero);rb.S.cur=keepCur;if(H())rb.boot();}}
       // T21: every generated item category follows the widened name bands.
       check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');
       check(BLUE_PRE.length===17&&new Set(BLUE_PRE).size===17,'rare prefix pool retains seven names and adds ten distinct dungeon names');
