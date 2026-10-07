@@ -84,7 +84,7 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    side lane": parked games get structural and polish work while Claude focuses on the two main games.
 8. ~~**Research brief for the big decisions**~~ — done by Claude 2026-10-08: `docs/research/decisions.md` (sources,
    recommendations, and the shared-systems plan: dialogue → sound → roster → world kit).
-9. **D1: Wildbond cap table** (decision 1) — claimed by Claude, 2026-10-08. `levelCap()` in 02-state.js uses a table
+9. ~~**D1: Wildbond cap table**~~ — done by Claude 2026-10-08. `levelCap()` in 02-state.js uses a table
    (`CAP_TABLE` in 00-data.js): 15, 25, 35, 45, 55, 60, 65, 70, then 75 with all eight badges.
 10. **D2+D3: Realmbound group XP split and journey length** (decisions 2-3) — claimed by Claude, 2026-10-08. Kill XP ÷
    group size × (1, 1, 1.166, 1.3, 1.4); quest XP whole. A Breezy/Classic/Long Road setting scaling kill and quest XP

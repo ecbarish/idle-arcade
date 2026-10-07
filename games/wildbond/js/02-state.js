@@ -27,7 +27,7 @@ function keep(c, how) {
   S.ranch.push(c); return 'ranch';
 }
 /* Pacing: the badge level cap and the XP/coin multipliers from the journey setting. */
-function levelCap() { return S.capMode === 'off' ? LEVEL_CAP : Math.min(LEVEL_CAP, CAP_BASE + CAP_STEP * S.badges.length); }
+function levelCap() { return S.capMode === 'off' ? LEVEL_CAP : Math.min(LEVEL_CAP, CAP_TABLE[Math.min(S.badges.length, CAP_TABLE.length - 1)]); }
 function journey() { return JOURNEY[S.journey] || JOURNEY.classic; }
 function xpMult() { return journey().xp * (S.auto ? AUTO_XP : 1); }
 /* Level ups, new moves and evolution after gaining xp. Returns messages. */

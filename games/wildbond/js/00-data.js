@@ -2,9 +2,10 @@
 /* Wildbond content data. Add species, moves and biomes here; no logic lives in this file. */
 
 const LEVEL_CAP = 100;
-/* Badge level caps: with no badges creatures stop at 15; each badge raises the cap by 10 (up to 100).
+/* Badge level caps (decided 2026-10-08, docs/research/decisions.md): the main story ends near level 70, so the cap
+   rises 10 a badge for the first four, then 5: CAP_TABLE[badges]. The post-game opens the way to 100.
    Soft cap (default): XP drops to a trickle above it. Hard: no XP above it. Off: only the 100 limit. */
-const CAP_BASE = 15, CAP_STEP = 10, SOFT_TRICKLE = 0.05;
+const CAP_TABLE = [15, 25, 35, 45, 55, 60, 65, 70, 75], SOFT_TRICKLE = 0.05;
 /* Journey length: picked with your starter, changeable at the Larkhaven inn (Journal tab).
    Auto-explore always earns a little less XP than playing yourself (AUTO_XP). */
 const JOURNEY = {

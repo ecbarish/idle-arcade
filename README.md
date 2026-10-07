@@ -39,6 +39,10 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-08 (night, later)** — Decisions from the research brief (`docs/research/decisions.md`). Wildbond: the main
+  story will end near level 70, so badge caps now rise 10 a badge for the first four and 5 after (55, 60, 65, 70, then
+  75 with all eight); nothing changes for the four badges that exist today.
+
 - **2026-10-08 (night)** — Realmbound: the Silent Barrows' bosses now breathe **Grave Chill** (T1-B), a cold that
   stacks on your whole party and hurts every second until someone heals it off, so a healer really matters there.
   Measured how long levels 40-45 take (2¼-3½ hours of active play solo; Auto is slower for every class).

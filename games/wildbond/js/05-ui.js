@@ -75,7 +75,7 @@ const TABS = {
     build: () => `<h3>Journal</h3><div class="stats"><div>Battles <b>${S.stats.battles}</b></div><div>Wins <b>${S.stats.wins}</b></div><div>Caught <b>${S.stats.caught}</b></div><div>Played <b>${fmtTime(S.stats.play)}</b></div></div>
       <h4>Larkhaven inn: your journey</h4><p class="sub">Choose how long the road is. You can change these any time you're not in a battle.${S.auto ? ' Auto-explore earns a little less XP than exploring yourself.' : ''}</p>
       ${settingRow('journey', Object.keys(JOURNEY).map(k => [k, JOURNEY[k].name, JOURNEY[k].desc]), S.journey)}
-      <p class="sub" style="margin-top:10px">Badge level cap: right now your creatures can reach level <b>${levelCap()}</b>. Each badge raises it by ${CAP_STEP}.</p>
+      <p class="sub" style="margin-top:10px">Badge level cap: right now your creatures can reach level <b>${levelCap()}</b>. Each badge raises it: by 10 for the first four, then by 5, up to 75 with all eight; the post-game goes on to 100.</p>
       ${settingRow('cap', [['soft', 'Soft cap', 'Above the cap, XP slows to a trickle.'], ['hard', 'Hard cap', 'No XP at all above the cap.'], ['off', 'No cap', 'Grow freely up to level 100.']], S.capMode)}
       <p class="sub" style="margin-top:10px">XP share: creatures resting on the ranch learn from your battles.</p>
       ${settingRow('share', [['off', 'XP share off', 'Only your team of three gains XP.'], ['on', 'XP share on', 'Ranch creatures get a quarter of the XP.']], S.xpShare ? 'on' : 'off')}
