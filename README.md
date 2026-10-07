@@ -35,6 +35,13 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-06 (night, part 4)** — Wildbond eras, part 1 (T13): a new journey now begins in a faded world, four
+  shades of green like an old handheld (the Pocket style). Earning the Thorn Badge brings the color back in a short
+  scene, unlocks the Pixel and 16-bit styles, and Isolde gives you Warden's boots (hold Shift to run, or tap somewhere
+  far away). A day/night clock arrives too: dusk and night darken the 16-bit world, and Shade creatures come out more
+  at night. Maren, Pip and Old Tobin each have something to say about the color. Existing saves keep their style
+  and can try Pocket from the Journal.
+
 - **2026-10-06 (night, part 3)** — Merged ChatGPT's Wildbond browser checks (T16): open
   http://localhost:8765/tests/wildbond.html (via serve.ps1) and click Run checks; 314 checks of maps, story data,
   walking, gates, level caps, Wardens, old saves, the inn and the shop. Your save is backed up and restored.

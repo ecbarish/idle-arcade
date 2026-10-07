@@ -2,14 +2,14 @@
 /* The scene: exploring with your team, or the two sides of a battle. Drawn through the current art era.
    Battle motion: teams slide in, attackers lunge, hit creatures flinch and blink, element-colored sparks,
    screen shake on critical hits, fainted creatures sink, winners hop. All of it is skipped with reduced motion. */
-const cv = $('#scene'), cx = cv.getContext('2d'); let PW = 0, PH = 0;
+const cv = $('#scene'), cxRaw = cv.getContext('2d'); let cx = cxRaw, PW = 0, PH = 0; // cx: drawn through the era's color wrapper, if it has one
 function resize() { const r = cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); PW = r.width; PH = r.height; cv.width = Math.round(PW * d); cv.height = Math.round(PH * d); cx.setTransform(d, 0, 0, d, 0, 0); cx.imageSmoothingEnabled = false; }
 if (window.ResizeObserver) new ResizeObserver(resize).observe(cv); else addEventListener('resize', resize);
 const AX = [0.38, 0.25, 0.12], FX = [0.62, 0.75, 0.88];
 
 function frame(ms) {
   requestAnimationFrame(frame); if (!PW || document.hidden) return;
-  const t = ms / 1000, A = art(), p = Math.max(2, Math.floor(PH / 46)), mo = !reduceMotion;
+  const t = ms / 1000, A = art(), p = Math.max(2, Math.floor(PH / 46)), mo = !reduceMotion; cx = eraCtx(cxRaw);
   cx.save();
   if (B && B.shake > 0 && mo) cx.translate((Math.random() - 0.5) * p * 3, (Math.random() - 0.5) * p * 2);
   if (S.started && !B && S.pos && MAPS[S.pos.map]) { drawWorld(t, A); cx.restore(); return; }
@@ -89,6 +89,10 @@ function drawWorld(t, A) {
     walker(cx, sx, sy, ts, q.look, q.dir, q.step);
     if (q.mark) { const by = sy - ts * 0.75 - (reduceMotion ? 0 : Math.abs(Math.sin(t * 4)) * ts * 0.1); cx.fillStyle = '#f2c14e'; cx.fillRect(sx + ts * 0.35, by, ts * 0.3, ts * 0.38);
       cx.fillStyle = '#17323a'; cx.fillRect(sx + ts * 0.46, by + ts * 0.06, ts * 0.08, ts * 0.17); cx.fillRect(sx + ts * 0.46, by + ts * 0.27, ts * 0.08, ts * 0.06); } }
+  // dusk and night, in eras that show light
+  const dk = A.light ? darkness() : 0;
+  if (dk > 0) { cx.fillStyle = `rgba(18,24,64,${(0.42 * dk).toFixed(3)})`; cx.fillRect(0, 0, PW, PH);
+    if (dk < 1) { cx.fillStyle = `rgba(255,140,60,${(0.14 * Math.sin(dk * Math.PI)).toFixed(3)})`; cx.fillRect(0, 0, PW, PH); } }
   // where you are
   cx.font = `700 ${Math.max(12, Math.round(ts * 0.45))}px Fredoka, sans-serif`; const label = m.name, w = cx.measureText(label).width + 16;
   cx.fillStyle = 'rgba(23,50,58,.72)'; cx.fillRect(8, 8, w, ts * 0.75); cx.fillStyle = '#fff'; cx.textBaseline = 'middle'; cx.fillText(label, 16, 8 + ts * 0.38); cx.textBaseline = 'alphabetic';

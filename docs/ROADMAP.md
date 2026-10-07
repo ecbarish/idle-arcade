@@ -52,6 +52,8 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
   Done 2026-10-06. See "Pacing, level caps and journey settings" in docs/creature-game-design.md.
 - [ ] **T11b: Challenge modes and rematches** (Claude, later): Nuzlocke/Randomizer/Solo/Hardcore at a new game,
   Warden and Wren rematch tiers, area mastery stars.
+- [x] **T13 part 1** (Claude): the Pocket era to start, color returning with the Thorn Badge, running shoes,
+  day/night clock, era-aware townsfolk. Done 2026-10-06. Parts 2 (HD-2D) and 3 (Diorama) follow.
 - [ ] **T13: Era progression in the world** (Claude, after T7b): Pocket (Game Boy) → 16-bit → HD-2D → voxel
   Diorama → modern 3D → first-person/VR, each with era-matched mechanics and story beats. See "Eras you walk through"
   in docs/creature-game-design.md. T7b must keep the tile map separate from the renderer.

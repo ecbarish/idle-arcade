@@ -68,8 +68,10 @@ test iframe. Existing Node DOM and Playwright checks remain in `tests/` for deve
   townsfolk added to `CAST`), 12-walk (moving on maps, doors, exits, talking, Auto walking; position in `S.pos`), 99-boot.
   The map scene is drawn in 06-scene `drawWorld` through `ART[era].tile` and `ART[era].walker`.
   Localhost test hook: `window.__wb`.
-- Art eras: the look evolves with progress (Pixel → 16-bit → HD → 3D). A new era is a new `ART.<id>` object with
-  `creature`, `backdrop`, `tamer`; never draw outside it.
+- Art eras: the look evolves with progress (Pocket → Pixel/16-bit → HD-2D → Diorama → 3D). A new era is a new
+  `ART.<id>` object with `creature`, `backdrop`, `tamer`, `tile`, `walker`, `item`; optional `ctx(realContext)` (a
+  color wrapper, as Pocket's four greens) and `light` (shows the day/night clock). Never draw outside it; get a
+  canvas context through `eraCtx()`.
 
 ## Next steps
 1. Promo page for friends (hub card + screenshots).

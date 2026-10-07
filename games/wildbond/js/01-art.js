@@ -307,4 +307,39 @@ ART.pixel.tile = (c, ch, x, y, s, P, t, gx, gy) => paintTile(c, ch, x, y, s, P, 
 ART.pixel.walker = (c, x, y, s, L, dir, step) => paintWalker(c, x, y, s, L, dir, step, false);
 ART.bit16.tile = (c, ch, x, y, s, P, t, gx, gy) => paintTile(c, ch, x, y, s, P, t, gx, gy, true);
 ART.bit16.walker = (c, x, y, s, L, dir, step) => paintWalker(c, x, y, s, L, dir, step, true);
+ART.bit16.light = true; // shows the day/night clock on the map
+/* Pocket: the faded world you start in, four shades of green like an old handheld. It draws with the Pixel art,
+   through a canvas wrapper (ctx) that turns every color into the nearest of the four shades by brightness. Any era
+   can supply ctx(realContext) this way; eraCtx() applies it, so scene, portraits and dialogue faces all match. */
+const POCKET = ['#0f380f', '#306230', '#8bac0f', '#c4cfa1'];
+const pocketCache = new Map();
+function pocketColor(col) {
+  if (typeof col !== 'string') return col;
+  let out = pocketCache.get(col); if (out) return out;
+  let r, g, b, a = 1, m;
+  if ((m = /^#([0-9a-f]{3})$/i.exec(col))) [r, g, b] = [...m[1]].map(h => parseInt(h + h, 16));
+  else if ((m = /^#([0-9a-f]{6})/i.exec(col))) [r, g, b] = [0, 2, 4].map(i => parseInt(m[1].slice(i, i + 2), 16));
+  else if ((m = /^rgba?\(([^)]+)\)$/i.exec(col))) { const v = m[1].split(',').map(Number); [r, g, b] = v; if (v.length > 3) a = v[3]; }
+  else return col;
+  const L = 0.299 * r + 0.587 * g + 0.114 * b, shade = POCKET[L < 60 ? 0 : L < 120 ? 1 : L < 185 ? 2 : 3];
+  out = a < 1 ? `rgba(${[1, 3, 5].map(i => parseInt(shade.slice(i, i + 2), 16)).join(',')},${a})` : shade;
+  if (pocketCache.size > 2000) pocketCache.clear(); pocketCache.set(col, out); return out;
+}
+const pocketWraps = new WeakMap();
+function pocketCtx(real) {
+  if (pocketWraps.has(real)) return pocketWraps.get(real);
+  const fns = {};
+  const wrap = new Proxy(real, {
+    get(t, k) {
+      const v = t[k]; if (typeof v !== 'function') return v;
+      if (k === 'createLinearGradient' || k === 'createRadialGradient')
+        return (...args) => { const gr = v.apply(t, args), add = gr.addColorStop; gr.addColorStop = (o, c) => add.call(gr, o, pocketColor(c)); return gr; };
+      return fns[k] || (fns[k] = v.bind(t));
+    },
+    set(t, k, v) { t[k] = k === 'fillStyle' || k === 'strokeStyle' || k === 'shadowColor' ? pocketColor(v) : v; return true; }
+  });
+  pocketWraps.set(real, wrap); return wrap;
+}
+ART.pocket = Object.assign({}, ART.pixel, { ctx: pocketCtx });
 function art() { return ART[(S && S.era) || 'pixel'] || ART.pixel; }
+function eraCtx(c) { const A = art(); return A.ctx ? A.ctx(c) : c; }

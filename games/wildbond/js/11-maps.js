@@ -55,10 +55,14 @@ const MAPS = {
     pen: [14, 9, 18, 10],
     npcs: [
       { who: 'maren', at: [9, 11], dir: 'down', act: 'ranch',
-        lines: [['maren', 'Your ranch creatures are out in the paddock, {name}. Come into the barn and I\'ll show you how they\'re doing.']] },
+        lines: [['maren', 'Your ranch creatures are out in the paddock, {name}. Come into the barn and I\'ll show you how they\'re doing.']],
+        byBadge: { thorn: [['maren', 'Well, look at that. In my day the world had four colors and we liked it.'],
+          ['maren', '...It is very pretty, though. Don\'t tell Isolde I said so. Come on, the barn\'s open.']] } },
       { who: 'pip', at: [21, 7], dir: 'left',
         lines: [['pip', 'Wren says she\'s going to be Champion. I\'m going to be Champion first. I\'m seven, so I\'ve got loads of time.'],
-          ['pip', 'The tall grass up north is where the wild ones hide. Mum says don\'t go in without a partner. You\'ve got one, so that\'s fine.']] }
+          ['pip', 'The tall grass up north is where the wild ones hide. Mum says don\'t go in without a partner. You\'ve got one, so that\'s fine.']],
+        byBadge: { thorn: [['pip', 'Did everything just get... brighter? My shirt is YELLOW. Was it always yellow?'],
+          ['pip', 'Mum says I\'m imagining it. Mum has also started wearing her good scarf, so.']] } }
     ] },
   thornwood: { name: 'Thornwood', biome: 'thornwood', start: [13, 14, 'up'], warden: [12, 1],
     rows: [
@@ -118,7 +122,8 @@ const MAPS = {
     npcs: [
       { who: 'tobin', at: [6, 3], dir: 'down',
         lines: [['tobin', 'Forty years I\'ve fished this coast. Seen the tide go out further than it should, once. Didn\'t much like what walked out of it.'],
-          ['tobin', 'Reeds hide the wild ones. Walk through slow and they\'ll come and have a look at you.']] },
+          ['tobin', 'Reeds hide the wild ones. Walk through slow and they\'ll come and have a look at you.'],
+          ['tobin', 'And before you ask: no, the sea has not "got bluer lately". Sea\'s always been this color. Always.']] },
       { who: 'cato', at: [16, 7], dir: 'left',
         trainer: { sight: 3, team: [['kiteskirl', 14], ['reedtusk', 15]],
           win: [['cato', 'Washed up, just like everything else on this beach. Good battle, though.']],

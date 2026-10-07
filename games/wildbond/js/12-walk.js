@@ -42,6 +42,14 @@ function ensurePos() {
   placeAt(MAPS[S.biome] ? S.biome : 'larkhaven');
 }
 function arrived() { return Math.abs(WK.fx - S.pos.x) < 0.01 && Math.abs(WK.fy - S.pos.y) < 0.01; }
+/* Warden's boots (the Thorn Badge): hold Shift, or tap somewhere far away, to run. Auto-explore keeps walking. */
+const RUN_SPEED = 9;
+function speedNow() { return S.shoes && !S.auto && (WK.run || WK.pathRun) ? RUN_SPEED : WALK_SPEED; }
+/* The day/night clock follows the ranch day (07-ranch.js); it arrives with the Thorn Badge, like the boots.
+   darkness: 0 by day, rising at dusk to 1 at night. At night Shade creatures come out more. */
+function dayPart() { return ((S.ranchT || 0) / DAY_SECONDS) % 1; }
+function darkness() { if (!S.badges.includes('thorn')) return 0; const k = dayPart(); return k < 0.65 ? 0 : k < 0.75 ? (k - 0.65) / 0.1 : k < 0.95 ? 1 : (1 - k) / 0.05; }
+function isNight() { return darkness() >= 1; }
 
 function tryStep(dir) {
   if (B || TALK || !S.pos) return;
@@ -114,7 +122,9 @@ function talkTo(n) {
     return;
   }
   if (n.trainer) { if (S.beaten && S.beaten[n.who]) talk(n.trainer.after || n.trainer.win); else challengeTrainer(n); return; }
-  talk(n.lines, n.act === 'ranch' ? () => enterDoor('ranch') : null);
+  // townsfolk notice how the world changes: byBadge lines replace their usual ones once you hold that badge
+  const later = Object.keys(n.byBadge || {}).filter(b => S.badges.includes(b)).pop();
+  talk(later ? n.byBadge[later] : n.lines, n.act === 'ranch' ? () => enterDoor('ranch') : null);
 }
 
 /* walk to a tile by the shortest route; the last step may be onto a person, a door or an exit */
@@ -130,7 +140,7 @@ function walkTo(tx, ty) {
   }
   if (!prev.has(goal)) return false;
   const steps = []; for (let k = goal; prev.get(k); k = prev.get(k)[0]) steps.unshift(prev.get(k)[1]);
-  WK.path = steps; return true;
+  WK.path = steps; WK.pathRun = steps.length > 3; return true;
 }
 /* Auto-explore: wander to a random patch of tall grass; in town, head out toward the wild */
 function autoWalk() {
@@ -143,7 +153,8 @@ function autoWalk() {
 
 function walkTick(h) {
   if (!S.pos || B || TALK) return;
-  const sp = WALK_SPEED * h, f = WK.fol;
+  if (!WK.path.length) WK.pathRun = false;
+  const sp = speedNow() * h, f = WK.fol;
   WK.fx += Math.max(-sp, Math.min(sp, S.pos.x - WK.fx)); WK.fy += Math.max(-sp, Math.min(sp, S.pos.y - WK.fy));
   f.fx += Math.max(-sp, Math.min(sp, f.x - f.fx)); f.fy += Math.max(-sp, Math.min(sp, f.y - f.fy));
   if (WK.spot) { if (arrived() && (WK.spot.t -= h) <= 0) challengeTrainer(WK.spot.n); return; }
@@ -164,12 +175,13 @@ function interact() {
 document.addEventListener('keydown', e => {
   if (!S.started || TALK || e.target.matches('input,textarea') || $('#modal').hidden === false) return;
   const k = e.key.toLowerCase(), d = KEYDIR[k];
+  if (k === 'shift') WK.run = true;
   if (d && !B) { if (!WK.held.includes(d)) WK.held.push(d); WK.path = []; e.preventDefault();
     if (!e.repeat) { if (arrived()) tryStep(d); else WK.queued = d; } } // a quick tap still takes one step
   else if ((k === 'enter' || k === ' ') && !B && interact()) e.preventDefault();
 });
-document.addEventListener('keyup', e => { const d = KEYDIR[e.key.toLowerCase()]; if (d) WK.held = WK.held.filter(x => x !== d); });
-addEventListener('blur', () => { WK.held = []; });
+document.addEventListener('keyup', e => { const k = e.key.toLowerCase(), d = KEYDIR[k]; if (d) WK.held = WK.held.filter(x => x !== d); if (k === 'shift') WK.run = false; });
+addEventListener('blur', () => { WK.held = []; WK.run = false; });
 cv.addEventListener('click', e => {
   if (!S.started || B || TALK || !WK.cam) return;
   const r = cv.getBoundingClientRect(), c = WK.cam;

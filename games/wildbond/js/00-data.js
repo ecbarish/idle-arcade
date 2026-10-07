@@ -203,6 +203,13 @@ const SCENES = {
     ['wren', 'Okay. Okay! Not bad. {rival} and I were just warming up.'],
     ['maren', 'You two will push each other a long way. Now go on, Thornwood won\'t explore itself. Bring your team back here to rest whenever they need it.'],
     ['maren', 'And {name}? Watch how the wild ones move. Tire one out, toss a lure, and keep it calm. If it trusts you, it will come home with you.']
+  ],
+  /* the world starts faded (the Pocket era); the first badge brings its color back */
+  colorReturns: [
+    ['', 'The badge is warm in your hand. Then the whole forest seems to take a breath.'],
+    ['', 'The green drains out of the sky and blue pours in. Red roofs far to the south. Every leaf a different shade. Your partner\'s coat, bright as the day you met.'],
+    ['isolde', 'Ah. You see it too. The region was faded long ago, and the guardians still remember it as it was. Every bond you earn reminds the world a little more.'],
+    ['isolde', 'Take these as well: Warden\'s boots. Hold Shift and you\'ll cover twice the ground. Now go and show Maren. She\'ll pretend she isn\'t moved.']
   ]
 };
 /* Story beats trigger on the number of times you've explored. `text` goes to the journal; `lines` play as a
@@ -280,10 +287,13 @@ const STORY = [
 ];
 const COUNTER = { cindercub: 'ripplet', ripplet: 'mosshog', mosshog: 'cindercub' };
 
-/* Art eras: the world's look evolves as you progress. */
+/* Art eras: the world's look evolves as you progress (see "Eras you walk through" in docs/creature-game-design.md).
+   light: the era shows the day/night clock. */
 const ERAS = [
-  { id: 'pixel', name: 'Pixel', unlock: 'From the start' },
+  { id: 'pocket', name: 'Pocket', unlock: 'From the start' },
+  { id: 'pixel', name: 'Pixel', unlock: 'Earn the Thorn Badge' },
   { id: 'bit16', name: '16-bit', unlock: 'Earn the Thorn Badge' },
-  { id: 'hd', name: 'HD', unlock: 'A later region', soon: true },
+  { id: 'hd', name: 'HD-2D', unlock: 'Earn the Tide Badge', soon: true },
+  { id: 'diorama', name: 'Diorama', unlock: 'Earn the Ember Badge', soon: true },
   { id: '3d', name: '3D', unlock: 'Become Champion', soon: true }
 ];

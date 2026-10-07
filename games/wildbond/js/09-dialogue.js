@@ -51,7 +51,7 @@ document.addEventListener('keydown', e => {
 
 /* Portraits: 32x32 busts drawn at 2x, or the creature itself for '@species' lines. */
 function drawFace(who, open) {
-  const cv = talkEl.querySelector('.face'), c = cv.getContext('2d'), P = CAST[who];
+  const cv = talkEl.querySelector('.face'), c = eraCtx(cv.getContext('2d')), P = CAST[who];
   c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, 64, 64); c.imageSmoothingEnabled = false;
   cv.hidden = !who;
   if (!who) return;

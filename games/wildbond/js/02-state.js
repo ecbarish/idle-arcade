@@ -8,7 +8,7 @@ const R = Math.random, pick = a => a[Math.floor(R() * a.length)], rint = (a, b) 
 
 function fresh() {
   return { v: 1, started: false, name: 'Tamer', starter: null, team: [], ranch: [], coins: 120, lures: 5, biome: 'thornwood',
-    explored: 0, story: {}, badges: [], seen: {}, caught: {}, auto: false, era: 'pixel', eras: ['pixel'],
+    explored: 0, story: {}, badges: [], seen: {}, caught: {}, auto: false, era: 'pocket', eras: ['pocket'],
     stats: { battles: 0, wins: 0, caught: 0, play: 0 }, log: [], last: Date.now(), tab: 'team',
     journey: 'classic', capMode: 'soft', xpShare: false, pos: null };
 }
@@ -54,4 +54,6 @@ function save() {
       detail: lead ? `Lead: ${lead.name}, level ${lead.lvl} · ${BIOMES[S.biome].name}` : BIOMES[S.biome].name }); }
 }
 function load() { const o = Arcade.load(KEY); if (!o) return; S = Object.assign(fresh(), o); S.stats = Object.assign(fresh().stats, o.stats || {});
-  if (S.badges.includes('thorn') && !S.eras.includes('bit16')) S.eras.push('bit16'); }
+  // older saves began in color: they keep it, and get the faded Pocket look as an extra
+  if (!S.eras.includes('pocket')) S.eras.unshift('pocket');
+  if (S.badges.includes('thorn')) { for (const e of ['pixel', 'bit16']) if (!S.eras.includes(e)) S.eras.push(e); S.shoes = true; } }

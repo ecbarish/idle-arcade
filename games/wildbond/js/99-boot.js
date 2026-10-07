@@ -34,7 +34,7 @@ document.addEventListener('click', e => {
     case 'buyfood': buyFood(arg, 10); break;
     case 'breed': { const all = everyone(); if (startBreed(all.find(c => c.uid === BARN.a), all.find(c => c.uid === BARN.b))) { BARN.a = BARN.b = null; } break; }
     case 'biome': travelTo(arg); break;
-    case 'era': if (S.eras.includes(arg) && ART[arg]) { S.era = arg; document.querySelectorAll('canvas[data-sp]').forEach(c => delete c.dataset.done); tabKey = ''; } break;
+    case 'era': if (S.eras.includes(arg) && ART[arg]) { S.era = arg; recolor(); } break;
   }
   if (S.started) { renderAll(); save(); }
 });
