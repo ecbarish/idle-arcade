@@ -194,6 +194,12 @@ Options: *Soft* (default: XP drops to a trickle above the cap, so you can't over
 tables shuffled), *Solo Run* (one creature only), *Hardcore* (smarter opponents, no Rally). Completing a mode earns
 a title and a ranch cosmetic.
 
+**Ranch cosmetics as built (Codex, 2026-10-07):** the Ranch tab displays Homeward Leaf (Nuzlocke Survivor),
+Crossing Paths (Wanderer of Shuffled Wilds), One Bright Star (One and Only), and Warmstone Promise (Hard as
+Hearthstone). These original static pennants use the existing saved titles, display automatically once earned,
+and give no bonuses. Unfinished challenges show locked pennants. Earned titles stay honored when more badges
+are added; no extra currency, equipped-cosmetic field or daily reward was introduced.
+
 **Reasons to revisit old areas:**
 - Rematches: Wardens and Wren can be rebattled at higher tiers that scale to your level (Radical Red lets you
   rebattle gym leaders), with better rewards each tier.
