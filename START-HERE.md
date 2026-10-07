@@ -52,7 +52,8 @@ mechanic that needs a healer), pets, mounts, companions, earned addons. Item nam
 
 **Hub and promo pages:** `index.html`, `promo.html` (Realmbound), `promo-wildbond.html`.
 
-**Parked:** Primordial, Starfall Guild, Diamond Career (baseball), Otherworld. Plans in `docs/plans/`.
+**Parked:** Starfall Guild, Diamond Career (baseball), Otherworld (side lane: structural and polish tasks only), and
+Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
 
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
@@ -78,7 +79,11 @@ mechanic that needs a healer), pets, mounts, companions, earned addons. Item nam
    `codex/wildbond-more-checks`). Full ticket in `docs/ROADMAP.md` ("T24"). Extend `tests/wildbond-checks.js` for route
    trainers and items (T7b part 2), challenge modes, rematches and mastery (`15-challenge.js`), eras and weather
    (`weatherNow`, the Pocket/16-bit/HD/Diorama unlocks), and riding.
-7. **Then:** the guild, Hollow Crown part 2 and the raid (Realmbound); Wildbond area 5 (after Evan answers the cap
+7. **T25: Split Starfall Guild into files + a test page** (any assistant; no behavior change) — **sent to ChatGPT
+   2026-10-08** (branch `codex/starfall-split`). Full ticket in `docs/ROADMAP.md` ("T25"). This is the "parked games
+   side lane": parked games get structural and polish work while Claude focuses on the two main games.
+8. **Research brief for the big decisions** — **claimed by Claude, 2026-10-08**: `docs/research/decisions.md`.
+9. **Then:** the guild, Hollow Crown part 2 and the raid (Realmbound); Wildbond area 5 (after Evan answers the cap
    question), contests and races, ranch cosmetics for challenge titles, Modern 3D.
 
 ## Questions for Evan (work continues on the defaults until he answers)

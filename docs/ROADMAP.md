@@ -29,6 +29,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T20: Realmbound Frostmere II, The Barrowfields and The Silent Barrows** (ChatGPT, data): see the T20 section.
 - [x] **T21: Realmbound item name tiers to level 60** (ChatGPT, data + one formula): see the T21 section.
 - [ ] **T24: Wildbond checks for the newer systems** (ChatGPT, tests only): see the T24 section.
+- [ ] **T25: Split Starfall Guild into small files, add a test page** (ChatGPT, no behavior change): see the T25 section.
 - [x] **T2: Creature game spec + shared creature module plan** (Claude). See docs/creature-game-design.md.
 - [x] **T3: Content for levels 30-40** (Codex): Frostmere, The Winter Road. See
   [chapter specification](realmbound-winter-road.md). Evan authorized the narrow progression spec while Claude
@@ -153,6 +154,24 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   (it validates maps, exits, NPC spots, speakers and moves). Then play it: give a save the first three badges with
   `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
+
+### T25: Split Starfall Guild into small files, add a test page (no behavior change)
+Starfall Guild (games/starfall-guild/index.html) is one 826-line file, the shape Realmbound was in before T0. Split it
+the same way so it can be improved safely later. **No gameplay, balance, text or save changes.**
+- **Files:** `games/starfall-guild/index.html` (markup + ordered classic `<script src>` tags, no build step, no modules),
+  `style.css` (the existing styles, unchanged), and `js/NN-name.js` files in load order: data (classes, heroes,
+  dungeon, town buildings, staff, seasons), state and save (`KEY = 'starfall-guild-save-v1'` and the save format stay
+  exactly as they are), the dungeon/battle runtime, town and staff logic, UI and tabs, rendering, events, boot.
+  Keep top-level names identical so behaviour is unchanged; if two parts depend on load order, note it in HANDOFF.md.
+- **Test hook and page:** on `localhost` only, expose `window.__sg` (state getter, save/load, the main tick function and
+  a few key actions) like Realmbound's `window.__rb`. Add `tests/starfall.html` (+ `tests/starfall-checks.js`) in the
+  style of `tests/wildbond.html`: back up and restore `starfall-guild-save-v1` and the hub progress, load the game in
+  an iframe, and check that a fresh save starts, an old save from the current main version loads unchanged, recruiting,
+  a dungeon run, a town building purchase and a season reset work, and the tick advances without errors.
+- **Prove no change:** before splitting, save a game played for a few minutes on main; after splitting, load it and
+  confirm identical numbers. Note the check in the PR.
+- **Docs:** HANDOFF.md layout section for Starfall Guild; README changelog line; tick T25 here and in START-HERE.md.
+- Don't touch Wildbond, Realmbound or Primordial (Primordial is on the back burner).
 
 ### T24: Wildbond checks for the newer systems (tests only)
 `tests/wildbond.html` (T16) checks maps, story data, walking, gates, caps, Wardens, old saves, the inn and the shop.
