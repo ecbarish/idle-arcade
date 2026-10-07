@@ -14,7 +14,7 @@ const JOURNEY = {
   long: { name: 'Long Road', xp: 0.08, coins: 0.8, rare: -0.3, desc: 'For the grind: less XP and rarer finds. Every level is earned.' }
 };
 const AUTO_XP = 0.8;
-const BADGES = { thorn: { name: 'Thorn Badge' }, tide: { name: 'Tide Badge' }, ember: { name: 'Ember Badge' }, beacon: { name: 'Beacon Badge' }, reed: { name: 'Reed Badge' }, echo: { name: 'Echo Badge' } };
+const BADGES = { thorn: { name: 'Thorn Badge' }, tide: { name: 'Tide Badge' }, ember: { name: 'Ember Badge' }, beacon: { name: 'Beacon Badge' }, reed: { name: 'Reed Badge' }, echo: { name: 'Echo Badge' }, loom: { name: 'Loom Badge' } };
 
 /* Element wheel: each element is strong against the ones listed. */
 const ELEMENTS = {
@@ -272,7 +272,35 @@ const SPECIES = {
   undertone: { name: 'Undertone', fam: 'hyena', el: 'Shade', col: '#504765', unique: 1, big: 1,
     base: { hp: 94, pow: 91, grd: 87, spd: 88, wit: 82, spi: 88 },
     learn: [[1,"shadowSting"],[1,"howl"],[1,"mistVeil"],[1,"bite"]],
-    dex: 'Its low call passes through winding stone to guide separated groups back to one another.' }
+    dex: 'Its low call passes through winding stone to guide separated groups back to one another.' },
+  /* Sunthread Commons: partners with different strengths. */
+  clovercolt: { name: "Clovercolt", fam: "horse", el: "Grove", col: "#a5bb63",
+    base: {hp: 54,pow: 47,grd: 45,spd: 62,wit: 43,spi: 49}, learn: [[1,"charge"],[1,"vineLash"],[18,"regrowth"],[32,"tailwind"]], evo: {at: 64,to: "bloomcourser"},
+    dex: "It carries loose shelter ties in its mane and waits while slower partners cross the meadow." },
+  bloomcourser: { name: "Bloomcourser", fam: "horse", el: "Grove", col: "#6d9a49", big: 1,
+    base: {hp: 76,pow: 68,grd: 66,spd: 84,wit: 56,spi: 70}, learn: [[1,"charge"],[1,"vineLash"],[18,"regrowth"],[32,"tailwind"],[64,"thornQuake"]],
+    dex: "Flowers open along its mane where young creatures lean against it during a storm." },
+  tilthtusk: { name: "Tilthtusk", fam: "boar", el: "Grove", col: "#938353",
+    base: {hp: 65,pow: 59,grd: 59,spd: 32,wit: 38,spi: 47}, learn: [[1,"charge"],[1,"vineLash"],[16,"harden"],[28,"regrowth"]],
+    dex: "It loosens worn soil beside shared paths, carefully circling the marked nursery beds." },
+  hemglow: { name: "Hemglow", fam: "sprite", el: "Radiant", col: "#f3d184",
+    base: {hp: 41,pow: 33,grd: 41,spd: 57,wit: 68,spi: 60}, learn: [[1,"spark"],[14,"mistVeil"],[24,"regrowth"],[38,"radiance"]],
+    dex: "Its small light marks the edge of a shelter cloth so tired travelers can find a place beneath it." },
+  pennantlark: { name: "Pennantlark", fam: "bird", el: "Radiant", col: "#ebbe67",
+    base: {hp: 44,pow: 45,grd: 37,spd: 70,wit: 61,spi: 43}, learn: [[1,"peck"],[1,"spark"],[20,"tailwind"],[36,"radiance"]],
+    dex: "It flashes its wings above a gathering when the last returning team reaches the hall." },
+  hearthrunner: { name: "Hearthrunner", fam: "wolf", el: "Ember", col: "#cb7445",
+    base: {hp: 52,pow: 62,grd: 42,spd: 61,wit: 42,spi: 41}, learn: [[1,"bite"],[1,"emberSnap"],[18,"howl"],[34,"flameRush"]],
+    dex: "It warms cold paws beneath the meeting benches, then trots out to carry a message." },
+  ribbonstride: { name: "Ribbonstride", fam: "horse", el: "Gale", col: "#b7cfb8",
+    base: {hp: 50,pow: 47,grd: 37,spd: 79,wit: 46,spi: 41}, learn: [[1,"charge"],[1,"gust"],[20,"tailwind"],[36,"mistVeil"]],
+    dex: "It runs ahead of sudden gusts and brings wind-loosened ribbons back to their posts." },
+  dawntassel: { name: "Dawntassel", fam: "sprite", el: "Radiant", col: "#ffdfa0",
+    base: {hp: 39,pow: 34,grd: 42,spd: 63,wit: 64,spi: 58}, learn: [[1,"spark"],[16,"radiance"],[28,"regrowth"],[40,"tailwind"]],
+    dex: "A rare visitor at first light, it leaves a gold glimmer on the knots of a well-mended shelter." },
+  meadowmantle: { name: "Meadowmantle", fam: "boar", el: "Grove", col: "#668950", big: 1, unique: 1,
+    base: {hp: 108,pow: 88,grd: 105,spd: 55,wit: 76,spi: 98}, learn: [[1,"charge"],[1,"thornQuake"],[1,"harden"],[1,"regrowth"]],
+    dex: "The guardian rests across the windward edge of nursery ground, keeping tender roots and sleeping young sheltered." }
 };
 const STARTERS = ['cindercub', 'ripplet', 'mosshog'];
 
@@ -288,7 +316,8 @@ const BIOMES = {
   stillreed: { name: 'Stillreed Basin', lv: [52, 60], req: 'beacon', sky: ['#81988b', '#d6d8b2'], hill: '#65834c', ground: '#a49661',
     wild: [['reedlet', 24], ['siltjaw', 18], ['rillwhisk', 18], ['orchardroot', 18], ['gustreed', 16], ['duskcord', 14], ['glassbill', 3]] },
   hollowecho: { name: 'Hollowecho Hills', lv: [58, 64], req: 'reed', sky: ['#7c9190', '#c5cfb9'], hill: '#657c60', ground: '#8c8c80',
-    wild: [['hushpup',24],['umbrelace',18],['flintroot',18],['ledgewhisk',18],['bellmote',16],['dripdart',14],['chimespark',3]] }
+    wild: [['hushpup',24],['umbrelace',18],['flintroot',18],['ledgewhisk',18],['bellmote',16],['dripdart',14],['chimespark',3]] },
+  sunthread: {"name":"Sunthread Commons","lv":[62,68],"req":"echo","sky":["#9fcfe4","#f1e6b6"],"hill":"#90ac5f","ground":"#b4bf70","wild":[["clovercolt",24],["tilthtusk",18],["hemglow",18],["pennantlark",16],["hearthrunner",16],["ribbonstride",14],["dawntassel",3]]}
 };
 
 const RIVAL = { name: 'Wren', col: '#d85a8a' };
@@ -302,7 +331,8 @@ const CAST = {
   toren: { name: 'Warden Toren', skin: '#b87d59', hair: 'short', hairCol: '#ddd0bd', shirt: '#98543c', bg: '#ead0b2', title: 'Warden of Emberfall' },
   vessa: { name: 'Warden Vessa', skin: '#c99a74', hair: 'bun', hairCol: '#e0d2b0', shirt: '#4a6e8e', bg: '#dde6ee', title: 'Warden of Cloudglass Pass' },
   olan: { name: 'Warden Olan', skin: '#ac7957', hair: 'hat', hairCol: '#c4c5ac', hatCol: '#82774e', shirt: '#5b7c69', bg: '#d4dfc5', title: 'Warden of Stillreed Basin' },
-  senna: { name: 'Warden Senna', skin: '#bd8e6d', hair: 'short', hairCol: '#77747f', shirt: '#596b62', bg: '#ced6cf', title: 'Warden of Hollowecho Hills' }
+  senna: { name: 'Warden Senna', skin: '#bd8e6d', hair: 'short', hairCol: '#77747f', shirt: '#596b62', bg: '#ced6cf', title: 'Warden of Hollowecho Hills' },
+  halen: {"name":"Warden Halen","skin":"#a97a56","hair":"short","hairCol":"#b0a78c","shirt":"#758b53","bg":"#e9e3bd","title":"Warden of Sunthread Commons"}
 };
 /* Scenes that aren't tied to an explore count. */
 const SCENES = {
@@ -570,7 +600,32 @@ const STORY = [
   ],
   trainer: 'Warden Senna',
   team: [ [ 'flintroot', 60 ], [ 'bellmote', 61 ], [ 'hushmane', 63 ] ]
-}
+},
+  /* Sunthread: the regional gathering before the final stretch. */
+  { biome: "sunthread", at: 6, id: "rival8", title: "A place in the gathering", text: "Wren helped a nervous young tamer and their partner find a useful role before a gathering rematch.",
+    lines: [["","A young tamer grips an unused shelter rope while the gathering bustles around them. Wren kneels beside their little partner."],
+      ["wren","You do not have to pull like the big ones. See those loose ends? Your partner can hold them while mine makes the knot."],
+      ["","The little partner steadies a tie. The shelter cloth settles, and the young tamer smiles as the next team arrives beneath it."],
+      ["wren","Everyone has a part. Mine is still beating you, {name}. I brought a few different strengths this time. Ready?"]],
+    win: [["wren","All right, you win. Not one star performer in sight, and they still found every opening."],
+      ["wren","The young tamer is showing the next arrivals where to rest. Come on, our partners have earned a place under that shelter too."]],
+    team: [["hearthrunner",64],["ribbonstride",66],["$rival",67]] },
+  { biome: "sunthread", at: 14, id: "meadowmantle", title: "The sheltered ground", text: "Meadowmantle, guardian of Sunthread Commons, sheltered the nursery beds while neighboring teams settled the gathering.",
+    lines: [["","A sudden wind lifts the meadow grass. Beside the nursery beds, traveling teams fold their banners and let the youngest creatures rest."],
+      ["","A broad Grove boar settles along the windward edge. Flowers and small sleeping backs disappear beneath the shelter of its leafy mantle."],
+      ["@meadowmantle","Meadowmantle leaves the tender beds untouched. Once the wind eases, it rises, noses a clear patch of ground toward your team, and waits."]],
+    win: [["@meadowmantle","Meadowmantle lowers its mantle beside your partner, leaving enough room for every tired paw."],
+      ["","The gathered teams keep the nursery sheltered as you take the next path. The guardian chooses to walk beside you."]],
+    wild: ["meadowmantle",67,4] },
+  { biome: "sunthread", at: 24, id: "warden7", gate: "loom", title: "The Sunthread Warden", text: "Warden Halen tested how you made room for partners with different strengths at the gathering.",
+    lines: [["","At the meeting hall, a patient organizer greets each returning tamer by name. He sets aside his list when your team approaches."],
+      ["halen","Welcome, {name}. And welcome to the partners who brought you here. Names are easier to remember when you notice what each one does."],
+      ["halen","I judge making space. One partner can carry the cloth, another hold a knot, another help a frightened neighbor. Can your team leave room for all of them?"],
+      ["halen","Show me a battle where strength has more than one shape. The gathering can spare us a little time."]],
+    win: [["halen","You made room for the quiet work as well as the bright opening. Your partners could trust one another to do different things."],
+      ["halen","Take the Loom Badge. Your team can grow to level seventy now. A good gathering leaves nobody wondering whether they belong."],
+      ["halen","There is still a road ahead. Remember the names of the teams beside you, and leave them a place to rest."]],
+    trainer: "Warden Halen", team: [["tilthtusk",65],["hemglow",66],["bloomcourser",68]] }
 ];
 const COUNTER = { cindercub: 'ripplet', ripplet: 'mosshog', mosshog: 'cindercub' };
 

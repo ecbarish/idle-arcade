@@ -278,6 +278,75 @@ function wildbondChecks() {
     ready();S.badges=[...badges,'reed'];S.story.warden5=true;save();load();if(levelCap()!==60||!S.story.warden5||S.badges.length!==5)return false;
     S.badges.push('echo');wb.placeAt('hollowecho',27,9,'right');S.items={he1:true};S.beaten={veslin:true};save();reset();load();ensurePos();return S.pos.map==='hollowecho'&&S.pos.x===27&&S.biome==='hollowecho'&&levelCap()===65&&S.items.he1&&S.beaten.veslin;
   });
+  // T29: Sunthread content and the real walking, story, capture and badge paths.
+  const commonsSpecies = ['clovercolt', 'bloomcourser', 'tilthtusk', 'hearthrunner', 'ribbonstride', 'hemglow', 'pennantlark', 'dawntassel', 'meadowmantle'];
+  for (const id of commonsSpecies) {
+    check('Sunthread ' + id + ': valid family, element, moves and dex', () => {
+      const s = SPECIES[id]; return s && ['wolf','cat','boar','lizard','croc','bird','spider','horse','sprite','hyena'].includes(s.fam) && ELEMENTS[s.el] && s.learn.every(([l,m]) => l > 0 && MOVES[m]) && !!s.dex;
+    });
+    check('Sunthread ' + id + ': base stats follow its role', () => {
+      const s = SPECIES[id], total = Object.values(s.base).reduce((a,b) => a+b,0);
+      return Object.keys(s.base).sort().join(',') === 'grd,hp,pow,spd,spi,wit' && Object.values(s.base).every(n => n > 0) && (s.unique ? total >= 500 && total <= 600 : id === 'bloomcourser' ? total >= 400 && total <= 440 : total >= 280 && total <= 320);
+    });
+  }
+  check('Sunthread opens only with the Echo Badge at levels 62-68', () => {
+    ready(); const b=BIOMES.sunthread; if (b.lv.join(',') !== '62,68' || b.req !== 'echo' || biomeOpen('sunthread')) return false;
+    S.badges=[...badges,'reed','echo']; return biomeOpen('sunthread') && levelCap()===65;
+  });
+  check('Hollowecho gathering exit is gated and walks into Sunthread after Echo', () => {
+    ready(); S.badges=[...badges,'reed']; wb.placeAt('hollowecho',28,9,'right');wb.tryStep('right');
+    if(S.pos.map!=='hollowecho'||!W.msg.includes('Echo Badge'))return false;
+    S.badges.push('echo');wb.tryStep('right');return S.pos.map==='sunthread'&&S.biome==='sunthread'&&S.pos.x===1&&S.pos.y===9;
+  });
+  check('Sunthread west exit returns to Hollowecho on a safe tile', () => {
+    ready();S.badges=[...badges,'reed','echo'];wb.placeAt('sunthread');wb.tryStep('left');return S.pos.map==='hollowecho'&&S.biome==='hollowecho'&&S.pos.x===28&&S.pos.y===9;
+  });
+  check('Sunthread map uses valid tiles and every walkable square is connected', () => {
+    const m=MAPS.sunthread; if(m.rows.length!==14||m.rows.some(r=>r.length!==30||[...r].some(c=>!TILES[c])))return false;
+    const seen=new Set(),todo=[m.start.slice(0,2)];
+    while(todo.length){const [x,y]=todo.pop(),key=x+','+y;if(seen.has(key)||!walkable(m,x,y)||npcAt(m,x,y))continue;seen.add(key);for(const [dx,dy] of Object.values(DIRS))todo.push([x+dx,y+dy]);}
+    for(let y=0;y<14;y++)for(let x=0;x<30;x++)if(walkable(m,x,y)&&!npcAt(m,x,y)&&!seen.has(x+','+y))return false;
+    return m.items.every(it=>seen.has(it.at.join(',')))&&seen.has('0,9')&&seen.has('24,6')&&m.rows.some(r=>r.includes('#'))&&m.rows.some(r=>r.includes('f'));
+  });
+  check('Sunthread has a sign, three unique items and two route trainers at 64-67', () => {
+    const m=MAPS.sunthread;return Object.keys(m.signs).length===2&&m.items.length===3&&new Set(Object.values(MAPS).flatMap(m=>(m.items||[]).map(it=>it.id))).size===Object.values(MAPS).flatMap(m=>m.items||[]).length&&m.npcs.filter(n=>n.trainer).length===2&&m.npcs.filter(n=>n.trainer).every(n=>n.trainer.team.every(([id,l])=>SPECIES[id]&&l>=64&&l<=67))&&m.npcs.some(n=>n.who==='pell'&&!n.trainer);
+  });
+  check('Sunthread wild table excludes its guardian and keeps Dawntassel rare', () => {
+    const w=BIOMES.sunthread.wild;return w.every(([id,n])=>commonsSpecies.includes(id)&&n>0&&!SPECIES[id].unique)&&w.find(([id])=>id==='dawntassel')[1]===3&&w.filter(([id])=>id!=='dawntassel').every(([,n])=>n>3)&&SPECIES.meadowmantle.fam==='boar'&&SPECIES.meadowmantle.el==='Grove'&&SPECIES.meadowmantle.big===1&&SPECIES.meadowmantle.unique===1;
+  });
+  check('Clovercolt really evolves at 64 before the seventh badge is needed', () => {
+    ready();S.badges=[...badges,'reed','echo'];const c=wb.newCreature('clovercolt',63);c.xp=0;grow(c,Cr.xpNeed(63));return c.lvl===64&&c.sp==='bloomcourser'&&S.caught.bloomcourser;
+  });
+  check('Sunthread weather has clear mornings and sudden rain and its original zone tune has valid notes', () => {
+    const t=TRACKS.sunthread;return WEATHER.sunthread.join(',')==='clear,clear,rain'&&t.lead==='triangle'&&t.mel.split(' ').length===32&&[16,32].includes(t.bass.split(' ').length)&&[...t.mel.split(' '),...t.bass.split(' ')].every(n=>n==='.'||ArcadeSound.hz(n)>0);
+  });
+  check('Sunthread clear daytime selects its zone music', () => {
+    ready();S.badges=[...badges,'reed','echo'];S.day=1;S.ranchT=0;wb.placeAt('sunthread');return weatherNow()==='clear'&&!isNight()&&musicKey()==='sunthread';
+  });
+  const commonsBeats=STORY.filter(b=>b.biome==='sunthread');
+  check('Sunthread story has exactly the required thresholds and team bands', () => commonsBeats.length===3&&commonsBeats.map(b=>b.at).join(',')==='6,14,24'&&commonsBeats[0].team.every(([,l])=>l>=64&&l<=67)&&JSON.stringify(commonsBeats[0].team.at(-1))==='["$rival",67]'&&JSON.stringify(commonsBeats[1].wild)==='["meadowmantle",67,4]'&&commonsBeats[2].team.map(([,l])=>l).join(',')==='65,66,68'&&commonsBeats[2].gate==='loom'&&commonsBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
+  check('Wren gathering rematch triggers at six local explores and a real victory completes it', () => {
+    ready();S.badges=[...badges,'reed','echo'];wb.placeAt('sunthread');S.explored=100;S.exploredIn={sunthread:5};wb.explore();
+    if(!TALK||!TALK.lines.some(([,t])=>t.includes('little partner')))return false;skipTalk();return B&&B.story==='rival8'&&B.kind==='trainer'&&B.foes.at(-1).c.lvl===67&&finishFight()==='won'&&S.story.rival8;
+  });
+  check('Meadowmantle triggers at fourteen local explores and a real lure records the guardian', () => {
+    ready();S.badges=[...badges,'reed','echo'];S.story.rival8=true;wb.placeAt('sunthread');S.explored=100;S.exploredIn={sunthread:13};wb.explore();if(!TALK)return false;skipTalk();
+    if(!B||B.story!=='meadowmantle'||B.foes[0].c.sp!=='meadowmantle'||B.foes[0].c.lvl!==67||B.foes[0].c.rar!==4)return false;
+    const random=Math.random;try{Math.random=()=>0;wb.command('lure');if(!B.capture)return false;B.capture.pos=B.capture.zone;wb.calmNow();const caught=B.over==='caught';wb.finishBattle();skipTalk();return caught&&S.story.meadowmantle&&S.caught.meadowmantle&&[...S.team,...S.ranch].some(c=>c.sp==='meadowmantle');}finally{Math.random=random;}
+  });
+  check('Halen waits for 24 local explores; real victory awards Loom and cap 70 without changing eras', () => {
+    ready();S.badges=[...badges,'reed','echo'];S.story.rival8=S.story.meadowmantle=true;wb.placeAt('sunthread');S.explored=100;S.exploredIn={sunthread:23};
+    if(wb.wardenReady())return false;wb.challengeWarden();if(TALK||B)return false;S.exploredIn.sunthread=24;const eras=JSON.stringify(S.eras);wb.challengeWarden();if(!TALK)return false;skipTalk();
+    return B&&B.story==='warden7'&&finishFight()==='won'&&S.story.warden7&&S.badges.includes('loom')&&levelCap()===70&&JSON.stringify(S.eras)===eras;
+  });
+  check('Six-badge saves preserve progress; Sunthread saves reload the Loom Badge', () => {
+    ready();S.badges=[...badges,'reed','echo'];S.story.warden6=true;save();load();if(levelCap()!==65||!S.story.warden6||S.badges.length!==6)return false;
+    S.badges.push('loom');wb.placeAt('sunthread',27,6,'right');S.items={st1:true};S.beaten={mirel:true};save();reset();load();ensurePos();return S.pos.map==='sunthread'&&S.pos.x===27&&S.biome==='sunthread'&&levelCap()===70&&S.items.st1&&S.beaten.mirel;
+  });
+  check('Sunthread battle profile uses green meadow hills and moving leaves', () => BATTLE_PLACES.sunthread.far==='dunes'&&BATTLE_PLACES.sunthread.near==='oaks'&&BATTLE_PLACES.sunthread.leaves>0&&!BATTLE_PLACES.sunthread.water);
+  for (const n of MAPS.sunthread.npcs.filter(n=>n.trainer)) check('Sunthread trainer '+n.who+' plays and records a real victory', () => {
+    ready();S.badges=[...badges,'reed','echo'];wb.placeAt('sunthread');talkTo(n);if(!TALK)return false;skipTalk();return B&&B.npc===n.who&&B.trainer===CAST[n.who].name&&finishFight()==='won'&&S.beaten[n.who];
+  });
   // Living battle backdrops: real canvas calls across routes, eras, weather and reduced motion.
   check('Battle scenery draws each route and weather without changing the save or battle', () => {
     ready();S.badges=Object.keys(BADGES);const canvas=document.createElement('canvas');canvas.width=320;canvas.height=180;
@@ -545,7 +614,7 @@ function wildbondChecks() {
   });
   for (const g of STORY.filter(b => b.gate)) check(g.trainer + ': talking starts a rematch, victory advances its tier, and the same day is blocked', () => {
     ready(); S.story[g.id] = true; S.badges = badges.slice(); S.capMode = 'off';
-    S.team = [wb.newCreature('tidewyrm', 50, { rar: 4, temp: 'steady', traits: ['ferocious', 'thick'], pot: Object.fromEntries(Cr.STATS.map(k => [k, 31])) })];
+    S.team = [wb.newCreature('tidewyrm', Math.max(50,g.team.at(-1)[1]+6), { rar: 4, temp: 'steady', traits: ['ferocious', 'thick'], pot: Object.fromEntries(Cr.STATS.map(k => [k, 31])) })];
     const map = Object.keys(MAPS).find(id => MAPS[id].biome === (g.biome || 'thornwood')); wb.placeAt(map);
     const npc = npcsOf(curMap()).find(n => n.warden && n.warden.id === g.id); talkTo(npc); if (!TALK) return false; skipTalk();
     if (!B || B.kind !== 'trainer' || B.rematch !== g.id || B.tier !== 1 || finishFight() !== 'won') return false;
