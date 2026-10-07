@@ -140,7 +140,10 @@ a default so work never waits.
 - 2026-10-09 Claude: merged T26 (Starfall sound); built T1-C (third talent trees for all five classes) and new jobs
   (Herbalism → healing potions, Questing for benched heroes); sent T23 (Crown's Heart 52-60, the Hollow Key) to
   ChatGPT. Evan asked for **larger chunks per prompt**. Tests: Realmbound 972, Wildbond 488, Starfall 48.
-  **Next:** review `codex/realmbound-crownheart` (T23) when it lands; Claude builds R2 (raid system, item 18).
+  Then built R2, the raid (The Hollow Throne), same session: Realmbound 997 checks. **Next:** review
+  `codex/realmbound-crownheart` (T23) when it lands, then retune the raid at cap 60 (sim method in
+  `docs/realmbound-40-60.md`, "R2 as built"); Claude next: the guild (members, mood, guild level, more job slots)
+  and Wildbond area 5 (it has waited longest; bands in item 14).
 - 2026-10-07 Codex: T26 complete on `codex/starfall-sound` for Claude's review, unmerged. Browser checks:
   Realmbound 929, Wildbond 488, Starfall 48; saves restored. Two-minute live audio capture: all three themes,
   no clipping or browser errors; phone-width sound control fits. Subjective listening remains for PR review.
