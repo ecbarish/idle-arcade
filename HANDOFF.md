@@ -13,6 +13,14 @@ https://ecbarish.github.io/idle-arcade/ (GitHub Pages serves the `main` branch).
 - Game state saves through `shared/engine.js` (`Arcade.save/load/report`). Keep old saves loading:
   Realmbound has a `migrate()` function for exactly this.
 
+## Shared development notes
+
+Read [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for the current review, pending PRs, proposed next work and
+content inbox across all games. Keep its handoff section current after meaningful work so Evan can switch
+between Claude and Codex. Distinguish proposed, approved, PR-open and merged work; the roadmap still controls
+ticket scope. If a ticket limits editable files, leave notes in its allowed documentation or PR description
+and update the shared record in a later notes-only change.
+
 ## Layout
 - `index.html`: the hub. `shared/engine.js`: shared save and formatting helpers.
 - `games/realmbound/index.html`: Realmbound markup and ordered classic script tags; no build step.
@@ -44,8 +52,8 @@ moved into dungeon runtime setup, after dungeon data. Boot loads last, after eve
 ## Run and test
 Run `powershell -ExecutionPolicy Bypass -File serve.ps1` or `python -m http.server 8765` from the
 repository root, then open http://localhost:8765/. Open http://localhost:8765/tests/run.html and click
-**Run checks** for all 118 existing scenario checks and a clear PASS/FAIL list, without Node.js or npm.
-The runner loads the unchanged scenario file in a same-origin game iframe and restores the Realmbound
+**Run checks** for all 231 scenario checks (including the original coverage and Frostmere) and a clear PASS/FAIL list, without Node.js or npm.
+The runner loads the scenario file in a same-origin game iframe and restores the Realmbound
 save and hub progress afterward. Close other Realmbound tabs before running. The game keeps its
 localhost-only debug hook; on other server hostnames the runner exposes that same hook only inside its
 test iframe. Existing Node DOM and Playwright checks remain in `tests/` for development environments.
@@ -66,3 +74,11 @@ test iframe. Existing Node DOM and Playwright checks remain in `tests/` for deve
 2. Realmbound: professions and expanded talent trees, then levels 30-60, more dungeons, raids and guild, faction battlegrounds.
 3. Standalone creature game reusing Realmbound's creature system (families, rarity, traits, bond).
 4. Diamond Career (baseball), then Otherworld (isekai).
+
+## Current Realmbound chapter
+
+The Winter Road expands Frostmere to levels 30–40: five zones, 46 quests and a level-40 cap. See
+[docs/realmbound-winter-road.md](docs/realmbound-winter-road.md) for the narrow progression specification,
+T12 dependency and upgrade stages. Save key and `migrate()` are unchanged. The full T1 design remains open.
+For browser interactions, with a local server and development Playwright installation, run
+`node tests/realmbound-winter-road.cjs` (optional `REALMBOUND_BROWSER_PATH` selects an installed Chromium).

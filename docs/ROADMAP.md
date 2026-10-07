@@ -19,7 +19,9 @@ Mark a ticket done in the same PR that finishes it.
 - [x] **T0: Split Realmbound into small files** (ChatGPT). No behavior change. See HANDOFF.md.
 - [ ] **T1: Specs for levels 30-60, raids and the guild** (Claude).
 - [x] **T2: Creature game spec + shared creature module plan** (Claude). See docs/creature-game-design.md.
-- [ ] **T3: Content for levels 30-40** (ChatGPT, after T0 and T1).
+- [x] **T3: Content for levels 30-40** (Codex): Frostmere, The Winter Road. See
+  [chapter specification](realmbound-winter-road.md). Evan authorized the narrow progression spec while Claude
+  was unavailable; T1's remaining 40–60, raid and guild design stays open.
 - [x] **T4a: Shared creature module + Wildbond part 1** (Claude): starters, rival, Thornwood, capture, 3v3 command
   battles, evolution, Warden and badge, art-era system (Pixel only). Done 2026-10-08.
 - [x] **T4b: Wildbond part 2** (Claude): ranch days (food, training regimens, fatigue, injury, mood), breeding barn with

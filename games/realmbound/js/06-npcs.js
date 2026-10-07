@@ -23,7 +23,7 @@ function genNpcs(faction){const names=NPC_NAMES[faction].slice().sort(()=>R()-.5
   return names.map((name,i)=>({id:uid(),name,race:pick(FACTIONS[faction].races),cls:cls[i%5],pers:pick(Object.keys(PERSONALITY)),offset:rint(-3,3),aff:0,met:false,notes:[],
     hair:pick(['#6b4423','#e8c070','#2b2b2b','#a03020','#d8d8d8','#4a2a1a','#7a5ab0'])}));}
 function npcLvl(n){return clamp(H().lvl+n.offset,1,LEVEL_CAP);}
-function npcZone(n){return npcLvl(n)<10?FACTIONS[H().faction].start:npcLvl(n)<20?'fens':'ashen';}
+function npcZone(n){return npcLvl(n)<10?FACTIONS[H().faction].start:npcLvl(n)<20?'fens':npcLvl(n)<30?'ashen':'frostmere';}
 function npcOf(id){return (H().npcs||[]).find(n=>n.id===id);}
 function noteNpc(n,t){n.notes=n.notes||[];n.notes.unshift(t);if(n.notes.length>6)n.notes.length=6;}
 function say(n,kind){const L=PERSONALITY[n.pers].lines[kind];if(L)line(`${n.name}: ${pick(L)}`,'l-say');}
