@@ -10,8 +10,8 @@ ART.hd = (() => {
   const mk = () => { const c = document.createElement('canvas'); return [c, c.getContext('2d')]; };
   const [back, bx] = mk();
   const SRC = 16; // texture pixels per tile
-  const STAND = { T: 1, R: 1, P: 1, '#': 1, D: 1, '=': 1 }; // tiles that stand up instead of lying flat
-  const under = (ch, P) => ch === 'R' && P.rockBase ? '_' : ch === '#' || ch === 'D' ? '.' : ',';
+  const STAND = { T: 1, R: 1, P: 1, '#': 1, D: 1, '=': 1, j: 1, q: 1 }; // tiles that stand up instead of lying flat
+  const under = (ch, P) => ch === 'j' || ch === 'q' ? '~' : ch === 'R' && P.rockBase ? '_' : ch === '#' || ch === 'D' ? '.' : ',';
   const filterOK = 'filter' in bx;
 
   /* standing things, drawn up from their base line (x = left edge, y = ground) */
@@ -23,8 +23,13 @@ ART.hd = (() => {
       R(2 + sw * 1.5, 11.6, 4, 2, P.treeDk); R(2.4 + sw * 1.5, 11.8, 3.2, 1.6, P.tree);
       R(1, 7.8, 2.5, 1, P.treeLt); R(2 + sw, 10.8, 2, 0.8, P.treeLt); R(0.2, 4.4, 7.6, 0.9, P.treeDk); }
     else if (ch === 'R') { R(0.8, 0, 6.4, 4, P.rockDk); R(1.1, 0.4, 5.8, 3.4, P.rock); R(2, 3.6, 4, 1.2, P.rock); R(2, 3.2, 3, 0.8, P.rockLt); R(5.2, 0.8, 1.2, 2, P.rockDk); }
-    else if (ch === 'P') { R(3.5, 0, 1, 4.5, '#5a3c22'); R(1, 3.5, 6, 3.5, '#5a3a1e'); R(1.3, 3.8, 5.4, 2.9, '#a0703a'); R(1.8, 5.6, 4.4, 0.4, '#6b4a2a'); R(1.8, 4.6, 3.4, 0.4, '#6b4a2a'); }
+    else if (ch === 'P' || ch === 'q') { R(3.5, 0, 1, 4.5, '#5a3c22'); R(1, 3.5, 6, 3.5, '#5a3a1e'); R(1.3, 3.8, 5.4, 2.9, '#a0703a'); R(1.8, 5.6, 4.4, 0.4, '#6b4a2a'); R(1.8, 4.6, 3.4, 0.4, '#6b4a2a'); }
     else if (ch === '=') { R(0, 0, 1, 5, '#7a5028'); R(7, 0, 1, 5, '#7a5028'); R(0, 1.5, 8, 1, '#a0703a'); R(0, 3.5, 8, 1, '#a0703a'); R(0, 4.2, 8, 0.3, '#c8985a'); }
+    else if (ch === 'j') { // shallow hull, seats and a rope down to the board landing
+      R(1, .5, 6, 1.2, '#344c3f'); R(2, 0, 4, .7, '#182d31'); R(1.5, 1.7, 5, .6, '#ae8553');
+      R(1, 1.6, 1, .8, '#57745b'); R(6, 1.6, 1, .8, '#344c3f');
+      R(2, 2.2, 1, .4, '#e0c28e'); R(5, 2.2, 1, .4, '#e0c28e');
+      R(6.5, 1.6, .4, 2.5, '#cfa96d'); R(6, 3.7, 1.4, .7, '#e0c28e'); R(3.5, -.7, .4, 1.5, '#ded2a7'); }
     else paintTile(c, ch, X, Y - s, s, P, t, 0, 0, true); // walls and doors: the 16-bit tile, upright
   }
   function light(c, W, H) {

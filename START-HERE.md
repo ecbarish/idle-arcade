@@ -45,7 +45,7 @@ Farwatch Reach (66-72; W1 ready for review); caps follow `CAP_TABLE` (75 with al
 faded start, explained in the intro) → Pixel/16-bit → HD-2D (on the shared world kit) → Diorama (3D); day/night,
 weather with a Journal forecast, thunderstorms, living ambience and regional battle backdrops; visible wild
 creatures; ranch and breeding; challenge modes with ranch pennants, rematches, area mastery; music, effects and rain
-sounds. Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
+sounds. Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`. W7 Stillreed ferry landing is ready for review on `codex/wildbond-ferry-landing` (Wildbond v1.1.1).
 
 **Realmbound** (classic-MMO idle, flagship): levels 1-60 across eight zones, five classes with three talent trees
 each, five 5-person dungeons, the 10-person raid **The Hollow Throne** (opened by the Hollow Key; guild adventurers
@@ -83,6 +83,7 @@ rain sounds; walkable Realmbound towns.
    `docs/ROADMAP.md`, "T29".
 4. **Wildbond's ending:** W1 Farwatch Reach (66-72) is complete on `codex/wildbond-area8`, awaiting Claude's review; next W2, the league and the Champion (around 72-75), the post-game (battle
    tower, legendaries, the road to 100); contests and races; the Modern 3D era.
+   **W7:** Stillreed's visible ferry landing is ready for review on `codex/wildbond-ferry-landing`; town interiors remain open. W2 stays with Claude for review.
 5. **Realmbound next:** members' personal stories in the guild; battlegrounds (faction rivalry, the raid's closing
    hook); a second raid tier later.
 6. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines (a living scene on the
@@ -104,6 +105,8 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-07 Codex: W7 ferry landing complete on `codex/wildbond-ferry-landing`, awaiting review; no merge. Wildbond v1.1.1: visible boards, moored skiff and landing sign in five eras; all previous walkable squares remain open. Browser checks: Wildbond 1053, Realmbound 1519, Starfall 48, sound 21; saves/hub restored. Five eras, 375/1366/1920/3440 widths and saved crossing positions checked; before/after screenshots in `docs/screenshots/`. Town interiors remain open; league review and Frostmere PR #32 stay separate.
 
 - 2026-10-10 Claude: E3 save doctor in studio.html (summary, health check with fixes, searchable editor; per-game
   rules in `DOCTOR`, labels in `LABELS`; backs up before writing). **Next:** review T30 when it lands; W9 design or

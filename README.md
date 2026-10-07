@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Wildbond v1.1.1 (2026-10-07)** — **Stillreed ferry landing:** visible raised board crossings, a moored reed-green skiff and a landing sign in every art era. The jetty is walkable, the boat stays moored, and existing routes, trainers and saves keep working. W7 town interiors remain to do.
+
 - **2026-10-10** — **Save doctor** in the Studio: pick a game to see its save at a glance (heroes, team, badges, coins),
   a health check that spots broken values (an empty level, negative coins, a missing current hero) with a one-click
   fix, and every field in plain words, searchable and editable. Nothing is written until you press Save, and the old
