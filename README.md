@@ -39,6 +39,11 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-10** — **The Studio** (`studio.html`, linked from the homepage): Evan's game-master tools. Turn on GM mode
+  and every game gets a GM panel (Ctrl+Shift+G): give gold, coins, items and creatures, set levels and badges, teleport,
+  change the time of day and the weather, heal, grant the Hollow Key, add supplies and guild experience, reset raid
+  lockouts. Saves are backed up automatically before the first change, every action is logged, and the Studio can
+  back up, download, import and restore saves.
 - **v1.0.0 (2026-10-10)** — **Version numbers and a Feedback button in every game** (built by Jules, Google's coding
   agent, its first contribution). Each game and the homepage shows its version, and a Feedback button opens "Share
   feedback", "Report a bug" or "Suggest an idea", with the game, version and where you are already filled in.

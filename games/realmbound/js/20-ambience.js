@@ -35,9 +35,11 @@ const AMB_WEATHER = { clear: {}, rain: { rain: .8 }, drizzle: { rain: .4 }, stor
   blizzard: { snow: 2, wind: 1.3, fog: .5 }, dust: { dust: 1.6, wind: .8 }, ashfall: { ash: 1.2, embers: .4 } };
 let ambScroll = 0, ambLastT = null;
 /* 0 by day, 1 at night (a 24-minute cycle that every character shares); never dark inside dungeons */
-function realmNight(now) { const k = (((now === undefined ? Date.now() : now) / 1000) % AMB_DAY) / AMB_DAY; return k < .6 ? 0 : k < .68 ? (k - .6) / .08 : k < .92 ? 1 : (1 - k) / .08; }
+/* the world's clock: real time, plus any shift the GM panel set (js/24-gm.js) */
+function rbNow() { return Date.now() + (window.GM_SHIFT || 0); }
+function realmNight(now) { const k = (((now === undefined ? rbNow() : now) / 1000) % AMB_DAY) / AMB_DAY; return k < .6 ? 0 : k < .68 ? (k - .6) / .08 : k < .92 ? 1 : (1 - k) / .08; }
 /* the weather in a zone changes every 6 minutes, the same for everyone at the same time */
-function zoneWeather(id, now) { const z = AMB_ZONES[id], list = (z && z.weather) || ['clear'], seg = Math.floor((now === undefined ? Date.now() : now) / 360000);
+function zoneWeather(id, now) { if (window.GM_WEATHER) return window.GM_WEATHER; const z = AMB_ZONES[id], list = (z && z.weather) || ['clear'], seg = Math.floor((now === undefined ? rbNow() : now) / 360000);
   return list[(seg * 7 + id.charCodeAt(0) * 13 + id.length * 5) % 97 % list.length]; }
 function ambProfile() { const h = H(); return h.dun ? (AMB_DUNGEONS[h.dun.id] || { fx: { dust: .4 } }) : (AMB_ZONES[h.zone] || AMB_ZONES.thornvale); }
 /* behind everyone: sky, life, far scenery, hills and ground (all scrolling while you travel), torches, the campfire */

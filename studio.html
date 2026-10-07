@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Idle Arcade Studio</title>
+<style>
+:root{--bg:#120e18;--card:#1c1626;--line:#3a2e4a;--fg:#ece6f4;--dim:#a99cbb;--gold:#f2c14e;--ok:#7cf08a;--bad:#ff7a6a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif}
+main{max-width:980px;margin:0 auto;padding:20px 16px 60px}h1{font-size:28px;margin:0 0 4px;color:var(--gold)}h2{font-size:19px;margin:0 0 8px}
+.lead{color:var(--dim);margin:0 0 18px}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 14px}
+button,.btn{background:var(--gold);color:#1a1020;border:0;border-radius:6px;padding:6px 12px;font:600 14px system-ui;cursor:pointer;text-decoration:none;display:inline-block}
+button.alt{background:var(--line);color:var(--fg)}button.bad{background:var(--bad)}.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0}
+.meta{color:var(--dim);font-size:13px}.on{color:var(--ok);font-weight:700}.off{color:var(--dim);font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:13px}td{padding:4px 6px;border-top:1px solid var(--line);vertical-align:top}
+textarea{width:100%;min-height:80px;background:#0d0a12;color:var(--fg);border:1px solid var(--line);border-radius:6px;font:12px monospace}
+a{color:var(--gold)}.warn{color:var(--gold);font-size:13px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Idle Arcade Studio</h1>
+  <p class="lead">Evan's tools for changing and repairing the games without code. <a href="index.html">← Back to the arcade</a></p>
+
+  <section class="card">
+    <h2>Game master mode</h2>
+    <p class="meta">When it's on, every game shows a small <b>GM</b> button (or press <b>Ctrl+Shift+G</b>) with tools: give gold and items,
+      set levels and badges, teleport, change the time of day and weather, heal, hand out creatures, and more. Before your first change in a
+      visit, the game backs up your save (listed below), and every change is written to the log at the bottom.</p>
+    <div class="row">GM mode is <span id="gmState"></span> <button id="gmToggle"></button></div>
+    <div class="row"><a class="btn" href="games/wildbond/index.html?gm">Open Wildbond</a><a class="btn" href="games/realmbound/index.html?gm">Open Realmbound</a>
+      <a class="btn" href="games/starfall-guild/index.html?gm">Open Starfall Guild</a></div>
+  </section>
+
+  <section class="card">
+    <h2>Saves and backups</h2>
+    <p class="warn">Close the game's tab before restoring or importing: an open game saves every few seconds and would overwrite your change.</p>
+    <div id="saves"></div>
+  </section>
+
+  <section class="card">
+    <h2>GM log</h2>
+    <div class="row"><button class="alt" id="clearLog">Clear the log</button></div>
+    <div id="log" class="meta"></div>
+  </section>
+
+  <section class="card">
+    <h2>Coming next</h2>
+    <p class="meta">From the plan (docs/PROJECTS.md, Studio): a save doctor that shows a save as readable fields (E3), editors for dialogue
+      and text (E4), creatures and quests (E5), a map painter (E6), and a lighting and music tuner (E7).</p>
+  </section>
+</main>
+<script src="shared/engine.js"></script>
+<script src="shared/gm.js"></script>
+<script>
+'use strict';
+const GAMES = [['Wildbond', 'wildbond-save-v1'], ['Realmbound', 'realmbound-save-v1'], ['Starfall Guild', 'starfall-guild-save-v1']];
+const $ = s => document.querySelector(s), when = t => new Date(t).toLocaleString();
+const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }, del: k => { try { localStorage.removeItem(k); } catch (e) {} } };
+function backupsOf(key) { const out = []; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith(GM.BK_PREFIX + key + ':')) { try { out.push(Object.assign({ k }, JSON.parse(ls.get(k)))); } catch (e) {} } } return out.sort((a, b) => b.at - a.at); }
+function gmUI() { const on = GM.on(); $('#gmState').innerHTML = on ? '<span class="on">on</span>' : '<span class="off">off</span>'; $('#gmToggle').textContent = on ? 'Turn it off' : 'Turn it on'; }
+$('#gmToggle').onclick = () => { ls.set(GM.ON_KEY, GM.on() ? '0' : '1'); gmUI(); };
+function download(name, text) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' })); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); }
+function savesUI() {
+  $('#saves').innerHTML = GAMES.map(([name, key], gi) => {
+    const raw = ls.get(key), bks = backupsOf(key);
+    return `<h3 style="margin:12px 0 4px">${name}</h3>
+      <div class="meta">${raw ? `Save: ${(raw.length / 1024).toFixed(1)} KB` : 'No save yet.'}</div>
+      <div class="row">${raw ? `<button data-a="backup" data-g="${gi}">Back up now</button><button class="alt" data-a="download" data-g="${gi}">Download the save</button>` : ''}
+        <button class="alt" data-a="import" data-g="${gi}">Import a save…</button></div>
+      <div id="imp${gi}" hidden><textarea placeholder="Paste a save here (the text of a downloaded save file)"></textarea><div class="row"><button data-a="doimport" data-g="${gi}">Replace the save with this</button></div></div>
+      ${bks.length ? `<table>${bks.map(b => `<tr><td>${when(b.at)}</td><td>${b.why}</td><td>${(b.data.length / 1024).toFixed(1)} KB</td>
+        <td><button class="alt" data-a="restore" data-g="${gi}" data-k="${b.k}">Restore</button> <button class="alt" data-a="dlbk" data-k="${b.k}" data-g="${gi}">Download</button></td></tr>`).join('')}</table>` : '<div class="meta">No backups yet.</div>'}`;
+  }).join('');
+}
+$('#saves').addEventListener('click', e => {
+  const b = e.target.closest('[data-a]'); if (!b) return; const [name, key] = GAMES[Number(b.dataset.g)];
+  const a = b.dataset.a;
+  if (a === 'backup') GM.backup(key, 'made in the Studio');
+  else if (a === 'download') download(`${key}-${new Date().toISOString().slice(0, 10)}.json`, ls.get(key));
+  else if (a === 'dlbk') download(`${key}-backup.json`, JSON.parse(ls.get(b.dataset.k)).data);
+  else if (a === 'import') { const box = $('#imp' + b.dataset.g); box.hidden = !box.hidden; return; }
+  else if (a === 'doimport') { const text = $('#imp' + b.dataset.g + ' textarea').value.trim();
+    try { JSON.parse(text); } catch (err) { alert('That is not a save: it needs to be the text of a save file.'); return; }
+    if (!confirm(`Replace your ${name} save? The current one is backed up first.`)) return; GM.backup(key, 'before an import'); ls.set(key, text); }
+  else if (a === 'restore') { if (!confirm(`Restore this ${name} backup? Your current save is backed up first.`)) return; const data = JSON.parse(ls.get(b.dataset.k)).data; GM.backup(key, 'before a restore'); ls.set(key, data); }
+  savesUI();
+});
+function logUI() { let l = []; try { l = JSON.parse(ls.get(GM.LOG_KEY) || '[]'); } catch (e) {}
+  $('#log').innerHTML = l.length ? `<table>${l.slice(0, 60).map(x => `<tr><td>${when(x.at)}</td><td>${x.game}</td><td>${x.text.replace(/</g, '&lt;')}</td></tr>`).join('')}</table>` : 'Nothing yet.'; }
+$('#clearLog').onclick = () => { if (confirm('Clear the GM log?')) { ls.del(GM.LOG_KEY); logUI(); } };
+gmUI(); savesUI(); logUI();
+</script>
+</body>
+</html>

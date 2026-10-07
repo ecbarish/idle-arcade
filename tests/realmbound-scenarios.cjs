@@ -599,9 +599,9 @@ module.exports = function scenarios() {
         check(m.shadow.sx>0&&e.shadow.sx<0&&Math.abs(m.shadow.sx)>Math.abs(n.shadow.sx),'shadows point away from the sun and are longest at dawn and dusk');
         check(e.golden>.5&&n.golden<.2&&nt.grade.col,'golden hour, and a night grade');
         check(Math.abs(Light.cycle(.955,.955,.645))<1e-9&&Math.abs(Light.cycle(.645,.955,.645)-.5)<1e-9,'a game clock maps onto sunrise and sunset');
-        const c=document.createElement('canvas');c.width=200;c.height=200;const g=c.getContext('2d');g.fillStyle='#88ff88';g.fillRect(0,0,200,200);
+        const keepG=rb.S.gfx;rb.S.gfx='high';const c=document.createElement('canvas');c.width=200;c.height=200;const g=c.getContext('2d');g.fillStyle='#88ff88';g.fillRect(0,0,200,200);
         LT.cast(g,cc=>{cc.fillStyle='#f00';cc.fillRect(90,60,20,80);},[90,60,20,80],140,LT.time(.06),{});const d=g.getImageData(125,150,1,1).data;
-        check(d[1]<230&&d[0]<130,'a cast shadow darkens the ground where it falls');
+        if(keepG===undefined)delete rb.S.gfx;else rb.S.gfx=keepG;check(d[1]<230&&d[0]<130,'a cast shadow darkens the ground where it falls (High quality)');
         check(typeof realmSun()==='object'&&ZONE_LIGHT.fens.fog>ZONE_LIGHT.redsand.fog,'every zone has its own air: the Fens are foggier than the Redsand Steppe');}
       // T21: every generated item category follows the widened name bands.
       check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');

@@ -67,6 +67,11 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
   the game supplies `flat`, `stand`, `things`; returns a camera with `fwd`/`inv`). Wildbond's HD-2D era
   (`js/13-hd.js`) and Realmbound's towns (`js/22-town.js`) both draw through it. Wildbond's own walking (12-walk.js)
   runs on `World.walker` too (S4 part 2), keeping its own grass, trainers, roamers and items.
+- `studio.html` + `shared/gm.js`: the Studio (E1, E2). GM mode (Studio toggle, or `?gm` in a game's address) adds a GM
+  panel (Ctrl+Shift+G) whose actions each game registers in its own file: Realmbound `js/24-gm.js`, Wildbond
+  `js/16-gm.js`, Starfall `js/09-gm.js`. The panel backs up the save before the first change (`arcade-backup:<key>:<time>`,
+  8 kept) and logs every action (`arcade-gm-log`); the Studio lists, downloads, imports and restores saves. Realmbound's
+  clock goes through `rbNow()` (`window.GM_SHIFT`), its weather through `window.GM_WEATHER`; Wildbond wraps `weatherNow`.
 - `shared/light.js`: the light engine (S6/G1, inspired by WoW: Forever). `Light.create({reduce, quality})` gives
   `time(t01)` (the sun or moon at a time of day: direction, height, light colour, bounce-light shade, shadow vector,
   grade; t01 0 sunrise, .25 noon, .5 sunset, .75 midnight; `Light.cycle(k, sunrise, sunset)` maps a game clock),

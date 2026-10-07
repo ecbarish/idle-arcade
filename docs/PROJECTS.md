@@ -65,8 +65,8 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
-| E1 | **Studio shell** (`studio.html`): one page with tabs per game, a search box, and an "export my changes" button; patch format in `shared/patch.js` that every game reads at start | M | System | — | open | Write the patch format first; patches never replace saves |
-| E2 | **GM panel** (local only, behind a toggle): give gold, items, levels, creatures; teleport; set time of day and weather; heal; unlock areas; spawn a boss; all logged | M | System | E1 | open | Reuses the test hooks (`window.__rb`, `__wb`); never in normal play |
+| E1 | **Studio shell** (`studio.html`): one page with tabs per game, a search box, and an "export my changes" button; patch format in `shared/patch.js` that every game reads at start | M | System | — | part done 2026-10-10 (Claude): studio.html with GM mode, saves and backups, GM log; still to do: the patch format for content edits | Write the patch format first; patches never replace saves |
+| E2 | **GM panel** (local only, behind a toggle): give gold, items, levels, creatures; teleport; set time of day and weather; heal; unlock areas; spawn a boss; all logged | M | System | E1 | done 2026-10-10 (Claude): shared/gm.js + a GM file per game; add more actions any time | Reuses the test hooks (`window.__rb`, `__wb`); never in normal play |
 | E3 | **Save doctor**: load any save, see it as readable fields, fix values with checks, restore from automatic backups, export/import | M | System | L2 | open | Never edits a save without making a backup first |
 | E4 | **Text editor**: every line of dialogue, quest text, item and creature name, with a live preview in the scene style | M | System | E1 | open | |
 | E5 | **Creature and quest editors**: stats, moves, evolutions, wild tables; quest goals and rewards; validates against the same rules the tests use | L | System | E1 | open | Reuse the checks from tests/ as validators |

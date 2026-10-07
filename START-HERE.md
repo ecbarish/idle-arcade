@@ -105,6 +105,9 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-10 Claude: built the Studio (E1 part, E2): studio.html (GM mode, save backups/download/import/restore, GM
+  log) and the GM panel (shared/gm.js) with actions in every game. Tests: Realmbound 1519, Wildbond 908, Starfall 48,
+  sound 21. ChatGPT is on W1 (Wildbond area 8). **Next for Claude:** E3 save doctor or W9 baby-forms design; G2.
 - 2026-10-10 Claude: merged T29 (ChatGPT, Sunthread Commons, Wildbond 908 checks). Jules (Google's coding agent, first
   task, L9 + F2) couldn't push from its sandbox, so Evan pasted its diff and Claude applied it with three fixes
   (Wildbond's context read the wrong fields, Starfall's season field, `VERSION` placed above 'use strict').

@@ -21,7 +21,7 @@ const DUN_LIGHT = { sanctum: { fog: .3, col: '#7aa8c8' }, foundry: { fog: .25, c
 function realmSun(now) {
   const h = H(), dun = h && h.dun, z = h && (dun ? dungeonDef() : ZONES[h.zone]);
   if (dun) return LT.time(.42, { sky: z.sky[1], ground: z.ground }); // underground: a low, warm, steady light
-  const night = realmNight(now), k = (((now === undefined ? Date.now() : now) / 1000) % AMB_DAY) / AMB_DAY;
+  const night = realmNight(now), k = (((now === undefined ? rbNow() : now) / 1000) % AMB_DAY) / AMB_DAY;
   let st = LT.time(Light.cycle(k, .955, .645), { sky: z ? z.sky[1] : '#9cc4e8', ground: z ? z.ground : '#4a6a3a' });
   if (night > .5 && st.day) st = LT.time(.6, { sky: z.sky[1], ground: z.ground }); // tests and previews may force the night
   return st;
