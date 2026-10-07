@@ -603,6 +603,37 @@ module.exports = function scenarios() {
         LT.cast(g,cc=>{cc.fillStyle='#f00';cc.fillRect(90,60,20,80);},[90,60,20,80],140,LT.time(.06),{});const d=g.getImageData(125,150,1,1).data;
         if(keepG===undefined)delete rb.S.gfx;else rb.S.gfx=keepG;check(d[1]<230&&d[0]<130,'a cast shadow darkens the ground where it falls (High quality)');
         check(typeof realmSun()==='object'&&ZONE_LIGHT.fens.fog>ZONE_LIGHT.redsand.fog,'every zone has its own air: the Fens are foggier than the Redsand Steppe');}
+      // G2: winter haze is low, weather still matters, and the shared clock still directs the shadows.
+      {rb.S.cur=h.id;rb.boot();const hero=H(),keepZone=hero.zone,keepDun=hero.dun,keepPhase=C.phase,keepWeather=window.GM_WEATHER;
+        const fog=LT.fog,grade=LT.grade,shafts=LT.shafts,keepPW=PW,keepPH=PH,keepCW=cv.width,keepCH=cv.height;let air,beam;
+        try{
+          PW=PW||480;PH=PH||240;cv.width=PW;cv.height=PH; // The runner's collapsed iframe may have an unsized scene.
+          hero.dun=null;hero.zone='frostmere';
+          const noon=AMB_DAY*1000*.3,morning=realmSun(AMB_DAY*1000*.97),evening=realmSun(AMB_DAY*1000*.62),night=realmSun(AMB_DAY*1000*.8);
+          check(morning.day&&evening.day&&morning.shadow.sx*evening.shadow.sx<0,'Frostmere shadows swing with the same dawn-to-dusk sun');
+          check(!night.day&&night.shade[2]>night.shade[0],'Frostmere moon shadows retain cool reflected snow light');
+          LT.fog=(g,w,hh,t,o)=>{air=o;};LT.grade=()=>{};LT.shafts=(g,w,hh,t,st,o)=>{beam=o.strength;};
+          realmAtmosphere(0,PH*.78,realmSun(noon),[],AMB_WEATHER.clear);
+          const clear=air.density;
+          check(air.top>PH*.5&&air.top<air.ground,'Frostmere clear-weather haze starts below the skyline and rises from the snow');
+          realmAtmosphere(0,PH*.78,realmSun(noon),[],AMB_WEATHER.blizzard);
+          check(air.density>clear&&air.density<1,'a Frostmere blizzard thickens low haze without opaque fog');
+          beam=null;realmAtmosphere(0,PH*.78,realmSun(noon),[],AMB_WEATHER.rain);
+          check(beam===null,'winter rain suppresses direct light shafts');
+          const lamps=[{x:PW*.3,y:PH*.6,r:PH*.25,col:'#ffc860'}];
+          realmAtmosphere(0,PH*.78,night,lamps,AMB_WEATHER.clear);
+          check(air.lights===lamps&&air.density>clear,'winter night haze keeps the real warm lights for scattering');
+          C.phase='intown';window.GM_WEATHER='clear';townEnter();drawTown(0);
+          check(air.top>PH*.5&&air.top<air.ground,'Frostmere walkable lodge also keeps haze below the skyline');
+          for(const zone of Object.keys(ZONES).filter(z=>z!=='frostmere')){
+            hero.zone=zone;const z=ZONES[zone],expected=LT.time(Light.cycle(.3,.955,.645),{sky:z.sky[1],ground:z.ground});
+            check(JSON.stringify(realmSun(noon))===JSON.stringify(expected),'winter bounce-light tuning leaves '+zone+' unchanged');
+          }
+          hero.dun={id:'barrows',tier:0,step:0,mods:[]};beam=null;realmAtmosphere(0,PH*.78,realmSun(noon),[],{});
+          check(air.top===PH*.3&&beam===0,'Silent Barrows keeps its existing dungeon fog and no sun shafts');
+        }finally{LT.fog=fog;LT.grade=grade;LT.shafts=shafts;PW=keepPW;PH=keepPH;cv.width=keepCW;cv.height=keepCH;hero.zone=keepZone;hero.dun=keepDun;C.phase=keepPhase;
+          if(keepWeather===undefined)delete window.GM_WEATHER;else window.GM_WEATHER=keepWeather;}
+      }
       // T21: every generated item category follows the widened name bands.
       check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');
       check(BLUE_PRE.length===17&&new Set(BLUE_PRE).size===17,'rare prefix pool retains seven names and adds ten distinct dungeon names');

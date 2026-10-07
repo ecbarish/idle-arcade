@@ -47,6 +47,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 - **Wildbond v1.2.0 (2026-10-07)** — **The Returning Light League**, the story finale after all eight badges: Wren at the gate, four themed courts with healing rests, Champion Avenne, and a homecoming with Wren, Maren, Isolde and the guardians. Earn the Champion title and record the fully restored colour in the Journal. Cleared courts survive losses and reloads for the current ranch day; leaving ends the attempt. Post-game adventures remain future work.
 - **Wildbond v1.1.1 (2026-10-07)** — **Stillreed ferry landing:** visible raised board crossings, a moored reed-green skiff and a landing sign in every art era. The jetty is walkable, the boat stays moored, and existing routes, trainers and saves keep working. W7 town interiors remain to do.
 
+- **Realmbound v1.0.1 (2026-10-07)** — **Frostmere winter light:** low snow haze on the road and in its walkable hubs, cooler reflected light and clearer blue mountain layers. Warm night fires and windows remain visible; dawn, weather and the shared day/night shadows still shape the scene.
 - **2026-10-10** — **Save doctor** in the Studio: pick a game to see its save at a glance (heroes, team, badges, coins),
   a health check that spots broken values (an empty level, negative coins, a missing current hero) with a one-click
   fix, and every field in plain words, searchable and editable. Nothing is written until you press Save, and the old

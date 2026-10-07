@@ -66,6 +66,8 @@ parked for new features. **Hub and promo pages:** `index.html`, `promo.html`, `p
 **Parked:** Diamond Career (baseball), Otherworld (side lane: structural and polish tasks only), Primordial (back
 burner). Plans in `docs/plans/`.
 
+**Ready for review:** G2's Frostmere lighting pass (`codex/realmbound-frostmere-light`, Realmbound v1.0.1): low snow haze, cool reflected light and blue mountain layers. Other G2 zones remain open.
+
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
 **The master list is `docs/PROJECTS.md`** (every outlined project, sizes, dependencies, claims, the launch track);
@@ -85,6 +87,7 @@ rain sounds; walkable Realmbound towns.
 4. **Wildbond's ending:** W1 and T30/W2 are merged. T31/W3 part 1, the Lighthouse Spire and daily league rematches, is complete on `codex/wildbond-postgame`, awaiting review (PR #37). Next: roaming legendaries (W3 part 2), contests and races, and the Modern 3D era.
 5. **Realmbound next:** members' personal stories in the guild; battlegrounds (faction rivalry, the raid's closing
    hook); a second raid tier later.
+   **G2:** Frostmere lighting is ready for review on `codex/realmbound-frostmere-light`; choose another zone for the next lighting PR. Claude's league review remains separate.
 6. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines (a living scene on the
    ambience kit, shared sound, dialogue and creature art, a taste of each game). Build it once the games are further
    along.
@@ -117,6 +120,7 @@ a default so work never waits.
   `codex/wildbond-postgame`. **Next for Claude:** W9 baby-forms design, or the wider walkable view (L11).
 - 2026-10-07 Codex: T30/W2 complete on `codex/wildbond-league`, awaiting PR review; no merge. Returning Light League, Wren, four courts, Avenne and the colour-restoration homecoming; Champion title, daily progress and reload recovery, v1.2.0. All four pages pass: Wildbond 1120, Realmbound 1519, Starfall 48, sound 21; saves/hub restored. Phone/laptop/desktop/3440x1440 and five eras checked.
 
+- 2026-10-07 Codex: G2 Frostmere lighting ready for review on `codex/realmbound-frostmere-light`; no merge. Realmbound v1.0.1; low snow haze, cool bounce and blue distant layers. Four browser pages pass: Realmbound 1534, Wildbond 1044, Starfall 48, sound 21; saves/hub restored. Dawn/noon/night/blizzard, hubs, High/Low, reduced motion and 375/1366/1920/3440 widths checked; save reloaded. Before/after captures in `docs/screenshots/`. Claude's league retry investigation is untouched.
 - 2026-10-10 Claude: E3 save doctor in studio.html (summary, health check with fixes, searchable editor; per-game
   rules in `DOCTOR`, labels in `LABELS`; backs up before writing). **Next:** review T30 when it lands; W9 design or
   the wider walkable view (L11).
