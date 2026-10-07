@@ -92,7 +92,10 @@ rain sounds; walkable Realmbound towns.
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
-None open right now. **Decided 2026-10-08 (Evan: "go with your recommendations, and yes to the shared universe where
+1. **Baby forms (W9):** read `docs/proposals/creature-growth.md` and answer its five questions. Default if no
+   answer: the recommendations in it (life stages, babies stay on the ranch, elders, 3 ranch days, return-or-adopt).
+
+**Decided 2026-10-08 (Evan: "go with your recommendations, and yes to the shared universe where
 it makes sense"):** see the "Decided" section at the top of `docs/research/decisions.md`. New questions go here, each with
 a default so work never waits.
 
