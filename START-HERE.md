@@ -110,6 +110,13 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-07 Claude: merged six ChatGPT branches: T31 post-game (Spire + league rematches, v1.3.0), W7 ferry landing,
+  G2 Frostmere lighting, F4 playtest notes, L6 credits, L5 offline. **Changed L5 to online first** (sw.js: network
+  first with a 4 s fallback to the kept copy, no `CACHE_VERSION` bumps, takes over at once; docs/offline.md says why).
+  Hub header combines What to try, Credits and Install. playtest.html gained a v1.3.0 Wildbond route. All pass:
+  Wildbond 1176, Realmbound 1534, Starfall 48, sound 21, offline 15. The browser pane can't run service workers, so
+  the live install is unchecked: on the site, the hub should say "Ready for offline play".
 - 2026-10-07 Codex: T31/W3 part 1 complete on `codex/wildbond-postgame` (PR #37), awaiting review, no merge. Wildbond v1.3.0; Spire, safe persistent rewards/eggs, daily league rematches. All four browser pages pass; real 30-floor command-driven max-level climb completed, all five art styles (including actual 3D) and four screen sizes checked. Preserved Claude’s wider view/feedback keyboard changes. Next: review pending PRs; W3 roaming legendaries remains open.
 
 - 2026-10-07 Claude: Wildbond view distance (L11: `VIEWS`, `viewMult()`, `cycleView()` in 06-scene.js; header button
