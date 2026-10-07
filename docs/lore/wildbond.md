@@ -147,21 +147,52 @@ whatever road comes next rather than declaring an unbuilt route open.
 The basin uses rain, clear weather and mist, and has its own original, quiet zone tune. Toren's warm-stone clue
 remains unexplained; Stillwake's sheltering wake does not resolve it.
 
-## Proposed areas 6–8 — awaiting Evan's approval
+## Area 6 canon: Hollowecho Hills — levels 58–64 (T28)
 
-Areas 6–8 remain proposals. Their old T14 level bands below are historical; the decided bands are 58–64, 62–68 and 66–72. Guardian names describe prospective new species within existing families. No maps, species, battles or badges are implemented by this document.
+Beyond Stillreed Basin, the Reed Badge opens a survey trail through low green hills. Grey outcrops conceal cave
+mouths where dripping water and moving air make passages sound occupied. A surface hamlet hangs a bell beside
+the returning trail: teams ring before dusk and neighbors answer. Echoes sometimes answer a beat late. Shade offers
+shelter; a bright entrance can be harder to navigate than a familiar dark passage.
+
+The walkable hills have a winding path around uneven outcrops, a hamlet corner, irregular grass and rock-framed
+cave mouths. The west exit returns to Stillreed. **Veslin**, the bell keeper, makes sure every returning team gets
+an answer; **Narro**, a surveyor, changes a map after a Dripdart finds safer footing. Both offer friendly battles.
+Three supplies lie around the hamlet, a hollow and the eastern trail. Clear weather alternates with mist. An original,
+spacious pulse tune uses a call and answering fragments; there is no new art era or change to the journey settings.
+
+Nine species enter the record:
+
+- **Hushpup**, a Shade hyena, waits for a familiar echo at a fork. At level 60 it evolves into **Hushmane**, whose
+  soft call carries around bends without startling sheltered creatures.
+- **Umbrelace**, a Shade spider, hangs warning silk beside unsafe ledges while leaving the familiar passage open.
+- **Flintroot**, a Stone boar, clears loose stone with its shoulders before settling down.
+- **Ledgewhisk**, a Stone cat, feels along walls to find broad footing in the dark.
+- **Bellmote**, a Radiant sprite, lights a silent bell when a returning team approaches.
+- **Dripdart**, a Tide lizard, follows falling drops and taps the rock to call its neighbors.
+- **Chimespark**, a rare Radiant sprite, answers distant bells with one bright note; it has a low wild-table weight.
+- **Undertone**, the unique Shade hyena guardian, carries a low call through winding stone to reunite separated
+  groups. Its level-63 story encounter sits outside the ordinary wild table. A successful lure and calm can earn
+  companionship; knocking it out leaves a later retry, as with the other guardians.
+
+At six local explores, **Wren** notices her partner stopping before the bright mouth on her planned shortcut.
+She listens, rubs out her arrow and follows the familiar trail before the rematch. Listening was the cleverer move,
+she admits, while still expecting another chance to win. At fourteen, Undertone guides separated travelers home
+through answering notes and waits for their reunion before inviting the player's team closer.
+
+At twenty-four, **Warden Senna**, a quiet, attentive surveyor, tests whether the player listens to a partner's warning
+even when it contradicts a good plan. Her Flintroot, Bellmote and Hushmane are levels 60, 61 and 63. Victory awards
+the **Echo Badge** and raises the existing cap from 60 to 65. Senna asks teams to ring before dusk and answer others.
+These events do not explain the fading or Toren's warm stones, nor establish a new origin for Shade.
+
+## Proposed areas 7–8 — awaiting Evan's approval
+
+Areas 7–8 remain proposals. Their old T14 level bands below are historical; the decided bands are 62–68 and 66–72. Guardian names describe prospective new species within existing families. No maps, species, battles or badges are implemented by this document.
 
 ### Area 4 proposal (now built, see above): Cloudglass Pass — levels 32–42
 
 A high pass beyond Emberfall opens into hanging mist, pale rock and terraces of wind-bent grass. Small shelters mark places where walkers wait for clouds to lift. Guides mend ropes rather than promising safe weather; travelers share soup and compare which ridges they could see that morning. The warm-stone clue could lead here, but connecting those stones to a guardian would need an approved scene.
 
 **Mix:** Gale birds and horses, Stone cats and spiders, Radiant sprites. **Warden:** Vessa, a cheerful guide who admits when visibility beats her; she judges asking for help and sharing responsibility. **Badge:** Beacon Badge. **Guardian:** Lanterncrest, a Radiant bird whose proposed light reveals sheltered resting places. **Wren beat:** she takes a shortcut to arrive first, then returns for a lost traveler; her rematch celebrates getting everyone through rather than winning the race.
-
-### Area 6 proposal: Hollowecho Hills — levels 52–62
-
-Low hills conceal caverns where dripping water and moving air make every passage sound occupied. Surface hamlets hang bells by cave mouths so returning teams can signal before dusk. The inhabitants trade stories about echoes that answer a beat late. Exploration should feel curious rather than cruel: shade offers shelter, and a bright entrance can be harder to navigate than a familiar dark passage.
-
-**Mix:** Shade hyenas and spiders, Stone boars and cats, Radiant sprites, Tide lizards. **Warden:** Senna, an attentive surveyor who rarely raises her voice; she judges listening to a partner's warning even when it contradicts a plan. **Badge:** Echo Badge. **Guardian:** Undertone, a Shade hyena proposed to guide separated groups through sound. **Wren beat:** she recognizes her partner's unease before entering a wrong passage, then admits that listening was the cleverer move before their rematch.
 
 ### Area 7 proposal: Sunthread Commons — levels 62–70
 

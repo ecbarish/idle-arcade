@@ -14,7 +14,7 @@ const JOURNEY = {
   long: { name: 'Long Road', xp: 0.08, coins: 0.8, rare: -0.3, desc: 'For the grind: less XP and rarer finds. Every level is earned.' }
 };
 const AUTO_XP = 0.8;
-const BADGES = { thorn: { name: 'Thorn Badge' }, tide: { name: 'Tide Badge' }, ember: { name: 'Ember Badge' }, beacon: { name: 'Beacon Badge' }, reed: { name: 'Reed Badge' } };
+const BADGES = { thorn: { name: 'Thorn Badge' }, tide: { name: 'Tide Badge' }, ember: { name: 'Ember Badge' }, beacon: { name: 'Beacon Badge' }, reed: { name: 'Reed Badge' }, echo: { name: 'Echo Badge' } };
 
 /* Element wheel: each element is strong against the ones listed. */
 const ELEMENTS = {
@@ -236,7 +236,43 @@ const SPECIES = {
   stillwake: { name: 'Stillwake', fam: 'croc', el: 'Tide', col: '#638d7c', unique: 1, big: 1,
     base: { hp: 100, pow: 86, grd: 100, spd: 60, wit: 90, spi: 95 },
     learn: [[1, 'bite'], [1, 'bubbleJet'], [1, 'mistVeil'], [1, 'tidePulse']],
-    dex: "Stillreed Basin's guardian shelters small creatures in its calm wake as flooded channels carry them across." }
+    dex: "Stillreed Basin's guardian shelters small creatures in its calm wake as flooded channels carry them across." },
+  hushpup: { name: 'Hushpup', fam: 'hyena', el: 'Shade', col: '#81729b', evo: { to: 'hushmane', at: 60 },
+    base: { hp: 50, pow: 52, grd: 43, spd: 56, wit: 51, spi: 48 },
+    learn: [[1,"bite"],[6,"shadowSting"],[16,"howl"],[26,"mistVeil"]],
+    dex: 'It stops at a fork until the returning echo matches the footfalls of its friends.' },
+  hushmane: { name: 'Hushmane', fam: 'hyena', el: 'Shade', col: '#66597c',
+    base: { hp: 76, pow: 76, grd: 64, spd: 73, wit: 66, spi: 65 },
+    learn: [[1,"bite"],[6,"shadowSting"],[16,"howl"],[26,"mistVeil"]],
+    dex: 'Its soft call carries around stone bends without startling the creatures sheltering there.' },
+  umbrelace: { name: 'Umbrelace', fam: 'spider', el: 'Shade', col: '#726b84',
+    base: { hp: 47, pow: 43, grd: 51, spd: 48, wit: 59, spi: 52 },
+    learn: [[1,"scratch"],[6,"shadowSting"],[16,"webSnare"],[26,"mistVeil"]],
+    dex: 'It hangs silk beside unsafe ledges, leaving the familiar passage open.' },
+  flintroot: { name: 'Flintroot', fam: 'boar', el: 'Stone', col: '#9a927a',
+    base: { hp: 63, pow: 58, grd: 66, spd: 32, wit: 39, spi: 42 },
+    learn: [[1,"charge"],[6,"rockToss"],[16,"harden"],[26,"howl"]],
+    dex: 'It rubs loose stone from the trail with its shoulders before settling down to sleep.' },
+  ledgewhisk: { name: 'Ledgewhisk', fam: 'cat', el: 'Stone', col: '#b0a698',
+    base: { hp: 46, pow: 54, grd: 49, spd: 65, wit: 45, spi: 41 },
+    learn: [[1,"scratch"],[6,"rockToss"],[16,"harden"],[26,"tailwind"]],
+    dex: 'Its whiskers brush the wall while its paws find the broadest ledge in the dark.' },
+  bellmote: { name: 'Bellmote', fam: 'sprite', el: 'Radiant', col: '#d9d797',
+    base: { hp: 43, pow: 36, grd: 43, spd: 52, wit: 63, spi: 63 },
+    learn: [[1,"radiance"],[6,"spark"],[16,"mistVeil"],[26,"regrowth"]],
+    dex: 'It rests inside a silent bell and lights the rim when a returning team approaches.' },
+  dripdart: { name: 'Dripdart', fam: 'lizard', el: 'Tide', col: '#6f9e9c',
+    base: { hp: 48, pow: 46, grd: 43, spd: 65, wit: 53, spi: 45 },
+    learn: [[1,"bubbleJet"],[6,"tidePulse"],[16,"tailwind"],[26,"mistVeil"]],
+    dex: 'It follows falling drops to shallow pools, then taps the rock to call its neighbors.' },
+  chimespark: { name: 'Chimespark', fam: 'sprite', el: 'Radiant', col: '#d4c5ed',
+    base: { hp: 40, pow: 39, grd: 41, spd: 61, wit: 62, spi: 57 },
+    learn: [[1,"radiance"],[6,"spark"],[16,"tailwind"],[26,"regrowth"]],
+    dex: 'Rarely seen outside quiet hollows, it answers distant bells with a single bright note.' },
+  undertone: { name: 'Undertone', fam: 'hyena', el: 'Shade', col: '#504765', unique: 1, big: 1,
+    base: { hp: 94, pow: 91, grd: 87, spd: 88, wit: 82, spi: 88 },
+    learn: [[1,"shadowSting"],[1,"howl"],[1,"mistVeil"],[1,"bite"]],
+    dex: 'Its low call passes through winding stone to guide separated groups back to one another.' }
 };
 const STARTERS = ['cindercub', 'ripplet', 'mosshog'];
 
@@ -250,7 +286,9 @@ const BIOMES = {
   cloudglass: { name: 'Cloudglass Pass', lv: [32, 42], req: 'ember', sky: ['#aebdcc', '#eef2f4'], hill: '#8d97a3', ground: '#a3ae98',
     wild: [['mistfinch', 22], ['shalecat', 20], ['cirrusmane', 18], ['pallweaver', 16], ['gritbeak', 14], ['fogtail', 12], ['lanternwisp', 3]] },
   stillreed: { name: 'Stillreed Basin', lv: [52, 60], req: 'beacon', sky: ['#81988b', '#d6d8b2'], hill: '#65834c', ground: '#a49661',
-    wild: [['reedlet', 24], ['siltjaw', 18], ['rillwhisk', 18], ['orchardroot', 18], ['gustreed', 16], ['duskcord', 14], ['glassbill', 3]] }
+    wild: [['reedlet', 24], ['siltjaw', 18], ['rillwhisk', 18], ['orchardroot', 18], ['gustreed', 16], ['duskcord', 14], ['glassbill', 3]] },
+  hollowecho: { name: 'Hollowecho Hills', lv: [58, 64], req: 'reed', sky: ['#7c9190', '#c5cfb9'], hill: '#657c60', ground: '#8c8c80',
+    wild: [['hushpup',24],['umbrelace',18],['flintroot',18],['ledgewhisk',18],['bellmote',16],['dripdart',14],['chimespark',3]] }
 };
 
 const RIVAL = { name: 'Wren', col: '#d85a8a' };
@@ -263,7 +301,8 @@ const CAST = {
   nerys: { name: 'Warden Nerys', skin: '#8a5a3c', hair: 'hat', hairCol: '#9a948a', hatCol: '#3c5a6a', shirt: '#2f5e78', bg: '#cfe3ea', title: 'Warden of the Saltmarsh' },
   toren: { name: 'Warden Toren', skin: '#b87d59', hair: 'short', hairCol: '#ddd0bd', shirt: '#98543c', bg: '#ead0b2', title: 'Warden of Emberfall' },
   vessa: { name: 'Warden Vessa', skin: '#c99a74', hair: 'bun', hairCol: '#e0d2b0', shirt: '#4a6e8e', bg: '#dde6ee', title: 'Warden of Cloudglass Pass' },
-  olan: { name: 'Warden Olan', skin: '#ac7957', hair: 'hat', hairCol: '#c4c5ac', hatCol: '#82774e', shirt: '#5b7c69', bg: '#d4dfc5', title: 'Warden of Stillreed Basin' }
+  olan: { name: 'Warden Olan', skin: '#ac7957', hair: 'hat', hairCol: '#c4c5ac', hatCol: '#82774e', shirt: '#5b7c69', bg: '#d4dfc5', title: 'Warden of Stillreed Basin' },
+  senna: { name: 'Warden Senna', skin: '#bd8e6d', hair: 'short', hairCol: '#77747f', shirt: '#596b62', bg: '#ced6cf', title: 'Warden of Hollowecho Hills' }
 };
 /* Scenes that aren't tied to an explore count. */
 const SCENES = {
@@ -429,7 +468,109 @@ const STORY = [
     win: [['olan', "You left them room. Your team kept its footing without taking everyone else's. That is the kind of strength this basin can live beside."],
       ['olan', 'Take the Reed Badge. Your partners can grow to level sixty now. Please celebrate on the dry boards; I have only just mopped them.'],
       ['olan', 'Stillwake keeps a quiet crossing, and now you know why we keep the landing open. Carry that care wherever your team goes next.']],
-    trainer: 'Warden Olan', team: [['orchardroot', 54], ['ferrycrest', 55], ['siltjaw', 57]] }
+    trainer: 'Warden Olan', team: [['orchardroot', 54], ['ferrycrest', 55], ['siltjaw', 57]] },
+  /* Hollowecho Hills: listen before choosing the passage. */
+  {
+  biome: 'hollowecho',
+  at: 6,
+  id: 'rival7',
+  title: 'The passage that answers late',
+  text: 'Wren listened to her uneasy partner at a wrong passage, then chose the familiar trail for your rematch.',
+  lines: [
+    [
+      '',
+      'Wren has drawn an arrow toward a bright cave mouth. Her partner stops short and looks back at her, ears low.'
+    ],
+    [
+      'wren',
+      'That was my very clever shortcut. The echo comes back wrong, though. You heard it before I did, did you?'
+    ],
+    [ '', 'She rubs out the arrow and follows her partner around the outcrop to the broad trail.' ],
+    [
+      'wren',
+      'Listening was the cleverer move. Please remember I said something sensible before you beat me, {name}. Ready?'
+    ]
+  ],
+  win: [
+    [ 'wren', 'All right, you win. My shortcut lost before the battle even started.' ],
+    [
+      'wren',
+      'My partner knew the way. Next time I will ask before I draw the arrow. You can still expect a rematch.'
+    ]
+  ],
+  team: [ [ 'ledgewhisk', 58 ], [ 'hushmane', 60 ], [ '$rival', 61 ] ]
+},
+  {
+  biome: 'hollowecho',
+  at: 14,
+  id: 'undertone',
+  title: 'A low call through the stone',
+  text: 'Undertone, guardian of Hollowecho Hills, guided a separated group home with a call carried through the caverns.',
+  lines: [
+    [
+      '',
+      'A bell rings at the hamlet. Beyond the outcrop, another answers, but a small group is still missing from the trail.'
+    ],
+    [
+      '',
+      'A low call threads through the stone. The lost travelers follow each answering note until their footsteps meet beside the bell post.'
+    ],
+    [
+      '@undertone',
+      'A great Shade hyena emerges last: Undertone. It waits for the group to embrace before turning a quiet, questioning ear toward your team.'
+    ]
+  ],
+  win: [
+    [
+      '@undertone',
+      'Undertone sits beside your partner and hums a note so low you feel it through the ground.'
+    ],
+    [
+      '',
+      'The travelers ring the home bell. When you take the next path, the guardian answers from beside you.'
+    ]
+  ],
+  wild: [ 'undertone', 63, 4 ]
+},
+  {
+  biome: 'hollowecho',
+  at: 24,
+  id: 'warden6',
+  gate: 'echo',
+  title: 'The Hollowecho Warden',
+  text: 'Warden Senna tested whether you listened to a partner even when its warning contradicted your plan.',
+  lines: [
+    [
+      '',
+      'A quiet surveyor folds a map beside the cave mouth. Three partners watch the path while she waits for the last echo to fade.'
+    ],
+    [
+      'senna',
+      'Welcome, {name}. I am Senna. A tidy map is useful. A partner who disagrees with it is useful too.'
+    ],
+    [
+      'senna',
+      'I judge listening: will you change a good plan when someone beside you hears a warning you missed?'
+    ],
+    [ 'senna', 'Let them answer before you decide. We have enough daylight for a careful battle.' ]
+  ],
+  win: [
+    [
+      'senna',
+      'You heard them, even when it meant giving up an opening. Your plan made room for what your partners knew.'
+    ],
+    [
+      'senna',
+      'Take the Echo Badge. Your team can grow to level sixty-five now. Keep listening when the trail looks certain.'
+    ],
+    [
+      'senna',
+      'Ring the bell before dusk, and answer when someone else rings. A safe return is worth recording.'
+    ]
+  ],
+  trainer: 'Warden Senna',
+  team: [ [ 'flintroot', 60 ], [ 'bellmote', 61 ], [ 'hushmane', 63 ] ]
+}
 ];
 const COUNTER = { cindercub: 'ripplet', ripplet: 'mosshog', mosshog: 'cindercub' };
 

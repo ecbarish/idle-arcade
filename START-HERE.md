@@ -68,6 +68,10 @@ Claude's Stillreed ambience work remains separate after merge.
 **Parked:** Starfall Guild, Diamond Career (baseball), Otherworld (side lane: structural and polish tasks only), and
 Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
 
+**T28 ready for review:** `codex/wildbond-hollowecho` adds Hollowecho Hills (58–64), nine species, Wren's listening
+rematch, Undertone and Senna's Echo Badge (cap 65), a winding map, trainers, clear/mist weather and an original tune.
+All three browser test pages pass (Wildbond 748, Realmbound 1434, Starfall 48). Claude's cave ambience remains separate.
+
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
 1. ~~**T21: Realmbound item name tiers**~~ — done by ChatGPT, merged 2026-10-08.
@@ -144,7 +148,7 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
 21. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines: a living scene on the
    shared ambience kit, the shared sound, dialogue and creature art, a taste of each game. Wait until the games are
    further along so it's built once; then make it the arcade's showcase.
-22. **T28: Wildbond area 6, Hollowecho Hills** (any assistant; data) — **sent to ChatGPT 2026-10-09** (branch
+22. ~~**T28: Wildbond area 6, Hollowecho Hills**~~ — **done by Codex 2026-10-07; awaiting Claude's PR review** (branch
    `codex/wildbond-hollowecho`; ticket in `docs/ROADMAP.md`, "T28"): levels 58-64, Warden Senna, Echo Badge,
    Undertone. After merging: Claude adds its ambience (cave drips, dust, bats at dusk) in `drawAmbience`.
 23. **S4: the world kit** — part 1 done by Claude 2026-10-09 (`shared/world.js`; Wildbond HD-2D on it; walkable Realmbound towns in `js/22-town.js`). **Part 2 (next):** move Wildbond's walking (12-walk.js) onto `World.walker`; a layout per hub (camps for the Wildclans, the abbey for Thornvale); the guild hall as an interior you enter; then Starfall's guild hall. Originally: walkable places shared across games (see the plan in
@@ -170,6 +174,9 @@ a default so work never waits.
   world kit (walker + HD-2D renderer), moved Wildbond's HD-2D onto it, and made Realmbound's towns walkable (inn,
   smithy, trainer, stable, guild hall, quest giver, Pell and Brisket, Auto stroll). Tests: Realmbound 1448,
   Wildbond 619, Starfall 48. **Next:** review T28 when it lands (and add Hollowecho's ambience); S4 part 2.
+- 2026-10-07 Codex: T28 finished in the isolated clone, awaiting PR review; no merge. Wildbond 748, Realmbound 1434,
+  Starfall 48 pass with saves restored. Senna/Echo/Undertone are canon; desktop and phone map verified.
+
 - 2026-10-09 Claude: merged ChatGPT's T27 (Wildbond area 5, Stillreed Basin, levels 52-60, Warden Olan, Reed Badge,
   Stillwake) and gave the basin its own mist and fireflies. Tests: Wildbond 619, Realmbound 1434, Starfall 48.
 - 2026-10-07 Codex: T27 complete on `codex/wildbond-stillreed` for Claude's review, no merge. Browser checks pass:

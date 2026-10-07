@@ -213,6 +213,71 @@ function wildbondChecks() {
     ready();S.badges=badges.slice();S.story.warden4=true;save();load();if(levelCap()!==55||!S.story.warden4||S.badges.length!==4)return false;
     S.badges.push('reed');wb.placeAt('stillreed',19,9,'right');S.items={sr1:true};S.beaten={evren:true};save();reset();load();ensurePos();return S.pos.map==='stillreed'&&S.pos.x===19&&S.biome==='stillreed'&&levelCap()===60&&S.items.sr1&&S.beaten.evren;
   });
+  // T28: Hollowecho content and the real walking, story, capture and badge paths.
+  const hillSpecies = ['hushpup', 'hushmane', 'flintroot', 'dripdart', 'ledgewhisk', 'bellmote', 'umbrelace', 'chimespark', 'undertone'];
+  for (const id of hillSpecies) {
+    check('Hollowecho ' + id + ': valid family, element, moves and dex', () => {
+      const s = SPECIES[id]; return s && ['wolf','cat','boar','lizard','croc','bird','spider','horse','sprite','hyena'].includes(s.fam) && ELEMENTS[s.el] && s.learn.every(([l,m]) => l > 0 && MOVES[m]) && !!s.dex;
+    });
+    check('Hollowecho ' + id + ': base stats follow its role', () => {
+      const s = SPECIES[id], total = Object.values(s.base).reduce((a,b) => a+b,0);
+      return Object.keys(s.base).sort().join(',') === 'grd,hp,pow,spd,spi,wit' && Object.values(s.base).every(n => n > 0) && (s.unique ? total >= 500 && total <= 600 : id === 'hushmane' ? total >= 400 && total <= 440 : total >= 280 && total <= 320);
+    });
+  }
+  check('Hollowecho opens only with the Reed Badge at levels 58-64', () => {
+    ready(); const b=BIOMES.hollowecho; if (b.lv.join(',') !== '58,64' || b.req !== 'reed' || biomeOpen('hollowecho')) return false;
+    S.badges=[...badges,'reed']; return biomeOpen('hollowecho') && levelCap()===60;
+  });
+  check('Stillreed hill exit is gated and walks into Hollowecho after Reed', () => {
+    ready(); S.badges=badges.slice(); wb.placeAt('stillreed',28,9,'right');wb.tryStep('right');
+    if(S.pos.map!=='stillreed'||!W.msg.includes('Reed Badge'))return false;
+    S.badges.push('reed');wb.tryStep('right');return S.pos.map==='hollowecho'&&S.biome==='hollowecho'&&S.pos.x===1&&S.pos.y===9;
+  });
+  check('Hollowecho west exit returns to Stillreed on a safe tile', () => {
+    ready();S.badges=[...badges,'reed'];wb.placeAt('hollowecho');wb.tryStep('left');return S.pos.map==='stillreed'&&S.biome==='stillreed'&&S.pos.x===28&&S.pos.y===9;
+  });
+  check('Hollowecho map uses valid tiles and every walkable square is connected', () => {
+    const m=MAPS.hollowecho; if(m.rows.length!==14||m.rows.some(r=>r.length!==30||[...r].some(c=>!TILES[c])))return false;
+    const seen=new Set(),todo=[m.start.slice(0,2)];
+    while(todo.length){const [x,y]=todo.pop(),key=x+','+y;if(seen.has(key)||!walkable(m,x,y)||npcAt(m,x,y))continue;seen.add(key);for(const [dx,dy] of Object.values(DIRS))todo.push([x+dx,y+dy]);}
+    for(let y=0;y<14;y++)for(let x=0;x<30;x++)if(walkable(m,x,y)&&!npcAt(m,x,y)&&!seen.has(x+','+y))return false;
+    return m.items.every(it=>seen.has(it.at.join(',')))&&seen.has('0,9')&&seen.has('23,5')&&m.rows.some(r=>r.includes('R')&&r.includes('"'));
+  });
+  check('Hollowecho has a sign, three unique items and two route trainers at 58-62', () => {
+    const m=MAPS.hollowecho;return Object.keys(m.signs).length===1&&m.items.length===3&&new Set(Object.values(MAPS).flatMap(m=>(m.items||[]).map(it=>it.id))).size===Object.values(MAPS).flatMap(m=>m.items||[]).length&&m.npcs.filter(n=>n.trainer).length===2&&m.npcs.every(n=>n.trainer.team.every(([id,l])=>SPECIES[id]&&l>=58&&l<=62));
+  });
+  check('Hollowecho wild table excludes its guardian and keeps Chimespark rare', () => {
+    const w=BIOMES.hollowecho.wild;return w.every(([id,n])=>hillSpecies.includes(id)&&n>0&&!SPECIES[id].unique)&&w.find(([id])=>id==='chimespark')[1]===3&&w.filter(([id])=>id!=='chimespark').every(([,n])=>n>3)&&SPECIES.undertone.fam==='hyena'&&SPECIES.undertone.el==='Shade'&&SPECIES.undertone.big===1&&SPECIES.undertone.unique===1;
+  });
+  check('Hushpup really evolves at 60 before the sixth badge is needed', () => {
+    ready();S.badges=[...badges,'reed'];const c=wb.newCreature('hushpup',59);c.xp=0;grow(c,Cr.xpNeed(59));return c.lvl===60&&c.sp==='hushmane'&&S.caught.hushmane;
+  });
+  check('Hollowecho weather alternates clear and mist and its original zone tune has valid notes', () => {
+    const t=TRACKS.hollowecho;return WEATHER.hollowecho.join(',')==='clear,mist,clear'&&t.lead==='pulse'&&t.mel.split(' ').length===32&&[16,32].includes(t.bass.split(' ').length)&&[...t.mel.split(' '),...t.bass.split(' ')].every(n=>n==='.'||ArcadeSound.hz(n)>0);
+  });
+  check('Hollowecho clear daytime selects its zone music', () => {
+    ready();S.badges=[...badges,'reed'];S.day=1;S.ranchT=0;wb.placeAt('hollowecho');return weatherNow()==='clear'&&!isNight()&&musicKey()==='hollowecho';
+  });
+  const hillBeats=STORY.filter(b=>b.biome==='hollowecho');
+  check('Hollowecho story has exactly the required thresholds and team bands', () => hillBeats.length===3&&hillBeats.map(b=>b.at).join(',')==='6,14,24'&&hillBeats[0].team.every(([,l])=>l>=58&&l<=61)&&JSON.stringify(hillBeats[0].team.at(-1))==='["$rival",61]'&&JSON.stringify(hillBeats[1].wild)==='["undertone",63,4]'&&hillBeats[2].team.map(([,l])=>l).join(',')==='60,61,63'&&hillBeats[2].gate==='echo'&&hillBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
+  check('Wren wrong-passage rematch triggers at six local explores and a real victory completes it', () => {
+    ready();S.badges=[...badges,'reed'];wb.placeAt('hollowecho');S.explored=100;S.exploredIn={hollowecho:5};wb.explore();
+    if(!TALK||!TALK.lines.some(([,t])=>t.includes('echo')))return false;skipTalk();return B&&B.story==='rival7'&&B.kind==='trainer'&&B.foes.at(-1).c.lvl===61&&finishFight()==='won'&&S.story.rival7;
+  });
+  check('Undertone triggers at fourteen local explores and a real lure records the guardian', () => {
+    ready();S.badges=[...badges,'reed'];S.story.rival7=true;wb.placeAt('hollowecho');S.explored=100;S.exploredIn={hollowecho:13};wb.explore();if(!TALK)return false;skipTalk();
+    if(!B||B.story!=='undertone'||B.foes[0].c.sp!=='undertone'||B.foes[0].c.lvl!==63||B.foes[0].c.rar!==4)return false;
+    const random=Math.random;try{Math.random=()=>0;wb.command('lure');if(!B.capture)return false;B.capture.pos=B.capture.zone;wb.calmNow();const caught=B.over==='caught';wb.finishBattle();skipTalk();return caught&&S.story.undertone&&S.caught.undertone&&[...S.team,...S.ranch].some(c=>c.sp==='undertone');}finally{Math.random=random;}
+  });
+  check('Senna waits for 24 local explores; real victory awards Echo and cap 65 without changing eras', () => {
+    ready();S.badges=[...badges,'reed'];S.story.rival7=S.story.undertone=true;wb.placeAt('hollowecho');S.explored=100;S.exploredIn={hollowecho:23};
+    if(wb.wardenReady())return false;wb.challengeWarden();if(TALK||B)return false;S.exploredIn.hollowecho=24;const eras=JSON.stringify(S.eras);wb.challengeWarden();if(!TALK)return false;skipTalk();
+    return B&&B.story==='warden6'&&finishFight()==='won'&&S.story.warden6&&S.badges.includes('echo')&&levelCap()===65&&JSON.stringify(S.eras)===eras;
+  });
+  check('Five-badge saves preserve progress; Hollowecho saves reload the Echo Badge', () => {
+    ready();S.badges=[...badges,'reed'];S.story.warden5=true;save();load();if(levelCap()!==60||!S.story.warden5||S.badges.length!==5)return false;
+    S.badges.push('echo');wb.placeAt('hollowecho',27,9,'right');S.items={he1:true};S.beaten={veslin:true};save();reset();load();ensurePos();return S.pos.map==='hollowecho'&&S.pos.x===27&&S.biome==='hollowecho'&&levelCap()===65&&S.items.he1&&S.beaten.veslin;
+  });
   // T24: exercise the same walking, dialogue and battle paths as the game.
   function finishFight() {
     let ticks = 0;
