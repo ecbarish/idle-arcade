@@ -157,9 +157,7 @@ a default so work never waits.
 - 2026-10-09 Claude (evening): built S5, the shared ambience kit (living skies, scenery, weather with lightning and
   thunder, night lighting, fire, life) in all three games; merged ChatGPT's T23 (Crown's Heart, cap 60, Hollow Key);
   the quest log now says which dungeons an attunement quest waits on; raid re-measured at 60 (no retune). Tests:
-  Realmbound 1408, Wildbond 488, Starfall 48. Sent T27 (Wildbond Stillreed Basin) to ChatGPT. **Next:** the guild (members, mood, guild level, more job slots); review T27 when it lands. Older note:
-  Wildbond area 5 (Claude); give ChatGPT a new ticket (ideas: Wildbond battle backdrops on the ambience kit, a
-  Realmbound pacing pass for 52-60, or Starfall polish).
+  Realmbound 1408, Wildbond 488, Starfall 48. Sent T27 (Wildbond Stillreed Basin) to ChatGPT. **Next:** the guild (members, mood, guild level, more job slots); review T27 when it lands.
 - 2026-10-07 Codex: T23 complete on `codex/realmbound-crownheart` for Claude's review; no merge. All browser checks
   pass (Realmbound 1404, Wildbond 488, Starfall 48), saves restored. Focus Warrior: 45-52 282.19 min; 52-55 98.29 min.
   Evan chose to retain the strict file list: locked attunement reasons need a later quest-log UI change.
