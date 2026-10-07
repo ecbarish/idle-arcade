@@ -14,7 +14,7 @@ const JOURNEY = {
   long: { name: 'Long Road', xp: 0.08, coins: 0.8, rare: -0.3, desc: 'For the grind: less XP and rarer finds. Every level is earned.' }
 };
 const AUTO_XP = 0.8;
-const BADGES = { thorn: { name: 'Thorn Badge' }, tide: { name: 'Tide Badge' }, ember: { name: 'Ember Badge' }, beacon: { name: 'Beacon Badge' }, reed: { name: 'Reed Badge' }, echo: { name: 'Echo Badge' }, loom: { name: 'Loom Badge' } };
+const BADGES = { thorn: { name: 'Thorn Badge' }, tide: { name: 'Tide Badge' }, ember: { name: 'Ember Badge' }, beacon: { name: 'Beacon Badge' }, reed: { name: 'Reed Badge' }, echo: { name: 'Echo Badge' }, loom: { name: 'Loom Badge' }, horizon: { name: 'Horizon Badge' } };
 
 /* Element wheel: each element is strong against the ones listed. */
 const ELEMENTS = {
@@ -300,7 +300,35 @@ const SPECIES = {
     dex: "A rare visitor at first light, it leaves a gold glimmer on the knots of a well-mended shelter." },
   meadowmantle: { name: "Meadowmantle", fam: "boar", el: "Grove", col: "#668950", big: 1, unique: 1,
     base: {hp: 108,pow: 88,grd: 105,spd: 55,wit: 76,spi: 98}, learn: [[1,"charge"],[1,"thornQuake"],[1,"harden"],[1,"regrowth"]],
-    dex: "The guardian rests across the windward edge of nursery ground, keeping tender roots and sleeping young sheltered." }
+    dex: "The guardian rests across the windward edge of nursery ground, keeping tender roots and sleeping young sheltered." },
+  /* Farwatch Reach: careful records and the last stretch of the journey. */
+  shoalpup: { name: "Shoalpup", fam: "wolf", el: "Tide", col: "#8cabb1", evo: {"to":"soundhowl","at":68},
+    base: {"hp":52,"pow":54,"grd":43,"spd":62,"wit":43,"spi":46}, learn: [[1,"bite"],[1,"bubbleJet"],[18,"howl"],[32,"mistVeil"]],
+    dex: "It waits at the tideline until every returning paw has reached dry sand." },
+  soundhowl: { name: "Soundhowl", fam: "wolf", el: "Tide", col: "#5e8d9c", big: 1,
+    base: {"hp":76,"pow":78,"grd":65,"spd":82,"wit":55,"spi":64}, learn: [[1,"bite"],[1,"bubbleJet"],[18,"howl"],[32,"mistVeil"],[68,"tidePulse"]],
+    dex: "Its low call passes along the shore, letting separated teams find the same sheltered inlet." },
+  keeljaw: { name: "Keeljaw", fam: "croc", el: "Tide", col: "#758f89",
+    base: {"hp":66,"pow":58,"grd":62,"spd":30,"wit":40,"spi":44}, learn: [[1,"bite"],[1,"bubbleJet"],[18,"harden"],[32,"tidePulse"]],
+    dex: "It nudges drifting planks into the harbor shallows and leaves them where smaller paws can climb." },
+  chartwing: { name: "Chartwing", fam: "bird", el: "Gale", col: "#bdd3d5",
+    base: {"hp":42,"pow":43,"grd":38,"spd":78,"wit":55,"spi":44}, learn: [[1,"peck"],[1,"gust"],[18,"tailwind"],[32,"mistVeil"]],
+    dex: "It circles a lookout twice when fog closes the usual approach, then waits for the shore signal." },
+  moorweft: { name: "Moorweft", fam: "spider", el: "Stone", col: "#aba698",
+    base: {"hp":50,"pow":44,"grd":65,"spd":34,"wit":57,"spi":50}, learn: [[1,"scratch"],[1,"rockToss"],[18,"webSnare"],[32,"harden"]],
+    dex: "Its stout silk catches loose pebbles above paths without hiding the marks travelers follow." },
+  inkwhisk: { name: "Inkwhisk", fam: "cat", el: "Shade", col: "#777d98",
+    base: {"hp":43,"pow":53,"grd":39,"spd":70,"wit":52,"spi":43}, learn: [[1,"scratch"],[1,"shadowSting"],[18,"mistVeil"],[32,"tailwind"]],
+    dex: "It rests beside corrected charts and follows the fresh ink when an old shortcut becomes unsafe." },
+  buoyglint: { name: "Buoyglint", fam: "sprite", el: "Radiant", col: "#e8d6a2",
+    base: {"hp":40,"pow":32,"grd":44,"spd":56,"wit":66,"spi":62}, learn: [[1,"spark"],[14,"mistVeil"],[24,"regrowth"],[38,"radiance"]],
+    dex: "It lights the sheltered side of a mooring post until the last returning team has landed." },
+  isleglimmer: { name: "Isleglimmer", fam: "sprite", el: "Radiant", col: "#cde5e9",
+    base: {"hp":39,"pow":33,"grd":42,"spd":63,"wit":65,"spi":58}, learn: [[1,"spark"],[16,"radiance"],[28,"mistVeil"],[40,"tailwind"]],
+    dex: "Rarely seen beyond the lookouts, it hovers over a dry foothold before vanishing into sea fog." },
+  watchlight: { name: "Watchlight", fam: "sprite", el: "Radiant", col: "#f4e0a5", unique: 1, big: 1,
+    base: {"hp":96,"pow":68,"grd":88,"spd":82,"wit":104,"spi":92}, learn: [[1,"radiance"],[1,"mistVeil"],[1,"regrowth"],[1,"spark"]],
+    dex: "Farwatch Reach's guardian marks a safe approach through fog, waiting for travelers to answer before moving on." }
 };
 const STARTERS = ['cindercub', 'ripplet', 'mosshog'];
 
@@ -317,7 +345,8 @@ const BIOMES = {
     wild: [['reedlet', 24], ['siltjaw', 18], ['rillwhisk', 18], ['orchardroot', 18], ['gustreed', 16], ['duskcord', 14], ['glassbill', 3]] },
   hollowecho: { name: 'Hollowecho Hills', lv: [58, 64], req: 'reed', sky: ['#7c9190', '#c5cfb9'], hill: '#657c60', ground: '#8c8c80',
     wild: [['hushpup',24],['umbrelace',18],['flintroot',18],['ledgewhisk',18],['bellmote',16],['dripdart',14],['chimespark',3]] },
-  sunthread: {"name":"Sunthread Commons","lv":[62,68],"req":"echo","sky":["#9fcfe4","#f1e6b6"],"hill":"#90ac5f","ground":"#b4bf70","wild":[["clovercolt",24],["tilthtusk",18],["hemglow",18],["pennantlark",16],["hearthrunner",16],["ribbonstride",14],["dawntassel",3]]}
+  sunthread: {"name":"Sunthread Commons","lv":[62,68],"req":"echo","sky":["#9fcfe4","#f1e6b6"],"hill":"#90ac5f","ground":"#b4bf70","wild":[["clovercolt",24],["tilthtusk",18],["hemglow",18],["pennantlark",16],["hearthrunner",16],["ribbonstride",14],["dawntassel",3]]},
+  farwatch: {"name":"Farwatch Reach","lv":[66,72],"req":"loom","sky":["#8caebe","#dce5db"],"hill":"#748b88","ground":"#aab29a","wild":[["shoalpup",24],["keeljaw",18],["chartwing",18],["moorweft",16],["inkwhisk",16],["buoyglint",14],["isleglimmer",3]]}
 };
 
 const RIVAL = { name: 'Wren', col: '#d85a8a' };
@@ -332,7 +361,8 @@ const CAST = {
   vessa: { name: 'Warden Vessa', skin: '#c99a74', hair: 'bun', hairCol: '#e0d2b0', shirt: '#4a6e8e', bg: '#dde6ee', title: 'Warden of Cloudglass Pass' },
   olan: { name: 'Warden Olan', skin: '#ac7957', hair: 'hat', hairCol: '#c4c5ac', hatCol: '#82774e', shirt: '#5b7c69', bg: '#d4dfc5', title: 'Warden of Stillreed Basin' },
   senna: { name: 'Warden Senna', skin: '#bd8e6d', hair: 'short', hairCol: '#77747f', shirt: '#596b62', bg: '#ced6cf', title: 'Warden of Hollowecho Hills' },
-  halen: {"name":"Warden Halen","skin":"#a97a56","hair":"short","hairCol":"#b0a78c","shirt":"#758b53","bg":"#e9e3bd","title":"Warden of Sunthread Commons"}
+  halen: {"name":"Warden Halen","skin":"#a97a56","hair":"short","hairCol":"#b0a78c","shirt":"#758b53","bg":"#e9e3bd","title":"Warden of Sunthread Commons"},
+  rysa: {"name":"Warden Rysa","skin":"#bd906e","hair":"bun","hairCol":"#62565a","shirt":"#547c8a","bg":"#dbe6e1","title":"Warden of Farwatch Reach"}
 };
 /* Scenes that aren't tied to an explore count. */
 const SCENES = {
@@ -625,7 +655,44 @@ const STORY = [
     win: [["halen","You made room for the quiet work as well as the bright opening. Your partners could trust one another to do different things."],
       ["halen","Take the Loom Badge. Your team can grow to level seventy now. A good gathering leaves nobody wondering whether they belong."],
       ["halen","There is still a road ahead. Remember the names of the teams beside you, and leave them a place to rest."]],
-    trainer: "Warden Halen", team: [["tilthtusk",65],["hemglow",66],["bloomcourser",68]] }
+    trainer: "Warden Halen", team: [["tilthtusk",65],["hemglow",66],["bloomcourser",68]] },
+  /* Farwatch: the eighth badge, before the league (W2). */
+  { biome: "farwatch", at: 6, id: "rival9", title: "The notes we share", text: "Wren shared her corrected coastal notes before the last route rematch, with the league ahead.",
+    lines: [
+      ["","Wren holds out a salt-spotted notebook. A shortcut is crossed out; a sheltered approach is drawn beside it."],
+      ["wren","I used to keep the best route to myself. Take a copy, {name}. That crossing is only safe when the water is low. I nearly wrote it as always safe."],
+      ["wren","Eight roads since Larkhaven. Remember how sure I was that choosing the right starter would settle everything? My partner has had a few opinions since."],
+      ["wren","The league is nearly in sight. First, one more battle here, as friends. Shared notes do not mean I am letting you win!"]
+    ],
+    win: [
+      ["wren","You win. Again! I am writing that down accurately, even if the notebook would look better without it."],
+      ["wren","At the league, bring the whole journey with you. I will bring mine. For now, let us get everyone back to the harbor."]
+    ],
+    team: [["chartwing",68],["inkwhisk",69],["$rival",70]] },
+  { biome: "farwatch", at: 14, id: "watchlight", title: "An answering light", text: "Watchlight guided returning teams through the fog before inviting a bond beside the harbor.",
+    lines: [
+      ["","Sea fog folds over the lookout stones. A small light pauses above a dry inlet, then waits for an answering lantern from shore."],
+      ["","The returning team reaches the sand. Harbor keepers lower their lanterns only after counting every partner."],
+      ["@watchlight","Watchlight settles above the empty mooring. Its glow softens; it waits for your team to approach together."]
+    ],
+    win: [
+      ["@watchlight","Watchlight rests beside your partner, its glow steady enough to read the nearest trail mark."],
+      ["","The harbor keepers light the next approach themselves. The guardian chooses to accompany you; careful returns remain everyone's work."]
+    ],
+    wild: ["watchlight",71,4] },
+  { biome: "farwatch", at: 24, id: "warden8", gate: "horizon", title: "The Farwatch Warden", text: "Rysa tested responsibility for shared knowledge and awarded the eighth badge before the league.",
+    lines: [
+      ["","At the lookout ledger, Rysa strikes through her own tide estimate and writes a correction large enough for anyone to see."],
+      ["rysa","Welcome, {name}. I had yesterday's tide wrong. An honest correction helps more than a confident mistake. What we pass on becomes someone else's road."],
+      ["rysa","Seven Wardens have met your team. I am the eighth. Before the league, show me you can listen, learn, and take responsibility when a partner proves you wrong."],
+      ["rysa","We will battle on firm ground. Watch the team beside you as carefully as the one across from you."]
+    ],
+    win: [
+      ["rysa","You learned as the battle changed. That is the kind of knowledge worth sharing. Nobody needs you to pretend the journey was easy."],
+      ["rysa","Take the Horizon Badge, your eighth. Your partners can grow to level seventy-five. You have carried their trust from Larkhaven all the way to this shore."],
+      ["rysa","The league is the next chapter, not a reason to forget these roads. Rest here, correct your notes, and remember who helped you reach the horizon."]
+    ],
+    trainer: "Warden Rysa", team: [["keeljaw",69],["moorweft",70],["soundhowl",72]] }
 ];
 const COUNTER = { cindercub: 'ripplet', ripplet: 'mosshog', mosshog: 'cindercub' };
 

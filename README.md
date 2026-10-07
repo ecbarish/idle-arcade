@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Wildbond v1.1.0 (2026-10-07)** — **Farwatch Reach**, the eighth and final pre-league area (66–72): nine species, a coastal harbor map, two route trainers, Wren's shared-notes rematch, Watchlight, and Warden Rysa's Horizon Badge (cap 75 with eight badges). Original music, fog weather and a coastal battle backdrop. The league follows in W2.
+
 - **2026-10-10** — **The Studio** (`studio.html`, not linked anywhere so players never see it; bookmark it): Evan's game-master tools. Turn on GM mode
   and every game gets a GM panel (Ctrl+Shift+G): give gold, coins, items and creatures, set levels and badges, teleport,
   change the time of day and the weather, heal, grant the Hollow Key, add supplies and guild experience, reset raid
