@@ -28,6 +28,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T1-B: Grave Chill in the Silent Barrows, pacing 40-45 measured** (Claude, done 2026-10-08).
 - [x] **T20: Realmbound Frostmere II, The Barrowfields and The Silent Barrows** (ChatGPT, data): see the T20 section.
 - [x] **T21: Realmbound item name tiers to level 60** (ChatGPT, data + one formula): see the T21 section.
+- [ ] **T22: Realmbound Hollow Crown, part 1** (ChatGPT, data): see the T22 section.
 - [x] **T24: Wildbond checks for the newer systems** (ChatGPT, tests only): see the T24 section.
 - [x] **T25: Split Starfall Guild into small files, add a test page** (ChatGPT, no behavior change): see the T25 section.
 - [x] **T2: Creature game spec + shared creature module plan** (Claude). See docs/creature-game-design.md.
@@ -154,6 +155,32 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   (it validates maps, exits, NPC spots, speakers and moves). Then play it: give a save the first three badges with
   `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
+
+### T22: Realmbound Hollow Crown, part 1 (data)
+Levels 45-52, the second chapter of docs/realmbound-40-60.md ("The Hollow Crown" and "Story thread"). Same shape and
+rules as T20 (read its ticket below and copy its structure), building on what T20 and T1-B added.
+- **Change only:** games/realmbound/js/00-core.js (`LEVEL_CAP = 52`), 01-world.js (zone + quests), 06-npcs.js
+  (`npcZone`: companions 45+ visit the new zone), 07-dungeons.js (the new dungeon), tests/realmbound-scenarios.cjs
+  (add your checks in a block after the T20 checks), docs/lore/realmbound.md, README.md changelog, and ticking T22 here
+  and in START-HERE.md. Claude is building shared dialogue scenes meanwhile in new files and the quest UI.
+- **Zone `hollowcrown`, "The Hollow Crown"**, `lv: [45, 52]`, shared, hub *Thornmantle Camp* for both factions (a
+  shared forward camp, so both `hub` entries can be the same name), its own colours (sick green-gold canopy, dark
+  roots), a `lore` paragraph, appended to both `ZONE_ORDER` routes after `barrowfield`. Mobs (5 types, 45-52): Ashwing
+  drakes (`fam: 'lizard'`), corrupted treant wardens (humanoid), rot-bitten wolves, canopy spiders, thornback boars;
+  plus a legendary tameable elite at 52 (an Ashwing broodmother or old drake, `elite`, `rare`, a tameable family).
+- **12 quests `hc1`...** (kill/collect, 45-52, `req` chains, faction `giver` pairs and `done` lines in each giver's
+  voice). Story: both factions follow the barrows road east into a forest grown around an empty throne; the Ashwing
+  treat the throne as their hoard; the corruption is the forest trying to fill the empty seat. New quest givers are
+  welcome (original names). The last quests point to the dungeon and toward Seraveth (not met yet). Follow
+  `docs/lore/multiverse.md` (Pell the travelling peddler may appear as a quest giver or a line if it fits).
+- **Dungeon `rootrot`, "Rootrot Hollow"**: `minLvl: 49`, `zone: 'hollowcrown'`, levels 49-52, 4 packs and 3 bosses in
+  the same shape as `BARROWS`; bosses may use `wave`, `surge`, `enrage` and Grave Chill's `chill` only if it fits (it
+  is a cold mechanic; probably not). Add `rootrot: ROOTROT` to `DUNGEONS`.
+- **Checks:** everything T20's checks cover, for the new zone, quests, elite and dungeon (travel at 43 refused, 43+ if
+  the zone starts at 45: use the existing "minimum level − 2" rule; a level-45 save resumes and reaches 46). Also run
+  tests/wildbond.html and tests/starfall.html: all three test pages must pass.
+- **Pacing:** optional but welcome: run the sim described in docs/realmbound-40-60.md ("Measured") for one class
+  and add its numbers.
 
 ### T25: Split Starfall Guild into small files, add a test page (no behavior change)
 Starfall Guild (games/starfall-guild/index.html) is one 826-line file, the shape Realmbound was in before T0. Split it

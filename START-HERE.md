@@ -65,7 +65,8 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    `docs/realmbound-40-60.md` ("Measured: the Barrowfields"). To re-measure a later chapter, copy that method:
    loop `window.__rb.step(0.1)`, keep the quest log full with `accept`/`turnIn`, loot by hand (`lootAll()`) and
    empty bags in "Focus", and replace gear at each level.
-3. **T22: Realmbound Hollow Crown, part 1** (any assistant; data). Same shape as T20 (see its ticket in
+3. **T22: Realmbound Hollow Crown, part 1** (any assistant; data) — **sent to ChatGPT 2026-10-08** (branch
+   `codex/realmbound-hollowcrown`; full ticket in `docs/ROADMAP.md`, "T22"). Same shape as T20 (see its ticket in
    `docs/ROADMAP.md`): zone `hollowcrown`, "The Hollow Crown", `lv: [45, 52]`, shared hub *Thornmantle Camp*, a lore
    paragraph, 5 mob types 45-52 (Ashwing drakes use the `lizard` family; corrupted treants as humanoids; wolves,
    spiders, boars of the rotting wood), a legendary tameable elite at 52, 12 voiced quests (`hc1`…) following "The
@@ -91,7 +92,7 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    (×1.6 / ×1 / ×0.6), chosen at character creation and changeable in town; re-run the pacing sim afterwards.
 11. ~~**D7: shared multiverse record**~~ — done by Claude 2026-10-08: `docs/lore/multiverse.md` (rules, how the worlds
    connect, recurring characters Pell the peddler and the Archivist). Use it whenever writing new lore.
-12. **S1: shared dialogue scenes** (any assistant): move Wildbond's `09-dialogue.js` into `shared/dialogue.js` (portrait
+12. **S1: shared dialogue scenes** (any assistant) — **claimed by Claude, 2026-10-08**: move Wildbond's `09-dialogue.js` into `shared/dialogue.js` (portrait
    drawing, typewriter, auto-advance) with a small game-specific adapter, keep Wildbond identical (both test pages
    pass), then use it for Realmbound quest givers' offer/turn-in lines (portraits from a small cast list).
 13. **S2: shared sound** (any assistant): same for `10-sound.js` → `shared/sound.js`; give Realmbound effects and
