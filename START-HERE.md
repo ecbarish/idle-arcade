@@ -77,6 +77,9 @@ follow-ups. Shows the next two periods for unlocked routes; preserves the existi
 into battles in 16-bit, HD-2D and Diorama. Pocket and Pixel retain their existing appearance; combat is unchanged.
 **Challenge pennants ready for review:** `codex/wildbond-challenge-pennants` displays four original ranch
 pennants earned from the existing challenge titles. Cosmetics only; old title records work, no new save fields.
+**Rain audio ready for review:** `codex/shared-rain-audio` adds quiet rain through the shared sound engine.
+Wildbond follows the route weather (including battles), Realmbound follows rain/drizzle/storm outdoors; towns in
+Wildbond and Realmbound dungeons stay dry. Sound remains off by default; either enabled mode includes the rain.
 
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
@@ -141,6 +144,7 @@ pennants earned from the existing challenge titles. Cosmetics only; old title re
    Hollow Key (T23's last quest) but build it so it can be tested before T23 lands.
 19. ~~**S5: shared ambience kit**~~ — done by Claude 2026-10-09 (`shared/ambience.js`; all three games use it; layout in HANDOFF.md). Journal weather forecast: done by Codex 2026-10-07, awaiting PR review (`codex/wildbond-weather-forecast`). Ideas for later: Wildbond battle backdrops and rain sounds. Evan asked for it after seeing a living pixel-art
 19. ~~**S5: shared ambience kit**~~ — done by Claude 2026-10-09 (`shared/ambience.js`; all three games use it; layout in HANDOFF.md). Battle backdrops: done by Codex 2026-10-07, awaiting PR review (`codex/wildbond-battle-backdrops`). Ideas for later: a weather forecast in the Journal and rain sounds. Evan asked for it after seeing a living pixel-art
+19. ~~**S5: shared ambience kit**~~ — done by Claude 2026-10-09 (`shared/ambience.js`; all three games use it; layout in HANDOFF.md). Ideas for later: Wildbond battle backdrops, a weather forecast in the Journal, rain sounds (done by Codex 2026-10-07, awaiting review: `codex/shared-rain-audio`). Evan asked for it after seeing a living pixel-art
    scene (a floating island at night with rain, lightning, smoke, flickering windows, a campfire, fireflies, a waterfall,
    swaying trees, drifting clouds, a moving character; "the lightning and other moving elements made it most
    impressive"). `shared/ambience.js`, drawn on the games' existing canvases, quality first, used by every game:
@@ -192,6 +196,10 @@ a default so work never waits.
   `codex/wildbond-challenge-pennants`, awaiting review; no merge. Tests: Wildbond 627, Realmbound 1434, Starfall 48,
   saves restored; desktop/phone checked. Combined with all five earlier PRs: Realmbound 1465, Wildbond 769,
   Starfall 48, sound 21, all pass. Earlier PRs #22–26 are ready for review; S4 remains claimed by Claude.
+- 2026-10-07 Codex: S5 rain audio complete on `codex/shared-rain-audio`, awaiting PR review; no merge. Quiet filtered
+  noise in effects or music mode, fades with weather, stops on off/hidden, one loop maximum. No save fields.
+  Browser checks: Realmbound 1442, Wildbond 620, Starfall 48, shared sound 21; saves restored. Actual Web Audio
+  measured rain signal, dry fade and zero hidden/off output. Combined with PRs #22–25: Realmbound 1465, Wildbond 761, Starfall 48, sound 21, all pass. Earlier PRs remain pending; S4 stays Claude's.
 
 - 2026-10-09 Claude: merged ChatGPT's T27 (Wildbond area 5, Stillreed Basin, levels 52-60, Warden Olan, Reed Badge,
   Stillwake) and gave the basin its own mist and fireflies. Tests: Wildbond 619, Realmbound 1434, Starfall 48.

@@ -317,6 +317,10 @@ function wildbondChecks() {
   });
   check('An old save without titles loads locked pennants and unknown titles unlock none', () => {
     ready();delete S.titles;save();reset();load();if(S.titles.length!==0)return false;S.titles=['A future title'];const node=document.createElement('div');node.innerHTML=ranchPennantsHTML();return node.querySelectorAll('[data-earned="true"]').length===0;
+  check('Rain audio follows the route and stops in town, before Tide and before starting', () => {
+    ready();wb.placeAt('saltmarsh');S.day=1;S.ranchT=0;if(rainLevel()!==0)return false;
+    S.badges=['thorn','tide'];for(let day=1;day<=97;day++){S.day=day;const expected=weatherNow()==='rain'?(stormy()?1:.65):0;if(rainLevel()!==expected)return false;}
+    wb.placeAt('larkhaven');if(rainLevel()!==0)return false;wb.placeAt('saltmarsh');S.started=false;return rainLevel()===0;
   });
   // T24: exercise the same walking, dialogue and battle paths as the game.
   function finishFight() {

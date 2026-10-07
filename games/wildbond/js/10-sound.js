@@ -58,8 +58,10 @@ function musicKey() {
   }
   return TRACKS[S.biome] ? S.biome : 'thornwood';
 }
+/* The same rain heard on the route continues behind a battle; the inn stays quiet. */
+function rainLevel() { return S.started && S.pos && MAPS[S.pos.map].biome && weatherNow() === 'rain' ? (stormy() ? 1 : .65) : 0; }
 const SND = ArcadeSound.create({
-  tracks: TRACKS, voices: VOICE, musicKey,
+  tracks: TRACKS, voices: VOICE, musicKey, rain: rainLevel,
   mode: () => S.snd || 0, setMode: m => { S.snd = m; },
   button: () => $('#sndBtn')
 });

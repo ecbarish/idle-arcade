@@ -34,6 +34,11 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
   25% pulse / triangle / saw leads, drum lines, crossfades between tracks, and one shared set of effects (level,
   quest, catch, loot, warn, win, lose...). Each game writes its own tunes: Wildbond in `js/10-sound.js`, Realmbound
   in `js/17-sound.js`. Sound is always off until the player turns it on.
+  Optional `rain()` returns intensity 0–1: a single quiet filtered-noise layer in either enabled sound mode,
+  separate from music and effects gains. Wildbond and Realmbound supply it from their existing weather; Starfall
+  needs no adapter change. Dry conditions fade to silence; off, hidden or suspended pages release the loop.
+  `dispose()` releases a removed sound player's timer, visibility listener and audio context. Lifecycle checks:
+  `tests/sound.html` (no game saves read or written). No new sound preference or save fields.
 - `shared/roster.js`: the arcade's shared roster and jobs (`Roster.create({get, jobs, slots, canWork, capHours})`):
   members you aren't playing work jobs that pay whole units by the clock (the same time pays the same whether you
   played, were away or switched characters; reloading never pays twice; time away is capped like rested XP).
