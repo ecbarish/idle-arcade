@@ -29,6 +29,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T20: Realmbound Frostmere II, The Barrowfields and The Silent Barrows** (ChatGPT, data): see the T20 section.
 - [x] **T21: Realmbound item name tiers to level 60** (ChatGPT, data + one formula): see the T21 section.
 - [x] **T22: Realmbound Hollow Crown, part 1** (ChatGPT, data): see the T22 section.
+- [x] **T23: Realmbound Hollow Crown II, the Crown's Heart** (Codex): content, Key gates and pacing done; owner kept the strict file list, so the missing locked-quest UI reason is documented for follow-up in the PR.
 - [x] **T24: Wildbond checks for the newer systems** (ChatGPT, tests only): see the T24 section.
 - [x] **T25: Split Starfall Guild into small files, add a test page** (ChatGPT, no behavior change): see the T25 section.
 - [x] **T26: Starfall Guild sound on the shared sound system** (Codex): see the T26 section; original town, delve and boss themes, guarded effects and browser checks.

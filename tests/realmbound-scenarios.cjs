@@ -21,9 +21,9 @@ module.exports = function scenarios() {
         rb.accept(q.id);h.quests.prog[q.id]=q.n;rb.turnIn(q.id,0,false);
         check(h.quests.done[q.id],'quest completed: '+q.id);
       }
-      h.lvl=51;h.xp=0;rb.boot();rb.gainXP(rb.xpNeed(51)*10,false);
-      check(h.lvl===52&&h.xp===0,'XP stops at level 52');
-      check(h.npcs.every(n=>rb.npcZone(n)==='hollowcrown'),'high-level companions visit the Hollow Crown');
+      h.lvl=59;h.xp=0;rb.boot();rb.gainXP(rb.xpNeed(59)*10,false);
+      check(h.lvl===60&&h.xp===0,'XP stops at level 60');
+      check(h.npcs.every(n=>rb.npcZone(n)==='crownheart'),'high-level companions visit the Crown heart');
       h.lvl=27;for(const n of h.npcs)n.offset=0;
       check(h.npcs.every(n=>rb.npcZone(n)==='ashen'),'level-27 companions still visit Ashen Ridge');
       h.lvl=30;rb.boot();
@@ -210,6 +210,71 @@ module.exports = function scenarios() {
           check(rb.dungeonStats('sanctum').best===1&&rb.dungeonStats('foundry').clears===1&&rb.dungeonStats('barrows').clears===1,'Rootrot clear preserves earlier dungeon records: '+faction);
           rb.startDungeon(1,team,'rootrot');check(old.dun.id==='rootrot'&&old.dun.mods.length===1,'Rootrot earned Heroic uses existing modifiers: '+faction);
           old.dun=null;rb.boot();rb.save();
+        }
+      }
+      // T23: the Crown's Heart, Hollow Key gates and the existing raid unlock.
+      {
+        const z=rb.ZONES.crownheart,d=rb.DUNGEONS.heartwood,qs=rb.QUESTS.crownheart,elite=z.mobs.find(m=>m.elite);
+        check(z.name==="The Crown's Heart"&&z.lv[0]===52&&z.lv[1]===60&&z.faction===null,'Crown heart is a shared 52-60 zone');
+        check(z.hub.concord==='Heartwatch Camp'&&z.hub.wild===z.hub.concord,'both factions share the inward camp');
+        check(['Seraveth','Hollow Throne','Hollow Key','Silent Barrows','Rootrot Hollow'].every(t=>z.lore.includes(t)),'Crown heart lore names the attunement and occupied throne');
+        check(Object.values(ZONE_ORDER).every(r=>r.at(-1)==='crownheart'&&r.at(-2)==='hollowcrown'),'both routes append Crown heart');
+        check(z.mobs.length===7&&z.mobs.filter(m=>m.elite).length===1,'six ordinary Crown heart mobs and one elite');
+        check(z.mobs.every(m=>m.lv[0]>=52&&m.lv[1]<=60&&m.lv[0]<=m.lv[1]),'Crown heart mob bands remain within 52-60');
+        check(['wolf','boar','spider','lizard'].every(f=>z.mobs.some(m=>m.fam===f))&&z.mobs.some(m=>m.kind==='humanoid'),'Crown heart mob roles use existing families and treant kind');
+        check(new Set(Object.values(rb.ZONES).flatMap(z=>z.mobs.map(m=>m.id))).size===Object.values(rb.ZONES).flatMap(z=>z.mobs).length,'all surface mob IDs remain unique');
+        check(elite.id==='aurethyn'&&elite.rare&&elite.fam==='lizard'&&elite.lv.every(l=>l===60),'Aurethyn is a legendary tameable level-60 drake');
+        check(qs.length===14&&qs.every((q,i)=>q.id==='ch'+(i+1)&&q.lvl>=52&&q.lvl<=60),'fourteen ch quests cover levels 52-60');
+        check(qs.every(q=>q.giver.length===2&&q.done.length===2&&q.giver.every(Boolean)&&q.done.every(Boolean)),'all Crown heart quests have faction givers and turn-in voices');
+        check(qs.every(q=>['kill','collect'].includes(q.type)&&q.n>0&&(!q.req||qs.findIndex(p=>p.id===q.req)<qs.indexOf(q)&&qs.some(p=>p.id===q.req))),'Crown heart objectives and prerequisite chains are valid');
+        check(qs.slice(-3).every(q=>q.attune&&JSON.stringify(q.needDun)==='["barrows","rootrot"]')&&qs[11].req==='ch11'&&qs[12].req==='ch12'&&qs[13].req==='ch13','three Hollow Key quests require both dungeon clears and chained predecessors');
+        check(qs[13].done.every(t=>t.includes('Hollow Key')&&t.includes('Hollow Throne')&&t.includes('Seraveth')),'final voices hand over the Key and point to the existing raid');
+        check(d.name==='The Heartwood Vault'&&d.minLvl===56&&d.zone==='crownheart','Heartwood opens at 56 in Crown heart');
+        check(d.enc.filter(e=>!e.boss).length===4&&d.enc.filter(e=>e.boss).length===3,'Heartwood has four packs and three bosses');
+        check(d.enc.every(e=>e.lvl>=56&&e.lvl<=60&&(!e.mech||Object.keys(e.mech).every(k=>['wave','surge','enrage'].includes(k)))),'Heartwood uses existing warm-wood mechanics');
+        check(d.enc.at(-1).final&&d.enc.at(-1).lvl===60&&d.enc.at(-1).hpM>=13&&d.enc.at(-1).hpM<=14&&!d.enc.some(e=>e.name.includes('Seraveth')),'Heartwood final boss is tougher than Arveth and is not Seraveth');
+        check(TRACKS.crownheart.mel.split(' ').length===32&&TRACKS.crownheart.mel.split(' ').every(n=>n==='.'||ArcadeSound.hz(n)>0),'Crown heart has an original valid 32-note tune');
+        for(const faction of ['concord','wild']){
+          const c=rb.newHero('Heartcheck',faction,faction==='concord'?'human':'grishar','hunter');rb.S.chars.push(c);rb.S.cur=c.id;
+          Object.assign(c,{lvl:49,zone:'hollowcrown',xp:0});for(const n of c.npcs)n.offset=0;rb.boot();
+          const travel=()=>document.querySelector('[data-act="zone"][data-arg="crownheart"]').click();
+          travel();check(c.zone==='hollowcrown','Crown heart refuses travel at 49: '+faction);
+          c.lvl=50;rb.boot();travel();rb.boot();check(c.zone==='crownheart','Crown heart accepts travel at 50: '+faction);
+          check(document.querySelector('#zoneLore').textContent===z.lore&&document.body.textContent.includes('Heartwatch Camp'),'inward camp and lore visible: '+faction);
+          c.lvl=51;check(c.npcs.every(n=>rb.npcZone(n)==='hollowcrown'),'51 companions retain Outer Wood: '+faction);
+          c.lvl=52;check(c.npcs.every(n=>rb.npcZone(n)==='crownheart'),'52 companions visit Crown heart: '+faction);
+          c.zone='hollowcrown';c.quests.done.hc12=true;c.drecords={barrows:{clears:1,best:0,runs:1},rootrot:{clears:1,best:1,runs:2}};rb.boot();rb.save();
+          const resumed=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1'))),old=resumed.chars.find(h=>h.id===c.id);rb.S.chars=resumed.chars;rb.S.cur=old.id;rb.boot();
+          check(old.lvl===52&&old.zone==='hollowcrown'&&old.quests.done.hc12&&rb.dungeonStats('rootrot').best===1&&rb.dungeonStats('barrows').clears===1,'old level-52 save retains quests and dungeon records: '+faction);
+          rb.gainXP(rb.xpNeed(52),false);check(old.lvl===53,'old level-52 save resumes XP to 53: '+faction);travel();rb.boot();check(musicKey()==='crownheart','new zone selects its tune: '+faction);
+          for(const q of qs){
+            old.bags=[];old.grind=null;
+            check(q.type!=='collect'||z.mobs.find(m=>m.id===q.mob).drop,'collection target has an item: '+q.id+' '+faction);
+            if(q.req){delete old.quests.done[q.req];old.lvl=60;check(rb.qState(q)==='locked','actual prerequisite gates: '+q.id+' '+faction);old.quests.done[q.req]=true;}
+            if(q.attune){
+              for(const [b,r] of [[0,0],[1,0],[0,1]]){rb.dungeonStats('barrows').clears=b;rb.dungeonStats('rootrot').clears=r;old.lvl=60;check(rb.qState(q)==='locked','Hollow Key requires both clears '+b+'/'+r+': '+q.id+' '+faction);rb.accept(q.id);check(!old.quests.active.includes(q.id),'locked attunement cannot be accepted: '+q.id+' '+faction);}
+              rb.dungeonStats('barrows').clears=1;rb.dungeonStats('rootrot').clears=1;
+            }
+            old.lvl=q.lvl-3;check(rb.qState(q)==='locked','level below minus-two locks: '+q.id+' '+faction);old.lvl=q.lvl-2;check(rb.qState(q)==='avail','level minus-two opens: '+q.id+' '+faction);
+            questOffer(q.id);check(!!RTALK&&RTALK.lines[0][1]===q.text&&RTALK.choices.length===2,'voiced offer: '+q.id+' '+faction);SCN.choose(0);rb.boot();rb.spawn();check(old.quests.active.includes(q.id)&&rb.C.mob.id===q.mob,'acceptance selects actual mob: '+q.id+' '+faction);
+            old.quests.prog[q.id]=q.n;
+            if(q.attune){rb.dungeonStats('rootrot').clears=0;check(rb.qState(q)==='locked','imported active attunement remains gated: '+q.id+' '+faction);rb.turnIn(q.id,0,false);check(!old.quests.done[q.id],'gated attunement cannot turn in: '+q.id+' '+faction);rb.dungeonStats('rootrot').clears=1;}
+            if(q.id==='ch14')check(!raidKey(old),'raid remains locked until actual ch14 turn-in: '+faction);
+            rb.turnIn(q.id,0,false);const i=faction==='concord'?0:1;check(old.quests.done[q.id]&&rb.C.lines.some(l=>l.txt.includes(q.giver[i]+': "'+q.done[i]+'"')),'faction completion voice: '+q.id+' '+faction);
+            questThanks(q.id);check(!!RTALK&&RTALK.lines[0][1]===q.done[i],'portrait thanks: '+q.id+' '+faction);SCN.skip();
+            check(old.bags.length===1&&old.bags[0].ilvl===q.lvl+(q.elite?2:1)&&old.bags[0].rar===(q.elite?3:2),'scaled quest reward: '+q.id+' '+faction);
+          }
+          check(raidKey(old)&&!old.hollowKey,'ch14 alone unlocks the existing raid: '+faction);
+          rb.S.tab='quests';rb.boot();check(document.body.textContent.includes("14/14 quests done in The Crown's Heart"),'chapter completion visible: '+faction);
+          old.lvl=60;old.grind=elite.id;rb.boot();rb.spawn();check(rb.C.mob.rar===4&&rb.C.mob.id===elite.id,'legendary drake spawns: '+faction);rb.startTame();check(!!rb.C.taming,'legendary taming begins: '+faction);rb.finishTame();check(old.pets.some(p=>p.family==='lizard'&&p.rar===4),'legendary joins stable: '+faction);
+          old.grind=null;old.lvl=55;rb.boot();document.querySelector('[data-act="tab"][data-arg="friends"]').click();check(document.querySelector('[data-act="lfg"][data-arg="heartwood"]').disabled,'Heartwood LFG locked at 55: '+faction);
+          const team=old.npcs.slice(0,4).map(n=>n.id);rb.startDungeon(0,team,'heartwood');check(!old.dun,'entry rejected at 55: '+faction);
+          old.lvl=56;rb.boot();document.querySelector('[data-act="tab"][data-arg="friends"]').click();check(!document.querySelector('[data-act="lfg"][data-arg="heartwood"]').disabled,'Heartwood LFG enabled at 56: '+faction);
+          old.zone='hollowcrown';rb.boot();rb.startDungeon(0,team,'heartwood');check(!old.dun,'Heartwood requires Crown heart: '+faction);
+          old.zone='crownheart';rb.boot();rb.startDungeon(1,team,'heartwood');check(!old.dun,'Heartwood Heroic needs normal clear: '+faction);rb.startDungeon(0,team,'heartwood');check(old.dun&&old.dun.id==='heartwood','normal entry at 56: '+faction);
+          for(let i=0;i<d.enc.length;i++){old.dun.step=i;rb.spawnDungeon();check(rb.C.mob.name.includes(d.enc[i].name)&&rb.C.mob.lvl===d.enc[i].lvl&&rb.C.mob.boss===!!d.enc[i].boss,'Heartwood encounter '+i+': '+faction);}
+          rb.finishDungeon();check(rb.dungeonStats('heartwood').clears===1&&rb.dungeonStats('heartwood').best===0,'Heartwood clear unlocks Heroic: '+faction);check(rb.dungeonStats('barrows').clears===1&&rb.dungeonStats('rootrot').best===1,'Heartwood clear preserves earlier records: '+faction);
+          rb.startDungeon(1,team,'heartwood');check(old.dun.id==='heartwood'&&old.dun.mods.length===1,'earned Heartwood Heroic: '+faction);old.dun=null;old.lvl=59;old.xp=0;rb.boot();rb.gainXP(rb.xpNeed(59)*10,false);check(old.lvl===60&&old.xp===0,'cap at 60 discards overflow: '+faction);rb.save();
         }
       }
       // T1-A + T1-C: three talent trees, roles from your build, capstones, respec

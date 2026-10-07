@@ -224,3 +224,48 @@ slot (hands, feet, legs, chest + head) plus an epic. Set bonuses: 2 pieces +5% h
 +10% healing / damage +5%; 5: tank +3% dodge / healer +20% mana regen / damage +3% crit.
 Measured (Auto sim, cap 52, rare gear): perfect calls or Raid Leader ~11 min, no deaths; Auto without Raid Leader:
 warrior and rogue usually clear, a healer hero wipes on Seraveth until the raid learns. Retune when the cap is 60.
+
+### Measured: the Hollow Crown, 45 → 52 and 52 → 55 (T23, 2026-10-07)
+
+Native browser simulation through `serve.ps1`, using the same stand-in Focus method as the Barrowfields:
+a fresh **Concord Human Warrior**, Classic pace, no talents, rested XP, pet, companions, mounts or addons;
+uncommon gear of its current level generated at the start and replaced at each level-up. Step the real
+`window.__rb.step(0.1)`, set `C.lastInput = C.run`, and use the first ready ability from `aiList()` each global
+cooldown (`canUse` / `useAb(a, true)`). Accept available non-elite quests no more than one level above the hero,
+keep the three-slot log full, turn in the higher-scoring reward and loot manually with `lootAll()`. Bags are
+emptied between ticks as a stand-in for selling unwanted loot; no gear improvement is taken from drops. Repairs
+and town departure use the real functions if needed. The sim suppresses presentation callbacks and wall-clock
+timers only; it does not replace combat, XP, quest or death logic. Town-selling travel is not timed, matching the
+earlier simplified method.
+
+For reproduction, seed `Math.random` **before loading the game** with an unsigned 32-bit LCG: seed 230045;
+`seed = (Math.imul(1664525, seed) + 1013904223) >>> 0; return seed / 4294967296`. Reset the seed and create a new
+hero for each band. Stop at the destination level (52 or 55); the second run was also continued to 60 to check the
+late grind. Solo skips the legendary quests, so their dependent quests and the Key are not completed by this sim.
+These are leveling measurements, not dungeon, attunement or raid clear times.
+
+| Start zone / level | Level reached | Minutes for this level | Total minutes from start |
+|---|---|---|---|
+| Outer Wood / 45 | 46 | 15.00 | 15.00 |
+| | 47 | 39.44 | 54.44 |
+| | 48 | 43.46 | 97.90 |
+| | 49 | 34.09 | 131.99 |
+| | 50 | 46.17 | 178.16 |
+| | 51 | 46.12 | 224.28 |
+| | 52 | 57.91 | 282.19 |
+| Crown's Heart / 52 | 53 | 15.88 | 15.88 |
+| | 54 | 43.71 | 59.59 |
+| | 55 | 38.70 | 98.29 |
+| Extension of the same Heart run | 56 | 55.01 | 153.30 |
+| | 57 | 53.84 | 207.14 |
+| | 58 | 51.37 | 258.51 |
+| | 59 | 66.66 | 325.16 |
+| | 60 | 70.28 | 395.45 |
+
+Outer Wood: **282.19 minutes**, 1,018 kills, `hc1`–`hc10` completed, no deaths (40.31 minutes per level average).
+Crown's Heart to 55: **98.29 minutes**, 352 kills, `ch1`–`ch7` completed, no deaths (32.76 average). Continuing
+that same hero to 60: **395.45 minutes**, 1,405 kills, `ch1`–`ch10` completed, one death. The early quest burst is
+faster than the ~45-minute target, as in the Barrowfields; the last two levels take about 67 and 70 minutes,
+approaching the ~75-minute late target. No XP tuning was applied: the curve, previous chapter and existing XP
+formulas are unchanged. This one-class, no-talents, seeded sample is a baseline; other builds, party play and
+real travel to vendors will differ. Claude's cap-60 raid retune remains separate from T23.
