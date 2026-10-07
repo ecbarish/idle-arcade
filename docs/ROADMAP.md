@@ -58,6 +58,27 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T10: Wildbond third area, data only** (ChatGPT): see the T10 section below.
 
 - [x] **T12: Realmbound lore pass** (ChatGPT): see the T12 section below.
+- [ ] **T14: Wildbond lore bible and region outline** (ChatGPT, docs only): see the T14 section below.
+
+### T14: Wildbond lore bible and region outline (docs only)
+Wildbond is heading for about eight areas and eight badges (levels 1-100, see "Pacing, level caps and journey
+settings" in docs/creature-game-design.md). Write the world down before more of it is built, the way T12 did for
+Realmbound. **Create one file, `docs/lore/wildbond.md`, and change nothing else** (Claude is editing the Wildbond
+code and data for T11 at the same time, so don't touch games/, shared/ or other docs).
+- **What exists now, from the game:** read games/wildbond/js/00-data.js (SCENES, STORY, CAST, SPECIES `dex` lines,
+  BIOMES) and docs/creature-game-design.md. Record the region's history (the frontier, why nobody owns a creature,
+  what bonds are), Larkhaven, Keeper Maren, Wren, Warden Isolde, the Wardens as an order, each area so far
+  (Thornwood, Saltmarsh Coast, Emberfall Highlands), the guardians (Elderhorn, Breakwatermane, Hearthcrown) and what
+  "every region has something old watching it" means. Expand freely but never contradict in-game text.
+- **Saltmarsh Warden:** Claude is adding a Saltmarsh Coast Warden and the Tide Badge in T11. Leave a short
+  "to be filled in after T11" stub for them rather than inventing one.
+- **Proposed areas 4-8:** for each, a name, a one-paragraph feel (landscape, weather, people), a level band (about
+  32-42, 42-52, 52-62, 62-70, then post-game toward 100), an element/family mix using only the existing elements
+  and families, a Warden (name, personality, what their test judges), a badge name, a guardian creature, and one story
+  beat for Wren. Mark all of these clearly as **proposals for Evan to approve**, not canon.
+- **Open questions** at the end: anything the game hints at but never explains.
+- Keep it original (inspired by the genre, never naming or copying real games). Friendly, plain tone; headings and
+  short paragraphs; about 2,000-3,500 words.
 
 ### T12: Realmbound lore pass
 Make Realmbound's world feel lived-in, and start the lore record future guides will be built from.
