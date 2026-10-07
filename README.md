@@ -39,6 +39,13 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-09** — **Realmbound: a third talent tree for every class** (Warrior Fury, Rogue Subtlety, Mage Arcane,
+  Priest Discipline, Hunter Survival), each with new abilities (Bloodthirst, Death Wish, Shadow Dance, Arcane
+  Missiles, Penance, Pain Suppression, Explosive Shot...) and talents that change how you play: a wider Finishing Blow
+  window, repeat Backstabs, Smites that heal your party, stings that make your next shot instant. Everyone gets one
+  more free talent reset. **The jobs board grew:** Herbalism (herbs brew healing potions, drunk automatically below
+  30% health) and Questing (a benched hero slowly earns their own XP and gold). **Starfall Guild has sound now**
+  (ChatGPT, T26): its own town, delve and boss music on the arcade's shared sound system.
 - **2026-10-07** — Starfall Guild sound (T26): original town, delve and boss music through the shared sound engine,
   plus effects for recruiting, leveling, purchases, relics, boss victories, wipes and seasons. Sound starts off;
   the header cycles effects and music on, and saves the choice. Catch-up and automated actions cannot flood cues.

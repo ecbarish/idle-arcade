@@ -79,7 +79,7 @@ the very end, so running out of usage never strands work.
 - **Realmbound** (classic-MMO idle, flagship): levels 1-52 (Hollow Crown, T22), four dungeons, hunters/pets/mounts, sound, the Supplies tab (R1: other heroes mine ore for repair kits on `shared/roster.js`), lore bible in
   `docs/lore/realmbound.md`. Frostmere / The Winter Road (30-40) and the Barrowfields + Silent Barrows (40-45, T20,
   ChatGPT) are merged. **T1 is done:** the plan for 40-60, the guild and raids is `docs/realmbound-40-60.md`.
-  **T1-A is done:** two talent trees per class (`TALENTS[cls]` is a list of trees; `TALENT_LIST` flattens them with
+  **T1-A and T1-C are done:** three talent trees per class (`TALENTS[cls]` is a list of trees; `TALENT_LIST` flattens them with
   a tree index `ti`; `h.talents` is still keyed by id), capstones at 25 points in a tree, `heroRole()` from the
   tree with most points (no points = the class default), learned-only talent abilities on the bar, `respec()` with
   `respecCost()`. **T1-B is done:** `graveChill()` (stacking cold, healers remove it); pacing 40-45 measured in
@@ -94,3 +94,7 @@ Read [docs/plans/README.md](docs/plans/README.md) (and START-HERE.md for current
 Sports should support athlete careers and team management across sports. Salaries should fund lasting personal progress (homes, cars, other purchases). Baseball remains the recommended first module; do not silently unpark implementation.
 
 Winter Road (PR #7) and these plans (PR #8) are merged and live; `tests/run.html` passed (231) before merging. Wider T1 remains open. Wildbond stays Claude's lane. Open owner decisions: full-Auto unlock timing, the second sport, and whether purchases (homes/cars) have gameplay effects.
+
+## Working style (Evan, 2026-10-09)
+Evan wants **larger chunks per prompt**: when he says "proceed", finish several queue items in one go (review and merge
+ChatGPT's branches, write ChatGPT a sizeable ticket, then build more than one item yourself), committing after each.

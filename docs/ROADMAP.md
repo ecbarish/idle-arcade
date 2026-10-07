@@ -157,6 +157,38 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
+### T23: Realmbound Hollow Crown II, the Crown's Heart (data, levels 52-60)
+The last chapter before the raid: docs/realmbound-40-60.md ("The journey", "Story thread", "Raids"). Same shape and rules
+as T22 (read its ticket below and your own T22 code: copy the structure), building on everything T22 added.
+- **Change only:** games/realmbound/js/00-core.js (`LEVEL_CAP = 60`), 01-world.js (zone + quests), 06-npcs.js
+  (`npcZone`: companions 52+ visit the new zone), 07-dungeons.js (the new dungeon), 17-sound.js (one new `TRACKS` entry
+  for the zone: original, 32-token `mel`, a check fails without it), tests/realmbound-scenarios.cjs (a block after
+  your T22 checks), docs/lore/realmbound.md, docs/realmbound-40-60.md (pacing numbers), README.md changelog, and ticking
+  T23 here and in START-HERE.md. Claude is meanwhile building the raid system in new files, so don't add a raid.
+- **Zone `crownheart`, "The Crown's Heart"**, `lv: [52, 60]`, shared, hub: Thornmantle Camp moved inward (a new name
+  is fine, e.g. *Heartwatch*, both factions), its own colours (deeper, older wood, gold light on the throne), a `lore`
+  paragraph, appended to both `ZONE_ORDER` routes after `hollowcrown`. **6 mob types 52-60** with roles (e.g. Ashwing
+  elders and broodguards, rootbound choir-treants, crown-gnawed beasts) and a legendary tameable elite at 60.
+- **14 quests `ch1`...** (8 levels need more than T22's 12; kill/collect, 52-60, `req` chains, faction `giver` pairs
+  and `done` lines in each giver's voice, existing givers from T22 can return). Story: the forest's hunger to fill the
+  empty seat grows near the throne; Seraveth, the Ashwing matriarch, sits on it (heard, glimpsed, never fought here).
+  Follow `docs/lore/multiverse.md`: the Archivist may appear once as a quiet observer if it fits.
+- **Attunement, "The Hollow Key"** (the raid's entry): three final quests `ch12`-`ch14` marked `attune: true`, whose
+  `req` chain needs `ch11`, plus a check that the Silent Barrows and Rootrot Hollow have each been cleared at least once
+  (`dungeonStats('barrows').clears > 0` and `dungeonStats('rootrot').clears > 0`): add an optional `needDun: ['barrows',
+  'rootrot']` field to those quests and make `qState()` (08-inventory-quests.js; you may change this one function)
+  treat a quest whose dungeons aren't cleared as not yet available, with the reason shown in the quest log. The last
+  quest's `done` lines hand the player **the Hollow Key** and point at the Hollow Throne (the raid, coming next).
+- **Dungeon `heartwood`, "The Heartwood Vault"** (or a better name): `minLvl: 56`, `zone: 'crownheart'`, levels 56-60,
+  4 packs and 3 bosses in the `ROOTROT` shape; the last boss a little tougher than Arveth (`hpM` 13-14). Existing
+  `mech` keys only. Add it to `DUNGEONS`.
+- **Checks:** everything your T22 checks cover, for the new zone, quests, elite and dungeon; plus: `ch12` isn't
+  available until both dungeons are cleared and is once they are; a level-52 save resumes and reaches 53; level 60 is
+  the cap. All three test pages must pass (`tests/run.html`, `tests/wildbond.html`, `tests/starfall.html`).
+- **Pacing (required this time):** run the sim from docs/realmbound-40-60.md ("Measured: the Barrowfields") for one class
+  from 45 to 52 (your zone) and from 52 to 55 (this zone) and add the minutes per level to that doc. Targets: about 45
+  minutes per level rising to 75 by 59, Focus play. Tune only the new zone's quest XP and mob levels, never the curve.
+
 ### T26: Starfall Guild sound on the shared sound system (parked-games side lane)
 Starfall Guild has no sound. Give it music and effects through the arcade's shared engine, `shared/sound.js` (read its
 header comment first; Wildbond's `js/10-sound.js` and Realmbound's `js/17-sound.js` are the two examples to copy).

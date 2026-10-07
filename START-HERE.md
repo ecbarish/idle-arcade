@@ -45,7 +45,7 @@ with towns, trainers, items and riding; art eras Pocket → Pixel/16-bit → HD-
 badges; day/night, weather, visible wild creatures; ranch and breeding; challenge modes (Nuzlocke, Randomizer, Solo,
 Hardcore), rematches, area mastery stars; music and effects from the shared sound system. Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
 
-**Realmbound** (classic-MMO idle, flagship): levels 1-52 (the Hollow Crown, 45-52, is the newest zone), five classes, two talent trees each with roles that follow
+**Realmbound** (classic-MMO idle, flagship): levels 1-52 (the Hollow Crown, 45-52, is the newest zone), five classes, three talent trees each with roles that follow
 your build, four 5-person dungeons (Drowned Sanctum, Cindervein Foundry, Silent Barrows with its Grave Chill
 mechanic that needs a healer), pets, mounts, companions, earned addons, quest givers in portrait scenes, music
 per zone and sound effects (off by default), Rootrot Hollow (49-52), and a Supplies tab where heroes you aren't playing
@@ -54,9 +54,7 @@ mine ore for repair kits (R1). Item names change every 10 levels to 60. The plan
 
 **Hub and promo pages:** `index.html`, `promo.html` (Realmbound), `promo-wildbond.html`.
 
-**Starfall Guild:** split into small files with browser checks (T25), still parked for new features. T26 shared-engine
-sound is complete on `codex/starfall-sound`, awaiting Claude's review: original town, delve and boss music, big-moment
-effects and a saved off / effects / effects + music header control; off by default.
+**Starfall Guild:** split into small files with browser checks (T25) and its own music and effects (T26, off by default); still parked for new features.
 
 **Parked:** Starfall Guild, Diamond Career (baseball), Otherworld (side lane: structural and polish tasks only), and
 Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
@@ -81,7 +79,7 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    system ticket") and the guild section of `docs/realmbound-40-60.md`. Defaults: 3 job slots; one gathering job
    (Mining ore) and one recipe (ore → repair kits); a shared account bank; jobs capped like rested XP; the hero you're
    playing always earns more than one on a job.
-5. **T1-C: third talent trees** (*design*): Warrior Fury, Rogue Subtlety, Mage Arcane, Priest Discipline, Hunter
+5. ~~**T1-C: third talent trees**~~ — done by Claude 2026-10-09 (`TALENTS[cls][2]`; checks in the T1-C block). Originally: Warrior Fury, Rogue Subtlety, Mage Arcane, Priest Discipline, Hunter
    Survival, same shape as T1-A (25 ranks + capstone at 25 in that tree), plus talents that open new reactive windows.
 6. ~~**T24: Wildbond test coverage**~~ — done by Codex, merged by Claude 2026-10-08: trainers, items, signs,
    riding/running, era unlocks, weather, visible wild creatures, challenge modes, rematches and mastery.
@@ -109,12 +107,19 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    (a check fails without one).
 14. **Then:** the guild, Hollow Crown part 2 and the raid (Realmbound); Wildbond areas 5-8 (bands 52-60, 58-64, 62-68,
    66-72) and the league, contests and races, ranch cosmetics for challenge titles, Modern 3D.
-15. ~~**S3: shared roster and jobs**~~ — done by Claude 2026-10-08 with R1. Next jobs to add: *Questing* (a little XP for the worker, always less than playing them), *Herbalism* + potions, then the guild (members, mood, guild level, more slots). Originally: assign members to jobs, cap the
+15. ~~**S3: shared roster and jobs**~~ — done by Claude 2026-10-08 with R1; Herbalism (potions) and Questing added 2026-10-09. Next: the guild (members, mood, guild level, more slots). Originally: assign members to jobs, cap the
    earnings like rested XP, one return report when you come back. Realmbound's guild uses it first, then Starfall
    Guild's adventurers, Wildbond ranch jobs, and Diamond Career's team. Plan: `docs/research/decisions.md` (the
    shared-systems table). After that, S4: the world kit (`shared/world/`, Wildbond's walking world for every game).
-16. ~~**T26: Starfall Guild sound**~~ — **done by Codex 2026-10-07, awaiting Claude's PR review** (branch
+16. ~~**T26: Starfall Guild sound**~~ — done by Codex, merged by Claude 2026-10-09 (Starfall 48 checks) (branch
    `codex/starfall-sound`; ticket in `docs/ROADMAP.md`, "T26"). Music and effects through `shared/sound.js`.
+17. **T23: Realmbound Hollow Crown II, the Crown's Heart** (any assistant; data) — **sent to ChatGPT 2026-10-09**
+   (branch `codex/realmbound-crownheart`; ticket in `docs/ROADMAP.md`, "T23"): levels 52-60, `LEVEL_CAP = 60`, 14
+   quests with the Hollow Key attunement (`attune`, `needDun`), dungeon `heartwood` (56+), pacing numbers.
+18. **R2: the raid system and The Hollow Throne** (Claude): 10 raiders from your characters and companions, a plan
+   before each pull, raid calls during it, four bosses, weekly-style lockout (every 3 days), epic loot with tier
+   sets. Plan: `docs/realmbound-40-60.md` ("Raids") and decision 5 in `docs/research/decisions.md`. Gate it on the
+   Hollow Key (T23's last quest) but build it so it can be tested before T23 lands.
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
@@ -132,6 +137,10 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude: merged T26 (Starfall sound); built T1-C (third talent trees for all five classes) and new jobs
+  (Herbalism → healing potions, Questing for benched heroes); sent T23 (Crown's Heart 52-60, the Hollow Key) to
+  ChatGPT. Evan asked for **larger chunks per prompt**. Tests: Realmbound 972, Wildbond 488, Starfall 48.
+  **Next:** review `codex/realmbound-crownheart` (T23) when it lands; Claude builds R2 (raid system, item 18).
 - 2026-10-07 Codex: T26 complete on `codex/starfall-sound` for Claude's review, unmerged. Browser checks:
   Realmbound 929, Wildbond 488, Starfall 48; saves restored. Two-minute live audio capture: all three themes,
   no clipping or browser errors; phone-width sound control fits. Subjective listening remains for PR review.
