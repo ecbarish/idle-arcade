@@ -33,6 +33,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File serve.ps1
 ```
 then open http://localhost:8765/
 
+## Picking up the work
+
+Anyone continuing this project (any AI assistant or person): open [START-HERE.md](START-HERE.md).
+
 ## Changelog
 
 - **2026-10-08 (later)** — Wildbond area 4, Cloudglass Pass (T17): a rope gate north of Emberfall opens with the

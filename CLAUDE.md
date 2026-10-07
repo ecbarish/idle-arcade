@@ -2,14 +2,21 @@
 
 Evan's personal stable of browser games, live at https://ecbarish.github.io/idle-arcade/ (GitHub Pages from `main`).
 Evan works on this from more than one computer and with ChatGPT/Codex too, so **this repo is the shared memory**:
-read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (tickets) at the start of a session.
+read **`START-HERE.md`** (where we are, the ordered task queue, the session log, shared by every assistant), this
+file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (full tickets) at the start of a session.
 
 ## Start of every session
 1. `git pull`, then `git fetch` and check `git branch -r` for `codex/*` branches newer than `main` (ChatGPT's work).
 2. For each: `git log --format='%h %ae %s' main..origin/<branch>`, review the diff, test it (see below), merge with
    `git merge --no-ff`, push, and mark the ticket done if ChatGPT didn't. Evan confirmed on 2026-10-06 that Claude
-   merges after checking; ChatGPT/Codex still opens PRs and never merges its own work.
-3. Pick up the next ticket from "Where we are" below.
+   merges after checking; ChatGPT/Codex still opens PRs and never merges its own work (unless Claude is
+   unavailable: then START-HERE.md lets it merge after both test pages pass; double-check those merges).
+3. Read START-HERE.md's Session log for anything done elsewhere, then take the first task in its "Up next".
+
+## End of every session (Evan may switch to another assistant at any moment)
+Commit and push everything that works; update START-HERE.md ("Where we are", "Up next" with enough detail for
+someone with no memory of this session, a dated Session log line). Do this after each finished step, not only at
+the very end, so running out of usage never strands work.
 
 ## Rules
 - **Commits use only** `206636510+ecbarish@users.noreply.github.com` (set it as repo-local `user.email`). Never a
@@ -75,7 +82,7 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
 
 ## Latest owner direction and Codex handoff — 2026-10-06
 
-Read [docs/plans/README.md](docs/plans/README.md) and [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md). The plans cover six games and a broader sports framework, based on 19 comparable titles. All games should eventually support manual through full automation, with independent delegation settings. Earned automation remains the current rule; whether full Auto is available immediately is still an owner decision. Desktop and phone come first; VR is deferred.
+Read [docs/plans/README.md](docs/plans/README.md) (and START-HERE.md for current status). The plans cover six games and a broader sports framework, based on 19 comparable titles. All games should eventually support manual through full automation, with independent delegation settings. Earned automation remains the current rule; whether full Auto is available immediately is still an owner decision. Desktop and phone come first; VR is deferred.
 
 Sports should support athlete careers and team management across sports. Salaries should fund lasting personal progress (homes, cars, other purchases). Baseball remains the recommended first module; do not silently unpark implementation.
 

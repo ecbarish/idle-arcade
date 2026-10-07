@@ -1,5 +1,8 @@
 # Handoff guide (for any AI coding assistant or developer)
 
+**Start with [START-HERE.md](START-HERE.md):** current state, the ordered task queue and the session log. This file
+holds the full rules and the file layout.
+
 Idle Arcade is a set of plain HTML/JS browser games with no build step. The live site is
 https://ecbarish.github.io/idle-arcade/ (GitHub Pages serves the `main` branch).
 
@@ -15,11 +18,11 @@ https://ecbarish.github.io/idle-arcade/ (GitHub Pages serves the `main` branch).
 
 ## Shared development notes
 
-Read [docs/plans/README.md](docs/plans/README.md) for the six-game research, upgrade plans, sports expansion and desktop pickup checklist. Read [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for the current review, pending PRs, proposed next work and
-content inbox across all games. Keep its handoff section current after meaningful work so Evan can switch
-between Claude and Codex. Distinguish proposed, approved, PR-open and merged work; the roadmap still controls
-ticket scope. If a ticket limits editable files, leave notes in its allowed documentation or PR description
-and update the shared record in a later notes-only change.
+[START-HERE.md](START-HERE.md) is the live shared record: where things stand, the ordered task queue and the session
+log. Keep it current after every meaningful step so Evan can switch assistants at any moment. If a ticket limits
+which files you may edit, put your notes in the PR description and the session log line instead, and whoever merges
+updates START-HERE.md. [docs/plans/README.md](docs/plans/README.md) holds the six-game research and long-term
+plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to 2026-10-06.
 
 ## Layout
 - `index.html`: the hub. `shared/engine.js`: shared save and formatting helpers.

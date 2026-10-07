@@ -1,4 +1,7 @@
-# Development notes and next handoff
+# Development notes and next handoff (historical)
+
+> Superseded on 2026-10-08 by [START-HERE.md](../START-HERE.md), which every assistant now keeps current. The notes
+> below are the record up to 2026-10-06.
 
 This is the shared status and decision record for Evan, Claude and Codex. Read this with `HANDOFF.md` and `docs/ROADMAP.md` before taking work. The roadmap controls ticket scope and priorities; these notes distinguish observed code, pending work and proposals. Recheck main and open PRs before relying on an older status entry.
 
