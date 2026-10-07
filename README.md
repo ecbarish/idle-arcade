@@ -35,6 +35,9 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-07 (later)** — Merged ChatGPT's Wildbond music (T18): original tunes for Larkhaven, Emberfall, Cloudglass,
+  Warden battles, night and rain, chosen by where you are and what the sky is doing; voices for the newer characters.
+
 - **2026-10-07** — Wildbond eras, part 3 (T13): the Ember Badge makes the world solid. In the new Diorama style
   every place is a little 3D model, like a carved table-top scene: houses are blocks with red roofs, trees and rocks
   stand up, and you, the townsfolk and every creature are your pixel art pushed out into chunky 3D blocks. Drag the

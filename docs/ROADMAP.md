@@ -74,6 +74,29 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T15: Emberfall Warden and badge, data only** (ChatGPT): see the T15 section below.
 - [x] **T16: Wildbond browser checks** (ChatGPT, tests only): see the T16 section below.
 - [ ] **T17: Wildbond area 4, Cloudglass Pass** (ChatGPT, data + map): see the T17 section below.
+- [ ] **T19: Promo pages for friends** (ChatGPT, pages only): see the T19 section below.
+
+### T19: Promo pages for friends (pages only)
+`promo.html` (linked from the hub) is a "game box back cover" for Realmbound, but it's out of date: it lists Wildbond
+as "Creature game · Planned" and doesn't know Realmbound reaches level 40. Bring it up to date and give Wildbond
+its own. **Change only `promo.html`, a new `promo-wildbond.html`, and the hub `index.html`** (the Wildbond and
+Realmbound entries in its `GAMES` list, and a promo link like the existing one). Don't change games/, shared/ or
+docs other than ticking T19 here. Claude is working in games/wildbond/ meanwhile.
+- **promo.html (Realmbound):** update facts from the game and README (levels to 40, Frostmere and the Winter Road,
+  Hushfang, the lore pass: quest givers who answer when you turn in). In "Also in the arcade", replace "Creature game
+  · Planned" with **Wildbond** (status like the hub's "Early access") linking to promo-wildbond.html.
+- **promo-wildbond.html:** same idea and structure (title, a short pitch, "What's in it today" feature cards, "Where
+  it's headed", play button to games/wildbond/), with Wildbond's own look: reuse the hub's Wildbond colors and fonts
+  (Fredoka/Nunito), not Realmbound's bronze. Cover, in plain words for friends: picking a partner and your rival
+  Wren; walking a real world (towns, tall grass, trainers who spot you, items, riding your partner); catching with
+  lures and timing; raising, training and breeding on the ranch (hybrids, potential grades); Wardens and badges that
+  raise your level cap; choosing your journey length; the world's look growing with the story (a faded handheld
+  start, color, then light and depth, then a little 3D diorama you can turn); day/night, weather, music. "Where it's
+  headed": more regions, contests and races, challenge modes. Facts must match the game: read README.md's changelog
+  and games/wildbond/js/00-data.js, don't invent features. A small live scene at the top is welcome if it stays
+  simple (a canvas drawing a couple of creatures and the tamer like the hub covers do); no screenshots needed.
+- Plain HTML/CSS/JS, no build, readable at phone width (16px side gutter, no sideways scrolling), light and dark
+  are both fine. Check both pages and the hub at http://localhost:8765/ (serve.ps1).
 - [x] **T18: Wildbond music for every place** (ChatGPT, sound only): see the T18 section below.
 
 ### T18: Wildbond music for every place (sound only)
