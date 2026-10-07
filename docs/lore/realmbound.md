@@ -63,7 +63,7 @@ The chain turns toward stopping awakening rites and preparing for the descent: s
 
 **Frostmere** is a tundra crossed by the winter road. Lanternrest Lodge and Whitebough Hearth keep a fire for travelers still outside, but ice troll foragers steal their provisions and waykeepers strip the crossing markers. Recovering those stones reveals older carvings beneath the road marks, then a buried street of facing doorways with no hearths behind them. Hushfang guards the approach to this necropolis; its connection to the Sundering and the identity of its dead remain open.
 
-**The Hollow Crown** is the proposed corrupted forest with dragonkin and raid entrances. Its name evokes a place where an absence has become as powerful as a ruler, but no actual sovereign, dragon lineage or cause of corruption is established. Those decisions belong to future content.
+**The Hollow Crown's Outer Wood** is now a playable chapter, recorded below. The forest grew around a throne the Wayfolk left empty after the Sundering. The Ashwing are lesser drakes who claim that seat as their hoard. The Crown's Heart and the Hollow Throne remain future content; Seraveth has not been encountered.
 
 ## Quest givers
 
@@ -212,7 +212,7 @@ The factions' answer begins with ordinary obligations: recover the food, clothe 
 6. What precisely does the Ember Covenant intend to awaken, and how does Veyr relate to it? Are the two cults connected at all?
 7. Who directs Thornvale's Diggers beyond their foremen? *The Foreman's Ledger* does not currently provide a recovered document to answer that.
 8. Are any adventurer names shared identities with quest givers: Aldous, Merrin, Elowen, Kesh, Ruk, Ugra or Brakka? Keep them distinct unless confirmed. Corwin is not automatically Corwen; Drogo is not Drogan; Vash is not Vosh; Isla is not Ilsa.
-9. What woke the Wayfolk dead and the Last Wayward's refusal? Frostmere II identifies the necropolis's people and the trolls' practical reuse of their stones, but leaves the waking unexplained. The Hollow Crown remains a planned region.
+9. What woke the Wayfolk dead and the Last Wayward's refusal? Frostmere II identifies the necropolis's people and the trolls' practical reuse of their stones, but leaves the waking unexplained. The Hollow Crown's empty seat explains its forest's corruption, without establishing that it woke the barrow-dead.
 10. How do the factions' Greywater claims evolve as shared threats grow? The present game establishes neither a peace treaty nor open faction warfare.
 
 ## The Winter Road: new people and the White Vigil
@@ -294,3 +294,71 @@ ready for an expedition, leaving those answers for later story work.
 The final surface quest, **Carry the Road Within**, clears the remaining Threshold Keepers and directs the
 player to enter with four companions. Turning it in confirms the approach is ready; it does not count as a
 dungeon clear or say the Last Wayward has been defeated.
+
+
+## The Hollow Crown I: the Outer Wood
+
+The road from the Barrowfields leads east into **The Hollow Crown**, a forest grown around an empty throne.
+After the Sundering, the Wayfolk crowned no one. That absence festered: the wood now tries to fill the seat
+with whatever it can bind, drawing beast, branch and traveler toward its center. Sick green-gold leaves hide
+dark, shifting roots. This chapter establishes the forest's hunger; it does not explain the waking of the
+Wayfolk dead, or connect the Crown to the Ember Covenant or the Drowned Cult.
+
+**Thornmantle Camp** is the shared forward camp for Concord and Wildclan travelers who followed the same
+barrows road. Its watch, mended cloaks and raised walkways are practical cooperation, not a treaty between
+the factions. The camp sits in the Outer Wood; it has not yet moved into the Crown's Heart.
+
+### The wood and its people
+
+- **Rotgnaw Wolves** are rot-bitten predators that follow returning scouts. Their pelts help mend winter cloaks.
+- **Thornridge Boars** carry thornback growth and obstruct the cart bend. Their forked briar tusks brace the camp's
+  walkways without requiring healthy wood to be cut.
+- **Giltweb Canopy Spiders** close crossings with nests; their golden silk lashes flexible spans above the roots.
+- **Hollowroot Wardens** are corrupted treants with the outline of guards around a vacant seat. Their bark encloses
+  Empty Seat carvings that preserve the absence of a crowned successor.
+- **The Ashwing** are a lineage of lesser drakes nesting in the canopy. They treat the throne as their hoard.
+  Their defense of that claim is distinct from the wood's hunger to put something on the seat.
+- **Veskareth, the Bough Sentinel** is an old Ashwing drake watching the last outer crossing. This level-52
+  legendary beast can be fought or tamed under the existing lizard-family rules. No relationship to Seraveth
+  beyond membership in the Ashwing lineage is established.
+
+The new quest givers have separate voices even while both factions use the same camp:
+
+- **Trailwarden Aven** (Concord) keeps a returning watch, marks a shared trail before drawing boundaries, and
+  measures success by companions coming home. **Rootscout Neral** (Wildclans) keeps room for late arrivals and
+  insists that a story is no use if its teller cannot return.
+- **Campwright Tessa** (Concord) repairs linings, braces walkways and puts dry shoulders before banners.
+  **Cordmender Ghor** (Wildclans) values sound knots and flexible crossings, and stitches for whoever returns cold.
+- **Canopy Reader Ilyen** (Concord) records carvings before roots obscure them and refuses to write a meeting
+  that has not happened. **Barklistener Sova** (Wildclans) reads the wood's inward reach as hunger, and separates
+  an Ashwing claim from a road already won.
+- **Pell**, the travelling peddler, appears in the trailwardens' cart-road request, just passing through with
+  the patient mule **Brisket**. He is chatty,
+  honest about his posted prices, and claims to have sold a lantern to every hero ever. Clearing the boars lets
+  his cart bring lamps along the road; this cameo adds neither a new shop system nor a required crossover.
+  His personality follows the shared multiverse record.
+
+The twelve quests begin with a safe return trail and supplies for the camp. Recovering the wardens' carvings
+reveals how the vacant seat became a hungry center. Pushing back the lesser drakes exposes the Ashwing claim;
+scouts bring back the name **Seraveth**, their matriarch, from deeper in the Crown. She and her claimed throne
+remain ahead of this chapter. The quests do not say she has been met or defeated.
+
+### Rootrot Hollow
+
+**Rootrot Hollow** opens beneath the Outer Wood at level 49. Four packs guard its passages: Rotgnaw Scavengers,
+Hollowroot Gatekeepers, Giltweb Brood and Ashwing Rootwardens. **Canopy Shudder** and **Rootheave** describe its
+existing wave and surge attacks. Its bosses do not use the Barrows' cold mechanic.
+
+**Neldrath, the Ringkeeper** is a corrupted treant guarding the first inner ring. Its waves shake the canopy;
+its duty does not establish a named Wayfolk ancestor or a rightful ruler of the seat.
+
+**Ossavine, the Tangled Span** is a great spider holding the woven passage farther below. Waves and root surges
+make the crossing dangerous; the record does not make it the parent of every Giltweb spider.
+
+**Arveth, the Hoard Below** is an Ashwing drake defending the buried approach. The level-52 finale brings waves,
+surges and eventual fury. Arveth is not Seraveth, and clearing this dungeon neither fills the throne nor resolves
+the factions' obligations to the road.
+
+The final surface quest, **Under the Claiming Roots**, clears wardens from the descent and asks for four
+companions to enter Rootrot Hollow. Turning it in readies the approach; it is not a dungeon clear. The Crown's
+Heart, Seraveth, attunement and the Hollow Throne remain the next chapter.
