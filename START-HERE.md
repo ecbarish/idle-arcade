@@ -105,6 +105,9 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-10 Claude: merged W1 (ChatGPT, Farwatch, Wildbond 1044 checks, v1.1.0); sent T30 (Wildbond's ending: the
+  league and the Champion) to ChatGPT; L11 part 1: wide layouts for desktops and ultrawides (CSS only, verified at
+  3440x1440). **Next:** review T30; L11 part 2 (panel text and buttons scale), or E3 save doctor, or W9 design.
 - 2026-10-07 Codex: W1 Farwatch Reach complete on `codex/wildbond-area8`, awaiting PR review; no merge. Rysa/Horizon/Watchlight, nine species, harbor map, Wren's shared-notes rematch, original tune and coastal backdrop are canon. Wildbond v1.1.0; no save or engine changes. All four browser pages pass: Wildbond 1044, Realmbound 1519, Starfall 48, sound 21; saves/hub restored. Five art eras and 375px phone map/backdrop checked.
 
 - 2026-10-10 Claude: built the Studio (E1 part, E2): studio.html (GM mode, save backups/download/import/restore, GM

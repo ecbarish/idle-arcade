@@ -39,6 +39,11 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-10** — **Big screens.** On desktops and ultrawides (like Evan's 3440x1440) every game now uses the space:
+  the scene takes most of the width and becomes a cinematic 21:9 view on ultrawides (more of the world when you walk,
+  more of each zone in Realmbound), the panels sit beside it, and the homepage shows bigger covers. Phones and laptops
+  are unchanged. Also merged: Wildbond's eighth area, **Farwatch** (ChatGPT): Warden Rysa, the Horizon Badge (cap 75),
+  the guardian Watchlight, and Wren's last rematch before the league (Wildbond v1.1.0).
 - **Wildbond v1.1.0 (2026-10-07)** — **Farwatch Reach**, the eighth and final pre-league area (66–72): nine species, a coastal harbor map, two route trainers, Wren's shared-notes rematch, Watchlight, and Warden Rysa's Horizon Badge (cap 75 with eight badges). Original music, fog weather and a coastal battle backdrop. The league follows in W2.
 
 - **2026-10-10** — **The Studio** (`studio.html`, not linked anywhere so players never see it; bookmark it): Evan's game-master tools. Turn on GM mode
