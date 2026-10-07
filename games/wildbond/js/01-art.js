@@ -246,6 +246,7 @@ ART.bit16 = (() => {
 /* The walkable world (T7b): two more drawing calls per era.
    tile(ctx, ch, x, y, size, pal, t, gx, gy): one map tile (see TILES in 11-maps.js) at screen x,y; gx,gy = its map spot.
    walker(ctx, x, y, size, look, dir, step): a person seen from above, standing on the tile at x,y.
+   item(ctx, x, y, size, t): something lying on the tile at x,y, waiting to be picked up.
    pal comes from the area's colors (worldPal in 06-scene.js). The 16-bit era adds outlines and extra detail. */
 function tint(a, b, n) {
   const aa = parseInt(a.slice(1, 7), 16), bb = parseInt(b.slice(1, 7), 16);
@@ -272,6 +273,8 @@ function paintTile(c, ch, X, Y, s, P, t, gx, gy, fine) {
     case '#': R(0, 0, 8, 8, '#eadfc4'); R(0, 7, 8, 1, '#b8a888'); if (v(1) % 2) { R(2, 2, 4, 3, '#6aa0c8'); if (fine) R(2, 2, 4, 1, '#a8d0ea'); } break;
     case 'D': R(0, 0, 8, 8, '#eadfc4'); R(2, 1, 4, 7, '#7a4a2a'); R(5, 4, 1, 1, '#f2d24a'); if (fine) R(2, 1, 4, 1, '#5a3418'); break;
     case '=': grass(); R(0, 3, 8, 1, '#a0703a'); R(0, 5, 8, 1, '#a0703a'); R(0, 2, 1, 5, '#7a5028'); R(7, 2, 1, 5, '#7a5028'); break;
+    case 'P': grass(); R(3.5, 4, 1, 4, '#6b4a2a'); R(1, 1, 6, 3.5, '#a0703a'); R(1.5, 1.8, 5, 0.5, '#6b4a2a'); R(1.5, 3, 4, 0.5, '#6b4a2a');
+      if (fine) { R(1, 1, 6, 0.5, '#c8985a'); R(1, 4, 6, 0.5, '#5a3a1e'); } break;
     default: grass();
   }
 }
@@ -291,6 +294,15 @@ function paintWalker(c, X, Y, s, L, dir, step, fine) {
   if (L.hair === 'spiky') { R(2.2, -2, 0.8, 0.8, L.hairCol); R(3.6, -2.2, 0.8, 0.9, L.hairCol); R(5, -2, 0.8, 0.8, L.hairCol); }
   if (L.hair === 'hat') { const hc = L.hatCol || '#6b4423'; R(1, -1.4, 6, 0.8, hc); R(2.2, -2.8, 3.6, 1.6, hc); if (fine) R(2.2, -2.8, 3.6, 0.5, tint(hc, '#ffffff', 0.3)); }
 }
+/* an item on the ground: a little pouch that glints now and then */
+function paintItem(c, X, Y, s, t, fine) {
+  const u = s / 8, R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.floor(X + x * u), Math.floor(Y + y * u), Math.ceil(w * u), Math.ceil(h * u)); };
+  R(2, 6.5, 4, 1, 'rgba(0,0,0,.2)'); if (fine) R(1.6, 3.1, 4.8, 3.8, '#3a2414');
+  R(2, 3.5, 4, 3, '#c8783a'); R(3, 2.5, 2, 1, '#a85a2a'); R(2.5, 3.5, 3, 0.6, '#f2c14e');
+  const g = reduceMotion ? 0 : (t * 0.8 + X * 0.01) % 2; if (g < 0.25) { R(5.5, 1.5, 1, 1, '#ffffff'); R(5, 2, 2, 0.4, '#ffffff'); }
+}
+ART.pixel.item = (c, x, y, s, t) => paintItem(c, x, y, s, t, false);
+ART.bit16.item = (c, x, y, s, t) => paintItem(c, x, y, s, t, true);
 ART.pixel.tile = (c, ch, x, y, s, P, t, gx, gy) => paintTile(c, ch, x, y, s, P, t, gx, gy, false);
 ART.pixel.walker = (c, x, y, s, L, dir, step) => paintWalker(c, x, y, s, L, dir, step, false);
 ART.bit16.tile = (c, ch, x, y, s, P, t, gx, gy) => paintTile(c, ch, x, y, s, P, t, gx, gy, true);

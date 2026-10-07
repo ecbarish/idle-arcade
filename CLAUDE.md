@@ -39,10 +39,11 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
   16-bit), dialogue scenes with portraits, battle animation, chiptune sound. T11 pacing is done: levels to 100,
   journey length, badge caps, XP share (numbers and measured times in `docs/creature-game-design.md`). Pacing is
   checked with a fast Auto simulation in the browser (call `worldTick(0.1)` in a loop, skipping scenes).
-- **Walkable world (T7b part 1) is done:** Larkhaven and the three areas are tile maps you walk (keys or tap), tall
-  grass = exploring, walk-in inn/shop/ranch, Wardens and townsfolk stand in the world, Auto walks the grass. Pacing
-  measured unchanged. **Next for Claude:** T7b part 2 (route trainers, items, follower), then **T13 era progression**
-  (Game Boy → 16-bit → HD-2D → voxel diorama → 3D; VR deferred), then T11b (challenge modes, rematches).
+- **Walkable world (T7b parts 1-2) is done:** Larkhaven and the three areas are tile maps you walk (keys or tap),
+  tall grass = exploring, walk-in inn/shop/ranch, Wardens and townsfolk stand in the world, Auto walks the grass,
+  six route trainers who spot you (`trainer` npcs in 11-maps.js, beaten ones in `S.beaten`), items on the ground
+  (`S.items`), signposts, your lead creature follows you. **Next for Claude:** **T13 era progression** (Game Boy →
+  16-bit → HD-2D → voxel diorama → 3D; VR deferred), then T11b (challenge modes, rematches).
   Emberfall now has Warden Toren and the Ember Badge (T15, ChatGPT, merged), so the cap is 45 after three
   badges and area 4 needs a map and a `req: 'ember'` biome. ChatGPT still has T14 (Wildbond lore bible, docs only).
 - **Realmbound** (classic-MMO idle, flagship): levels 1-40, two dungeons, hunters/pets/mounts, lore bible in

@@ -12,7 +12,7 @@ function unit(c, side) {
 }
 function startBattle(kind, foes, opts) {
   opts = opts || {};
-  B = { kind, title: opts.title || '', trainer: opts.trainer || null, story: opts.story || null,
+  B = { kind, title: opts.title || '', trainer: opts.trainer || null, story: opts.story || null, npc: opts.npc || null,
     allies: S.team.filter(c => c.hp > 0).map(c => unit(c, 'a')), foes: foes.map(c => unit(c, 'f')),
     cmd: 1, cmdT: 0, t: 0, tele: null, lines: [], over: null, capture: null, fx: [], bursts: [], shake: 0, lastInput: -99 };
   for (const u of B.foes) S.seen[u.c.sp] = true;
@@ -132,7 +132,7 @@ function battleTick(h) {
   B.cmdT += h; if (B.cmdT >= 5) { B.cmdT = 0; B.cmd = Math.min(3, B.cmd + 1); }
   if (isAuto() && B.cmd >= 3) command('focus', true);
   if (B.tele) { B.tele.t -= h; if (B.tele.t <= 0) { const { u, m } = B.tele; B.tele = null;
-    if (u.c.hp > 0) resolve(u, m, MOVES[m], living('a'), living('f'), () => (Math.random() < 0.65 ? living('a')[0] : pick(living('a'))) || living('a')[0]); } }
+    if (u.c.hp > 0 && living('a').length) resolve(u, m, MOVES[m], living('a'), living('f'), () => (Math.random() < 0.65 ? living('a')[0] : pick(living('a'))) || living('a')[0]); } }
   for (const u of [...B.allies, ...B.foes]) {
     if (u.c.hp <= 0) continue;
     for (const k in u.cds) u.cds[k] = Math.max(0, u.cds[k] - h);
@@ -169,6 +169,7 @@ function endBattle(result) {
       bline(`${legend.c.name} staggers up and slips away. It might let you approach another time.`, 'warn'); }
     else if (B.story) storyWin(B.story);
   }
+  if (B.npc) trainerResult(B.npc, result); // a route trainer (12-walk.js)
   if (result === 'lost' && B.story) S.story[B.story + 'Retry'] = S.explored + 4;
   if (result === 'lost') { const lost = Math.round(S.coins * 0.1); S.coins -= lost; bline(`Your team is exhausted. You hurry back to Larkhaven (−${lost} coins).`, 'warn');
     if (B.story === 'elder') S.story.elderFled = true; }

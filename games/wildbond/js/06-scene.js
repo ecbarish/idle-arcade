@@ -73,11 +73,20 @@ function drawWorld(t, A) {
   if (m.pen) { const [x0, y0, x1, y1] = m.pen; S.ranch.slice(0, 4).forEach((c, i) => {
     const k = reduceMotion ? 0.5 : (Math.sin(t * 0.25 + i * 2.1) + 1) / 2, x = ox + (x0 + k * (x1 - x0) + 0.5) * ts, y = oy + (y0 + (i % 2) * (y1 - y0) + 0.9) * ts;
     A.creature(cx, x - ts * 0.3, y, ts / 16, sp(c), Math.cos(t * 0.25 + i * 2.1) > 0, t + i); }); }
-  // people, back to front
-  const ppl = npcsOf(m).map(n => ({ x: n.at[0], y: n.at[1], look: CAST[n.who], dir: n.dir || 'down', step: 0, mark: n.warden && wardenReady() && !S.story[n.warden.id] }));
+  // things on the ground
+  const item = A.item || ART.pixel.item;
+  for (const it of itemsLeft(m)) item(cx, ox + it.at[0] * ts, oy + it.at[1] * ts, ts, t);
+  // people and your lead creature, back to front
+  const ppl = npcsOf(m).map(n => ({ x: n.at[0], y: n.at[1], look: CAST[n.who], dir: n.dir || 'down', step: 0,
+    mark: (n.warden && wardenReady() && !S.story[n.warden.id]) || (WK.spot && WK.spot.n.who === n.who) }));
   ppl.push({ x: WK.fx, y: WK.fy, look: PLAYER_LOOK, dir: S.pos.dir, step: arrived() ? 0 : Math.floor(t * 8) % 2 });
+  const lead = S.team.find(c => c.hp > 0);
+  if (lead && (Math.abs(WK.fol.fx - WK.fx) > 0.05 || Math.abs(WK.fol.fy - WK.fy) > 0.05)) ppl.push({ x: WK.fol.fx, y: WK.fol.fy, pet: lead });
   ppl.sort((a, b) => a.y - b.y);
-  for (const q of ppl) { const sx = ox + q.x * ts, sy = oy + q.y * ts; walker(cx, sx, sy, ts, q.look, q.dir, q.step);
+  for (const q of ppl) { const sx = ox + q.x * ts, sy = oy + q.y * ts;
+    if (q.pet) { const pp = ts / 18, faceR = WK.fx > WK.fol.fx + 0.01 || (Math.abs(WK.fx - WK.fol.fx) < 0.01 && S.pos.dir !== 'left');
+      A.creature(cx, sx + ts / 2 - 2 * pp, sy + ts * 0.92, pp, sp(q.pet), faceR, t); continue; }
+    walker(cx, sx, sy, ts, q.look, q.dir, q.step);
     if (q.mark) { const by = sy - ts * 0.75 - (reduceMotion ? 0 : Math.abs(Math.sin(t * 4)) * ts * 0.1); cx.fillStyle = '#f2c14e'; cx.fillRect(sx + ts * 0.35, by, ts * 0.3, ts * 0.38);
       cx.fillStyle = '#17323a'; cx.fillRect(sx + ts * 0.46, by + ts * 0.06, ts * 0.08, ts * 0.17); cx.fillRect(sx + ts * 0.46, by + ts * 0.27, ts * 0.08, ts * 0.06); } }
   // where you are

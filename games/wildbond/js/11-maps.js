@@ -2,28 +2,39 @@
 /* The walkable world (T7b): one tile map per place. Data only. 12-walk.js moves you around these maps and
    ART[era].tile / ART[era].walker draw them, so a later era (HD-2D, voxel, 3D) can render the same maps.
    Tiles: '.' path  ',' grass  '"' tall grass (wild creatures hide here)  'f' flowers  '_' sand
-          'T' tree  '~' water  'o' hot spring  'R' rock  'r' roof  '#' wall  'D' door  '=' fence   (T ~ o R r # = are solid)
-          'N' 'S' 'E' 'W' an exit on that side, drawn as path.
+          'T' tree  '~' water  'o' hot spring  'R' rock  'r' roof  '#' wall  'D' door  '=' fence  'P' signpost
+          (T ~ o R r # = P are solid)   'N' 'S' 'E' 'W' an exit on that side, drawn as path.
    A map: rows (all the same length), biome (wild creatures and levels; none for towns), start [x, y, facing],
    exits { N: { to, x, y, dir, locked } } (locked = what you're told if the next area's badge isn't earned yet),
-   doors { 'x,y': 'inn' | 'shop' | 'ranch' }, npcs [{ who (a CAST key), at: [x, y], dir, lines, act }],
-   warden [x, y] (where the area's Warden stands, if it has one), pen [x0, y0, x1, y1] (ranch creatures roam here). */
+   doors { 'x,y': 'inn' | 'shop' | 'ranch' }, signs { 'x,y': text }, npcs [{ who (a CAST key), at: [x, y], dir, lines, act }],
+   warden [x, y] (where the area's Warden stands, if it has one), pen [x0, y0, x1, y1] (ranch creatures roam here),
+   items [{ id, at: [x, y], give: { coins | lures | meat | fish | grain | berries: amount } }] (picked up once, by walking on them).
+   A route trainer is an npc with trainer: { team: [[species, level]], sight (tiles they see ahead), win, after }:
+   walk into their line of sight and they come for a battle; `lines` play before it, `win` after you win, `after` later. */
 const TILES = {
   '.': {}, ',': {}, '"': { tall: 1 }, f: {}, _: {}, N: { exit: 1 }, S: { exit: 1 }, E: { exit: 1 }, W: { exit: 1 },
-  T: { solid: 1 }, '~': { solid: 1 }, o: { solid: 1 }, R: { solid: 1 }, r: { solid: 1 }, '#': { solid: 1 }, '=': { solid: 1 }, D: { door: 1 }
+  T: { solid: 1 }, '~': { solid: 1 }, o: { solid: 1 }, R: { solid: 1 }, r: { solid: 1 }, '#': { solid: 1 }, '=': { solid: 1 }, D: { door: 1 },
+  P: { solid: 1, sign: 1 }
 };
 
 /* Townsfolk and passers-by: speakers for map conversations. Wardens and story speakers live in 00-data.js. */
 Object.assign(CAST, {
   pip: { name: 'Pip', skin: '#f2c8a2', hair: 'spiky', hairCol: '#c96a2a', shirt: '#e0b03a', bg: '#f5e6b8', title: 'Larkhaven kid' },
-  tobin: { name: 'Old Tobin', skin: '#c48e68', hair: 'hat', hairCol: '#d8d4cc', hatCol: '#4a4038', shirt: '#6a7a5a', bg: '#d8e2d0', title: 'Saltmarsh fisher' }
+  tobin: { name: 'Old Tobin', skin: '#c48e68', hair: 'hat', hairCol: '#d8d4cc', hatCol: '#4a4038', shirt: '#6a7a5a', bg: '#d8e2d0', title: 'Saltmarsh fisher' },
+  // route trainers
+  bram: { name: 'Bram', skin: '#e8b890', hair: 'short', hairCol: '#4a3a2a', shirt: '#7a8a3a', bg: '#dfe6c4', title: 'Forager' },
+  lise: { name: 'Lise', skin: '#d29a74', hair: 'long', hairCol: '#2a2a3a', shirt: '#c8604a', bg: '#f0d6cc', title: 'Birdwatcher' },
+  cato: { name: 'Cato', skin: '#a8724e', hair: 'hat', hairCol: '#3a3028', hatCol: '#d8c08a', shirt: '#3a7a9a', bg: '#d0e4ec', title: 'Beachcomber' },
+  marit: { name: 'Marit', skin: '#f0c8a4', hair: 'bun', hairCol: '#b8483a', shirt: '#4a6a8a', bg: '#d8e0ec', title: 'Lighthouse runner' },
+  orsk: { name: 'Orsk', skin: '#8a5a3e', hair: 'short', hairCol: '#1e1e22', shirt: '#9a5a3a', bg: '#ecd4c0', title: 'Ridge hiker' },
+  sela: { name: 'Sela', skin: '#c88a64', hair: 'spiky', hairCol: '#e8e0d0', shirt: '#6a4a8a', bg: '#e0d4ec', title: 'Spring keeper' }
 });
 
 const MAPS = {
   larkhaven: { name: 'Larkhaven', pal: 'thornwood', start: [11, 7, 'down'],
     rows: [
       'TTTTTTTTTTNNTTTTTTTTTTTT',
-      'T,,,,,,,,,..,,,,,,,,,,,T',
+      'T,,,,,,,,,..P,,,,,,,,,,T',
       'T,rrrrr,,,..,,,,rrrrr,,T',
       'T,rrrrr,,,..,,,,rrrrr,,T',
       'T,##D##,,,..,,,,##D##,,T',
@@ -39,6 +50,8 @@ const MAPS = {
     ],
     exits: { N: { to: 'thornwood', x: 13, y: 14, dir: 'up' } },
     doors: { '4,4': 'inn', '18,4': 'shop', '7,10': 'ranch' },
+    signs: { '12,1': 'North: Thornwood. Mind the tall grass, and mind your partner.' },
+    items: [{ id: 'lh1', at: [22, 12], give: { coins: 30 } }],
     pen: [14, 9, 18, 10],
     npcs: [
       { who: 'maren', at: [9, 11], dir: 'down', act: 'ranch',
@@ -62,12 +75,26 @@ const MAPS = {
       'T,,,,,,,,,,,,..,,,,,,,,,,,,,,T',
       'TT""""""",,,,..,,,""""""",,TTT',
       'TT""""""",,,,..,,,""""""",,TTT',
-      'TTT"""",,,,,,..,,,,,,""""TTTTT',
+      'TTT"""",,,,,P..,,,,,,""""TTTTT',
       'TTTTTTTTTTTTT..TTTTTTTTTTTTTTT',
       'TTTTTTTTTTTTTSSTTTTTTTTTTTTTTT'
     ],
     exits: { S: { to: 'larkhaven', x: 10, y: 1, dir: 'down' },
       N: { to: 'saltmarsh', x: 13, y: 12, dir: 'up', locked: 'The hawthorn gate is shut tight. Warden Isolde keeps it, and she opens it only for tamers who have earned the Thorn Badge.' } },
+    signs: { '12,13': 'Thornwood. South: Larkhaven. North: the hawthorn gate and Warden Isolde.' },
+    items: [{ id: 'tw1', at: [2, 6], give: { coins: 60 } }, { id: 'tw2', at: [27, 10], give: { lures: 3 } }, { id: 'tw3', at: [5, 9], give: { berries: 5 } }],
+    npcs: [
+      { who: 'bram', at: [11, 10], dir: 'right',
+        trainer: { sight: 3, team: [['gnawhound', 5], ['duskweaver', 6]],
+          win: [['bram', 'Ha! Fair\'s fair. I was only out here for mushrooms anyway.']],
+          after: [['bram', 'The stream by the pond floods in spring. Best mushrooms in Thornwood grow right where it stops.']] },
+        lines: [['bram', 'Hold it! You walked right past my mushroom patch. Least you can do is give me a battle.']] },
+      { who: 'lise', at: [16, 6], dir: 'left',
+        trainer: { sight: 3, team: [['glimmerwing', 8], ['emberling', 9], ['pebblepaw', 10]],
+          win: [['lise', 'Oh, that was lovely to watch. Your team moves like a flock.']],
+          after: [['lise', 'I\'ve counted forty-one Glimmerwings this week. One of them keeps following Wren around.']] },
+        lines: [['lise', 'Shh! You\'ll scare the birds. ...Well, now they\'re gone. You owe me a battle.']] }
+    ],
     wardenDone: 'The gate is yours, {name}. The coast is waiting.' },
   saltmarsh: { name: 'Saltmarsh Coast', biome: 'saltmarsh', start: [13, 12, 'up'], warden: [16, 4],
     rows: [
@@ -82,7 +109,7 @@ const MAPS = {
       '"""""",,,,,,,................E',
       '""""",,,RR,,,................E',
       'T""""",,,,,,,..,,""""""",,,TTT',
-      'TT"""",,,,,,,..,,,""""",,TTTTT',
+      'TT"""",,,,,,P..,,,""""",,TTTTT',
       'TTTTTTTTTTTTT..TTTTTTTTTTTTTTT',
       'TTTTTTTTTTTTTSSTTTTTTTTTTTTTTT'
     ],
@@ -91,8 +118,20 @@ const MAPS = {
     npcs: [
       { who: 'tobin', at: [6, 3], dir: 'down',
         lines: [['tobin', 'Forty years I\'ve fished this coast. Seen the tide go out further than it should, once. Didn\'t much like what walked out of it.'],
-          ['tobin', 'Reeds hide the wild ones. Walk through slow and they\'ll come and have a look at you.']] }
+          ['tobin', 'Reeds hide the wild ones. Walk through slow and they\'ll come and have a look at you.']] },
+      { who: 'cato', at: [16, 7], dir: 'left',
+        trainer: { sight: 3, team: [['kiteskirl', 14], ['reedtusk', 15]],
+          win: [['cato', 'Washed up, just like everything else on this beach. Good battle, though.']],
+          after: [['cato', 'Found a shell yesterday that hums when the tide comes in. Old Tobin told me to put it back.']] },
+        lines: [['cato', 'A new tamer on my beach? The tide brought you in, so let\'s see what you\'re made of.']] },
+      { who: 'marit', at: [22, 9], dir: 'up',
+        trainer: { sight: 1, team: [['wrackjaw', 17], ['dunepounce', 18], ['brineskit', 18]],
+          win: [['marit', 'You\'re fast. Faster than me, and I run the lighthouse stairs twice a day.']],
+          after: [['marit', 'Warden Nerys says the flats change every six hours. I time my runs by them.']] },
+        lines: [['marit', 'Out of the way, I\'m on a run! ...Actually, no. A battle first. Then the run.']] }
     ],
+    signs: { '12,11': 'Saltmarsh Coast. East: the cliff road to the Emberfall Highlands.' },
+    items: [{ id: 'sm1', at: [2, 4], give: { lures: 3 } }, { id: 'sm2', at: [27, 6], give: { fish: 5 } }, { id: 'sm3', at: [10, 11], give: { coins: 120 } }],
     wardenDone: 'The flats will still be here when the tide turns, {name}. So will I.' },
   emberfall: { name: 'Emberfall Highlands', biome: 'emberfall', start: [1, 8, 'right'], warden: [20, 6],
     rows: [
@@ -103,7 +142,7 @@ const MAPS = {
       'R""""",,oo,,,,RR,,,,,,""""""RR',
       'R"""",,ooo,,,,RR,,,,,,,,""""RR',
       'R,,,,,,,,,,,,,,,,,,,,,,,,,,,RR',
-      'R,,""""",,,,,,,,,""""""",,,,RR',
+      'R,P""""",,,,,,,,,""""""",,,,RR',
       'W.........................,,RR',
       'W.........................,,RR',
       'R,,""""""",,,,RR,,,"""""",,RRR',
@@ -112,5 +151,19 @@ const MAPS = {
       'RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR'
     ],
     exits: { W: { to: 'saltmarsh', x: 28, y: 8, dir: 'left' } },
+    signs: { '2,7': 'Emberfall Highlands. Mind the springs: they\'re warmer than they look.' },
+    items: [{ id: 'ef1', at: [12, 3], give: { meat: 5 } }, { id: 'ef2', at: [27, 6], give: { lures: 5 } }, { id: 'ef3', at: [26, 11], give: { coins: 250 } }],
+    npcs: [
+      { who: 'orsk', at: [10, 7], dir: 'down',
+        trainer: { sight: 1, team: [['ashskip', 24], ['ventwhisk', 25]],
+          win: [['orsk', 'Good. Good! My legs are tired anyway. I\'ll blame them.']],
+          after: [['orsk', 'From the top of the ridge you can see all the way back to Larkhaven. Tiny little windmill.']] },
+        lines: [['orsk', 'The ridge path is narrow, friend. Only one of us gets to keep walking. Battle for it?']] },
+      { who: 'sela', at: [17, 10], dir: 'up',
+        trainer: { sight: 1, team: [['screegrin', 27], ['thermwing', 28], ['kilntusk', 29]],
+          win: [['sela', 'Warm work. Your team deserves a soak in the springs after that.']],
+          after: [['sela', 'Toren sits by the springs every morning. He says he\'s thinking. I think he\'s napping.']] },
+        lines: [['sela', 'Visitors to the springs have to earn their soak. Show me your team!']] }
+    ],
     wardenDone: 'You\'ve earned your badge here, {name}. The mountain will remember your team.' }
 };

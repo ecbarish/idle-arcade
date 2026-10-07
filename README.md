@@ -35,6 +35,12 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-06 (night, part 2)** — Wildbond walkable world, part 2 (T7b): six tamers now wait along the routes
+  (two per area). Walk into the line they're watching and they spot you ("!") and come over for a battle; beat them
+  once and they'll chat instead. Pouches of coins, lures and ranch food lie around each area, signposts tell you
+  where roads lead, and your lead creature now trots along behind you. Fixed a rare crash when a charged-up attack
+  landed after your whole team had fainted.
+
 - **2026-10-06 (later still)** — Merged ChatGPT's Emberfall Warden (T15): Warden Toren waits above the highland
   springs and tests your patience; beating him earns the Ember Badge and raises the level cap to 45.
 

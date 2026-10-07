@@ -59,8 +59,8 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
   Emberfall (games/wildbond/js/11-maps.js, data only); walking by keys or tap (12-walk.js); tall grass finds wild
   creatures; inn, shop and Maren's ranch you walk into; townsfolk and Wardens standing in the world; Auto-explore
   walks the grass. Drawn through `ART[era].tile/walker`. Done 2026-10-06.
-- [ ] **T7b part 2** (Claude): route trainers who spot you, items on the ground, your lead creature following you,
-  signposts, more townsfolk; later the menu shortcuts (Rest, Buy lures, Travel) can retire.
+- [x] **T7b part 2** (Claude): route trainers who spot you, items on the ground, your lead creature following you,
+  signposts. Done 2026-10-06. Later: more townsfolk; the menu shortcuts (Rest, Buy lures, Travel) can retire.
 - [x] **T10: Wildbond third area, data only** (ChatGPT): see the T10 section below.
 
 - [x] **T12: Realmbound lore pass** (ChatGPT): see the T12 section below.

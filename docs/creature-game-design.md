@@ -167,6 +167,10 @@ rate, coins 1.5/1/0.8, rarity boost +0.15/0/-0.3); Auto-explore earns 0.8x XP; b
 (explore 24, team 21/22/24). Measured on Auto from a fresh save with a sim player who catches two partners and
 challenges a Warden when about level with its ace: first badge at ~49 min (Breezy), ~140 min (Classic), ~208 min
 (Long Road); Breezy's second badge ~3.5 h. Still to do: challenge modes, rematches, the remaining QoL items.
+**Re-measured after the walkable world (T7b, tall-grass steps at real walking speed, route trainers on):** first
+badge ~62 min (Breezy) and ~170-200 min (Classic) on Auto; active play earns 1.25x the XP, so Classic lands at about
+2.3-2.6 h when played. A find comes every 8-16 tall-grass steps (`WK.grassN` in 12-walk.js) at 5 tiles a second.
+Simulations must call `worldTick(0.1)` in a loop; walking then runs at the real speed.
 
 **Full 1-100 range.** About eight areas, each with a level band (Thornwood ~2-12, Saltmarsh ~12-22, Emberfall
 ~22-32, ...). Eight badges carry you to about 70; the post-game takes you to 100.

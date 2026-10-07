@@ -5,8 +5,10 @@
 const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
 const KEYDIR = { arrowup: 'up', w: 'up', arrowdown: 'down', s: 'down', arrowleft: 'left', a: 'left', arrowright: 'right', d: 'right' };
 const WALK_SPEED = 5; // tiles a second
-/* fx, fy: where the tamer is drawn (slides toward S.pos); path: queued steps; grassN: tall-grass steps until the next find */
-const WK = { fx: 0, fy: 0, held: [], queued: null, path: [], grassN: 10, cam: null };
+/* fx, fy: where the tamer is drawn (slides toward S.pos); path: queued steps; grassN: tall-grass steps until the next find;
+   fol: where your lead creature walks (one step behind you); spot: a trainer who just saw you; cool: trainers who beat
+   you won't come at you again until you leave the area */
+const WK = { fx: 0, fy: 0, held: [], queued: null, path: [], grassN: 10, cam: null, fol: { x: 0, y: 0, fx: 0, fy: 0 }, spot: null, cool: {} };
 
 function curMap() { return MAPS[S.pos.map]; }
 function tileAt(m, x, y) { return y < 0 || y >= m.rows.length || x < 0 || x >= m.rows[0].length ? 'T' : m.rows[y][x]; }
@@ -24,12 +26,19 @@ function blocked(m, x, y) { return !!(TILES[tileAt(m, x, y)] || TILES.T).solid |
 function placeAt(id, x, y, dir) {
   const m = MAPS[id]; if (!m) return;
   if (x === undefined) [x, y, dir] = m.start;
-  S.pos = { map: id, x, y, dir: dir || 'down' }; WK.fx = x; WK.fy = y; WK.path = [];
+  if (!S.pos || S.pos.map !== id) WK.cool = {};
+  S.pos = { map: id, x, y, dir: dir || 'down' }; WK.fx = x; WK.fy = y; WK.path = []; WK.spot = null; WK.ready = true;
+  followBehind();
   if (m.biome) S.biome = m.biome;
+}
+/* the follower starts one tile behind you if there's room, otherwise right where you are */
+function followBehind() {
+  const [dx, dy] = DIRS[S.pos.dir] || [0, 1], bx = S.pos.x - dx, by = S.pos.y - dy, ok = !blocked(curMap(), bx, by);
+  WK.fol = { x: ok ? bx : S.pos.x, y: ok ? by : S.pos.y }; WK.fol.fx = WK.fol.x; WK.fol.fy = WK.fol.y;
 }
 /* older saves (and new tamers) have no position yet */
 function ensurePos() {
-  if (S.pos && MAPS[S.pos.map]) { if (!WK.cam) { WK.fx = S.pos.x; WK.fy = S.pos.y; } return; }
+  if (S.pos && MAPS[S.pos.map]) { if (!WK.ready) { WK.ready = true; WK.fx = S.pos.x; WK.fy = S.pos.y; followBehind(); } return; }
   placeAt(MAPS[S.biome] ? S.biome : 'larkhaven');
 }
 function arrived() { return Math.abs(WK.fx - S.pos.x) < 0.01 && Math.abs(WK.fy - S.pos.y) < 0.01; }
@@ -41,9 +50,48 @@ function tryStep(dir) {
   const npc = npcAt(m, nx, ny); if (npc) { WK.path = []; talkTo(npc); return; }
   if (TILES[ch] && TILES[ch].door) { WK.path = []; enterDoor(m.doors[nx + ',' + ny]); return; }
   if (TILES[ch] && TILES[ch].exit) { useExit(m, ch); return; }
+  if (TILES[ch] && TILES[ch].sign) { WK.path = []; W.msg = `The sign reads: "${(m.signs || {})[nx + ',' + ny] || 'The words have worn away.'}"`; return; }
   if (blocked(m, nx, ny)) { WK.path = []; return; }
-  S.pos.x = nx; S.pos.y = ny;
+  WK.fol.x = S.pos.x; WK.fol.y = S.pos.y; S.pos.x = nx; S.pos.y = ny;
+  pickUp(m, nx, ny);
+  if (spotted(m)) return;
   if (TILES[ch].tall && --WK.grassN <= 0) { WK.grassN = rint(8, 16); WK.path = []; explore(); }
+}
+/* items lying on the ground: picked up once, by walking onto them */
+function itemsLeft(m) { return (m.items || []).filter(it => !(S.items && S.items[it.id])); }
+function pickUp(m, x, y) {
+  const it = itemsLeft(m).find(i => i.at[0] === x && i.at[1] === y); if (!it) return;
+  S.items = S.items || {}; S.items[it.id] = true; ensureRanch();
+  const got = Object.entries(it.give).map(([k, n]) => {
+    if (k === 'coins') { S.coins += n; return `${n} coins`; }
+    if (k === 'lures') { S.lures += n; return `${n} lure${n > 1 ? 's' : ''}`; }
+    S.food[k] = (S.food[k] || 0) + n; return `${n} ${FOODS[k].name.toLowerCase()} for the ranch`; });
+  W.msg = `You found ${got.join(' and ')}!`; sfx('catch'); toast(W.msg);
+}
+/* route trainers: walk into the line they're facing and they come over for a battle */
+function spotted(m) {
+  for (const n of npcsOf(m)) {
+    if (!n.trainer || (S.beaten && S.beaten[n.who]) || WK.cool[n.who]) continue;
+    const [dx, dy] = DIRS[n.dir || 'down'];
+    for (let k = 1; k <= (n.trainer.sight || 3); k++) {
+      const x = n.at[0] + dx * k, y = n.at[1] + dy * k;
+      if (x === S.pos.x && y === S.pos.y) { WK.path = []; WK.held = []; WK.queued = null; WK.spot = { n, t: 0.9 }; sfx('warn'); return true; }
+      if (blocked(m, x, y)) break;
+    }
+  }
+  return false;
+}
+function challengeTrainer(n) {
+  WK.spot = null;
+  const grown = (id, lvl) => { let s = id; while (SPECIES[s].evo && lvl >= SPECIES[s].evo.at) s = SPECIES[s].evo.to; return s; };
+  const team = n.trainer.team.slice(-Math.max(1, S.team.length)).map(([id, lvl]) => newCreature(grown(id, lvl), lvl, { rar: 1 }));
+  talk(n.lines, () => { if (alive().length) startBattle('trainer', team, { trainer: CAST[n.who].name, npc: n.who }); });
+}
+/* called when a battle against a route trainer ends (03-battle.js) */
+function trainerResult(who, result) {
+  const n = npcsOf(curMap()).find(x => x.who === who); if (!n) return;
+  if (result === 'won') { S.beaten = S.beaten || {}; S.beaten[who] = true; W.after = n.trainer.win || null; slog(`Beat ${CAST[who].title.toLowerCase()} ${CAST[who].name} in ${curMap().name}.`); }
+  else WK.cool[who] = true;
 }
 function useExit(m, ch) {
   const ex = m.exits[ch]; if (!ex) return; WK.path = [];
@@ -57,7 +105,7 @@ function enterDoor(kind) {
   else if (kind === 'ranch') { S.tab = 'ranch'; renderTabs(true); W.msg = 'Maren waves you into the barn. Your ranch is open on the right.'; }
 }
 function talkTo(n) {
-  const face = { up: 'down', down: 'up', left: 'right', right: 'left' }[S.pos.dir]; n.dir = face;
+  const face = { up: 'down', down: 'up', left: 'right', right: 'left' }[S.pos.dir]; if (!n.trainer) n.dir = face; // trainers keep watching their path
   if (n.warden) {
     const g = n.warden;
     if (S.story[g.id]) talk([[n.who, MAPS[S.pos.map].wardenDone || 'You\'ve earned my badge. The road ahead is yours.']]);
@@ -65,6 +113,7 @@ function talkTo(n) {
     else talk([[n.who, `Not yet, {name}. Walk ${MAPS[S.pos.map].name} a while longer and let your team learn its ways. Come back to me after about ${Math.max(1, g.at - beatCount(g))} more finds in the grass.`]]);
     return;
   }
+  if (n.trainer) { if (S.beaten && S.beaten[n.who]) talk(n.trainer.after || n.trainer.win); else challengeTrainer(n); return; }
   talk(n.lines, n.act === 'ranch' ? () => enterDoor('ranch') : null);
 }
 
@@ -94,8 +143,10 @@ function autoWalk() {
 
 function walkTick(h) {
   if (!S.pos || B || TALK) return;
-  const sp = WALK_SPEED * h;
+  const sp = WALK_SPEED * h, f = WK.fol;
   WK.fx += Math.max(-sp, Math.min(sp, S.pos.x - WK.fx)); WK.fy += Math.max(-sp, Math.min(sp, S.pos.y - WK.fy));
+  f.fx += Math.max(-sp, Math.min(sp, f.x - f.fx)); f.fy += Math.max(-sp, Math.min(sp, f.y - f.fy));
+  if (WK.spot) { if (arrived() && (WK.spot.t -= h) <= 0) challengeTrainer(WK.spot.n); return; }
   if (!arrived()) return;
   const dir = WK.held[WK.held.length - 1] || WK.queued || WK.path.shift(); WK.queued = null;
   if (dir) tryStep(dir);
