@@ -172,6 +172,9 @@ badge ~62 min (Breezy) and ~170-200 min (Classic) on Auto; active play earns 1.2
 2.3-2.6 h when played. A find comes every 8-16 tall-grass steps (`WK.grassN` in 12-walk.js) at 5 tiles a second.
 Simulations must call `worldTick(0.1)` in a loop; walking then runs at the real speed.
 
+**Decided 2026-10-08:** the main story ends near level 70; badge caps 15, 25, 35, 45, 55, 60, 65, 70, then 75 with all
+eight; post-game to 100 (see `docs/research/decisions.md`).
+
 **Full 1-100 range.** About eight areas, each with a level band (Thornwood ~2-12, Saltmarsh ~12-22, Emberfall
 ~22-32, ...). Eight badges carry you to about 70; the post-game takes you to 100.
 

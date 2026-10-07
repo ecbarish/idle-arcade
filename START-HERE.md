@@ -84,21 +84,25 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    side lane": parked games get structural and polish work while Claude focuses on the two main games.
 8. ~~**Research brief for the big decisions**~~ — done by Claude 2026-10-08: `docs/research/decisions.md` (sources,
    recommendations, and the shared-systems plan: dialogue → sound → roster → world kit).
-9. **Then:** the guild, Hollow Crown part 2 and the raid (Realmbound); Wildbond area 5 (after Evan answers the cap
-   question), contests and races, ranch cosmetics for challenge titles, Modern 3D.
+9. **D1: Wildbond cap table** (decision 1) — claimed by Claude, 2026-10-08. `levelCap()` in 02-state.js uses a table
+   (`CAP_TABLE` in 00-data.js): 15, 25, 35, 45, 55, 60, 65, 70, then 75 with all eight badges.
+10. **D2+D3: Realmbound group XP split and journey length** (decisions 2-3) — claimed by Claude, 2026-10-08. Kill XP ÷
+   group size × (1, 1, 1.166, 1.3, 1.4); quest XP whole. A Breezy/Classic/Long Road setting scaling kill and quest XP
+   (×1.6 / ×1 / ×0.6), chosen at character creation and changeable in town; re-run the pacing sim afterwards.
+11. **D7: shared multiverse record** — claimed by Claude, 2026-10-08: `docs/lore/multiverse.md`.
+12. **S1: shared dialogue scenes** (any assistant): move Wildbond's `09-dialogue.js` into `shared/dialogue.js` (portrait
+   drawing, typewriter, auto-advance) with a small game-specific adapter, keep Wildbond identical (both test pages
+   pass), then use it for Realmbound quest givers' offer/turn-in lines (portraits from a small cast list).
+13. **S2: shared sound** (any assistant): same for `10-sound.js` → `shared/sound.js`; give Realmbound effects and
+   per-zone music (original tunes), sound off by default.
+14. **Then:** the guild, Hollow Crown part 2 and the raid (Realmbound); Wildbond areas 5-8 (bands 52-60, 58-64, 62-68,
+   66-72) and the league, contests and races, ranch cosmetics for challenge titles, Modern 3D.
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
-**All of these have a researched recommendation in `docs/research/decisions.md` ("Decisions for Evan").**
-
-- **Wildbond level cap:** eight badges would allow level 95 but the plan says the main story ends near 70.
-  [Default: decide before area 5; nothing to change yet.]
-- **Realmbound** (from `docs/realmbound-40-60.md`): how many heroes work at once [3]; raids as planning or hands-on
-  [both]; raid size [10 for now]; how often raid loot can be won [every 3 days]; keep classic friction [yes, with
-  ways to earn it away]; the new names (Wayfolk, Silent Barrows, Seraveth…) [keep].
-- **Realmbound group questing:** questing with four companions is about 5× faster than solo (measured in T1-B),
-  at every level. Should party kills split XP, as classic MMOs do (with a small group bonus), or stay fast as the
-  reward for making friends? [Default: leave as is until Evan decides; it changes levels 1-40 too.]
+None open right now. **Decided 2026-10-08 (Evan: "go with your recommendations, and yes to the shared universe where
+it makes sense"):** see the "Decided" section at the top of `docs/research/decisions.md`. New questions go here, each with
+a default so work never waits.
 
 ## Before you stop (every session, even a short one)
 

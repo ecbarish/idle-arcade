@@ -181,6 +181,9 @@ changelog entry, lore record updated.
 
 ## Owner questions (defaults in brackets)
 
+**Decided 2026-10-08:** all six take the defaults below, plus split group XP and a journey length setting; details
+and reasoning in `docs/research/decisions.md`. Job slots: 3 growing to 5-6, never 8.
+
 1. **How much of the account plays at once?** A small supported roster (3–4 heroes with jobs) or all eight character
    slots? [Start with 3 job slots, growing with guild level.]
 2. **Raid feel:** mostly preparation and management, or active encounter play? [Both: plan before the pull, raid calls

@@ -1,5 +1,22 @@
 # Research brief: the big open decisions (2026-10-08)
 
+## Decided (Evan, 2026-10-08: "go with your recommendations, and yes to the shared universe where it makes sense")
+
+1. **Wildbond:** the main story ends near level 70. Badge caps: 15, 25, 35, 45, 55, 60, 65, 70 for 0–7 badges, 75 with
+   all 8; the Champion around 72–75; the post-game opens the rest of the way to 100. Areas 5–8: 52–60, 58–64, 62–68,
+   66–72.
+2. **Realmbound:** kill XP splits across the group with classic bonuses (×1, ×1, ×1.166, ×1.3, ×1.4 for 1–5); quest XP
+   stays whole.
+3. **Realmbound:** a journey length setting (Breezy / Classic / Long Road).
+4. **Realmbound:** 3 job slots growing to 5–6 with guild level, never 8; jobs keep running, one return report.
+5. **Realmbound:** first raid for 10, a 20 tier later only if wanted, no 40; raid loot every 3 days, practice any time;
+   DKP by default with a loot-council override. The other T1 owner questions take their defaults (hands-on raids with
+   planning, keep classic friction with ways to earn it away, keep the new names).
+6. **Shared systems** in this order: dialogue scenes → sound/music → roster and jobs → the world kit.
+7. **A light shared multiverse, where it makes sense:** recurring characters across games, Otherworld's lives visiting
+   the other games' worlds, and possibly Primordial as the deep past of the creatures. Every game stays playable on
+   its own. Canon record: `docs/lore/multiverse.md`.
+
 Written by Claude for Evan. For each open decision: what comparable games did, what players said, and what I
 recommend for Idle Arcade. Numbers from well-documented games are facts; recommendations are opinions to accept or
 change. Sources are at the end of each section. The earlier broad survey of 19 games is `docs/plans/RESEARCH.md`.
