@@ -67,7 +67,9 @@ function wildbondChecks() {
   function reset() {
     // Clear transient battle/dialogue state as well as persistent state between scenarios.
     B = null; TALK = null; talkEl.hidden = true; W.after = W.afterDone = null; W.endT = W.autoT = 0; W.msg = '';
-    S = fresh(); WK.ready = false; panelKey = tabKey = ''; closeModal();
+    S = fresh(); WK.ready = false; WK.held = []; WK.queued = null; WK.spot = null;
+    WK.run = WK.pathRun = false; WK.cool = {}; WK.roam = []; WK.roamT = 99; WK.grassN = 10000;
+    panelKey = tabKey = ''; closeModal();
   }
   function ready() {
     reset(); S.started = true; S.starter = 'ripplet'; S.rivalStarter = 'mosshog';
@@ -94,8 +96,8 @@ function wildbondChecks() {
     ready(); S.badges = ['thorn']; wb.placeAt('thornwood', 13, 1, 'up'); wb.tryStep('up');
     return S.pos.map === 'saltmarsh';
   });
-  const badges = ['thorn', 'tide', 'ember'];
-  for (let n = 0; n <= 3; n++) check('Level cap with ' + n + ' badges is ' + (15 + 10 * n), () => {
+  const badges = ['thorn', 'tide', 'ember', 'beacon'];
+  for (let n = 0; n <= badges.length; n++) check('Level cap with ' + n + ' badges is ' + (15 + 10 * n), () => {
     ready(); S.badges = badges.slice(0, n); return wb.levelCap() === 15 + 10 * n;
   });
   check('Soft cap still grants a trickle of XP at the cap', () => {
@@ -145,6 +147,224 @@ function wildbondChecks() {
   check('Walking into the shop buys five lures for 50 coins', () => {
     ready(); const coins = S.coins, lures = S.lures; wb.placeAt('larkhaven', 18, 5, 'up'); wb.tryStep('up');
     return S.coins === coins - 50 && S.lures === lures + 5 && W.msg.includes('shopkeeper');
+  });
+  // T24: exercise the same walking, dialogue and battle paths as the game.
+  function finishFight() {
+    let ticks = 0;
+    while (B && !B.over && ticks++ < 10000) {
+      if (B.tele) wb.command('guard');
+      else if (B.cmd >= 2 && living('a').some(u => u.c.hp < u.st.hp * 0.5)) wb.command('rally');
+      else wb.command('focus');
+      wb.worldTick(0.1);
+    }
+    const result = B && B.over;
+    if (result) { wb.finishBattle(); skipTalk(); }
+    return result;
+  }
+  function beside(map, x, y) {
+    for (const [dir, [dx, dy]] of Object.entries(DIRS)) {
+      const px = x - dx, py = y - dy;
+      if (walkable(map, px, py) && !npcAt(map, px, py) && !TILES[tile(map, px, py)].exit && !TILES[tile(map, px, py)].sign) return [px, py, dir];
+    }
+    throw Error('No walkable approach at ' + x + ',' + y);
+  }
+  const trainers = Object.entries(MAPS).flatMap(([map, m]) => (m.npcs || []).filter(n => n.trainer).map(n => ({ map, n })));
+  for (const { map, n } of trainers) {
+    check(map + ': walking into ' + n.who + "'s sight starts a trainer scene and battle", () => {
+      ready(); const m = MAPS[map], [dx, dy] = DIRS[n.dir];
+      const x = n.at[0] + dx, y = n.at[1] + dy;
+      const [px, py, dir] = beside(m, x, y); wb.placeAt(map, px, py, dir);
+      if (!walk(x, y) || !WK.spot || WK.spot.n.who !== n.who) return false;
+      for (let i = 0; i < 30 && !TALK; i++) wb.worldTick(0.1);
+      const scene = !!TALK && TALK.lines[0][0] === n.who; skipTalk();
+      return scene && B && B.kind === 'trainer' && B.npc === n.who && B.trainer === CAST[n.who].name;
+    });
+    check(map + ': victory records ' + n.who + ' and talking again plays after dialogue', () => {
+      ready(); wb.placeAt(map); talkTo(n); skipTalk();
+      if (finishFight() !== 'won' || !S.beaten[n.who]) return false;
+      talkTo(n); const expected = n.trainer.after || n.trainer.win;
+      return !B && !!TALK && JSON.stringify(TALK.lines) === JSON.stringify(expected.map(([who, text]) => [who, fillText(text)]));
+    });
+    check(map + ': losing to ' + n.who + ' prevents another sight challenge until changing maps', () => {
+      ready(); wb.placeAt(map); S.team = [wb.newCreature('ripplet', 1)]; S.team[0].hp = 1;
+      talkTo(n); skipTalk();
+      let ticks = 0; while (B && !B.over && ticks++ < 10000) wb.worldTick(0.1);
+      if (!B || B.over !== 'lost' || !WK.cool[n.who] || S.beaten && S.beaten[n.who]) return false;
+      wb.finishBattle(); skipTalk();
+      const [dx, dy] = DIRS[n.dir], x = n.at[0] + dx, y = n.at[1] + dy;
+      wb.placeAt(map, x, y); if (spotted(MAPS[map]) || WK.spot) return false;
+      wb.placeAt('larkhaven'); wb.placeAt(map, x, y);
+      return !WK.cool[n.who] && spotted(MAPS[map]) && WK.spot.n.who === n.who;
+    });
+  }
+  for (const [id, m] of Object.entries(MAPS)) {
+    for (const it of m.items || []) check(id + ': walking picks up ' + it.id + ' exactly once', () => {
+      ready(); ensureRanch(); const [x, y] = it.at, [px, py, dir] = beside(m, x, y);
+      wb.placeAt(id, px, py, dir);
+      const before = { coins: S.coins, lures: S.lures, ...S.food };
+      wb.tryStep(dir);
+      if (S.pos.x !== x || S.pos.y !== y || !S.items[it.id]) return false;
+      for (const [key, amount] of Object.entries(it.give)) if ((key === 'coins' || key === 'lures' ? S[key] : S.food[key]) !== before[key] + amount) return false;
+      const after = JSON.stringify({ coins: S.coins, lures: S.lures, food: S.food });
+      wb.placeAt(id, px, py, dir); wb.tryStep(dir);
+      return !itemsLeft(m).some(i => i.id === it.id) && after === JSON.stringify({ coins: S.coins, lures: S.lures, food: S.food });
+    });
+    for (const [at, words] of Object.entries(m.signs || {})) check(id + ': sign ' + at + ' shows its text and blocks movement', () => {
+      ready(); const [x, y] = at.split(',').map(Number), [px, py, dir] = beside(m, x, y);
+      wb.placeAt(id, px, py, dir); wb.tryStep(dir);
+      return tile(m, x, y) === 'P' && S.pos.x === px && S.pos.y === py && W.msg === 'The sign reads: "' + words + '"';
+    });
+  }
+  check('Riding requires the Ember Badge and a conscious partner', () => {
+    ready(); toggleRide(); if (S.ride) return false;
+    S.badges = ['ember']; S.team[0].hp = 0; toggleRide(); if (S.ride) return false;
+    healAll(); toggleRide(); return S.ride && rideOK() && speedNow() === RIDE_SPEED;
+  });
+  check('Riding toggles off and cannot toggle during battle or dialogue', () => {
+    ready(); S.badges = ['ember']; toggleRide(); toggleRide(); if (S.ride) return false;
+    talk([['maren', 'Wait here.']]); toggleRide(); if (S.ride) return false; skipTalk();
+    startBattle('wild', [wb.newCreature('ripplet', 2)]); toggleRide(); return !S.ride;
+  });
+  check('Boots and Shift run; Auto always walks even while riding', () => {
+    ready(); WK.run = true; if (speedNow() !== WALK_SPEED) return false;
+    S.shoes = true; if (speedNow() !== RUN_SPEED) return false;
+    S.badges = ['ember']; toggleRide(); if (speedNow() !== RIDE_SPEED) return false;
+    S.auto = true; return speedNow() === WALK_SPEED;
+  });
+  check('New saves start with only the Pocket era', () => { reset(); return S.era === 'pocket' && JSON.stringify(S.eras) === '["pocket"]' && !S.shoes; });
+  for (const [gate, era, before, prior] of [
+    ['thorn', 'bit16', 'pocket', []], ['tide', 'hd', 'bit16', ['thorn']], ['ember', 'diorama', 'hd', ['thorn', 'tide']]
+  ]) check(gate + ': real Warden victory unlocks and switches art eras', () => {
+    ready(); S.badges = prior.slice(); S.era = before;
+    S.eras = ['pocket', ...(prior.includes('thorn') ? ['pixel', 'bit16'] : []), ...(prior.includes('tide') ? ['hd'] : [])];
+    const g = STORY.find(b => b.gate === gate), map = Object.keys(MAPS).find(id => MAPS[id].biome === (g.biome || 'thornwood'));
+    wb.placeAt(map); S.explored = g.at; S.exploredIn = { [S.biome]: g.at }; wb.challengeWarden(); skipTalk();
+    // Accelerate only this scenario's scheduled color/depth/solid scene. Restore the real timer even on failure.
+    const timer = window.setTimeout, scenes = [];
+    window.setTimeout = (fn, delay, ...args) => delay === 900 ? (scenes.push(() => fn(...args)), 0) : timer(fn, delay, ...args);
+    try {
+      if (finishFight() !== 'won') return false;
+      for (const scene of scenes) scene();
+      const changed = S.badges.includes(gate) && S.era === era && S.eras.includes(era) && !!TALK;
+      skipTalk(); return changed && (gate !== 'thorn' || S.shoes && S.eras.includes('pixel'));
+    } finally { window.setTimeout = timer; }
+  });
+  for (let n = 0; n <= 3; n++) check('Old save with ' + n + ' badges recovers its earned eras and boots', () => {
+    ready(); S.badges = badges.slice(0, n); S.era = 'pixel'; S.eras = ['pixel']; delete S.shoes;
+    save(); load();
+    const expected = ['pocket', 'pixel', ...(n >= 1 ? ['bit16'] : []), ...(n >= 2 ? ['hd'] : []), ...(n >= 3 ? ['diorama'] : [])];
+    return S.era === 'pixel' && expected.every(e => S.eras.includes(e)) && !!S.shoes === (n >= 1);
+  });
+  check('Darkness arrives with Thorn, rises at dusk, and reaches night', () => {
+    ready(); S.ranchT = DAY_SECONDS * 0.8; if (darkness() !== 0 || isNight()) return false;
+    S.badges = ['thorn']; if (!isNight() || darkness() !== 1) return false;
+    S.ranchT = DAY_SECONDS * 0.7; if (!(darkness() > 0 && darkness() < 1) || isNight()) return false;
+    S.ranchT = 0; return darkness() === 0 && !isNight();
+  });
+  function shareOf(element) {
+    // Stratified uniform draws test the distribution without a probabilistic pass/fail threshold.
+    const random = Math.random; let sample = 0, found = 0;
+    Math.random = () => (sample + 0.5) / 2000;
+    try { for (; sample < 2000; sample++) if (SPECIES[wildPick()].el === element) found++; }
+    finally { Math.random = random; }
+    return found;
+  }
+  check('Night increases Shade wild picks over daylight', () => {
+    ready(); wb.placeAt('thornwood'); S.badges = ['thorn']; S.ranchT = 0; const day = shareOf('Shade');
+    S.ranchT = DAY_SECONDS * 0.8; return shareOf('Shade') > day;
+  });
+  check('Weather stays clear before Tide and in town', () => {
+    ready(); wb.placeAt('saltmarsh'); S.day = 1; S.ranchT = 0;
+    if (weatherNow() !== 'clear') return false;
+    S.badges = ['tide']; wb.placeAt('larkhaven'); return weatherNow() === 'clear';
+  });
+  check('Rain increases Tide wild picks compared with clear weather', () => {
+    ready(); wb.placeAt('saltmarsh'); S.badges = ['thorn', 'tide']; S.ranchT = 0;
+    const dayFor = weather => { for (let day = 1; day <= 100; day++) { S.day = day; if (weatherNow() === weather) return true; } return false; };
+    if (!dayFor('clear')) return false; const clear = shareOf('Tide');
+    return dayFor('rain') && shareOf('Tide') > clear;
+  });
+  check('Visible wild creatures appear only after Tide and outside town', () => {
+    ready(); wb.placeAt('thornwood'); roamTick(13); if (WK.roam.length) return false;
+    S.badges = ['tide']; for (let i = 0; i < 3; i++) roamTick(13);
+    if (WK.roam.length !== 3 || !WK.roam.every(r => tile(curMap(), r.x, r.y) === '"' && SPECIES[r.sp])) return false;
+    wb.placeAt('larkhaven'); roamTick(13); return WK.roam.length === 0;
+  });
+  check('Walking onto a visible creature starts a wild battle with its species', () => {
+    ready(); S.badges = ['tide']; wb.placeAt('thornwood'); roamTick(13);
+    const r = WK.roam[0], [px, py, dir] = beside(curMap(), r.x, r.y); wb.placeAt('thornwood', px, py, dir); wb.tryStep(dir);
+    return B && B.kind === 'wild' && B.foes[0].c.sp === r.sp && B.foes[0].c.lvl === r.lvl && !WK.roam.includes(r);
+  });
+  check('Choosing Nuzlocke stores the selected mode', () => {
+    reset(); wb.chooseStarter('ripplet', 'Modecheck', 'classic', { nuzlocke: true });
+    return S.modes.nuzlocke && modeOn('nuzlocke') && !modeOn('solo');
+  });
+  check('Nuzlocke allows the first meeting but refuses a second lure in an area', () => {
+    ready(); wb.placeAt('thornwood'); S.modes = { nuzlocke: true };
+    startBattle('wild', [wb.newCreature('ripplet', 2)]); wb.command('lure');
+    if (!B.firstMeet || !B.capture) return false;
+    B.capture = null; wb.command('flee'); wb.finishBattle();
+    startBattle('wild', [wb.newCreature('ripplet', 2)]); const lures = S.lures; wb.command('lure');
+    return S.metIn.thornwood && !B.firstMeet && !B.capture && S.lures === lures && B.lines.some(l => l.t.includes('Nuzlocke:'));
+  });
+  check('Nuzlocke releases a fainted partner after an actual battle', () => {
+    ready(); S.modes = { nuzlocke: true }; const fallen = wb.newCreature('ripplet', 1); fallen.hp = 0; S.team.push(fallen);
+    startBattle('wild', [wb.newCreature('ripplet', 2)]);
+    return finishFight() === 'won' && !S.team.some(c => c.uid === fallen.uid) && !S.ranch.some(c => c.uid === fallen.uid) && !S.modes.nuzlockeEnded;
+  });
+  check('An empty Nuzlocke team ends the run gently with a second-chance partner', () => {
+    ready(); S.modes = { nuzlocke: true }; S.team = [wb.newCreature('ripplet', 1)]; S.team[0].hp = 1;
+    startBattle('wild', [wb.newCreature('tidewyrm', 100)]);
+    let ticks = 0; while (B && !B.over && ticks++ < 10000) wb.worldTick(0.1);
+    if (!B || B.over !== 'lost') return false; wb.finishBattle();
+    return !S.modes.nuzlocke && S.modes.nuzlockeEnded && S.team.length === 1 && S.team[0].hp > 0 && !!TALK && TALK.lines.some(([who]) => who === 'maren');
+  });
+  check('Solo permits one teammate and sends an actual catch to the ranch', () => {
+    ready(); S.modes = { solo: true }; startBattle('wild', [wb.newCreature('ripplet', 2, { rar: 0 })]);
+    wb.command('lure'); if (!B.capture) return false; B.capture.pos = B.capture.zone;
+    const random = Math.random; Math.random = () => 0;
+    try { calmNow(); } finally { Math.random = random; }
+    return teamMax() === 1 && S.team.length === 1 && S.ranch.length === 1 && S.ranch[0].sp === 'ripplet' && B.over === 'caught';
+  });
+  check('Hardcore refuses Rally without spending points or healing', () => {
+    ready(); S.modes = { hardcore: true }; startBattle('wild', [wb.newCreature('ripplet', 2)]);
+    B.cmd = 3; S.team[0].hp = Math.floor(stOf(S.team[0]).hp / 2); const hp = S.team[0].hp; wb.command('rally');
+    return S.team[0].hp === hp && B.cmd === 3 && B.lines.some(l => l.t.includes('Hardcore: no Rally'));
+  });
+  check('Randomizer is a stable permutation for one seed, including after save/load', () => {
+    ready(); S.modes = { randomizer: true, seed: 123456 }; RANDOM_MAP = RANDOM_SEED = null;
+    const pool = [...new Set(Object.values(BIOMES).flatMap(b => b.wild.map(([id]) => id)))].sort();
+    const shuffled = pool.map(randomized); if (JSON.stringify(shuffled.slice().sort()) !== JSON.stringify(pool)) return false;
+    save(); load(); RANDOM_MAP = RANDOM_SEED = null;
+    return JSON.stringify(pool.map(randomized)) === JSON.stringify(shuffled) && shuffled.some((id, i) => id !== pool[i]);
+  });
+  for (const g of STORY.filter(b => b.gate)) check(g.trainer + ': talking starts a rematch, victory advances its tier, and the same day is blocked', () => {
+    ready(); S.story[g.id] = true; S.badges = badges.slice(); S.capMode = 'off';
+    S.team = [wb.newCreature('tidewyrm', 50, { rar: 4, temp: 'steady', traits: ['ferocious', 'thick'], pot: Object.fromEntries(Cr.STATS.map(k => [k, 31])) })];
+    const map = Object.keys(MAPS).find(id => MAPS[id].biome === (g.biome || 'thornwood')); wb.placeAt(map);
+    const npc = npcsOf(curMap()).find(n => n.warden && n.warden.id === g.id); talkTo(npc); if (!TALK) return false; skipTalk();
+    if (!B || B.kind !== 'trainer' || B.rematch !== g.id || B.tier !== 1 || finishFight() !== 'won') return false;
+    if (S.rematch[g.id] !== 1 || rematchReady(g.id)) return false;
+    talkTo(npc); const blocked = !!TALK && !B && TALK.lines.some(([, text]) => text.includes('tomorrow')); skipTalk();
+    S.day++; return blocked && rematchReady(g.id) && rematchTier(g.id) === 2;
+  });
+  check('Wren appears in Larkhaven after rival2 and offers a trainer rematch', () => {
+    ready(); if (wrenNpc() || npcsOf(MAPS.larkhaven).some(n => n.rematch === 'wren')) return false;
+    S.story.rival2 = true; const npc = npcsOf(MAPS.larkhaven).find(n => n.rematch === 'wren');
+    if (!npc || JSON.stringify(npc.at) !== JSON.stringify(WREN_SPOT.at)) return false;
+    talkTo(npc); skipTalk(); return B && B.kind === 'trainer' && B.rematch === 'wren' && B.trainer === CAST.wren.name;
+  });
+  for (const biome of Object.keys(BIOMES)) check(biome + ': mastery counts each of its three stars independently', () => {
+    ready(); const map = MAPS[biome], g = STORY.find(b => b.gate && (b.biome || 'thornwood') === biome);
+    if (!map || !g || masteryOf(biome).stars !== 0) return false;
+    for (const [id] of BIOMES[biome].wild) S.caught[id] = true;
+    let m = masteryOf(biome); if (m.stars !== 1 || !m.dex || m.warden || m.secrets) return false;
+    S.rematch[g.id] = 2; if (masteryOf(biome).stars !== 1) return false;
+    S.rematch[g.id] = 3; m = masteryOf(biome); if (m.stars !== 2 || !m.warden) return false;
+    S.items = Object.fromEntries((map.items || []).map(it => [it.id, true]));
+    if (masteryOf(biome).secrets) return false;
+    S.beaten = Object.fromEntries((map.npcs || []).filter(n => n.trainer).map(n => [n.who, true]));
+    m = masteryOf(biome); return m.stars === 3 && m.dex && m.warden && m.secrets && m.hasWarden;
   });
   return checks;
 }
