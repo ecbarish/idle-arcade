@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- 2026-10-07: Realmbound guild adventurers can ask a first supply favor in their own voice. Help in town from the shared bank for mood, friendship and guild XP; each favor is recorded once, even after dismissal and re-invitation.
+
 - **2026-10-07** — Wildbond area 5: Stillreed Basin (52–60), beyond Cloudglass Pass. Nine new species include
   Reedlet's evolution into Ferrycrest and the guardian Stillwake. Wren helps free a ferry rope before the rematch;
   ferryman Warden Olan awards the Reed Badge, raising the existing cap to 60. Walk the reed banks, board crossings

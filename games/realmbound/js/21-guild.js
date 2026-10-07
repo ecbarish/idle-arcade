@@ -48,7 +48,7 @@ function foundProblem() {
 function foundGuild(name) {
   const why = foundProblem(); if (why) { err(why); return false; }
   const h = H(), s = guildSignatures(); name = String(name || '').replace(/[^A-Za-z' -]/g, '').trim().slice(0, 24) || pick(GUILD_NAMES);
-  h.money -= GUILD_COST; Object.assign(G(), { name, founded: Date.now(), founder: h.id, level: 1, xp: 0, members: {} });
+  h.money -= GUILD_COST; Object.assign(G(), { name, founded: Date.now(), founder: h.id, level: 1, xp: 0, members: {}, requests: {} });
   for (const n of s.friends) addMember(n, h, true);
   slog(`Founded the guild ${name}.`); toast(`${name} is founded!`); sfx('badge');
   line(`${name} is founded. ${s.chars.length ? 'All your characters' : 'You'}${s.friends.length ? ` and ${s.friends.map(n => n.name).join(', ')}` : ''} sign the charter.`, 'l-loot');
@@ -78,6 +78,58 @@ function guildTick(now) {
     if (m.mood < 10) { dismissMember(key); toast(`${w.name} has left ${G().name}`); slog(`${w.name} left ${G().name}, feeling forgotten.`); }
   }
 }
+/* A first supply favor per adventurer, not a daily chore. The account ledger survives leaving/rejoining. */
+const MEMBER_REQUESTS = {
+  warrior: { title: 'A shield worth lending', item: 'kit', count: 1, supply: 'repair kit', ask: 'My shield strap is fraying. Could you spare a repair kit? I want it ready when a new member needs cover.' },
+  rogue: { title: 'Mend before the next mile', item: 'kit', count: 1, supply: 'repair kit', ask: 'The buckle on my travel gear finally gave way. A repair kit would get me ready for the next road.' },
+  mage: { title: 'A focus for the workbench', item: 'ore', count: 6, supply: 'ore', ask: 'I am shaping a practice focus for the hall. Six ore would let me finish its stand without borrowing a weapon rack.' },
+  priest: { title: 'Something for the returning watch', item: 'potion', count: 1, supply: 'healing potion', ask: 'I would like a healing potion set aside for a weary guard. A quiet welcome can matter as much as a sermon.' },
+  hunter: { title: 'A gentler trail', item: 'herb', count: 4, supply: 'herbs', ask: 'Four herbs would help me prepare a soothing rub for the animals returning from long walks. They carry us far enough.' }
+};
+const REQUEST_VOICE = {
+  cheerful: { hello: 'Oh, you have a moment!', thanks: 'You remembered! I will make sure the next person feels as welcome.' },
+  gruff: { hello: 'A small thing. Hear me out.', thanks: 'That will do. Better than that, actually. Appreciated.' },
+  shy: { hello: 'If it is not too much trouble...', thanks: 'You listened. I was not sure I should ask. Thank you.' },
+  bold: { hello: 'A fine guild deserves sound preparations!', thanks: 'A worthy kindness! The hall will hear who helped.' },
+  scholarly: { hello: 'I have a practical proposal.', thanks: 'Useful evidence that a guild is more than a charter. Thank you.' },
+  greedy: { hello: 'Before you ask, this is for all of us.', thanks: 'A good investment. Fine, yes, a kind one too.' }
+};
+function memberRequest(key) {
+  if (!guildOn() || !G().members[key] || (G().requests || {})[key]) return null;
+  const worker = workerOf(key); if (!worker || worker.kind !== 'adv') return null;
+  return MEMBER_REQUESTS[worker.cls] || null;
+}
+function requestProblem(key) {
+  const request = memberRequest(key); if (!request) return 'No unfinished request from this member.';
+  if (!H() || !inTown() || H().dun) return 'Bring supplies to a town to help a member.';
+  if (ROSTER.jobOf(key)) return 'Return this member from their job first.';
+  if ((S.bank && S.bank[request.item] || 0) < request.count) return 'Needs ' + request.count + ' ' + request.supply + ' from the shared bank.';
+  return '';
+}
+function fulfillMemberRequest(key) {
+  const problem = requestProblem(key); if (problem) { err(problem); return false; }
+  const request = memberRequest(key), worker = workerOf(key), g = G();
+  bank()[request.item] -= request.count;
+  (g.requests || (g.requests = {}))[key] = { title: request.title, at: Date.now() };
+  moodBump(worker.n, 10, worker.hero); addAff(worker.n, 3, 'You helped with ' + request.title.toLowerCase() + '.');
+  guildXP(15, 'A member request');
+  const voice = REQUEST_VOICE[worker.n.pers] || REQUEST_VOICE.cheerful;
+  line(worker.name + ': ' + voice.thanks, 'l-say');slog('Helped ' + worker.name + ' with ' + request.title.toLowerCase() + '.');
+  sfx('quest');return true;
+}
+function memberRequestsHTML() {
+  if (!guildOn()) return '';
+  const members = Object.keys(G().members).map(key => ({ key, worker: workerOf(key) })).filter(({ worker }) => worker && worker.kind === 'adv');
+  if (!members.length) return '';
+  return '<h4>Members asking a favor</h4><p class="sub">A first favor for each adventurer: give supplies from the shared bank in town. Helping gives +10 mood, +3 friendship and 15 guild experience. No deadline; each favor can be completed once.</p>' +
+    members.map(({ key, worker }) => {
+      const done = (G().requests || {})[key], request = memberRequest(key);
+      if (done) return '<div class="rowl"><div class="l"><b>' + worker.name + '</b><div class="meta">Helped: ' + done.title + '</div></div></div>';
+      if (!request) return '';
+      const voice = REQUEST_VOICE[worker.n.pers] || REQUEST_VOICE.cheerful, why = requestProblem(key);
+      return '<div class="rowl"><div class="l"><b>' + worker.name + ' · ' + request.title + '</b><div class="meta">' + voice.hello + ' ' + request.ask + '</div><div class="meta">' + (why || 'Ready: give ' + request.count + ' ' + request.supply + ' from the shared bank.') + '</div></div><div class="r"><button class="btn sm" data-act="guildrequest" data-arg="' + key + '" ' + (why ? 'disabled' : '') + '>Help</button></div></div>';
+    }).join('');
+}
 /* the guild hall: drawn at the top of the Guild tab (18-supplies.js) */
 function guildHTML() {
   const h = H();
@@ -102,12 +154,13 @@ function guildHTML() {
       <div class="aff" title="Mood ${mood}"><i style="width:${mood}%;background:${mood >= 70 ? '#7cf08a' : mood >= 30 ? '#f2c14e' : '#e0483e'}"></i></div></div>
       <div class="r"><button class="btn sm alt" data-act="guilddismiss" data-arg="${k}">Dismiss</button></div></div>`; }).join('') : '<p class="meta">No adventurers yet. Invite companions who are your Friends.</p>';
   if (cand.length) o += `<p class="meta" style="margin-top:6px">Could join: ${cand.map(n => `<button class="btn sm" data-act="guildinvite" data-arg="${n.id}">Invite ${n.name}</button>`).join(' ')}</p>`;
-  return o;
+  return o + memberRequestsHTML();
 }
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-act]'); if (!el || !H()) return; const a = el.dataset.act, arg = el.dataset.arg;
   if (a === 'guildfound') { if (foundGuild(($('#guildName') || {}).value)) save(); }
   else if (a === 'guildinvite') { if (inviteToGuild(Number(arg))) save(); }
+  else if (a === 'guildrequest') { if (fulfillMemberRequest(arg)) save(); }
   else if (a === 'guilddismiss') { const w = workerOf(arg); if (w && arm(el, 'Dismiss', 'Click again to dismiss')) { dismissMember(arg); line(`${w.name} leaves the guild on good terms.`, 'l-sys'); save(); } else return; }
   else return;
   renderTab(true);

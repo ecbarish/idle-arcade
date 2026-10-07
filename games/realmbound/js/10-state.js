@@ -9,7 +9,10 @@ let S=emptyS();
 const H=()=>S.chars.find(c=>c.id===S.cur)||null;
 function migrate(o){
   if(!o||typeof o!=='object')return emptyS();
-  if(Array.isArray(o.chars))return o;
+  if(Array.isArray(o.chars)){
+    if(o.guild&&o.guild.founded)o.guild.requests=o.guild.requests||{};
+    return o;
+  }
   const s=emptyS();s.last=o.last||Date.now();s.tab=o.tab||'quests';
   if(o.hero){const h=o.hero;h.id=h.id||uid();h.log=o.log||[];h.lastPlayed=o.last||Date.now();s.chars.push(h);s.cur=h.id;}
   return s;
