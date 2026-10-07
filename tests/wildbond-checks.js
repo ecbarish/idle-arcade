@@ -148,6 +148,71 @@ function wildbondChecks() {
     ready(); const coins = S.coins, lures = S.lures; wb.placeAt('larkhaven', 18, 5, 'up'); wb.tryStep('up');
     return S.coins === coins - 50 && S.lures === lures + 5 && W.msg.includes('shopkeeper');
   });
+  // T27: Stillreed content and the real walking, story, capture and badge paths.
+  const basinSpecies = ['reedlet', 'ferrycrest', 'siltjaw', 'rillwhisk', 'orchardroot', 'gustreed', 'duskcord', 'glassbill', 'stillwake'];
+  for (const id of basinSpecies) {
+    check('Stillreed ' + id + ': valid family, element, moves and dex', () => {
+      const s = SPECIES[id]; return s && ['wolf','cat','boar','lizard','croc','bird','spider','horse','sprite','hyena'].includes(s.fam) && ELEMENTS[s.el] && s.learn.every(([l,m]) => l > 0 && MOVES[m]) && !!s.dex;
+    });
+    check('Stillreed ' + id + ': base stats follow its role', () => {
+      const s = SPECIES[id], total = Object.values(s.base).reduce((a,b) => a+b,0);
+      return Object.keys(s.base).sort().join(',') === 'grd,hp,pow,spd,spi,wit' && Object.values(s.base).every(n => n > 0) && (s.unique ? total >= 500 && total <= 600 : id === 'ferrycrest' ? total >= 400 && total <= 440 : total >= 280 && total <= 320);
+    });
+  }
+  check('Stillreed opens only with the Beacon Badge at levels 52-60', () => {
+    ready(); const b=BIOMES.stillreed; if (b.lv.join(',') !== '52,60' || b.req !== 'beacon' || biomeOpen('stillreed')) return false;
+    S.badges=badges.slice(); return biomeOpen('stillreed') && levelCap()===55;
+  });
+  check('Cloudglass ferry path is gated and walks into Stillreed after the badge', () => {
+    ready(); S.badges=badges.slice(0,3); wb.placeAt('cloudglass',27,8,'right'); wb.tryStep('right');
+    if(S.pos.map!=='cloudglass'||!W.msg.includes('Beacon Badge'))return false;
+    S.badges=badges.slice();wb.tryStep('right');return S.pos.map==='stillreed'&&S.biome==='stillreed'&&S.pos.x===1&&S.pos.y===8;
+  });
+  check('Stillreed west exit returns to Cloudglass on a safe tile', () => {
+    ready();S.badges=badges.slice();wb.placeAt('stillreed');wb.tryStep('left');return S.pos.map==='cloudglass'&&S.biome==='cloudglass'&&S.pos.x===27&&S.pos.y===8;
+  });
+  check('Stillreed map uses valid tiles and every walkable square is connected', () => {
+    const m=MAPS.stillreed; if(m.rows.length!==14||m.rows.some(r=>r.length!==30||[...r].some(c=>!TILES[c])))return false;
+    const seen=new Set(),todo=[m.start.slice(0,2)];
+    while(todo.length){const [x,y]=todo.pop(),key=x+','+y;if(seen.has(key)||!walkable(m,x,y)||npcAt(m,x,y))continue;seen.add(key);for(const [dx,dy] of Object.values(DIRS))todo.push([x+dx,y+dy]);}
+    for(let y=0;y<14;y++)for(let x=0;x<30;x++)if(walkable(m,x,y)&&!npcAt(m,x,y)&&!seen.has(x+','+y))return false;
+    return m.items.every(it=>seen.has(it.at.join(',')))&&seen.has('0,8')&&seen.has('23,8')&&m.rows.some(r=>r.includes('~')&&r.includes('"'));
+  });
+  check('Stillreed has a sign, three unique items and two route trainers at 52-56', () => {
+    const m=MAPS.stillreed;return Object.keys(m.signs).length===1&&m.items.length===3&&new Set(Object.values(MAPS).flatMap(m=>(m.items||[]).map(it=>it.id))).size===Object.values(MAPS).flatMap(m=>m.items||[]).length&&m.npcs.filter(n=>n.trainer).length===2&&m.npcs.every(n=>n.trainer.team.every(([id,l])=>SPECIES[id]&&l>=52&&l<=56));
+  });
+  check('Stillreed wild table excludes its guardian and keeps Glassbill rare', () => {
+    const w=BIOMES.stillreed.wild;return w.every(([id,n])=>basinSpecies.includes(id)&&n>0&&!SPECIES[id].unique)&&w.find(([id])=>id==='glassbill')[1]===3&&w.filter(([id])=>id!=='glassbill').every(([,n])=>n>3)&&SPECIES.stillwake.fam==='croc'&&SPECIES.stillwake.el==='Tide'&&SPECIES.stillwake.big===1&&SPECIES.stillwake.unique===1;
+  });
+  check('Reedlet really evolves at 54 before the fifth badge is needed', () => {
+    ready();S.badges=badges.slice();const c=wb.newCreature('reedlet',53);c.xp=0;grow(c,Cr.xpNeed(53));return c.lvl===54&&c.sp==='ferrycrest'&&S.caught.ferrycrest;
+  });
+  check('Stillreed weather is rainy and its original zone tune has valid notes', () => {
+    const t=TRACKS.stillreed;return WEATHER.stillreed.join(',')==='rain,clear,rain,mist'&&t.mel.split(' ').length===32&&[16,32].includes(t.bass.split(' ').length)&&[...t.mel.split(' '),...t.bass.split(' ')].every(n=>n==='.'||ArcadeSound.hz(n)>0);
+  });
+  check('Stillreed clear daytime selects its zone music', () => {
+    ready();S.badges=badges.slice();S.day=4;S.ranchT=0;wb.placeAt('stillreed');return weatherNow()==='clear'&&!isNight()&&musicKey()==='stillreed';
+  });
+  const basinBeats=STORY.filter(b=>b.biome==='stillreed');
+  check('Stillreed story has exactly the required thresholds and team bands', () => basinBeats.length===3&&basinBeats.map(b=>b.at).join(',')==='6,14,24'&&basinBeats[0].team.every(([,l])=>l>=52&&l<=55)&&JSON.stringify(basinBeats[0].team.at(-1))==='["$rival",55]'&&JSON.stringify(basinBeats[1].wild)==='["stillwake",57,4]'&&basinBeats[2].team.map(([,l])=>l).join(',')==='54,55,57'&&basinBeats[2].gate==='reed'&&basinBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
+  check('Wren ferry rematch triggers at six local explores and a real victory completes it', () => {
+    ready();S.badges=badges.slice();wb.placeAt('stillreed');S.explored=100;S.exploredIn={stillreed:5};wb.explore();
+    if(!TALK||!TALK.lines.some(([,t])=>t.includes('rope')))return false;skipTalk();return B&&B.story==='rival6'&&B.kind==='trainer'&&B.foes.at(-1).c.lvl===55&&finishFight()==='won'&&S.story.rival6;
+  });
+  check('Stillwake triggers at fourteen local explores and a real lure records the guardian', () => {
+    ready();S.badges=badges.slice();S.story.rival6=true;wb.placeAt('stillreed');S.explored=100;S.exploredIn={stillreed:13};wb.explore();if(!TALK)return false;skipTalk();
+    if(!B||B.story!=='stillwake'||B.foes[0].c.sp!=='stillwake'||B.foes[0].c.lvl!==57||B.foes[0].c.rar!==4)return false;
+    const random=Math.random;try{Math.random=()=>0;wb.command('lure');if(!B.capture)return false;B.capture.pos=B.capture.zone;wb.calmNow();const caught=B.over==='caught';wb.finishBattle();skipTalk();return caught&&S.story.stillwake&&S.caught.stillwake&&[...S.team,...S.ranch].some(c=>c.sp==='stillwake');}finally{Math.random=random;}
+  });
+  check('Olan waits for 24 local explores; real victory awards Reed and cap 60 without changing eras', () => {
+    ready();S.badges=badges.slice();S.story.rival6=S.story.stillwake=true;wb.placeAt('stillreed');S.explored=100;S.exploredIn={stillreed:23};
+    if(wb.wardenReady())return false;wb.challengeWarden();if(TALK||B)return false;S.exploredIn.stillreed=24;const eras=JSON.stringify(S.eras);wb.challengeWarden();if(!TALK)return false;skipTalk();
+    return B&&B.story==='warden5'&&finishFight()==='won'&&S.story.warden5&&S.badges.includes('reed')&&levelCap()===60&&JSON.stringify(S.eras)===eras;
+  });
+  check('Four-badge saves preserve progress and Stillreed saves reload their position and badge', () => {
+    ready();S.badges=badges.slice();S.story.warden4=true;save();load();if(levelCap()!==55||!S.story.warden4||S.badges.length!==4)return false;
+    S.badges.push('reed');wb.placeAt('stillreed',19,9,'right');S.items={sr1:true};S.beaten={evren:true};save();reset();load();ensurePos();return S.pos.map==='stillreed'&&S.pos.x===19&&S.biome==='stillreed'&&levelCap()===60&&S.items.sr1&&S.beaten.evren;
+  });
   // T24: exercise the same walking, dialogue and battle paths as the game.
   function finishFight() {
     let ticks = 0;

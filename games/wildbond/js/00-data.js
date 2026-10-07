@@ -14,7 +14,7 @@ const JOURNEY = {
   long: { name: 'Long Road', xp: 0.08, coins: 0.8, rare: -0.3, desc: 'For the grind: less XP and rarer finds. Every level is earned.' }
 };
 const AUTO_XP = 0.8;
-const BADGES = { thorn: { name: 'Thorn Badge' }, tide: { name: 'Tide Badge' }, ember: { name: 'Ember Badge' }, beacon: { name: 'Beacon Badge' } };
+const BADGES = { thorn: { name: 'Thorn Badge' }, tide: { name: 'Tide Badge' }, ember: { name: 'Ember Badge' }, beacon: { name: 'Beacon Badge' }, reed: { name: 'Reed Badge' } };
 
 /* Element wheel: each element is strong against the ones listed. */
 const ELEMENTS = {
@@ -200,7 +200,43 @@ const SPECIES = {
   lanterncrest: { name: 'Lanterncrest', fam: 'bird', el: 'Radiant', col: '#f6d77a', unique: 1, big: 1,
     base: { hp: 88, pow: 82, grd: 80, spd: 96, wit: 96, spi: 92 },
     learn: [[1, 'peck'], [1, 'spark'], [12, 'radiance'], [16, 'tailwind']],
-    dex: 'The guardian of Cloudglass Pass. Its crest burns like a lamp through the thickest cloud, lighting the way to shelter.' }
+    dex: 'The guardian of Cloudglass Pass. Its crest burns like a lamp through the thickest cloud, lighting the way to shelter.' },
+  reedlet: { name: 'Reedlet', fam: 'lizard', el: 'Tide', col: '#759b89',
+    base: { hp: 48, pow: 40, grd: 48, spd: 56, wit: 60, spi: 48 },
+    learn: [[1, 'tailWhip'], [1, 'bubbleJet'], [12, 'mistVeil'], [24, 'tidePulse']], evo: { at: 54, to: 'ferrycrest' },
+    dex: 'It balances on floating reeds and nudges loose ferry ropes toward the landing.' },
+  ferrycrest: { name: 'Ferrycrest', fam: 'croc', el: 'Tide', col: '#4c8177', big: 1,
+    base: { hp: 80, pow: 62, grd: 78, spd: 54, wit: 78, spi: 68 },
+    learn: [[1, 'tailWhip'], [1, 'bubbleJet'], [12, 'mistVeil'], [24, 'tidePulse']],
+    dex: 'Its broad crest parts a quiet channel through reeds without overturning their nests.' },
+  siltjaw: { name: 'Siltjaw', fam: 'croc', el: 'Tide', col: '#7c8970',
+    base: { hp: 60, pow: 58, grd: 62, spd: 30, wit: 42, spi: 48 },
+    learn: [[1, 'bite'], [8, 'bubbleJet'], [18, 'harden'], [28, 'tidePulse']],
+    dex: 'It rests under grey-green water with only its mossy nose above the surface.' },
+  rillwhisk: { name: 'Rillwhisk', fam: 'lizard', el: 'Tide', col: '#8db7aa',
+    base: { hp: 42, pow: 38, grd: 40, spd: 72, wit: 62, spi: 46 },
+    learn: [[1, 'tailWhip'], [6, 'bubbleJet'], [16, 'mistVeil'], [26, 'tidePulse']],
+    dex: 'Its whiskers tremble before the channel rises, giving boat families time to loosen their lines.' },
+  orchardroot: { name: 'Orchardroot', fam: 'boar', el: 'Grove', col: '#7d9a52',
+    base: { hp: 64, pow: 56, grd: 58, spd: 32, wit: 40, spi: 50 },
+    learn: [[1, 'charge'], [6, 'vineLash'], [16, 'regrowth'], [26, 'thornQuake']],
+    dex: 'It turns fallen orchard fruit into soft soil and leaves the growing roots undisturbed.' },
+  gustreed: { name: 'Gustreed', fam: 'bird', el: 'Gale', col: '#d0bd78',
+    base: { hp: 42, pow: 44, grd: 36, spd: 78, wit: 56, spi: 44 },
+    learn: [[1, 'peck'], [6, 'gust'], [16, 'tailwind'], [26, 'mistVeil']],
+    dex: 'It whistles between reed stems, then falls quiet when a tired ferry reaches the bank.' },
+  duskcord: { name: 'Duskcord', fam: 'spider', el: 'Shade', col: '#76677c',
+    base: { hp: 44, pow: 38, grd: 48, spd: 50, wit: 66, spi: 54 },
+    learn: [[1, 'bite'], [6, 'shadowSting'], [16, 'webSnare'], [26, 'mistVeil']],
+    dex: 'Its dusk webs catch drifting seeds above the water while leaving a gap for passing wings.' },
+  glassbill: { name: 'Glassbill', fam: 'bird', el: 'Gale', col: '#a6c9bc',
+    base: { hp: 40, pow: 38, grd: 38, spd: 76, wit: 62, spi: 46 },
+    learn: [[1, 'peck'], [6, 'gust'], [16, 'tailwind'], [26, 'mistVeil']],
+    dex: 'Rarely seen among the reeds, it taps clear notes on rain-filled shells before dawn.' },
+  stillwake: { name: 'Stillwake', fam: 'croc', el: 'Tide', col: '#638d7c', unique: 1, big: 1,
+    base: { hp: 100, pow: 86, grd: 100, spd: 60, wit: 90, spi: 95 },
+    learn: [[1, 'bite'], [1, 'bubbleJet'], [1, 'mistVeil'], [1, 'tidePulse']],
+    dex: "Stillreed Basin's guardian shelters small creatures in its calm wake as flooded channels carry them across." }
 };
 const STARTERS = ['cindercub', 'ripplet', 'mosshog'];
 
@@ -212,7 +248,9 @@ const BIOMES = {
   emberfall: { name: 'Emberfall Highlands', lv: [22, 32], req: 'tide', sky: ['#a6a6bf', '#efd0aa'], hill: '#81756d', ground: '#a58a68',
     wild: [['slaglet', 24], ['ashskip', 20], ['cragskein', 16], ['ventwhisk', 16], ['thermwing', 14], ['screegrin', 10], ['glowmote', 3]] },
   cloudglass: { name: 'Cloudglass Pass', lv: [32, 42], req: 'ember', sky: ['#aebdcc', '#eef2f4'], hill: '#8d97a3', ground: '#a3ae98',
-    wild: [['mistfinch', 22], ['shalecat', 20], ['cirrusmane', 18], ['pallweaver', 16], ['gritbeak', 14], ['fogtail', 12], ['lanternwisp', 3]] }
+    wild: [['mistfinch', 22], ['shalecat', 20], ['cirrusmane', 18], ['pallweaver', 16], ['gritbeak', 14], ['fogtail', 12], ['lanternwisp', 3]] },
+  stillreed: { name: 'Stillreed Basin', lv: [52, 60], req: 'beacon', sky: ['#81988b', '#d6d8b2'], hill: '#65834c', ground: '#a49661',
+    wild: [['reedlet', 24], ['siltjaw', 18], ['rillwhisk', 18], ['orchardroot', 18], ['gustreed', 16], ['duskcord', 14], ['glassbill', 3]] }
 };
 
 const RIVAL = { name: 'Wren', col: '#d85a8a' };
@@ -224,7 +262,8 @@ const CAST = {
   isolde: { name: 'Warden Isolde', skin: '#b98262', hair: 'long', hairCol: '#2a3b2c', shirt: '#3d6b52', bg: '#c9dfc8', title: 'Warden of Thornwood' },
   nerys: { name: 'Warden Nerys', skin: '#8a5a3c', hair: 'hat', hairCol: '#9a948a', hatCol: '#3c5a6a', shirt: '#2f5e78', bg: '#cfe3ea', title: 'Warden of the Saltmarsh' },
   toren: { name: 'Warden Toren', skin: '#b87d59', hair: 'short', hairCol: '#ddd0bd', shirt: '#98543c', bg: '#ead0b2', title: 'Warden of Emberfall' },
-  vessa: { name: 'Warden Vessa', skin: '#c99a74', hair: 'bun', hairCol: '#e0d2b0', shirt: '#4a6e8e', bg: '#dde6ee', title: 'Warden of Cloudglass Pass' }
+  vessa: { name: 'Warden Vessa', skin: '#c99a74', hair: 'bun', hairCol: '#e0d2b0', shirt: '#4a6e8e', bg: '#dde6ee', title: 'Warden of Cloudglass Pass' },
+  olan: { name: 'Warden Olan', skin: '#ac7957', hair: 'hat', hairCol: '#c4c5ac', hatCol: '#82774e', shirt: '#5b7c69', bg: '#d4dfc5', title: 'Warden of Stillreed Basin' }
 };
 /* Scenes that aren't tied to an explore count. */
 const SCENES = {
@@ -365,7 +404,32 @@ const STORY = [
     win: [['vessa', 'There it is. They covered for each other every time one of them stumbled. That\'s the whole test, and you passed it before I finished asking.'],
       ['vessa', 'Here, the Beacon Badge. Your team can grow stronger now. Keep it where you can see it when the cloud comes down.'],
       ['vessa', 'Past the pass the land opens up, wide and wet. I\'ve never been. If you go, shout back now and then, would you?']],
-    trainer: 'Warden Vessa', team: [['shalecat', 41], ['lanternwisp', 42], ['cloudharrier', 44]] }
+    trainer: 'Warden Vessa', team: [['shalecat', 41], ['lanternwisp', 42], ['cloudharrier', 44]] },
+  /* Stillreed Basin: a fair restart, a sheltered crossing and a test of restraint. */
+  { biome: 'stillreed', at: 6, id: 'rival6', title: 'A fair start at the ferry', text: 'Wren stopped the rematch to free a tangled ferry rope with you, then asked for a fair restart on dry ground.',
+    lines: [['', 'Wren has just called the first move when a ferry rope snags beneath the landing. The boat tilts, and she waves her team back.'],
+      ['wren', 'Wait! That rope is pulling the ferry sideways. Can you hold this end while I free it? We can argue about who was winning after nobody is falling in.'],
+      ['', 'Together you loosen the knot. The ferry settles, and its passengers step onto the bank while both teams wait.'],
+      ['wren', 'Right. Dry ground, both teams rested, nobody tangled. A fair restart! I am still planning to win, {name}.']],
+    win: [['wren', 'You won the restart. The first three seconds do not count. That is a very official ferry rule I have just invented.'],
+      ['wren', 'Thanks for holding the rope. Turns out asking for a hand leaves both of mine free to battle. We should do that more.']],
+    team: [['gustreed', 52], ['duskcord', 54], ['$rival', 55]] },
+  { biome: 'stillreed', at: 14, id: 'stillwake', title: 'The quiet crossing', text: 'Stillwake, guardian of Stillreed Basin, sheltered a crossing through the flooded reeds.',
+    lines: [['', 'Rain swells the channel until the low bank disappears. Small creatures wait on a reed island with nowhere dry to step.'],
+      ['', 'A great croc rises beside them: Stillwake, guardian of the basin. Its broad back shelters the crossing, and its wake smooths the water as the little ones follow.'],
+      ['@stillwake', 'It waits until the last creature reaches the bank, then turns toward your team. The quiet water leaves room for an invitation.']],
+    win: [['@stillwake', 'Stillwake lowers its broad head beside your partner. The channel behind it stays calm.'],
+      ['', 'When your team walks on, the guardian follows at a patient distance, leaving the landing clear for the next crossing.']],
+    wild: ['stillwake', 57, 4] },
+  { biome: 'stillreed', at: 24, id: 'warden5', gate: 'reed', title: 'The Stillreed Warden', text: 'Warden Olan tested restraint beside the ferry landing, where a careless victory could upset another crossing.',
+    lines: [['', 'Beside the landing, a ferryman coils a dry rope while his three partners leave space for a Rillwhisk to pass.'],
+      ['olan', 'Welcome, {name}. I am Olan. If you came to make a splash, the rain has already booked every available slot.'],
+      ['olan', 'A stronger team can win carelessly. I judge restraint: can yours leave a safe crossing for someone smaller while the battle is yours to take?'],
+      ['olan', 'The ferry has right of way. Let your partners read the bank, and show me how you win without making every neighbor pay for it.']],
+    win: [['olan', "You left them room. Your team kept its footing without taking everyone else's. That is the kind of strength this basin can live beside."],
+      ['olan', 'Take the Reed Badge. Your partners can grow to level sixty now. Please celebrate on the dry boards; I have only just mopped them.'],
+      ['olan', 'Stillwake keeps a quiet crossing, and now you know why we keep the landing open. Carry that care wherever your team goes next.']],
+    trainer: 'Warden Olan', team: [['orchardroot', 54], ['ferrycrest', 55], ['siltjaw', 57]] }
 ];
 const COUNTER = { cindercub: 'ripplet', ripplet: 'mosshog', mosshog: 'cindercub' };
 

@@ -106,21 +106,56 @@ cloud with its crest burning like a lamp and lights the way to shelters you'd wa
 and answering when others shout; her Beacon Badge raises the cap to 55. She points onward to land "wide and wet"
 (the Stillreed Basin proposal). The warm-stone clue from Toren is still unexplained.
 
-## Proposed areas 5–8 — awaiting Evan's approval
+## Area 5 canon: Stillreed Basin — levels 52–60 (T27)
 
-Every detail in this section is a proposal. Level bands follow T14's outline rather than a finalized balance plan. Guardian names describe prospective new species within existing families. No maps, species, battles or badges are implemented by this document.
+Beyond Cloudglass Pass lies a broad freshwater basin with reed beds, ferries and orchards on raised ground.
+The Beacon Badge opens the descending ferry path. Rain can last for days, then stop so suddenly that every drip
+becomes audible. Boat families leave landing space for wild creatures. People know the water by what moves beneath
+it and make room for neighboring livelihoods rather than treating the basin as an obstacle to drain.
+
+The walkable basin has reed-grass banks around water channels, raised board crossings, a ferry landing and an orchard.
+Its west exit returns to Cloudglass; the route has two friendly trainers and three supplies to find. **Evren**, an
+orchard keeper, leaves fallen fruit for the herd before filling baskets. **Tavil**, a ferry rope-mender, values a
+sound knot that still opens and promises a ride even to the losing team.
+
+Nine new species enter the record:
+
+- **Reedlet**, a Tide lizard, balances on floating reeds and nudges loose ferry ropes toward the landing. It evolves
+  at 54 into **Ferrycrest**, a Tide croc whose broad crest parts quiet channels without overturning nests.
+- **Siltjaw**, a Tide croc, rests beneath grey-green water with its mossy nose above the surface.
+- **Rillwhisk**, a Tide lizard, feels a rising channel in its whiskers before boat families need to loosen their lines.
+- **Orchardroot**, a Grove boar, turns fallen fruit into soil while leaving growing roots undisturbed.
+- **Gustreed**, a Gale bird, whistles among reed stems and quiets as a tired ferry reaches the bank.
+- **Duskcord**, a Shade spider, catches drifting seeds in dusk webs while leaving gaps for passing wings.
+- **Glassbill**, a rare Gale bird, taps clear notes on rain-filled shells before dawn. Its wild-table weight is low;
+  this is not a unique guardian or a new link to the coast's unexplained humming shell.
+- **Stillwake**, the unique Tide croc guardian, shelters smaller creatures crossing flooded channels in its calm wake.
+  It appears in the level-57 story encounter, outside the ordinary wild table. As with other guardians, a lure and
+  calm can earn its companionship; knocking it out leaves a later retry, not a claimed bond.
+
+At six local explores, **Wren** interrupts the rematch when a ferry rope tangles, asks the player to hold one end,
+and frees it. With passengers ashore, she asks for a fair restart on dry ground. She still intends to win and jokes
+that the interrupted opening does not count. At fourteen, Stillwake waits until the small creatures have crossed
+before inviting the player's team to approach.
+
+At twenty-four, **Warden Olan**, a courteous ferryman with a dry joke for an unnecessary splash, tests restraint
+beside the landing. A stronger team could win carelessly; he asks whether it can leave a safe crossing for somebody
+smaller. His Orchardroot, Ferrycrest and Siltjaw are levels 54, 55 and 57. Victory awards the **Reed Badge**, raising
+the existing badge cap from 55 to 60. It adds no art era or new interpretation of the fading. Olan asks for care on
+whatever road comes next rather than declaring an unbuilt route open.
+
+The basin uses rain, clear weather and mist, and has its own original, quiet zone tune. Toren's warm-stone clue
+remains unexplained; Stillwake's sheltering wake does not resolve it.
+
+## Proposed areas 6–8 — awaiting Evan's approval
+
+Areas 6–8 remain proposals. Their old T14 level bands below are historical; the decided bands are 58–64, 62–68 and 66–72. Guardian names describe prospective new species within existing families. No maps, species, battles or badges are implemented by this document.
 
 ### Area 4 proposal (now built, see above): Cloudglass Pass — levels 32–42
 
 A high pass beyond Emberfall opens into hanging mist, pale rock and terraces of wind-bent grass. Small shelters mark places where walkers wait for clouds to lift. Guides mend ropes rather than promising safe weather; travelers share soup and compare which ridges they could see that morning. The warm-stone clue could lead here, but connecting those stones to a guardian would need an approved scene.
 
 **Mix:** Gale birds and horses, Stone cats and spiders, Radiant sprites. **Warden:** Vessa, a cheerful guide who admits when visibility beats her; she judges asking for help and sharing responsibility. **Badge:** Beacon Badge. **Guardian:** Lanterncrest, a Radiant bird whose proposed light reveals sheltered resting places. **Wren beat:** she takes a shortcut to arrive first, then returns for a lost traveler; her rematch celebrates getting everyone through rather than winning the race.
-
-### Area 5 proposal: Stillreed Basin — levels 42–52
-
-Beyond the pass lies a broad freshwater basin with reed beds, ferries and orchards on raised ground. Rain can last for days, then stop so suddenly that every drip becomes audible. Boat families leave landing space for wild creatures. People know the water by what moves beneath it and make room for neighboring livelihoods rather than treating the basin as an obstacle to drain.
-
-**Mix:** Tide crocs and lizards, Grove boars, Gale birds, Shade spiders. **Warden:** Olan, a courteous ferryman with a dry joke for every unnecessary splash; he judges restraint when the stronger team could win carelessly. **Badge:** Reed Badge. **Guardian:** Stillwake, a Tide croc proposed to shelter creatures crossing flooded channels. **Wren beat:** she interrupts a rematch to free a tangled ferry rope and lets the player help, then asks for a fair restart on dry ground.
 
 ### Area 6 proposal: Hollowecho Hills — levels 52–62
 
@@ -149,7 +184,7 @@ The outline's final reach follows an exposed coast where old stone lookouts face
 - What continues guarding an area when its guardian chooses to accompany a tamer?
 - Where do elements come from, and can different guardians share an element without sharing an origin?
 - What does a badge certify beyond passage and growth, and who recognizes the Wardens' authority?
-- Where will the league and Champion fit? Eight badges imply a cap of 95 under the current formula, while the design describes the main journey reaching about 70. How will those two plans meet?
+- Where will the league and Champion fit? The implemented cap table gives 75 after eight badges (60 after Reed), while the design describes the main journey reaching about 70. Where will the league and post-game boundary sit?
 - Should area 8 span the finale and post-game, or follow the finale? Its proposed level band and eighth badge remain provisional.
 - How should later light and depth restoration work without requiring a guardian capture? Current color restoration already allows that freedom.
 - What are the humming shell, unusual tidal retreat and disappearing dusk webs telling us? They may be separate mysteries.

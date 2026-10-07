@@ -125,6 +125,7 @@ function drawAmbience(t, A, v) {
     if (m.biome === 'thornwood' && w === 'clear') fx.leaves = .3;
     if (m.biome === 'emberfall') fx.embers = Math.max(fx.embers || 0, .3);
     if (m.biome === 'cloudglass') Object.assign(fx, { dust: .9, dustCol: '#ffffff', fog: Math.max(fx.fog || 0, .5), ground: PH * 1.05 });
+    if (m.biome === 'stillreed') { fx.fog = Math.max(fx.fog || 0, .45); fx.fogCol = '#e2ecdc'; fx.ground = PH * 1.05; if (w === 'clear') fx.fireflies = Math.max(fx.fireflies || 0, .35); }
     if (dk > .3 && m.biome !== 'emberfall' && w !== 'rain') fx.fireflies = dk;
   }
   AMB.weather(cx, PW, PH, t, fx);
