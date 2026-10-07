@@ -14,7 +14,7 @@
   const base = new URL('../', document.currentScript.src);
   say('Preparing offline play…');
   navigator.serviceWorker.register(new URL('sw.js', base), { scope: base.href, updateViaCache: 'none' }).then(reg => {
-    const show = () => { if (reg.waiting) say('Update ready. Close every arcade tab, then reopen.'); else if (reg.active) say('Ready for offline play.'); };
+    const show = () => { if (reg.active) say('Ready for offline play. Updates arrive on their own when you are online.'); };
     show();
     const watch = worker => { if (!worker) return; worker.addEventListener('statechange', () => {
       if (worker.state === 'redundant' && !reg.active) say('Offline setup did not finish. Reopen the arcade online to try again.'); else show();

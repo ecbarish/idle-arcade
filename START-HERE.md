@@ -46,7 +46,7 @@ faded start, explained in the intro) → Pixel/16-bit → HD-2D (on the shared w
 weather with a Journal forecast, thunderstorms, living ambience and regional battle backdrops; visible wild
 creatures; ranch and breeding; challenge modes with ranch pennants, rematches, area mastery; music, effects and rain
 sounds. T30 adds the Returning Light League, Wren's gate battle, four courts and Champion Avenne, with a
-Champion title and the colour-restoration ending (v1.2.0; merged). T31/W3 part 1 adds the Lighthouse Spire and daily league rematches (v1.3.0 on `codex/wildbond-postgame`, PR #37, awaiting review). Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
+Champion title and the colour-restoration ending (v1.2.0; merged). T31/W3 part 1 adds the Lighthouse Spire and daily league rematches (v1.3.0, merged); Stillreed has a walkable ferry landing (W7). Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
 
 **Realmbound** (classic-MMO idle, flagship): levels 1-60 across eight zones, five classes with three talent trees
 each, five 5-person dungeons, the 10-person raid **The Hollow Throne** (opened by the Hollow Key; guild adventurers
@@ -66,7 +66,7 @@ parked for new features. **Hub and promo pages:** `index.html`, `promo.html`, `p
 **Parked:** Diamond Career (baseball), Otherworld (side lane: structural and polish tasks only), Primordial (back
 burner). Plans in `docs/plans/`.
 
-**Ready for review:** G2's Frostmere lighting pass (`codex/realmbound-frostmere-light`, Realmbound v1.0.1): low snow haze, cool reflected light and blue mountain layers. Other G2 zones remain open.
+**Merged:** G2's Frostmere lighting pass (Realmbound v1.0.1): low snow haze, cool reflected light and blue mountain layers. Other G2 zones remain open.
 
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
@@ -84,10 +84,10 @@ rain sounds; walkable Realmbound towns.
    walk into; then a walkable guild hall for Starfall Guild.
 3. ~~**T29: Wildbond area 7, Sunthread Commons**~~ (Codex; data) — done by ChatGPT, merged by Claude 2026-10-10 (branch `codex/wildbond-sunthread`): levels 62-68; ticket in
    `docs/ROADMAP.md`, "T29".
-4. **Wildbond's ending:** W1 and T30/W2 are merged. T31/W3 part 1, the Lighthouse Spire and daily league rematches, is complete on `codex/wildbond-postgame`, awaiting review (PR #37). Next: roaming legendaries (W3 part 2), contests and races, and the Modern 3D era.
+4. **Wildbond's ending:** W1 and T30/W2 are merged. T31/W3 part 1, the Lighthouse Spire and daily league rematches, is merged (v1.3.0). Next: roaming legendaries (W3 part 2), contests and races, and the Modern 3D era.
 5. **Realmbound next:** members' personal stories in the guild; battlegrounds (faction rivalry, the raid's closing
    hook); a second raid tier later.
-   **G2:** Frostmere lighting is ready for review on `codex/realmbound-frostmere-light`; choose another zone for the next lighting PR. Claude's league review remains separate.
+   **G2:** Frostmere is merged; Saltmarsh is in progress (ChatGPT, `codex/wildbond-saltmarsh-light`); pick another zone for the next lighting PR.
 6. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines (a living scene on the
    ambience kit, shared sound, dialogue and creature art, a taste of each game). Build it once the games are further
    along.

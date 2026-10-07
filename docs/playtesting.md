@@ -19,7 +19,5 @@ prototypes have short optional checks only.
 - Keep local links relative for GitHub Pages. Check them, keyboard focus, readable layout at 375, 1366, 1920
   and 3440 px, and unchanged storage. Run all four existing browser test pages.
 
-This branch describes main at ef770d7. The league, offline installation, credits, ferry and Frostmere lighting
-PRs are still awaiting review; their test routes belong in the notes only when those changes actually ship.
-If L5 offline support is merged, add this page to its explicit `PAGES` list in `sw.js` and bump
-`CACHE_VERSION` when updating any notes. Retain the newer hub version when combining releases.
+The notes describe what is on main. playtest.html and credits.html are in the offline worker's `PAGES` list; nothing
+needs bumping when the notes change (updates arrive online first, see docs/offline.md).

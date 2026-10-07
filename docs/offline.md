@@ -14,20 +14,18 @@ three.js library is not cached: a fresh offline Diorama session falls back to th
 No saves, hub progress, sound choices or other localStorage keys are changed by installation. Saves still belong
 to the same browser profile and origin. There is no account, cloud sync or cross-device transfer in this feature.
 
-## Releasing cached files
+## Updates (online first)
 
-**Bump `CACHE_VERSION` in `sw.js` for every release that changes a cached page, script, style or asset**,
-including changes to any of the four games. Keep it unique (date plus counter is enough). Do this in the final
-release commit after combining PRs; do not reuse a version. Reusing a live cache version rejects the update.
+Nothing to do at release. With internet, the worker asks the site for every page, script and style first (past the
+browser's HTTP cache) and keeps a copy of each good answer, so a new release shows up on the next reload, the same as
+without the worker. Without internet, or when an answer takes longer than 4 seconds, the kept copy is used (a slow
+answer still refreshes it for next time). The hub prepares a complete copy of all four games on its first visit, so
+they work offline even before you have opened them. A new worker takes over at once; that is safe because it never
+pins old files while you are online. `CACHE_VERSION` only changes if the worker's own storage format changes.
 
-Preparation requests bypass both the HTTP cache and the previous worker. A failed preparation removes its partial
-cache and retains the last working release. The new worker waits until every tab under this arcade scope closes;
-it never swaps scripts underneath a running game. When the hub says **Update ready**, close all arcade tabs and
-installed app windows, then reopen. Activation deletes old releases for this scope only. No forced reload button.
-
-The hub registers the worker; a player who goes straight to a game before ever visiting the hub has not prepared
-offline play. Browser storage may be cleared or evicted: revisit the hub online to prepare again. If initial
-preparation fails, online play remains available and the hub says to reopen online to retry.
+Claude changed this on 2026-10-07 from Codex's first design (cache first, bump `CACHE_VERSION` on every release,
+update only after every tab closes): with several assistants pushing many times a day, one forgotten bump would have
+left players on an old version without anyone noticing.
 
 ## Checks
 
