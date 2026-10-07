@@ -56,10 +56,9 @@ earned addons. The plan to 60 with the guild and the first raid: `docs/realmboun
 
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
-1. **T21: Realmbound item name tiers** (any assistant) — sent to ChatGPT on 2026-10-08; check for a
-   `codex/realmbound-item-tiers` branch before starting it yourself. Full ticket in `docs/ROADMAP.md` ("T21").
-2. **T1-B: Grave Chill and pacing 40-45** (any assistant; *design* defaults below). Realmbound files:
-   07-dungeons.js, 11-combat.js, tests/realmbound-scenarios.cjs.
+1. ~~**T21: Realmbound item name tiers**~~ — done by ChatGPT, merged 2026-10-08.
+2. **T1-B: Grave Chill and pacing 40-45** (any assistant; *design* defaults below) — **claimed by Claude,
+   2026-10-08**. Realmbound files: 07-dungeons.js, 11-combat.js, tests/realmbound-scenarios.cjs.
    - Add `mech.chill: <seconds>` to the Silent Barrows' three bosses (14, 12, 10). Every `chill` seconds the boss
      puts one **Grave Chill** stack on you and every companion (max 5). Each stack deals 1.5% of max health per
      second. Healing someone removes one of their stacks (the companion healer's heals, your Mend/Renew); Circle of
@@ -80,7 +79,8 @@ earned addons. The plan to 60 with the guild and the first raid: `docs/realmboun
    playing always earns more than one on a job.
 5. **T1-C: third talent trees** (*design*): Warrior Fury, Rogue Subtlety, Mage Arcane, Priest Discipline, Hunter
    Survival, same shape as T1-A (25 ranks + capstone at 25 in that tree), plus talents that open new reactive windows.
-6. **Wildbond test coverage** (any assistant; tests only): extend `tests/wildbond-checks.js` with checks for route
+6. **T24: Wildbond test coverage** (any assistant; tests only) — **sent to ChatGPT 2026-10-08** (branch
+   `codex/wildbond-more-checks`). Full ticket in `docs/ROADMAP.md` ("T24"). Extend `tests/wildbond-checks.js` for route
    trainers and items (T7b part 2), challenge modes, rematches and mastery (`15-challenge.js`), eras and weather
    (`weatherNow`, the Pocket/16-bit/HD/Diorama unlocks), and riding.
 7. **Then:** the guild, Hollow Crown part 2 and the raid (Realmbound); Wildbond area 5 (after Evan answers the cap

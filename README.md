@@ -39,7 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
-- **2026-10-07** — Realmbound item names now progress through eight tiers (T21): the original level 1–20 names,
+- **2026-10-08 (evening)** — Realmbound item names now progress through eight tiers (T21, ChatGPT): the original level 1–20 names,
   then new names for 21–30, 31–40, 41–50 and 51–60 across every armor material, weapon, off-hand and trinket.
   Adds ten dungeon-flavored rare-item prefixes. Existing saved items keep their names; item statistics are unchanged.
 

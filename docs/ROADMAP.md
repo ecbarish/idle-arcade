@@ -27,6 +27,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T1-A: Second talent trees, roles from your build, respec** (Claude, done 2026-10-07). Next: T1-B.
 - [x] **T20: Realmbound Frostmere II, The Barrowfields and The Silent Barrows** (ChatGPT, data): see the T20 section.
 - [x] **T21: Realmbound item name tiers to level 60** (ChatGPT, data + one formula): see the T21 section.
+- [ ] **T24: Wildbond checks for the newer systems** (ChatGPT, tests only): see the T24 section.
 - [x] **T2: Creature game spec + shared creature module plan** (Claude). See docs/creature-game-design.md.
 - [x] **T3: Content for levels 30-40** (Codex): Frostmere, The Winter Road. See
   [chapter specification](realmbound-winter-road.md). Evan authorized the narrow progression spec while Claude
@@ -151,6 +152,33 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   (it validates maps, exits, NPC spots, speakers and moves). Then play it: give a save the first three badges with
   `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
+
+### T24: Wildbond checks for the newer systems (tests only)
+`tests/wildbond.html` (T16) checks maps, story data, walking, gates, caps, Wardens, old saves, the inn and the shop.
+Everything built since has no checks yet. **Change only `tests/wildbond-checks.js`** (plus ticking T24 here and in
+START-HERE.md's "Up next"). Use the same style: `check(label, () => …)`, `ready()` for a fresh tamer, `walk()`,
+finishing battles with `worldTick(0.1)` in a loop. Read the code you're testing; don't guess names.
+- **Route trainers and items (12-walk.js, 11-maps.js):** walking into a trainer's line of sight (`trainer.sight` in
+  the direction they face) starts a scene and a `trainer` battle; winning sets `S.beaten[who]`; talking to a beaten
+  trainer plays `after`; a trainer who beat you doesn't challenge again until you change maps (`WK.cool`). Walking
+  onto an item adds its coins/lures/food once (`S.items`). Signposts (`P`) set `W.msg` and block movement.
+- **Riding and running:** `toggleRide()` only works with the Ember Badge and a conscious partner; `speedNow()` is
+  `RIDE_SPEED` when riding, `RUN_SPEED` with Warden's boots and Shift (`WK.run`), `WALK_SPEED` on Auto.
+- **Eras:** a new save starts in `pocket`; winning the Thorn Badge unlocks `pixel` and `bit16`, gives `S.shoes`
+  and switches Pocket to 16-bit; the Tide Badge unlocks `hd` (switching from 16-bit); the Ember Badge unlocks
+  `diorama` (switching from HD-2D). Old saves get the eras their badges imply (`load()`).
+- **Day, night and weather:** `darkness()` is 0 before the Thorn Badge; at night (`isNight()`) Shade species are
+  picked more often by `wildPick()`; `weatherNow()` is `clear` before the Tide Badge and in town; rain raises Tide.
+- **Visible wild creatures:** after the Tide Badge, `WK.roam` fills up on a map with tall grass; stepping onto one
+  starts a wild battle with that species.
+- **Challenge modes (15-challenge.js):** `chooseStarter(id, name, pace, {nuzlocke:true})` stores `S.modes`;
+  Nuzlocke: the second wild meeting in an area can't be lured, a fainted creature is released after battle, and a
+  run with nobody left ends gently (`S.modes.nuzlockeEnded`); Solo: `teamMax()` is 1 and catches go to the ranch;
+  Hardcore: Rally is refused; Randomizer: `randomized()` is a permutation and stays the same for one `S.modes.seed`.
+- **Rematches and mastery:** talking to a beaten Warden starts a `trainer` battle with `B.rematch` set; winning
+  raises `S.rematch[id]` and blocks another the same `S.day`; Wren appears in Larkhaven after `S.story.rival2`;
+  `masteryOf(biome)` counts its three stars.
+- Restore saves as T16 does. All checks pass before you push.
 
 ### T20: Realmbound Frostmere II, The Barrowfields and The Silent Barrows (data)
 The first chapter of docs/realmbound-40-60.md: levels 40-45 and a third dungeon, built with existing systems

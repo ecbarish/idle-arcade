@@ -61,7 +61,7 @@ module.exports = function scenarios() {
           check(winter.quests.done[q.id]&&rb.C.lines.some(l=>l.txt.includes(speaker+': "'+voice+'"')),'winter turn-in voice: '+q.id+' '+faction);
           check(winter.bags.length===1&&winter.bags[0].ilvl>=q.lvl,'winter reward scales: '+q.id+' '+faction);
         }
-        rb.boot();
+        rb.S.tab='quests';rb.boot(); // the check reads the Quests tab, whatever tab the save was left on
         check(document.body.textContent.includes('10/10 quests done in Frostmere'),'winter completion visible: '+faction);
         winter.grind='hushfang';rb.boot();rb.spawn();
         check(rb.C.mob.id==='hushfang'&&rb.C.mob.rar===4&&rb.C.mob.elite,'Hushfang spawns legendary: '+faction);
