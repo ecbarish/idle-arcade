@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Arcade v1.0.1 (2026-10-07)** — **What to try (F4):** the homepage links to short version-stamped playtest routes for Wildbond and Realmbound, with optional prototype checks and feedback links. New players and existing saves have separate starting points. See [playtest notes](playtest.html) and [maintainer guide](docs/playtesting.md).
+
 - **2026-10-10** — **Save doctor** in the Studio: pick a game to see its save at a glance (heroes, team, badges, coins),
   a health check that spots broken values (an empty level, negative coins, a missing current hero) with a one-click
   fix, and every field in plain words, searchable and editable. Nothing is written until you press Save, and the old
