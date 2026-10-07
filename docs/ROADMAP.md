@@ -85,6 +85,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T15: Emberfall Warden and badge, data only** (ChatGPT): see the T15 section below.
 - [x] **T16: Wildbond browser checks** (ChatGPT, tests only): see the T16 section below.
 - [x] **T17: Wildbond area 4, Cloudglass Pass** (built by Claude 2026-10-08 after the ChatGPT run never arrived; see the T17 section below).
+- [x] **T28: Wildbond area 6, Hollowecho Hills** (Codex): content, winding map, original tune and browser checks; see the T28 section.
 - [x] **T27: Wildbond area 5, Stillreed Basin** (Codex): content, walkable map, weather, original tune and browser checks; see the T27 section.
 - [x] **T19: Promo pages for friends** (ChatGPT, pages only): see the T19 section below.
 

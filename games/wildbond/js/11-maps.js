@@ -31,7 +31,9 @@ Object.assign(CAST, {
   ilka: { name: 'Ilka', skin: '#e2b48c', hair: 'long', hairCol: '#5a3a24', shirt: '#7a8c5a', bg: '#e0e6d0', title: 'Rope-mender' },
   teodor: { name: 'Teodor', skin: '#a87452', hair: 'hat', hairCol: '#2a2a2a', hatCol: '#5a6a7a', shirt: '#c8b48a', bg: '#e6e0d0', title: 'Cloud-watcher' },
   evren: { name: 'Evren', skin: '#d4a27a', hair: 'bun', hairCol: '#493a2c', shirt: '#6c8650', bg: '#e0dfb9', title: 'Orchard keeper' },
-  tavil: { name: 'Tavil', skin: '#946749', hair: 'short', hairCol: '#b8b49a', shirt: '#5a7d85', bg: '#d0dfd5', title: 'Ferry rope-mender' }
+  tavil: { name: 'Tavil', skin: '#946749', hair: 'short', hairCol: '#b8b49a', shirt: '#5a7d85', bg: '#d0dfd5', title: 'Ferry rope-mender' },
+  veslin: { name: 'Veslin', skin: '#b28162', hair: 'bun', hairCol: '#5c4f4b', shirt: '#9e986d', bg: '#dadcc4', title: 'Bell keeper' },
+  narro: { name: 'Narro', skin: '#deb798', hair: 'short', hairCol: '#393d48', shirt: '#69808d', bg: '#cedbdf', title: 'Cave surveyor' }
 });
 
 const MAPS = {
@@ -223,13 +225,13 @@ const MAPS = {
       "T,\"\"\"\"\",,,,\"~~~\",,,,,,,,\"\"\"\",T",
       "T,,,,,,,,,,\"~~~\",,,,,,,,\"\"\"\",T",
       "W..P.......\"~~~\",,,,,,,,,,,,,T",
-      "T,,,........................,T",
+      "T,,,.........................E",
       "T,\"\"\"\"\",,,,\"~~~\",,,,,,,,,,,,,T",
       "T,\"\"\"\"\",,,,\"~~~\",,,,,,,,,,,,,T",
       "T,,,,,,,,,,\"~~~\",,,,,,,,,,,,,T",
       "TTTTTTTTTTTT~~~TTTTTTTTTTTTTTT"
     ],
-    exits: { W: { to: 'cloudglass', x: 27, y: 8, dir: 'left' } },
+    exits: { W: { to: 'cloudglass', x: 27, y: 8, dir: 'left' }, E: { to: 'hollowecho', x: 1, y: 9, dir: 'right', locked: 'The hill survey trail requires the Reed Badge. Leave the basin crossing safe before exploring the caverns.' } },
     signs: { '3,8': 'Stillreed Basin. West: Cloudglass Pass. Leave the ferry landing open for small creatures; orchard paths cross the channels on raised boards.' },
     items: [{ id: 'sr1', at: [4, 3], give: { fish: 6 } }, { id: 'sr2', at: [24, 6], give: { lures: 6 } }, { id: 'sr3', at: [27, 11], give: { berries: 8 } }],
     npcs: [
@@ -244,5 +246,86 @@ const MAPS = {
           after: [['tavil', 'Wren and a new tamer freed a ferry rope today. The passengers thanked them; the rope had no comment.']] },
         lines: [['tavil', 'The boards are dry enough for a battle. Shall we? I promise the losing team still gets a ferry ride.']] }
     ],
-    wardenDone: 'The landing stays open, {name}. Keep winning with room for your neighbors.' }
+    wardenDone: 'The landing stays open, {name}. Keep winning with room for your neighbors.' },
+  hollowecho: {
+  name: 'Hollowecho Hills',
+  biome: 'hollowecho',
+  edge: 'R',
+  start: [ 1, 9, 'right' ],
+  warden: [ 23, 4 ],
+  rows: [
+    'RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR',
+    'R,rrrrr,,,RRRRR,",,,RRRRRRR,,R',
+    'R,rrrrr,,,RRRRR""",,RRRRRRR,,R',
+    'R,##_##,",RRRRR"""",RR___RR,,R',
+    'R,_____""",RRR,""",,,R___R,,,R',
+    'R,__.__P""",,,,,",,,........,R',
+    'R,,,.,,""",,,,,......,,,,"".,R',
+    'R,,,............,,,,,,,,"""."R',
+    'R,,",.,,RRRRR,,",,R_RR,,,"".,R',
+    'W.....,,RRRRR,""",R__R,,,,"..R',
+    'R"""""",RRRRR"""""R__R,,RRR,,R',
+    'R""""",,,RRR,,""",RRRR,,RRR,,R',
+    'R,,",,,,,,,,,,,",,,,,,,,,,,,,R',
+    'RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR'
+  ],
+  exits: { W: { to: 'stillreed', x: 28, y: 9, dir: 'left' } },
+  signs: {
+    '7,5': 'Hollowecho Hills. West: Stillreed Basin. Ring the hamlet bell before dusk; answer a returning team before choosing your next passage.'
+  },
+  items: [
+    { id: 'he1', at: [ 3, 5 ], give: { berries: 8 } },
+    { id: 'he2', at: [ 19, 10 ], give: { lures: 6 } },
+    { id: 'he3', at: [ 27, 8 ], give: { coins: 500 } }
+  ],
+  npcs: [
+    {
+      who: 'veslin',
+      at: [ 6, 6 ],
+      dir: 'down',
+      trainer: {
+        sight: 1,
+        team: [ [ 'bellmote', 58 ], [ 'umbrelace', 59 ] ],
+        win: [ [ 'veslin', 'Good listening! The bell can wait while both teams catch their breath.' ] ],
+        after: [
+          [ 'veslin', 'One ring means a team is home. We always answer, even if supper is getting cold.' ]
+        ]
+      },
+      lines: [
+        [
+          'veslin',
+          'Welcome back to daylight. A friendly battle beside the bell? Nobody has to find the dark trail alone.'
+        ]
+      ]
+    },
+    {
+      who: 'narro',
+      at: [ 16, 6 ],
+      dir: 'down',
+      trainer: {
+        sight: 1,
+        team: [ [ 'dripdart', 60 ], [ 'flintroot', 61 ], [ 'hushmane', 62 ] ],
+        win: [
+          [
+            'narro',
+            'A fine change of plan. My partners heard yours coming and still could not quite keep up.'
+          ]
+        ],
+        after: [
+          [
+            'narro',
+            'The bright mouth has loose footing. My Dripdart showed me the familiar passage; I changed the map.'
+          ]
+        ]
+      },
+      lines: [
+        [
+          'narro',
+          'I have put the measuring cord away. Shall we see what our partners make of a battle on level ground?'
+        ]
+      ]
+    }
+  ],
+  wardenDone: 'Keep listening, {name}. A careful return matters more than a perfect map.'
+}
 };
