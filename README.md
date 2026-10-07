@@ -35,6 +35,9 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-07 (night)** — Merged ChatGPT's promo pages (T19): promo.html is up to date for Realmbound (levels 1-40,
+  Frostmere), and promo-wildbond.html introduces Wildbond to friends; the hub links both.
+
 - **2026-10-07 (evening)** — Wildbond challenges and rematches (T11b). Starting a new journey you can switch on
   challenge modes, alone or mixed: **Nuzlocke** (a creature that faints goes home to the wild, and only the first
   creature you meet in each area can be caught), **Randomizer** (wild creatures shuffled between the areas),
