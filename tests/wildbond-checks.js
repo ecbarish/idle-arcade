@@ -775,6 +775,20 @@ function wildbondChecks() {
     S.beaten = Object.fromEntries((map.npcs || []).filter(n => n.trainer).map(n => [n.who, true]));
     m = masteryOf(biome); return m.stars === 3 && m.dex && m.warden && m.secrets && m.hasWarden;
   });
+  check('view distance cycles Close, Wide, Far and widens the view (L11)', () => {
+    const S = wb.S, was = S.view, seen = [];
+    try { S.view = 'near'; const m1 = viewMult(); for (let i = 0; i < 3; i++) { cycleView(); seen.push(S.view); }
+      S.view = 'far'; renderViewBtn();
+      return m1 === 1 && viewMult() > 1.5 && seen.join() === 'wide,far,near' && document.querySelector('#viewBtn').textContent === 'View: Far'; }
+    finally { S.view = was; }
+  });
+  check('saves without a view choice fall back to a valid view', () => { const S = wb.S, was = S.view; try { delete S.view; return !!VIEWS[viewKey()]; } finally { S.view = was; } });
+  check('arrow keys inside the feedback menu never walk the tamer', () => {
+    const box = document.querySelector('.feedback-container'); if (!box) return true;
+    const S = wb.S; if (!S.started || !S.pos) return true; const before = JSON.stringify(S.pos);
+    box.querySelector('button').dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    const ok = JSON.stringify(S.pos) === before && !wb.WK.held.length; wb.WK.held = []; return ok;
+  });
   return checks;
 }
 
