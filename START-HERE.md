@@ -147,7 +147,7 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
 22. **T28: Wildbond area 6, Hollowecho Hills** (any assistant; data) — **sent to ChatGPT 2026-10-09** (branch
    `codex/wildbond-hollowecho`; ticket in `docs/ROADMAP.md`, "T28"): levels 58-64, Warden Senna, Echo Badge,
    Undertone. After merging: Claude adds its ambience (cave drips, dust, bats at dusk) in `drawAmbience`.
-23. **S4: the world kit** — **claimed by Claude 2026-10-09**: walkable places shared across games (see the plan in
+23. **S4: the world kit** — part 1 done by Claude 2026-10-09 (`shared/world.js`; Wildbond HD-2D on it; walkable Realmbound towns in `js/22-town.js`). **Part 2 (next):** move Wildbond's walking (12-walk.js) onto `World.walker`; a layout per hub (camps for the Wildclans, the abbey for Thornvale); the guild hall as an interior you enter; then Starfall's guild hall. Originally: walkable places shared across games (see the plan in
    HANDOFF.md, "World kit", once written). First use: a walkable Realmbound town and guild hall.
 
 ## Questions for Evan (work continues on the defaults until he answers)
@@ -166,6 +166,10 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude (late night): wrote T28 for ChatGPT (Wildbond Hollowecho Hills); built S4 part 1, the shared
+  world kit (walker + HD-2D renderer), moved Wildbond's HD-2D onto it, and made Realmbound's towns walkable (inn,
+  smithy, trainer, stable, guild hall, quest giver, Pell and Brisket, Auto stroll). Tests: Realmbound 1448,
+  Wildbond 619, Starfall 48. **Next:** review T28 when it lands (and add Hollowecho's ambience); S4 part 2.
 - 2026-10-09 Claude: merged ChatGPT's T27 (Wildbond area 5, Stillreed Basin, levels 52-60, Warden Olan, Reed Badge,
   Stillwake) and gave the basin its own mist and fireflies. Tests: Wildbond 619, Realmbound 1434, Starfall 48.
 - 2026-10-07 Codex: T27 complete on `codex/wildbond-stillreed` for Claude's review, no merge. Browser checks pass:

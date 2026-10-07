@@ -102,8 +102,9 @@
     opt = opt || {};
     const SRC = opt.src || 16, mk = () => { const c = document.createElement('canvas'); return [c, c.getContext('2d')]; };
     const [ground, gx] = mk(), [screen, sx] = mk(), filterOK = 'filter' in gx;
-    const rgba = (hex, a) => { const h = hex.replace('#', ''); return `rgba(${[0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)).join(',')},${a})`; };
-    const mixHex = (a, b, k) => { const p = [0, 2, 4].map(i => parseInt(a.slice(1 + i, 3 + i), 16)), q = [0, 2, 4].map(i => parseInt(b.slice(1 + i, 3 + i), 16)); return `rgb(${p.map((v, i) => Math.round(v + (q[i] - v) * k)).join(',')})`; };
+    const parse = c => { if (c[0] === '#') { let h = c.slice(1); if (h.length === 3) h = [...h].map(x => x + x).join(''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); } return (String(c).match(/[\d.]+/g) || [0, 0, 0]).slice(0, 3).map(Number); };
+    const rgba = (c, a) => `rgba(${parse(c).join(',')},${a})`;
+    const mixHex = (a, b, k) => { const p = parse(a), q = parse(b); return `rgb(${p.map((v, i) => Math.round(v + (q[i] - v) * k)).join(',')})`; };
     /* the camera: horizon at 20% of the height, the walker at 80%, about 4 tiles from the lens */
     function camera(W, H, v) { const yh = H * (v.horizon || .2), ys = H * .8, dp = 4.2, ts = H / (v.zoom || 6.5); return { W, H, yh, dp, K: (ys - yh) * dp, F: ts * dp, px: v.px + .5, py: v.py + .5 }; }
     function project(C, wx, wy) { const d = C.dp + (C.py - wy); if (d < .45) return null; const s = C.F / d; return { x: C.W / 2 + (wx - C.px) * s, y: C.yh + C.K / d, s, d }; }

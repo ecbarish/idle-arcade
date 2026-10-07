@@ -5,7 +5,7 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function resize(){const r=cv.getBoundingClientRect();const d=Math.min(2,devicePixelRatio||1);PW=r.width;PH=r.height;cv.width=Math.round(PW*d);cv.height=Math.round(PH*d);cx.setTransform(d,0,0,d,0,0);cx.imageSmoothingEnabled=false;}
 if(window.ResizeObserver)new ResizeObserver(resize).observe(cv);else addEventListener('resize',resize);
 function drawHero(x,y,p,t){const h=H(),r=RACES[h.race],K=CLASSES[h.cls];const q=(gx,gy,w,hh,c)=>{cx.fillStyle=c;cx.fillRect(Math.round(x+gx*p),Math.round(y+gy*p),Math.ceil(w*p),Math.ceil(hh*p));};
-  const sit=C.phase==='rest'||C.phase==='intown';const dy=sit?3:0;
+  const sit=C.phase==='rest'||(C.phase==='intown'&&!TOWN.on);const dy=sit?3:0; // in a walkable town (22-town.js) you stand and walk
   if(C.phase==='dead')cx.globalAlpha=.4;
   q(2,10+dy,1,sit?1:3,'#2b2b3a');q(5,10+dy,1,sit?1:3,'#2b2b3a');
   q(1,5+dy,6,5,K.col);q(1,9+dy,6,1,'#3a2a1a');q(0,6+dy,1,3,K.col);q(7,6+dy,1,3,K.col);
@@ -46,7 +46,7 @@ function drawBeast(c,x,y,p,col,fam,right,t){
   }
   c.restore();
 }
-function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidden)return;const t=ms/1000;const h=H(),z=h.dun?dungeonDef():ZONES[h.zone];
+function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidden)return;const t=ms/1000;if(townActive()){drawTown(t);return;}TOWN.on=false;TOWN.last=null;const h=H(),z=h.dun?dungeonDef():ZONES[h.zone];
   const gy=PH*.78,p=Math.max(2,Math.floor(PH/42));const AMBS=ambBack(t,gy,p); // sky, scenery, ground, torches, campfire (20-ambience.js)
   if(C.phase==='intown'||C.phase==='town')ambTown(gy,t,AMBS);
   const walk=(C.phase==='seek'||C.phase==='town')&&!reduce?Math.sin(t*8)*p*.6:0;

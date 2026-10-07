@@ -39,6 +39,13 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-09 (late night)** — **Realmbound's towns are places now.** Arriving in town, the scene turns into the hub,
+  seen in HD-2D like Wildbond: walk around with the arrow keys or WASD or by tapping, and talk with Enter. The Inn
+  heals everyone, the Smithy buys your junk and repairs, the Trainer, the Stable and the **Guild hall** open their
+  tabs, the quest giver offers the next quest in a scene, Pip lights the lamps at night, and now and then Pell the
+  peddler and his mule Brisket come through selling healing potions. Windows and lamps glow at night, and the town
+  gets the zone's weather. On Auto your hero strolls to the smithy and out of the gate. This runs on a new shared
+  world kit, and Wildbond's HD-2D view now draws through the same engine.
 - **2026-10-07** — Wildbond area 5: Stillreed Basin (52–60), beyond Cloudglass Pass. Nine new species include
   Reedlet's evolution into Ferrycrest and the guardian Stillwake. Wren helps free a ferry rope before the rematch;
   ferryman Warden Olan awards the Reed Badge, raising the existing cap to 60. Walk the reed banks, board crossings

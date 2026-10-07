@@ -46,6 +46,12 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
   Realmbound: `js/20-ambience.js` (zone profiles `AMB_ZONES`, `AMB_DUNGEONS`, 24-minute day `realmNight`, weather every 6
   minutes `zoneWeather`). Wildbond: `drawAmbience` in `js/06-scene.js` (cameras expose `WK.cam.fwd` for lights).
   Starfall: `06-render.js` (the night window with falling stars, living torches). Thunder is `sfx('thunder', vol)`.
+- `shared/world.js`: the world kit (S4). `World.walker({map, tiles, pos, people, busy, speed, on})`: grid walking
+  with smooth sliding, held keys, click-to-walk (`walkTo`, `tap`), bumping into people/doors/exits/signs.
+  `World.hd({src})` -> `draw(ctx, W, H, t, view)`: the HD-2D renderer (tilted camera, haze, depth of field, light;
+  the game supplies `flat`, `stand`, `things`; returns a camera with `fwd`/`inv`). Wildbond's HD-2D era
+  (`js/13-hd.js`) and Realmbound's towns (`js/22-town.js`) both draw through it. Wildbond's own walking (12-walk.js)
+  is not on `World.walker` yet (S4 part 2).
 - `games/realmbound/index.html`: Realmbound markup and ordered classic script tags; no build step.
 - `games/realmbound/style.css`: the unchanged MMO interface styles.
 - `games/realmbound/js/00-core.js`: save key, selectors, formatting aliases, random helpers and level cap.
@@ -70,6 +76,7 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
 - `games/realmbound/js/19-raid.js`: R2, raids: `RAIDS.throne` (The Hollow Throne), `startRaid()`/`autoRaid()`, plans (`choosePlan`), tells and raid calls (`raidStep`, `raidCall`, keys S/A/Q/W), lockout (`raidLock`), set loot and bonuses (`raidLoot`, `setT` added to `T()`), your other characters as raiders (`raidAlt`, found by `npcOf`). Hooks in 09-dungeon-runs.js (spawn, kill, finish, leave) and `step()`.
 - `games/realmbound/js/20-ambience.js`: S5 living scenes for Realmbound (`ambBack`, `ambTown`, `ambFront`, called from `frame()` in 14-scene.js).
 - `games/realmbound/js/21-guild.js`: the guild (account-wide, in `S.guild` beside the jobs board): founding (`foundProblem`, `foundGuild`), members and mood (`memberKey`, `addMember`, `inviteToGuild`, `dismissMember`, `moodBump`, `guildTick`), guild XP and levels (`guildXP`, `guildXPMult` used by `gainXP`, `jobSlots`), workers for the jobs board (`workerOf`, `workerCanWork`), and `guildHTML()` at the top of the Guild tab (TABS.supplies in 18-supplies.js).
+- `games/realmbound/js/22-town.js`: walkable towns (S4): `TOWN_BUILDINGS`, `townMap()`, `townPeople()` (quest giver, registrar, Pip, Pell and Brisket), `TOWN_WALK` (World.walker), `townDoor`, `townTalk`, Auto stroll (`townAutoTick`), and `drawTown()` (World.hd), which `frame()` uses while `townActive()`.
 - `games/realmbound/js/99-boot.js`: startup, load, timers and the unchanged localhost-only `window.__rb` hook.
 - `docs/realmbound-design.md`: design decisions. `docs/ideas.md`: parked backlog.
 

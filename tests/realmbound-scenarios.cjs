@@ -489,6 +489,24 @@ module.exports = function scenarios() {
         rb.S.tab='supplies';renderTab(true);check(/The Testers/.test(document.querySelector('#tabbody').innerHTML)&&/Jobs board/.test(document.querySelector('#tabbody').innerHTML),'the Guild tab shows the guild hall and the jobs board');
         const old=rb.migrate({v:2,chars:[JSON.parse(JSON.stringify(B2))],cur:B2.id,last:Date.now(),tab:'quests'});check(!old.guild,'saves from before the guild load unchanged');
         rb.S.chars=keepC;rb.S.cur=keepCur;rb.S.guild=keepG;rb.S.bank=keepB;if(!keepG)delete rb.S.guild;if(!keepB)delete rb.S.bank;rb.S.tab='quests';if(H())rb.boot();}
+      // S4: the shared world kit, and walkable Realmbound towns
+      {const m=TOWN.map;check(m.rows.length===16&&m.rows.every(r=>r.length===28),'the town map is 28 by 16');
+        const tw=rb.newHero('Towncheck','concord','human','warrior');tw.lvl=20;tw.mode='focus';const keepC=rb.S.chars,keepCur=rb.S.cur;rb.S.chars=[tw];rb.S.cur=tw.id;rb.boot();rb.C.phase='intown';rb.C.lastInput=rb.C.run;
+        if(modalKind)closeModal();townEnter();check(TOWN.pos.x===13&&TOWN.pos.y===14&&!TOWN.auto,'you arrive at the town gate');
+        check(TOWN_BUILDINGS.every(b=>{TOWN_WALK.place(13,14,'up');return TOWN_WALK.walkTo(b.door,b.y+b.h-1);}),'every building door can be reached from the gate');
+        TOWN_WALK.place(13,14,'up');check(TOWN_WALK.step('up')&&TOWN.pos.y===13,'walking moves you a tile');TOWN_WALK.place(1,1,'up');check(!TOWN_WALK.step('up')&&TOWN.pos.y===1,'trees block the way');
+        rb.C.hp=1;townDoor(TOWN_BUILDINGS.find(b=>b.kind==='inn'));check(rb.C.hp===rb.ST.hpMax,'the inn heals you');
+        tw.bags.push(genJunk(20,'beast'));tw.gear.weapon.dur=10;const m0=tw.money;townDoor(TOWN_BUILDINGS.find(b=>b.kind==='smith'));check(!tw.bags.some(i=>i.junk)&&tw.gear.weapon.dur===100&&tw.money!==m0,'the smithy buys junk and repairs');
+        townDoor(TOWN_BUILDINGS.find(b=>b.kind==='guild'));check(rb.S.tab==='supplies','the guild hall door opens the Guild tab');
+        while(RTALK)SCN.skip();const g=townPeople().find(n=>n.id==='giver');townTalk(g);check(!!RTALK&&RTALK.choices&&RTALK.choices.length===2,'the quest giver offers a quest in a scene');SCN.choose(1);
+        const keepP=window.pellHere;pellHere=()=>true;const pell=townPeople().find(n=>n.id==='pell');check(!!pell,'Pell visits the town now and then');
+        tw.money=1000;const pots=bank().potion;while(RTALK)SCN.skip();townTalk(pell);SCN.choose(0);check(bank().potion===pots+1&&tw.money===800,'Pell sells a healing potion for 2 silver');pellHere=keepP;
+        TOWN_WALK.place(13,14,'down');TOWN_WALK.step('down');check(rb.C.phase==='seek','the town gate takes you back on the road');
+        tw.mode='auto';rb.C.phase='intown';townEnter();tw.bags.push(genJunk(20,'beast'));for(let i=0;i<2000&&rb.C.phase==='intown';i++){TOWN_WALK.tick(.05);townAutoTick();}
+        check(rb.C.phase==='seek'&&!tw.bags.some(i=>i.junk),'on Auto your hero visits the smithy, then walks out of the gate');
+        const wk=World.walker({map:()=>({rows:['...','.#.','...']}),tiles:{'.':{},'#':{solid:1}},pos:()=>wpos,on:{}}),wpos={x:0,y:0,dir:'down'};wk.place(0,0);
+        check(wk.walkTo(2,2)&&wk.path.length===4,'the shared walker finds the shortest way around walls');
+        rb.S.chars=keepC;rb.S.cur=keepCur;rb.S.tab='quests';if(H())rb.boot();}
       // T21: every generated item category follows the widened name bands.
       check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');
       check(BLUE_PRE.length===17&&new Set(BLUE_PRE).size===17,'rare prefix pool retains seven names and adds ten distinct dungeon names');
