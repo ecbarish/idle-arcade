@@ -2,7 +2,8 @@
 /* R2: raids. The Hollow Throne, the first raid (docs/realmbound-40-60.md, "Raids"; decision 5 in
    docs/research/decisions.md). A raid is a dungeon run (09-dungeon-runs.js) with ten people:
    - Raiders: you plus nine from your companions (Acquaintance or better) and your other characters, who join as
-     raiders at their own level. At least two tanks and two healers, counting you. "Gather the raid" picks for you.
+     raiders at their own level. A founded guild also brings adventurers from your other heroes, at their owners' level.
+     Gather pays and stops selected raiders' jobs. At least two tanks and two healers, counting you. "Gather the raid" picks for you.
    - Entry: the Hollow Key (the last quest of the Crown's Heart, T23) and the level cap.
    - Before each boss you choose a plan; during the pull the boss gives tells and you make raid calls (buttons, or
      S = Swap, A = Adds, Q = Spread, W = Stack). Auto makes calls too, badly at first; clearing the raid once earns
@@ -49,14 +50,32 @@ function raidAlt(id) {
   const n = ALT_RAIDERS[id] || (ALT_RAIDERS[id] = { id, aff: 9999, met: true, notes: [], hair: '#6b4423', alt: true, pers: Object.keys(PERSONALITY)[0] });
   return Object.assign(n, { name: c.name, cls: c.cls, race: c.race, offset: c.lvl - h.lvl, role: heroRole(c) });
 }
+/* Guild ids retain their owner: affinity and memories write to the original companion, never a copy.
+   Only the raid's id and level offset differ. These views are runtime-only; saves store the existing member key. */
+function raidGuild(id) {
+  if (!guildOn() || typeof id !== 'string' || !id.startsWith('adv:')) return null;
+  const w = workerOf(id); if (!w || w.kind !== 'adv') return null;
+  return new Proxy(w.n, {
+    get(n, k) {
+      if (k === 'id' || k === 'guildKey') return id;
+      if (k === 'offset') return clamp(w.hero.lvl + n.offset, 1, LEVEL_CAP) - H().lvl;
+      return Reflect.get(n, k);
+    },
+    set(n, k, v) { if (k === 'id' || k === 'offset' || k === 'guildKey') return false; return Reflect.set(n, k, v); }
+  });
+}
 const roleOf = n => n.role || ROLE_OF[n.cls];
 function raidKey(h) { h = h || H(); return !!(h.hollowKey || (h.quests && h.quests.done && h.quests.done.ch14)); }
 function raidLock(h) { h = h || H(); const L = h.raidLock; if (!L || Date.now() - L.at > RAID_RESET) h.raidLock = { at: 0, killed: [] }; return h.raidLock; }
 /* who could come: other characters at the cap, then companions you know, strongest first */
 function raidCandidates() {
   const h = H(), need = RAID_LVL() - 2, out = [];
-  for (const c of S.chars) if (String(c.id) !== String(h.id) && c.lvl >= need) out.push(raidAlt('alt' + c.id));
-  for (const n of h.npcs || []) if (n.met && affLvl(n) >= 1 && npcLvl(n) >= need) out.push(n);
+  for (const c of S.chars) if (String(c.id) !== String(h.id) && c.lvl >= need && !c.dun && workerCanWork(c.id)) out.push(raidAlt('alt' + c.id));
+  for (const n of h.npcs || []) if (n.met && affLvl(n) >= 1 && npcLvl(n) >= need && !memberRaiding(memberKey(h.id, n.id))) out.push(n);
+  if (guildOn()) for (const key of Object.keys(G().members)) {
+    const w = workerOf(key);
+    if (w && String(w.hero.id) !== String(h.id) && !w.hero.dun && w.lvl >= need && w.n.met && affLvl(w.n) >= 1 && workerCanWork(key)) out.push(raidGuild(key));
+  }
   return out.filter(Boolean);
 }
 function raidComp(ids) { const ns = ids.map(npcOf).filter(Boolean), me = heroRole(), cnt = r => ns.filter(n => roleOf(n) === r).length + (me === r ? 1 : 0); return { tank: cnt('tank'), heal: cnt('heal'), n: ns.length }; }
@@ -74,6 +93,8 @@ function raidProblem(ids) {
   if (!raidKey(h)) return 'The Hollow Throne is sealed: it needs the Hollow Key, from the last quest of the Crown\'s Heart.';
   if (h.lvl < RAID_LVL()) return `Needs level ${RAID_LVL()}.`;
   if (ids.length !== 9 || new Set(ids).size !== 9) return `A raid needs nine others; you can gather ${raidCandidates().length}. Befriend more adventurers or bring your other characters to level ${RAID_LVL() - 2}.`;
+  const eligible = new Set(raidCandidates().map(n => n.id));
+  if (ids.some(id => !eligible.has(id))) return 'Someone in that raid is no longer available or high enough level.';
   const c = raidComp(ids); if (c.n !== 9) return 'Someone in that raid is no longer around.';
   if (c.tank < 2) return 'A raid needs at least two tanks (counting you).';
   if (c.heal < 2) return 'A raid needs at least two healers (counting you).';
@@ -81,7 +102,13 @@ function raidProblem(ids) {
 }
 function startRaid(ids) {
   ids = ids || autoRaid(); const why = raidProblem(ids); if (why) { err(why); return false; }
-  const h = H(), base = RAID_LVL(); for (const e of THRONE.enc) e.lvl = base + e.off;
+  const h = H(), base = RAID_LVL();
+  for (const id of ids) {
+    const n = npcOf(id), key = n.guildKey || (n.alt ? String(id).slice(3) : memberKey(h.id, id));
+    const job = ROSTER.jobOf(key), units = ROSTER.stop(key);
+    if (job && units) line(reportText([{ who: key, job, units }]), 'l-sys');
+  }
+  for (const e of THRONE.enc) e.lvl = base + e.off;
   h.dun = { id: 'throne', tier: 0, step: 0, mods: [], wipes: 0, raid: true, plans: {}, prev: (h.party || []).slice() };
   h.party = ids.slice(); dungeonStats('throne').runs++; syncParty(); for (const p of C.party) { p.hp = compStats(p.n).hpMax; p.dead = false; }
   C.mob = null; C.loot = null; C.enc = null; C.tell = null; C.phase = 'seek'; C.t = 4;
@@ -191,7 +218,7 @@ function raidSection() {
   const zoneName = ZONES[THRONE.zone] ? ZONES[THRONE.zone].name : 'The Crown\'s Heart';
   return `<h4>Raid: ${THRONE.name}</h4><p class="meta">Ten people, four bosses, in ${zoneName}. Before each boss you choose a plan; during the
     pull make raid calls when the boss gives a tell (S Swap, A Adds, Q Spread, W Stack). Bosses stay dead for 3 days. Drops epics and your class's
-    ${TIER[h.cls]} set.</p><p class="meta">Cleared ${r.clears} time${r.clears === 1 ? '' : 's'}${lock.killed.length ? ` · ${lock.killed.length} of 4 bosses dead this lockout` : ''}${h.raidLeader ? ' · Raid Leader: Auto calls reliably' : ''}${setPieces() ? ` · ${setPieces()}/5 set pieces worn` : ''}.</p>
+    ${TIER[h.cls]} set.</p><p class="meta">${guildOn() ? "Your guild adventurers can join from any hero, at their own level; adventurers whose hero is in a dungeon stay there. " : ""}Gathering the raid pays and stops its members' jobs; jobs stay stopped when you return.</p><p class="meta">Cleared ${r.clears} time${r.clears === 1 ? '' : 's'}${lock.killed.length ? ` · ${lock.killed.length} of 4 bosses dead this lockout` : ''}${h.raidLeader ? ' · Raid Leader: Auto calls reliably' : ''}${setPieces() ? ` · ${setPieces()}/5 set pieces worn` : ''}.</p>
     ${why ? `<p class="meta">${why}</p>` : `<p class="meta">Your raid: ${ids.map(id => npcOf(id).name).join(', ')} (${c.tank} tanks, ${c.heal} healers).</p>`}
     <button class="btn" data-act="raidgo" ${why ? 'disabled' : ''}>Gather the raid and enter</button>`;
 }

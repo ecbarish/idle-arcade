@@ -489,6 +489,47 @@ module.exports = function scenarios() {
         rb.S.tab='supplies';renderTab(true);check(/The Testers/.test(document.querySelector('#tabbody').innerHTML)&&/Jobs board/.test(document.querySelector('#tabbody').innerHTML),'the Guild tab shows the guild hall and the jobs board');
         const old=rb.migrate({v:2,chars:[JSON.parse(JSON.stringify(B2))],cur:B2.id,last:Date.now(),tab:'quests'});check(!old.guild,'saves from before the guild load unchanged');
         rb.S.chars=keepC;rb.S.cur=keepCur;rb.S.guild=keepG;rb.S.bank=keepB;if(!keepG)delete rb.S.guild;if(!keepB)delete rb.S.bank;rb.S.tab='quests';if(H())rb.boot();}
+      // Account-wide guild raid rosters: owned companions, job reservations and persistent memories.
+      {const keepC=rb.S.chars,keepCur=rb.S.cur,keepG=rb.S.guild,keepB=rb.S.bank;
+        const lead=rb.newHero('Guildraider','concord','human','mage'),owner=rb.newHero('Guildhost','concord','stonekin','warrior');
+        lead.lvl=owner.lvl=LEVEL_CAP;lead.hollowKey=true;rb.S.chars=[lead,owner];rb.S.cur=lead.id;rb.S.guild={jobs:{}};rb.S.bank={};rb.boot();
+        const ns=owner.npcs.slice(0,8),classes=['warrior','priest','priest','priest','mage','rogue','hunter','mage'];
+        ns.forEach((n,i)=>{n.cls=classes[i];n.met=true;n.aff=AFFINITY[2].at;n.offset=0;});ns[0].id=lead.npcs[0].id;
+        check(raidCandidates().length===1&&!raidGuild(memberKey(owner.id,ns[0].id)),'without a founded guild, other heroes\' companions stay unavailable');
+        Object.assign(rb.S.guild,{name:'The Shared Lantern',founded:Date.now(),level:1,xp:0,members:{}});ns.forEach(n=>addMember(n,owner,true));
+        const keys=ns.map(n=>memberKey(owner.id,n.id)),first=keys[0],alt='alt'+owner.id,ids=autoRaid();
+        check(ids.length===9&&keys.every(k=>ids.includes(k))&&ids.includes(alt)&&raidProblem(ids)==='','a guild gathers nine others across heroes, with two tanks and three healers');
+        check(npcOf(first).id===first&&npcOf(first).name===ns[0].name&&npcOf(ns[0].id)===lead.npcs[0],'owner-qualified ids resolve the right companion even when local ids collide');
+        ns[0].offset=-2;check(npcLvl(npcOf(first))===LEVEL_CAP-2&&compStats(npcOf(first)).lvl===LEVEL_CAP-2,'guild companions keep their owner\'s level and offset in combat');
+        ns[0].offset=-3;check(!raidCandidates().some(n=>n.id===first)&&/available/.test(raidProblem(ids)),'a low-level member cannot bypass eligibility with a direct raid call');ns[0].offset=0;
+        ns[0].met=false;check(!raidCandidates().some(n=>n.id===first),'an unmet companion cannot join');ns[0].met=true;
+        ns[0].aff=0;check(!raidCandidates().some(n=>n.id===first),'a stranger cannot join');ns[0].aff=AFFINITY[2].at;
+        owner.dun={id:'rootrot'};check(raidCandidates().length===0,'a hero in a dungeon and their companions stay with that expedition');owner.dun=null;
+        const m=rb.S.guild.members[first];delete rb.S.guild.members[first];check(!npcOf(first)&&!raidCandidates().some(n=>n.id===first),'a dismissed guild adventurer is not a raider');rb.S.guild.members[first]=m;
+        const key0=TABS.friends.key();delete rb.S.guild.members[first];check(TABS.friends.key()!==key0,'the Friends tab refreshes when the guild raid pool changes');rb.S.guild.members[first]=m;
+        check(ROSTER.assign(first,'mine')&&ROSTER.assign(owner.id,'mine'),'future raiders can work before gathering');
+        rb.S.guild.jobs[first].since-=3600e3;rb.S.guild.jobs[String(owner.id)].since-=3600e3;const due=Math.floor(3600/JOBS.mine.every(first))+Math.floor(3600/JOBS.mine.every(owner.id));
+        check(!startRaid(ids.slice(1))&&ROSTER.jobOf(first)==='mine'&&bank().ore===0,'a rejected raid leaves jobs and earnings untouched');
+        lead.party=[lead.npcs[0].id];syncParty();const oldParty=lead.party.slice();
+        check(startRaid(ids)&&rb.C.party.length===9&&rb.C.party.some(p=>p.id===first),'guild raiders enter through the existing ten-person combat engine');
+        updateWorld();check(rb.C.party.every(p=>document.getElementById('pm-'+p.id)&&document.getElementById('pmt-'+p.id).textContent.includes('/')),'all owner-qualified raiders have working health frames');
+        rb.spawnDungeon();const mobHP=rb.C.mob.hp;for(let i=0;i<20;i++){rb.C.lastInput=rb.C.run;rb.step(.1);}check(rb.C.mob&&rb.C.mob.hp<mobHP&&rb.C.party.length===9,'the shared roster fights through real raid combat steps');
+        check(!ROSTER.jobOf(first)&&!ROSTER.jobOf(owner.id)&&bank().ore===due,'gathering settles earned work once and stops the selected jobs');const ore=bank().ore;supplyTick();check(bank().ore===ore,'stopped raid jobs never pay twice');
+        check(!ROSTER.assign(first,'mine')&&!ROSTER.assign(owner.id,'mine')&&!dismissMember(first),'active raiders cannot also work or leave the guild');
+        const savedMood=m.mood;m.mood=1;m.at=Date.now()-1000;guildTick();check(rb.S.guild.members[first]===m&&!lead.log.some(t=>t.includes(ns[0].name+' left ')),'an unhappy attending member stays through the raid without false departure messages');m.mood=savedMood;
+        const before=ns[0].aff,mood=m.mood;addAff(npcOf(first),2,'Held the line with another guild hero.');moodBump(npcOf(first),6);
+        check(ns[0].aff===before+2&&ns[0].notes[0]==='Held the line with another guild hero.'&&m.mood===mood+6,'raid friendship, memories and mood reach the original companion');
+        m.at-=3600e3;const happy=m.mood;guildTick();check(m.mood>happy,'time in a guild raid raises the attending member\'s mood');
+        rb.S.cur=owner.id;rb.boot();check(!workerCanWork(first)&&!workerCanWork(owner.id)&&!workerCanWork(lead.id)&&!dismissMember(first),'switching heroes leaves the saved raid\'s members reserved');rb.S.cur=lead.id;rb.boot();
+        rb.save();const restored=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1')));Object.assign(rb.S,restored);rb.boot();
+        const loadedOwner=charOf(owner.id),loadedLead=H(),loadedNpc=loadedOwner.npcs.find(n=>n.id===ns[0].id);
+        check(loadedLead.party.includes(first)&&rb.C.party.length===9&&npcOf(first).name===loadedNpc.name&&loadedNpc.aff===before+2,'a saved raid reloads all nine raiders and their persistent friendship');
+        check(!Object.prototype.hasOwnProperty.call(loadedNpc,'guildKey')&&loadedNpc.id===ns[0].id&&loadedNpc.offset===0,'runtime raid views add no proxy fields to the saved companion');
+        const aff=loadedNpc.aff;loadedLead.dun.step=6;raidFinish();
+        check(!loadedLead.dun&&loadedLead.party.join()===oldParty.join()&&loadedNpc.aff===aff+15&&loadedNpc.notes.some(n=>/Cleared The Hollow Throne/.test(n)),'finishing the raid remembers it on the owning hero and restores the leader\'s party');
+        check(workerCanWork(first)&&workerCanWork(owner.id)&&!ROSTER.jobOf(first),'raiders are free afterward; jobs stay stopped until assigned again');
+        check(/guild adventurers/.test(raidSection())&&/jobs stay stopped/.test(raidSection()),'the raid page explains the shared roster and job handoff');
+        rb.S.chars=keepC;rb.S.cur=keepCur;rb.S.guild=keepG;rb.S.bank=keepB;if(!keepG)delete rb.S.guild;if(!keepB)delete rb.S.bank;rb.S.tab='quests';if(H())rb.boot();}
       // S4: the shared world kit, and walkable Realmbound towns
       {const m=TOWN.map;check(m.rows.length===16&&m.rows.every(r=>r.length===28),'the town map is 28 by 16');
         const tw=rb.newHero('Towncheck','concord','human','warrior');tw.lvl=20;tw.mode='focus';const keepC=rb.S.chars,keepCur=rb.S.cur;rb.S.chars=[tw];rb.S.cur=tw.id;rb.boot();rb.C.phase='intown';rb.C.lastInput=rb.C.run;

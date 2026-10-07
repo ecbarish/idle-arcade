@@ -39,6 +39,10 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-07** — Realmbound guild raids can draw adventurers from all your heroes, at their owners' levels.
+  Gathering pays and stops their jobs; raiders stay reserved across hero switches and reloads, then are free
+  when the run ends. Friendship and memories stay with the original companion. Existing raid gates and balance remain.
+
 - **2026-10-09 (late night)** — **Realmbound's towns are places now.** Arriving in town, the scene turns into the hub,
   seen in HD-2D like Wildbond: walk around with the arrow keys or WASD or by tapping, and talk with Enter. The Inn
   heals everyone, the Smithy buys your junk and repairs, the Trainer, the Stable and the **Guild hall** open their

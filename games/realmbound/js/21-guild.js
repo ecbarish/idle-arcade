@@ -29,8 +29,14 @@ function workerOf(id) {
 function moodMult(id) { const w = workerOf(id); if (!w || w.kind !== 'adv') return 1; return w.m.mood >= 70 ? 1.1 : w.m.mood < 30 ? .8 : 1; }
 function workerCanWork(id) {
   const w = workerOf(id), h = H(); if (!w || !h) return false;
-  if (w.kind === 'char') return String(w.c.id) !== String(h.id);
+  if (w.kind === 'char') return String(w.c.id) !== String(h.id) && !(w.c.dun && w.c.dun.raid) && !S.chars.some(c => c.dun && c.dun.raid && (c.party || []).includes('alt' + w.c.id));
+  if (memberRaiding(id)) return false;
   return !(String(w.hero.id) === String(h.id) && (h.party || []).includes(w.n.id)); // not while they're in your party
+}
+/* A saved raid reserves its adventurers even while you play another hero. */
+function memberRaiding(key) {
+  const a = advParts(key); if (!a || !a.hero) return false;
+  return S.chars.some(c => c.dun && c.dun.raid && ((c.party || []).includes(key) || (String(c.id) === String(a.hero.id) && (c.party || []).some(id => String(id) === a.npcId))));
 }
 const memberKey = (heroId, npcId) => `adv:${heroId}:${npcId}`;
 function isMember(n, h) { h = h || H(); return guildOn() && !!G().members[memberKey(h.id, n.id)]; }
@@ -56,7 +62,7 @@ function foundGuild(name) {
 }
 function addMember(n, h, quiet) { G().members[memberKey(h.id, n.id)] = { mood: 60, at: Date.now(), joined: Date.now() }; if (!quiet) { addAff(n, 5, `Joined ${G().name}.`); toast(`${n.name} joins ${G().name}`); } }
 function inviteToGuild(npcId) { const h = H(), n = npcOf(npcId); if (!guildOn() || !n || n.alt || affLvl(n) < 2 || isMember(n, h)) return false; addMember(n, h); say(n, 'thanks'); return true; }
-function dismissMember(key) { if (!G().members || !G().members[key]) return false; ROSTER.stop(key); delete G().members[key]; return true; }
+function dismissMember(key) { if (!G().members || !G().members[key] || memberRaiding(key)) return false; ROSTER.stop(key); delete G().members[key]; return true; }
 /* guild XP and levels */
 function guildXP(n, why) {
   if (!guildOn() || !(n > 0)) return; const g = G(); g.xp += n;
@@ -64,18 +70,18 @@ function guildXP(n, why) {
 }
 function guildNext() { const g = G(); return g.level >= GUILD_MAX ? null : GUILD_LVL[g.level]; }
 /* mood: in your party +6 an hour, on a job +2 (up to 85), benched -1 (at most 24 hours counted while away) */
-function moodBump(n, v, h) { h = h || H(); if (!guildOn() || !n) return; const m = G().members[memberKey(h.id, n.id)]; if (m) m.mood = clamp(m.mood + v, 0, 100); }
+function moodBump(n, v, h) { h = h || H(); if (!guildOn() || !n) return; const m = G().members[n.guildKey || memberKey(h.id, n.id)]; if (m) m.mood = clamp(m.mood + v, 0, 100); }
 function guildTick(now) {
   if (!guildOn()) return; now = now || Date.now(); const h = H();
   for (const [key, m] of Object.entries(G().members)) {
     const w = workerOf(key); if (!w) { delete G().members[key]; continue; }
     const hrs = Math.min(24, Math.max(0, (now - m.at) / 36e5)); m.at = now; if (!hrs) continue;
-    const inParty = h && String(w.hero.id) === String(h.id) && (h.party || []).includes(w.n.id) && C && C.party && C.party.length;
+    const inParty = memberRaiding(key) || h && String(w.hero.id) === String(h.id) && (h.party || []).includes(w.n.id) && C && C.party && C.party.length;
     const working = !!ROSTER.jobOf(key);
     m.mood = clamp(m.mood + (inParty ? 6 * hrs : working ? Math.min(2 * hrs, Math.max(0, 85 - m.mood)) : -hrs), 0, 100);
     if (m.mood < 30 && !m.warned) { m.warned = true; toast(`${w.name} feels overlooked by ${G().name}`); slog(`${w.name} feels overlooked. Group with them, give them a job or some loot.`); }
     if (m.mood >= 40) m.warned = false;
-    if (m.mood < 10) { dismissMember(key); toast(`${w.name} has left ${G().name}`); slog(`${w.name} left ${G().name}, feeling forgotten.`); }
+    if (m.mood < 10 && dismissMember(key)) { toast(`${w.name} has left ${G().name}`); slog(`${w.name} left ${G().name}, feeling forgotten.`); }
   }
 }
 /* the guild hall: drawn at the top of the Guild tab (18-supplies.js) */
@@ -100,7 +106,7 @@ function guildHTML() {
   o += mem.length ? mem.map(w => { const k = memberKey(w.hero.id, w.n.id), mood = Math.round(w.m.mood), face = mood >= 70 ? 'happy' : mood >= 30 ? 'content' : 'unhappy';
     return `<div class="rowl"><div class="l"><b style="color:${CLASSES[w.cls].col}">${w.name}</b> <span class="meta">level ${w.lvl} ${CLASSES[w.cls].name} · ${String(w.hero.id) === String(h.id) ? 'your companion' : `${w.hero.name}'s companion`} · ${face}</span>
       <div class="aff" title="Mood ${mood}"><i style="width:${mood}%;background:${mood >= 70 ? '#7cf08a' : mood >= 30 ? '#f2c14e' : '#e0483e'}"></i></div></div>
-      <div class="r"><button class="btn sm alt" data-act="guilddismiss" data-arg="${k}">Dismiss</button></div></div>`; }).join('') : '<p class="meta">No adventurers yet. Invite companions who are your Friends.</p>';
+      <div class="r"><button class="btn sm alt" data-act="guilddismiss" data-arg="${k}" ${memberRaiding(k) ? 'disabled title="Return from the raid before dismissing this member"' : ''}>Dismiss</button></div></div>`; }).join('') : '<p class="meta">No adventurers yet. Invite companions who are your Friends.</p>';
   if (cand.length) o += `<p class="meta" style="margin-top:6px">Could join: ${cand.map(n => `<button class="btn sm" data-act="guildinvite" data-arg="${n.id}">Invite ${n.name}</button>`).join(' ')}</p>`;
   return o;
 }
@@ -108,7 +114,7 @@ document.addEventListener('click', e => {
   const el = e.target.closest('[data-act]'); if (!el || !H()) return; const a = el.dataset.act, arg = el.dataset.arg;
   if (a === 'guildfound') { if (foundGuild(($('#guildName') || {}).value)) save(); }
   else if (a === 'guildinvite') { if (inviteToGuild(Number(arg))) save(); }
-  else if (a === 'guilddismiss') { const w = workerOf(arg); if (w && arm(el, 'Dismiss', 'Click again to dismiss')) { dismissMember(arg); line(`${w.name} leaves the guild on good terms.`, 'l-sys'); save(); } else return; }
+  else if (a === 'guilddismiss') { const w = workerOf(arg); if (w && arm(el, 'Dismiss', 'Click again to dismiss')) { if (!dismissMember(arg)) { err('Return from the raid before dismissing this member.'); return; } line(`${w.name} leaves the guild on good terms.`, 'l-sys'); save(); } else return; }
   else return;
   renderTab(true);
 });

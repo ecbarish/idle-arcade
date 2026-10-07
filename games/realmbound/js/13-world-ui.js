@@ -68,8 +68,8 @@ function updateWorld(){
   // party frames
   const pfr=$('#partyframes');pfr.hidden=!C.party.length;
   if(C.party.length){const pk=C.party.map(p=>p.id).join(',');if(pfr.dataset.k!==pk){pfr.dataset.k=pk;
-      pfr.innerHTML=C.party.map(p=>`<div class="pm" id="pm-${p.id}"><div class="pn"><span style="color:${CLASSES[p.n.cls].col}">${p.n.name}</span><span class="role">${ROLE_NAME[ROLE_OF[p.n.cls]]} · ${npcLvl(p.n)}</span></div><div class="bar b-hp"><i id="pmh-${p.id}"></i><span id="pmt-${p.id}"></span></div></div>`).join('');}
-    for(const p of C.party){const mx=compStats(p.n).hpMax;$('#pm-'+p.id).classList.toggle('dead',p.dead);$('#pmh-'+p.id).style.width=(p.hp/mx*100)+'%';$('#pmt-'+p.id).textContent=p.dead?'Fallen':`${Math.ceil(p.hp)} / ${mx}${p.chill?' · Chill '+p.chill:''}`;}}
+      pfr.innerHTML=C.party.map(p=>`<div class="pm" id="pm-${p.id}"><div class="pn"><span style="color:${CLASSES[p.n.cls].col}">${p.n.name}</span><span class="role">${ROLE_NAME[roleOf(p.n)]} · ${npcLvl(p.n)}</span></div><div class="bar b-hp"><i id="pmh-${p.id}"></i><span id="pmt-${p.id}"></span></div></div>`).join('');}
+    for(const p of C.party){const mx=compStats(p.n).hpMax;document.getElementById('pm-'+p.id).classList.toggle('dead',p.dead);document.getElementById('pmh-'+p.id).style.width=(p.hp/mx*100)+'%';document.getElementById('pmt-'+p.id).textContent=p.dead?'Fallen':`${Math.ceil(p.hp)} / ${mx}${p.chill?' · Chill '+p.chill:''}`;}}
   // someone you meet on the road
   const ec=$('#enccard'),e=C.enc,en=e&&npcOf(e.id);ec.hidden=!en;
   if(en){const ek=e.id+e.kind+e.waved+h.party.length;if(ec.dataset.k!==ek){ec.dataset.k=ek;const K2=CLASSES[en.cls];

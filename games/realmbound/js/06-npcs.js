@@ -24,7 +24,7 @@ function genNpcs(faction){const names=NPC_NAMES[faction].slice().sort(()=>R()-.5
     hair:pick(['#6b4423','#e8c070','#2b2b2b','#a03020','#d8d8d8','#4a2a1a','#7a5ab0'])}));}
 function npcLvl(n){return clamp(H().lvl+n.offset,1,LEVEL_CAP);}
 function npcZone(n){return npcLvl(n)<10?FACTIONS[H().faction].start:npcLvl(n)<20?'fens':npcLvl(n)<30?'ashen':npcLvl(n)<40?'frostmere':npcLvl(n)<45?'barrowfield':npcLvl(n)<52?'hollowcrown':'crownheart';}
-function npcOf(id){return (H().npcs||[]).find(n=>n.id===id)||raidAlt(id);} // raidAlt: your other characters as raiders (19-raid.js)
+function npcOf(id){return (H().npcs||[]).find(n=>n.id===id)||raidAlt(id)||raidGuild(id);} // raid views: your other characters and their guild companions (19-raid.js)
 function noteNpc(n,t){n.notes=n.notes||[];n.notes.unshift(t);if(n.notes.length>6)n.notes.length=6;}
 function say(n,kind){const L=PERSONALITY[n.pers].lines[kind];if(L)line(`${n.name}: ${pick(L)}`,'l-say');}
 function addAff(n,v,note){const b=affLvl(n);n.aff=Math.max(0,n.aff+v);n.met=true;if(note)noteNpc(n,note);const a=affLvl(n);

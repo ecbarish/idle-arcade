@@ -57,6 +57,10 @@ the Heartwood Vault (56+), an original zone tune and the Hollow Key gates. `ch14
 Pacing is recorded in `docs/realmbound-40-60.md`. Evan kept the strict file list: the quest-log message for missing
 dungeon clears remains a separate UI follow-up; `qState()` enforces the gate.
 
+**Guild raid rosters ready for review:** `codex/realmbound-guild-raiders` lets invited adventurers from every
+hero join the Hollow Throne. Their original levels, friendship and memories persist; gathering settles and
+stops jobs, and saved raid members remain reserved across hero switches. No new save fields.
+
 **Hub and promo pages:** `index.html`, `promo.html` (Realmbound), `promo-wildbond.html`.
 
 **T27 ready for review:** `codex/wildbond-stillreed` adds Stillreed Basin (52-60), nine species, Wren's ferry rematch,
@@ -116,7 +120,7 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    (a check fails without one).
 14. **Then:** the guild, Hollow Crown part 2 and the raid (Realmbound); Wildbond areas 5-8 (bands 52-60, 58-64, 62-68,
    66-72) and the league, contests and races, ranch cosmetics for challenge titles, Modern 3D.
-15. ~~**S3: shared roster and jobs**~~ — done by Claude 2026-10-08 with R1; Herbalism (potions) and Questing added 2026-10-09; **the guild done 2026-10-09** (`js/21-guild.js`; rules in docs/realmbound-40-60.md, "The guild as built"). Next guild ideas: members' requests, a walkable guild hall (S4 world kit), guild members filling raid rosters. Originally: assign members to jobs, cap the
+15. ~~**S3: shared roster and jobs**~~ — done by Claude 2026-10-08 with R1; Herbalism (potions) and Questing added 2026-10-09; **the guild done 2026-10-09** (`js/21-guild.js`; rules in docs/realmbound-40-60.md, "The guild as built"). **Guild-wide raid rosters done by Codex, 2026-10-07; awaiting review** (`codex/realmbound-guild-raiders`); members' requests are ready in PR #25. Next guild ideas: a walkable guild hall (S4 world kit), guild members filling raid rosters. Originally: assign members to jobs, cap the
    earnings like rested XP, one return report when you come back. Realmbound's guild uses it first, then Starfall
    Guild's adventurers, Wildbond ranch jobs, and Diamond Career's team. Plan: `docs/research/decisions.md` (the
    shared-systems table). After that, S4: the world kit (`shared/world/`, Wildbond's walking world for every game).
@@ -165,6 +169,12 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-07 Codex: pulled Claude's S4 towns and completed guild-wide raid rosters on
+  `codex/realmbound-guild-raiders`, awaiting review, no merge. All browser checks pass: Realmbound 1475,
+  Wildbond 619, Starfall 48; saves/hub restored, zero errors. Gather button, nine health frames, reserved
+  members, desktop/phone layouts checked. Combined with latest S4 main and all six earlier PRs:
+  Realmbound 1506, Wildbond 769, Starfall 48, sound 21, all pass. S4 part 2 remains for Claude; PRs #22–27 also await review.
 
 - 2026-10-09 Claude (late night): wrote T28 for ChatGPT (Wildbond Hollowecho Hills); built S4 part 1, the shared
   world kit (walker + HD-2D renderer), moved Wildbond's HD-2D onto it, and made Realmbound's towns walkable (inn,
