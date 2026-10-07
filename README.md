@@ -39,7 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
-- **2026-10-07** — Starfall Guild is split into small classic scripts and its unchanged stylesheet (T25).
+- **2026-10-08 (night, ChatGPT)** — Starfall Guild is split into small classic scripts and its unchanged stylesheet (T25).
+  Wildbond has 76 new browser checks for its newer systems (T24).
   Adds a browser check page for old saves, recruiting, combat, town purchases and seasons; gameplay and saves are unchanged.
 
 - **2026-10-08 (night, later)** — Decisions from the research brief (`docs/research/decisions.md`). Wildbond: the main
