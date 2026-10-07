@@ -51,6 +51,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 - 2026-10-07: Wildbond battles in 16-bit and later styles keep their region's scenery, weather and night: woods, coast water, highland stone, cloud peaks and basin reeds. Combat and earlier art styles are unchanged.
 - 2026-10-07: Wildbond challenge titles now display four original pennants in the Ranch tab. Existing earned titles work immediately; these decorations give no stat bonuses.
 - 2026-10-07: Quiet rain sound follows the weather in Wildbond and Realmbound through the shared sound engine. Off by default; fades between conditions and stops on hidden pages or sound off. Shared sound checks: tests/sound.html.
+- 2026-10-07: Realmbound guild adventurers can ask a first supply favor in their own voice. Help in town from the shared bank for mood, friendship and guild XP; each favor is recorded once, even after dismissal and re-invitation.
 
 - **2026-10-07** — Wildbond area 5: Stillreed Basin (52–60), beyond Cloudglass Pass. Nine new species include
   Reedlet's evolution into Ferrycrest and the guardian Stillwake. Wren helps free a ferry rope before the rematch;

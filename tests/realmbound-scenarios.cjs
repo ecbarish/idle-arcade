@@ -513,6 +513,32 @@ module.exports = function scenarios() {
           zoneWeather=()=>weather;check(rainLevel()===level,'rain sound level follows '+weather);}
           zoneWeather=()=> 'storm';hero.dun={id:'sanctum'};check(rainLevel()===0,'dungeon ambience has no outdoor rain sound');
         }finally{zoneWeather=keepWeather;rb.S.chars=rb.S.chars.filter(c=>c!==hero);rb.S.cur=keepCur;if(H())rb.boot();}}
+      // Member requests: supply handoff, friendship, persistence and protection against repeat rewards.
+      {const keepG=rb.S.guild,keepB=rb.S.bank,keepChars=rb.S.chars,keepCur=rb.S.cur;
+        const lead=rb.newHero('Requestlead','concord','human','warrior'),alt=rb.newHero('Requestalt','concord','human','mage');lead.lvl=45;alt.lvl=45;
+        rb.S.chars=[lead,alt];rb.S.cur=lead.id;rb.S.bank={ore:0,kit:0,herb:0,potion:0};rb.S.guild={jobs:{}};rb.boot();
+        const npc=lead.npcs[0],key=memberKey(lead.id,npc.id);check(!memberRequest(key)&&!fulfillMemberRequest(key),'requests need a founded guild and real member');
+        rb.S.guild={jobs:{},name:'The Helpers',founded:Date.now(),level:1,xp:0,members:{}};npc.met=true;npc.aff=30;addMember(npc,lead,true);
+        check(memberRequest(key)&&!rb.S.guild.requests,'legacy guild gets a request without rendering a new save field');
+        for(const cls of Object.keys(CLASSES)){npc.cls=cls;check(MEMBER_REQUESTS[cls]&&memberRequest(key).count>0,'first favor exists for '+cls);}
+        npc.cls='warrior';rb.C.phase='seek';rb.S.bank.kit=2;const before=JSON.stringify(rb.S);check(!fulfillMemberRequest(key)&&JSON.stringify(rb.S)===before,'field requests cannot spend supplies or award rewards');
+        rb.C.phase='intown';lead.dun={id:'sanctum'};check(!fulfillMemberRequest(key)&&rb.S.bank.kit===2,'requests cannot be completed inside a dungeon');lead.dun=null;
+        rb.S.bank.kit=0;check(!fulfillMemberRequest(key)&&rb.S.bank.kit===0&&rb.S.guild.xp===0,'missing supplies leave progress unchanged');
+        rb.S.bank.kit=2;check(ROSTER.assign(key,'mine'),'request member can still take a normal job');check(!fulfillMemberRequest(key)&&/Return/.test(requestProblem(key))&&rb.S.bank.kit===2,'a working member must return before a handoff');ROSTER.stop(key);
+        npc.pers='shy';const mood=rb.S.guild.members[key].mood,aff=npc.aff;
+        rb.S.tab='supplies';renderTab(true);const button=document.querySelector('[data-act="guildrequest"][data-arg="'+key+'"]');check(button&&!button.disabled,'ready request appears as an enabled Help button');button.click();
+        check(rb.S.bank.kit===1&&rb.S.guild.xp===15&&rb.S.guild.members[key].mood===mood+10&&npc.aff===aff+3,'actual Help click consumes one kit and awards exactly the displayed rewards');
+        check(npc.notes.some(n=>n.includes('shield worth lending'))&&lead.log.some(n=>n.includes('Helped '+npc.name)),'favor is recorded in companion memory and hero journal');
+        check(!memberRequest(key)&&!fulfillMemberRequest(key)&&rb.S.bank.kit===1&&rb.S.guild.xp===15,'a double click cannot consume supplies or award rewards again');
+        check(/Helped: A shield worth lending/.test(guildHTML()),'completed favor stays visible in the hall');
+        dismissMember(key);check(inviteToGuild(npc.id)&&!memberRequest(key)&&!fulfillMemberRequest(key)&&rb.S.guild.xp===15,'dismissal and reinvitation do not reset a completed favor');
+        const other=alt.npcs[0];other.cls='priest';other.pers='scholarly';other.met=true;other.aff=30;addMember(other,alt,true);const otherKey=memberKey(alt.id,other.id);rb.S.bank.potion=1;
+        const ownAff=npc.aff;check(fulfillMemberRequest(otherKey)&&rb.S.bank.potion===0&&other.aff===33&&npc.aff===ownAff&&rb.S.guild.members[otherKey].mood===70,'any hero can help another hero\'s member through the shared bank without changing the wrong companion');
+        const requestCopy=JSON.stringify(rb.S.guild.requests);rb.save();const saved=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1')));check(JSON.stringify(saved.guild.requests)===requestCopy,'completed requests persist through save and migration');
+        const legacy=JSON.parse(JSON.stringify(saved));delete legacy.guild.requests;check(Object.keys(rb.migrate(legacy).guild.requests).length===0,'legacy guild saves default the request ledger');
+        check(!fulfillMemberRequest('adv:missing:missing')&&!fulfillMemberRequest(String(lead.id)),'stale or character keys cannot claim adventurer favors');
+        check(Object.keys(PERSONALITY).every(k=>REQUEST_VOICE[k]&&REQUEST_VOICE[k].hello&&REQUEST_VOICE[k].thanks),'every existing personality has original offer and thanks dialogue');
+        rb.S.chars=keepChars;rb.S.cur=keepCur;rb.S.guild=keepG;rb.S.bank=keepB;if(!keepG)delete rb.S.guild;if(!keepB)delete rb.S.bank;rb.S.tab='quests';if(H())rb.boot();}
       // T21: every generated item category follows the widened name bands.
       check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');
       check(BLUE_PRE.length===17&&new Set(BLUE_PRE).size===17,'rare prefix pool retains seven names and adds ten distinct dungeon names');

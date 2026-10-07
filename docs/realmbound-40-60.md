@@ -282,4 +282,21 @@ counted at once; loot +10, a dungeon clear together +8, a raid boss +6; below 30
 70+ works 10% faster, below 30 20% slower. Jobs: adventurers mine, gather, guard (12 guild XP a watch, a watch every
 15 min); characters can also quest. Guild XP: quest 10, dungeon clear 60, raid boss 150. Levels at 0/600/1800/4200/8400
 guild XP (1-5): +2% XP per level for every character, job slots 3/3/4/4/5/6. Not yet: a walkable guild hall (the world
-kit), guild-wide raid rosters, members' requests and personal stories.
+kit), guild-wide raid rosters and longer personal stories. First member requests are built below.
+
+
+### First member requests (Codex, 2026-10-07)
+
+A small first favor for every adventurer in the guild, under Evan's lunch-session development authorization.
+The Guild tab shows the member's request in their existing personality's voice. Warrior and Rogue ask for one
+repair kit, Mage for six ore for a practice-focus stand, Priest for one healing potion for a returning guard,
+Hunter for four herbs for the animals. Materials come only from the account's shared supply bank. Bring them to
+a town and return the member from any job before handing them over; any of your heroes may help any guild member.
+
+Each favor gives +10 mood (capped at 100), +3 affinity and 15 guild XP, plus a companion memory and hero journal
+entry. The supplies are consumed; these gifts do not change gear, jobs, damage, healing or quest XP. There is no
+expiry or daily reset. A one-time account ledger, S.guild.requests[memberKey], stores the title and completion
+time. It survives dismissal, mood departure, re-invitation and hero switching, so favor rewards cannot be farmed
+by recruiting again. Older founded-guild saves default the ledger to an empty object in migrate(); pre-guild
+saves remain unchanged. New guilds start with an empty ledger. This is a first supply favor, not a new personal
+quest chain; larger stories and the world-kit hall remain separate work.

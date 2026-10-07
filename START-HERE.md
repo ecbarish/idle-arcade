@@ -80,6 +80,9 @@ pennants earned from the existing challenge titles. Cosmetics only; old title re
 **Rain audio ready for review:** `codex/shared-rain-audio` adds quiet rain through the shared sound engine.
 Wildbond follows the route weather (including battles), Realmbound follows rain/drizzle/storm outdoors; towns in
 Wildbond and Realmbound dungeons stay dry. Sound remains off by default; either enabled mode includes the rain.
+**Guild member requests ready for review:** `codex/realmbound-member-requests` gives adventurers a first supply
+favor with their own voice. Town handoff grants mood/friendship/guild XP once; the account ledger prevents repeat
+rewards after dismissal. Design and migration rules are recorded in `docs/realmbound-40-60.md`.
 
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
@@ -130,6 +133,8 @@ Wildbond and Realmbound dungeons stay dry. Sound remains off by default; either 
 14. **Then:** the guild, Hollow Crown part 2 and the raid (Realmbound); Wildbond areas 5-8 (bands 52-60, 58-64, 62-68,
    66-72) and the league, contests and races, ranch cosmetics for challenge titles (done by Codex 2026-10-07, awaiting review: `codex/wildbond-challenge-pennants`), Modern 3D.
 15. ~~**S3: shared roster and jobs**~~ — done by Claude 2026-10-08 with R1; Herbalism (potions) and Questing added 2026-10-09; **the guild done 2026-10-09** (`js/21-guild.js`; rules in docs/realmbound-40-60.md, "The guild as built"). Next guild ideas: members' requests, a walkable guild hall (S4 world kit), guild members filling raid rosters. Originally: assign members to jobs, cap the
+   66-72) and the league, contests and races, ranch cosmetics for challenge titles, Modern 3D.
+15. ~~**S3: shared roster and jobs**~~ — done by Claude 2026-10-08 with R1; Herbalism (potions) and Questing added 2026-10-09; **the guild done 2026-10-09** (`js/21-guild.js`; rules in docs/realmbound-40-60.md, "The guild as built"). First member requests: done by Codex 2026-10-07, awaiting review (`codex/realmbound-member-requests`). Next guild ideas: personal stories, a walkable guild hall (S4 world kit), guild members filling raid rosters. Originally: assign members to jobs, cap the
    earnings like rested XP, one return report when you come back. Realmbound's guild uses it first, then Starfall
    Guild's adventurers, Wildbond ranch jobs, and Diamond Career's team. Plan: `docs/research/decisions.md` (the
    shared-systems table). After that, S4: the world kit (`shared/world/`, Wildbond's walking world for every game).
@@ -200,6 +205,9 @@ a default so work never waits.
   noise in effects or music mode, fades with weather, stops on off/hidden, one loop maximum. No save fields.
   Browser checks: Realmbound 1442, Wildbond 620, Starfall 48, shared sound 21; saves restored. Actual Web Audio
   measured rain signal, dry fade and zero hidden/off output. Combined with PRs #22–25: Realmbound 1465, Wildbond 761, Starfall 48, sound 21, all pass. Earlier PRs remain pending; S4 stays Claude's.
+- 2026-10-07 Codex: used Evan's lunch-session authorization for the guild's first member requests; chose one-time
+  supply favors, no deadlines, +10 mood/+3 friendship/15 guild XP. Browser checks: Realmbound 1457, Wildbond 619,
+  Starfall 48; saves restored. Combined validation of all four lunch PRs also passed: Realmbound 1457, Wildbond 760, Starfall 48. Branch `codex/realmbound-member-requests`, awaiting review; no merge. S4 remains Claude's.
 
 - 2026-10-09 Claude: merged ChatGPT's T27 (Wildbond area 5, Stillreed Basin, levels 52-60, Warden Olan, Reed Badge,
   Stillwake) and gave the basin its own mist and fireflies. Tests: Wildbond 619, Realmbound 1434, Starfall 48.
