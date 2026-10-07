@@ -43,6 +43,10 @@ a{color:inherit}
 .t-baseball{font-family:var(--f-sign);font-size:24px;color:#fff}
 .t-wildbond{font-family:var(--f-sign);font-size:26px;color:#fff;text-shadow:0 3px 0 #217a52}
 .t-otherworld{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:34px;color:#fff;text-shadow:0 0 14px rgba(140,200,255,.8)}
+.header-tools{display:flex;align-items:center;gap:12px;margin-top:12px}
+.version-label{font-size:12px;color:var(--dim)}
+.fb-btn{background:var(--line);border:none;color:var(--fg);padding:6px 12px;border-radius:4px;font:inherit;font-size:13px;cursor:pointer}
+.fb-btn:hover{background:var(--muted);color:var(--bg)}
 .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
 .status{align-self:flex-start;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 9px;border-radius:999px;border:1px solid currentColor}
 .s-play{color:var(--ok)} .s-proto{color:var(--proto)} .s-design{color:var(--dim)}
@@ -77,6 +81,7 @@ a{color:inherit}
   <header class="marquee">
     <h1 class="sign">Idle <span>Arcade</span></h1>
     <p class="tag">A stable of idle and progression games. Each one saves on its own, so you can jump between them and pick up where you left off. New here? Meet <a href="promo.html" style="color:var(--marquee)">Realmbound →</a> or <a href="promo-wildbond.html" style="color:var(--ok)">Wildbond →</a></p>
+    <div class="header-tools"><span class="version-label">v1.0.0</span><div class="feedback-container"><button class="fb-btn" aria-haspopup="true" aria-expanded="false">Feedback</button></div></div>
   </header>
 
   <main class="shelf" id="shelf"></main>
@@ -89,9 +94,12 @@ a{color:inherit}
 </div>
 
 <script src="shared/engine.js"></script>
+<script src="shared/feedback.js"></script>
 <script>
 (function(){
 'use strict';
+const VERSION = '1.0.0'; // the arcade's version (L9)
+setupFeedback('The arcade homepage', VERSION, () => '');
 const GAMES=[
   {id:'primordial',title:'Primordial',tcls:'t-primordial',status:['Playable','s-play'],href:'games/primordial/index.html',
    blurb:'Grow from a single cell. Evolve instincts that play for you, draft random mutations, and restart through extinctions for permanent progress.',

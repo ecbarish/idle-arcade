@@ -38,7 +38,7 @@ and the arcade's homepage shows them off. Any assistant may push these forward w
 | L6 | **Credits** page and `CREDITS.md` for any outside assets | S | Polish | — | open | See CREATIVE.md "Outside assets" |
 | L7 | **Bug bash and balance pass**: full playthrough sims of both games, fix what they find | L | Polish | W1, W2 | open | Use the pacing sim methods in the design docs |
 | L8 | **Immersive homepage** that shows off the engines (living scene, sound, dialogue, creatures) | L | Art | G1, W2 | open | Evan: build once the games are further along (START-HERE) |
-| L9 | **Versioning and release notes**: a version number in each game, a release checklist | S | Polish | — | open | |
+| L9 | **Versioning and release notes**: a version number in each game, a release checklist | S | Polish | — | done 2026-10-10 (Jules) | HANDOFF.md "Releasing a version" |
 | L10 | **Accessibility**: keyboard play everywhere, colour contrast, readable fonts, screen-reader labels | M | Polish | — | open | |
 
 ## Graphics: light, fog and atmosphere (S6)
@@ -78,7 +78,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
 | F1 | **Issue forms** for playtest feedback, bugs and suggestions | S | Polish | — | done 2026-10-09 | `.github/ISSUE_TEMPLATE/`, docs/FEEDBACK.md |
-| F2 | **In-game "Send feedback" button** in every game: opens the right form with game, version, place and a small summary filled in (no personal data) | S | Polish | F1 | open | |
+| F2 | **In-game "Send feedback" button** in every game: opens the right form with game, version, place and a small summary filled in (no personal data) | S | Polish | F1 | done 2026-10-10 (Jules) | shared/feedback.js |
 | F3 | **Triage habit**: assistants read open issues at the start of a session (docs/FEEDBACK.md) | S | Process | F1 | done 2026-10-09 | In CLAUDE.md's start-of-session steps |
 | F4 | **Tester build notes**: a short "what to try" page for each release, linked from the homepage | S | Polish | L9 | open | |
 

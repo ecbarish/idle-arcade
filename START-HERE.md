@@ -109,6 +109,10 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-10 Claude: merged T29 (ChatGPT, Sunthread Commons, Wildbond 908 checks). Jules (Google's coding agent, first
+  task, L9 + F2) couldn't push from its sandbox, so Evan pasted its diff and Claude applied it with three fixes
+  (Wildbond's context read the wrong fields, Starfall's season field, `VERSION` placed above 'use strict').
+  **Note for Jules sessions:** Evan must press "Publish branch / Publish PR" in Jules's code panel to reach GitHub.
 - 2026-10-09 Claude (night, low on credits, planning only): Evan's new notes are now projects in docs/PROJECTS.md:
   the **Studio** (E1-E7: GM panel, save doctor, text/creature/quest editors, map painter, lighting tuner), the
   **feedback loop** (F1 done: GitHub issue forms for feedback, bugs, suggestions, docs/FEEDBACK.md; F2 in-game button),

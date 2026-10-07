@@ -9,6 +9,10 @@ body:
       label: Which game?
       options: [Wildbond, Realmbound, Starfall Guild, The arcade homepage, Other]
     validations: { required: true }
+  - type: input
+    id: context
+    attributes:
+      label: Game version and where you were (filled in automatically)
   - type: textarea
     id: what
     attributes:

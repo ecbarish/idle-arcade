@@ -1,4 +1,5 @@
 'use strict';
+const VERSION = '1.0.0'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
 /* Clicks, keys, the game loop and startup. */
 function findC(uid) { uid = Number(uid); return S.team.find(c => c.uid === uid) || S.ranch.find(c => c.uid === uid); }
 document.addEventListener('click', e => {
@@ -55,6 +56,7 @@ let started = false;
 function start() {
   if (started) return; started = true; load();
   if (!S.started) talk(SCENES.intro, () => openModal(startHTML())); else if (!S.team.length) openModal(startHTML());
+  setupFeedback('Wildbond', VERSION, () => { if (!S.started || !S.team.length) return 'Not started'; const lead = S.team[0], sp = SPECIES[lead.sp]; return `${BIOMES[S.biome] ? BIOMES[S.biome].name : S.biome}, ${S.badges.length} badge${S.badges.length === 1 ? '' : 's'}, lead: level ${lead.lvl} ${sp ? sp.name : lead.sp}`; }); // the Feedback menu (shared/feedback.js)
   renderSoundBtn();
   resize(); renderAll(); renderTabs(true);
   // time away: auto-explore keeps going at a gentle pace, manual play just rests

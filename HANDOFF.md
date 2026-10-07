@@ -16,6 +16,16 @@ https://ecbarish.github.io/idle-arcade/ (GitHub Pages serves the `main` branch).
 - Game state saves through `shared/engine.js` (`Arcade.save/load/report`). Keep old saves loading:
   Realmbound has a `migrate()` function for exactly this.
 
+## Releasing a version
+Each game has `const VERSION` in its `js/99-boot.js` (the hub: in `index.html`) and a small `vX.Y.Z` label in its
+header; keep both in step. To release:
+- Bump the version in every game that changed (and the hub if the arcade changed).
+- Run all four test pages (`tests/run.html`, `tests/wildbond.html`, `tests/starfall.html`, `tests/sound.html`).
+- Load an old save in each changed game to confirm it still works.
+- Check each changed game at phone width (375 px).
+- Add a README changelog entry headed with the version, and a dated START-HERE session-log line.
+- Optionally tag the release in git (`git tag vX.Y.Z`).
+
 ## Shared development notes
 
 [START-HERE.md](START-HERE.md) is the live shared record: where things stand, the ordered task queue and the session

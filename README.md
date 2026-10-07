@@ -39,6 +39,9 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **v1.0.0 (2026-10-10)** — **Version numbers and a Feedback button in every game** (built by Jules, Google's coding
+  agent, its first contribution). Each game and the homepage shows its version, and a Feedback button opens "Share
+  feedback", "Report a bug" or "Suggest an idea", with the game, version and where you are already filled in.
 - **2026-10-09 (evening)** — **Light and shadow, inspired by WoW: Forever.** A new shared light engine: the sun and
   moon cross the sky with each game's clock, and every hero, creature, tree, lamp post and building casts its own
   silhouette as a shadow that swings and stretches through the day (long and golden at dawn and dusk, faint under the

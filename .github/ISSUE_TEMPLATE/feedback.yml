@@ -10,6 +10,10 @@ body:
       options: [Wildbond, Realmbound, Starfall Guild, The arcade homepage, Other]
     validations: { required: true }
   - type: input
+    id: context
+    attributes:
+      label: Game version and where you were (filled in automatically)
+  - type: input
     id: time
     attributes:
       label: About how long did you play?

@@ -8,6 +8,10 @@ body:
     attributes:
       label: For which game?
       options: [Wildbond, Realmbound, Starfall Guild, A new game, The whole arcade]
+  - type: input
+    id: context
+    attributes:
+      label: Game version and where you were (filled in automatically)
   - type: textarea
     id: idea
     attributes:

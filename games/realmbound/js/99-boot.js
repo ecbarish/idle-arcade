@@ -1,4 +1,5 @@
 'use strict';
+const VERSION = '1.0.0'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
 /* =================== boot =================== */
 function boot(){
   const h=H();
@@ -20,6 +21,7 @@ function start(data){
   if(data&&data.S){S=migrate(data.S);boot();}else{S=migrate(Arcade.load(KEY));boot();if(H())away=offline((Date.now()-(H().lastPlayed||S.last||Date.now()))/1000,true);}
   if(away&&(away.kills||away.rested>0)&&H())openModal('offline',offlineHTML(away));
   if(window.claude&&window.claude.hot&&window.claude.hot.snapshot){try{window.claude.hot.snapshot(()=>({S:JSON.parse(JSON.stringify(S))}));}catch(e){}}
+  setupFeedback('Realmbound', VERSION, () => { const h = H(); if (!h) return 'Not started'; return `${ZONES[h.zone] ? ZONES[h.zone].name : h.zone}, level ${h.lvl} ${CLASSES[h.cls] ? CLASSES[h.cls].name : h.cls}`; }); // the Feedback menu (shared/feedback.js)
   resize();
   let lastT=performance.now(),uiT=0,chk=0;
   setInterval(()=>{const t=performance.now();let dt=(t-lastT)/1000;lastT=t;if(!H()||!C)return;
