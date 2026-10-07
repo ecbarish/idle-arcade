@@ -31,6 +31,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T22: Realmbound Hollow Crown, part 1** (ChatGPT, data): see the T22 section.
 - [x] **T24: Wildbond checks for the newer systems** (ChatGPT, tests only): see the T24 section.
 - [x] **T25: Split Starfall Guild into small files, add a test page** (ChatGPT, no behavior change): see the T25 section.
+- [x] **T26: Starfall Guild sound on the shared sound system** (Codex): see the T26 section; original town, delve and boss themes, guarded effects and browser checks.
 - [x] **T2: Creature game spec + shared creature module plan** (Claude). See docs/creature-game-design.md.
 - [x] **T3: Content for levels 30-40** (Codex): Frostmere, The Winter Road. See
   [chapter specification](realmbound-winter-road.md). Evan authorized the narrow progression spec while Claude

@@ -6,6 +6,7 @@ function arm(el,label,armedLabel){if(el.classList.contains('armed')){el.classLis
 document.addEventListener('click',e=>{
   const el=e.target.closest('[data-act]');if(!el)return;const a=el.dataset.act,arg=el.dataset.arg;
   switch(a){
+    case 'sound':SND.cycle();break;
     case 'tab':S.tab=arg;renderTab(true);break;
     case 'mode':S.buy=arg==='max'?'max':Number(arg);break;
     case 'lvl':levelUp(Number(arg),S.buy);break;
@@ -30,7 +31,7 @@ document.addEventListener('click',e=>{
     case 'import':try{importSave($('#saveTxt').value);closeModal();curKey=null;$('#saveMsg').textContent='Save imported.';}catch(err){$('#saveMsg').textContent="That text isn't a Starfall Guild save. Paste the whole exported block.";}break;
     case 'reset':if(arm(el,'Erase everything','Click again to erase')){S=fresh();boot0();save();closeModal();curKey=null;toast('Everything erased. A new guild opens its doors.');}break;
   }
-  updateUI();
+  updateUI();SND.render();
 });
 document.addEventListener('change',e=>{if(e.target.id==='autoAt'){S.autoAt=Math.max(1,Math.floor(Number(e.target.value)||1));e.target.value=S.autoAt;}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modalKind&&modalKind!=='region')closeModal();});

@@ -13,7 +13,7 @@ function start(data){
   if(data&&data.S){S=merge(data.S);D=derive();}else{const o=load();S=merge(o);D=derive();if(o)away=offline((now()-(S.last||now()))/1000);}
   boot0();S.last=now();
   if(window.claude&&window.claude.hot&&window.claude.hot.snapshot){try{window.claude.hot.snapshot(()=>({S:JSON.parse(JSON.stringify(S))}));}catch(e){}}
-  resize();renderTab(true);updateUI();
+  resize();renderTab(true);updateUI();SND.render();
   if(away&&away.gain>0&&!S.regionOffer)openModal('offline','Welcome back',offlineHTML(away));
   let lastT=performance.now(),uiT=0;
   setInterval(()=>{const t=performance.now(),dt=(t-lastT)/1000;lastT=t;

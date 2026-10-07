@@ -7,14 +7,14 @@ function bizMax(i){const b=BIZ[i],c0=b.base*Math.pow(b.growth,S.biz[i]);if(S.gol
 function bizUnlocked(i){return S.best>=BIZ[i].floor;}
 function buyBiz(i,mode){if(!bizUnlocked(i))return false;const k=mode==='max'?bizMax(i):Number(mode);if(k<=0)return false;const c=bizCostN(i,k);if(c>S.gold)return false;
   const before=Math.floor(S.biz[i]/25);S.gold-=c;S.biz[i]+=k;if(Math.floor(S.biz[i]/25)>before)toast(`${BIZ[i].name} income doubled!`,'var(--blue)');
-  const tot=S.biz.reduce((a,b)=>a+b,0);if(tot>S.stats.bizMax)S.stats.bizMax=tot;D=derive();return true;}
+  const tot=S.biz.reduce((a,b)=>a+b,0);if(tot>S.stats.bizMax)S.stats.bizMax=tot;D=derive();sfx('coin');return true;}
 function facCost(f){const l=S.fac[f.id]||0;return Math.ceil(f.base*Math.pow(f.mult,l));}
 function buyFac(id){const f=FAC.find(x=>x.id===id),l=S.fac[id]||0;if(l>=f.max)return false;const c=facCost(f);if(S.gold<c)return false;
-  S.gold-=c;S.fac[id]=l+1;const tot=Object.values(S.fac).reduce((a,b)=>a+b,0);if(tot>S.stats.facMax)S.stats.facMax=tot;D=derive();return true;}
+  S.gold-=c;S.fac[id]=l+1;const tot=Object.values(S.fac).reduce((a,b)=>a+b,0);if(tot>S.stats.facMax)S.stats.facMax=tot;D=derive();sfx('coin');return true;}
 function lvlCostN(a,k){const base=5*(1+0.5*a.star)*D.lvlM,r=1.16;return base*Math.pow(r,a.lvl-1)*(Math.pow(r,k)-1)/(r-1);}
 function lvlMax(a){const base=5*(1+0.5*a.star)*D.lvlM,r=1.16,c0=base*Math.pow(r,a.lvl-1);if(S.gold<c0)return 0;let k=Math.floor(Math.log(S.gold*(r-1)/c0+1)/Math.log(r));while(k>0&&lvlCostN(a,k)>S.gold)k--;return k;}
 function levelUp(id,mode){const a=S.party.find(x=>x.id===id);if(!a)return false;const k=mode==='max'?lvlMax(a):Number(mode);if(k<=0)return false;const c=lvlCostN(a,k);if(c>S.gold)return false;
-  S.gold-=c;const oldMax=D.pmax;a.lvl+=k;if(a.lvl>S.stats.maxLvl)S.stats.maxLvl=a.lvl;D=derive();if(!S.resting)S.php+=Math.max(0,D.pmax-oldMax);return true;}
+  S.gold-=c;const oldMax=D.pmax;a.lvl+=k;if(a.lvl>S.stats.maxLvl)S.stats.maxLvl=a.lvl;D=derive();if(!S.resting)S.php+=Math.max(0,D.pmax-oldMax);sfx('level');return true;}
 
 /* ================= tavern ================= */
 function rollStar(){const w=starWeights(S.fac.tavern||0,S.crest.rep||0);let t=w.reduce((a,b)=>a+b,0),r=Math.random()*t;for(let i=0;i<5;i++){r-=w[i];if(r<=0)return i+1;}return 1;}
@@ -23,7 +23,7 @@ function refreshBoard(){S.board=Array.from({length:D.boardN},()=>{S.nextId++;ret
 function rerollCost(){return Math.ceil((20+S.best*6)*Math.pow(1.5,S.rerolls));}
 function recruit(id){const a=S.board.find(x=>x.id===id);if(!a||S.party.length>=D.size)return false;const c=recruitCost(a);if(S.gold<c)return false;
   S.gold-=c;S.board=S.board.filter(x=>x.id!==id);S.party.push(a);S.stats.recruits++;const oldMax=D.pmax;D=derive();if(!S.resting)S.php+=D.pmax-oldMax;
-  log(`<b>${a.name}</b> the ${stars(a.star).replace(/☆/g,'')} ${CLASSES[a.cls].name} joined the guild.`);checkCombos();return true;}
+  log(`<b>${a.name}</b> the ${stars(a.star).replace(/☆/g,'')} ${CLASSES[a.cls].name} joined the guild.`);checkCombos();sfx('quest');return true;}
 function dismiss(id){const a=S.party.find(x=>x.id===id);if(!a)return;S.party=S.party.filter(x=>x.id!==id);D=derive();S.php=Math.min(S.php,D.pmax);log(`${a.name} left the guild.`);}
 function checkCombos(){for(const c of D.combos){if(!S.combosFound[c.id]){S.combosFound[c.id]=true;toast(`Combo found: ${c.name}! ${c.desc}`,'var(--gold)');log(`Combo discovered: <b>${c.name}</b>.`);}}}
 function power(a,i){const e=D.each[i];return e?e.atk+e.hp/5:0;}
@@ -36,7 +36,7 @@ function nextRenownFloor(){const g=renownGain();for(let f=Math.max(S.best+1,SEAS
 function newSeason(auto){
   const g=renownGain();if(g<=0||S.regionOffer)return;
   const keepN=S.crest.legends||0;const ranked=S.party.map((a,i)=>({a,p:power(a,i)})).sort((x,y)=>y.p-x.p).slice(0,keepN).map(o=>Object.assign({},o.a,{lvl:1}));
-  S.renown+=g;S.renownLife+=g;S.stats.seasons++;
+  S.renown+=g;S.renownLife+=g;S.stats.seasons++;sfx('badge');
   log(`Season ${S.stats.seasons} ended at ${floorName(S.best)}. +${fmt(g)} Renown.`);
   const prev=S.region;
   Object.assign(S,{gold:startGold(S.crest.funds||0),floor:1,best:1,push:true,pushWait:0,party:ranked,board:[],boardT:0,rerolls:0,biz:BIZ.map(()=>0),fac:{},
