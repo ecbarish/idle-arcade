@@ -123,4 +123,4 @@ function hatch(e) {
 
 /* ---- biome travel ---- */
 function biomeOpen(id) { const b = BIOMES[id]; return !b.req || S.badges.includes(b.req); }
-function travelTo(id) { if (B || !BIOMES[id] || !biomeOpen(id) || S.biome === id) return; S.biome = id; W.msg = `You travel to ${BIOMES[id].name}.`; slog(`Travelled to ${BIOMES[id].name}.`); }
+function travelTo(id) { if (B || !BIOMES[id] || !biomeOpen(id) || (S.pos ? S.pos.map === id : S.biome === id)) return; S.biome = id; if (MAPS[id]) placeAt(id); W.msg = `You travel to ${BIOMES[id].name}.`; slog(`Travelled to ${BIOMES[id].name}.`); }

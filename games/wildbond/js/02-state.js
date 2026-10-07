@@ -10,7 +10,7 @@ function fresh() {
   return { v: 1, started: false, name: 'Tamer', starter: null, team: [], ranch: [], coins: 120, lures: 5, biome: 'thornwood',
     explored: 0, story: {}, badges: [], seen: {}, caught: {}, auto: false, era: 'pixel', eras: ['pixel'],
     stats: { battles: 0, wins: 0, caught: 0, play: 0 }, log: [], last: Date.now(), tab: 'team',
-    journey: 'classic', capMode: 'soft', xpShare: false };
+    journey: 'classic', capMode: 'soft', xpShare: false, pos: null };
 }
 let S = fresh();
 

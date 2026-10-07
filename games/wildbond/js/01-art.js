@@ -1,6 +1,7 @@
 'use strict';
-/* Art eras. All drawing goes through ART[era]. A new era is a new object with the same three functions:
-   creature(ctx, x, y, size, species, facingRight, t, opts), backdrop(ctx, w, h, biome, t), tamer(ctx, x, y, size, color, t).
+/* Art eras. All drawing goes through ART[era]. A new era is a new object with the same functions:
+   creature(ctx, x, y, size, species, facingRight, t, opts), backdrop(ctx, w, h, biome, t), tamer(ctx, x, y, size, color, t),
+   and for the walkable world tile(...) and walker(...) (see the bottom of this file).
    x,y = the creature's feet (bottom center). size = pixel unit. Gameplay never draws directly. */
 const ART = {};
 let reduceMotion = false;
@@ -242,4 +243,56 @@ ART.bit16 = (() => {
     }
   };
 })();
+/* The walkable world (T7b): two more drawing calls per era.
+   tile(ctx, ch, x, y, size, pal, t, gx, gy): one map tile (see TILES in 11-maps.js) at screen x,y; gx,gy = its map spot.
+   walker(ctx, x, y, size, look, dir, step): a person seen from above, standing on the tile at x,y.
+   pal comes from the area's colors (worldPal in 06-scene.js). The 16-bit era adds outlines and extra detail. */
+function tint(a, b, n) {
+  const aa = parseInt(a.slice(1, 7), 16), bb = parseInt(b.slice(1, 7), 16);
+  return '#' + [16, 8, 0].map(s => Math.round(((aa >> s) & 255) * (1 - n) + ((bb >> s) & 255) * n).toString(16).padStart(2, '0')).join('');
+}
+function paintTile(c, ch, X, Y, s, P, t, gx, gy, fine) {
+  const u = s / 8, R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.floor(X + x * u), Math.floor(Y + y * u), Math.ceil(w * u), Math.ceil(h * u)); };
+  const hsh = ((gx * 73856093) ^ (gy * 19349663)) >>> 0, v = n => (hsh >> n) & 7, mo = !reduceMotion;
+  const grass = () => { R(0, 0, 8, 8, P.grass); R(v(2), v(5), 1, 1, P.grassDk); if (fine) { R(v(8), v(11), 1, 1, P.grassLt); R(v(14), v(17), 1, 1, P.grassDk); } };
+  switch (ch) {
+    case '.': case 'N': case 'S': case 'E': case 'W': R(0, 0, 8, 8, P.path); R(v(1), v(4), 1, 1, P.pathDk); if (fine) R(v(7), v(10), 1, 1, P.pathLt); break;
+    case '_': R(0, 0, 8, 8, P.sand); R(v(1), v(4), 1, 1, P.sandDk); if (fine) R(v(9), v(12), 1, 1, '#fff6d8'); break;
+    case '~': { R(0, 0, 8, 8, P.water); const k = mo ? Math.floor(t * 1.5 + v(3)) % 8 : v(3); R(k, 1 + v(6) % 5, 2, 1, P.waterLt); if (fine) R((k + 4) % 8, 6, 1, 1, P.waterLt); break; }
+    case 'o': grass(); R(0.5, 0.5, 7, 7, '#d98a52'); R(1, 1, 6, 6, '#f0b070'); { const k = mo ? (t * 2 + v(3)) % 4 : 1; R(2 + v(5) % 3, 4 - k, 1, 1, 'rgba(255,255,255,.7)'); } break;
+    case '"': grass(); R(0, 4, 8, 4, P.tallDk);
+      for (let i = 0; i < 4; i++) { const sw = mo ? Math.round(Math.sin(t * 2 + gx * 0.9 + i)) * 0.5 : 0, x = 0.5 + i * 2;
+        R(x + sw, 1 + (i % 2), 1, 6 - (i % 2), P.tall); if (fine) R(x + sw, 1 + (i % 2), 1, 1, P.tallLt); } break;
+    case 'f': grass(); R(1 + v(3) % 3, 2 + v(6) % 3, 1, 1, ['#f2d24a', '#f07a9a', '#ffffff'][v(9) % 3]); R(5 + v(4) % 2, 5, 1, 1, ['#ffffff', '#f2d24a', '#b48ae8'][v(12) % 3]); break;
+    case 'T': grass(); R(3, 6, 2, 2, '#6b4a2a'); R(0, 1, 8, 5, P.tree); R(1, 0, 6, 7, P.tree); R(2, 1, 3, 1, P.treeLt);
+      if (fine) { R(1, 6, 6, 1, P.treeDk); R(0, 5, 1, 1, P.treeDk); R(7, 5, 1, 1, P.treeDk); R(5, 2, 1, 1, P.treeLt); } break;
+    case 'R': R(0, 0, 8, 8, P.rockBase || P.grass); R(1, 2, 6, 5, P.rock); R(2, 1, 4, 1, P.rock); R(2, 2, 3, 1, P.rockLt); R(1, 6, 6, 1, P.rockDk);
+      if (fine) { R(6, 3, 1, 3, P.rockDk); R(3, 4, 1, 1, P.rockDk); } break;
+    case 'r': R(0, 0, 8, 8, P.roof); R(0, 2, 8, 1, P.roofDk); R(0, 5, 8, 1, P.roofDk); if (fine) R(0, 0, 8, 1, tint(P.roof, '#ffffff', 0.25)); break;
+    case '#': R(0, 0, 8, 8, '#eadfc4'); R(0, 7, 8, 1, '#b8a888'); if (v(1) % 2) { R(2, 2, 4, 3, '#6aa0c8'); if (fine) R(2, 2, 4, 1, '#a8d0ea'); } break;
+    case 'D': R(0, 0, 8, 8, '#eadfc4'); R(2, 1, 4, 7, '#7a4a2a'); R(5, 4, 1, 1, '#f2d24a'); if (fine) R(2, 1, 4, 1, '#5a3418'); break;
+    case '=': grass(); R(0, 3, 8, 1, '#a0703a'); R(0, 5, 8, 1, '#a0703a'); R(0, 2, 1, 5, '#7a5028'); R(7, 2, 1, 5, '#7a5028'); break;
+    default: grass();
+  }
+}
+function paintWalker(c, X, Y, s, L, dir, step, fine) {
+  const u = s / 8, R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.floor(X + x * u), Math.floor(Y + y * u), Math.ceil(w * u), Math.ceil(h * u)); };
+  const side = dir === 'left' ? -1 : dir === 'right' ? 1 : 0, ink = '#1d2a30';
+  R(1.5, 7, 5, 1, 'rgba(0,0,0,.25)');
+  if (fine) { R(1.6, 2.6, 4.8, 3.8, ink); R(1.6, -1.4, 4.8, 4.6, ink); }
+  R(2.5, 5.5, 1, step ? 1.5 : 2, '#2b2b3a'); R(4.5, 5.5, 1, step ? 2 : 1.5, '#2b2b3a');
+  R(2, 3, 4, 3, L.shirt); R(1.4 + side * 0.4, 3.2, 0.6, 2, L.shirt); R(6 + side * 0.4, 3.2, 0.6, 2, L.shirt);
+  R(2, -1, 4, 4, L.skin);
+  if (dir === 'up') R(2, -1.3, 4, 3.6, L.hairCol);
+  else { R(2, -1.3, 4, 1.3, L.hairCol); if (side) R(side < 0 ? 5 : 2, -0.5, 1, 2, L.hairCol);
+    const eye = '#111'; if (!side) { R(2.8, 0.8, 0.7, 0.7, eye); R(4.5, 0.8, 0.7, 0.7, eye); } else R(side < 0 ? 2.5 : 4.8, 0.8, 0.7, 0.7, eye); }
+  if (L.hair === 'long') { R(1.6, -0.6, 0.6, 3.2, L.hairCol); R(5.8, -0.6, 0.6, 3.2, L.hairCol); }
+  if (L.hair === 'bun') R(3.2, -2.2, 1.6, 1.2, L.hairCol);
+  if (L.hair === 'spiky') { R(2.2, -2, 0.8, 0.8, L.hairCol); R(3.6, -2.2, 0.8, 0.9, L.hairCol); R(5, -2, 0.8, 0.8, L.hairCol); }
+  if (L.hair === 'hat') { const hc = L.hatCol || '#6b4423'; R(1, -1.4, 6, 0.8, hc); R(2.2, -2.8, 3.6, 1.6, hc); if (fine) R(2.2, -2.8, 3.6, 0.5, tint(hc, '#ffffff', 0.3)); }
+}
+ART.pixel.tile = (c, ch, x, y, s, P, t, gx, gy) => paintTile(c, ch, x, y, s, P, t, gx, gy, false);
+ART.pixel.walker = (c, x, y, s, L, dir, step) => paintWalker(c, x, y, s, L, dir, step, false);
+ART.bit16.tile = (c, ch, x, y, s, P, t, gx, gy) => paintTile(c, ch, x, y, s, P, t, gx, gy, true);
+ART.bit16.walker = (c, x, y, s, L, dir, step) => paintWalker(c, x, y, s, L, dir, step, true);
 function art() { return ART[(S && S.era) || 'pixel'] || ART.pixel; }

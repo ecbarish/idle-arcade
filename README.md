@@ -35,6 +35,13 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-06 (late night)** — Wildbond walkable world, part 1 (T7b): Larkhaven, Thornwood, the Saltmarsh Coast and
+  the Emberfall Highlands are now places you walk around, top-down, with the arrow keys/WASD or by tapping where to go.
+  Wild creatures hide in the tall grass. Walk into the inn to rest, the shop for lures and Maren's barn for your
+  ranch, whose creatures now roam the paddock. Wardens stand by their gates (a "!" means they're ready for you) and
+  townsfolk have things to say. Gates stay shut until you've earned the badge. Auto-explore walks the grass for you.
+  Works in both art styles.
+
 - **2026-10-06 (night)** — Wildbond pacing overhaul (T11): levels now go to 100 and the journey is much longer. You pick
   a journey length with your starter (Breezy: first badge in about an hour; Classic: about two to three hours; Long
   Road: less XP and rarer finds) and can change it at the Larkhaven inn in the Journal. Badges set a level cap (15,

@@ -47,7 +47,7 @@ document.addEventListener('keydown', e => {
 });
 
 /* test hook, local dev server only */
-if (location.hostname === 'localhost') window.__wb = { get S() { return S; }, get B() { return B; }, newDay, startBreed, breedInfo, catchUpDays, travelTo, explore, command, calmNow, worldTick, finishBattle, challengeWarden, chooseStarter, newCreature, startBattle, levelCap, wardenReady };
+if (location.hostname === 'localhost') window.__wb = { get S() { return S; }, get B() { return B; }, newDay, startBreed, breedInfo, catchUpDays, travelTo, explore, command, calmNow, worldTick, finishBattle, challengeWarden, chooseStarter, newCreature, startBattle, levelCap, wardenReady, placeAt, walkTo, tryStep, get WK() { return WK; } };
 
 let started = false;
 function start() {

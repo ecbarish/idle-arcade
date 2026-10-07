@@ -55,8 +55,12 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [ ] **T13: Era progression in the world** (Claude, after T7b): Pocket (Game Boy) → 16-bit → HD-2D → voxel
   Diorama → modern 3D → first-person/VR, each with era-matched mechanics and story beats. See "Eras you walk through"
   in docs/creature-game-design.md. T7b must keep the tile map separate from the renderer.
-- [ ] **T7b (revised): Walkable world** (Claude): top-down map with tall grass, route trainers, items, NPCs; towns
-  you walk into (inn, shop, ranch) instead of menu buttons. Auto-explore = your tamer walks routes on their own.
+- [x] **T7b part 1: Walkable world** (Claude): top-down tile maps for Larkhaven, Thornwood, Saltmarsh Coast and
+  Emberfall (games/wildbond/js/11-maps.js, data only); walking by keys or tap (12-walk.js); tall grass finds wild
+  creatures; inn, shop and Maren's ranch you walk into; townsfolk and Wardens standing in the world; Auto-explore
+  walks the grass. Drawn through `ART[era].tile/walker`. Done 2026-10-06.
+- [ ] **T7b part 2** (Claude): route trainers who spot you, items on the ground, your lead creature following you,
+  signposts, more townsfolk; later the menu shortcuts (Rest, Buy lures, Travel) can retire.
 - [x] **T10: Wildbond third area, data only** (ChatGPT): see the T10 section below.
 
 - [x] **T12: Realmbound lore pass** (ChatGPT): see the T12 section below.

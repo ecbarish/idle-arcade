@@ -6,7 +6,7 @@ function chooseStarter(id, name, pace) {
   S.name = (name || 'Tamer').replace(/[<>&"]/g, '').slice(0, 14) || 'Tamer';
   if (JOURNEY[pace]) S.journey = pace;
   const c = newCreature(id, 5, { rar: 1, born: 'Your first partner, from Larkhaven.' });
-  S.started = true; S.starter = id; S.team = [c]; S.seen[id] = S.caught[id] = true;
+  S.started = true; S.starter = id; S.team = [c]; S.seen[id] = S.caught[id] = true; placeAt('larkhaven');
   slog(`${S.name} arrived in Larkhaven and chose ${c.name}.`);
   // the rival picks the starter that beats yours
   const rival = newCreature(COUNTER[id], 4, { rar: 1 });
@@ -33,7 +33,7 @@ function beatCount(b) { return b.biome ? ((S.exploredIn || {})[b.biome] || 0) : 
 function beatHere(b) { return (b.biome || 'thornwood') === S.biome; }
 function beat() { return STORY.find(b => beatHere(b) && beatCount(b) >= b.at && !S.story[b.id] && !(S.explored < (S.story[b.id + 'Retry'] || 0)) && !(b.id === 'elder' && S.story.elderFled) && !b.gate); }
 /* the Warden of the area you're in, if you haven't beaten them yet */
-function gateHere() { return STORY.find(b => b.gate && beatHere(b) && !S.story[b.id]); }
+function gateHere() { if (S.pos && MAPS[S.pos.map] && !MAPS[S.pos.map].biome) return null; return STORY.find(b => b.gate && beatHere(b) && !S.story[b.id]); }
 function wardenReady() { const g = gateHere(); return !!g && beatCount(g) >= g.at; }
 function elderReady() { return S.story.elderFled && !S.story.elderCaught && S.badges.includes('thorn'); }
 
@@ -45,6 +45,7 @@ function wildLvl() { const [a, b] = BIOMES[S.biome].lv, m = Math.round(teamAvg()
 function explore() {
   if (B || TALK) return;
   if (!alive().length) { W.msg = 'Your team is exhausted. Rest in Larkhaven first.'; return; }
+  if (S.pos && !curMap().biome) { W.msg = 'No wild creatures in town. Walk out into the tall grass to find them.'; return; }
   S.explored++; S.exploredIn = S.exploredIn || {}; S.exploredIn[S.biome] = (S.exploredIn[S.biome] || 0) + 1;
   const bt = beat();
   if (bt) { story(bt); return; }
@@ -83,7 +84,9 @@ function worldTick(h) {
   if (TALK) return;
   if (B) { battleTick(h);
     if (B && B.over) { W.endT += h; if (W.endT > (S.auto ? 2 : 3.5)) finishBattle(); } return; }
-  if (S.auto) { W.autoT += h; if (W.autoT >= 3) { W.autoT = 0; if (!alive().length || alive().length < S.team.length && alive().some(c => c.hp < stOf(c).hp * 0.3)) restInTown(); else explore(); } }
+  if (S.started) { ensurePos(); walkTick(h); }
+  // Auto-explore: your tamer walks the tall grass (12-walk.js); every few seconds they check whether the team needs rest
+  if (S.auto) { W.autoT += h; if (W.autoT >= 3) { W.autoT = 0; if (!alive().length || alive().length < S.team.length && alive().some(c => c.hp < stOf(c).hp * 0.3)) restInTown(); } }
 }
 function finishBattle() { if (!B) return; if (B.over === 'lost') healAll(); B = null; W.endT = 0; save();
   if (W.after) { const lines = W.after, done = W.afterDone; W.after = W.afterDone = null; talk(lines, done); } else if (W.afterDone) { W.afterDone(); W.afterDone = null; } }

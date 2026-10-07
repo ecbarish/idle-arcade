@@ -64,7 +64,9 @@ test iframe. Existing Node DOM and Playwright checks remain in `tests/` for deve
 - `games/wildbond/js/`: 00-data (elements, moves, species, biomes, story, art eras: data only), 01-art (art eras:
   every drawing call goes through `ART[era]`), 02-state, 03-battle, 04-world (explore, story, town), 05-ui,
   06-scene (battle animation), 07-ranch, 08-ranch-ui, 09-dialogue (scenes with portraits; speakers in `CAST`,
-  scripts in `SCENES` and story `lines`/`win`), 10-sound (Web Audio effects + note-string music `TRACKS`), 99-boot.
+  scripts in `SCENES` and story `lines`/`win`), 10-sound (Web Audio effects + note-string music `TRACKS`), 11-maps (walkable tile maps, data only: `MAPS`, `TILES`,
+  townsfolk added to `CAST`), 12-walk (moving on maps, doors, exits, talking, Auto walking; position in `S.pos`), 99-boot.
+  The map scene is drawn in 06-scene `drawWorld` through `ART[era].tile` and `ART[era].walker`.
   Localhost test hook: `window.__wb`.
 - Art eras: the look evolves with progress (Pixel → 16-bit → HD → 3D). A new era is a new `ART.<id>` object with
   `creature`, `backdrop`, `tamer`; never draw outside it.

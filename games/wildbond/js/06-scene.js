@@ -12,6 +12,7 @@ function frame(ms) {
   const t = ms / 1000, A = art(), p = Math.max(2, Math.floor(PH / 46)), mo = !reduceMotion;
   cx.save();
   if (B && B.shake > 0 && mo) cx.translate((Math.random() - 0.5) * p * 3, (Math.random() - 0.5) * p * 2);
+  if (S.started && !B && S.pos && MAPS[S.pos.map]) { drawWorld(t, A); cx.restore(); return; }
   const gy = A.backdrop(cx, PW, PH, BIOMES[S.biome], t);
   if (!S.started) { cx.restore(); return; }
   if (B) {
@@ -42,6 +43,46 @@ function frame(ms) {
     S.team.forEach((c, i) => A.creature(cx, PW * (0.32 + i * 0.13), gy, p, sp(c), true, c.hp > 0 ? t + i : 0, { alpha: c.hp > 0 ? 1 : 0.35 }));
   }
   cx.restore();
+}
+/* ---- the walkable world, seen from above, the camera following your tamer ---- */
+const PALS = {};
+function worldPal(m) {
+  const id = m.pal || m.biome; if (PALS[id]) return PALS[id];
+  const b = BIOMES[id], g = b.ground, coast = id === 'saltmarsh', ash = id === 'emberfall';
+  return (PALS[id] = { grass: g, grassDk: tint(g, '#1d3a20', 0.25), grassLt: tint(g, '#e8f0b0', 0.3),
+    tall: tint(g, '#1f4a22', 0.4), tallDk: tint(g, '#1f4a22', 0.2), tallLt: tint(g, '#d8f0a0', 0.35),
+    path: ash ? '#b8a48e' : '#d8c08a', pathDk: ash ? '#8a7866' : '#b09868', pathLt: '#ecdcb0',
+    sand: '#e3d3a0', sandDk: '#c4b07c', water: coast ? '#3a86b8' : '#3d8fd0', waterLt: '#a8dcf0',
+    tree: tint(b.hill, '#1e3a24', 0.35), treeDk: tint(b.hill, '#10241a', 0.6), treeLt: tint(b.hill, '#c8e090', 0.25),
+    rock: ash ? '#7a6a64' : '#8b817a', rockDk: ash ? '#4a3c38' : '#5e5650', rockLt: ash ? '#a8948a' : '#b8aea6',
+    roof: '#b0503a', roofDk: '#8a3a2a', rockBase: coast ? '#e3d3a0' : null });
+}
+const PLAYER_LOOK = { skin: '#f1c9a0', hair: 'hat', hairCol: '#6b4423', hatCol: '#6b4423', shirt: '#2f9e6b' };
+function drawWorld(t, A) {
+  const m = curMap(), P = worldPal(m), rows = m.rows.length, cols = m.rows[0].length, edge = m.biome === 'emberfall' ? 'R' : 'T';
+  const ts = Math.max(20, Math.round(PH / 8.5)), vw = PW / ts, vh = PH / ts;
+  const camX = cols <= vw ? (cols - vw) / 2 : clamp(WK.fx + 0.5 - vw / 2, 0, cols - vw);
+  const camY = rows <= vh ? (rows - vh) / 2 : clamp(WK.fy + 0.5 - vh / 2, 0, rows - vh);
+  const ox = Math.round(-camX * ts), oy = Math.round(-camY * ts), tile = A.tile || ART.pixel.tile, walker = A.walker || ART.pixel.walker;
+  WK.cam = { ox, oy, ts };
+  for (let y = Math.floor(camY); y < camY + vh; y++) for (let x = Math.floor(camX); x < camX + vw; x++) {
+    const inside = x >= 0 && y >= 0 && x < cols && y < rows;
+    tile(cx, inside ? m.rows[y][x] : (m.biome === 'saltmarsh' && y < 4 ? '~' : edge), ox + x * ts, oy + y * ts, ts, P, t, x, y);
+  }
+  // ranch creatures roam the paddock
+  if (m.pen) { const [x0, y0, x1, y1] = m.pen; S.ranch.slice(0, 4).forEach((c, i) => {
+    const k = reduceMotion ? 0.5 : (Math.sin(t * 0.25 + i * 2.1) + 1) / 2, x = ox + (x0 + k * (x1 - x0) + 0.5) * ts, y = oy + (y0 + (i % 2) * (y1 - y0) + 0.9) * ts;
+    A.creature(cx, x - ts * 0.3, y, ts / 16, sp(c), Math.cos(t * 0.25 + i * 2.1) > 0, t + i); }); }
+  // people, back to front
+  const ppl = npcsOf(m).map(n => ({ x: n.at[0], y: n.at[1], look: CAST[n.who], dir: n.dir || 'down', step: 0, mark: n.warden && wardenReady() && !S.story[n.warden.id] }));
+  ppl.push({ x: WK.fx, y: WK.fy, look: PLAYER_LOOK, dir: S.pos.dir, step: arrived() ? 0 : Math.floor(t * 8) % 2 });
+  ppl.sort((a, b) => a.y - b.y);
+  for (const q of ppl) { const sx = ox + q.x * ts, sy = oy + q.y * ts; walker(cx, sx, sy, ts, q.look, q.dir, q.step);
+    if (q.mark) { const by = sy - ts * 0.75 - (reduceMotion ? 0 : Math.abs(Math.sin(t * 4)) * ts * 0.1); cx.fillStyle = '#f2c14e'; cx.fillRect(sx + ts * 0.35, by, ts * 0.3, ts * 0.38);
+      cx.fillStyle = '#17323a'; cx.fillRect(sx + ts * 0.46, by + ts * 0.06, ts * 0.08, ts * 0.17); cx.fillRect(sx + ts * 0.46, by + ts * 0.27, ts * 0.08, ts * 0.06); } }
+  // where you are
+  cx.font = `700 ${Math.max(12, Math.round(ts * 0.45))}px Fredoka, sans-serif`; const label = m.name, w = cx.measureText(label).width + 16;
+  cx.fillStyle = 'rgba(23,50,58,.72)'; cx.fillRect(8, 8, w, ts * 0.75); cx.fillStyle = '#fff'; cx.textBaseline = 'middle'; cx.fillText(label, 16, 8 + ts * 0.38); cx.textBaseline = 'alphabetic';
 }
 /* sparks fly outward for hits, sparkles rise for heals, a ring flashes for a catch */
 function drawBurst(b, gy, p) {

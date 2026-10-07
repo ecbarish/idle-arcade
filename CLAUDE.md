@@ -39,9 +39,12 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
   16-bit), dialogue scenes with portraits, battle animation, chiptune sound. T11 pacing is done: levels to 100,
   journey length, badge caps, XP share (numbers and measured times in `docs/creature-game-design.md`). Pacing is
   checked with a fast Auto simulation in the browser (call `worldTick(0.1)` in a loop, skipping scenes).
-- **Next for Claude: T7b walkable world** (tile map kept separate from the renderer), then **T13 era progression**
-  (Game Boy → 16-bit → HD-2D → voxel diorama → 3D; VR deferred). T11b (challenge modes, rematches) after that.
-  Emberfall needs a Warden and badge before area 4. ChatGPT has T14 (Wildbond lore bible, docs only).
+- **Walkable world (T7b part 1) is done:** Larkhaven and the three areas are tile maps you walk (keys or tap), tall
+  grass = exploring, walk-in inn/shop/ranch, Wardens and townsfolk stand in the world, Auto walks the grass. Pacing
+  measured unchanged. **Next for Claude:** T7b part 2 (route trainers, items, follower), then **T13 era progression**
+  (Game Boy → 16-bit → HD-2D → voxel diorama → 3D; VR deferred), then T11b (challenge modes, rematches).
+  ChatGPT has T14 (Wildbond lore bible, docs only) and T15 (Emberfall Warden + badge, data only in 00-data.js;
+  its Warden appears on the Emberfall map automatically at `warden: [20, 6]`).
 - **Realmbound** (classic-MMO idle, flagship): levels 1-40, two dungeons, hunters/pets/mounts, lore bible in
   `docs/lore/realmbound.md`. Frostmere / The Winter Road (30-40, PR #7) is merged; its necropolis dungeon and levels
   41+ wait on the rest of T1 (Claude: specs for 40-60, raids, guild).
