@@ -72,6 +72,7 @@ function drawFace(who, open) {
   if (P.hair === 'spiky') for (const x of [9, 12, 15, 18, 21]) { q(x, 4, 2, 2, P.hairCol); q(x + 1, 3, 1, 1, P.hairCol); }
   if (P.hair === 'bun') { q(13, 2, 6, 4, P.hairCol); q(14, 1, 4, 1, P.hairCol); q(14, 2, 2, 1, shade(P.hairCol, 0.25)); }
   if (P.hair === 'long') { q(8, 8, 2, 8, P.hairCol); q(22, 8, 2, 8, P.hairCol); }
+  if (P.hair === 'hat') { const hc = P.hatCol || '#5a4a3a'; q(10, 2, 12, 6, hc); q(10, 6, 12, 1, shade(hc, 0.3)); q(5, 8, 22, 2, shade(hc, -0.2)); }
 }
 function shade(hex, n) { const v = parseInt(hex.slice(1, 7), 16), f = x => Math.round(n < 0 ? x * (1 + n) : x + (255 - x) * n);
   return '#' + [16, 8, 0].map(s => f((v >> s) & 255).toString(16).padStart(2, '0')).join(''); }

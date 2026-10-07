@@ -9,7 +9,8 @@ const R = Math.random, pick = a => a[Math.floor(R() * a.length)], rint = (a, b) 
 function fresh() {
   return { v: 1, started: false, name: 'Tamer', starter: null, team: [], ranch: [], coins: 120, lures: 5, biome: 'thornwood',
     explored: 0, story: {}, badges: [], seen: {}, caught: {}, auto: false, era: 'pixel', eras: ['pixel'],
-    stats: { battles: 0, wins: 0, caught: 0, play: 0 }, log: [], last: Date.now(), tab: 'team' };
+    stats: { battles: 0, wins: 0, caught: 0, play: 0 }, log: [], last: Date.now(), tab: 'team',
+    journey: 'classic', capMode: 'soft', xpShare: false };
 }
 let S = fresh();
 
@@ -25,9 +26,16 @@ function keep(c, how) {
   if (S.team.length < 3) { S.team.push(c); return 'team'; }
   S.ranch.push(c); return 'ranch';
 }
+/* Pacing: the badge level cap and the XP/coin multipliers from the journey setting. */
+function levelCap() { return S.capMode === 'off' ? LEVEL_CAP : Math.min(LEVEL_CAP, CAP_BASE + CAP_STEP * S.badges.length); }
+function journey() { return JOURNEY[S.journey] || JOURNEY.classic; }
+function xpMult() { return journey().xp * (S.auto ? AUTO_XP : 1); }
 /* Level ups, new moves and evolution after gaining xp. Returns messages. */
 function grow(c, xp) {
-  const msgs = [], before = movesOf(c), lv = c.lvl, gained = Cr.gainXp(c, xp, LEVEL_CAP);
+  const cap = levelCap(), msgs = [], before = movesOf(c);
+  let gained = 0;
+  if (c.lvl < cap) gained = Cr.gainXp(c, xp, cap);
+  else if (S.capMode === 'soft' && c.lvl < LEVEL_CAP) gained = Cr.gainXp(c, Math.round(xp * SOFT_TRICKLE), LEVEL_CAP);
   if (gained) {
     msgs.push(`${c.name} grew to level ${c.lvl}!`); sfx('level');
     for (const m of movesOf(c)) if (!before.includes(m)) msgs.push(`${c.name} learned ${MOVES[m].name}!`);

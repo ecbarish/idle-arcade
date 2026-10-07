@@ -47,9 +47,11 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [ ] **T8: Game guides** (ChatGPT) — **parked** until games are closer to finished, so guides don't need constant
   rewrites. Spec kept below. Meanwhile, keep lore written down in each game's design doc as it's added.
 - [ ] **T9: Wildbond guide** (ChatGPT) — parked with T8.
-- [ ] **T11: Wildbond pacing overhaul** (Claude, next): levels 1-100, journey length (Breezy/Classic/Long Road),
-  badge level caps (soft/hard/off), XP share toggle. See "Pacing, level caps and journey settings" in
-  docs/creature-game-design.md. Rescale T10's Emberfall levels when merging. Challenge modes and rematches follow.
+- [x] **T11: Wildbond pacing overhaul** (Claude): levels 1-100, journey length (Breezy/Classic/Long Road),
+  badge level caps (soft/hard/off), XP share toggle, Saltmarsh Warden + Tide Badge, Saltmarsh/Emberfall rescaled.
+  Done 2026-10-06. See "Pacing, level caps and journey settings" in docs/creature-game-design.md.
+- [ ] **T11b: Challenge modes and rematches** (Claude, later): Nuzlocke/Randomizer/Solo/Hardcore at a new game,
+  Warden and Wren rematch tiers, area mastery stars.
 - [ ] **T13: Era progression in the world** (Claude, after T7b): Pocket (Game Boy) → 16-bit → HD-2D → voxel
   Diorama → modern 3D → first-person/VR, each with era-matched mechanics and story beats. See "Eras you walk through"
   in docs/creature-game-design.md. T7b must keep the tile map separate from the renderer.

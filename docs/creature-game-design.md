@@ -161,6 +161,13 @@ Replayability and reasons to revisit older content matter. Ideas drawn from what
 **Measured problem (v0):** on Auto from a fresh save, the team hit level 12 in 15 minutes and the level-20 cap in
 about 2 hours, before the first badge. Far too fast.
 
+**Built in T11 (2026-10-06):** levels 1-100; journey length Breezy/Classic/Long Road (XP 0.36/0.13/0.08 of the old
+rate, coins 1.5/1/0.8, rarity boost +0.15/0/-0.3); Auto-explore earns 0.8x XP; badge caps 15 + 10 per badge (soft:
+5% XP above the cap; hard; off); XP share gives ranch creatures 25%; Warden Nerys and the Tide Badge in Saltmarsh
+(explore 24, team 21/22/24). Measured on Auto from a fresh save with a sim player who catches two partners and
+challenges a Warden when about level with its ace: first badge at ~49 min (Breezy), ~140 min (Classic), ~208 min
+(Long Road); Breezy's second badge ~3.5 h. Still to do: challenge modes, rematches, the remaining QoL items.
+
 **Full 1-100 range.** About eight areas, each with a level band (Thornwood ~2-12, Saltmarsh ~12-22, Emberfall
 ~22-32, ...). Eight badges carry you to about 70; the post-game takes you to 100.
 

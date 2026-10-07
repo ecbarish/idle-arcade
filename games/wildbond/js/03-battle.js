@@ -153,13 +153,15 @@ function endBattle(result) {
   if (!B || B.over) return; B.over = result; sfx(result === 'lost' ? 'lose' : result === 'fled' ? 'select' : 'win');
   if (result === 'won' || result === 'caught') {
     const foes = B.foes.concat([]), lvSum = B.foes.reduce((s, u) => s + u.c.lvl, 0) || 3;
-    const base = Math.round(lvSum * 12 * (B.kind === 'wild' ? 1 : 1.6)), coins = Math.round(lvSum * (B.kind === 'wild' ? 3 : 12));
+    const base = lvSum * 12 * (B.kind === 'wild' ? 1 : 1.6) * xpMult(), coins = Math.round(lvSum * (B.kind === 'wild' ? 3 : 12) * journey().coins);
     if (result === 'won') { S.stats.wins++; S.coins += coins; bline(`You win! +${coins} coins.`, 'good'); }
     const msgs = [];
     const avgFoe = lvSum / Math.max(1, B.foes.length + (result === 'caught' ? 1 : 0));
     // much less xp from foes far below your level, so you move on instead of grinding
     const scale = c => Math.min(1.2, Math.pow(Math.max(1, avgFoe) / c.lvl, 2));
     for (const u of B.allies) { if (u.c.hp <= 0) { msgs.push(...grow(u.c, Math.round(base * 0.3 * scale(u.c)))); continue; } msgs.push(...grow(u.c, Math.round(base * scale(u.c)))); Cr.addBond(u.c, B.kind === 'wild' ? 0.5 : 2); }
+    // XP share: creatures resting on the ranch learn from watching, at a quarter of the XP
+    if (S.xpShare) for (const c of S.ranch) for (const m of grow(c, Math.round(base * 0.25 * scale(c)))) if (/evolved/.test(m)) msgs.push(m);
     for (const m of msgs) { bline(m, 'good'); if (/evolved|learned/.test(m)) toast(m); }
     // a legendary knocked out (not befriended) slips away and can be found again later
     const legend = B.kind === 'wild' && B.foes.find(f => sp(f.c).unique);

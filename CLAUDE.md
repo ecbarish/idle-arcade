@@ -34,14 +34,14 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
 - Evan isn't a programmer: explain in plain words, show results, give clear next steps.
 
 ## Where we are (update this at the end of each session)
-- **Wildbond** (creature game, the current focus): starters, rival Wren, Thornwood → Saltmarsh Coast → Emberfall
-  Highlands (Emberfall's `tide` badge doesn't exist yet), ranch/breeding, art eras (Pixel, 16-bit), dialogue
-  scenes with portraits, battle animation, chiptune sound.
-- **Next for Claude: T11 pacing overhaul** (measured problem: level 12 in 15 min, cap 20 in ~2 h on Auto). Levels
-  1-100, journey length Breezy/Classic/Long Road, badge level caps (soft/hard/off), XP share; add the Saltmarsh
-  Warden + `tide` badge; rescale Emberfall's levels. Then **T7b walkable world** (tile map kept separate from the
-  renderer), then **T13 era progression** (Game Boy → 16-bit → HD-2D → voxel diorama → 3D → VR). Plans are in
-  `docs/creature-game-design.md`.
+- **Wildbond** (creature game, the current focus): starters, rival Wren, Thornwood (2-12) → Saltmarsh Coast
+  (12-22, Warden Nerys, Tide Badge) → Emberfall Highlands (22-32, no Warden yet), ranch/breeding, art eras (Pixel,
+  16-bit), dialogue scenes with portraits, battle animation, chiptune sound. T11 pacing is done: levels to 100,
+  journey length, badge caps, XP share (numbers and measured times in `docs/creature-game-design.md`). Pacing is
+  checked with a fast Auto simulation in the browser (call `worldTick(0.1)` in a loop, skipping scenes).
+- **Next for Claude: T7b walkable world** (tile map kept separate from the renderer), then **T13 era progression**
+  (Game Boy → 16-bit → HD-2D → voxel diorama → 3D; VR deferred). T11b (challenge modes, rematches) after that.
+  Emberfall needs a Warden and badge before area 4. ChatGPT has T14 (Wildbond lore bible, docs only).
 - **Realmbound** (classic-MMO idle, flagship): levels 1-40, two dungeons, hunters/pets/mounts, lore bible in
   `docs/lore/realmbound.md`. Frostmere / The Winter Road (30-40, PR #7) is merged; its necropolis dungeon and levels
   41+ wait on the rest of T1 (Claude: specs for 40-60, raids, guild).

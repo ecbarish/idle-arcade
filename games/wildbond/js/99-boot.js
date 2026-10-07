@@ -7,7 +7,13 @@ document.addEventListener('click', e => {
   switch (a) {
     case 'sound': cycleSound(); break;
     case 'skiptalk': skipTalk(); break;
-    case 'starter': chooseStarter(arg, ($('#tname') || {}).value); closeModal(); break;
+    case 'starter': chooseStarter(arg, ($('#tname') || {}).value, S.journey); closeModal(); break;
+    case 'set': { const [k, v] = arg.split(':'); if (B) break;
+      if (k === 'pace' && JOURNEY[v]) { S.journey = v; el.parentNode.querySelectorAll('.era').forEach(b => { const on = b === el; b.classList.toggle('cur', on); b.setAttribute('aria-pressed', on); }); return; }
+      if (k === 'journey' && JOURNEY[v] && S.journey !== v) { S.journey = v; toast(`Journey length: ${JOURNEY[v].name}.`); slog(`Chose a ${JOURNEY[v].name} journey at the Larkhaven inn.`); }
+      if (k === 'cap' && ['soft', 'hard', 'off'].includes(v)) S.capMode = v;
+      if (k === 'share') S.xpShare = v === 'on';
+      break; }
     case 'explore': explore(); break;
     case 'warden': challengeWarden(); break;
     case 'elder': seekElder(); break;
@@ -41,7 +47,7 @@ document.addEventListener('keydown', e => {
 });
 
 /* test hook, local dev server only */
-if (location.hostname === 'localhost') window.__wb = { get S() { return S; }, get B() { return B; }, newDay, startBreed, breedInfo, catchUpDays, travelTo, explore, command, calmNow, worldTick, finishBattle, challengeWarden, chooseStarter, newCreature, startBattle };
+if (location.hostname === 'localhost') window.__wb = { get S() { return S; }, get B() { return B; }, newDay, startBreed, breedInfo, catchUpDays, travelTo, explore, command, calmNow, worldTick, finishBattle, challengeWarden, chooseStarter, newCreature, startBattle, levelCap, wardenReady };
 
 let started = false;
 function start() {
@@ -52,7 +58,7 @@ function start() {
   // time away: auto-explore keeps going at a gentle pace, manual play just rests
   const away = (Date.now() - (S.last || Date.now())) / 1000;
   if (S.started) { const days = catchUpDays(Math.max(0, away)); if (days) setTimeout(() => toast(` ranch day passed while you were away. Check the Ranch tab.`), 1500); }
-  if (S.started && away > 60) { healAll(); if (S.auto) { const n = Math.min(200, Math.floor(away / 30)); let xp = 0, coins = 0; for (let i = 0; i < n; i++) { coins += rint(2, 6) * 3; xp += Math.round(teamAvg() * 9); }
+  if (S.started && away > 60) { healAll(); if (S.auto) { const n = Math.min(200, Math.floor(away / 30)); let xp = 0, coins = 0; for (let i = 0; i < n; i++) { coins += Math.round(rint(2, 6) * 3 * journey().coins); xp += Math.round(teamAvg() * 9 * xpMult()); }
       S.coins += coins; for (const c of S.team) grow(c, Math.round(xp / Math.max(1, S.team.length))); toast(`While you were away your team explored ${n} times: +${fmtI(coins)} coins.`); } else toast('Your team rested while you were away.'); }
   let last = performance.now();
   setInterval(() => { const n = performance.now(); let dt = Math.min(5, (n - last) / 1000); last = n; if (!S.started) return;

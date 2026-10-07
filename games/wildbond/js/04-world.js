@@ -2,8 +2,9 @@
 /* Exploring, the story, and the town of Larkhaven. */
 const W = { msg: '', autoT: 0, endT: 0 };
 
-function chooseStarter(id, name) {
+function chooseStarter(id, name, pace) {
   S.name = (name || 'Tamer').replace(/[<>&"]/g, '').slice(0, 14) || 'Tamer';
+  if (JOURNEY[pace]) S.journey = pace;
   const c = newCreature(id, 5, { rar: 1, born: 'Your first partner, from Larkhaven.' });
   S.started = true; S.starter = id; S.team = [c]; S.seen[id] = S.caught[id] = true;
   slog(`${S.name} arrived in Larkhaven and chose ${c.name}.`);
@@ -17,17 +18,23 @@ function storyWin(id) {
   S.story[id] = true;
   // the after-battle scene plays once the result screen closes (see finishBattle)
   W.after = id === 'rival1' ? SCENES.rival1Win : (STORY.find(b => b.id === id) || {}).win || null;
-  if (id === 'warden' && !S.badges.includes('thorn')) {
-    S.badges.push('thorn'); S.coins += 300; slog('Earned the Thorn Badge from Warden Isolde.');
-    if (!S.eras.includes('bit16')) S.eras.push('bit16');
-    W.afterDone = () => { toast('You earned the Thorn Badge!'); sfx('badge'); setTimeout(() => toast('The world shimmers... the 16-bit art style is unlocked. Switch it in the Journal.'), 2500); };
+  const g = STORY.find(b => b.id === id && b.gate);
+  if (g && !S.badges.includes(g.gate)) {
+    const badge = BADGES[g.gate].name;
+    S.badges.push(g.gate); S.coins += 300 * S.badges.length; slog(`Earned the ${badge} from ${g.trainer}.`);
+    const newEra = g.gate === 'thorn' && !S.eras.includes('bit16'); if (newEra) S.eras.push('bit16');
+    W.afterDone = () => { toast(`You earned the ${badge}!`); sfx('badge');
+      setTimeout(() => toast(S.capMode === 'off' ? 'Your team feels stronger.' : `Your creatures can now grow to level ${levelCap()}.`), 2000);
+      if (newEra) setTimeout(() => toast('The world shimmers... the 16-bit art style is unlocked. Switch it in the Journal.'), 4500); };
   }
 }
 /* Thornwood beats count all explores (older saves); other biomes count explores made in that biome. */
 function beatCount(b) { return b.biome ? ((S.exploredIn || {})[b.biome] || 0) : S.explored; }
 function beatHere(b) { return (b.biome || 'thornwood') === S.biome; }
-function beat() { return STORY.find(b => beatHere(b) && beatCount(b) >= b.at && !S.story[b.id] && !(S.explored < (S.story[b.id + 'Retry'] || 0)) && !(b.id === 'elder' && S.story.elderFled) && b.id !== 'warden'); }
-function wardenReady() { return S.explored >= STORY[2].at && !S.story.warden; }
+function beat() { return STORY.find(b => beatHere(b) && beatCount(b) >= b.at && !S.story[b.id] && !(S.explored < (S.story[b.id + 'Retry'] || 0)) && !(b.id === 'elder' && S.story.elderFled) && !b.gate); }
+/* the Warden of the area you're in, if you haven't beaten them yet */
+function gateHere() { return STORY.find(b => b.gate && beatHere(b) && !S.story[b.id]); }
+function wardenReady() { const g = gateHere(); return !!g && beatCount(g) >= g.at; }
 function elderReady() { return S.story.elderFled && !S.story.elderCaught && S.badges.includes('thorn'); }
 
 function teamAvg() { return S.team.length ? S.team.reduce((s, c) => s + c.lvl, 0) / S.team.length : 1; }
@@ -44,10 +51,11 @@ function explore() {
   const r = Math.random();
   if (r < 0.62) {
     const n = S.team.length >= 2 ? (Math.random() < 0.6 ? 1 : Math.random() < 0.75 ? 2 : 3) : 1;
-    const foes = []; for (let i = 0; i < n; i++) { const id = wildPick(); foes.push(newCreature(id, wildLvl(), { boost: S.team.some(c => c.traits.includes('lucky')) ? 0.3 : 0 })); }
+    const boost = (S.team.some(c => c.traits.includes('lucky')) ? 0.3 : 0) + journey().rare;
+    const foes = []; for (let i = 0; i < n; i++) { const id = wildPick(); foes.push(newCreature(id, wildLvl(), { boost })); }
     startBattle('wild', foes);
   } else if (r < 0.76) {
-    if (Math.random() < 0.5) { const c = rint(8, 20); S.coins += c; W.msg = `You find ${c} coins under a fallen log.`; }
+    if (Math.random() < 0.5) { const c = Math.round(rint(8, 20) * journey().coins); S.coins += c; W.msg = `You find ${c} coins under a fallen log.`; }
     else { S.lures++; W.msg = 'You find a lure caught in some brambles.'; }
   } else W.msg = pick(['You follow a stream deeper into Thornwood.', 'Birdsong all around. Your team looks happy.', 'You rest in a sunny clearing for a moment.',
     'Pawprints in the mud lead off between the trees.', 'A breeze rustles the old oaks.']);
@@ -64,7 +72,7 @@ function storyFight(b) {
   const team = b.team.slice(-Math.max(1, S.team.length)).map(([id, lvl]) => newCreature(grown(id === '$rival' ? S.rivalStarter : id, lvl), lvl, { rar: 1 }));
   startBattle('trainer', team, { trainer: b.trainer || RIVAL.name, story: b.id });
 }
-function challengeWarden() { if (!B && !TALK && wardenReady() && alive().length) story(STORY[2]); }
+function challengeWarden() { if (!B && !TALK && wardenReady() && alive().length) story(gateHere()); }
 function seekElder() { if (!B && !TALK && elderReady() && alive().length) { S.story.elderFled = false; story(STORY[1]); } }
 function restInTown() { if (B) return; healAll(); W.msg = 'You rest at the Larkhaven inn. Your team is fully healed.'; }
 function buyLures() { if (B) return; if (S.coins < 50) { W.msg = 'Lures cost 50 coins for 5.'; return; } S.coins -= 50; S.lures += 5; W.msg = 'You buy 5 lures.'; }

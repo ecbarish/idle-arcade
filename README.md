@@ -35,6 +35,13 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-06 (night)** — Wildbond pacing overhaul (T11): levels now go to 100 and the journey is much longer. You pick
+  a journey length with your starter (Breezy: first badge in about an hour; Classic: about two to three hours; Long
+  Road: less XP and rarer finds) and can change it at the Larkhaven inn in the Journal. Badges set a level cap (15,
+  then +10 per badge) as a soft cap, hard cap or off; an optional XP share teaches ranch creatures from your battles.
+  Auto-explore earns a little less XP than playing yourself. New: Warden Nerys of the Saltmarsh and the Tide Badge,
+  which opens the Emberfall Highlands. Saltmarsh (12-22) and Emberfall (22-32) were rescaled to fit.
+
 - **2026-10-06 (evening)** — Merged ChatGPT's Realmbound **Frostmere: The Winter Road** (PR #7): a snowbound zone
   for levels 30-40 with Lanternrest Lodge and Whitebough Hearth, ten quests, ice trolls, three new tameable beasts
   and Hushfang, a legendary wolf elite; the level cap is now 40. Merged ChatGPT's research and staged plans for every

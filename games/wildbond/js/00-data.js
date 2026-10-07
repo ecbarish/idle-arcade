@@ -1,7 +1,19 @@
 'use strict';
 /* Wildbond content data. Add species, moves and biomes here; no logic lives in this file. */
 
-const LEVEL_CAP = 20;
+const LEVEL_CAP = 100;
+/* Badge level caps: with no badges creatures stop at 15; each badge raises the cap by 10 (up to 100).
+   Soft cap (default): XP drops to a trickle above it. Hard: no XP above it. Off: only the 100 limit. */
+const CAP_BASE = 15, CAP_STEP = 10, SOFT_TRICKLE = 0.05;
+/* Journey length: picked with your starter, changeable at the Larkhaven inn (Journal tab).
+   Auto-explore always earns a little less XP than playing yourself (AUTO_XP). */
+const JOURNEY = {
+  breezy: { name: 'Breezy', xp: 0.36, coins: 1.5, rare: 0.15, desc: 'A quicker story: more XP and coins. First badge in about an hour.' },
+  classic: { name: 'Classic', xp: 0.13, coins: 1, rare: 0, desc: 'The intended pace. First badge in about two to three hours.' },
+  long: { name: 'Long Road', xp: 0.08, coins: 0.8, rare: -0.3, desc: 'For the grind: less XP and rarer finds. Every level is earned.' }
+};
+const AUTO_XP = 0.8;
+const BADGES = { thorn: { name: 'Thorn Badge' }, tide: { name: 'Tide Badge' } };
 
 /* Element wheel: each element is strong against the ones listed. */
 const ELEMENTS = {
@@ -155,11 +167,11 @@ const SPECIES = {
 const STARTERS = ['cindercub', 'ripplet', 'mosshog'];
 
 const BIOMES = {
-  thornwood: { name: 'Thornwood', lv: [2, 9], sky: ['#9fd0f0', '#e0f0d0'], hill: '#4f7a3a', ground: '#6a9a48',
+  thornwood: { name: 'Thornwood', lv: [2, 12], sky: ['#9fd0f0', '#e0f0d0'], hill: '#4f7a3a', ground: '#6a9a48',
     wild: [['glimmerwing', 22], ['pebblepaw', 20], ['duskweaver', 16], ['bogsnap', 14], ['emberling', 12], ['gnawhound', 12], ['galefoal', 4], ['sunspark', 3]] },
-  saltmarsh: { name: 'Saltmarsh Coast', lv: [10, 18], req: 'thorn', sky: ['#7dbbd8', '#d1e9ed'], hill: '#a6ae75', ground: '#7f9b6c',
+  saltmarsh: { name: 'Saltmarsh Coast', lv: [12, 22], req: 'thorn', sky: ['#7dbbd8', '#d1e9ed'], hill: '#a6ae75', ground: '#7f9b6c',
     wild: [['brineskit', 24], ['dunepounce', 20], ['reedtusk', 16], ['wrackjaw', 14], ['kiteskirl', 18], ['spindriftfoal', 8], ['foamglint', 3]] },
-  emberfall: { name: 'Emberfall Highlands', lv: [18, 26], req: 'tide', sky: ['#a6a6bf', '#efd0aa'], hill: '#81756d', ground: '#a58a68',
+  emberfall: { name: 'Emberfall Highlands', lv: [22, 32], req: 'tide', sky: ['#a6a6bf', '#efd0aa'], hill: '#81756d', ground: '#a58a68',
     wild: [['slaglet', 24], ['ashskip', 20], ['cragskein', 16], ['ventwhisk', 16], ['thermwing', 14], ['screegrin', 10], ['glowmote', 3]] }
 };
 
@@ -169,7 +181,8 @@ const RIVAL = { name: 'Wren', col: '#d85a8a' };
 const CAST = {
   maren: { name: 'Keeper Maren', skin: '#d9a77c', hair: 'bun', hairCol: '#c9c3b8', shirt: '#5b8a4a', bg: '#cfe7c4', title: 'Larkhaven ranch keeper' },
   wren: { name: 'Wren', skin: '#f0c7a4', hair: 'spiky', hairCol: '#3a2230', shirt: '#d85a8a', bg: '#f6d3e1', title: 'Your rival' },
-  isolde: { name: 'Warden Isolde', skin: '#b98262', hair: 'long', hairCol: '#2a3b2c', shirt: '#3d6b52', bg: '#c9dfc8', title: 'Warden of Thornwood' }
+  isolde: { name: 'Warden Isolde', skin: '#b98262', hair: 'long', hairCol: '#2a3b2c', shirt: '#3d6b52', bg: '#c9dfc8', title: 'Warden of Thornwood' },
+  nerys: { name: 'Warden Nerys', skin: '#8a5a3c', hair: 'hat', hairCol: '#9a948a', hatCol: '#3c5a6a', shirt: '#2f5e78', bg: '#cfe3ea', title: 'Warden of the Saltmarsh' }
 };
 /* Scenes that aren't tied to an explore count. */
 const SCENES = {
@@ -206,7 +219,8 @@ const STORY = [
       ['@elderhorn', 'It lowers its antlers. Not an attack. A test.']],
     win: [['@elderhorn', 'Elderhorn lowers its great head and breathes on your hands. The moss on its back flowers.'], ['', 'The guardian of Thornwood has chosen to walk with you.']],
     wild: ['elderhorn', 11, 4] },
-  { at: 26, id: 'warden', title: 'The Thornwood Warden', text: 'Warden Isolde tested your bond at the Thornwood gate.',
+  /* gate: a Warden. They wait for you to challenge them (a button, not a surprise) and award that badge. */
+  { at: 26, id: 'warden', gate: 'thorn', title: 'The Thornwood Warden', text: 'Warden Isolde tested your bond at the Thornwood gate.',
     lines: [['', 'The road north ends at a gate of living hawthorn. A tall woman waits beside it, three creatures resting at her feet.'],
       ['isolde', 'Maren wrote to me about you, {name}. She does that when she thinks someone is worth watching.'],
       ['isolde', 'Wardens don\'t judge strength. Strength is easy. We judge whether your team fights for you or just near you.'],
@@ -214,20 +228,29 @@ const STORY = [
     win: [['isolde', 'Your bond is real. They looked back at you before every move. Not many teams do that.'],
       ['isolde', 'Take the Thorn Badge. The gate will open for you now, and the coast is waiting.'],
       ['isolde', 'One more thing. Thornwood isn\'t the only place with a guardian. Every region has something old watching it. Be kind when you meet them.']],
-    trainer: 'Warden Isolde', team: [['pebblepaw', 10], ['bogsnap', 11], ['thornback', 12]] },
+    trainer: 'Warden Isolde', team: [['pebblepaw', 11], ['bogsnap', 12], ['thornback', 14]] },
   /* Saltmarsh Coast: beats count explores made in that biome */
   { biome: 'saltmarsh', at: 6, id: 'rival3', title: 'Wren on the coast', text: 'Wren was waiting where the dunes meet the marsh for another battle.',
     lines: [['', 'Where the dunes meet the marsh, a familiar figure is building a very bad sandcastle.'],
       ['wren', 'There you are! I heard you beat Isolde. I got here first, though. Two whole days first.'],
       ['wren', 'The coast changes a team. Wind, salt, the tide pulling at your feet. Let me show you how much.']],
     win: [['wren', 'Ugh! Fine. Fine! You\'re good.'], ['wren', 'Hey, have you heard the howling at low tide? The old fishers say it\'s the keeper of the coast. I\'m going to find it first.']],
-    team: [['kiteskirl', 14], ['brineskit', 15], ['$rival', 16]] },
+    team: [['kiteskirl', 17], ['brineskit', 18], ['$rival', 19]] },
   { biome: 'saltmarsh', at: 14, id: 'tidewolf', title: 'A howl over the breakers', text: 'Breakwatermane, keeper of the coast, appeared at low tide.',
     lines: [['', 'The tide pulls back further than it should. Fish flop on the bare sand. Far out, something howls.'],
       ['', 'A great wolf walks out of the surf, its mane breaking like a wave and reforming. Breakwatermane, keeper of the coast. Every wave seems to wait for it.'],
       ['@breakwatermane', 'It watches your team for a long moment, then steps forward.']],
     win: [['@breakwatermane', 'Breakwatermane shakes the sea from its mane and sits beside you, as calm as still water.'], ['', 'Somewhere up the beach, Wren yells something that sounds a lot like \"NO WAY.\"']],
-    wild: ['breakwatermane', 17, 4] },
+    wild: ['breakwatermane', 21, 4] },
+  { biome: 'saltmarsh', at: 24, id: 'warden2', gate: 'tide', title: 'The Saltmarsh Warden', text: 'Warden Nerys tested your team on the tidal flats below the lighthouse.',
+    lines: [['', 'Below the old lighthouse the tide has pulled back, leaving a mile of rippled sand. A woman in a salt-stained hat waits on it, ankle-deep and unbothered.'],
+      ['nerys', 'You\'re the one Isolde wrote about. She says your team looks back at you. Good. Out here, that isn\'t enough.'],
+      ['nerys', 'The sea changes every six hours. A team that only knows one way to fight gets swept off its feet. I judge whether yours can change with it.'],
+      ['nerys', 'The flats flood in an hour. Let\'s not waste it.']],
+    win: [['nerys', 'You shifted when I shifted. Your team read the water as fast as mine did. That\'s the whole test.'],
+      ['nerys', 'Take the Tide Badge. Your creatures can grow stronger now, and the road up to the Emberfall Highlands is open.'],
+      ['nerys', 'Mind the hot springs up there. And if the ground hums under your feet, stand still and be polite. Something old lives in that mountain too.']],
+    trainer: 'Warden Nerys', team: [['wrackjaw', 21], ['spindriftfoal', 22], ['brineskit', 24]] },
   /* Emberfall Highlands: beats count explores made in that biome */
   { biome: 'emberfall', at: 6, id: 'rival4', title: 'Wren at Warmstep Rise', text: 'Wren challenged you to a rematch on the warm stone trail above the coast.',
     lines: [['', 'The coast is a blue ribbon far below Warmstep Rise, where Wren is trying to keep a scarf out of a Thermwing\'s beak.'],
@@ -236,14 +259,14 @@ const STORY = [
       ['wren', 'Your team looks happy. Mine looks ready for a rematch. Come on, {name}, let\'s see what the climb taught us!']],
     win: [['wren', 'All right, you win. I\'m blaming the hill. It was clearly on your side.'],
       ['wren', 'Next time, I pick the hill. Come on, there\'s a warm spring ahead; both our teams have earned a rest.']],
-    team: [['thermwing', 22], ['kilntusk', 23], ['$rival', 24]] },
+    team: [['thermwing', 27], ['kilntusk', 28], ['$rival', 29]] },
   { biome: 'emberfall', at: 14, id: 'hearthstag', title: 'Hoofbeats beneath the mountain', text: 'Hearthcrown, guardian of Emberfall, emerged beside the highland springs.',
     lines: [['', 'The trail reaches a bowl of black stone where warm water bubbles softly through the cracks. Hoofbeats sound through the steam.'],
       ['', 'A great stag steps into view, ember light threaded through its antlers: Hearthcrown, guardian of Emberfall. The springs glow a little brighter around it.'],
       ['@hearthcrown', 'It nudges a loose stone away from your partner\'s feet, then lowers its antlers and waits. A gentle invitation to show your bond.']],
     win: [['@hearthcrown', 'Hearthcrown folds its legs beside your team, warming the stone beneath their tired paws.'],
       ['', 'When you rise to leave, the guardian rises too, ready to share the next stretch of the trail.']],
-    wild: ['hearthcrown', 25, 4] }
+    wild: ['hearthcrown', 31, 4] }
 ];
 const COUNTER = { cindercub: 'ripplet', ripplet: 'mosshog', mosshog: 'cindercub' };
 
