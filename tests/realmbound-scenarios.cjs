@@ -547,6 +547,19 @@ module.exports = function scenarios() {
         check(rb.C.phase==='seek'&&!tw.bags.some(i=>i.junk),'on Auto your hero visits the smithy, then walks out of the gate');
         const wk=World.walker({map:()=>({rows:['...','.#.','...']}),tiles:{'.':{},'#':{solid:1}},pos:()=>wpos,on:{}}),wpos={x:0,y:0,dir:'down'};wk.place(0,0);
         check(wk.walkTo(2,2)&&wk.path.length===4,'the shared walker finds the shortest way around walls');
+        // S4 part 2: Wildclan camps, the Abbey, and the guild hall you walk into
+        const wv=rb.newHero('Campcheck','wild','grishar','hunter');wv.lvl=45;rb.S.chars=[wv];rb.S.cur=wv.id;rb.boot();
+        check(townKind()==='camp'&&TOWN.map.rows.some(r=>r.includes('F'))&&buildingName(TOWN_BUILDINGS[0])==='Longhouse','Wildclan hubs are camps around a firepit');
+        const cv2=rb.newHero('Abbeycheck','concord','human','priest');cv2.lvl=45;cv2.zone='thornvale';rb.S.chars=[cv2];rb.S.cur=cv2.id;rb.boot();
+        check(townKind()==='town'&&buildingName(TOWN_BUILDINGS[0])==='Abbey'&&TOWN.map.rows.some(r=>r.includes('O')),'Thornvale\'s inn is the Abbey, and Concord towns have a fountain');
+        const kg=rb.S.guild,kb=rb.S.bank;rb.S.guild={jobs:{}};rb.S.bank={};cv2.money=60000;rb.C.phase='intown';for(const n of cv2.npcs.slice(0,5)){n.met=true;n.aff=AFFINITY[2].at;}foundGuild('Hallcheck');
+        TOWN.inside=true;check(TOWN.map===GUILD_HALL&&hallPeople().filter(p=>p.id==='member').length===5,'inside the hall your guild adventurers gather');
+        TOWN_WALK.place(7,8,'up');check(GUILD_HALL.rows.every(r=>r.length===16)&&TOWN_WALK.walkTo(2,3)&&TOWN_WALK.walkTo(13,3)&&TOWN_WALK.walkTo(13,8),'you can walk the whole hall, from the chest to the jobs board');
+        const mk=Object.keys(rb.S.guild.members)[0],mw=workerOf(mk);rb.S.bank={ore:10,kit:2,herb:8,potion:2};while(RTALK)SCN.skip();memberTalk(mk);
+        const asked=!!RTALK&&RTALK.choices&&RTALK.choices.length===2;SCN.choose(0);check(asked&&rb.S.guild.requests[mk],'a member asks their favor in the hall and you can give it there');
+        while(RTALK)SCN.skip();memberTalk(mk);check(!!RTALK&&!RTALK.choices,'afterwards they just talk, by mood');while(RTALK)SCN.skip();
+        townExit();const gb=TOWN_BUILDINGS.find(b=>b.kind==='guild');check(!TOWN.inside&&TOWN.pos.x===gb.door&&TOWN.pos.y===gb.y+gb.h,'the hall door leads back out in front of the hall');
+        rb.S.guild=kg;rb.S.bank=kb;if(!kg)delete rb.S.guild;if(!kb)delete rb.S.bank;
         rb.S.chars=keepC;rb.S.cur=keepCur;rb.S.tab='quests';if(H())rb.boot();}
       // Rain audio follows outdoor ambience and never invents dungeon rain.
       {const hero=rb.newHero('Raincheck','concord','human','mage'),keepCur=rb.S.cur,keepWeather=zoneWeather;rb.S.chars.push(hero);rb.S.cur=hero.id;rb.boot();

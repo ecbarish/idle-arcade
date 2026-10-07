@@ -39,6 +39,12 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-09 (later)** — **Realmbound's hubs get their own character.** Wildclan hubs are now camps: hide tents
+  around a great firepit with real flames and smoke, torches, a palisade and a painted totem (the Longhouse, Forge,
+  Guild lodge and Corral). Thornvale's inn is the Abbey, with a bell tower. **You can walk into your guild hall:** a
+  long room with a red rug, long tables, banners, candles and a roaring hearth, where your guild adventurers gather;
+  talk to them for their mood, give them their favor right there, and use the chest and jobs board. Wildbond's walking
+  now runs on the same shared engine as Realmbound's towns.
 - **2026-10-07** — Realmbound guild raids can draw adventurers from all your heroes, at their owners' levels.
   Gathering pays and stops their jobs; raiders stay reserved across hero switches and reloads, then are free
   when the run ends. Friendship and memories stay with the original companion. Existing raid gates and balance remain.

@@ -73,7 +73,7 @@ decisions; S1-S5 shared systems (S4 part 1); Wildbond weather forecast, battle b
 rain sounds; walkable Realmbound towns.
 
 1. ~~**Hollowecho ambience**~~ — done by Claude 2026-10-09 (dust, mist colour, bats at dusk, battle scenery).
-2. **S4 part 2: the world kit** (Claude): move Wildbond's walking (12-walk.js) onto `World.walker` (its 769 checks
+2. **S4 part 2: the world kit** (Claude) — mostly done 2026-10-09: Wildbond walks on `World.walker`; Wildclan camps and Thornvale's Abbey; the walkable guild hall. **Left:** a walkable guild hall for Starfall Guild; more hub variety (a layout per zone). Originally: move Wildbond's walking (12-walk.js) onto `World.walker` (its 769 checks
    guard it); a layout per Realmbound hub (Wildclan camps, Thornvale's abbey); the guild hall as an interior you
    walk into; then a walkable guild hall for Starfall Guild.
 3. **T29: Wildbond area 7, Sunthread Commons** (ChatGPT; data) — **sent to ChatGPT 2026-10-09** (branch `codex/wildbond-sunthread`): levels 62-68; ticket in
@@ -102,6 +102,9 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude (later): S4 part 2: Wildbond's walking on the shared walker; Wildclan camps (tents, firepit,
+  torches, totem), Thornvale's Abbey; the guild hall interior with members, favors, chest and jobs board. Tests:
+  Realmbound 1513, Wildbond 769, Starfall 48. **Next:** review T29 (Sunthread) when it lands; Starfall's walkable hall.
 - 2026-10-09 Claude: reviewed and merged seven ChatGPT branches (T28 Hollowecho Hills, guild member favors, guild
   raiders, shared rain sounds, Wildbond battle backdrops, Journal forecast, challenge pennants); fixed three check
   closings lost in the merge and a portrait crash without a hero; tidied this file; gave Hollowecho its ambience and
