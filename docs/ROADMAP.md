@@ -66,7 +66,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T10: Wildbond third area, data only** (ChatGPT): see the T10 section below.
 
 - [x] **T12: Realmbound lore pass** (ChatGPT): see the T12 section below.
-- [ ] **T14: Wildbond lore bible and region outline** (ChatGPT, docs only): see the T14 section below.
+- [x] **T14: Wildbond lore bible and region outline** (ChatGPT, docs only): see the T14 section below.
 - [x] **T15: Emberfall Warden and badge, data only** (ChatGPT): see the T15 section below.
 - [x] **T16: Wildbond browser checks** (ChatGPT, tests only): see the T16 section below.
 
