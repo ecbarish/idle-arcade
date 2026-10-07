@@ -217,6 +217,13 @@ const SCENES = {
     ['', 'Shadows stretch out long and soft. The lighthouse stands up off the sand. Far down the coast, the dunes fade into a blue haze you could almost walk into.'],
     ['nerys', 'Huh. Forty years on this coast and I\'ve never seen the far shore that clear.'],
     ['nerys', 'Keep your eyes open in the reeds now, {name}. When the world has depth, the wild ones stop hiding in it. And the weather\'s going to start doing as it pleases.']
+  ],
+  /* the third badge makes the world solid enough to walk all the way around (HD-2D -> Diorama) */
+  solidReturns: [
+    ['', 'The ground hums under your feet, low and steady, the way Nerys said it might.'],
+    ['', 'The springs, the ridges, the path behind you: everything settles, solid and whole, like a model of the mountain someone carved and set down on a table. You could walk all the way around it.'],
+    ['toren', 'There. Feel that? Old stones remember their shapes. Now and then they remind the rest of us.'],
+    ['toren', 'Your partner looks like it could carry you up the next ridge, {name}. Press R and let it. Patience is good. So is a ride.']
   ]
 };
 /* Story beats trigger on the number of times you've explored. `text` goes to the journal; `lines` play as a
@@ -301,6 +308,6 @@ const ERAS = [
   { id: 'pixel', name: 'Pixel', unlock: 'Earn the Thorn Badge' },
   { id: 'bit16', name: '16-bit', unlock: 'Earn the Thorn Badge' },
   { id: 'hd', name: 'HD-2D', unlock: 'Earn the Tide Badge' },
-  { id: 'diorama', name: 'Diorama', unlock: 'Earn the Ember Badge', soon: true },
+  { id: 'diorama', name: 'Diorama', unlock: 'Earn the Ember Badge' },
   { id: '3d', name: '3D', unlock: 'Become Champion', soon: true }
 ];

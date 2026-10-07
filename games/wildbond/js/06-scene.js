@@ -10,6 +10,7 @@ const AX = [0.38, 0.25, 0.12], FX = [0.62, 0.75, 0.88];
 function frame(ms) {
   requestAnimationFrame(frame); if (!PW || document.hidden) return;
   const t = ms / 1000, A = art(), p = Math.max(2, Math.floor(PH / 46)), mo = !reduceMotion; cx = eraCtx(cxRaw);
+  dioramaShow(false); // the 3D view turns itself back on when it draws (14-diorama.js)
   cx.save();
   if (B && B.shake > 0 && mo) cx.translate((Math.random() - 0.5) * p * 3, (Math.random() - 0.5) * p * 2);
   if (S.started && !B && S.pos && MAPS[S.pos.map]) { drawWorld(t, A); cx.restore(); return; }
@@ -68,9 +69,10 @@ function worldView(m, t) {
   for (const r of WK.roam) things.push({ kind: 'pet', wild: 1, x: r.fx, y: r.fy, sp: SPECIES[r.sp], right: r.right, t: t * 1.5 + r.x });
   for (const n of npcsOf(m)) things.push({ kind: 'person', x: n.at[0], y: n.at[1], look: CAST[n.who], dir: n.dir || 'down', step: 0,
     mark: (n.warden && wardenReady() && !S.story[n.warden.id]) || (WK.spot && WK.spot.n.who === n.who) });
-  things.push({ kind: 'person', me: 1, x: WK.fx, y: WK.fy, look: PLAYER_LOOK, dir: S.pos.dir, step: arrived() ? 0 : Math.floor(t * 8) % 2 });
-  const lead = S.team.find(c => c.hp > 0);
-  if (lead && (Math.abs(WK.fol.fx - WK.fx) > 0.05 || Math.abs(WK.fol.fy - WK.fy) > 0.05))
+  const lead = S.team.find(c => c.hp > 0), riding = S.ride && lead && rideOK();
+  if (riding) things.push({ kind: 'pet', x: WK.fx, y: WK.fy, sp: sp(lead), right: S.pos.dir !== 'left', t: arrived() ? 0 : t * 3 });
+  things.push({ kind: 'person', me: 1, ride: riding, x: WK.fx, y: WK.fy, look: PLAYER_LOOK, dir: S.pos.dir, step: riding || arrived() ? 0 : Math.floor(t * 8) % 2 });
+  if (!riding && lead && (Math.abs(WK.fol.fx - WK.fx) > 0.05 || Math.abs(WK.fol.fy - WK.fy) > 0.05))
     things.push({ kind: 'pet', x: WK.fol.fx, y: WK.fol.fy, sp: sp(lead), right: WK.fx > WK.fol.fx + 0.01 || (Math.abs(WK.fx - WK.fol.fx) < 0.01 && S.pos.dir !== 'left'), t });
   things.sort((a, b) => a.y - b.y);
   return { m, P: worldPal(m), px: WK.fx, py: WK.fy, things, edge: m.biome === 'emberfall' ? 'R' : 'T' };
@@ -108,7 +110,7 @@ function drawTopDown(v, t, A) {
   for (const q of v.things) { const sx = ox + q.x * ts, sy = oy + q.y * ts;
     if (q.kind === 'item') item(cx, sx, sy, ts, t);
     else if (q.kind === 'pet') { const pp = ts / (q.wild ? 17 : 18); A.creature(cx, sx + ts / 2 - 2 * pp, sy + ts * 0.92, pp, q.sp, q.right, q.t); }
-    else { walker(cx, sx, sy, ts, q.look, q.dir, q.step); if (q.mark) drawMark(sx, sy, ts, t); } }
+    else { const ry = q.ride ? sy - ts * 0.35 : sy; walker(cx, sx, ry, ts, q.look, q.dir, q.step); if (q.mark) drawMark(sx, ry, ts, t); } }
 }
 /* rain, mist and falling ash (the weather arrives with the Tide Badge; see weatherNow in 12-walk.js) */
 function drawWeather(t) {

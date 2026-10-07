@@ -43,14 +43,14 @@ function renderPanel() {
     return;
   }
   const town = S.pos && !curMap().biome;
-  const k = 'x' + S.biome + S.badges.length + S.explored + W.msg + S.lures + wardenReady() + elderReady() + alive().length + S.auto + (S.pos && S.pos.map) + isNight() + weatherNow();
+  const k = 'x' + S.biome + S.badges.length + S.explored + W.msg + S.lures + wardenReady() + elderReady() + alive().length + S.auto + (S.pos && S.pos.map) + isNight() + weatherNow() + !!S.ride + S.era;
   if (k === panelKey) return; panelKey = k;
   const nb = STORY.find(b => beatHere(b) && !S.story[b.id] && !b.gate && !(b.id === 'elder' && S.story.elderFled)), g = gateHere();
   el.innerHTML = `<div class="explore"><div><b>${town ? curMap().name : BIOMES[S.biome].name}</b> <span class="meta">${town ? 'inn, shop and Maren\'s ranch · walk north to Thornwood' : `explored ${S.explored} times · wild levels ${BIOMES[S.biome].lv[0]}–${BIOMES[S.biome].lv[1]}`}</span></div>
     <p class="msg">${W.msg || (!alive().length ? 'Your team is exhausted. Rest at the Larkhaven inn.' : town ? 'Walk into a door to visit. Talk to people by walking up to them.' : 'Wild creatures hide in the tall grass.')}</p>
-    <p class="meta">${S.auto ? 'Auto-explore is on: your tamer walks the grass on their own.' : `Walk with the arrow keys or WASD, or tap where you want to go.${S.shoes ? ' Hold Shift to run.' : ''}`}${!town && isNight() ? ' Night has fallen: Shade creatures are out.' : ''}${WEATHER_NAME[weatherNow()] ? ' ' + WEATHER_NAME[weatherNow()] : ''}</p>
+    <p class="meta">${S.auto ? 'Auto-explore is on: your tamer walks the grass on their own.' : `Walk with the arrow keys or WASD, or tap where you want to go.${S.shoes ? ' Hold Shift to run.' : ''}${S.era === 'diorama' ? ' Drag the scene to turn the camera, scroll to zoom.' : ''}`}${!town && isNight() ? ' Night has fallen: Shade creatures are out.' : ''}${WEATHER_NAME[weatherNow()] ? ' ' + WEATHER_NAME[weatherNow()] : ''}</p>
     ${!town && nb && beatCount(nb) < nb.at ? `<p class="meta">Something is waiting further in (${nb.at - beatCount(nb)} more finds in the grass).</p>` : ''}
-    <div class="acts">${town ? '' : `<button class="btn big" data-act="explore" ${alive().length ? '' : 'disabled'}>Search the grass <kbd>E</kbd></button>`}
+    <div class="acts">${town ? '' : `<button class="btn big" data-act="explore" ${alive().length ? '' : 'disabled'}>Search the grass <kbd>E</kbd></button>`}${rideOK() ? `<button class="btn alt" data-act="ride">${S.ride ? "Walk" : "Ride " + S.team.find(c => c.hp > 0).name} <kbd>R</kbd></button>` : ""}
       ${wardenReady() ? `<button class="btn gold" data-act="warden">Challenge ${g.trainer}</button>` : ''}
       ${elderReady() ? '<button class="btn gold" data-act="elder">Seek Elderhorn</button>' : ''}
       ${Object.keys(BIOMES).filter(id => (S.pos ? S.pos.map !== id : id !== S.biome) && biomeOpen(id)).map(id => `<button class="btn alt" data-act="biome" data-arg="${id}">Travel to ${BIOMES[id].name}</button>`).join('')}

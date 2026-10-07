@@ -57,4 +57,5 @@ function load() { const o = Arcade.load(KEY); if (!o) return; S = Object.assign(
   // older saves began in color: they keep it, and get the faded Pocket look as an extra
   if (!S.eras.includes('pocket')) S.eras.unshift('pocket');
   if (S.badges.includes('thorn')) { for (const e of ['pixel', 'bit16']) if (!S.eras.includes(e)) S.eras.push(e); S.shoes = true; }
-  if (S.badges.includes('tide') && !S.eras.includes('hd')) S.eras.push('hd'); }
+  if (S.badges.includes('tide') && !S.eras.includes('hd')) S.eras.push('hd');
+  if (S.badges.includes('ember') && !S.eras.includes('diorama')) S.eras.push('diorama'); }

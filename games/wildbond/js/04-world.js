@@ -29,6 +29,9 @@ function storyWin(id) {
     // the second badge brings light and depth (16-bit -> HD-2D), weather, and wild creatures you can see
     const newHD = g.gate === 'tide' && !S.eras.includes('hd'); if (newHD) S.eras.push('hd');
     const flat = newHD && S.era === 'bit16';
+    // the third badge makes the world solid (HD-2D -> Diorama) and lets you ride your lead creature
+    const newDio = g.gate === 'ember' && !S.eras.includes('diorama'); if (newDio) S.eras.push('diorama');
+    const lit = newDio && S.era === 'hd';
     W.afterDone = () => { toast(`You earned the ${badge}!`); sfx('badge');
       setTimeout(() => toast(S.capMode === 'off' ? 'Your team feels stronger.' : `Your creatures can now grow to level ${levelCap()}.`), 2000);
       if (faded) setTimeout(() => { S.era = 'bit16'; recolor(); slog('Color came back to the world. Isolde gave you Warden\'s boots.');
@@ -36,7 +39,10 @@ function storyWin(id) {
       else if (newEra) setTimeout(() => toast('The world shimmers... the 16-bit art style is unlocked. Switch it in the Journal. Hold Shift to run.'), 4500);
       if (flat) setTimeout(() => { S.era = 'hd'; recolor(); slog('Light and depth came back to the world. Weather rolls in, and wild creatures can be seen in the grass.');
         talk(SCENES.lightReturns, () => toast('New art style: HD-2D. Wild creatures now show themselves in the tall grass, and the weather changes.')); }, 900);
-      else if (newHD) setTimeout(() => toast('HD-2D art style unlocked (Journal). Wild creatures now show themselves in the grass, and the weather changes.'), 4500); };
+      else if (newHD) setTimeout(() => toast('HD-2D art style unlocked (Journal). Wild creatures now show themselves in the grass, and the weather changes.'), 4500);
+      if (lit) setTimeout(() => { S.era = 'diorama'; recolor(); slog('The world turned solid as a carved model. Your partner can carry you now.');
+        talk(SCENES.solidReturns, () => toast('New art style: Diorama. Drag the scene to turn the camera, scroll to zoom. Press R to ride your partner.')); }, 900);
+      else if (newDio) setTimeout(() => toast('Diorama art style unlocked (Journal). Press R to ride your lead creature.'), 4500); };
   }
 }
 /* after the art style changes, portraits and faces redraw in the new look */

@@ -35,6 +35,12 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-07** — Wildbond eras, part 3 (T13): the Ember Badge makes the world solid. In the new Diorama style
+  every place is a little 3D model, like a carved table-top scene: houses are blocks with red roofs, trees and rocks
+  stand up, and you, the townsfolk and every creature are your pixel art pushed out into chunky 3D blocks. Drag the
+  scene to turn the camera all the way around, scroll to zoom; the arrow keys follow the camera. Toren also lets you
+  ride your lead creature (press R or the Ride button) for a much faster trip. Battles use the HD-2D look.
+
 - **2026-10-07 (early)** — Merged ChatGPT's Wildbond lore bible (T14, docs/lore/wildbond.md). Wildbond eras, part 2
   (T13): the Tide Badge brings light and depth back to the world in a scene on the beach, and the new HD-2D style
   shows the same places through a tilted camera: trees, people and creatures stand up out of the ground, the

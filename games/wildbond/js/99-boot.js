@@ -15,6 +15,7 @@ document.addEventListener('click', e => {
       if (k === 'share') S.xpShare = v === 'on';
       break; }
     case 'explore': explore(); break;
+    case 'ride': toggleRide(); break;
     case 'warden': challengeWarden(); break;
     case 'elder': seekElder(); break;
     case 'rest': restInTown(); break;

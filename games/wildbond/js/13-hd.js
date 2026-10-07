@@ -80,7 +80,7 @@ ART.hd = (() => {
       shadow(c, p.x, p.y, s * (q.kind === 'item' ? 0.6 : 1));
       if (q.kind === 'item') base.item(c, left, p.y - s * 0.95, s, t);
       else if (q.kind === 'pet') { const pp = s / (q.wild ? 15 : 17); base.creature(c, p.x - 2 * pp, p.y - s * 0.02, pp, q.sp, q.right, q.t); }
-      else { base.walker(c, left, p.y - s * 0.95, s, q.look, q.dir, q.step); if (q.mark) drawMark(left, p.y - s * 0.95, s, t); }
+      else { const top = p.y - s * (q.ride ? 1.3 : 0.95); base.walker(c, left, top, s, q.look, q.dir, q.step); if (q.mark) drawMark(left, top, s, t); }
     }
     light(c, W, H);
     // tapping the ground: screen -> tile

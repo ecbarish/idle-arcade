@@ -52,6 +52,8 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
   Done 2026-10-06. See "Pacing, level caps and journey settings" in docs/creature-game-design.md.
 - [ ] **T11b: Challenge modes and rematches** (Claude, later): Nuzlocke/Randomizer/Solo/Hardcore at a new game,
   Warden and Wren rematch tiers, area mastery stars.
+- [x] **T13 part 3** (Claude): the Diorama era (Ember Badge): the same maps as a voxel model in three.js, sprites
+  extruded into voxels, an orbiting camera; riding your lead creature. Done 2026-10-07. Modern 3D and VR later.
 - [x] **T13 part 2** (Claude): the HD-2D era (Tide Badge): perspective view of the same maps with standing sprites,
   haze, depth of field and light; weather that changes spawns; wild creatures you can see in the grass. Done 2026-10-06.
 - [x] **T13 part 1** (Claude): the Pocket era to start, color returning with the Thorn Badge, running shoes,

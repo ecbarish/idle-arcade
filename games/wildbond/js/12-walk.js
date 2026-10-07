@@ -44,7 +44,19 @@ function ensurePos() {
 function arrived() { return Math.abs(WK.fx - S.pos.x) < 0.01 && Math.abs(WK.fy - S.pos.y) < 0.01; }
 /* Warden's boots (the Thorn Badge): hold Shift, or tap somewhere far away, to run. Auto-explore keeps walking. */
 const RUN_SPEED = 9;
-function speedNow() { return S.shoes && !S.auto && (WK.run || WK.pathRun) ? RUN_SPEED : WALK_SPEED; }
+function speedNow() { return S.auto ? WALK_SPEED : S.ride && rideOK() ? RIDE_SPEED : S.shoes && (WK.run || WK.pathRun) ? RUN_SPEED : WALK_SPEED; }
+/* Riding (the Ember Badge): press R or the Ride button and your lead creature carries you. Auto-explore walks. */
+const RIDE_SPEED = 11;
+function rideOK() { return S.badges.includes('ember') && S.team.some(c => c.hp > 0); }
+function toggleRide() {
+  if (B || TALK) return;
+  if (!rideOK()) { W.msg = S.badges.includes('ember') ? 'Your team is too tired to carry you. Rest first.' : 'Nobody has offered to carry you yet.'; return; }
+  S.ride = !S.ride; const lead = S.team.find(c => c.hp > 0);
+  W.msg = S.ride ? `You climb onto ${lead.name}'s back.` : `You hop down and walk beside ${lead.name}.`;
+}
+/* in the Diorama the arrow keys follow the camera: "up" is always away from you on screen */
+const TURN = ['up', 'right', 'down', 'left'];
+function turnDir(d) { return S.era === 'diorama' && DIO.T ? TURN[(TURN.indexOf(d) - DIO.turn + 4) % 4] : d; }
 /* The day/night clock follows the ranch day (07-ranch.js); it arrives with the Thorn Badge, like the boots.
    darkness: 0 by day, rising at dusk to 1 at night. At night Shade creatures come out more. */
 function dayPart() { return ((S.ranchT || 0) / DAY_SECONDS) % 1; }
@@ -196,7 +208,7 @@ function walkTick(h) {
   if (WK.spot) { if (arrived() && (WK.spot.t -= h) <= 0) challengeTrainer(WK.spot.n); return; }
   roamTick(h); if (B) return;
   if (!arrived()) return;
-  const dir = WK.held[WK.held.length - 1] || WK.queued || WK.path.shift(); WK.queued = null;
+  const held = WK.held[WK.held.length - 1], dir = (held && turnDir(held)) || WK.queued || WK.path.shift(); WK.queued = null;
   if (dir) tryStep(dir);
   else if (S.auto && alive().length) autoWalk();
 }
@@ -214,12 +226,14 @@ document.addEventListener('keydown', e => {
   const k = e.key.toLowerCase(), d = KEYDIR[k];
   if (k === 'shift') WK.run = true;
   if (d && !B) { if (!WK.held.includes(d)) WK.held.push(d); WK.path = []; e.preventDefault();
-    if (!e.repeat) { if (arrived()) tryStep(d); else WK.queued = d; } } // a quick tap still takes one step
+    if (!e.repeat) { if (arrived()) tryStep(turnDir(d)); else WK.queued = turnDir(d); } } // a quick tap still takes one step
   else if ((k === 'enter' || k === ' ') && !B && interact()) e.preventDefault();
+  else if (k === 'r' && !B && !e.repeat) toggleRide();
 });
 document.addEventListener('keyup', e => { const k = e.key.toLowerCase(), d = KEYDIR[k]; if (d) WK.held = WK.held.filter(x => x !== d); if (k === 'shift') WK.run = false; });
 addEventListener('blur', () => { WK.held = []; WK.run = false; });
 cv.addEventListener('click', e => {
+  if (WK.dragged) { WK.dragged = false; return; } // that was a drag to turn the Diorama camera, not a tap
   if (!S.started || B || TALK || !WK.cam) return;
   const r = cv.getBoundingClientRect(), c = WK.cam;
   const mx = e.clientX - r.left, my = e.clientY - r.top; // a renderer with a tilted camera supplies cam.inv (screen -> tile)
