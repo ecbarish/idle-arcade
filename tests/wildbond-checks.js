@@ -420,6 +420,68 @@ function wildbondChecks() {
   for (const n of MAPS.farwatch.npcs.filter(n=>n.trainer)) check('Farwatch trainer '+n.who+' plays and records a real victory', () => {
     ready();S.badges=[...badges,'reed','echo','loom'];wb.placeAt('farwatch');talkTo(n);if(!TALK)return false;skipTalk();return B&&B.npc===n.who&&B.trainer===CAST[n.who].name&&finishFight()==='won'&&S.beaten[n.who];
   });
+  // T30: league entry, the daily gauntlet and the finale through the existing battle flow.
+  function leagueReady() { ready(); S.badges=Object.keys(BADGES); S.day=1; S.ranchT=0; wb.placeAt('league'); leagueState(); }
+  check('League road checks every one of the eight badges, then walks both ways', () => {
+    for(const missing of Object.keys(BADGES)){ready();S.badges=Object.keys(BADGES).filter(b=>b!==missing);wb.placeAt('farwatch',12,1,'up');wb.tryStep('up');if(S.pos.map!=='farwatch'||!W.msg.includes('eight badges'))return false;}
+    leagueReady();wb.placeAt('farwatch',12,1,'up');wb.tryStep('up');if(S.pos.map!=='league'||S.pos.x!==3||S.pos.y!==16)return false;wb.tryStep('down');return S.pos.map==='farwatch'&&S.pos.x===12&&S.pos.y===1;
+  });
+  check('League is a connected, valid walkable hall with five courts and a gate battle', () => {
+    leagueReady();const m=MAPS.league,seen=new Set(),todo=[m.start.slice(0,2)];
+    while(todo.length){const [x,y]=todo.pop(),k=x+','+y;if(seen.has(k)||!walkable(m,x,y)||npcAt(m,x,y))continue;seen.add(k);for(const [dx,dy]of Object.values(DIRS))todo.push([x+dx,y+dy]);}
+    for(let y=0;y<m.rows.length;y++)for(let x=0;x<m.rows[0].length;x++)if(walkable(m,x,y)&&!npcAt(m,x,y)&&!seen.has(x+','+y))return false;
+    return !m.biome&&m.league&&m.npcs.filter(n=>typeof n.league==='number').length===5&&m.npcs.some(n=>n.league==='wren')&&m.npcs.every(n=>seen.has(n.at[0]+','+(n.at[1]+1)))&&seen.has('3,17');
+  });
+  const leagueBeats=STORY.filter(b=>b.league!==undefined);
+  check('Four voiced league teams are 70-74, Champion is 74-76 and Wren brings her partner at 73', () => leagueBeats.length===6&&leagueBeats.slice(1,5).every(b=>b.team.length===3&&b.team.every(([id,l])=>SPECIES[id]&&l>=70&&l<=74)&&b.lines.length>=2&&b.win.length)&&leagueBeats.at(-1).team.every(([id,l])=>SPECIES[id]&&l>=74&&l<=76)&&leagueBeats[0].team.at(-1).join(',')==='$rival,73');
+  check('Wren must be met before any court; courts cannot be skipped', () => {
+    leagueReady();leagueTalk(4);if(B||TALK||!W.msg.includes('Wren'))return false;leagueTalk('wren');if(!TALK)return false;skipTalk();if(!B||B.story!=='leagueWren'||finishFight()!=='won'||!S.story.leagueWren||!leagueLocked())return false;
+    leagueTalk(2);return !B&&!TALK&&W.msg.includes('listening court')&&S.league.room===0;
+  });
+  for(let room=0;room<5;room++)check('League room '+(room+1)+' uses a real story battle and heals after its result scene', () => {
+    leagueReady();S.story.leagueWren=true;S.league.room=room;S.league.active=true;S.team[0].hp=Math.round(stOf(S.team[0]).hp*.6);leagueTalk(room);if(!TALK)return false;skipTalk();if(!B||B.story!==leagueBeats[room+1].id||B.leagueDay!==1)return false;
+    if(finishFight()!=='won')return false;return S.league.room===room+1&&S.team.every(c=>c.hp===stOf(c).hp)&&(room<4?S.pos.x===7+(room+1)*7:S.titles.includes('Champion'));
+  });
+  check('A league loss returns to entrance, keeps cleared rooms today and permits an immediate retry', () => {
+    leagueReady();S.story.leagueWren=true;S.league.room=2;S.league.active=true;leagueTalk(2);skipTalk();S.team[0].hp=0;endBattle('lost');wb.finishBattle();skipTalk();
+    if(S.pos.map!=='league'||S.pos.x!==3||S.pos.y!==16||S.league.room!==2||!leagueLocked()||S.team[0].hp!==stOf(S.team[0]).hp)return false;
+    leagueContinue();skipTalk();return B&&B.story==='league3';
+  });
+  check('Failed gate battle does not mark Wren won and retries at the gate', () => {
+    leagueReady();leagueTalk('wren');skipTalk();endBattle('lost');wb.finishBattle();skipTalk();leagueContinue();skipTalk();return B&&B.story==='leagueWren'&&!S.story.leagueWren&&S.league.room===0;
+  });
+  check('Gauntlet blocks travel, free inn healing, exit and ranch/team swapping; leaving clears rooms', () => {
+    leagueReady();S.story.leagueWren=true;S.league.active=true;S.league.room=2;S.team[0].hp=1;wb.travelTo('thornwood');wb.placeAt('league',3,16,'down');wb.tryStep('down');wb.S.tab='ranch';restInTown();
+    const uid=S.team[0].uid;
+    const button=document.createElement('button');button.dataset.act='toranch';button.dataset.arg=uid;document.body.append(button);button.click();button.remove();
+    if(S.pos.map!=='league'||S.team[0].hp!==1||S.team[0].uid!==uid||!TABS.ranch.build().includes('stays together'))return false;
+    leagueLeave();return S.pos.map==='farwatch'&&!leagueLocked()&&S.league.room===0;
+  });
+  check('Cleared rooms persist across a same-day save reload and expire the next ranch day', () => {
+    leagueReady();S.story.leagueWren=true;S.league.active=true;S.league.room=3;save();reset();load();ensurePos();if(S.league.room!==3||!leagueLocked())return false;
+    S.day++;leagueState();return S.league.room===0&&!leagueLocked()&&S.pos.x===3&&S.story.leagueWren;
+  });
+  check('A day boundary during battle cannot advance an expired attempt', () => {
+    leagueReady();S.story.leagueWren=true;S.league.active=true;S.league.room=3;leagueTalk(3);skipTalk();S.day++;endBattle('won');wb.finishBattle();skipTalk();return S.league.room===0&&!S.story.league4&&!leagueLocked()&&S.pos.x===3;
+  });
+  check('Old eight-badge saves default a fresh league attempt without losing creatures, story or titles', () => {
+    leagueReady();const uid=S.team[0].uid;S.titles=['Trail test'];S.story.warden8=true;delete S.league;save();reset();load();return S.team[0].uid===uid&&S.story.warden8&&S.badges.length===8&&S.titles.join(',')==='Trail test'&&S.league.room===0&&!leagueLocked()&&!S.story.leagueChampion;
+  });
+  check('Champion victory and ending are once-only, recorded in Journal, and do not unlock unbuilt 3D or cap 100', () => {
+    leagueReady();S.story.leagueWren=true;S.league.active=true;S.league.room=4;const eras=JSON.stringify(S.eras);leagueTalk(4);skipTalk();if(finishFight()!=='won')return false;
+    if(!S.story.leagueChampion||!S.story.leagueEnding||!S.titles.includes('Champion')||!leagueJournal().includes('fully restored')||levelCap()!==75||JSON.stringify(S.eras)!==eras||leagueLocked())return false;
+    const count=S.log.length;leagueTalk(4);skipTalk();save();reset();load();return S.titles.filter(t=>t==='Champion').length===1&&S.story.leagueEnding&&S.log.length===count;
+  });
+  check('Reload during a healing rest resumes the rest before allowing the next room', () => {
+    leagueReady();S.story.leagueWren=true;S.league.active=true;leagueTalk(0);skipTalk();endBattle('won');S.team[0].hp=1;save();reset();load();leagueContinue();if(!TALK||B||S.league.room!==1||!S.league.rest)return false;skipTalk();return !S.league.rest&&S.team[0].hp===stOf(S.team[0]).hp;
+  });
+  check('Reload between Champion result and ending resumes the finale safely', () => {
+    leagueReady();S.story.leagueWren=true;S.league.active=true;S.league.room=4;leagueTalk(4);skipTalk();endBattle('won');save();reset();load();wb.placeAt('league');leagueContinue();if(!TALK)return false;skipTalk();return S.story.leagueEnding&&S.titles.includes('Champion')&&!leagueLocked();
+  });
+  check('League tune, weather and backdrop select the hall without adding a wild biome', () => {
+    leagueReady();const t=TRACKS.league;return musicKey()==='league'&&WEATHER.league.includes(weatherNow())&&BATTLE_PLACES.league.far==='ruins'&&t.mel.split(' ').length===32&&[...t.mel.split(' '),...t.bass.split(' ')].every(n=>n==='.'||ArcadeSound.hz(n)>0)&&!BIOMES.league&&!roamOn();
+  });
+  check('Ending includes Wren, Maren, Isolde and free guardians without requiring any capture', () => SCENES.leagueEnding.some(([who])=>who==='wren')&&SCENES.leagueEnding.some(([who])=>who==='maren')&&SCENES.leagueEnding.some(([who])=>who==='isolde')&&SCENES.leagueEnding.some(([,t])=>t.includes('guardians')));
   // Living battle backdrops: real canvas calls across routes, eras, weather and reduced motion.
   check('Battle scenery draws each route and weather without changing the save or battle', () => {
     ready();S.badges=Object.keys(BADGES);const canvas=document.createElement('canvas');canvas.width=320;canvas.height=180;

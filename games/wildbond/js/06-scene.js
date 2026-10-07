@@ -49,6 +49,7 @@ function frame(ms) {
    Weather and night come from the walking clock; this paints behind creatures and never changes a battle. */
 const BATTLE_AMB = Ambience.create({ reduce: () => reduceMotion });
 const BATTLE_PLACES = {
+  league: { far: 'ruins', near: 'oaks', leaves: .15 },
   thornwood: { far: 'oaks', near: 'pines', leaves: .25 },
   saltmarsh: { far: 'dunes', near: 'stones', water: true },
   emberfall: { far: 'mesas', near: 'stones', embers: .3 },
@@ -59,7 +60,7 @@ const BATTLE_PLACES = {
   farwatch: { far: 'ruins', near: 'stones', water: true, fog: .35 }
 };
 function drawBattleBackdrop(t) {
-  const b = BIOMES[S.biome], place = BATTLE_PLACES[S.biome] || { far: 'dunes', near: 'stones' };
+  const atLeague = S.pos && curMap().league, b = BIOMES[atLeague ? curMap().pal : S.biome], place = BATTLE_PLACES[atLeague ? 'league' : S.biome] || { far: 'dunes', near: 'stones' };
   const night = darkness(), weather = weatherNow(), time = reduceMotion ? 0 : t;
   const px = Math.max(2, Math.round(PH / 160)), gy = PH * .8;
   cx.save();

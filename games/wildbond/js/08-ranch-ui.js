@@ -3,8 +3,9 @@
 const BARN = { a: null, b: null };
 TABS.ranch = {
   key: () => { ensureRanch(); return everyone().map(c => { ensureCare(c); return [c.uid, c.lvl, c.plan.food, c.plan.act, c.injured, Math.round(c.fatigue / 10), Math.round(c.mood / 10), trainedTotal(c)].join(':'); }).join() +
-    '|' + S.day + '|' + S.eggs.length + '|' + JSON.stringify(S.food) + '|' + BARN.a + '|' + BARN.b + '|' + S.team.length + '|' + !!B + '|' + JSON.stringify(S.titles || []);  },
+    '|' + S.day + '|' + S.eggs.length + '|' + JSON.stringify(S.food) + '|' + BARN.a + '|' + BARN.b + '|' + S.team.length + '|' + !!B + '|' + leagueLocked() + '|' + JSON.stringify(S.titles || []);  },
   build: () => {
+    if (leagueLocked()) return '<h3>Ranch</h3><p class="sub">Your league team stays together between rooms. Leave the attempt to visit Maren and change your team.</p>';
     ensureRanch(); const all = everyone();
     const foodOpts = c => `<option value="none" ${c.plan.food === 'none' ? 'selected' : ''}>No food</option>` + Object.entries(FOODS).map(([k, f]) =>
       `<option value="${k}" ${c.plan.food === k ? 'selected' : ''}>${f.name}${FAVORITE[sp(c).fam] === k ? ' (favorite)' : ''}</option>`).join('');
@@ -56,6 +57,7 @@ function ranchPennantsHTML() {
 
 document.addEventListener('change', e => {
   const t = e.target;
+  if (leagueLocked() && (t.dataset.plan || t.dataset.barn)) return;
   if (t.dataset.plan) { const c = everyone().find(x => x.uid === Number(t.dataset.uid)); if (c) { ensureCare(c); c.plan[t.dataset.plan] = t.value; save(); } }
   if (t.dataset.barn) { BARN[t.dataset.barn] = t.value ? Number(t.value) : null; }
   if (t.dataset.plan || t.dataset.barn) renderAll();

@@ -362,10 +362,27 @@ const CAST = {
   olan: { name: 'Warden Olan', skin: '#ac7957', hair: 'hat', hairCol: '#c4c5ac', hatCol: '#82774e', shirt: '#5b7c69', bg: '#d4dfc5', title: 'Warden of Stillreed Basin' },
   senna: { name: 'Warden Senna', skin: '#bd8e6d', hair: 'short', hairCol: '#77747f', shirt: '#596b62', bg: '#ced6cf', title: 'Warden of Hollowecho Hills' },
   halen: {"name":"Warden Halen","skin":"#a97a56","hair":"short","hairCol":"#b0a78c","shirt":"#758b53","bg":"#e9e3bd","title":"Warden of Sunthread Commons"},
+  edrin: {"name":"Edrin","title":"Listening court","shirt":"#6d8268","skin":"#deb08b","hair":"short","hairCol":"#66595a","bg":"#e5e8db"},
+  maela: {"name":"Maela","title":"Shelter court","shirt":"#698796","skin":"#ba8767","hair":"bun","hairCol":"#66595a","bg":"#e5e8db"},
+  corven: {"name":"Corven","title":"Shared-work court","shirt":"#b18d66","skin":"#deb08b","hair":"short","hairCol":"#66595a","bg":"#e5e8db"},
+  liora: {"name":"Liora","title":"Honest-record court","shirt":"#b3a56d","skin":"#ba8767","hair":"bun","hairCol":"#66595a","bg":"#e5e8db"},
+  avenne: {"name":"Champion Avenne","title":"Champion of the Returning Light League","shirt":"#8b7095","skin":"#deb08b","hair":"short","hairCol":"#66595a","bg":"#e5e8db"},
+  nelva: {"name":"Nelva","title":"League rest keeper","shirt":"#798d88","skin":"#ba8767","hair":"bun","hairCol":"#66595a","bg":"#e5e8db"},
   rysa: {"name":"Warden Rysa","skin":"#bd906e","hair":"bun","hairCol":"#62565a","shirt":"#547c8a","bg":"#dbe6e1","title":"Warden of Farwatch Reach"}
 };
 /* Scenes that aren't tied to an explore count. */
 const SCENES = {
+  leagueEnding: [
+    ["","At the gate, Wren stands on tiptoe until she sees your team. Maren has a blanket over one arm; Isolde waits beside the lookout stones."],
+    ["wren","Champion! I practiced saying it quietly. That did not work. CHAMPION!"],
+    ["maren","Come here, {name}. All of you. I remember three little ones waiting by a ranch gate. Look how far those paws have carried you."],
+    ["isolde","The last pale seam has gone from the clouds. The water holds every colour of the shore. The world remembers its colours fully now."],
+    ["","Along the coast, a lantern answers. In the basin, a sheltered wake crosses the reeds. Beyond the hills, the guardians answer in calls, light and leaf-shadow. Some travel beside tamers; others remain at home."],
+    ["isolde","Their memory did not need a cage. Every bond, every safe return, reminded the land. The reason it faded is still an older story."],
+    ["wren","We should go home and tell everyone. Then we should take the long way. I know a few places we missed."],
+    ["maren","The ranch gate will be open. A Champion still needs somewhere to rest."],
+    ["","Your journey is complete. You earned the Champion title. Keep exploring and raising your partners; more adventures after the league are coming."]
+  ],
   intro: [
     ['', 'The supply cart stops at the edge of the trees. Larkhaven is a handful of roofs, a windmill and a ranch fence that runs right up to the forest.'],
     ['', 'Everything here looks faded, like an old picture left in the sun: the trees, the roofs, even the sky are washed in the same soft green.'],
@@ -692,7 +709,67 @@ const STORY = [
       ["rysa","Take the Horizon Badge, your eighth. Your partners can grow to level seventy-five. You have carried their trust from Larkhaven all the way to this shore."],
       ["rysa","The league is the next chapter, not a reason to forget these roads. Rest here, correct your notes, and remember who helped you reach the horizon."]
     ],
-    trainer: "Warden Rysa", team: [["keeljaw",69],["moorweft",70],["soundhowl",72]] }
+    trainer: "Warden Rysa", team: [["keeljaw",69],["moorweft",70],["soundhowl",72]] },
+  /* T30: scripted league encounters; these do not trigger through wild explores. */
+  { biome: "league", at: 0, id: "leagueWren", league: "wren", title: "The last gate battle", text: "Wren shared the last gate battle before the league.",
+    lines: [
+      ["","Wren closes her notebook beside the league gate. The first page is creased where a ranch name was written in a hurry."],
+      ["wren","Larkhaven. My brilliant starter strategy. All those wrong turns. We made it, {name}. Our partners made it with us."],
+      ["wren","Your notes helped me get here. Mine are yours too. But this last battle? You still have to earn it."],
+      ["wren","Whatever happens inside, you will find me cheering for the team that walked every road beside you. Ready?"]
+    ],
+    win: [
+      ["wren","You win. I wanted that one so badly! And I am glad it was you. Both things can be true."],
+      ["wren","Go on. They can count your badges; I know what it took to earn them. I will be right here when you come out."]
+    ],
+    team: [["chartwing",72],["inkwhisk",73],["$rival",73]] },
+  { biome: "league", at: 0, id: "league1", league: 0, title: "The listening court", trainer: "Edrin", text: "Edrin tested listening at the Returning Light League.",
+    lines: [
+      ["edrin","I used to shout a plan over every warning. My partners taught me to leave a silence."],
+      ["edrin","This court asks you to hear what changes. Give your team room to answer."]
+    ],
+    win: [
+      ["edrin","You listened while the battle was moving. That is harder than listening after it ends."]
+    ],
+    team: [["hushmane",70],["dripdart",71],["bloomcourser",72]] },
+  { biome: "league", at: 0, id: "league2", league: 1, title: "The shelter court", trainer: "Maela", text: "Maela tested sheltering a team at the Returning Light League.",
+    lines: [
+      ["maela","A shelter is useful because someone can rest beneath it. Strength must leave a safe place for another."],
+      ["maela","Show me how your team protects its tired paws."]
+    ],
+    win: [
+      ["maela","Your strongest opening did not leave anybody behind. Come, the next bench is dry."]
+    ],
+    team: [["keeljaw",71],["flintroot",72],["ferrycrest",73]] },
+  { biome: "league", at: 0, id: "league3", league: 2, title: "The shared-work court", trainer: "Corven", text: "Corven tested sharing the work at the Returning Light League.",
+    lines: [
+      ["corven","I carry the benches; Ribbonstride fetches the cloth. Neither of us could hold this gathering alone."],
+      ["corven","Three partners, different work. Let us see what they can make together."]
+    ],
+    win: [
+      ["corven","Nobody had to become somebody else to help. I like that team."]
+    ],
+    team: [["hearthrunner",72],["ribbonstride",73],["tilthtusk",74]] },
+  { biome: "league", at: 0, id: "league4", league: 3, title: "The honest-record court", trainer: "Liora", text: "Liora tested learning honestly at the Returning Light League.",
+    lines: [
+      ["liora","My ledger has mistakes in it. They are crossed out where the next tamer can see them."],
+      ["liora","A league battle is a record of what we learn, not proof we have nothing left to learn."]
+    ],
+    win: [
+      ["liora","Write that down: we changed our minds, and our partners trusted us enough to try again."]
+    ],
+    team: [["buoyglint",72],["moorweft",73],["pennantlark",74]] },
+  { biome: "league", at: 0, id: "leagueChampion", league: 4, title: "The Champion terrace", trainer: "Champion Avenne", text: "Avenne met your team on the Champion terrace.",
+    lines: [
+      ["avenne","Welcome, {name}. I know eight Wardens who have been waiting to hear how your team arrived."],
+      ["avenne","The title belongs to a tamer, but the journey belongs to every partner beside them. Mine still teach me things."],
+      ["avenne","Bring the forest, the crossing, the gathering and the horizon with you. Let us give them a battle worth remembering."]
+    ],
+    win: [
+      ["avenne","There it is. A whole journey, answering together. You have earned this place."],
+      ["avenne","Come back through the gate with me. The people who believed in you should hear your name first."]
+    ],
+    team: [["bloomcourser",74],["hushmane",75],["soundhowl",76]] }
 ];
 const COUNTER = { cindercub: 'ripplet', ripplet: 'mosshog', mosshog: 'cindercub' };
 

@@ -16,6 +16,8 @@ function chooseStarter(id, name, pace, modes) {
   talk(SCENES.rival1, () => startBattle('trainer', [rival], { trainer: RIVAL.name, story: 'rival1' }));
 }
 function storyWin(id) {
+  const leagueBeat = STORY.find(b => b.id === id && b.league !== undefined);
+  if (leagueBeat) { leagueVictory(leagueBeat); return; }
   S.story[id] = true;
   // the after-battle scene plays once the result screen closes (see finishBattle)
   W.after = id === 'rival1' ? SCENES.rival1Win : (STORY.find(b => b.id === id) || {}).win || null;
@@ -23,7 +25,7 @@ function storyWin(id) {
   if (g && !S.badges.includes(g.gate)) {
     const badge = BADGES[g.gate].name;
     S.badges.push(g.gate); S.coins += 300 * S.badges.length; slog(`Earned the ${badge} from ${g.trainer}.`); checkTitles();
-    // the first badge brings the world's color back (Pocket -> 16-bit), and Warden's boots for running
+    // the first badge brings the world\'s color back (Pocket -> 16-bit), and Warden's boots for running
     const newEra = g.gate === 'thorn' && !S.eras.includes('bit16');
     if (g.gate === 'thorn') { for (const e of ['pixel', 'bit16']) if (!S.eras.includes(e)) S.eras.push(e); S.shoes = true; }
     const faded = newEra && S.era === 'pocket';
@@ -92,16 +94,16 @@ function storyFight(b) {
   // trainers' creatures appear evolved once they're past their evolution level
   const grown = (id, lvl) => { let s = id; while (SPECIES[s].evo && lvl >= SPECIES[s].evo.at) s = SPECIES[s].evo.to; return s; };
   const team = b.team.slice(-Math.max(1, S.team.length)).map(([id, lvl]) => newCreature(grown(id === '$rival' ? S.rivalStarter : id, lvl), lvl, { rar: 1 }));
-  startBattle('trainer', team, { trainer: b.trainer || RIVAL.name, story: b.id });
+  startBattle('trainer', team, { trainer: b.trainer || RIVAL.name, story: b.id, leagueDay: b.league !== undefined ? leagueState().day : null });
 }
 function challengeWarden() { if (!B && !TALK && wardenReady() && alive().length) story(gateHere()); }
 function seekElder() { if (!B && !TALK && elderReady() && alive().length) { S.story.elderFled = false; story(STORY[1]); } }
-function restInTown() { if (B) return; healAll(); W.msg = 'You rest at the Larkhaven inn. Your team is fully healed.'; }
+function restInTown() { if (B || leagueLocked()) { if (!B) W.msg = 'Rest between league rooms; leave the attempt before visiting Larkhaven.'; return; } healAll(); W.msg = 'You rest at the Larkhaven inn. Your team is fully healed.'; }
 function buyLures() { if (B) return; if (S.coins < 50) { W.msg = 'Lures cost 50 coins for 5.'; return; } S.coins -= 50; S.lures += 5; W.msg = 'You buy 5 lures.'; }
 
 /* After a battle: show the result briefly, then clear it. Auto mode keeps exploring on its own. */
 function worldTick(h) {
-  S.stats.play += h; ranchTick(h);
+  S.stats.play += h; ranchTick(h); leagueState();
   if (TALK) return;
   if (B) { battleTick(h);
     if (B && B.over) { W.endT += h; if (W.endT > (S.auto ? 2 : 3.5)) finishBattle(); } return; }
@@ -111,3 +113,65 @@ function worldTick(h) {
 }
 function finishBattle() { if (!B) return; if (B.over === 'lost') healAll(); B = null; W.endT = 0; save();
   if (W.after) { const lines = W.after, done = W.afterDone; W.after = W.afterDone = null; talk(lines, done); } else if (W.afterDone) { W.afterDone(); W.afterDone = null; } }
+
+/* T30: the league uses existing story fights, result scenes and the ranch day. */
+function leagueOpen() { return Object.keys(BADGES).every(id => S.badges.includes(id)); }
+function leagueState() {
+  S.league = S.league || { day: 0, room: 0, active: false, rest: false };
+  if (S.league.day !== (S.day || 1)) {
+    const wasActive = S.league.active;
+    S.league = { day: S.day || 1, room: 0, active: false, rest: false };
+    if (wasActive && S.pos && MAPS[S.pos.map] && curMap().league && !B) { placeAt('league'); W.msg = 'A new ranch day begins. The league rooms are ready for a fresh attempt.'; }
+  }
+  return S.league;
+}
+function leagueLocked() { return leagueState().active; }
+function leagueBeat() { return STORY.find(b => b.league === (!S.story.leagueWren ? 'wren' : leagueState().room)); }
+function leagueTalk(room) {
+  if (B || TALK || !S.pos || !curMap().league || !leagueOpen()) return;
+  if (room === 'keeper') { talk([['nelva', leagueLocked() ? 'Your cleared rooms are kept for today. Continue with the same team, or leave this attempt to visit the ranch.' : 'Welcome. There is a dry bench here; take your time before meeting Wren.']], () => { if (!leagueLocked()) { healAll(); save(); } }); return; }
+  if (S.story.leagueChampion) { if (!S.story.leagueEnding) leagueEnding(); else if (room === 'wren') talk([['wren','Champion! Come back to Larkhaven with me sometime. I want to show Maren our notes.']]); else { const who = castKeyOf((STORY.find(b => b.league === room) || {}).trainer) || 'avenne'; talk([[who,'Welcome back, Champion. These roads are still yours to walk. More adventures after the league are coming.']]); } return; }
+  const b = leagueBeat();
+  if (!b) { W.msg = 'Return to the entrance for a fresh attempt.'; return; }
+  if (leagueState().rest) { talk([['nelva','A quiet rest between courts. Your team is fully healed; take the next room when you are ready.']], () => { healAll(); S.league.rest = false; placeAt('league',7 + S.league.room * 7,9,'up'); save(); }); return; }
+  if (b.league !== room) { W.msg = !S.story.leagueWren ? 'Meet Wren at the gate first.' : 'Visit the next court in order: ' + b.title + '.'; return; }
+  if (!alive().length) { W.msg = 'Rest at the entrance before beginning.'; return; }
+  const run = leagueState(); run.active = true; S.ride = false;
+  placeAt('league', room === 'wren' ? 3 : 7 + room * 7, room === 'wren' ? 13 : 8, 'up');
+  story(b);
+}
+function leagueContinue() { const b = leagueBeat(); if (S.story.leagueChampion) { leagueTalk(4); return; } if (b) leagueTalk(b.league); }
+function leagueLeave() {
+  if (B || TALK) return;
+  S.league = { day: S.day || 1, room: 0, active: false, rest: false };
+  placeAt('farwatch',12,1,'down'); W.msg = 'You leave the league attempt. Visit the ranch freely; the four courts begin again when you return.'; save();
+}
+function leagueVictory(b) {
+  const run = leagueState();
+  if (!B || B.leagueDay !== run.day) { W.after = [['nelva','The ranch day changed during that battle. Rest here; the courts begin afresh today.']]; W.afterDone = () => { healAll(); placeAt('league'); save(); }; return; }
+  if (b.league === 'wren') S.story.leagueWren = true;
+  else { run.room = b.league + 1; S.story[b.id] = true; }
+  if (b.id === 'leagueChampion') { W.after = b.win.concat(SCENES.leagueEnding); W.afterDone = completeLeagueEnding; return; }
+  run.rest = true;
+  const next = STORY.find(x => x.league === run.room);
+  W.after = b.win.concat([['nelva','Water, warm cloths, and a quiet moment. Every partner is counted. Your team is fully healed for the next court.']]);
+  W.afterDone = () => { healAll(); run.rest = false; placeAt('league',7 + run.room * 7,9,'up'); W.msg = 'Rested. Next: ' + next.title + '. Cleared rooms last for this ranch day.'; save(); };
+  slog(b.text);
+}
+function leagueDefeat() {
+  const run = leagueState();
+  W.after = (W.after || []).concat([['nelva','Come back to the entrance. We will help your partners rest. Today\'s cleared rooms are still yours; try the next one when you are ready.']]);
+  W.afterDone = () => { healAll(); placeAt('league'); W.msg = 'Your team is rested. Continue today\'s attempt, or leave it to visit the ranch.'; save(); };
+  run.active = true; placeAt('league');
+}
+function leagueEnding() { talk(SCENES.leagueEnding,completeLeagueEnding); }
+function completeLeagueEnding() {
+  healAll(); S.story.leagueEnding = true; S.titles = S.titles || [];
+  if (!S.titles.includes('Champion')) { S.titles.push('Champion'); slog('Champion of the Returning Light League: the world\'s colour is fully restored. The post-game is coming.'); toast('Title earned: Champion!'); sfx('badge'); }
+  S.league.active = false; placeAt('league',3,14,'down'); W.msg = 'Champion! Your journey is complete. More adventures after the league are coming.'; save();
+}
+function leaguePanel() {
+  const run = leagueState(), b = leagueBeat();
+  return '<div class="explore"><b>Returning Light League</b><p class="msg">' + (W.msg || 'Meet Wren at the gate, then follow the four courts to the Champion terrace.') + '</p><p class="meta">Day ' + (S.day || 1) + ' · ' + Math.min(4,run.room) + '/4 courts cleared. Healing rests between rooms; leaving ends this attempt. Walk with WASD/arrows, or tap a person.</p><div class="acts"><button class="btn gold" data-act="league">' + (S.story.leagueChampion ? S.story.leagueEnding ? 'Greet the Champion' : 'See the ending' : b.league === 'wren' ? 'Meet Wren at the gate' : 'Visit ' + b.title) + '</button><button class="btn alt" data-act="leagueleave">Leave for Farwatch</button></div></div>';
+}
+function leagueJournal() { return '<h4>The Returning Light League</h4><p class="sub">' + (S.story.leagueEnding ? 'Champion. The world\'s colour is fully restored. Wren, Maren and Isolde welcomed your team home. More adventures after the league are coming.' : S.story.leagueChampion ? 'Champion battle won. Return to the league to see the ending.' : S.story.leagueWren ? 'Wren\'s last gate battle is won. Today: ' + Math.min(4,leagueState().room) + '/4 courts cleared; the Champion waits beyond them.' : 'Eight badges open the league road from Farwatch. Wren waits at the gate.') + '</p>'; }

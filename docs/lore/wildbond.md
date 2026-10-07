@@ -2,7 +2,7 @@
 
 ## Reading this record
 
-This records Wildbond through v1.1.0 and all eight Wardens, including the Pocket era and the return of color. The source is [content and dialogue](../../games/wildbond/js/00-data.js), [map conversations](../../games/wildbond/js/11-maps.js), [story rewards](../../games/wildbond/js/04-world.js), and the [creature game design](../creature-game-design.md). Current game text takes precedence over older planning language.
+This records Wildbond through v1.2.0 and all eight Wardens, including the Pocket era and the return of color. The source is [content and dialogue](../../games/wildbond/js/00-data.js), [map conversations](../../games/wildbond/js/11-maps.js), [story rewards](../../games/wildbond/js/04-world.js), and the [creature game design](../creature-game-design.md). Current game text takes precedence over older planning language.
 
 The first sections describe established canon. Where the game leaves room for interpretation, that is stated. All eight areas are now approved and recorded in the area canon sections below; earlier proposals are historical planning notes. The region itself has no confirmed proper name yet.
 
@@ -282,6 +282,42 @@ a post-game reach toward 100. Evan's approved ending plan supersedes that band: 
 then the league and Champion at about 72–75, with the road to 100 reserved for the post-game. Its proposed
 Rysa, Horizon Badge, Watchlight and Wren's shared notes are now implemented canon.
 
+## The finale: Returning Light League (T30 / W2)
+
+All eight badges open Farwatch's north road to the **Returning Light League**, a coastal hall with four courts
+and a Champion terrace. Five small court shelters look over the water; reflection pools, flowers, benches and
+an open promenade leave room for teams to rest. **Nelva**, the rest keeper, counts every partner before the next
+room. The hall has its own original C-major tune, clear/mist weather and stone-and-oak battle scenery.
+
+**Wren's last gate battle** brings Chartwing at 72, Inkwhisk at 73 and her original partner at 73. Her notebook
+still holds the first hurried ranch entry. She remembers her starter strategy and the wrong turns, offers her
+notes freely, and admits that wanting to win and being glad for a friend can both be true. Winning this gate
+battle is a permanent story milestone; it is not repeated for each daily league attempt.
+
+The four trainers bring existing species, with distinct themes and voices:
+
+- **Edrin**, the listening court: Hushmane 70, Dripdart 71, Bloomcourser 72. He learned to leave a silence for a warning.
+- **Maela**, the shelter court: Keeljaw 71, Flintroot 72, Ferrycrest 73. Strength must leave a safe place for another.
+- **Corven**, the shared-work court: Hearthrunner 72, Ribbonstride 73, Tilthtusk 74. Partners need different useful roles.
+- **Liora**, the honest-record court: Buoyglint 72, Moorweft 73, Pennantlark 74. Corrections belong where others can see them.
+
+The same team fights the courts in order. Nelva offers a short healing rest after each victory, including Wren's;
+losses heal and return the team to the entrance, preserving cleared courts for the current ranch day. Reloads
+resume today's progress and any unfinished healing rest. The next day begins a fresh attempt. Leaving for the
+ranch or other routes ends the attempt; team swaps and ranch actions are unavailable until then.
+
+**Champion Avenne** brings Bloomcourser 74, Hushmane 75 and Soundhowl 76. She recognizes the eight Wardens' lessons,
+but says a title belongs to a tamer while the journey belongs to every partner beside them. After her defeat,
+Wren cheers at the gate. Maren remembers the three young starters; Isolde sees the final pale seam leave the
+clouds and the shore hold its full colours. The guardians answer through light, calls, leaf-shadow and a sheltered
+wake. Some accompany tamers and others stay home: no guardian capture is required for the ending.
+
+This establishes **the world's colour fully restored** through earned bonds and careful returns. It does not
+explain the original fading, Toren's warm stones, or the guardians' origins. The **Champion** title and completion
+are permanent and recorded in the Journal. The cap remains 75 with all eight badges; the road to 100 and Modern
+3D remain W3/W6, with a gentle message that more adventures after the league are coming. A reload after the
+Champion result can resume the ending, and repeated visits never duplicate the title.
+
 ## Open questions
 
 - What is the region called, and how long have Larkhaven and the Wardens existed?
@@ -291,7 +327,6 @@ Rysa, Horizon Badge, Watchlight and Wren's shared notes are now implemented cano
 - What continues guarding an area when its guardian chooses to accompany a tamer?
 - Where do elements come from, and can different guardians share an element without sharing an origin?
 - What does a badge certify beyond passage and growth, and who recognizes the Wardens' authority?
-- What will the league and Champion scenes look like? The approved boundary is after Farwatch (66–72), at about 72–75; the post-game opens the road to 100.
 - How should later light and depth restoration work without requiring a guardian capture? Current color restoration already allows that freedom.
 - What are the humming shell, unusual tidal retreat and disappearing dusk webs telling us? They may be separate mysteries.
 - Which future regions and characters does Evan want to approve before their names enter dialogue or data?
