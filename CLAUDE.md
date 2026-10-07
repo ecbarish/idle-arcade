@@ -63,9 +63,11 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
   Cloudglass Pass: 00-data.js + 11-maps.js); while it's open Claude only touches `SCENES` and `ERAS` in 00-data.js
   and nothing in 11-maps.js.
 - **Realmbound** (classic-MMO idle, flagship): levels 1-40, two dungeons, hunters/pets/mounts, lore bible in
-  `docs/lore/realmbound.md`. Frostmere / The Winter Road (30-40, PR #7) is merged; its necropolis dungeon and levels
-  41+ wait on the rest of T1 (Claude: specs for 40-60, raids, guild).
-  Big future direction: the whole roster plays at once (IdleOn-style).
+  `docs/lore/realmbound.md`. Frostmere / The Winter Road (30-40, PR #7) is merged. **T1 is done:** the plan for
+  40-60, the guild and raids is `docs/realmbound-40-60.md` (chapters, talents, loot, pacing, guild, raid, build
+  order, owner questions with defaults). **Next for Claude:** T1-A (second talent trees, roles from your build,
+  respec), then T1-B. ChatGPT: T20 (Frostmere II + The Silent Barrows) and T21 (item name tiers).
+  Big future direction: the whole roster plays at once (IdleOn-style); the guild section of the plan is where it lands.
 - Parked: Primordial, Starfall Guild, Diamond Career (baseball), Otherworld (isekai).
 
 ## Latest owner direction and Codex handoff — 2026-10-06

@@ -178,7 +178,8 @@ bright handheld look and Primordial's microscope.
   Sanctum record only. Old active dungeon runs gain the `sanctum` identity on load.
 - Automation and Focus/Auto efficiency are unchanged. LFG Tool repeats the dungeon you just cleared.
 
-Next: professions and broader talent choices, then Frostmere and the journey to level 60.
+Next: professions and broader talent choices, then Frostmere and the journey to level 60. The plan for 40-60,
+the guild and raids is [docs/realmbound-40-60.md](realmbound-40-60.md) (T1).
 
 ## Frostmere first chapter: The Winter Road
 

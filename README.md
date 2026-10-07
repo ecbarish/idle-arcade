@@ -35,6 +35,11 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-07 (night, later)** — Realmbound plan for levels 40-60, the guild and raids (T1): docs/realmbound-40-60.md.
+  Three chapters (the Barrowfields and the Silent Barrows, then the Hollow Crown in two parts), second and third
+  talent trees with roles that follow your build, item names for every level band, a guild that is your whole
+  account, and a first 10-person raid, The Hollow Throne.
+
 - **2026-10-07 (night)** — Merged ChatGPT's promo pages (T19): promo.html is up to date for Realmbound (levels 1-40,
   Frostmere), and promo-wildbond.html introduces Wildbond to friends; the hub links both.
 

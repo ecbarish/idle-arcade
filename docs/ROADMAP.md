@@ -21,7 +21,12 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 
 ## Tickets
 - [x] **T0: Split Realmbound into small files** (ChatGPT). No behavior change. See HANDOFF.md.
-- [ ] **T1: Specs for levels 30-60, raids and the guild** (Claude).
+- [x] **T1: Specs for levels 40-60, raids and the guild** (Claude): [docs/realmbound-40-60.md](realmbound-40-60.md),
+  done 2026-10-07. Follow-ups in its build order: T1-A (Claude, second talent trees and roles), T20 and T21
+  (ChatGPT, below), T1-B, R1, T22/T23, guild and raid.
+- [ ] **T1-A: Second talent trees, roles from your build, respec** (Claude, next for Realmbound).
+- [ ] **T20: Realmbound Frostmere II, The Barrowfields and The Silent Barrows** (ChatGPT, data): see the T20 section.
+- [ ] **T21: Realmbound item name tiers to level 60** (ChatGPT, data + one formula): see the T21 section.
 - [x] **T2: Creature game spec + shared creature module plan** (Claude). See docs/creature-game-design.md.
 - [x] **T3: Content for levels 30-40** (Codex): Frostmere, The Winter Road. See
   [chapter specification](realmbound-winter-road.md). Evan authorized the narrow progression spec while Claude
@@ -146,6 +151,48 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   (it validates maps, exits, NPC spots, speakers and moves). Then play it: give a save the first three badges with
   `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
+
+### T20: Realmbound Frostmere II, The Barrowfields and The Silent Barrows (data)
+The first chapter of docs/realmbound-40-60.md: levels 40-45 and a third dungeon, built with existing systems
+only, following The Winter Road's contract (docs/realmbound-winter-road.md). Read docs/realmbound-40-60.md
+("The journey" and "Story thread") and docs/lore/realmbound.md first.
+- **Change only:** games/realmbound/js/00-core.js (`LEVEL_CAP = 45`), 01-world.js (a new zone and its quests),
+  06-npcs.js (`npcZone`: companions level 40+ visit the new zone), 07-dungeons.js (the new dungeon),
+  tests/realmbound-scenarios.cjs (checks), docs/lore/realmbound.md, README.md changelog, and ticking T20 here.
+  Claude is changing talents and party roles (03-talents-abilities.js, 09-dungeon-runs.js, 12-tabs.js) meanwhile.
+- **Zone `barrowfield`, "The Barrowfields"**, `lv: [40, 45]`, shared (`faction: null`), hubs `Lanternrest Lodge` /
+  `Whitebough Hearth` (forward camps), its own sky/hill/ground (grey-blue snow, dark barrow stone), a `lore`
+  paragraph, appended to both `ZONE_ORDER` routes after `frostmere`. Mobs: 5 types levels 40-45 using existing
+  families/kinds (e.g. grave-cold wolves, barrow spiders, restless Wayfolk dead as humanoids, ice troll diggers) and
+  one legendary tameable elite at 45 (`elite: true, rare: true`, a beast family that can be tamed).
+- **11-12 quests** `bf1`…: kill/collect, levels 40-45, `req` chains like Frostmere, faction-specific `giver`
+  pairs and `done` lines in each giver's voice (reuse Surveyor Tavin / Storykeeper Eshra and the Roadwarden pair, or
+  add new named givers). The story follows "Story thread: Frostmere II": the Wayfolk, their road-stones, the
+  grave-cold spreading up the road. The last quest sends you to the dungeon. Original names only.
+- **Dungeon `barrows`, "The Silent Barrows"**: `minLvl: 42`, `zone: 'barrowfield'`, its own sky/hill/ground,
+  `waveName`/`surgeName`, 4 packs and 3 bosses at levels 42-45 in the same shape as `FOUNDRY` (existing `mech`
+  keys only: `wave`, `surge`, `enrage`; boss `hpM`/`dmgM`/`loot` like the Foundry's, slightly higher). Final
+  boss **the Last Wayward** (level 45). Add `barrows: BARROWS` to `DUNGEONS`. Claude adds its new Grave Chill
+  mechanic afterwards (T1-B).
+- **Checks:** tests/run.html must pass, plus new scenario checks like Frostmere's: both factions travel at 38 (not
+  37), see the right hub and lore, take every quest, hear each turn-in voice, get a scaled reward; the elite spawns
+  and can be tamed; a level-40 save resumes and earns XP to 41; the dungeon appears in the dungeon list at 42 in its
+  zone. Lore record: add the Barrowfields, its people, the dungeon and its bosses, consistent with the spec's story.
+
+### T21: Realmbound item name tiers to level 60 (data + one formula)
+Item names stop changing at item level 16 today. Give every level band its own names (docs/realmbound-40-60.md,
+"Loot from 40 to 60").
+- **Change only:** games/realmbound/js/02-items.js (names), the `tier` line in `genItem` in 08-inventory-quests.js,
+  tests/realmbound-scenarios.cjs (a few checks), README.md changelog, and ticking T21 here.
+- **Formula:** `tier = ilvl <= 20 ? Math.min(3, Math.floor((ilvl - 1) / 5)) : Math.min(7, 3 + Math.ceil((ilvl - 20) / 10))`
+  so tiers 0-3 cover levels 1-20 as today, 4 = 21-30, 5 = 31-40, 6 = 41-50, 7 = 51-60. Items already in saves keep
+  the names they were generated with.
+- **Names:** extend every list indexed by tier to 8 entries (each `MAT` material, each `WEAPONS[...].names`, each
+  `OFFH` list, `TRINKETS`), getting sturdier and grander with level and fitting the existing style (Banded → e.g.
+  Runed, Frostforged, Wayfolk, Ashwing-scale…). Add 8-12 dungeon-flavored entries to `BLUE_PRE` (Wayfolk's,
+  Barrow-touched, Rimebound…). Original names only.
+- **Checks:** tests/run.html passes; new checks that `genItem` at item levels 1, 16, 25, 35, 45, 55 uses tier 0, 3,
+  4, 5, 6, 7 names for a weapon, an armor piece, an off-hand and a trinket.
 
 ### T16: Wildbond browser checks (tests only)
 Realmbound has `tests/run.html` (click **Run checks**, get PASS/FAIL, no Node.js). Give Wildbond the same, so every
