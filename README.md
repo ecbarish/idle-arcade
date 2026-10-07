@@ -39,6 +39,9 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-10** — **Readable on big screens.** On desktops and ultrawides, the panels, text and buttons now grow
+  with the screen (about 1.1x on a 1920 desktop, 1.3x on a 3440x1440 ultrawide), so nothing is tiny next to the big
+  scene. The scenes themselves stay sharp and taps still land exactly where you click.
 - **2026-10-10** — **Big screens.** On desktops and ultrawides (like Evan's 3440x1440) every game now uses the space:
   the scene takes most of the width and becomes a cinematic 21:9 view on ultrawides (more of the world when you walk,
   more of each zone in Realmbound), the panels sit beside it, and the homepage shows bigger covers. Phones and laptops

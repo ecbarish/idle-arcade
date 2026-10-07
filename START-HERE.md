@@ -105,6 +105,9 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-10 Claude: L11 part 2: panels, text and buttons scale with CSS `zoom` at 1700 px+ (1.12) and 2400 px+
+  (1.3); canvases never zoom so taps stay exact (checked at 3440x1440 in all three games; tests pass). **Next:** review
+  T30 (`codex/wildbond-league`) when it lands; then E3 save doctor, or W9 design, or the wider walkable view (L11).
 - 2026-10-10 Claude: merged W1 (ChatGPT, Farwatch, Wildbond 1044 checks, v1.1.0); sent T30 (Wildbond's ending: the
   league and the Champion) to ChatGPT; L11 part 1: wide layouts for desktops and ultrawides (CSS only, verified at
   3440x1440). **Next:** review T30; L11 part 2 (panel text and buttons scale), or E3 save doctor, or W9 design.
