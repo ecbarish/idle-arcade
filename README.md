@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Realmbound v1.0.1 (2026-10-07)** — **Frostmere winter light:** low snow haze on the road and in its walkable hubs, cooler reflected light and clearer blue mountain layers. Warm night fires and windows remain visible; dawn, weather and the shared day/night shadows still shape the scene.
 - **2026-10-10** — **Save doctor** in the Studio: pick a game to see its save at a glance (heroes, team, badges, coins),
   a health check that spots broken values (an empty level, negative coins, a missing current hero) with a one-click
   fix, and every field in plain words, searchable and editable. Nothing is written until you press Save, and the old
