@@ -67,7 +67,7 @@ plans; [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) is the historical record up to
   the game supplies `flat`, `stand`, `things`; returns a camera with `fwd`/`inv`). Wildbond's HD-2D era
   (`js/13-hd.js`) and Realmbound's towns (`js/22-town.js`) both draw through it. Wildbond's own walking (12-walk.js)
   runs on `World.walker` too (S4 part 2), keeping its own grass, trainers, roamers and items.
-- `studio.html` + `shared/gm.js`: the Studio (E1, E2). GM mode (Studio toggle, or `?gm` in a game's address) adds a GM
+- `studio.html` + `shared/gm.js`: the Studio (E1, E2), deliberately unlinked so players never stumble on it (Evan, 2026-10-10: keep immersion; cheats are fine since saves are per-player). GM mode (Studio toggle, or `?gm` in a game's address) adds a GM
   panel (Ctrl+Shift+G) whose actions each game registers in its own file: Realmbound `js/24-gm.js`, Wildbond
   `js/16-gm.js`, Starfall `js/09-gm.js`. The panel backs up the save before the first change (`arcade-backup:<key>:<time>`,
   8 kept) and logs every action (`arcade-gm-log`); the Studio lists, downloads, imports and restores saves. Realmbound's
