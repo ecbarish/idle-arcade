@@ -41,7 +41,9 @@ changes, what "good" looks like, and how much each kind of decision is yours to 
 - **Pixel-art discipline:** crisp pixels (no blurry scaling), a palette that fits the zone, motion that's gentle.
 - **Writing:** short lines, each character sounds like themselves, no exposition dumps; show the world through people.
 - **Feel:** every action answers with sound, motion or a line of text; nothing important happens silently.
-- **Phone-friendly:** works with taps at 375 px wide.
+- **Every screen, not just phones** (Evan plays on a 45-inch 3440x1440 ultrawide): check a phone (375 px wide), a
+  laptop (1366x768), a desktop (1920x1080) and an ultrawide (3440x1440). Big screens should *use* the space (a larger
+  scene, panels side by side, crisp at high resolution), not show a small column in the middle; phones get taps.
 
 ## Your creative freedom, by level
 

@@ -32,7 +32,7 @@ and the arcade's homepage shows them off. Any assistant may push these forward w
 |---|---|---|---|---|---|---|
 | L1 | **Shared settings panel** in every game: sound, graphics quality (S6), reduced motion, text size | M | Polish | G1 | open | One `shared/settings.js`; respects `prefers-reduced-motion` by default |
 | L2 | **Save safety** in every game: export / import / automatic backup slot, version tags in saves | M | System | — | open | Starfall already exports; copy its pattern; never change existing save keys |
-| L3 | **Mobile pass**: layouts, tap targets, the walkable worlds on touch, performance on a mid phone | L | Polish | G4 | open | Test at 375 px wide; scenes must stay above ~40 fps |
+| L3 | **Mobile pass**: layouts, tap targets, the walkable worlds on touch, performance on a mid phone | L | Polish | G4 | open | Test at 375 px wide; scenes must stay above ~40 fps; see L11 for big screens |
 | L4 | **Onboarding**: a gentle first 10 minutes per game (what to click, what Auto does) | M | Design+Polish | — | open | Realmbound and Wildbond first; use the shared dialogue scenes |
 | L5 | **Install and offline** (web app manifest + service worker), so the arcade works like an app | S | System | — | open | GitHub Pages friendly; cache-bust on release |
 | L6 | **Credits** page and `CREDITS.md` for any outside assets | S | Polish | — | open | See CREATIVE.md "Outside assets" |
@@ -40,6 +40,7 @@ and the arcade's homepage shows them off. Any assistant may push these forward w
 | L8 | **Immersive homepage** that shows off the engines (living scene, sound, dialogue, creatures) | L | Art | G1, W2 | open | Evan: build once the games are further along (START-HERE) |
 | L9 | **Versioning and release notes**: a version number in each game, a release checklist | S | Polish | — | done 2026-10-10 (Jules) | HANDOFF.md "Releasing a version" |
 | L10 | **Accessibility**: keyboard play everywhere, colour contrast, readable fonts, screen-reader labels | M | Polish | — | open | |
+| L11 | **Big screens**: laptop, desktop and ultrawide (3440x1440) layouts that use the space: the scene grows (wider view in the walkable worlds, more of the zone in Realmbound), panels sit side by side, text scales, canvases stay crisp at high resolution | M | Polish | — | open | Evan's main screen is a 45-inch ultrawide; test at 1366x768, 1920x1080 and 3440x1440 alongside 375 px |
 
 ## Graphics: light, fog and atmosphere (S6)
 
