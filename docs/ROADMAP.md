@@ -61,6 +61,29 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 
 - [x] **T12: Realmbound lore pass** (ChatGPT): see the T12 section below.
 - [ ] **T14: Wildbond lore bible and region outline** (ChatGPT, docs only): see the T14 section below.
+- [ ] **T15: Emberfall Warden and badge, data only** (ChatGPT): see the T15 section below.
+
+### T15: Emberfall Warden and badge (data only)
+Emberfall Highlands (levels 22-32) is the only area without a Warden. Add one, using the Warden system T11 built.
+**Change only games/wildbond/js/00-data.js** (plus ticking T15 here). Claude is building the walkable world (T7b)
+in other files at the same time.
+- `BADGES`: add one badge (pick an id and a name that fit a volcanic highland, e.g. `ember: { name: 'Ember Badge' }`).
+- `CAST`: add the Warden as a speaker (same fields as `isolde`/`nerys`; `hair` must be one of short, long, bun,
+  spiky, hat; `hatCol` only with `hat`). Give them a title like 'Warden of Emberfall'.
+- `STORY`: add one beat right after the `hearthstag` beat, copying the shape of the `warden2` (Warden Nerys) beat:
+  `biome: 'emberfall'`, `at: 24`, a unique `id` (e.g. 'warden3'), `gate: '<your badge id>'`, `title`, `text` (one
+  journal line), `lines` (4 lines: one narration line setting the scene, then the Warden), `win` (3 lines: praise, the
+  badge handed over, a hint about something old further on), `trainer: '<Warden name>'` matching CAST, and `team` of
+  three from Emberfall's own species at levels 31, 32 and 34 (use the evolved form `kilntusk`, not `slaglet`, if
+  you use that line). The game already shows the "Challenge" button, plays the scenes, awards the badge and raises
+  the level cap from these fields; no code changes are needed.
+- **What this Warden judges** must differ from the others: Isolde judges bond ("does your team fight *for* you"),
+  Nerys judges adapting ("can your team change with the tide"). Pick something new (patience, endurance under heat,
+  trust under pressure...) and make the dialogue show it. Match the existing tone: warm, plain, a little wry.
+- Test: serve the repo (`serve.ps1`), open http://localhost:8765/games/wildbond/, and in the console use the
+  localhost hook `window.__wb`: give a save both badges, set `S.biome = 'emberfall'` and
+  `S.exploredIn = { emberfall: 24 }`; the Challenge button must show your Warden's name, the scene must play,
+  and winning must add the badge and raise `__wb.levelCap()` to 45. No console errors.
 
 ### T14: Wildbond lore bible and region outline (docs only)
 Wildbond is heading for about eight areas and eight badges (levels 1-100, see "Pacing, level caps and journey
