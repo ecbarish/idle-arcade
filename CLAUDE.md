@@ -6,8 +6,9 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
 
 ## Start of every session
 1. `git pull`, then `git fetch` and check `git branch -r` for `codex/*` branches newer than `main` (ChatGPT's work).
-2. For each: `git log --format='%h %ae %s' main..origin/<branch>`, review the diff and test it (see below).
-   Keep feature work in a PR for Evan to review. Do not merge automatically; Evan explicitly requested PRs without merging.
+2. For each: `git log --format='%h %ae %s' main..origin/<branch>`, review the diff, test it (see below), merge with
+   `git merge --no-ff`, push, and mark the ticket done if ChatGPT didn't. Evan confirmed on 2026-10-06 that Claude
+   merges after checking; ChatGPT/Codex still opens PRs and never merges its own work.
 3. Pick up the next ticket from "Where we are" below.
 
 ## Rules
@@ -41,8 +42,9 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
   Warden + `tide` badge; rescale Emberfall's levels. Then **T7b walkable world** (tile map kept separate from the
   renderer), then **T13 era progression** (Game Boy → 16-bit → HD-2D → voxel diorama → 3D → VR). Plans are in
   `docs/creature-game-design.md`.
-- **Realmbound** (classic-MMO idle, flagship): levels 1-30, two dungeons, hunters/pets/mounts, lore bible in
-  `docs/lore/realmbound.md`. Waiting on T1 (Claude: specs for 30-60, raids, guild), then T3 content for ChatGPT.
+- **Realmbound** (classic-MMO idle, flagship): levels 1-40, two dungeons, hunters/pets/mounts, lore bible in
+  `docs/lore/realmbound.md`. Frostmere / The Winter Road (30-40, PR #7) is merged; its necropolis dungeon and levels
+  41+ wait on the rest of T1 (Claude: specs for 40-60, raids, guild).
   Big future direction: the whole roster plays at once (IdleOn-style).
 - Parked: Primordial, Starfall Guild, Diamond Career (baseball), Otherworld (isekai).
 
@@ -52,4 +54,4 @@ Read [docs/plans/README.md](docs/plans/README.md) and [docs/DEVELOPMENT.md](docs
 
 Sports should support athlete careers and team management across sports. Salaries should fund lasting personal progress (homes, cars, other purchases). Baseball remains the recommended first module; do not silently unpark implementation.
 
-T12 is merged in main `e4c10f6`. Local `codex/realmbound-winter-road` implements levels 30–40 and integrates that main; it has not been pushed. `codex/arcade-development-plan` adds documentation above it. Wider T1 remains open. Preserve Claude's Wildbond lane; no Wildbond files were edited. Desktop publishing and a fresh post-integration browser run are needed. See the desktop checklist before copying files or importing saves.
+Winter Road (PR #7) and these plans (PR #8) are merged and live; `tests/run.html` passed (231) before merging. Wider T1 remains open. Wildbond stays Claude's lane. Open owner decisions: full-Auto unlock timing, the second sport, and whether purchases (homes/cars) have gameplay effects.

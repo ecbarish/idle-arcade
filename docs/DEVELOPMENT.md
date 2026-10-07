@@ -2,7 +2,15 @@
 
 This is the shared status and decision record for Evan, Claude and Codex. Read this with `HANDOFF.md` and `docs/ROADMAP.md` before taking work. The roadmap controls ticket scope and priorities; these notes distinguish observed code, pending work and proposals. Recheck main and open PRs before relying on an older status entry.
 
-## Latest handoff — research and portfolio plans, 2026-10-06
+## Latest handoff — Winter Road and plans merged, 2026-10-06 (Claude)
+
+PR #7 (The Winter Road, levels 30–40) and PR #8 (research and plans) are merged to main and live. Before merging,
+Claude reran `tests/run.html` on the integrated branch (PASS, 231 checks) and played a level-30 hero into Frostmere
+with no console errors. Evan confirmed: Claude reviews, tests and merges `codex/*` work (CLAUDE.md step 2), and the
+narrow 30–40 spec stands; T1's 40–60, raid and guild design remains with Claude. The entry below is the historical
+Codex handoff; its publication and desktop items are done.
+
+## Previous handoff — research and portfolio plans, 2026-10-06
 
 **Request:** research all planned games, record what comparable games do well/poorly, and propose development stages. Evan clarified that sports spans multiple sports and athlete/team-management roles, salaries must fund meaningful homes/cars/purchases, all games need manual through full automation, and desktop/phone matter more than VR.
 

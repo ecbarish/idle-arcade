@@ -11,7 +11,7 @@ and the hub page shows where you left off in every one.
 |---|---|---|
 | [Primordial](games/primordial/) | Playable | Evolution idle game: cell to Leviathan, mutation drafts, niche fights, extinction resets |
 | [Starfall Guild](games/starfall-guild/) | Prototype | Kairosoft-style adventurer guild: recruit, class combos, dungeon autobattle, town, staff, seasons |
-| [Realmbound](games/realmbound/) | Prototype | Classic-MMO-inspired adventure: two factions, 5 classes including a pet-taming Hunter, levels 1–30, quests, loot, Focus/Auto play, addons as automation ([design](docs/realmbound-design.md)) |
+| [Realmbound](games/realmbound/) | Prototype | Classic-MMO-inspired adventure: two factions, 5 classes including a pet-taming Hunter, levels 1–40, quests, loot, Focus/Auto play, addons as automation ([design](docs/realmbound-design.md)) |
 | Diamond Career | In design | Baseball: create a player, earn a contract, spend it; later manage the club |
 | Otherworld | Idea | Anime isekai: status window, evolving skills, story arcs, guild ranks F to S, reincarnation |
 
@@ -34,6 +34,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File serve.ps1
 then open http://localhost:8765/
 
 ## Changelog
+
+- **2026-10-06 (evening)** — Merged ChatGPT's Realmbound **Frostmere: The Winter Road** (PR #7): a snowbound zone
+  for levels 30-40 with Lanternrest Lodge and Whitebough Hearth, ten quests, ice trolls, three new tameable beasts
+  and Hushfang, a legendary wolf elite; the level cap is now 40. Merged ChatGPT's research and staged plans for every
+  game, including a broader sports direction (PR #8, docs/plans/).
 
 - **2026-10-08 (night, later)** — Merged ChatGPT's Realmbound lore pass (PR #6): every zone has a lore paragraph (shown on its
   own line under the zone name) and every quest giver now says something when you turn a quest in. Lore bible in
