@@ -72,6 +72,27 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T15: Emberfall Warden and badge, data only** (ChatGPT): see the T15 section below.
 - [x] **T16: Wildbond browser checks** (ChatGPT, tests only): see the T16 section below.
 - [ ] **T17: Wildbond area 4, Cloudglass Pass** (ChatGPT, data + map): see the T17 section below.
+- [ ] **T18: Wildbond music for every place** (ChatGPT, sound only): see the T18 section below.
+
+### T18: Wildbond music for every place (sound only)
+Wildbond's chiptune music (games/wildbond/js/10-sound.js) has tracks for Thornwood, the Saltmarsh, battles, trainer
+battles and legendaries, written as note strings and played live by Web Audio. Give every place and moment its own
+tune. **Change only games/wildbond/js/10-sound.js** (plus ticking T18 here). Claude is building the Diorama era
+in other files, and T17 is editing 00-data.js and 11-maps.js.
+- **New tracks** in `TRACKS`, same format (one 8th note per token, `.` = rest, `mel` and `bass` the same length,
+  `bpm`, optional `shift`): `larkhaven` (cosy home town, gentle), `emberfall` (warm, a bit adventurous, highland
+  air), `cloudglass` (airy, high, a little lonely; T17's area 4 uses the biome id `cloudglass`), `warden` (a Warden
+  battle: proud and serious, faster than `trainer`), `night` (a soft, slower variant for any area at night) and
+  `rain` (a calm, steady tune for rainy weather). Each melody 32-64 tokens, original (never copy real songs), and
+  musical: stay mostly in one key, end in a way that loops smoothly back to the start.
+- **Choose them** in `musicKey()`: Warden battles (`B.story` is a beat with `gate`, look it up in `STORY`) play
+  `warden`; in town (`S.pos` on a map with no `biome`) play `larkhaven`; out in an area, `night` when `isNight()`
+  is true, otherwise `rain` when `weatherNow() === 'rain'`, otherwise the area's own track if it has one. Both
+  `isNight` and `weatherNow` already exist (12-walk.js); call them only when `S.pos` is set.
+- **Voices:** add `vessa` (T17's Warden) and the route trainers in 11-maps.js (`bram`, `lise`, `cato`, `marit`,
+  `orsk`, `sela`) to `VOICE`, each a pitch in Hz that suits the character (dialogue blips).
+- **Check:** serve the repo (serve.ps1), open http://localhost:8765/games/wildbond/, set Sound to "Effects + music"
+  with the header button and listen in town, Thornwood and a battle; `tests/wildbond.html` must still pass.
 
 ### T17: Wildbond area 4, Cloudglass Pass (data + map)
 Build area 4 from the "Area 4 proposal: Cloudglass Pass" in docs/lore/wildbond.md (Evan approved it by sending
