@@ -35,6 +35,10 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-07** — Realmbound item names now progress through eight tiers (T21): the original level 1–20 names,
+  then new names for 21–30, 31–40, 41–50 and 51–60 across every armor material, weapon, off-hand and trinket.
+  Adds ten dungeon-flavored rare-item prefixes. Existing saved items keep their names; item statistics are unchanged.
+
 - **2026-10-08 (later)** — Wildbond area 4, Cloudglass Pass (T17): a rope gate north of Emberfall opens with the
   Ember Badge onto a misty mountain pass. Seven new wild creatures (Mistfinch evolves into Cloudharrier), the guardian
   Lanterncrest, trainers Ilka and Teodor, a Wren rematch, and Warden Vessa, whose Beacon Badge raises the cap to 55.

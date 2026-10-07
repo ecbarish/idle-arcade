@@ -1,7 +1,7 @@
 'use strict';
 function genItem(ilvl,rar,slot,o){
   o=o||{};ilvl=Math.max(1,Math.round(ilvl));const cls=o.cls||pick(Object.keys(CLASSES));const K=CLASSES[cls];
-  const it={id:uid(),slot,ilvl,rar,stats:{},dur:100};const tier=Math.min(3,Math.floor((ilvl-1)/5));let base;
+  const it={id:uid(),slot,ilvl,rar,stats:{},dur:100};const tier=ilvl <= 20 ? Math.min(3, Math.floor((ilvl - 1) / 5)) : Math.min(7, 3 + Math.ceil((ilvl - 20) / 10));let base;
   if(slot==='weapon'){const type=o.type||pick(K.weap),W=WEAPONS[type];it.wtype=type;it.speed=W.speed;
     const dps=(ilvl*.7+2.5)*[.8,1,1.15,1.3,1.5][rar];it.wmin=Math.max(1,Math.round(dps*W.speed*.8));it.wmax=Math.round(dps*W.speed*1.2)+1;base=W.names[tier];}
   else if(slot==='offhand'){const type=o.type||K.off;it.otype=type;base=OFFH[type][tier];if(type==='shield')it.armor=Math.round(8*(ilvl*2+5)*[.8,1,1.1,1.25,1.4][rar]);}

@@ -168,5 +168,24 @@ module.exports = function scenarios() {
       tw.talents={cruelty:1};check(rb.respecCost()===20000,'resets in a row cost more');
       tw.lvl=30;tw.talents={cruelty:2};check(rb.respecCost()===0,'resets are free below level 40');
       rb.S.chars=rb.S.chars.filter(c=>c!==tw);
-      rb.S.cur=h.id;rb.boot();rb.save();return checks;
+      // T21: every generated item category follows the widened name bands.
+      check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');
+      check(BLUE_PRE.length===17&&new Set(BLUE_PRE).size===17,'rare prefix pool retains seven names and adds ten distinct dungeon names');
+      for(const [ilvl,tier] of [[1,0],[16,3],[25,4],[35,5],[45,6],[55,7]]){
+        check(Object.entries(WEAPONS).every(([type,w])=>genItem(ilvl,1,'weapon',{cls:'warrior',type}).name===w.names[tier]),'weapon names use tier '+tier+' at item level '+ilvl);
+        check(Object.entries(MAT).every(([atype,names])=>genItem(ilvl,1,'chest',{cls:'warrior',atype}).name.startsWith(names[tier]+' ')),'armor names use tier '+tier+' at item level '+ilvl);
+        check(Object.entries(OFFH).every(([type,names])=>genItem(ilvl,1,'offhand',{cls:'warrior',type}).name===names[tier]),'off-hand names use tier '+tier+' at item level '+ilvl);
+        check(genItem(ilvl,2,'trinket',{cls:'warrior',suffix:'bear'}).name===TRINKETS[tier]+' of the Bear','trinket names use tier '+tier+' at item level '+ilvl);
+      }
+      for(const [ilvl,tier] of [[5,0],[6,1],[10,1],[11,2],[15,2],[20,3],[21,4],[30,4],[31,5],[40,5],[41,6],[50,6],[51,7],[60,7],[61,7],[100,7]]){
+        check(genItem(ilvl,1,'weapon',{cls:'warrior',type:'sword'}).name===WEAPONS.sword.names[tier]&&
+          genItem(ilvl,1,'chest',{cls:'warrior',atype:'mail'}).name.startsWith(MAT.mail[tier]+' ')&&
+          genItem(ilvl,1,'offhand',{cls:'warrior',type:'shield'}).name===OFFH.shield[tier]&&
+          genItem(ilvl,2,'trinket',{cls:'warrior',suffix:'bear'}).name===TRINKETS[tier]+' of the Bear','item name boundary at level '+ilvl+' uses tier '+tier);
+      }
+      rb.S.cur=h.id;rb.boot();
+      const oldBlade=genItem(45,1,'weapon',{cls:'warrior',type:'sword'});oldBlade.name='Tempered Longblade';rb.S.chars.find(c=>c.id===h.id).bags.push(oldBlade);rb.save();
+      const saved=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1'))).chars.find(c=>c.id===h.id).bags.find(it=>it.id===oldBlade.id);
+      check(saved.name==='Tempered Longblade'&&saved.ilvl===45,'saved high-level items retain their original generated names');
+      rb.save();return checks;
     };
