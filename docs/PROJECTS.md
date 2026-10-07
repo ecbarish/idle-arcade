@@ -86,7 +86,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
-| T29 | Area 7, Sunthread Commons (62-68), Warden Halen, Loom Badge | M | Data | — | claimed: ChatGPT, 2026-10-09, codex/wildbond-sunthread | ROADMAP.md "T29" |
+| T29 | Area 7, Sunthread Commons (62-68), Warden Halen, Loom Badge | M | Data | — | done 2026-10-10 (ChatGPT) | ROADMAP.md "T29" |
 | W1 | Area 8 (66-72), the last Warden and badge | M | Data | T29 | open | docs/lore/wildbond.md "Proposed areas 5-8"; copy T29's shape |
 | W2 | **The league and the Champion** (about 72-75): the ending, its scenes, Wren's last battle | L | System+Data | W1 | open | docs/creature-game-design.md; decision 1 in docs/research/decisions.md |
 | W3 | **Post-game**: battle tower, roaming legendaries, rematch tiers, the road to 100 | L | System | W2 | open | |
