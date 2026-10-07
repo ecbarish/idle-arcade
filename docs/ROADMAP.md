@@ -28,7 +28,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T1-B: Grave Chill in the Silent Barrows, pacing 40-45 measured** (Claude, done 2026-10-08).
 - [x] **T20: Realmbound Frostmere II, The Barrowfields and The Silent Barrows** (ChatGPT, data): see the T20 section.
 - [x] **T21: Realmbound item name tiers to level 60** (ChatGPT, data + one formula): see the T21 section.
-- [ ] **T24: Wildbond checks for the newer systems** (ChatGPT, tests only): see the T24 section.
+- [x] **T24: Wildbond checks for the newer systems** (ChatGPT, tests only): see the T24 section.
 - [ ] **T25: Split Starfall Guild into small files, add a test page** (ChatGPT, no behavior change): see the T25 section.
 - [x] **T2: Creature game spec + shared creature module plan** (Claude). See docs/creature-game-design.md.
 - [x] **T3: Content for levels 30-40** (Codex): Frostmere, The Winter Road. See

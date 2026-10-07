@@ -75,10 +75,9 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    playing always earns more than one on a job.
 5. **T1-C: third talent trees** (*design*): Warrior Fury, Rogue Subtlety, Mage Arcane, Priest Discipline, Hunter
    Survival, same shape as T1-A (25 ranks + capstone at 25 in that tree), plus talents that open new reactive windows.
-6. **T24: Wildbond test coverage** (any assistant; tests only) — **sent to ChatGPT 2026-10-08** (branch
-   `codex/wildbond-more-checks`). Full ticket in `docs/ROADMAP.md` ("T24"). Extend `tests/wildbond-checks.js` for route
-   trainers and items (T7b part 2), challenge modes, rematches and mastery (`15-challenge.js`), eras and weather
-   (`weatherNow`, the Pocket/16-bit/HD/Diorama unlocks), and riding.
+6. ~~**T24: Wildbond test coverage**~~ — completed by Codex on `codex/wildbond-more-checks`, pending PR review.
+   `tests/wildbond.html` passes 488 checks, including route trainers, items, signs, riding/running, era unlocks,
+   weather, visible wild creatures, challenge modes, rematches and mastery. Gameplay files are unchanged.
 7. **T25: Split Starfall Guild into files + a test page** (any assistant; no behavior change) — **sent to ChatGPT
    2026-10-08** (branch `codex/starfall-split`). Full ticket in `docs/ROADMAP.md` ("T25"). This is the "parked games
    side lane": parked games get structural and polish work while Claude focuses on the two main games.
@@ -107,6 +106,8 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Codex: completed T24 on `codex/wildbond-more-checks`; Wildbond 488 and Realmbound 575 browser checks
+  pass. PR #16 open for review; nothing merged. Only the test script and T24 status notes changed.
 - 2026-10-08 Claude (later): merged T21 (item names, ChatGPT); built T1-B (Grave Chill; pacing 40-45 measured, no XP
   change; found group questing ~5x faster, added as a question). Sent T24 (Wildbond checks) to ChatGPT. Fixed a
   Frostmere check that depended on which tab a local save was left on.
