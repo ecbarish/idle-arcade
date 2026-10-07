@@ -626,9 +626,19 @@ module.exports = function scenarios() {
           C.phase='intown';window.GM_WEATHER='clear';townEnter();drawTown(0);
           check(air.top>PH*.5&&air.top<air.ground,'Frostmere walkable lodge also keeps haze below the skyline');
           for(const zone of Object.keys(ZONES).filter(z=>z!=='frostmere')){
-            hero.zone=zone;const z=ZONES[zone],expected=LT.time(Light.cycle(.3,.955,.645),{sky:z.sky[1],ground:z.ground});
-            check(JSON.stringify(realmSun(noon))===JSON.stringify(expected),'winter bounce-light tuning leaves '+zone+' unchanged');
+            hero.zone=zone;const z=ZONES[zone],a=ZONE_LIGHT[zone]||{},expected=LT.time(Light.cycle(.3,.955,.645),{sky:a.bounceSky||z.sky[1],ground:a.bounceGround||z.ground});
+            check(JSON.stringify(realmSun(noon))===JSON.stringify(expected),zone+' bounce light uses its own colours, or the zone\'s sky and ground');
           }
+          // G2 (Claude): every zone has its own night colour, and dusk stays warm while the sun is still up
+          const nights=Object.keys(ZONES).map(zone=>(ZONE_LIGHT[zone]||{}).night);
+          check(nights.every(c=>/^#[0-9a-f]{6}$/i.test(c||''))&&new Set(nights).size===nights.length,'every zone has its own night colour');
+          const lightsFn=AMB.lights;let dark=null,tint=null;AMB.lights=(g,w,hh,t,o)=>{dark=o.dark;tint=o.tint;};
+          try{hero.zone='redsand';const dusk=AMB_DAY*1000*.63,late=AMB_DAY*1000*.8;
+            ambFront(0,PH*.78,4,{P:{fx:{},nightFx:{}},W:{},lights:[],night:realmNight(dusk),sun:realmSun(dusk)});
+            check(realmSun(dusk).day&&realmNight(dusk)>0&&dark!==null&&dark<=realmNight(dusk)*.31,'golden hour only hints at dusk while the sun is up (no grey wash)');
+            dark=null;ambFront(0,PH*.78,4,{P:{fx:{},nightFx:{}},W:{},lights:[],night:realmNight(late),sun:realmSun(late)});
+            check(dark===realmNight(late)&&tint===ZONE_LIGHT.redsand.night,'after sunset the full night falls, in the zone\'s own colour');
+          }finally{AMB.lights=lightsFn;}
           hero.dun={id:'barrows',tier:0,step:0,mods:[]};beam=null;realmAtmosphere(0,PH*.78,realmSun(noon),[],{});
           check(air.top===PH*.3&&beam===0,'Silent Barrows keeps its existing dungeon fog and no sun shafts');
         }finally{LT.fog=fog;LT.grade=grade;LT.shafts=shafts;PW=keepPW;PH=keepPH;cv.width=keepCW;cv.height=keepCH;hero.zone=keepZone;hero.dun=keepDun;C.phase=keepPhase;

@@ -39,6 +39,9 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Realmbound v1.0.2 (2026-10-07)** — **Every zone has its own light.** Sunsets are warm and golden instead of a grey
+  wash (the night now falls after the sun sets, not before), each zone has its own night (violet desert, ember-red
+  ridge, murky teal marsh, olive forest, amber Crown's Heart...), and light bounces off each zone's ground.
 - **2026-10-07** — **Offline play always stays up to date.** The installable arcade now loads the newest version
   whenever you're online and uses its saved copy only without internet (or on a very slow connection), so updates
   never get stuck. The homepage header now has What to try, Credits and Install together.

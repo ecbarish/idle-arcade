@@ -259,7 +259,7 @@ function drawTown(t) {
   if (!inside) { LT.grade(cx, PW, PH, sun, { tint: air.tint, amount: air.grade }); if (!W.rain) LT.shafts(cx, PW, PH, t, sun, { strength: air.shafts === undefined ? 1 : air.shafts }); }
   if (!inside) AMB.weather(cx, PW, PH, t, Object.assign({}, W, { px: 2, splashAnywhere: true, fireflies: night > .4 && !W.rain ? .5 : 0, onThunder: v => sfx('thunder', v) }));
   else AMB.weather(cx, PW, PH, t, { dust: .5, px: 2 });
-  const dark = inside ? .8 : night; if (dark > .02) AMB.lights(cx, PW, PH, t, { dark, max: inside ? .5 : .55, tint: inside ? '#140a04' : '#0a0e2a', lights });
+  const dark = inside ? .8 : night; if (dark > .02) AMB.lights(cx, PW, PH, t, { dark, max: inside ? .5 : .55, tint: inside ? '#140a04' : air.night || '#0a0e2a', lights });
   if (!inside) AMB.flash(cx, PW, PH, t);
   LT.bloom(cx, cv, PW, PH, sun);
   // where you are, top left

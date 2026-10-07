@@ -111,6 +111,7 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-07 Claude: G2 for every Realmbound zone (23-light.js `ZONE_LIGHT`: per-zone `night` colour, bounce, grade,  shafts, fogTop; 20-ambience.js `ambFront` holds the visual dark to 30% while the sun is up, fixing grey sunsets;  towns use the zone night). Realmbound v1.0.2, 1537 checks. **Next for Claude:** G2 dungeons, or W3 part 2 (roaming  legendaries); review T32 when ChatGPT finishes.
 - 2026-10-07 Claude: merged G2 Saltmarsh lighting (ChatGPT; Wildbond v1.3.1, 1194 checks); wrote T32 (lighting for  every other Wildbond area, `codex/wildbond-area-light`) for ChatGPT. **Next for Claude:** G2 for Realmbound zones and  dungeons (not Frostmere), or W3 part 2 (roaming legendaries).
 - 2026-10-07 Claude: merged six ChatGPT branches: T31 post-game (Spire + league rematches, v1.3.0), W7 ferry landing,
   G2 Frostmere lighting, F4 playtest notes, L6 credits, L5 offline. **Changed L5 to online first** (sw.js: network

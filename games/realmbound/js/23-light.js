@@ -10,15 +10,26 @@ const LT = Light.create({ reduce: () => reduce, quality: () => gfxQuality() });
 function gfxQuality() { if (S.gfx) return S.gfx; const slow = (navigator.hardwareConcurrency || 8) <= 4 || Math.min(screen.width, screen.height) < 500; return slow ? 'low' : 'high'; }
 function cycleGfx() { S.gfx = gfxQuality() === 'high' ? 'low' : 'high'; renderGfxBtn(); save(); }
 function renderGfxBtn() { const b = $('#gfxBtn'); if (b) b.textContent = 'Graphics: ' + (gfxQuality() === 'high' ? 'High' : 'Low'); }
-/* each zone's air: how much fog, its colour, and the light's tint */
+/* each zone's air: how much fog (fogTop: how high it reaches), its colour, the light's tint, how strongly the hour
+   grades the scene, light shafts, the colours light bounces off (sky and ground), and its own night colour (G2) */
 const ZONE_LIGHT = {
-  thornvale: { fog: .14, col: '#e6ecf0' }, redsand: { fog: .1, col: '#f0d2a8', tint: '#ffb070' }, fens: { fog: .55, col: '#cfdccc', tint: '#a8c0a0' },
-  ashen: { fog: .28, col: '#8a7470', tint: '#ff8050' },
+  // green valley: warm, clean morning light, soft blue-green moonlight
+  thornvale: { fog: .12, col: '#e8efe4', tint: '#ffe0a0', shafts: .9, bounceGround: '#7aa050', night: '#0a1626' },
+  // dry steppe: clear air, strong warm grade and red-earth bounce, a violet desert night
+  redsand: { fog: .08, col: '#f2d6ae', tint: '#ffa860', grade: 1.15, shafts: .7, bounceGround: '#d08850', night: '#1c1030' },
+  // marsh: low-lying mist the sun pours through, murky teal nights
+  fens: { fog: .55, col: '#c8d8c4', tint: '#a0b898', fogTop: .5, grade: .8, shafts: 1.2, night: '#06161a' },
+  // volcanic ridge: smoke, lava bounce from below, ember-red dark
+  ashen: { fog: .28, col: '#7a625e', tint: '#ff7040', grade: 1.1, shafts: .5, bounceGround: '#a04a30', night: '#1e0808' },
   // Winter-road air stays close to the snow. Cool reflected light leaves the hearths warm at night.
   frostmere: { fog: .24, col: '#e2edf5', tint: '#a9c6e5', fogTop: .58, townFogTop: .55, grade: .85, shafts: .55,
-    bounceSky: '#92b8d9', bounceGround: '#ddeaf3' },
-  barrowfield: { fog: .5, col: '#c8d2dc', tint: '#9ab0c8' },
-  hollowcrown: { fog: .34, col: '#d8d8a0', tint: '#d0c060' }, crownheart: { fog: .32, col: '#e8d498', tint: '#f2c14e' }
+    bounceSky: '#92b8d9', bounceGround: '#ddeaf3', night: '#081638' },
+  // grave country: ground mist among the barrows, cold light, nights near black
+  barrowfield: { fog: .5, col: '#c4ced8', tint: '#90a8c4', fogTop: .6, grade: .9, shafts: .6, night: '#0a0e1c' },
+  // the old forest crown: green-gold haze, shafts through the canopy, olive dark
+  hollowcrown: { fog: .34, col: '#d4d49c', tint: '#d0c060', shafts: 1.1, bounceGround: '#5a5a28', night: '#10140a' },
+  // its heart: golden light everywhere, deep amber nights
+  crownheart: { fog: .32, col: '#e8d498', tint: '#f2c14e', grade: 1.1, shafts: 1.2, night: '#181206' }
 };
 const DUN_LIGHT = { sanctum: { fog: .3, col: '#7aa8c8' }, foundry: { fog: .25, col: '#8a6050', tint: '#ff7040' }, barrows: { fog: .45, col: '#9ab0c8' }, rootrot: { fog: .35, col: '#a0b070' }, heartwood: { fog: .3, col: '#c8b070' }, throne: { fog: .3, col: '#c8a060', tint: '#ffb050' } };
 /* the sun's state right now: the same day as realmNight() (sunrise near the end of the night, sunset at dusk) */
@@ -45,7 +56,7 @@ function realmShadows(gy, p, t, st, lights) {
 /* in front of everything: fog with scattered light, the colour of the hour, light shafts */
 function realmAtmosphere(t, gy, st, lights, weather) {
   const air = zoneAir(), fogD = air.fog + (weather && weather.fog ? weather.fog * .4 : 0) + (st.day ? 0 : .08) + (st.day && st.p < .2 ? .12 : 0); // morning mist
-  LT.fog(cx, PW, PH, t, { ground: gy + PH * .05, top: PH * (air.fogTop === undefined ? .3 : air.fogTop), density: fogD, col: Light.css(Light.mix(air.col, '#1a2040', st.day ? 0 : .55)), lights });
+  LT.fog(cx, PW, PH, t, { ground: gy + PH * .05, top: PH * (air.fogTop === undefined ? .3 : air.fogTop), density: fogD, col: Light.css(Light.mix(air.col, air.night ? Light.mix(air.night, '#2a3450', .5) : '#1a2040', st.day ? 0 : .55)), lights });
   LT.grade(cx, PW, PH, st, { tint: air.tint, amount: air.grade });
   if (!(weather && weather.rain)) LT.shafts(cx, PW, PH, t, st, { strength: H().dun ? 0 : air.shafts === undefined ? .9 + air.fog : air.shafts });
 }

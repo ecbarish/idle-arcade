@@ -88,10 +88,12 @@ function ambFront(t, gy, p, A) {
   const fx = Object.assign({}, A.P.fx, A.night > .4 ? A.P.nightFx : {}, A.W);
   if (fx.rain && fx.wind === undefined) fx.wind = .25;
   AMB.weather(cx, PW, PH, t, Object.assign(fx, { ground: gy + p * 4, px: Math.max(2, Math.round(p / 2)), onThunder: v => sfx('thunder', v) }));
-  const lights = A.lights.concat(A.dun || A.night > .02 ? [{ x: PW * .3, y: gy - 7 * p, r: PH * (A.dun ? .32 : .26), col: '#ffe0b0' }] : []);
-  if (C.mob && (A.dun || A.night > .02)) lights.push({ x: PW * .66, y: gy - 8 * p, r: PH * .2, col: '#c8d0ff' });
-  realmAtmosphere(t, gy, A.sun || realmSun(), lights, A.W); // fog you move through, the colour of the hour, light shafts (23-light.js)
-  if (A.dun || A.night > .02) AMB.lights(cx, PW, PH, t, { dark: A.dun ? .85 : A.night, max: A.dun ? .55 : .5, lights });
+  // the dark comes with the sun: while it's still up (golden hour), only a hint of dusk, so sunset stays warm, not grey
+  const sun = A.sun || realmSun(), dark = A.dun ? .85 : sun.day ? A.night * .3 : A.night;
+  const lights = A.lights.concat(dark > .02 ? [{ x: PW * .3, y: gy - 7 * p, r: PH * (A.dun ? .32 : .26), col: '#ffe0b0' }] : []);
+  if (C.mob && dark > .02) lights.push({ x: PW * .66, y: gy - 8 * p, r: PH * .2, col: '#c8d0ff' });
+  realmAtmosphere(t, gy, sun, lights, A.W); // fog you move through, the colour of the hour, light shafts (23-light.js)
+  if (dark > .02) AMB.lights(cx, PW, PH, t, { dark, max: A.dun ? .55 : .5, lights, tint: zoneAir().night }); // each zone's own night colour
   AMB.flash(cx, PW, PH, t);
   LT.bloom(cx, cv, PW, PH, A.sun || realmSun());
 }
