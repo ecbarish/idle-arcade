@@ -109,6 +109,8 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    earnings like rested XP, one return report when you come back. Realmbound's guild uses it first, then Starfall
    Guild's adventurers, Wildbond ranch jobs, and Diamond Career's team. Plan: `docs/research/decisions.md` (the
    shared-systems table). After that, S4: the world kit (`shared/world/`, Wildbond's walking world for every game).
+16. **T26: Starfall Guild sound** (any assistant; parked-games side lane) — **sent to ChatGPT 2026-10-08** (branch
+   `codex/starfall-sound`; ticket in `docs/ROADMAP.md`, "T26"). Music and effects through `shared/sound.js`.
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
@@ -130,7 +132,7 @@ a default so work never waits.
   effects, and Wildbond's sound improved. All test pages pass: Realmbound 600, Wildbond 488, Starfall 24.
   **Next chat, start here:** (1) `git fetch`; if `origin/codex/realmbound-hollowcrown` exists, review T22 and
   merge it (check the author email, read the diff, run all three test pages, `merge --no-ff`); (2) give
-  ChatGPT the next side-lane ticket; (3) Claude builds R1 together with S3 (items 4 and 15).
+  ChatGPT the next side-lane ticket (T26 Starfall sound was sent too: review `codex/starfall-sound` if it is there); (3) Claude builds R1 together with S3 (items 4 and 15).
 - 2026-10-08 Claude (late): merged T24 + T25; built S1, the shared scene system (moods, blinking, choices, faces
   from names): Wildbond switched over unchanged, Realmbound quest givers now speak in portrait scenes with Accept
   / Not now. Sent T22 (Hollow Crown) to ChatGPT. Next for Claude: S2 shared sound.

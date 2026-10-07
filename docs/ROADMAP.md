@@ -156,6 +156,35 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
+### T26: Starfall Guild sound on the shared sound system (parked-games side lane)
+Starfall Guild has no sound. Give it music and effects through the arcade's shared engine, `shared/sound.js` (read its
+header comment first; Wildbond's `js/10-sound.js` and Realmbound's `js/17-sound.js` are the two examples to copy).
+- **Change only:** `games/starfall-guild/index.html` (load `../../shared/sound.js` after `shared/engine.js`, a new
+  script tag for the new file, and a header button `<button id="sndBtn" data-act="sound" aria-pressed="false">Sound:
+  off</button>` placed in `<header class="top">` in the same style as its other buttons), a new
+  `games/starfall-guild/js/08-sound.js` (load it after `07-events.js` and before boot), a `case`/branch for
+  `data-act="sound"` in `07-events.js` that calls `SND.cycle()`, `SND.render()` once at boot, one-line `sfx(...)` calls
+  at the hook points below, `tests/starfall-checks.js`, HANDOFF.md (the Starfall layout list), README changelog, and
+  ticking T26 here and in START-HERE.md. **Don't edit `shared/sound.js`** (if it needs a change, describe it in the
+  PR), and don't touch Wildbond or Realmbound.
+- **Setting:** off by default; `mode: () => S.snd || 0`, `setMode: m => { S.snd = m; save(); }` (use the game's real
+  save function name). Old saves without `snd` must load unchanged, with sound off.
+- **Music (original tunes, note strings, 8th notes, '.' rests, mel 32 tokens, bass 16 or 32, optional drums):**
+  `town` (when no run is active / in town: warm, hopeful), `delve` (a normal dungeon floor: steady, adventurous,
+  with drums), `boss` (a boss floor, `isBoss(floor)`: fast, `echo: false`). `musicKey()` returns one of these from
+  the game state, or null when the tab is a modal that should be quiet. Starfall's feel is starry and arcane, so try
+  `lead: 'pulse'` or `'triangle'` and minor or Dorian keys. Every note must be a real pitch (`ArcadeSound.hz(n) > 0`).
+- **Effects (shared names only; keep them to big moments, never on every hit or every tick):** boss defeated →
+  `win`; relic chosen → `loot`; hero recruited at the tavern → `quest`; hero levels up → `level`; town building
+  bought → `coin`; party wiped / forced back up → `lose`; season reset → `badge`. If a hook can fire many times in one
+  tick (offline catch-up, farming), guard it so it plays at most once.
+- **Checks** (add to `tests/starfall-checks.js`): every track exists and every note is a real pitch; sound starts off;
+  clicking `#sndBtn` cycles `S.snd` 0 → 1 → 2 → 0 and the button text follows; every `sfx` name above runs without
+  throwing; `musicKey()` gives `town`, `delve` and `boss` in the matching states; an old save without `snd` loads.
+  All three test pages must pass: `tests/starfall.html`, `tests/run.html`, `tests/wildbond.html`.
+- **Listen to it:** play with sound on for a couple of minutes and note in the PR how the tunes feel; the bar is "would
+  you leave it on", not just "it makes noise".
+
 ### T22: Realmbound Hollow Crown, part 1 (data)
 Levels 45-52, the second chapter of docs/realmbound-40-60.md ("The Hollow Crown" and "Story thread"). Same shape and
 rules as T20 (read its ticket below and copy its structure), building on what T20 and T1-B added.
