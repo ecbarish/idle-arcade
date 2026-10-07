@@ -2,9 +2,9 @@
 
 ## Reading this record
 
-This records the game at main commit `fa7f540`, including the three Wardens, the Pocket era and the return of color. The source is [content and dialogue](../../games/wildbond/js/00-data.js), [map conversations](../../games/wildbond/js/11-maps.js), [story rewards](../../games/wildbond/js/04-world.js), and the [creature game design](../creature-game-design.md). Current game text takes precedence over older planning language.
+This records Wildbond through v1.1.0 and all eight Wardens, including the Pocket era and the return of color. The source is [content and dialogue](../../games/wildbond/js/00-data.js), [map conversations](../../games/wildbond/js/11-maps.js), [story rewards](../../games/wildbond/js/04-world.js), and the [creature game design](../creature-game-design.md). Current game text takes precedence over older planning language.
 
-The first sections describe established canon. Where the game leaves room for interpretation, that is stated. The five later areas are **proposals for Evan to approve**, not existing places or approved content. Their names, people, badges, guardians and events must not be treated as canon or added to the game without a ticket. The region itself has no confirmed proper name yet.
+The first sections describe established canon. Where the game leaves room for interpretation, that is stated. All eight areas are now approved and recorded in the area canon sections below; earlier proposals are historical planning notes. The region itself has no confirmed proper name yet.
 
 ## A frontier with an older memory
 
@@ -228,27 +228,59 @@ those beside them and leave a place to rest, without declaring an unbuilt final 
 Sunthread has its own original, open G-major zone tune and green meadow hills with drifting leaves behind
 battles. It introduces no new art era, journey setting, save fields or interpretation of the fading.
 
-## Proposed area 8 — awaiting Evan's approval
+## Area 8 canon: Farwatch Reach — levels 66–72 (W1)
 
-Area 8 remains a proposal, with the decided band 66–72. Sunthread was approved by Evan through T29 and is recorded as canon above; its older proposal is retained below as design history. The remaining guardian proposal uses an existing family and is not implemented by this document.
+The Loom Badge opens Sunthread's east coastal road into **Farwatch Reach**, the final area before the league.
+An exposed bluff bends down toward a small sandy harbor. An old stone lookout stands above the trail; a ledger
+house sits by the returning path. A short pier reaches into the eastern water. Unfamiliar islands remain beyond
+the marked approaches: they are scenery and a future possibility, not a route the player can take yet.
+Bright distance alternates with abrupt sea fog. People count returning partners and answer shore lanterns;
+careful records matter because somebody else may trust a note with their whole team.
 
-### Area 4 proposal (now built, see above): Cloudglass Pass — levels 32–42
+**Delka**, a lookout recorder, battles with Chartwing and Moorweft at 68–69 and writes down where a plan changed.
+**Sivren**, a harbor keeper, battles with Keeljaw, Buoyglint and Shoalpup at 69–70 and keeps a dry bench for teams
+bound for the league and those returning from it. The 30×14 walkable map joins Sunthread in both directions,
+with winding paths, irregular grass, rock-framed lookout buildings, two signs and three supplies, including one
+on the pier. All walkable ground can be reached; water is solid, as on existing maps.
 
-A high pass beyond Emberfall opens into hanging mist, pale rock and terraces of wind-bent grass. Small shelters mark places where walkers wait for clouds to lift. Guides mend ropes rather than promising safe weather; travelers share soup and compare which ridges they could see that morning. The warm-stone clue could lead here, but connecting those stones to a guardian would need an approved scene.
+Nine new species enter the record, using existing families, elements and moves:
 
-**Mix:** Gale birds and horses, Stone cats and spiders, Radiant sprites. **Warden:** Vessa, a cheerful guide who admits when visibility beats her; she judges asking for help and sharing responsibility. **Badge:** Beacon Badge. **Guardian:** Lanterncrest, a Radiant bird whose proposed light reveals sheltered resting places. **Wren beat:** she takes a shortcut to arrive first, then returns for a lost traveler; her rematch celebrates getting everyone through rather than winning the race.
+- **Shoalpup**, a Tide wolf, waits for every returning paw at the tideline. At 68 it evolves into **Soundhowl**,
+  whose low call helps separated teams find the same sheltered inlet.
+- **Keeljaw**, a Tide croc, brings drifting planks into shallows where smaller creatures can climb.
+- **Chartwing**, a Gale bird, checks an approach from the air and waits for the shore signal when fog closes it.
+- **Moorweft**, a Stone spider, catches loose pebbles above paths without concealing the trail marks.
+- **Inkwhisk**, a Shade cat, follows corrected charts when an old shortcut becomes unsafe.
+- **Buoyglint**, a Radiant sprite, lights a sheltered mooring post until everyone has landed.
+- **Isleglimmer**, a rare Radiant sprite with wild weight 3, briefly marks dry footing through sea fog.
+- **Watchlight**, the unique, big Radiant sprite guardian, marks safe approaches and waits for travelers to answer.
+  Its level-71, rarity-4 story encounter stays outside the ordinary wild table. A lure and calm can earn its
+  companionship; a knockout retains the existing retry. Harbor keepers keep the approaches lit if it joins you.
 
-### Area 7 proposal (now built, see above): Sunthread Commons — historical levels 62–70
+At six local explores, **Wren** shares her corrected coastal notebook: a crossing is safe only at low water,
+and she nearly wrote otherwise. She recalls Larkhaven and the confidence of choosing her first partner, then
+challenges the player as a friend who still intends to win. Her Chartwing, Inkwhisk and original partner are
+68, 69 and 70. Afterward she promises to bring her whole journey to the league, as she hopes the player will.
 
-Wide upland meadows gather routes from several settlements. Clear mornings give way to sudden winds, and meeting halls double as storm shelters. A regional gathering could bring ranch keepers and traveling teams together before the final stretch. Fields should show cooperation at an ordinary scale: sharing paths, repairing a shelter and letting tired creatures rest while others finish the work.
+At fourteen, Watchlight waits for a returning team to answer the harbor lantern and reach dry ground before
+inviting the player's team closer. The scene does not explain the fading or connect unfamiliar islands to
+Toren's warm stones; those mysteries remain open.
 
-**Mix:** Grove horses and boars, Radiant sprites and birds, Ember wolves, Gale horses. **Warden:** Halen, a patient organizer with a talent for remembering names; he judges making space for partners with different strengths. **Badge:** Loom Badge. **Guardian:** Meadowmantle, a Grove boar proposed to preserve sheltered nursery ground. **Wren beat:** she helps a nervous young tamer find a role in the gathering, then brings a varied team to a rematch whose story emphasizes cooperation over one star performer.
+At twenty-four, **Warden Rysa**, a welcoming recorder, visibly corrects her own tide estimate. She judges
+responsibility for what a tamer learns and passes on. Her Keeljaw, Moorweft and Soundhowl are 69, 70 and 72.
+Victory awards the eighth **Horizon Badge**: the existing cap table allows level 75 with all eight badges.
+She recognizes the trust carried from Larkhaven to this shore and asks the team to rest and correct its notes
+before the league. The league, Champion, post-game and Modern 3D remain future work (W2/W3/W6).
 
-### Area 8 proposal: Farwatch Reach — post-game toward level 100
+Farwatch has an original, spacious D-major triangle tune over D–Bm–G–A, clear/mist weather and a battle backdrop
+of old stone lookouts, coastal stones, water and fog. No new save fields, art eras or journey settings are added.
 
-The outline's final reach follows an exposed coast where old stone lookouts face unfamiliar islands. Weather alternates between bright distance and abrupt sea fog. A small harbor welcomes teams returning from long expeditions; people keep careful records because a rumor can send someone into danger. This could host the eighth Warden and lead into repeat journeys, with the precise league and post-game boundary still requiring a design decision.
+## Earlier area proposals (historical)
 
-**Mix:** Tide wolves and crocs, Gale birds, Stone spiders, Shade cats, Radiant sprites. **Warden:** Rysa, a welcoming recorder who insists on correcting her own mistakes; she judges responsibility for what a tamer learns and passes on. **Badge:** Horizon Badge. **Guardian:** Watchlight, a Radiant sprite proposed to mark safe approaches through fog. **Wren beat:** she arrives with notes she once would have guarded as an advantage, shares them with the player, then challenges them as a friend who still intends to win.
+Cloudglass Pass and Sunthread Commons are built and recorded above. The original Farwatch proposal described
+a post-game reach toward 100. Evan's approved ending plan supersedes that band: Farwatch is area 8 at 66–72,
+then the league and Champion at about 72–75, with the road to 100 reserved for the post-game. Its proposed
+Rysa, Horizon Badge, Watchlight and Wren's shared notes are now implemented canon.
 
 ## Open questions
 
@@ -259,8 +291,7 @@ The outline's final reach follows an exposed coast where old stone lookouts face
 - What continues guarding an area when its guardian chooses to accompany a tamer?
 - Where do elements come from, and can different guardians share an element without sharing an origin?
 - What does a badge certify beyond passage and growth, and who recognizes the Wardens' authority?
-- Where will the league and Champion fit? The implemented cap table gives 75 after eight badges (60 after Reed), while the design describes the main journey reaching about 70. Where will the league and post-game boundary sit?
-- Should area 8 span the finale and post-game, or follow the finale? Its proposed level band and eighth badge remain provisional.
+- What will the league and Champion scenes look like? The approved boundary is after Farwatch (66–72), at about 72–75; the post-game opens the road to 100.
 - How should later light and depth restoration work without requiring a guardian capture? Current color restoration already allows that freedom.
 - What are the humming shell, unusual tidal retreat and disappearing dusk webs telling us? They may be separate mysteries.
 - Which future regions and characters does Evan want to approve before their names enter dialogue or data?

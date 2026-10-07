@@ -39,9 +39,9 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
 
 ## Where we are (2026-10-09)
 
-**Wildbond** (creature game): six areas, each with a Warden and badge: Thornwood (2-12), Saltmarsh Coast (12-22),
-Emberfall Highlands (22-32), Cloudglass Pass (32-42), Stillreed Basin (52-60), Hollowecho Hills (58-64); caps follow
-`CAP_TABLE` (65 after six badges). A walkable world with towns, trainers, items and riding; art eras Pocket (the
+**Wildbond** (creature game): eight areas, each with a Warden and badge: Thornwood (2-12), Saltmarsh Coast (12-22),
+Emberfall Highlands (22-32), Cloudglass Pass (32-42), Stillreed Basin (52-60), Hollowecho Hills (58-64), Sunthread Commons (62-68),
+Farwatch Reach (66-72; W1 ready for review); caps follow `CAP_TABLE` (75 with all eight badges). A walkable world with towns, trainers, items and riding; art eras Pocket (the
 faded start, explained in the intro) → Pixel/16-bit → HD-2D (on the shared world kit) → Diorama (3D); day/night,
 weather with a Journal forecast, thunderstorms, living ambience and regional battle backdrops; visible wild
 creatures; ranch and breeding; challenge modes with ranch pennants, rematches, area mastery; music, effects and rain
@@ -81,7 +81,7 @@ rain sounds; walkable Realmbound towns.
    walk into; then a walkable guild hall for Starfall Guild.
 3. ~~**T29: Wildbond area 7, Sunthread Commons**~~ (Codex; data) — done by ChatGPT, merged by Claude 2026-10-10 (branch `codex/wildbond-sunthread`): levels 62-68; ticket in
    `docs/ROADMAP.md`, "T29".
-4. **Wildbond's ending:** area 8 (66-72), then the league and the Champion (around 72-75), the post-game (battle
+4. **Wildbond's ending:** W1 Farwatch Reach (66-72) is complete on `codex/wildbond-area8`, awaiting Claude's review; next W2, the league and the Champion (around 72-75), the post-game (battle
    tower, legendaries, the road to 100); contests and races; the Modern 3D era.
 5. **Realmbound next:** members' personal stories in the guild; battlegrounds (faction rivalry, the raid's closing
    hook); a second raid tier later.
@@ -104,6 +104,8 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-07 Codex: W1 Farwatch Reach complete on `codex/wildbond-area8`, awaiting PR review; no merge. Rysa/Horizon/Watchlight, nine species, harbor map, Wren's shared-notes rematch, original tune and coastal backdrop are canon. Wildbond v1.1.0; no save or engine changes. All four browser pages pass: Wildbond 1044, Realmbound 1519, Starfall 48, sound 21; saves/hub restored. Five art eras and 375px phone map/backdrop checked.
 
 - 2026-10-10 Claude: built the Studio (E1 part, E2): studio.html (GM mode, save backups/download/import/restore, GM
   log) and the GM panel (shared/gm.js) with actions in every game. Tests: Realmbound 1519, Wildbond 908, Starfall 48,

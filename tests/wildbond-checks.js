@@ -347,6 +347,79 @@ function wildbondChecks() {
   for (const n of MAPS.sunthread.npcs.filter(n=>n.trainer)) check('Sunthread trainer '+n.who+' plays and records a real victory', () => {
     ready();S.badges=[...badges,'reed','echo'];wb.placeAt('sunthread');talkTo(n);if(!TALK)return false;skipTalk();return B&&B.npc===n.who&&B.trainer===CAST[n.who].name&&finishFight()==='won'&&S.beaten[n.who];
   });
+  // W1: Farwatch content and the real walking, story, capture and badge paths.
+  const reachSpecies = ['shoalpup', 'soundhowl', 'keeljaw', 'chartwing', 'moorweft', 'inkwhisk', 'buoyglint', 'isleglimmer', 'watchlight'];
+  for (const id of reachSpecies) {
+    check('Farwatch ' + id + ': valid family, element, moves and dex', () => {
+      const s = SPECIES[id]; return s && ['wolf','cat','boar','lizard','croc','bird','spider','horse','sprite','hyena'].includes(s.fam) && ELEMENTS[s.el] && s.learn.every(([l,m]) => l > 0 && MOVES[m]) && !!s.dex;
+    });
+    check('Farwatch ' + id + ': base stats follow its role', () => {
+      const s = SPECIES[id], total = Object.values(s.base).reduce((a,b) => a+b,0);
+      return Object.keys(s.base).sort().join(',') === 'grd,hp,pow,spd,spi,wit' && Object.values(s.base).every(n => n > 0) && (s.unique ? total >= 500 && total <= 600 : id === 'soundhowl' ? total >= 400 && total <= 440 : total >= 280 && total <= 320);
+    });
+  }
+  check('Farwatch opens only with the Loom Badge at levels 66-72', () => {
+    ready(); const b=BIOMES.farwatch; if (b.lv.join(',') !== '66,72' || b.req !== 'loom' || biomeOpen('farwatch')) return false;
+    S.badges=[...badges,'reed','echo','loom']; return biomeOpen('farwatch') && levelCap()===70;
+  });
+  check('Sunthread coastal exit is gated and walks into Farwatch after Loom', () => {
+    ready(); S.badges=[...badges,'reed','echo']; wb.placeAt('sunthread',28,9,'right');wb.tryStep('right');
+    if(S.pos.map!=='sunthread'||!W.msg.includes('Loom Badge'))return false;
+    S.badges.push('loom');wb.tryStep('right');return S.pos.map==='farwatch'&&S.biome==='farwatch'&&S.pos.x===1&&S.pos.y===9;
+  });
+  check('Farwatch west exit returns to Sunthread on a safe tile', () => {
+    ready();S.badges=[...badges,'reed','echo','loom'];wb.placeAt('farwatch');wb.tryStep('left');return S.pos.map==='sunthread'&&S.biome==='sunthread'&&S.pos.x===28&&S.pos.y===9;
+  });
+  check('Farwatch map uses valid tiles and every walkable square is connected', () => {
+    const m=MAPS.farwatch; if(m.rows.length!==14||m.rows.some(r=>r.length!==30||[...r].some(c=>!TILES[c])))return false;
+    const seen=new Set(),todo=[m.start.slice(0,2)];
+    while(todo.length){const [x,y]=todo.pop(),key=x+','+y;if(seen.has(key)||!walkable(m,x,y)||npcAt(m,x,y))continue;seen.add(key);for(const [dx,dy] of Object.values(DIRS))todo.push([x+dx,y+dy]);}
+    for(let y=0;y<14;y++)for(let x=0;x<30;x++)if(walkable(m,x,y)&&!npcAt(m,x,y)&&!seen.has(x+','+y))return false;
+    return m.items.every(it=>seen.has(it.at.join(',')))&&seen.has('0,9')&&seen.has('20,4')&&m.rows.some(r=>r.includes('#'))&&m.rows.some(r=>r.includes('f'));
+  });
+  const seenHarbor=m=>m.rows[9].slice(24,28)==='....'&&m.rows[8][24]==='~';
+  check('Farwatch has a sign, three unique items and two route trainers at 68-70', () => {
+    const m=MAPS.farwatch;return Object.keys(m.signs).length===2&&m.items.length===3&&new Set(Object.values(MAPS).flatMap(m=>(m.items||[]).map(it=>it.id))).size===Object.values(MAPS).flatMap(m=>m.items||[]).length&&m.npcs.filter(n=>n.trainer).length===2&&m.npcs.filter(n=>n.trainer).every(n=>n.trainer.team.every(([id,l])=>SPECIES[id]&&l>=68&&l<=70))&&m.rows.some(r=>r.includes('~'))&&seenHarbor(m);
+  });
+  check('Farwatch wild table excludes its guardian and keeps Isleglimmer rare', () => {
+    const w=BIOMES.farwatch.wild;return w.every(([id,n])=>reachSpecies.includes(id)&&n>0&&!SPECIES[id].unique)&&w.find(([id])=>id==='isleglimmer')[1]===3&&w.filter(([id])=>id!=='isleglimmer').every(([,n])=>n>3)&&SPECIES.watchlight.fam==='sprite'&&SPECIES.watchlight.el==='Radiant'&&SPECIES.watchlight.big===1&&SPECIES.watchlight.unique===1;
+  });
+  check('Shoalpup really evolves at 68 before the eighth badge is needed', () => {
+    ready();S.badges=[...badges,'reed','echo','loom'];const c=wb.newCreature('shoalpup',67);c.xp=0;grow(c,Cr.xpNeed(67));return c.lvl===68&&c.sp==='soundhowl'&&S.caught.soundhowl;
+  });
+  check('Farwatch weather has bright distance and sea fog and its original zone tune has valid notes', () => {
+    const t=TRACKS.farwatch;return WEATHER.farwatch.join(',')==='clear,mist,clear,mist'&&t.lead==='triangle'&&t.mel.split(' ').length===32&&[16,32].includes(t.bass.split(' ').length)&&[...t.mel.split(' '),...t.bass.split(' ')].every(n=>n==='.'||ArcadeSound.hz(n)>0);
+  });
+  check('Farwatch clear daytime selects its zone music', () => {
+    ready();S.badges=[...badges,'reed','echo','loom'];S.day=2;S.ranchT=0;wb.placeAt('farwatch');return weatherNow()==='clear'&&!isNight()&&musicKey()==='farwatch';
+  });
+  check('Farwatch fog really selects mist, keeps its zone tune and uses the existing Gale and Shade weather bonuses', () => {
+    ready();S.badges=[...badges,'reed','echo','loom'];S.day=1;S.ranchT=0;wb.placeAt('farwatch');return weatherNow()==='mist'&&musicKey()==='farwatch'&&WEATHER_FX.mist.Gale===1.5&&WEATHER_FX.mist.Shade===1.5;
+  });
+  const reachBeats=STORY.filter(b=>b.biome==='farwatch');
+  check('Farwatch story has exactly the required thresholds and team bands', () => reachBeats.length===3&&reachBeats.map(b=>b.at).join(',')==='6,14,24'&&reachBeats[0].team.every(([,l])=>l>=68&&l<=70)&&JSON.stringify(reachBeats[0].team.at(-1))==='["$rival",70]'&&JSON.stringify(reachBeats[1].wild)==='["watchlight",71,4]'&&reachBeats[2].team.map(([,l])=>l).join(',')==='69,70,72'&&reachBeats[2].gate==='horizon'&&reachBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
+  check('Wren shared-notes rematch triggers at six local explores and a real victory completes it', () => {
+    ready();S.badges=[...badges,'reed','echo','loom'];wb.placeAt('farwatch');S.explored=100;S.exploredIn={farwatch:5};wb.explore();
+    if(!TALK||!TALK.lines.some(([,t])=>t.includes('league')))return false;skipTalk();return B&&B.story==='rival9'&&B.kind==='trainer'&&B.foes.at(-1).c.lvl===70&&finishFight()==='won'&&S.story.rival9;
+  });
+  check('Watchlight triggers at fourteen local explores and a real lure records the guardian', () => {
+    ready();S.badges=[...badges,'reed','echo','loom'];S.story.rival9=true;wb.placeAt('farwatch');S.explored=100;S.exploredIn={farwatch:13};wb.explore();if(!TALK)return false;skipTalk();
+    if(!B||B.story!=='watchlight'||B.foes[0].c.sp!=='watchlight'||B.foes[0].c.lvl!==71||B.foes[0].c.rar!==4)return false;
+    const random=Math.random;try{Math.random=()=>0;wb.command('lure');if(!B.capture)return false;B.capture.pos=B.capture.zone;wb.calmNow();const caught=B.over==='caught';wb.finishBattle();skipTalk();return caught&&S.story.watchlight&&S.caught.watchlight&&[...S.team,...S.ranch].some(c=>c.sp==='watchlight');}finally{Math.random=random;}
+  });
+  check('Rysa waits for 24 local explores; real victory awards Horizon and cap 75 without changing eras', () => {
+    ready();S.badges=[...badges,'reed','echo','loom'];S.story.rival9=S.story.watchlight=true;wb.placeAt('farwatch');S.explored=100;S.exploredIn={farwatch:23};
+    if(wb.wardenReady())return false;wb.challengeWarden();if(TALK||B)return false;S.exploredIn.farwatch=24;const eras=JSON.stringify(S.eras);wb.challengeWarden();if(!TALK)return false;skipTalk();
+    return B&&B.story==='warden8'&&finishFight()==='won'&&S.story.warden8&&S.badges.includes('horizon')&&levelCap()===75&&JSON.stringify(S.eras)===eras&&S.badges.length===8&&S.badges.slice(0,7).join(',')==='thorn,tide,ember,beacon,reed,echo,loom';
+  });
+  check('Seven-badge saves preserve progress; Farwatch saves reload the Horizon Badge', () => {
+    ready();S.badges=[...badges,'reed','echo','loom'];S.story.warden7=true;save();load();if(levelCap()!==70||!S.story.warden7||S.badges.length!==7)return false;
+    S.badges.push('horizon');wb.placeAt('farwatch',26,10,'right');S.items={fw1:true};S.beaten={delka:true};save();reset();load();ensurePos();return S.pos.map==='farwatch'&&S.pos.x===26&&S.biome==='farwatch'&&levelCap()===75&&S.items.fw1&&S.beaten.delka;
+  });
+  check('Farwatch battle profile uses coastal lookouts, stones, water and fog', () => BATTLE_PLACES.farwatch.far==='ruins'&&BATTLE_PLACES.farwatch.near==='stones'&&BATTLE_PLACES.farwatch.fog>0&&BATTLE_PLACES.farwatch.water);
+  for (const n of MAPS.farwatch.npcs.filter(n=>n.trainer)) check('Farwatch trainer '+n.who+' plays and records a real victory', () => {
+    ready();S.badges=[...badges,'reed','echo','loom'];wb.placeAt('farwatch');talkTo(n);if(!TALK)return false;skipTalk();return B&&B.npc===n.who&&B.trainer===CAST[n.who].name&&finishFight()==='won'&&S.beaten[n.who];
+  });
   // Living battle backdrops: real canvas calls across routes, eras, weather and reduced motion.
   check('Battle scenery draws each route and weather without changing the save or battle', () => {
     ready();S.badges=Object.keys(BADGES);const canvas=document.createElement('canvas');canvas.width=320;canvas.height=180;

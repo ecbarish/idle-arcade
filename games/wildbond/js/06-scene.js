@@ -55,7 +55,8 @@ const BATTLE_PLACES = {
   cloudglass: { far: 'peaks', near: 'stones', fog: .45, snow: true },
   stillreed: { far: 'oaks', near: 'reeds', water: true, fog: .35 },
   hollowecho: { far: 'peaks', near: 'stones', fog: .2 },
-  sunthread: { far: 'dunes', near: 'oaks', leaves: .35 }
+  sunthread: { far: 'dunes', near: 'oaks', leaves: .35 },
+  farwatch: { far: 'ruins', near: 'stones', water: true, fog: .35 }
 };
 function drawBattleBackdrop(t) {
   const b = BIOMES[S.biome], place = BATTLE_PLACES[S.biome] || { far: 'dunes', near: 'stones' };

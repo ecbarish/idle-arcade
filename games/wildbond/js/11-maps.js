@@ -21,6 +21,8 @@ const TILES = {
 Object.assign(CAST, {
   pip: { name: 'Pip', skin: '#f2c8a2', hair: 'spiky', hairCol: '#c96a2a', shirt: '#e0b03a', bg: '#f5e6b8', title: 'Larkhaven kid' },
   tobin: { name: 'Old Tobin', skin: '#c48e68', hair: 'hat', hairCol: '#d8d4cc', hatCol: '#4a4038', shirt: '#6a7a5a', bg: '#d8e2d0', title: 'Saltmarsh fisher' },
+  delka: { name: 'Delka', skin: '#ce9c77', hair: 'hat', hairCol: '#736a61', hatCol: '#667f88', shirt: '#7f9392', bg: '#d5e4e2', title: 'Lookout recorder' },
+  sivren: { name: 'Sivren', skin: '#966a4b', hair: 'short', hairCol: '#b9b6a3', shirt: '#5a7e92', bg: '#dbe6ec', title: 'Harbor keeper' },
   // route trainers
   bram: { name: 'Bram', skin: '#e8b890', hair: 'short', hairCol: '#4a3a2a', shirt: '#7a8a3a', bg: '#dfe6c4', title: 'Forager' },
   lise: { name: 'Lise', skin: '#d29a74', hair: 'long', hairCol: '#2a2a3a', shirt: '#c8604a', bg: '#f0d6cc', title: 'Birdwatcher' },
@@ -353,13 +355,14 @@ const MAPS = {
     "T,,,,,.......,,,,,,.........,T",
     "T,,,,,.,,,,,.,,,,,,.,,,,,,,f,T",
     "T,,,,,.,,,,,.....f..,,,,,T,,,T",
-    "W......,,,,,,,,,,,f,f,T,T,,,,T",
+    "W......,,,,,,,,,,,f,f,T,T,,,,E",
     "T,,\"\"\"\"\"===,,,,,,,,,,\"\"\"\"\"\"T,T",
     "T,\"\"\"\"\"\",,,,,,====,,\"\"\"\"\"\"\",,T",
     "T,,,\"\"\",,,,,,,,,,,,,,,\"\"\"\",,,T",
     "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
   ],
   "exits": {
+    "E": { "to": "farwatch", "x": 1, "y": 9, "dir": "right", "locked": "The coastal road requires the Loom Badge. Make room for every partner before Farwatch Reach." },
     "W": {
       "to": "hollowecho",
       "x": 28,
@@ -506,5 +509,163 @@ const MAPS = {
     }
   ],
   "wardenDone": "There is a place for your whole team here, {name}. Remember the names of those who helped you."
+},
+  farwatch: {
+  "name": "Farwatch Reach",
+  "biome": "farwatch",
+  "start": [
+    1,
+    9,
+    "right"
+  ],
+  "warden": [
+    20,
+    3
+  ],
+  "rows": [
+    "RRRRRRRRRRRRRRRRRRRRRRRR~~~~~~",
+    "R,,,,,,rrrr,,,,,\"\"\",,,RR~~~~~~",
+    "R,,\"\"\",rrrr,,,,\"\"\"\",,,RR~~~~~~",
+    "R,\"\"\"\",####,,,,,,,______~~~~~~",
+    "R,\"\"\"\"f,,,,R,,,.......__~~~~~~",
+    "R,\"\"\",,,,,,R,,P.,,___.__~~~~~~",
+    "R,,,,,..........,,,,,.,,~~~~~~",
+    "R,,,f,.,,,,,,,,,R,___.__~~~~~~",
+    "R,,,,,.,,,,\"\"\",,R,___._P~~~~~~",
+    "W......,,.............__....~~",
+    "R,,,rrrrr.\"\"\"\",,,,______....~~",
+    "R,,,#####.\"\"\",,,,,______~~~~~~",
+    "R,,T,,,,,.,,f,,,T,______~~~~~~",
+    "RRRRRRRRRRRRRRRRRRRRRRRR~~~~~~"
+  ],
+  "exits": {
+    "W": {
+      "to": "sunthread",
+      "x": 28,
+      "y": 9,
+      "dir": "left"
+    }
+  },
+  "signs": {
+    "14,5": "Farwatch Reach. West: Sunthread Commons. Follow the bluff path to the harbor. Lookout records are checked each tide; a crossed-out note is better than a hidden mistake.",
+    "23,8": "Returning teams: answer the shore lantern before approaching. Rest on the harbor bench; distant islands are not a marked route."
+  },
+  "items": [
+    {
+      "id": "fw1",
+      "at": [
+        3,
+        4
+      ],
+      "give": {
+        "lures": 8
+      }
+    },
+    {
+      "id": "fw2",
+      "at": [
+        12,
+        10
+      ],
+      "give": {
+        "fish": 8
+      }
+    },
+    {
+      "id": "fw3",
+      "at": [
+        26,
+        10
+      ],
+      "give": {
+        "berries": 8
+      }
+    }
+  ],
+  "npcs": [
+    {
+      "who": "delka",
+      "at": [
+        9,
+        6
+      ],
+      "dir": "down",
+      "lines": [
+        [
+          "delka",
+          "A friendly battle? Chartwing checks the wind, and Moorweft checks the footing. I try to check both."
+        ]
+      ],
+      "trainer": {
+        "sight": 2,
+        "team": [
+          [
+            "chartwing",
+            68
+          ],
+          [
+            "moorweft",
+            69
+          ]
+        ],
+        "win": [
+          [
+            "delka",
+            "That was useful practice. I will mark where my plan changed, so the next team can learn from it."
+          ]
+        ],
+        "after": [
+          [
+            "delka",
+            "The lookout ledger has a space for corrections. Filling it in is part of the job."
+          ]
+        ]
+      }
+    },
+    {
+      "who": "sivren",
+      "at": [
+        20,
+        8
+      ],
+      "dir": "left",
+      "lines": [
+        [
+          "sivren",
+          "We have a clear patch beside the harbor. Shall we practice before the fog comes back?"
+        ]
+      ],
+      "trainer": {
+        "sight": 2,
+        "team": [
+          [
+            "keeljaw",
+            69
+          ],
+          [
+            "buoyglint",
+            70
+          ],
+          [
+            "shoalpup",
+            70
+          ]
+        ],
+        "win": [
+          [
+            "sivren",
+            "Well played! Every partner is counted, every plank is back on shore. A good finish."
+          ]
+        ],
+        "after": [
+          [
+            "sivren",
+            "Some teams are heading toward the league. We keep a dry bench for them and a lantern for the ones returning."
+          ]
+        ]
+      }
+    }
+  ],
+  "wardenDone": "Eight badges, {name}. Take time to rest before the league, and leave clear notes for the teams behind you."
 }
 };
