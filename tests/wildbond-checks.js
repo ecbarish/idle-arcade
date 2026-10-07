@@ -901,6 +901,7 @@ function wildbondChecks() {
   check('Lantern seed uses normal ranch care and cannot create a free shop purchase',()=>{spireReady();const cost=FOODS.lanternseed.cost;S.coins=cost;buyFood('lanternseed',1);ensureCare(S.team[0]);S.team[0].plan={food:'lanternseed',act:'rest'};const before=S.team[0].train.wit||0;newDay(true);return cost>0&&S.coins===0&&S.food.lanternseed===0&&S.team[0].train.wit===before+1;});
   check('Milestone eggs that hatch during a climb stay on the ranch without changing its team',()=>{spireReady();towerState().active=true;towerMilestone(10);const uid=S.team[0].uid;newDay(true);newDay(true);return S.team.length===1&&S.team[0].uid===uid&&S.ranch.length===1&&S.ranch[0].rar===2;});
   check('Fleeing a Spire battle ends the climb without awarding the skipped floor',()=>{spireReady();Object.assign(towerState(),{active:true,floor:2,best:2});towerFight();skipTalk();const coins=S.coins;endBattle('fled');finishBattle();skipTalk();return !S.tower.active&&S.tower.floor===0&&S.tower.best===2&&S.coins===coins;});
+
   // G2 Saltmarsh: inspect the real scene calls, then restore every rendering hook.
   function coastalAir(weather, part, light = true, biome = 'saltmarsh') {
     ready(); S.badges = ['thorn', 'tide']; wb.placeAt(biome); S.ranchT = DAY_SECONDS * part;

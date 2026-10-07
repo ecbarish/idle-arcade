@@ -37,4 +37,4 @@ Visual checks used a frozen ranch clock and seeded creature generation for consi
 
 ## Review coordination
 
-Merged main 3e7a078 into this branch after Claude integrated all six earlier projects. Wildbond's patch version is 1.3.1 in both places, based on main's 1.3.0. The online-first worker, immediate takeover and offline documentation are unchanged; no cache-version bump. All existing tests and handoff entries are retained. Codex has not merged this PR into main or touched Claude's checkout.
+Shipped as Wildbond 1.3.1, merged by Claude in PR #38 while Codex was verifying the integration. This branch also contains main b9d526b and preserves the T32 ticket. The worker, offline adapter, offline documentation and release instructions match main exactly: online-first fetches, immediate takeover, no cache-version bump. Updated validation notes, refreshed screenshots and a v1.3.1 tester route are in the follow-up PR.

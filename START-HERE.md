@@ -46,7 +46,7 @@ faded start, explained in the intro) → Pixel/16-bit → HD-2D (on the shared w
 weather with a Journal forecast, thunderstorms, living ambience and regional battle backdrops; visible wild
 creatures; ranch and breeding; challenge modes with ranch pennants, rematches, area mastery; music, effects and rain
 sounds. T30 adds the Returning Light League, Wren's gate battle, four courts and Champion Avenne, with a
-Champion title and the colour-restoration ending (v1.2.0; merged). T31/W3 part 1 adds the Lighthouse Spire and daily league rematches (v1.3.0, merged); Stillreed has a walkable ferry landing (W7). Saltmarsh lighting v1.3.1 is ready in PR #38. Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
+Champion title and the colour-restoration ending (v1.2.0; merged). T31/W3 part 1 adds the Lighthouse Spire and daily league rematches (v1.3.0, merged); Stillreed has a walkable ferry landing (W7). Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
 
 **Realmbound** (classic-MMO idle, flagship): levels 1-60 across eight zones, five classes with three talent trees
 each, five 5-person dungeons, the 10-person raid **The Hollow Throne** (opened by the Hollow Key; guild adventurers
@@ -87,7 +87,7 @@ rain sounds; walkable Realmbound towns.
 4. **Wildbond's ending:** W1 and T30/W2 are merged. T31/W3 part 1, the Lighthouse Spire and daily league rematches, is merged (v1.3.0). Next: roaming legendaries (W3 part 2), contests and races, and the Modern 3D era.
 5. **Realmbound next:** members' personal stories in the guild; battlegrounds (faction rivalry, the raid's closing
    hook); a second raid tier later.
-   **G2:** Frostmere is merged; Saltmarsh is ready for review (complete, PR #38 awaiting review; Wildbond v1.3.1); pick another zone for the next lighting PR.
+   **G2:** Frostmere is merged; Saltmarsh is merged; the other Wildbond areas are T32 (ChatGPT); Realmbound zones remain.
 6. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines (a living scene on the
    ambience kit, shared sound, dialogue and creature art, a taste of each game). Build it once the games are further
    along.
@@ -111,8 +111,10 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
-- 2026-10-07 Codex: merged main 3e7a078 into `codex/wildbond-saltmarsh-light` (PR #38); preserved all six merged projects and Claude's online-first worker unchanged. Wildbond patch version is now 1.3.1. Saltmarsh checks and main's checks are both retained; refreshed screenshots and reran browser pages before pushing. No merge into main.
+- 2026-10-07 Codex: integrated main b9d526b into `codex/wildbond-saltmarsh-light` after Claude merged PR #38 during validation. Preserved T32 and online-first offline code unchanged. All five pages pass: Wildbond 1194, Realmbound 1534, Starfall 48, sound 21, offline 15; saves/hub restored. Follow-up contains refreshed screenshots, validation notes and a v1.3.1 tester route only. No Codex merge into main.
 
+
+- 2026-10-07 Claude: merged G2 Saltmarsh lighting (ChatGPT; Wildbond v1.3.1, 1194 checks); wrote T32 (lighting for  every other Wildbond area, `codex/wildbond-area-light`) for ChatGPT. **Next for Claude:** G2 for Realmbound zones and  dungeons (not Frostmere), or W3 part 2 (roaming legendaries).
 - 2026-10-07 Claude: merged six ChatGPT branches: T31 post-game (Spire + league rematches, v1.3.0), W7 ferry landing,
   G2 Frostmere lighting, F4 playtest notes, L6 credits, L5 offline. **Changed L5 to online first** (sw.js: network
   first with a 4 s fallback to the kept copy, no `CACHE_VERSION` bumps, takes over at once; docs/offline.md says why).
