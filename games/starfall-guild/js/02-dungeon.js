@@ -23,7 +23,7 @@ function battleTick(h){
     if(crit)dmg*=2;m.hp-=dmg;fxHit('m',dmg,crit);
     if(m.hp<=0){
       const g=m.gold*D.goldM*(1+D.thief);gain(g);S.stats.kills++;fxHit('g',g);
-      if(m.boss){S.stats.bosses++;S.relicPending++;log(`Defeated <b>${m.name}</b> on ${floorName(m.f)}. A relic dropped!`);toast(`Boss down: ${m.name}. Choose a relic!`,'var(--violet)');}
+      if(m.boss){sfx('win');S.stats.bosses++;S.relicPending++;log(`Defeated <b>${m.name}</b> on ${floorName(m.f)}. A relic dropped!`);toast(`Boss down: ${m.name}. Choose a relic!`,'var(--violet)');}
       S.php=Math.min(D.pmax,S.php+D.pmax*D.regen);
       if(S.push&&S.pushWait<=0){S.floor++;if(S.floor>S.best){S.best=S.floor;if(S.best>S.stats.bestEver)S.stats.bestEver=S.best;
         BIZ.forEach((b,i)=>{if(b.floor===S.best)toast(`${b.name} can now open in town.`,'var(--green)');});}}
@@ -31,7 +31,7 @@ function battleTick(h){
     }
     const hit=m.atk*(0.85+Math.random()*0.3);S.php-=hit;S.php=Math.min(D.pmax,S.php+D.pmax*D.heal);fxHit('p',hit);
     if(S.php<=0){
-      S.php=0;const ph=hasRelic('phoenix');S.resting=ph?0.01:D.rest;
+      sfx('lose');S.php=0;const ph=hasRelic('phoenix');S.resting=ph?0.01:D.rest;
       if(!ph&&S.floor>1)S.floor--;S.pushWait=30;spawn();
       fx.lastDefeat=performance.now();break;
     }
@@ -45,6 +45,6 @@ function ensureRelicOffer(){if(S.relicOffer||S.relicPending<=0)return;const pool
   while(out.length<3&&out.length<pool.length){const cand=pool.filter(id=>!out.includes(id));let t=0;for(const id of cand)t+=wt[RELICS[id].r];let r=Math.random()*t;
     for(const id of cand){r-=wt[RELICS[id].r];if(r<=0){out.push(id);break;}}if(r>0)out.push(cand[cand.length-1]);}
   S.relicOffer=out;}
-function takeRelic(id,auto){if(!S.relicOffer||!S.relicOffer.includes(id))return;S.relics.push(id);S.relicPending--;S.relicOffer=null;D=derive();
+function takeRelic(id,auto){if(!S.relicOffer||!S.relicOffer.includes(id))return;S.relics.push(id);S.relicPending--;S.relicOffer=null;D=derive();sfx('loot');
   log(`${auto?'Nyx picked':'Took'} the <b>${RELICS[id].name}</b>.`);if(!auto)toast(`${RELICS[id].name}: ${RELICS[id].desc}`,'var(--violet)');}
 

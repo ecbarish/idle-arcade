@@ -54,7 +54,9 @@ mine ore for repair kits (R1). Item names change every 10 levels to 60. The plan
 
 **Hub and promo pages:** `index.html`, `promo.html` (Realmbound), `promo-wildbond.html`.
 
-**Starfall Guild:** split into small files with browser checks (T25), still parked for new features.
+**Starfall Guild:** split into small files with browser checks (T25), still parked for new features. T26 shared-engine
+sound is complete on `codex/starfall-sound`, awaiting Claude's review: original town, delve and boss music, big-moment
+effects and a saved off / effects / effects + music header control; off by default.
 
 **Parked:** Starfall Guild, Diamond Career (baseball), Otherworld (side lane: structural and polish tasks only), and
 Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
@@ -111,7 +113,7 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    earnings like rested XP, one return report when you come back. Realmbound's guild uses it first, then Starfall
    Guild's adventurers, Wildbond ranch jobs, and Diamond Career's team. Plan: `docs/research/decisions.md` (the
    shared-systems table). After that, S4: the world kit (`shared/world/`, Wildbond's walking world for every game).
-16. **T26: Starfall Guild sound** (any assistant; parked-games side lane) — **sent to ChatGPT 2026-10-08** (branch
+16. ~~**T26: Starfall Guild sound**~~ — **done by Codex 2026-10-07, awaiting Claude's PR review** (branch
    `codex/starfall-sound`; ticket in `docs/ROADMAP.md`, "T26"). Music and effects through `shared/sound.js`.
 
 ## Questions for Evan (work continues on the defaults until he answers)
@@ -129,6 +131,10 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-07 Codex: T26 complete on `codex/starfall-sound` for Claude's review, unmerged. Browser checks:
+  Realmbound 929, Wildbond 488, Starfall 48; saves restored. Two-minute live audio capture: all three themes,
+  no clipping or browser errors; phone-width sound control fits. Subjective listening remains for PR review.
 
 - 2026-10-08 Claude (night, Evan asleep, later): built R1 + S3, the shared roster (`shared/roster.js`) and Realmbound's
   Supplies tab (other heroes mine ore → repair kits); merged ChatGPT's T22 (Hollow Crown 45-52, Rootrot Hollow).

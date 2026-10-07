@@ -14,6 +14,7 @@
       <div class="lbl"><a class="home" href="../../index.html">← Arcade</a> · Season <span id="seasonNo" class="px">1</span> · <span id="regionName">Greenleaf Meadow</span></div>
       <div class="gname">Starfall Guild</div>
       <div class="sm" id="regionNote">No modifiers</div>
+      <button class="btn sm2" id="sndBtn" data-act="sound" aria-pressed="false">Sound: off</button>
     </div>
     <div class="hcell"><div class="lbl">Gold</div><div class="big" id="gold">0</div><div class="sm px" id="gps">0/s</div></div>
     <div class="hcell"><div class="lbl">Dungeon</div><div class="mid px" id="floorTop">B1F</div><div class="sm px" id="bestTop">Best B1F</div></div>
@@ -64,6 +65,7 @@
 <div class="toasts" id="toasts" aria-live="polite"></div>
 
 <script src="../../shared/engine.js"></script>
+<script src="../../shared/sound.js"></script>
 <script src="js/00-data.js"></script>
 <script src="js/01-state-save.js"></script>
 <script src="js/02-dungeon.js"></script>
@@ -72,4 +74,5 @@
 <script src="js/05-ui.js"></script>
 <script src="js/06-render.js"></script>
 <script src="js/07-events.js"></script>
+<script src="js/08-sound.js"></script>
 <script src="js/99-boot.js"></script>

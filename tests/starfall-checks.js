@@ -126,7 +126,7 @@ const MAIN_SAVE = {
 };
 
 // Runs in the game iframe to exercise the unchanged classic-script functions.
-function starfallChecks(oldSave) {
+async function starfallChecks(oldSave) {
   const checks = [];
   const check = (label, test) => {
     try { if (!test()) throw Error('Expected condition was false.'); checks.push({ok:true,label}); }
@@ -170,6 +170,48 @@ function starfallChecks(oldSave) {
   check('Every existing tab renders and updates without errors',()=>{reset();for(const tab of Object.keys(TABS)){S.tab=tab;renderTab(true);updateUI();if(!document.querySelector('#tabbody').innerHTML)return false;}return true;});
   check('Canvas renderer still draws a frame',()=>{reset();frame(performance.now());return cv.width>0 && cv.height>0;});
   check('Tick advances without errors or nonfinite state',()=>{reset();for(let i=0;i<100;i++)sg.advance(0.1);updateUI();return Math.abs(S.stats.play-10)<1e-9 && S.stats.kills>0 && [S.gold,S.php,D.patk,D.pmax,S.mon.hp,S.mon.atk].every(Number.isFinite);});
+  // T26: shared sound, original tunes, controls, saved settings and real event hooks.
+  check('Three original themes have 32 melody notes and 16 or 32 bass notes',()=>['town','delve','boss'].every(k=>SND.tracks[k]&&SND.tracks[k].mel.length===32&&[16,32].includes(SND.tracks[k].bass.length)));
+  check('Every melody and bass token is a rest or a real pitch',()=>Object.values(SND.tracks).every(t=>t.mel.concat(t.bass).every(n=>n==='.'||ArcadeSound.hz(n)>0)));
+  check('Delve has drums and the faster boss theme has no echo',()=>SND.tracks.delve.drum.length>0&&SND.tracks.boss.bpm>SND.tracks.delve.bpm&&!SND.tracks.boss.echo);
+  check('Fresh sound is off without adding a save field',()=>{reset();SND.render();return !Object.hasOwn(S,'snd')&&$('#sndBtn').textContent==='Sound: off'&&$('#sndBtn').getAttribute('aria-pressed')==='false';});
+  check('Header clicks cycle off, effects, music and off with matching text and saved setting',()=>{
+    const b=$('#sndBtn');for(const [mode,text] of [[1,'Sound: effects'],[2,'Sound: effects + music'],[0,'Sound: off']]){b.click();if(S.snd!==mode||load().snd!==mode||b.textContent!==text||b.getAttribute('aria-pressed')!==(mode?'true':'false'))return false;}return true;
+  });
+  check('Old save without snd loads unchanged and silent',()=>{localStorage.setItem(KEY,JSON.stringify(oldSave));S=merge(load());D=derive();SND.render();return same(S,oldSave)&&!Object.hasOwn(S,'snd')&&$('#sndBtn').textContent==='Sound: off';});
+  check('Sound-on setting survives save and load',()=>{reset();S.snd=2;save();S=merge(load());SND.render();return S.snd===2&&$('#sndBtn').textContent==='Sound: effects + music';});
+  check('Importing an old save refreshes the header to sound off',()=>{reset();S.snd=2;S.tab='ledger';renderTab(true);SND.render();$('#saveTxt').value=Arcade.encode(oldSave);document.querySelector('[data-act="import"]').click();return !Object.hasOwn(S,'snd')&&S.gold===oldSave.gold&&$('#sndBtn').textContent==='Sound: off'&&$('#sndBtn').getAttribute('aria-pressed')==='false';});
+  check('Erasing a sound-on save refreshes the header to sound off',()=>{reset();S.snd=2;S.tab='ledger';renderTab(true);SND.render();document.querySelector('[data-act="reset"]').click();document.querySelector('[data-act="reset"]').click();return !Object.hasOwn(S,'snd')&&S.gold===60&&$('#sndBtn').textContent==='Sound: off'&&$('#sndBtn').getAttribute('aria-pressed')==='false';});
+  check('Town and inactive-party states choose the warm town theme',()=>{reset();S.tab='town';if(musicKey()!=='town')return false;S.tab='party';S.party=[];return musicKey()==='town';});
+  check('Normal floor selects delve and a boss floor selects boss',()=>{reset();S.tab='party';S.floor=1;const normal=musicKey();S.floor=10;return normal==='delve'&&musicKey()==='boss';});
+  check('Regional five-floor bosses also select boss',()=>{reset();S.region=Object.keys(REGIONS).find(k=>REGIONS[k].boss5);S.floor=5;return isBoss(5)&&musicKey()==='boss';});
+  check('Resting party returns to the town theme',()=>{reset();S.resting=1;return musicKey()==='town';});
+  check('Modals and a pending region choice silence music',()=>{reset();openModal('export','Test','Test');const quiet=musicKey()===null;closeModal();S.regionOffer=['meadow'];return quiet&&musicKey()===null;});
+  const played=[],originalSfx=SND.sfx;
+  SND.sfx=(name,...args)=>{played.push(name);return originalSfx(name,...args);};
+  function audible(){reset();S.snd=1;soundPlayed.clear();soundPending.clear();played.length=0;}
+  try {
+    audible();for(const name of ['win','loot','quest','level','coin','lose','badge'])sfx(name);await Promise.resolve();
+    check('Every required shared effect runs without throwing',()=>['win','loot','quest','level','coin','lose','badge'].every(n=>played.includes(n)));
+    audible();S.party[0].lvl=100;S.floor=S.best=10;S.push=false;D=derive();S.php=D.pmax;spawn();advance(2);await Promise.resolve();
+    check('Repeated boss kills in a catch-up tick play one victory cue',()=>S.stats.bosses>1&&played.filter(n=>n==='win').length===1);
+    audible();S.party[0].lvl=100;S.push=false;D=derive();advance(2);await Promise.resolve();
+    check('Ordinary farm kills do not add hit or kill sounds',()=>S.stats.kills>1&&played.length===0);
+    audible();S.gold=10000;for(let i=0;i<5;i++)levelUp(S.party[0].id,1);await Promise.resolve();
+    check('Batch leveling plays one level cue',()=>S.party[0].lvl===6&&played.filter(n=>n==='level').length===1);
+    audible();S.gold=10000;buyBiz(0,1);buyBiz(0,1);buyFac('smith');await Promise.resolve();
+    check('Town purchases play one coin cue per batch',()=>S.biz[0]===2&&S.fac.smith===1&&played.filter(n=>n==='coin').length===1);
+    audible();S.gold=10000;recruit(S.board[0].id);await Promise.resolve();
+    check('Actual recruiting plays the quest cue',()=>S.stats.recruits===1&&played.includes('quest'));
+    audible();S.relicPending=1;S.relicOffer=['phoenix'];takeRelic('phoenix',false);await Promise.resolve();
+    check('Choosing a relic plays loot',()=>S.relics.includes('phoenix')&&played.includes('loot'));
+    audible();S.best=20;newSeason(false);await Promise.resolve();
+    check('Season reset plays badge',()=>S.stats.seasons===1&&played.includes('badge'));
+    audible();S.floor=2;spawn();S.mon.hp=1e9;S.mon.atk=1e9;S.php=1;advance(0.5);await Promise.resolve();
+    check('Actual wipe and forced retreat play lose',()=>S.php===0&&S.floor===1&&played.includes('lose'));
+    audible();S.gold=0;buyBiz(0,1);recruit(S.board[0].id);levelUp(S.party[0].id,1);await Promise.resolve();
+    check('Failed actions remain silent',()=>played.length===0);
+  } finally {SND.sfx=originalSfx;reset();SND.render();}
   return checks;
 }
 
@@ -216,7 +258,7 @@ function starfallChecks(oldSave) {
       });
       const w = frame.contentWindow;
       if (!w.__sg) throw Error('Starfall Guild localhost test hook is unavailable.');
-      for (const c of w.eval('(' + starfallChecks.toString() + ')(' + JSON.stringify(MAIN_SAVE) + ')')) record(c.ok, c.label);
+      for (const c of await w.eval('(' + starfallChecks.toString() + ')(' + JSON.stringify(MAIN_SAVE) + ')')) record(c.ok, c.label);
     } catch (error) {
       record(false, error.message);
     } finally {

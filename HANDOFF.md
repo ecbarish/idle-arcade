@@ -96,7 +96,7 @@ test iframe. Existing Node DOM and Playwright checks remain in `tests/` for deve
 ## Starfall Guild layout
 
 `games/starfall-guild/index.html` keeps the existing markup and loads `style.css` (the original styles),
-`shared/engine.js`, then these classic scripts in order, without modules, async, defer or a build step:
+`shared/engine.js`, `shared/sound.js`, then these classic scripts in order, without modules, async, defer or a build step:
 
 - `00-data.js`: save key, helpers, classes, names, monsters, town buildings, relics, regions, crest and staff data.
 - `01-state-save.js`: fresh state, merge defaults, derived stats, save/load and portable saves.
@@ -106,6 +106,8 @@ test iframe. Existing Node DOM and Playwright checks remain in `tests/` for deve
 - `05-ui.js`: toasts, modals, tabs and HUD updates.
 - `06-render.js`: original procedural pixel art, canvas setup and animation.
 - `07-events.js`: existing mouse, keyboard and input handlers.
+- `08-sound.js`: original town, delve and boss tunes on the shared sound engine, music selection and batched effects.
+  The header cycles off / effects / effects + music; `S.snd` is written only when changed, so old saves stay silent.
 - `99-boot.js`: startup, loading, timers and localhost-only `window.__sg`.
 
 Classic scripts share lexical bindings. Data callbacks refer to state and UI helpers only when called;

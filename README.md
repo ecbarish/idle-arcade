@@ -39,6 +39,10 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-07** — Starfall Guild sound (T26): original town, delve and boss music through the shared sound engine,
+  plus effects for recruiting, leveling, purchases, relics, boss victories, wipes and seasons. Sound starts off;
+  the header cycles effects and music on, and saves the choice. Catch-up and automated actions cannot flood cues.
+
 - **2026-10-08 (night, later)** — **Realmbound: your other characters can work for you now.** A new **Supplies** tab
   holds a supply bank shared by all your characters and a jobs board: any hero you aren't playing can go Mining (3 at
   a time; higher levels mine faster), and their ore arrives even while you're away, up to 8 hours, with one report
