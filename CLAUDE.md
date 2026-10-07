@@ -16,7 +16,8 @@ read this file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (ti
   personal email. End commit messages with the Co-Authored-By line the session gives you.
 - Never enter Evan's passwords or create accounts for him; he signs in himself.
 - Plain HTML/JS, no build step, no installs. Test locally with `serve.ps1` (http://localhost:8765/) in the browser
-  pane. Realmbound: `tests/run.html` must stay all-pass. Wildbond: `window.__wb` hook on localhost.
+  pane. Realmbound: `tests/run.html` must stay all-pass. Wildbond: `tests/wildbond.html` must stay all-pass;
+  `window.__wb` hook on localhost.
 - Ship in small playable steps with a README changelog entry. When handing work to ChatGPT, write the ticket into
   `docs/ROADMAP.md` first and give Evan a copy-paste prompt (branch `codex/<topic>`, open a PR, don't merge,
   noreply email).

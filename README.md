@@ -35,6 +35,10 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-06 (night, part 3)** — Merged ChatGPT's Wildbond browser checks (T16): open
+  http://localhost:8765/tests/wildbond.html (via serve.ps1) and click Run checks; 314 checks of maps, story data,
+  walking, gates, level caps, Wardens, old saves, the inn and the shop. Your save is backed up and restored.
+
 - **2026-10-06 (night, part 2)** — Wildbond walkable world, part 2 (T7b): six tamers now wait along the routes
   (two per area). Walk into the line they're watching and they spot you ("!") and come over for a battle; beat them
   once and they'll chat instead. Pouches of coins, lures and ranch food lie around each area, signposts tell you
