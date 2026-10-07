@@ -212,7 +212,7 @@ The factions' answer begins with ordinary obligations: recover the food, clothe 
 6. What precisely does the Ember Covenant intend to awaken, and how does Veyr relate to it? Are the two cults connected at all?
 7. Who directs Thornvale's Diggers beyond their foremen? *The Foreman's Ledger* does not currently provide a recovered document to answer that.
 8. Are any adventurer names shared identities with quest givers: Aldous, Merrin, Elowen, Kesh, Ruk, Ugra or Brakka? Keep them distinct unless confirmed. Corwin is not automatically Corwen; Drogo is not Drogan; Vash is not Vosh; Isla is not Ilsa.
-9. Who built Frostmere's necropolis, and why did the ice troll waykeepers reuse its stones? The Winter Road reaches its approach, but does not answer this. The Hollow Crown remains a planned region.
+9. What woke the Wayfolk dead and the Last Wayward's refusal? Frostmere II identifies the necropolis's people and the trolls' practical reuse of their stones, but leaves the waking unexplained. The Hollow Crown remains a planned region.
 10. How do the factions' Greywater claims evolve as shared threats grow? The present game establishes neither a peace treaty nor open faction warfare.
 
 ## The Winter Road: new people and the White Vigil
@@ -226,3 +226,71 @@ The factions' answer begins with ordinary obligations: recover the food, clothe 
 - **Hushfang, the White Vigil** is a great pale wolf at the road's last crossing. Defeating or taming it ends the danger to sleds; neither proves why it watched the buried city. A Hunter may earn its companionship through the existing legendary taming rules.
 
 The recovered provisions reach both faction camps. This is practical cooperation between these travelers, not a declaration that the Concord and Wildclans have resolved all their disputes. No connection between these ice trolls and the Ember Covenant is established.
+
+## Frostmere II: The Barrowfields and the Silent Barrows
+
+The winter road continues into **The Barrowfields**, where grey-blue snow lies between dark barrow stones.
+Lanternrest Lodge and Whitebough Hearth maintain forward camps under their existing names; these are extensions
+of the two winter hubs, not new settlements. Grave-cold spreads toward their lamps. The people living beside the
+road need warm watch cloaks, repaired sleds and a clear return path before any expedition can safely go farther.
+
+The older carvings recovered along the Winter Road belong to the **Wayfolk**, who kept the Reach's crossings
+before the Sundering. They buried road-stones with their dead because they believed a road remembers whoever
+walked it. Tavin reads the name from fragments carried by restless Roadshades; Eshra recognizes the belief in the
+same inscriptions. This establishes whose dead lie here without settling the Sundering's cause, date or the
+builders of other ruins.
+
+Ice Troll Cairn Diggers carry reused crossing stones. Fresh cuts over the older names mark the trolls' own
+routes: their reuse was practical, not intended to insult the dead. The camps stop the continuing destruction
+at the open cairns, but neither speaker claims it explains what first woke the barrows. No connection to the
+Ember Covenant or the Drowned Cult is established.
+
+**Gravebreath Wolves** bring danger along the cold approach; their pelts help protect the watch.
+**Stoneweft Spiders** web the spaces between stones, and their silk holds sled braces against the frost.
+**Wayfolk Roadshades** carry the scattered old road fragments. **Wayfolk Threshold Keepers** bar the facing
+doorways and carry inscriptions naming a warden who refuses the living. These are the restless Wayfolk dead,
+rendered through the game's existing humanoid kind, not an added race or creature family.
+
+**Paleweft, the Lamp-Eater** is a great pale spider hunting beside the last road lamps. Its webs obstruct the
+approach to the Silent Barrows. Defeating it or earning its companionship makes those lamps safer; a Hunter may
+tame it through the existing legendary beast rules. Its epithet does not establish that it consumes fire or
+caused the grave-cold.
+
+The established winter givers continue their work in the forward camps:
+
+- **Roadwarden Sella** secures the watch and counts people returning from the crossing. She asks for wolves,
+  diggers and webbed approaches to be cleared so readers and parties can reach the stones together.
+- **Pathkeeper Dorr** protects the same route from Whitebough. He insists on space for the slowest companion,
+  and refuses to turn uncertain evidence into a story blaming the trolls for the waking.
+- **Seamster Oren** uses gravebreath pelts and stoneweft silk to mend existing equipment before making more.
+  He wants scouts and tired travelers to return wearing the gear he prepared.
+- **Hideworker Naska** judges protection by the living shoulders it warms. She asks that finished cloaks be
+  shared across the camps, and values a sled returning with everyone over one returning laden.
+- **Surveyor Tavin** identifies the Wayfolk and compares old carvings with newer road marks. The inscriptions
+  let him name the Last Wayward; they do not let him explain its waking.
+- **Storykeeper Eshra** reads a duty to remember journeys and keep crossings available. She asks the party to
+  carry that duty into the barrows with a lamp and four companions, rather than treating memory as an empty road.
+
+### The Silent Barrows
+
+The dungeon opens beyond the threshold approach. Four packs and three bosses guard its road-stones and dark
+passages: Barrow Lampkeepers, Cairnweft Brood, Waystone Bearers and Keepers of the Return Path. **Gravewind**
+strikes the party; **Stonewake Rupture** threatens travelers who fail to dodge. These use the existing wave and
+surge mechanics. The planned Grave Chill mechanic belongs to T1-B and is not present in this chapter.
+
+**Ordel, Keeper of the Unlit Wick** is a restless Wayfolk lampkeeper guarding the first inner crossing. The
+lampkeeping duty persists even with no flame to guide a living traveler. Ordel's defense calls Gravewind across
+the party; the record establishes neither a cult allegiance nor responsibility for waking the dead.
+
+**Selnith, the Doorweaver** is a great spider whose webs span the inner doorway passages. Its territory overlaps
+the waystone bearers' route. Gravewind and Stonewake Rupture make the narrow passage dangerous, but its presence
+does not prove that it commands the Wayfolk or is related to Paleweft.
+
+**The Last Wayward** is a Wayfolk warden who refuses the road to people who forgot why it was built. The final
+inscriptions preserve that refusal; the final encounter brings waves, ruptures and eventual fury. Facing the
+warden does not explain what woke it or decide the factions' future obligations. The chapter ends with the road
+ready for an expedition, leaving those answers for later story work.
+
+The final surface quest, **Carry the Road Within**, clears the remaining Threshold Keepers and directs the
+player to enter with four companions. Turning it in confirms the approach is ready; it does not count as a
+dungeon clear or say the Last Wayward has been defeated.

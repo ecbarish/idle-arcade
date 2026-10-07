@@ -25,7 +25,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
   done 2026-10-07. Follow-ups in its build order: T1-A (Claude, second talent trees and roles), T20 and T21
   (ChatGPT, below), T1-B, R1, T22/T23, guild and raid.
 - [ ] **T1-A: Second talent trees, roles from your build, respec** (Claude, next for Realmbound).
-- [ ] **T20: Realmbound Frostmere II, The Barrowfields and The Silent Barrows** (ChatGPT, data): see the T20 section.
+- [x] **T20: Realmbound Frostmere II, The Barrowfields and The Silent Barrows** (ChatGPT, data): see the T20 section.
 - [ ] **T21: Realmbound item name tiers to level 60** (ChatGPT, data + one formula): see the T21 section.
 - [x] **T2: Creature game spec + shared creature module plan** (Claude). See docs/creature-game-design.md.
 - [x] **T3: Content for levels 30-40** (Codex): Frostmere, The Winter Road. See
