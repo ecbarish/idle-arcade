@@ -210,6 +210,13 @@ const SCENES = {
     ['', 'The green drains out of the sky and blue pours in. Red roofs far to the south. Every leaf a different shade. Your partner\'s coat, bright as the day you met.'],
     ['isolde', 'Ah. You see it too. The region was faded long ago, and the guardians still remember it as it was. Every bond you earn reminds the world a little more.'],
     ['isolde', 'Take these as well: Warden\'s boots. Hold Shift and you\'ll cover twice the ground. Now go and show Maren. She\'ll pretend she isn\'t moved.']
+  ],
+  /* the second badge brings light and depth (16-bit -> HD-2D) */
+  lightReturns: [
+    ['', 'The tide turns. For a moment the whole beach holds still, and then the light changes.'],
+    ['', 'Shadows stretch out long and soft. The lighthouse stands up off the sand. Far down the coast, the dunes fade into a blue haze you could almost walk into.'],
+    ['nerys', 'Huh. Forty years on this coast and I\'ve never seen the far shore that clear.'],
+    ['nerys', 'Keep your eyes open in the reeds now, {name}. When the world has depth, the wild ones stop hiding in it. And the weather\'s going to start doing as it pleases.']
   ]
 };
 /* Story beats trigger on the number of times you've explored. `text` goes to the journal; `lines` play as a
@@ -293,7 +300,7 @@ const ERAS = [
   { id: 'pocket', name: 'Pocket', unlock: 'From the start' },
   { id: 'pixel', name: 'Pixel', unlock: 'Earn the Thorn Badge' },
   { id: 'bit16', name: '16-bit', unlock: 'Earn the Thorn Badge' },
-  { id: 'hd', name: 'HD-2D', unlock: 'Earn the Tide Badge', soon: true },
+  { id: 'hd', name: 'HD-2D', unlock: 'Earn the Tide Badge' },
   { id: 'diorama', name: 'Diorama', unlock: 'Earn the Ember Badge', soon: true },
   { id: '3d', name: '3D', unlock: 'Become Champion', soon: true }
 ];

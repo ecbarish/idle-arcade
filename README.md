@@ -35,6 +35,13 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-07 (early)** — Merged ChatGPT's Wildbond lore bible (T14, docs/lore/wildbond.md). Wildbond eras, part 2
+  (T13): the Tide Badge brings light and depth back to the world in a scene on the beach, and the new HD-2D style
+  shows the same places through a tilted camera: trees, people and creatures stand up out of the ground, the
+  distance fades into haze and goes soft, and warm light falls across everything. Weather arrives too (rain on the
+  coast and in the woods, mist, falling ash in the highlands), and it changes which creatures come out. Wild
+  creatures now show themselves in the tall grass: walk into one to battle it (they're a little more often rare).
+
 - **2026-10-06 (night, part 4)** — Wildbond eras, part 1 (T13): a new journey now begins in a faded world, four
   shades of green like an old handheld (the Pocket style). Earning the Thorn Badge brings the color back in a short
   scene, unlocks the Pixel and 16-bit styles, and Isolde gives you Warden's boots (hold Shift to run, or tap somewhere

@@ -8,7 +8,7 @@ const WALK_SPEED = 5; // tiles a second
 /* fx, fy: where the tamer is drawn (slides toward S.pos); path: queued steps; grassN: tall-grass steps until the next find;
    fol: where your lead creature walks (one step behind you); spot: a trainer who just saw you; cool: trainers who beat
    you won't come at you again until you leave the area */
-const WK = { fx: 0, fy: 0, held: [], queued: null, path: [], grassN: 10, cam: null, fol: { x: 0, y: 0, fx: 0, fy: 0 }, spot: null, cool: {} };
+const WK = { fx: 0, fy: 0, held: [], queued: null, path: [], grassN: 10, cam: null, fol: { x: 0, y: 0, fx: 0, fy: 0 }, spot: null, cool: {}, roam: [], roamT: 99 };
 
 function curMap() { return MAPS[S.pos.map]; }
 function tileAt(m, x, y) { return y < 0 || y >= m.rows.length || x < 0 || x >= m.rows[0].length ? 'T' : m.rows[y][x]; }
@@ -26,7 +26,7 @@ function blocked(m, x, y) { return !!(TILES[tileAt(m, x, y)] || TILES.T).solid |
 function placeAt(id, x, y, dir) {
   const m = MAPS[id]; if (!m) return;
   if (x === undefined) [x, y, dir] = m.start;
-  if (!S.pos || S.pos.map !== id) WK.cool = {};
+  if (!S.pos || S.pos.map !== id) { WK.cool = {}; WK.roam = []; WK.roamT = 99; }
   S.pos = { map: id, x, y, dir: dir || 'down' }; WK.fx = x; WK.fy = y; WK.path = []; WK.spot = null; WK.ready = true;
   followBehind();
   if (m.biome) S.biome = m.biome;
@@ -50,6 +50,41 @@ function speedNow() { return S.shoes && !S.auto && (WK.run || WK.pathRun) ? RUN_
 function dayPart() { return ((S.ranchT || 0) / DAY_SECONDS) % 1; }
 function darkness() { if (!S.badges.includes('thorn')) return 0; const k = dayPart(); return k < 0.65 ? 0 : k < 0.75 ? (k - 0.65) / 0.1 : k < 0.95 ? 1 : (1 - k) / 0.05; }
 function isNight() { return darkness() >= 1; }
+/* Weather (arrives with the Tide Badge): it changes three times a ranch day and tips which creatures come out. */
+const WEATHER = { thornwood: ['clear', 'clear', 'rain'], saltmarsh: ['clear', 'rain', 'mist'], emberfall: ['clear', 'clear', 'ash'] };
+const WEATHER_FX = { rain: { Tide: 2, Ember: 0.5 }, mist: { Shade: 1.5, Gale: 1.5 }, ash: { Ember: 1.6, Gale: 0.6 } };
+const WEATHER_NAME = { rain: 'Rain: Tide creatures are out.', mist: 'Mist: Shade and Gale creatures drift out of it.', ash: 'Falling ash: Ember creatures love it.' };
+function weatherNow() {
+  if (!S.badges.includes('tide') || !S.pos || !curMap().biome) return 'clear';
+  const list = WEATHER[S.biome] || ['clear', 'mist'], seg = Math.floor(dayPart() * 3), h = ((S.day || 1) * 7 + seg * 13 + S.biome.length * 5) % 97;
+  return list[h % list.length];
+}
+/* Visible wild creatures (arrive with the Tide Badge): a few wander the tall grass. Walk into one to battle it;
+   they're a little more likely to be rare than what the grass turns up. Finds in the grass still happen as before. */
+function roamOn() { return S.badges.includes('tide') && !!curMap().biome; }
+function tallTiles(m) { const out = []; m.rows.forEach((r, y) => [...r].forEach((ch, x) => { if (ch === '"') out.push([x, y]); })); return out; }
+function addRoamer() {
+  const m = curMap(), free = tallTiles(m).filter(([x, y]) => !(x === S.pos.x && y === S.pos.y) && !npcAt(m, x, y) && !WK.roam.some(r => r.x === x && r.y === y));
+  if (!free.length) return; const [x, y] = pick(free);
+  WK.roam.push({ sp: wildPick(), lvl: wildLvl(), x, y, fx: x, fy: y, t: 1 + Math.random() * 2, right: Math.random() < 0.5 });
+}
+function roamTick(h) {
+  if (!roamOn()) { WK.roam = []; return; }
+  WK.roamT = (WK.roamT || 0) + h; if (WK.roam.length < 3 && WK.roamT > 12) { WK.roamT = 0; addRoamer(); }
+  const m = curMap();
+  for (const r of WK.roam) {
+    const s = 2.5 * h; r.fx += Math.max(-s, Math.min(s, r.x - r.fx)); r.fy += Math.max(-s, Math.min(s, r.y - r.fy));
+    if ((r.t -= h) > 0) continue; r.t = 1.2 + Math.random() * 2.5;
+    const [dx, dy] = pick(Object.values(DIRS)), nx = r.x + dx, ny = r.y + dy; if (dx) r.right = dx > 0;
+    if (nx === S.pos.x && ny === S.pos.y) { meetRoamer(r); return; }
+    if (tileAt(m, nx, ny) === '"' && !npcAt(m, nx, ny) && !WK.roam.some(o => o.x === nx && o.y === ny)) { r.x = nx; r.y = ny; }
+  }
+}
+function meetRoamer(r) {
+  if (B || TALK || !alive().length) return;
+  WK.roam = WK.roam.filter(o => o !== r); WK.path = []; WK.held = []; W.msg = '';
+  startBattle('wild', [newCreature(r.sp, r.lvl, { boost: 0.4 + journey().rare + (S.team.some(c => c.traits.includes('lucky')) ? 0.3 : 0) })]);
+}
 
 function tryStep(dir) {
   if (B || TALK || !S.pos) return;
@@ -62,6 +97,7 @@ function tryStep(dir) {
   if (blocked(m, nx, ny)) { WK.path = []; return; }
   WK.fol.x = S.pos.x; WK.fol.y = S.pos.y; S.pos.x = nx; S.pos.y = ny;
   pickUp(m, nx, ny);
+  const r = WK.roam.find(o => o.x === nx && o.y === ny); if (r) { meetRoamer(r); return; }
   if (spotted(m)) return;
   if (TILES[ch].tall && --WK.grassN <= 0) { WK.grassN = rint(8, 16); WK.path = []; explore(); }
 }
@@ -158,6 +194,7 @@ function walkTick(h) {
   WK.fx += Math.max(-sp, Math.min(sp, S.pos.x - WK.fx)); WK.fy += Math.max(-sp, Math.min(sp, S.pos.y - WK.fy));
   f.fx += Math.max(-sp, Math.min(sp, f.x - f.fx)); f.fy += Math.max(-sp, Math.min(sp, f.y - f.fy));
   if (WK.spot) { if (arrived() && (WK.spot.t -= h) <= 0) challengeTrainer(WK.spot.n); return; }
+  roamTick(h); if (B) return;
   if (!arrived()) return;
   const dir = WK.held[WK.held.length - 1] || WK.queued || WK.path.shift(); WK.queued = null;
   if (dir) tryStep(dir);
@@ -185,7 +222,9 @@ addEventListener('blur', () => { WK.held = []; WK.run = false; });
 cv.addEventListener('click', e => {
   if (!S.started || B || TALK || !WK.cam) return;
   const r = cv.getBoundingClientRect(), c = WK.cam;
-  const tx = Math.floor((e.clientX - r.left - c.ox) / c.ts), ty = Math.floor((e.clientY - r.top - c.oy) / c.ts);
+  const mx = e.clientX - r.left, my = e.clientY - r.top; // a renderer with a tilted camera supplies cam.inv (screen -> tile)
+  const [tx, ty] = c.inv ? c.inv(mx, my) : [Math.floor((mx - c.ox) / c.ts), Math.floor((my - c.oy) / c.ts)];
+  if (tx === undefined) return;
   if (tx === S.pos.x && ty === S.pos.y) return;
   walkTo(tx, ty);
 });

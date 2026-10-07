@@ -26,11 +26,17 @@ function storyWin(id) {
     const newEra = g.gate === 'thorn' && !S.eras.includes('bit16');
     if (g.gate === 'thorn') { for (const e of ['pixel', 'bit16']) if (!S.eras.includes(e)) S.eras.push(e); S.shoes = true; }
     const faded = newEra && S.era === 'pocket';
+    // the second badge brings light and depth (16-bit -> HD-2D), weather, and wild creatures you can see
+    const newHD = g.gate === 'tide' && !S.eras.includes('hd'); if (newHD) S.eras.push('hd');
+    const flat = newHD && S.era === 'bit16';
     W.afterDone = () => { toast(`You earned the ${badge}!`); sfx('badge');
       setTimeout(() => toast(S.capMode === 'off' ? 'Your team feels stronger.' : `Your creatures can now grow to level ${levelCap()}.`), 2000);
       if (faded) setTimeout(() => { S.era = 'bit16'; recolor(); slog('Color came back to the world. Isolde gave you Warden\'s boots.');
         talk(SCENES.colorReturns, () => toast('New art styles unlocked: Pixel and 16-bit. Switch any time in the Journal. Hold Shift to run.')); }, 900);
-      else if (newEra) setTimeout(() => toast('The world shimmers... the 16-bit art style is unlocked. Switch it in the Journal. Hold Shift to run.'), 4500); };
+      else if (newEra) setTimeout(() => toast('The world shimmers... the 16-bit art style is unlocked. Switch it in the Journal. Hold Shift to run.'), 4500);
+      if (flat) setTimeout(() => { S.era = 'hd'; recolor(); slog('Light and depth came back to the world. Weather rolls in, and wild creatures can be seen in the grass.');
+        talk(SCENES.lightReturns, () => toast('New art style: HD-2D. Wild creatures now show themselves in the tall grass, and the weather changes.')); }, 900);
+      else if (newHD) setTimeout(() => toast('HD-2D art style unlocked (Journal). Wild creatures now show themselves in the grass, and the weather changes.'), 4500); };
   }
 }
 /* after the art style changes, portraits and faces redraw in the new look */
@@ -45,8 +51,8 @@ function wardenReady() { const g = gateHere(); return !!g && beatCount(g) >= g.a
 function elderReady() { return S.story.elderFled && !S.story.elderCaught && S.badges.includes('thorn'); }
 
 function teamAvg() { return S.team.length ? S.team.reduce((s, c) => s + c.lvl, 0) / S.team.length : 1; }
-/* at night, Shade creatures come out more and Radiant ones hide (the day/night clock, 12-walk.js) */
-function wildPick() { const n = isNight(), t = BIOMES[S.biome].wild.map(([id, w]) => [id, n && SPECIES[id].el === 'Shade' ? w * 3 : n && SPECIES[id].el === 'Radiant' ? w * 0.5 : w]), tot = t.reduce((s, [, w]) => s + w, 0); let r = Math.random() * tot; for (const [id, w] of t) { r -= w; if (r <= 0) return id; } return t[0][0]; }
+/* at night, Shade creatures come out more and Radiant ones hide; weather tips the odds too (12-walk.js) */
+function wildPick() { const n = isNight(), fx = WEATHER_FX[weatherNow()] || {}, t = BIOMES[S.biome].wild.map(([id, w]) => [id, (n && SPECIES[id].el === 'Shade' ? w * 3 : n && SPECIES[id].el === 'Radiant' ? w * 0.5 : w) * (fx[SPECIES[id].el] || 1)]), tot = t.reduce((s, [, w]) => s + w, 0); let r = Math.random() * tot; for (const [id, w] of t) { r -= w; if (r <= 0) return id; } return t[0][0]; }
 /* wild creatures match your team, within the biome's range */
 function wildLvl() { const [a, b] = BIOMES[S.biome].lv, m = Math.round(teamAvg()); return clamp(rint(m - 2, m + 1), a, b); }
 

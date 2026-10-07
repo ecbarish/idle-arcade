@@ -58,44 +58,72 @@ function worldPal(m) {
     roof: '#b0503a', roofDk: '#8a3a2a', rockBase: coast ? '#e3d3a0' : null });
 }
 const PLAYER_LOOK = { skin: '#f1c9a0', hair: 'hat', hairCol: '#6b4423', hatCol: '#6b4423', shirt: '#2f9e6b' };
-function drawWorld(t, A) {
-  const m = curMap(), P = worldPal(m), rows = m.rows.length, cols = m.rows[0].length, edge = m.biome === 'emberfall' ? 'R' : 'T';
-  const ts = Math.max(20, Math.round(PH / 8.5)), vw = PW / ts, vh = PH / ts;
-  const camX = cols <= vw ? (cols - vw) / 2 : clamp(WK.fx + 0.5 - vw / 2, 0, cols - vw);
-  const camY = rows <= vh ? (rows - vh) / 2 : clamp(WK.fy + 0.5 - vh / 2, 0, rows - vh);
-  const ox = Math.round(-camX * ts), oy = Math.round(-camY * ts), tile = A.tile || ART.pixel.tile, walker = A.walker || ART.pixel.walker;
-  WK.cam = { ox, oy, ts };
-  for (let y = Math.floor(camY); y < camY + vh; y++) for (let x = Math.floor(camX); x < camX + vw; x++) {
-    const inside = x >= 0 && y >= 0 && x < cols && y < rows;
-    tile(cx, inside ? m.rows[y][x] : (m.biome === 'saltmarsh' && y < 4 ? '~' : edge), ox + x * ts, oy + y * ts, ts, P, t, x, y);
-  }
-  // ranch creatures roam the paddock
+/* What's on the map right now, for any renderer: positions are in tiles (x, y = the tile's top-left corner). */
+function worldView(m, t) {
+  const things = [];
   if (m.pen) { const [x0, y0, x1, y1] = m.pen; S.ranch.slice(0, 4).forEach((c, i) => {
-    const k = reduceMotion ? 0.5 : (Math.sin(t * 0.25 + i * 2.1) + 1) / 2, x = ox + (x0 + k * (x1 - x0) + 0.5) * ts, y = oy + (y0 + (i % 2) * (y1 - y0) + 0.9) * ts;
-    A.creature(cx, x - ts * 0.3, y, ts / 16, sp(c), Math.cos(t * 0.25 + i * 2.1) > 0, t + i); }); }
-  // things on the ground
-  const item = A.item || ART.pixel.item;
-  for (const it of itemsLeft(m)) item(cx, ox + it.at[0] * ts, oy + it.at[1] * ts, ts, t);
-  // people and your lead creature, back to front
-  const ppl = npcsOf(m).map(n => ({ x: n.at[0], y: n.at[1], look: CAST[n.who], dir: n.dir || 'down', step: 0,
-    mark: (n.warden && wardenReady() && !S.story[n.warden.id]) || (WK.spot && WK.spot.n.who === n.who) }));
-  ppl.push({ x: WK.fx, y: WK.fy, look: PLAYER_LOOK, dir: S.pos.dir, step: arrived() ? 0 : Math.floor(t * 8) % 2 });
+    const k = reduceMotion ? 0.5 : (Math.sin(t * 0.25 + i * 2.1) + 1) / 2;
+    things.push({ kind: 'pet', x: x0 + k * (x1 - x0), y: y0 + (i % 2) * (y1 - y0), sp: sp(c), right: Math.cos(t * 0.25 + i * 2.1) > 0, t: t + i }); }); }
+  for (const it of itemsLeft(m)) things.push({ kind: 'item', x: it.at[0], y: it.at[1] });
+  for (const r of WK.roam) things.push({ kind: 'pet', wild: 1, x: r.fx, y: r.fy, sp: SPECIES[r.sp], right: r.right, t: t * 1.5 + r.x });
+  for (const n of npcsOf(m)) things.push({ kind: 'person', x: n.at[0], y: n.at[1], look: CAST[n.who], dir: n.dir || 'down', step: 0,
+    mark: (n.warden && wardenReady() && !S.story[n.warden.id]) || (WK.spot && WK.spot.n.who === n.who) });
+  things.push({ kind: 'person', me: 1, x: WK.fx, y: WK.fy, look: PLAYER_LOOK, dir: S.pos.dir, step: arrived() ? 0 : Math.floor(t * 8) % 2 });
   const lead = S.team.find(c => c.hp > 0);
-  if (lead && (Math.abs(WK.fol.fx - WK.fx) > 0.05 || Math.abs(WK.fol.fy - WK.fy) > 0.05)) ppl.push({ x: WK.fol.fx, y: WK.fol.fy, pet: lead });
-  ppl.sort((a, b) => a.y - b.y);
-  for (const q of ppl) { const sx = ox + q.x * ts, sy = oy + q.y * ts;
-    if (q.pet) { const pp = ts / 18, faceR = WK.fx > WK.fol.fx + 0.01 || (Math.abs(WK.fx - WK.fol.fx) < 0.01 && S.pos.dir !== 'left');
-      A.creature(cx, sx + ts / 2 - 2 * pp, sy + ts * 0.92, pp, sp(q.pet), faceR, t); continue; }
-    walker(cx, sx, sy, ts, q.look, q.dir, q.step);
-    if (q.mark) { const by = sy - ts * 0.75 - (reduceMotion ? 0 : Math.abs(Math.sin(t * 4)) * ts * 0.1); cx.fillStyle = '#f2c14e'; cx.fillRect(sx + ts * 0.35, by, ts * 0.3, ts * 0.38);
-      cx.fillStyle = '#17323a'; cx.fillRect(sx + ts * 0.46, by + ts * 0.06, ts * 0.08, ts * 0.17); cx.fillRect(sx + ts * 0.46, by + ts * 0.27, ts * 0.08, ts * 0.06); } }
+  if (lead && (Math.abs(WK.fol.fx - WK.fx) > 0.05 || Math.abs(WK.fol.fy - WK.fy) > 0.05))
+    things.push({ kind: 'pet', x: WK.fol.fx, y: WK.fol.fy, sp: sp(lead), right: WK.fx > WK.fol.fx + 0.01 || (Math.abs(WK.fx - WK.fol.fx) < 0.01 && S.pos.dir !== 'left'), t });
+  things.sort((a, b) => a.y - b.y);
+  return { m, P: worldPal(m), px: WK.fx, py: WK.fy, things, edge: m.biome === 'emberfall' ? 'R' : 'T' };
+}
+/* a "!" over someone's head: a Warden who is ready, or a trainer who just spotted you */
+function drawMark(sx, sy, ts, t) {
+  const by = sy - ts * 0.75 - (reduceMotion ? 0 : Math.abs(Math.sin(t * 4)) * ts * 0.1);
+  cx.fillStyle = '#f2c14e'; cx.fillRect(sx + ts * 0.35, by, ts * 0.3, ts * 0.38);
+  cx.fillStyle = '#17323a'; cx.fillRect(sx + ts * 0.46, by + ts * 0.06, ts * 0.08, ts * 0.17); cx.fillRect(sx + ts * 0.46, by + ts * 0.27, ts * 0.08, ts * 0.06);
+}
+function drawWorld(t, A) {
+  const m = curMap(), v = worldView(m, t);
+  if (A.world) A.world(cx, PW, PH, v, t); else drawTopDown(v, t, A);
+  drawWeather(t);
   // dusk and night, in eras that show light
   const dk = A.light ? darkness() : 0;
   if (dk > 0) { cx.fillStyle = `rgba(18,24,64,${(0.42 * dk).toFixed(3)})`; cx.fillRect(0, 0, PW, PH);
     if (dk < 1) { cx.fillStyle = `rgba(255,140,60,${(0.14 * Math.sin(dk * Math.PI)).toFixed(3)})`; cx.fillRect(0, 0, PW, PH); } }
   // where you are
-  cx.font = `700 ${Math.max(12, Math.round(ts * 0.45))}px Fredoka, sans-serif`; const label = m.name, w = cx.measureText(label).width + 16;
-  cx.fillStyle = 'rgba(23,50,58,.72)'; cx.fillRect(8, 8, w, ts * 0.75); cx.fillStyle = '#fff'; cx.textBaseline = 'middle'; cx.fillText(label, 16, 8 + ts * 0.38); cx.textBaseline = 'alphabetic';
+  const fs = Math.max(12, Math.round(PH / 19)); cx.font = `700 ${fs}px Fredoka, sans-serif`; const label = m.name, w = cx.measureText(label).width + 16;
+  cx.fillStyle = 'rgba(23,50,58,.72)'; cx.fillRect(8, 8, w, fs * 1.65); cx.fillStyle = '#fff'; cx.textBaseline = 'middle'; cx.fillText(label, 16, 8 + fs * 0.85); cx.textBaseline = 'alphabetic';
+}
+/* the classic view: straight down, the camera following your tamer */
+function drawTopDown(v, t, A) {
+  const { m, P } = v, rows = m.rows.length, cols = m.rows[0].length;
+  const ts = Math.max(20, Math.round(PH / 8.5)), vw = PW / ts, vh = PH / ts;
+  const camX = cols <= vw ? (cols - vw) / 2 : clamp(v.px + 0.5 - vw / 2, 0, cols - vw);
+  const camY = rows <= vh ? (rows - vh) / 2 : clamp(v.py + 0.5 - vh / 2, 0, rows - vh);
+  const ox = Math.round(-camX * ts), oy = Math.round(-camY * ts), tile = A.tile || ART.pixel.tile, walker = A.walker || ART.pixel.walker, item = A.item || ART.pixel.item;
+  WK.cam = { ox, oy, ts };
+  for (let y = Math.floor(camY); y < camY + vh; y++) for (let x = Math.floor(camX); x < camX + vw; x++) {
+    const inside = x >= 0 && y >= 0 && x < cols && y < rows;
+    tile(cx, inside ? m.rows[y][x] : (m.biome === 'saltmarsh' && y < 4 ? '~' : v.edge), ox + x * ts, oy + y * ts, ts, P, t, x, y);
+  }
+  for (const q of v.things) { const sx = ox + q.x * ts, sy = oy + q.y * ts;
+    if (q.kind === 'item') item(cx, sx, sy, ts, t);
+    else if (q.kind === 'pet') { const pp = ts / (q.wild ? 17 : 18); A.creature(cx, sx + ts / 2 - 2 * pp, sy + ts * 0.92, pp, q.sp, q.right, q.t); }
+    else { walker(cx, sx, sy, ts, q.look, q.dir, q.step); if (q.mark) drawMark(sx, sy, ts, t); } }
+}
+/* rain, mist and falling ash (the weather arrives with the Tide Badge; see weatherNow in 12-walk.js) */
+function drawWeather(t) {
+  const w = weatherNow(); if (w === 'clear') return;
+  const mo = reduceMotion ? 0 : 1;
+  if (w === 'rain') { cx.strokeStyle = 'rgba(190,215,255,.55)'; cx.lineWidth = 1; cx.beginPath();
+    for (let i = 0; i < 90; i++) { const x = (i * 97.3 + t * 260 * mo) % (PW + 40) - 20, y = (i * 53.7 + t * 520 * mo) % (PH + 30) - 15; cx.moveTo(x, y); cx.lineTo(x - 4, y + 11); }
+    cx.stroke(); cx.fillStyle = 'rgba(40,60,90,.12)'; cx.fillRect(0, 0, PW, PH); }
+  else if (w === 'mist') { for (let i = 0; i < 5; i++) { const y = PH * (0.15 + i * 0.18), x = ((t * 12 * mo + i * 170) % (PW + 300)) - 300;
+      const g = cx.createLinearGradient(x, 0, x + 300, 0); g.addColorStop(0, 'rgba(235,242,245,0)'); g.addColorStop(0.5, 'rgba(235,242,245,.32)'); g.addColorStop(1, 'rgba(235,242,245,0)');
+      cx.fillStyle = g; cx.fillRect(x, y, 300, PH * 0.14); }
+    cx.fillStyle = 'rgba(225,232,236,.16)'; cx.fillRect(0, 0, PW, PH); }
+  else if (w === 'ash') { cx.fillStyle = 'rgba(70,64,62,.55)';
+    for (let i = 0; i < 60; i++) { const x = (i * 61.1 + Math.sin(t + i) * 12 * mo) % PW, y = (i * 37.9 + t * 30 * mo) % PH; cx.fillRect(x, y, 2, 2); }
+    cx.fillStyle = 'rgba(120,80,60,.08)'; cx.fillRect(0, 0, PW, PH); }
 }
 /* sparks fly outward for hits, sparkles rise for heals, a ring flashes for a catch */
 function drawBurst(b, gy, p) {

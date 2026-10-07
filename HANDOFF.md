@@ -65,7 +65,8 @@ test iframe. Existing Node DOM and Playwright checks remain in `tests/` for deve
   every drawing call goes through `ART[era]`), 02-state, 03-battle, 04-world (explore, story, town), 05-ui,
   06-scene (battle animation), 07-ranch, 08-ranch-ui, 09-dialogue (scenes with portraits; speakers in `CAST`,
   scripts in `SCENES` and story `lines`/`win`), 10-sound (Web Audio effects + note-string music `TRACKS`), 11-maps (walkable tile maps, data only: `MAPS`, `TILES`,
-  townsfolk added to `CAST`), 12-walk (moving on maps, doors, exits, talking, Auto walking; position in `S.pos`), 99-boot.
+  townsfolk added to `CAST`), 12-walk (moving on maps, doors, exits, talking, Auto walking, trainers, items, weather, visible wild creatures;
+  position in `S.pos`), 13-hd (the HD-2D era renderer), 99-boot.
   The map scene is drawn in 06-scene `drawWorld` through `ART[era].tile` and `ART[era].walker`.
   Localhost test hook: `window.__wb`.
 - Art eras: the look evolves with progress (Pocket → Pixel/16-bit → HD-2D → Diorama → 3D). A new era is a new
