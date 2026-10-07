@@ -66,7 +66,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T12: Realmbound lore pass** (ChatGPT): see the T12 section below.
 - [ ] **T14: Wildbond lore bible and region outline** (ChatGPT, docs only): see the T14 section below.
 - [x] **T15: Emberfall Warden and badge, data only** (ChatGPT): see the T15 section below.
-- [ ] **T16: Wildbond browser checks** (ChatGPT, tests only): see the T16 section below.
+- [x] **T16: Wildbond browser checks** (ChatGPT, tests only): see the T16 section below.
 
 ### T16: Wildbond browser checks (tests only)
 Realmbound has `tests/run.html` (click **Run checks**, get PASS/FAIL, no Node.js). Give Wildbond the same, so every
