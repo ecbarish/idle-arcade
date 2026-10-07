@@ -39,6 +39,9 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-07** — **Wildbond: see more of the world.** A new **View** button (or the V key) switches between Close,
+  Wide and Far, so a big monitor shows more of the map instead of bigger tiles; desktops and ultrawides start on Wide,
+  phones on Close. Works in every art style. Also: arrow keys inside the Feedback menu no longer walk your tamer.
 - **Wildbond v1.2.0 (2026-10-07)** — **The Returning Light League**, the story finale after all eight badges: Wren at the gate, four themed courts with healing rests, Champion Avenne, and a homecoming with Wren, Maren, Isolde and the guardians. Earn the Champion title and record the fully restored colour in the Journal. Cleared courts survive losses and reloads for the current ranch day; leaving ends the attempt. Post-game adventures remain future work.
 
 - **2026-10-10** — **Save doctor** in the Studio: pick a game to see its save at a glance (heroes, team, badges, coins),

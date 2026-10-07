@@ -92,7 +92,10 @@ rain sounds; walkable Realmbound towns.
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
-None open right now. **Decided 2026-10-08 (Evan: "go with your recommendations, and yes to the shared universe where
+1. **Baby forms (W9):** read `docs/proposals/creature-growth.md` and answer its five questions. Default if no
+   answer: the recommendations in it (life stages, babies stay on the ranch, elders, 3 ranch days, return-or-adopt).
+
+**Decided 2026-10-08 (Evan: "go with your recommendations, and yes to the shared universe where
 it makes sense"):** see the "Decided" section at the top of `docs/research/decisions.md`. New questions go here, each with
 a default so work never waits.
 
@@ -105,10 +108,13 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-07 Claude: Wildbond view distance (L11: `VIEWS`, `viewMult()`, `cycleView()` in 06-scene.js; header button
+  and V key; `S.view` optional, no `fresh()` change so T31 merges cleanly); feedback menu keys no longer walk. 1123
+  checks. **Next for Claude:** W9 baby-forms design (`docs/proposals/creature-growth.md`), then G2 zone lighting.
 - 2026-10-07 Claude: merged T30 (ChatGPT, the league and Champion, Wildbond v1.2.0, 1120 checks; played through to
   the Champion title); wrote T31 (post-game part 1: the tower and league rematches) for ChatGPT on
   `codex/wildbond-postgame`. **Next for Claude:** W9 baby-forms design, or the wider walkable view (L11).
-
 - 2026-10-07 Codex: T30/W2 complete on `codex/wildbond-league`, awaiting PR review; no merge. Returning Light League, Wren, four courts, Avenne and the colour-restoration homecoming; Champion title, daily progress and reload recovery, v1.2.0. All four pages pass: Wildbond 1120, Realmbound 1519, Starfall 48, sound 21; saves/hub restored. Phone/laptop/desktop/3440x1440 and five eras checked.
 
 - 2026-10-10 Claude: E3 save doctor in studio.html (summary, health check with fixes, searchable editor; per-game

@@ -128,17 +128,27 @@ function drawMark(sx, sy, ts, t) {
   cx.fillStyle = '#17323a'; cx.fillRect(sx + ts * 0.46, by + ts * 0.06, ts * 0.08, ts * 0.17); cx.fillRect(sx + ts * 0.46, by + ts * 0.27, ts * 0.08, ts * 0.06);
 }
 function drawWorld(t, A) {
-  const m = curMap(), v = worldView(m, t);
+  const m = curMap(), v = worldView(m, t); renderViewBtn();
   if (A.world) A.world(cx, PW, PH, v, t); else drawTopDown(v, t, A);
   drawAmbience(t, A, v);
   // where you are
   const fs = Math.max(12, Math.round(PH / 19)); cx.font = `700 ${fs}px Fredoka, sans-serif`; const label = m.name, w = cx.measureText(label).width + 16;
   cx.fillStyle = 'rgba(23,50,58,.72)'; cx.fillRect(8, 8, w, fs * 1.65); cx.fillStyle = '#fff'; cx.textBaseline = 'middle'; cx.fillText(label, 16, 8 + fs * 0.85); cx.textBaseline = 'alphabetic';
 }
+/* View distance (L11): Close, Wide or Far, from the header button or the V key. Big screens see more of the world
+   instead of bigger tiles: with no choice made, a tall scene (a desktop or ultrawide) starts on Wide. */
+const VIEWS = { near: ['Close', 1], wide: ['Wide', 1.35], far: ['Far', 1.7] };
+function viewKey() { return VIEWS[S.view] ? S.view : cv.clientHeight > 700 ? 'wide' : 'near'; }
+function viewMult() { return VIEWS[viewKey()][1]; }
+function cycleView() { const ks = Object.keys(VIEWS); S.view = ks[(ks.indexOf(viewKey()) + 1) % ks.length];
+  if (typeof DIO !== 'undefined') DIO.dist = 16 * viewMult(); W.msg = `View: ${VIEWS[S.view][0]}.`; renderViewBtn(); save(); }
+let viewLabel = '';
+function renderViewBtn() { const b = $('#viewBtn'), l = 'View: ' + VIEWS[viewKey()][0]; if (b && l !== viewLabel) { viewLabel = l; b.textContent = l; } }
+document.addEventListener('click', e => { if (e.target.closest('[data-act="view"]')) cycleView(); });
 /* the classic view: straight down, the camera following your tamer */
 function drawTopDown(v, t, A) {
   const { m, P } = v, rows = m.rows.length, cols = m.rows[0].length;
-  const ts = Math.max(20, Math.round(PH / 8.5)), vw = PW / ts, vh = PH / ts;
+  const ts = Math.max(14, Math.round(PH / (8.5 * viewMult()))), vw = PW / ts, vh = PH / ts;
   const camX = cols <= vw ? (cols - vw) / 2 : clamp(v.px + 0.5 - vw / 2, 0, cols - vw);
   const camY = rows <= vh ? (rows - vh) / 2 : clamp(v.py + 0.5 - vh / 2, 0, rows - vh);
   const ox = Math.round(-camX * ts), oy = Math.round(-camY * ts), tile = A.tile || ART.pixel.tile, walker = A.walker || ART.pixel.walker, item = A.item || ART.pixel.item;

@@ -230,13 +230,14 @@ function walkTick(h) {
 function interact() { return !!S.pos && WK.interact(); }
 
 document.addEventListener('keydown', e => {
-  if (!S.started || TALK || e.target.matches('input,textarea') || $('#modal').hidden === false) return;
+  if (!S.started || TALK || e.target.matches('input,textarea,select') || e.target.closest('.feedback-container') || $('#modal').hidden === false) return;
   const k = e.key.toLowerCase(), d = KEYDIR[k];
   if (k === 'shift') WK.run = true;
   if (d && !B) { if (!WK.held.includes(d)) WK.held.push(d); WK.path = []; e.preventDefault();
     if (!e.repeat) { if (arrived()) tryStep(turnDir(d)); else WK.queued = turnDir(d); } } // a quick tap still takes one step
   else if ((k === 'enter' || k === ' ') && !B && interact()) e.preventDefault();
   else if (k === 'r' && !B && !e.repeat) toggleRide();
+  else if (k === 'v' && !e.repeat) cycleView(); // view distance (06-scene.js)
 });
 document.addEventListener('keyup', e => { const k = e.key.toLowerCase(), d = KEYDIR[k]; if (d) WK.held = WK.held.filter(x => x !== d); if (k === 'shift') WK.run = false; });
 addEventListener('blur', () => { WK.held = []; WK.run = false; });
