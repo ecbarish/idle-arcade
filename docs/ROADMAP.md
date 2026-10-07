@@ -159,6 +159,32 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
+### T28: Wildbond area 6, Hollowecho Hills (data + map + tune)
+Build area 6 from the "Area 6 proposal: Hollowecho Hills" in docs/lore/wildbond.md at the **decided level band
+58-64** (docs/research/decisions.md, decision 1; the proposal's 52-62 is outdated: five badges cap your team at 60, six
+at 65). Same shape as your T27 (Stillreed Basin): read its ticket and your own T27 code and copy the structure.
+- **Change only:** games/wildbond/js/00-data.js, games/wildbond/js/11-maps.js, one `WEATHER` entry in 12-walk.js
+  (`hollowecho: ['clear', 'mist', 'clear']`), one `TRACKS` entry in 10-sound.js (`hollowecho`: original, echoing,
+  a little mysterious; try `lead: 'pulse'`), tests/wildbond-checks.js, docs/lore/wildbond.md (move Hollowecho into
+  canon), README.md changelog, ticking T28 here and in START-HERE.md. Don't touch `ERAS`, `JOURNEY` or the caps.
+- **00-data.js:** `BADGES.echo` (Echo Badge); `CAST.senna` (Warden Senna, 'Warden of Hollowecho Hills', a quiet
+  surveyor); `BIOMES.hollowecho` with `lv: [58, 64]`, `req: 'reed'`, its own colours (low green hills, grey stone,
+  dark cave mouths) and a wild table; 8-10 new `SPECIES` mixing Shade hyenas and spiders, Stone boars and cats,
+  Radiant sprites and Tide lizards (T6 rules: existing families, elements and `MOVES` only; base stats about 300 basic
+  / 420 evolved; a one-line `dex`), one two-stage evolution line (`evo.at` 60 or lower), one rare species, and
+  **Undertone** (Shade hyena guardian, `unique: 1`, `big: 1`, not in the wild table).
+- **STORY** (after the Stillreed beats, `biome: 'hollowecho'`): the Wren rematch at 6 following the lore's beat (her
+  partner's unease at a wrong passage; `team` ending `['$rival', 61]`, levels 58-61); the Undertone encounter at 14
+  (`wild: ['undertone', 63, 4]`, it guides a separated group home through sound); Warden Senna at 24 (`gate: 'echo'`,
+  team at levels 60, 61, 63, judging listening to a partner's warning even when it contradicts a plan).
+- **11-maps.js:** `MAPS.hollowecho` (`name: 'Hollowecho Hills'`, `biome: 'hollowecho'`), about 30 x 14, legend tiles
+  only. **Make it feel like a place, not a grid** (the one note on T27: Stillreed's map came out as even repeated
+  patches): winding paths around rock outcrops, a hamlet corner with a bell post (a sign), irregular grass patches,
+  cave mouths suggested with rock. An exit back to Stillreed and Stillreed gets a way on (locked until the Reed
+  Badge), `start`, `warden` spot, one signpost, three `items`, two route trainers (teams 58-62, warm short dialogue).
+- **Checks:** mirror your Stillreed checks (map valid and joined both ways, species rules, the Warden gives the Echo
+  Badge and the cap becomes 65, story beats run). All three test pages must pass.
+
 ### T27: Wildbond area 5, Stillreed Basin (data + map + tune)
 Build area 5 from the "Area 5 proposal: Stillreed Basin" in docs/lore/wildbond.md (Evan approved continuing the journey
 by sending this ticket), at the **decided level band 52-60** (docs/research/decisions.md, decision 1; the proposal's

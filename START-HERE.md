@@ -144,6 +144,11 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
 21. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines: a living scene on the
    shared ambience kit, the shared sound, dialogue and creature art, a taste of each game. Wait until the games are
    further along so it's built once; then make it the arcade's showcase.
+22. **T28: Wildbond area 6, Hollowecho Hills** (any assistant; data) — **sent to ChatGPT 2026-10-09** (branch
+   `codex/wildbond-hollowecho`; ticket in `docs/ROADMAP.md`, "T28"): levels 58-64, Warden Senna, Echo Badge,
+   Undertone. After merging: Claude adds its ambience (cave drips, dust, bats at dusk) in `drawAmbience`.
+23. **S4: the world kit** — **claimed by Claude 2026-10-09**: walkable places shared across games (see the plan in
+   HANDOFF.md, "World kit", once written). First use: a walkable Realmbound town and guild hall.
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
