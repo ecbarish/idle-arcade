@@ -13,7 +13,7 @@ const JOURNEY = {
   long: { name: 'Long Road', xp: 0.08, coins: 0.8, rare: -0.3, desc: 'For the grind: less XP and rarer finds. Every level is earned.' }
 };
 const AUTO_XP = 0.8;
-const BADGES = { thorn: { name: 'Thorn Badge' }, tide: { name: 'Tide Badge' }, ember: { name: 'Ember Badge' } };
+const BADGES = { thorn: { name: 'Thorn Badge' }, tide: { name: 'Tide Badge' }, ember: { name: 'Ember Badge' }, beacon: { name: 'Beacon Badge' } };
 
 /* Element wheel: each element is strong against the ones listed. */
 const ELEMENTS = {
@@ -162,7 +162,44 @@ const SPECIES = {
   hearthcrown: { name: 'Hearthcrown', fam: 'horse', el: 'Ember', col: '#a66e4c', antlers: 1, unique: 1, big: 1,
     base: { hp: 95, pow: 85, grd: 90, spd: 70, wit: 90, spi: 95 },
     learn: [[1, 'charge'], [1, 'emberSnap'], [12, 'regrowth'], [16, 'flameRush']],
-    dex: 'The guardian of Emberfall warms frozen springs with its ember-lit antlers so every creature can drink.' }
+    dex: 'The guardian of Emberfall warms frozen springs with its ember-lit antlers so every creature can drink.' },
+  /* Cloudglass Pass (area 4, levels 32-42; docs/lore/wildbond.md) */
+  mistfinch: { name: 'Mistfinch', fam: 'bird', el: 'Gale', col: '#b9c8d6',
+    base: { hp: 44, pow: 48, grd: 40, spd: 72, wit: 52, spi: 46 },
+    learn: [[1, 'peck'], [1, 'gust'], [12, 'tailwind'], [34, 'mistVeil']], evo: { at: 38, to: 'cloudharrier' },
+    dex: 'It sings only when the cloud is thick, so lost walkers can follow the sound down to a ledge.' },
+  cloudharrier: { name: 'Cloudharrier', fam: 'bird', el: 'Gale', col: '#8fa6bd', big: 1,
+    base: { hp: 62, pow: 72, grd: 56, spd: 98, wit: 72, spi: 62 },
+    learn: [[1, 'peck'], [1, 'gust'], [12, 'tailwind'], [34, 'mistVeil']],
+    dex: 'It circles above a stranded traveler until someone climbs up to see what it has found.' },
+  cirrusmane: { name: 'Cirrusmane', fam: 'horse', el: 'Gale', col: '#dfe6ec',
+    base: { hp: 54, pow: 54, grd: 46, spd: 76, wit: 38, spi: 42 },
+    learn: [[1, 'charge'], [1, 'gust'], [14, 'tailwind'], [30, 'howl']],
+    dex: 'Its mane streams like a wisp of high cloud, and it never runs a ridge its herd can\'t follow.' },
+  shalecat: { name: 'Shalecat', fam: 'cat', el: 'Stone', col: '#8e8a86',
+    base: { hp: 50, pow: 62, grd: 64, spd: 50, wit: 36, spi: 42 },
+    learn: [[1, 'scratch'], [1, 'rockToss'], [12, 'harden'], [30, 'bite']],
+    dex: 'It naps on loose scree and knows, before anyone, which stones are about to slide.' },
+  fogtail: { name: 'Fogtail', fam: 'cat', el: 'Gale', col: '#c9d2d8',
+    base: { hp: 46, pow: 56, grd: 42, spd: 70, wit: 46, spi: 44 },
+    learn: [[1, 'scratch'], [1, 'gust'], [10, 'mistVeil'], [28, 'tailwind']],
+    dex: 'When the cloud rolls in it vanishes completely, except for the tip of its tail.' },
+  pallweaver: { name: 'Pallweaver', fam: 'spider', el: 'Stone', col: '#9a9590',
+    base: { hp: 46, pow: 50, grd: 54, spd: 52, wit: 58, spi: 44 },
+    learn: [[1, 'bite'], [1, 'webSnare'], [10, 'rockToss'], [28, 'shadowSting']],
+    dex: 'Its silk bridges the narrow cracks in the pass, and small creatures cross on them every morning.' },
+  gritbeak: { name: 'Gritbeak', fam: 'bird', el: 'Stone', col: '#7d776e',
+    base: { hp: 52, pow: 60, grd: 60, spd: 54, wit: 38, spi: 40 },
+    learn: [[1, 'peck'], [1, 'rockToss'], [16, 'harden'], [30, 'gust']],
+    dex: 'It cracks seeds on the rocks with its stone-hard beak, and the noise carries a long way in fog.' },
+  lanternwisp: { name: 'Lanternwisp', fam: 'sprite', el: 'Radiant', col: '#ffe9a8',
+    base: { hp: 40, pow: 38, grd: 42, spd: 66, wit: 76, spi: 68 },
+    learn: [[1, 'spark'], [1, 'radiance'], [12, 'regrowth'], [30, 'tailwind']],
+    dex: 'Rarely seen. It glows brightest beside the shelters, as if it knows which doors are open.' },
+  lanterncrest: { name: 'Lanterncrest', fam: 'bird', el: 'Radiant', col: '#f6d77a', unique: 1, big: 1,
+    base: { hp: 88, pow: 82, grd: 80, spd: 96, wit: 96, spi: 92 },
+    learn: [[1, 'peck'], [1, 'spark'], [12, 'radiance'], [16, 'tailwind']],
+    dex: 'The guardian of Cloudglass Pass. Its crest burns like a lamp through the thickest cloud, lighting the way to shelter.' }
 };
 const STARTERS = ['cindercub', 'ripplet', 'mosshog'];
 
@@ -172,7 +209,9 @@ const BIOMES = {
   saltmarsh: { name: 'Saltmarsh Coast', lv: [12, 22], req: 'thorn', sky: ['#7dbbd8', '#d1e9ed'], hill: '#a6ae75', ground: '#7f9b6c',
     wild: [['brineskit', 24], ['dunepounce', 20], ['reedtusk', 16], ['wrackjaw', 14], ['kiteskirl', 18], ['spindriftfoal', 8], ['foamglint', 3]] },
   emberfall: { name: 'Emberfall Highlands', lv: [22, 32], req: 'tide', sky: ['#a6a6bf', '#efd0aa'], hill: '#81756d', ground: '#a58a68',
-    wild: [['slaglet', 24], ['ashskip', 20], ['cragskein', 16], ['ventwhisk', 16], ['thermwing', 14], ['screegrin', 10], ['glowmote', 3]] }
+    wild: [['slaglet', 24], ['ashskip', 20], ['cragskein', 16], ['ventwhisk', 16], ['thermwing', 14], ['screegrin', 10], ['glowmote', 3]] },
+  cloudglass: { name: 'Cloudglass Pass', lv: [32, 42], req: 'ember', sky: ['#aebdcc', '#eef2f4'], hill: '#8d97a3', ground: '#a3ae98',
+    wild: [['mistfinch', 22], ['shalecat', 20], ['cirrusmane', 18], ['pallweaver', 16], ['gritbeak', 14], ['fogtail', 12], ['lanternwisp', 3]] }
 };
 
 const RIVAL = { name: 'Wren', col: '#d85a8a' };
@@ -183,7 +222,8 @@ const CAST = {
   wren: { name: 'Wren', skin: '#f0c7a4', hair: 'spiky', hairCol: '#3a2230', shirt: '#d85a8a', bg: '#f6d3e1', title: 'Your rival' },
   isolde: { name: 'Warden Isolde', skin: '#b98262', hair: 'long', hairCol: '#2a3b2c', shirt: '#3d6b52', bg: '#c9dfc8', title: 'Warden of Thornwood' },
   nerys: { name: 'Warden Nerys', skin: '#8a5a3c', hair: 'hat', hairCol: '#9a948a', hatCol: '#3c5a6a', shirt: '#2f5e78', bg: '#cfe3ea', title: 'Warden of the Saltmarsh' },
-  toren: { name: 'Warden Toren', skin: '#b87d59', hair: 'short', hairCol: '#ddd0bd', shirt: '#98543c', bg: '#ead0b2', title: 'Warden of Emberfall' }
+  toren: { name: 'Warden Toren', skin: '#b87d59', hair: 'short', hairCol: '#ddd0bd', shirt: '#98543c', bg: '#ead0b2', title: 'Warden of Emberfall' },
+  vessa: { name: 'Warden Vessa', skin: '#c99a74', hair: 'bun', hairCol: '#e0d2b0', shirt: '#4a6e8e', bg: '#dde6ee', title: 'Warden of Cloudglass Pass' }
 };
 /* Scenes that aren't tied to an explore count. */
 const SCENES = {
@@ -297,7 +337,32 @@ const STORY = [
     win: [['toren', 'You waited without giving up. Even under pressure, you left your partners time to find their footing. Well done.'],
       ['toren', 'Take the Ember Badge. Your creatures can grow stronger now. You have earned it, and a sit by the springs.'],
       ['toren', 'Further on, beyond the high pass, there are old stones that stay warm through winter. Something was keeping watch there long before we Wardens arrived. Walk slowly, and listen.']],
-    trainer: 'Warden Toren', team: [['cragskein', 31], ['glowmote', 32], ['kilntusk', 34]] }
+    trainer: 'Warden Toren', team: [['cragskein', 31], ['glowmote', 32], ['kilntusk', 34]] },
+  /* Cloudglass Pass: beats count explores made in that biome */
+  { biome: 'cloudglass', at: 6, id: 'rival5', title: 'Wren in the cloud', text: 'Wren took a shortcut through the pass, then turned back for a lost traveler. The rematch waited until everyone was down safe.',
+    lines: [['', 'The cloud closes in until you can barely see your partner. Somewhere above, a familiar voice is shouting directions at nobody in particular.'],
+      ['wren', 'There you are! I found a shortcut. It was a great shortcut. Then I found a lost trader on it, so it got a bit less short.'],
+      ['wren', 'He\'s safe at the shelter now. Turns out you can\'t win a race if you leave people on the ledge. Who knew. Maren, probably.'],
+      ['wren', 'Anyway! Everyone\'s down, so it counts as a fair start. Let\'s battle!']],
+    win: [['wren', 'You beat me AND I did a good deed today. I\'m calling that a draw. A moral draw.'],
+      ['wren', 'The trader says there\'s a bird up here that glows like a lamp. Bet it\'s just a really shiny Mistfinch. Bet you want to find out anyway.']],
+    team: [['cirrusmane', 37], ['cloudharrier', 38], ['$rival', 39]] },
+  { biome: 'cloudglass', at: 14, id: 'lampbird', title: 'A light in the cloud', text: 'Lanterncrest, guardian of Cloudglass Pass, appeared where the path vanished into the cloud.',
+    lines: [['', 'The cloud is so thick that the path ends a step in front of you. Then, high above, a light comes on. Then another, closer.'],
+      ['', 'A great bird drops out of the white, its crest burning like a lamp: Lanterncrest, guardian of the pass. Where its light falls, you can see a shelter you would have walked straight past.'],
+      ['@lanterncrest', 'It lands on the rock beside you and tilts its head, waiting to see whether you\'ll follow the light or test it.']],
+    win: [['@lanterncrest', 'Lanterncrest settles its wings and the light in its crest softens, warm as a window at night.'],
+      ['', 'When you set off again, the light goes with you, a little ahead, the way a friend walks in the dark.']],
+    wild: ['lanterncrest', 41, 4] },
+  { biome: 'cloudglass', at: 24, id: 'warden4', gate: 'beacon', title: 'The Cloudglass Warden', text: 'Warden Vessa tested your team on the shelter ledge at the top of the pass.',
+    lines: [['', 'At the top of the pass a stone shelter clings to the ledge, a rope strung from its door into the cloud. A woman is coiling the rope, humming.'],
+      ['vessa', 'Hello, {name}! Toren said you were patient. Good. Up here, patience is how you wait for the cloud. What I judge is what you do while you wait.'],
+      ['vessa', 'Nobody crosses this pass alone, not even me. I lose my way twice a season. The trick is shouting for help before you need it, and answering when someone else shouts.'],
+      ['vessa', 'So: does your team lean on each other, or does everyone try to carry the whole mountain? Let\'s find out.']],
+    win: [['vessa', 'There it is. They covered for each other every time one of them stumbled. That\'s the whole test, and you passed it before I finished asking.'],
+      ['vessa', 'Here, the Beacon Badge. Your team can grow stronger now. Keep it where you can see it when the cloud comes down.'],
+      ['vessa', 'Past the pass the land opens up, wide and wet. I\'ve never been. If you go, shout back now and then, would you?']],
+    trainer: 'Warden Vessa', team: [['shalecat', 41], ['lanternwisp', 42], ['cloudharrier', 44]] }
 ];
 const COUNTER = { cindercub: 'ripplet', ripplet: 'mosshog', mosshog: 'cindercub' };
 

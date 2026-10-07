@@ -55,7 +55,7 @@ function noise(dur, at, vol) {
   const s = ac.createBufferSource(), g = ac.createGain(); g.gain.value = vol || 0.4; s.buffer = buf; s.connect(g); g.connect(SND.out); s.start(at || ac.currentTime);
 }
 const VOICE = { maren: 330, wren: 620, isolde: 260, nerys: 290, toren: 240, pip: 700, tobin: 220,
-  vessa: 410, bram: 280, lise: 510, cato: 350, marit: 560, orsk: 230, sela: 460 };
+  vessa: 410, bram: 280, lise: 510, cato: 350, marit: 560, orsk: 230, sela: 460, ilka: 480, teodor: 250 };
 function sfx(name, arg) {
   if (!sndMode() || document.hidden || !audio()) return; const t = SND.ac.currentTime, arp = (ns, d, ty, v) => ns.forEach((n, i) => tone(hz(n), d, ty || 'square', t + i * d, v || 0.35));
   switch (name) {

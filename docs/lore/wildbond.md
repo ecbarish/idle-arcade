@@ -94,11 +94,23 @@ Isolde's warning is already supported by three guardians with distinct relations
 
 It does not establish that guardians created the elements, caused the fading or obey the Wardens. A guardian joining a team also leaves an unanswered question about its duties at home. Later writing should preserve that uncertainty until a scene explains it. Toren's old warm stones are a continuation hook, not evidence that any particular proposed guardian below already exists.
 
-## Proposed areas 4–8 — awaiting Evan's approval
+## Cloudglass Pass — levels 32–42 (canon since T17, 2026-10-08)
+
+Built from the proposal below, which Evan approved by sending ticket T17. In the game: a rope gate north of
+Emberfall opens with the Ember Badge. The pass climbs through tall grass and scree to Warden **Vessa**'s stone
+shelter on the top ledge, a rope strung from its door into the cloud. **Ilka** the rope-mender and **Teodor** the
+cloud-watcher battle travelers on the path. Wild: Mistfinch (evolving into Cloudharrier at 38), Shalecat,
+Cirrusmane, Pallweaver, Gritbeak, Fogtail and the rarely seen Lanternwisp. Wren takes a shortcut, finds a lost
+trader on it and brings him to the shelter before their rematch. **Lanterncrest**, the guardian, drops out of the
+cloud with its crest burning like a lamp and lights the way to shelters you'd walk past. Vessa judges asking for help
+and answering when others shout; her Beacon Badge raises the cap to 55. She points onward to land "wide and wet"
+(the Stillreed Basin proposal). The warm-stone clue from Toren is still unexplained.
+
+## Proposed areas 5–8 — awaiting Evan's approval
 
 Every detail in this section is a proposal. Level bands follow T14's outline rather than a finalized balance plan. Guardian names describe prospective new species within existing families. No maps, species, battles or badges are implemented by this document.
 
-### Area 4 proposal: Cloudglass Pass — levels 32–42
+### Area 4 proposal (now built, see above): Cloudglass Pass — levels 32–42
 
 A high pass beyond Emberfall opens into hanging mist, pale rock and terraces of wind-bent grass. Small shelters mark places where walkers wait for clouds to lift. Guides mend ropes rather than promising safe weather; travelers share soup and compare which ridges they could see that morning. The warm-stone clue could lead here, but connecting those stones to a guardian would need an approved scene.
 

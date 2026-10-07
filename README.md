@@ -35,6 +35,11 @@ then open http://localhost:8765/
 
 ## Changelog
 
+- **2026-10-08 (later)** — Wildbond area 4, Cloudglass Pass (T17): a rope gate north of Emberfall opens with the
+  Ember Badge onto a misty mountain pass. Seven new wild creatures (Mistfinch evolves into Cloudharrier), the guardian
+  Lanterncrest, trainers Ilka and Teodor, a Wren rematch, and Warden Vessa, whose Beacon Badge raises the cap to 55.
+  Pip now notices when the Tide Badge brings light and depth back. Promo page and hub updated to four Wardens.
+
 - **2026-10-08** — Merged ChatGPT's Realmbound chapter (T20): the Barrowfields beyond the winter road, twelve voiced
   quests about the Wayfolk and their road-stones, Paleweft the Lamp-Eater, and a third dungeon, The Silent Barrows,
   ending with the Last Wayward. The level cap is 45. Talents, part 1 (T1-A): every class gets a second tree

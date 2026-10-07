@@ -27,7 +27,9 @@ Object.assign(CAST, {
   cato: { name: 'Cato', skin: '#a8724e', hair: 'hat', hairCol: '#3a3028', hatCol: '#d8c08a', shirt: '#3a7a9a', bg: '#d0e4ec', title: 'Beachcomber' },
   marit: { name: 'Marit', skin: '#f0c8a4', hair: 'bun', hairCol: '#b8483a', shirt: '#4a6a8a', bg: '#d8e0ec', title: 'Lighthouse runner' },
   orsk: { name: 'Orsk', skin: '#8a5a3e', hair: 'short', hairCol: '#1e1e22', shirt: '#9a5a3a', bg: '#ecd4c0', title: 'Ridge hiker' },
-  sela: { name: 'Sela', skin: '#c88a64', hair: 'spiky', hairCol: '#e8e0d0', shirt: '#6a4a8a', bg: '#e0d4ec', title: 'Spring keeper' }
+  sela: { name: 'Sela', skin: '#c88a64', hair: 'spiky', hairCol: '#e8e0d0', shirt: '#6a4a8a', bg: '#e0d4ec', title: 'Spring keeper' },
+  ilka: { name: 'Ilka', skin: '#e2b48c', hair: 'long', hairCol: '#5a3a24', shirt: '#7a8c5a', bg: '#e0e6d0', title: 'Rope-mender' },
+  teodor: { name: 'Teodor', skin: '#a87452', hair: 'hat', hairCol: '#2a2a2a', hatCol: '#5a6a7a', shirt: '#c8b48a', bg: '#e6e0d0', title: 'Cloud-watcher' }
 });
 
 const MAPS = {
@@ -62,7 +64,9 @@ const MAPS = {
         lines: [['pip', 'Wren says she\'s going to be Champion. I\'m going to be Champion first. I\'m seven, so I\'ve got loads of time.'],
           ['pip', 'The tall grass up north is where the wild ones hide. Mum says don\'t go in without a partner. You\'ve got one, so that\'s fine.']],
         byBadge: { thorn: [['pip', 'Did everything just get... brighter? My shirt is YELLOW. Was it always yellow?'],
-          ['pip', 'Mum says I\'m imagining it. Mum has also started wearing her good scarf, so.']] } }
+          ['pip', 'Mum says I\'m imagining it. Mum has also started wearing her good scarf, so.']],
+          tide: [['pip', 'Mum, the corners are round now. The corners of EVERYTHING. Come and look!'],
+            ['pip', 'Mum says the corners were always round. Then she stood looking at the windmill for a really long time.']] } }
     ] },
   thornwood: { name: 'Thornwood', biome: 'thornwood', start: [13, 14, 'up'], warden: [12, 1],
     rows: [
@@ -140,8 +144,8 @@ const MAPS = {
     wardenDone: 'The flats will still be here when the tide turns, {name}. So will I.' },
   emberfall: { name: 'Emberfall Highlands', biome: 'emberfall', start: [1, 8, 'right'], warden: [20, 6],
     rows: [
-      'RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR',
-      'RRRRRRRR""""RRRRRRRRR""""RRRRR',
+      'RRRRRRRRRRRRRNNRRRRRRRRRRRRRRR',
+      'RRRRRRRR""""R..RRRRRR""""RRRRR',
       'RRRR"""""""",,,RRRR,,""""""RRR',
       'RR""""""""",,,,,,,,,,""""""""R',
       'R""""",,oo,,,,RR,,,,,,""""""RR',
@@ -155,7 +159,8 @@ const MAPS = {
       'RRRR""""""RRRRRRRRR""""RRRRRRR',
       'RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR'
     ],
-    exits: { W: { to: 'saltmarsh', x: 28, y: 8, dir: 'left' } },
+    exits: { W: { to: 'saltmarsh', x: 28, y: 8, dir: 'left' },
+      N: { to: 'cloudglass', x: 13, y: 12, dir: 'up', locked: 'A rope bars the high path into the cloud. A tag on it reads: "Ember Badge holders only. The pass is no place to learn patience. Toren."' } },
     signs: { '2,7': 'Emberfall Highlands. Mind the springs: they\'re warmer than they look.' },
     items: [{ id: 'ef1', at: [12, 3], give: { meat: 5 } }, { id: 'ef2', at: [27, 6], give: { lures: 5 } }, { id: 'ef3', at: [26, 11], give: { coins: 250 } }],
     npcs: [
@@ -170,5 +175,38 @@ const MAPS = {
           after: [['sela', 'Toren sits by the springs every morning. He says he\'s thinking. I think he\'s napping.']] },
         lines: [['sela', 'Visitors to the springs have to earn their soak. Show me your team!']] }
     ],
-    wardenDone: 'You\'ve earned your badge here, {name}. The mountain will remember your team.' }
+    wardenDone: 'You\'ve earned your badge here, {name}. The mountain will remember your team.' },
+  cloudglass: { name: 'Cloudglass Pass', biome: 'cloudglass', edge: 'R', start: [13, 12, 'up'], warden: [14, 2],
+    rows: [
+      'RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR',
+      'RRR""""RRRRR,,,,,,RRRR"""""RRR',
+      'RR""""""",,,,,,,,,,,,""""""""R',
+      'R""""",,,,,,,,,,,,,,,,,""""RRR',
+      'R"",,,RR,,,,,..,,,,,RR,,""",RR',
+      'RR,,RRR,"""",..,"""",RRR,,,,RR',
+      'R"""",,,"""""..""""",,,,,"""RR',
+      'R"""",RR,,,,,..,,,,,RR,"""""RR',
+      'RR,,,,,,,,,,,..,,,,,,,,,,,,,RR',
+      'R""""""",,RR,..,RR,,""""""",RR',
+      'RR"""""",,,,P..,,,,,""""""RRRR',
+      'RRR""""",,,,,..,,,,,"""""RRRRR',
+      'RRRRRRRRRRRRR..RRRRRRRRRRRRRRR',
+      'RRRRRRRRRRRRRSSRRRRRRRRRRRRRRR'
+    ],
+    exits: { S: { to: 'emberfall', x: 13, y: 1, dir: 'down' } },
+    signs: { '12,10': 'Cloudglass Pass. South: Emberfall. Up top: Warden Vessa\'s shelter. If the cloud comes down, stop and shout.' },
+    items: [{ id: 'cg1', at: [2, 8], give: { coins: 300 } }, { id: 'cg2', at: [27, 8], give: { lures: 5 } }, { id: 'cg3', at: [3, 2], give: { berries: 6 } }],
+    npcs: [
+      { who: 'ilka', at: [8, 8], dir: 'right',
+        trainer: { sight: 5, team: [['fogtail', 34], ['pallweaver', 35]],
+          win: [['ilka', 'Good knots, your team. You tie yourselves together without even trying.']],
+          after: [['ilka', 'Every rope on this pass, I\'ve mended at least twice. Vessa says that makes me the pass\'s grandmother. I\'m thirty-one.']] },
+        lines: [['ilka', 'Mind the rope! ...You didn\'t trip on it. Fine. Then you can battle me instead.']] },
+      { who: 'teodor', at: [15, 5], dir: 'left',
+        trainer: { sight: 2, team: [['gritbeak', 38], ['cirrusmane', 39], ['shalecat', 40]],
+          win: [['teodor', 'The cloud is lifting. That usually happens right after I lose.']],
+          after: [['teodor', 'I count the clouds every morning. Yesterday, four hundred and twelve. Vessa says I made that up. I did not.']] },
+        lines: [['teodor', 'Stand still. You\'re in my view of the cloud. ...Well, now that you\'re here, a battle.']] }
+    ],
+    wardenDone: 'The cloud always lifts in the end, {name}. Bring a friend next time anyway.' }
 };

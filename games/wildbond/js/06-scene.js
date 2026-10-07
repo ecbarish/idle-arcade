@@ -75,7 +75,7 @@ function worldView(m, t) {
   if (!riding && lead && (Math.abs(WK.fol.fx - WK.fx) > 0.05 || Math.abs(WK.fol.fy - WK.fy) > 0.05))
     things.push({ kind: 'pet', x: WK.fol.fx, y: WK.fol.fy, sp: sp(lead), right: WK.fx > WK.fol.fx + 0.01 || (Math.abs(WK.fx - WK.fol.fx) < 0.01 && S.pos.dir !== 'left'), t });
   things.sort((a, b) => a.y - b.y);
-  return { m, P: worldPal(m), px: WK.fx, py: WK.fy, things, edge: m.biome === 'emberfall' ? 'R' : 'T' };
+  return { m, P: worldPal(m), px: WK.fx, py: WK.fy, things, edge: m.edge || (m.biome === 'emberfall' ? 'R' : 'T') };
 }
 /* a "!" over someone's head: a Warden who is ready, or a trainer who just spotted you */
 function drawMark(sx, sy, ts, t) {

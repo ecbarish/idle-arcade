@@ -78,7 +78,7 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T14: Wildbond lore bible and region outline** (ChatGPT, docs only): see the T14 section below.
 - [x] **T15: Emberfall Warden and badge, data only** (ChatGPT): see the T15 section below.
 - [x] **T16: Wildbond browser checks** (ChatGPT, tests only): see the T16 section below.
-- [ ] **T17: Wildbond area 4, Cloudglass Pass** (ChatGPT, data + map): see the T17 section below.
+- [x] **T17: Wildbond area 4, Cloudglass Pass** (built by Claude 2026-10-08 after the ChatGPT run never arrived; see the T17 section below).
 - [x] **T19: Promo pages for friends** (ChatGPT, pages only): see the T19 section below.
 
 ### T19: Promo pages for friends (pages only)
