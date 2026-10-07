@@ -93,6 +93,36 @@ tick, take quests, accept the best gear) for a level-40 hero of each class, reco
 the zone's mob/quest XP multipliers, never the global curve (so 1–40 doesn't change). Rested XP stays the offline
 mechanic. Measured numbers go into this doc.
 
+### Measured: the Barrowfields, 40 → 45 (T1-B, 2026-10-08)
+
+Headless sim: a fresh level-40 hero, uncommon gear of its own level replaced at each level-up, no talents, no rested
+XP, the quest log kept full, bags emptied like a player selling junk. "Focus" = a stand-in player who presses the
+best ready ability every global cooldown and loots by hand; "Auto" = the game's own autopilot (55% efficiency).
+Solo heroes skip the elite quest (Paleweft), so its follow-up stays locked; they grind Threshold Keepers once the
+quests run out (around level 43). Minutes are total elapsed play when each level was reached.
+
+| Hero | 41 | 42 | 43 | 44 | 45 | Deaths |
+|---|---|---|---|---|---|---|
+| Warrior, Focus | 16 | 30 | 53 | 105 | 159 | 0 |
+| Warrior, Auto | 17 | 37 | 68 | 134 | 203 | 0 |
+| Rogue, Focus / Auto | 15 / 18 | 31 / 42 | 62 / 77 | 120 / 139 | 179 / 202 | 5 / 6 |
+| Mage, Focus / Auto | 26 / 19 | 48 / 38 | 80 / 80 | 153 / 160 | 215 / 246 | 22 / 14 |
+| Priest, Focus / Auto | 13 / 18 | 30 / 38 | 58 / 85 | 114 / 168 | 173 / 246 | 1 / 15 |
+| Hunter, Focus / Auto | 11 / 14 | 24 / 29 | 44 / 57 | 89 / 115 | 134 / 175 | 0 / 0 |
+| Warrior + 4 companions, Focus / Auto | 4 / 4 | 9 / 8 | 14 / 16 | 20 / 22 | 36 / 40 | 0 / 0 |
+
+- **Solo:** 2¼–3½ hours of Focus play for the chapter (27–43 minutes a level on average); Auto takes 13–43% longer,
+  so active play pays more for every class. Early levels (with quests) run ~15–25 minutes, late levels (grinding)
+  ~50–70. That's within the "no more than twice the target" rule, so **no XP change** was made.
+- **Mages die a lot solo** at this band in uncommon gear (14–22 deaths); worth a look when T1-C revisits Frost/Fire.
+- **Companions make leveling about 5× faster** (36–40 minutes for the whole chapter): companions add a lot of damage
+  in the open world and the hero's XP isn't shared with them. This affects levels 1–40 too, so it's an owner/design
+  decision, not a zone tweak. Option to decide (recorded in START-HERE.md): split kill XP across the party with a
+  group bonus, as classic MMOs do, or keep fast group questing as the reward for befriending adventurers.
+- **The Silent Barrows** (level 44, uncommon gear, normal tier): with a priest companion the party clears in about two
+  minutes without deaths; without a healer, Grave Chill and the bosses wipe it. Heroic tier 3 fails either way in that
+  gear, as intended for a Heroic tier.
+
 ## The guild (Layer 3a) — your account becomes the guild
 
 Realmbound's big direction (Evan's favorite): the whole roster plays at once. The guild is where that lives.

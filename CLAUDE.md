@@ -75,8 +75,8 @@ the very end, so running out of usage never strands work.
   **T1-A is done:** two talent trees per class (`TALENTS[cls]` is a list of trees; `TALENT_LIST` flattens them with
   a tree index `ti`; `h.talents` is still keyed by id), capstones at 25 points in a tree, `heroRole()` from the
   tree with most points (no points = the class default), learned-only talent abilities on the bar, `respec()` with
-  `respecCost()`. **Next for Claude:** T1-B (the Silent Barrows' Grave Chill mechanic, pacing sim 40-45), then R1.
-  ChatGPT: T21 (item name tiers).
+  `respecCost()`. **T1-B is done:** `graveChill()` (stacking cold, healers remove it); pacing 40-45 measured in
+  `docs/realmbound-40-60.md`. Item name tiers to 60 (T21, ChatGPT) are merged. **Next:** see START-HERE.md's queue.
   Big future direction: the whole roster plays at once (IdleOn-style); the guild section of the plan is where it lands.
 - Parked: Primordial, Starfall Guild, Diamond Career (baseball), Otherworld (isekai).
 

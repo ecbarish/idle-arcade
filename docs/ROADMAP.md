@@ -24,7 +24,8 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
 - [x] **T1: Specs for levels 40-60, raids and the guild** (Claude): [docs/realmbound-40-60.md](realmbound-40-60.md),
   done 2026-10-07. Follow-ups in its build order: T1-A (Claude, second talent trees and roles), T20 and T21
   (ChatGPT, below), T1-B, R1, T22/T23, guild and raid.
-- [x] **T1-A: Second talent trees, roles from your build, respec** (Claude, done 2026-10-07). Next: T1-B.
+- [x] **T1-A: Second talent trees, roles from your build, respec** (Claude, done 2026-10-07).
+- [x] **T1-B: Grave Chill in the Silent Barrows, pacing 40-45 measured** (Claude, done 2026-10-08).
 - [x] **T20: Realmbound Frostmere II, The Barrowfields and The Silent Barrows** (ChatGPT, data): see the T20 section.
 - [x] **T21: Realmbound item name tiers to level 60** (ChatGPT, data + one formula): see the T21 section.
 - [ ] **T24: Wildbond checks for the newer systems** (ChatGPT, tests only): see the T24 section.

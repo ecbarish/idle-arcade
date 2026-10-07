@@ -46,8 +46,8 @@ badges; day/night, weather, visible wild creatures; ranch and breeding; challeng
 Hardcore), rematches, area mastery stars; music. Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
 
 **Realmbound** (classic-MMO idle, flagship): levels 1-45, five classes, two talent trees each with roles that follow
-your build, three 5-person dungeons (Drowned Sanctum, Cindervein Foundry, Silent Barrows), pets, mounts, companions,
-earned addons. The plan to 60 with the guild and the first raid: `docs/realmbound-40-60.md`; lore:
+your build, three 5-person dungeons (Drowned Sanctum, Cindervein Foundry, Silent Barrows with its Grave Chill
+mechanic that needs a healer), pets, mounts, companions, earned addons. Item names change every 10 levels to 60. The plan to 60 with the guild and the first raid: `docs/realmbound-40-60.md`; lore:
 `docs/lore/realmbound.md`.
 
 **Hub and promo pages:** `index.html`, `promo.html` (Realmbound), `promo-wildbond.html`.
@@ -57,16 +57,11 @@ earned addons. The plan to 60 with the guild and the first raid: `docs/realmboun
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
 1. ~~**T21: Realmbound item name tiers**~~ — done by ChatGPT, merged 2026-10-08.
-2. **T1-B: Grave Chill and pacing 40-45** (any assistant; *design* defaults below) — **claimed by Claude,
-   2026-10-08**. Realmbound files: 07-dungeons.js, 11-combat.js, tests/realmbound-scenarios.cjs.
-   - Add `mech.chill: <seconds>` to the Silent Barrows' three bosses (14, 12, 10). Every `chill` seconds the boss
-     puts one **Grave Chill** stack on you and every companion (max 5). Each stack deals 1.5% of max health per
-     second. Healing someone removes one of their stacks (the companion healer's heals, your Mend/Renew); Circle of
-     Light removes all. A toast like the existing surge warning: "Grave Chill: heal it off!". Shown on party frames.
-   - Pacing: with the test hook (`window.__rb` on localhost: `newHero`, `step`, `gainXP`...), run a level-40 hero of
-     each class through the Barrowfields quests in Focus and Auto, record minutes per level, and write them into
-     `docs/realmbound-40-60.md` ("Pacing"). Target: about 45 minutes per level in Focus. If a level takes more than
-     twice that, raise only this zone's quest XP (don't touch the global XP curve).
+2. ~~**T1-B: Grave Chill and pacing 40-45**~~ — done by Claude 2026-10-08. Grave Chill is `graveChill()` in
+   11-combat.js (`mech.chill` on the Barrows bosses); pacing results and the sim method are in
+   `docs/realmbound-40-60.md` ("Measured: the Barrowfields"). To re-measure a later chapter, copy that method:
+   loop `window.__rb.step(0.1)`, keep the quest log full with `accept`/`turnIn`, loot by hand (`lootAll()`) and
+   empty bags in "Focus", and replace gear at each level.
 3. **T22: Realmbound Hollow Crown, part 1** (any assistant; data). Same shape as T20 (see its ticket in
    `docs/ROADMAP.md`): zone `hollowcrown`, "The Hollow Crown", `lv: [45, 52]`, shared hub *Thornmantle Camp*, a lore
    paragraph, 5 mob types 45-52 (Ashwing drakes use the `lizard` family; corrupted treants as humanoids; wolves,
@@ -93,6 +88,9 @@ earned addons. The plan to 60 with the guild and the first raid: `docs/realmboun
 - **Realmbound** (from `docs/realmbound-40-60.md`): how many heroes work at once [3]; raids as planning or hands-on
   [both]; raid size [10 for now]; how often raid loot can be won [every 3 days]; keep classic friction [yes, with
   ways to earn it away]; the new names (Wayfolk, Silent Barrows, Seraveth…) [keep].
+- **Realmbound group questing:** questing with four companions is about 5× faster than solo (measured in T1-B),
+  at every level. Should party kills split XP, as classic MMOs do (with a small group bonus), or stay fast as the
+  reward for making friends? [Default: leave as is until Evan decides; it changes levels 1-40 too.]
 
 ## Before you stop (every session, even a short one)
 
@@ -104,6 +102,9 @@ earned addons. The plan to 60 with the guild and the first raid: `docs/realmboun
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (later): merged T21 (item names, ChatGPT); built T1-B (Grave Chill; pacing 40-45 measured, no XP
+  change; found group questing ~5x faster, added as a question). Sent T24 (Wildbond checks) to ChatGPT. Fixed a
+  Frostmere check that depended on which tab a local save was left on.
 - 2026-10-08 Claude: wrote this file. Merged T20 (Barrowfields, cap 45) and T19 (promo pages); built T1-A (second
   talent trees, roles, respec) and T17 (Cloudglass Pass, which ChatGPT never delivered). Sent T21 to ChatGPT.
 - 2026-10-07 Claude: T13 parts 1-3 (eras), T11b (challenge modes), T1 plan (`docs/realmbound-40-60.md`); merged T14,
