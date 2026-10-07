@@ -39,6 +39,10 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-10** — **Save doctor** in the Studio: pick a game to see its save at a glance (heroes, team, badges, coins),
+  a health check that spots broken values (an empty level, negative coins, a missing current hero) with a one-click
+  fix, and every field in plain words, searchable and editable. Nothing is written until you press Save, and the old
+  save is backed up first.
 - **2026-10-10** — **Readable on big screens.** On desktops and ultrawides, the panels, text and buttons now grow
   with the screen (about 1.1x on a 1920 desktop, 1.3x on a 3440x1440 ultrawide), so nothing is tiny next to the big
   scene. The scenes themselves stay sharp and taps still land exactly where you click.

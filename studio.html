@@ -10,11 +10,18 @@
 main{max-width:980px;margin:0 auto;padding:20px 16px 60px}h1{font-size:28px;margin:0 0 4px;color:var(--gold)}h2{font-size:19px;margin:0 0 8px}
 .lead{color:var(--dim);margin:0 0 18px}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 14px}
 button,.btn{background:var(--gold);color:#1a1020;border:0;border-radius:6px;padding:6px 12px;font:600 14px system-ui;cursor:pointer;text-decoration:none;display:inline-block}
-button.alt{background:var(--line);color:var(--fg)}button.bad{background:var(--bad)}.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0}
+button:disabled{opacity:.4;cursor:default}button.alt{background:var(--line);color:var(--fg)}button.bad{background:var(--bad)}.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0}
 .meta{color:var(--dim);font-size:13px}.on{color:var(--ok);font-weight:700}.off{color:var(--dim);font-weight:700}
 table{width:100%;border-collapse:collapse;font-size:13px}td{padding:4px 6px;border-top:1px solid var(--line);vertical-align:top}
 textarea{width:100%;min-height:80px;background:#0d0a12;color:var(--fg);border:1px solid var(--line);border-radius:6px;font:12px monospace}
 a{color:var(--gold)}.warn{color:var(--gold);font-size:13px}
+input,select{background:#0d0a12;color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:5px 8px;font:14px system-ui}
+details{margin:2px 0}summary{cursor:pointer;padding:2px 0}.kids{margin-left:16px;border-left:1px solid var(--line);padding-left:10px}
+.leaf{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:2px 0}.leaf label{min-width:190px;color:var(--dim);font-size:13px}
+.leaf input[type=text],.leaf input[type=number]{width:220px;padding:3px 6px;font-size:13px}.leaf .when{font-size:12px;color:var(--dim)}
+.leaf.changed label{color:var(--gold)}.facts{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.facts span{background:var(--line);border-radius:12px;padding:2px 10px;font-size:13px}
+.issue{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0;font-size:14px}.issue::before{content:'!';color:var(--bad);font-weight:700}
+.healthy{color:var(--ok);font-size:14px;margin:6px 0}
 </style>
 </head>
 <body>
@@ -38,6 +45,18 @@ a{color:var(--gold)}.warn{color:var(--gold);font-size:13px}
     <div id="saves"></div>
   </section>
 
+  <section class="card" id="doctor">
+    <h2>Save doctor</h2>
+    <p class="meta">Look inside a save as readable fields, fix anything that looks wrong, and change values by hand. Nothing is written until
+      you press <b>Save my changes</b>, and the old save is backed up first (it appears in the list above).</p>
+    <div class="row"><select id="docGame"></select><input id="docFind" type="search" placeholder="Find a field (e.g. level, coins)" style="flex:1;min-width:160px">
+      <button class="alt" id="docUndo" disabled>Undo my changes</button><button id="docSave" disabled>Save my changes</button></div>
+    <div id="docMsg" class="meta" aria-live="polite"></div>
+    <div id="docSummary"></div>
+    <div id="docHealth"></div>
+    <div id="docTree"></div>
+  </section>
+
   <section class="card">
     <h2>GM log</h2>
     <div class="row"><button class="alt" id="clearLog">Clear the log</button></div>
@@ -46,8 +65,7 @@ a{color:var(--gold)}.warn{color:var(--gold);font-size:13px}
 
   <section class="card">
     <h2>Coming next</h2>
-    <p class="meta">From the plan (docs/PROJECTS.md, Studio): a save doctor that shows a save as readable fields (E3), editors for dialogue
-      and text (E4), creatures and quests (E5), a map painter (E6), and a lighting and music tuner (E7).</p>
+    <p class="meta">From the plan (docs/PROJECTS.md, Studio): editors for dialogue and text (E4), creatures and quests (E5), a map painter (E6), and a lighting and music tuner (E7).</p>
   </section>
 </main>
 <script src="shared/engine.js"></script>
@@ -89,7 +107,105 @@ $('#saves').addEventListener('click', e => {
 function logUI() { let l = []; try { l = JSON.parse(ls.get(GM.LOG_KEY) || '[]'); } catch (e) {}
   $('#log').innerHTML = l.length ? `<table>${l.slice(0, 60).map(x => `<tr><td>${when(x.at)}</td><td>${x.game}</td><td>${x.text.replace(/</g, '&lt;')}</td></tr>`).join('')}</table>` : 'Nothing yet.'; }
 $('#clearLog').onclick = () => { if (confirm('Clear the GM log?')) { ls.del(GM.LOG_KEY); logUI(); } };
-gmUI(); savesUI(); logUI();
+/* ---- Save doctor (E3): a save as readable fields, a health check with one-click fixes, edits saved only after a backup ---- */
+const esc = v => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+const LABELS = { v: 'save version', chars: 'heroes', cur: 'current hero (id)', bank: 'shared bank', guild: 'guild', lvl: 'level', xp: 'experience',
+  hp: 'health', money: 'money (copper; 10000 = 1 gold)', coins: 'coins', gold: 'gold', team: 'team', ranch: 'ranch', badges: 'badges', sp: 'species',
+  pos: 'where you stand', era: 'art era', eras: 'art eras unlocked', zone: 'zone', gear: 'equipped gear', bags: 'bags', party: 'party', floor: 'floor',
+  best: 'best floor', lures: 'lures', food: 'food', eggs: 'eggs', day: 'ranch day', modes: 'challenge modes', titles: 'titles', stats: 'statistics',
+  log: 'message log', last: 'last saved', lastPlayed: 'last played', bond: 'bond', mood: 'mood', fatigue: 'fatigue', injured: 'injured', rar: 'rarity',
+  ilvl: 'item level', dur: 'durability', talents: 'talents', renown: 'renown', cls: 'class', race: 'race', faction: 'faction', pot: 'potential',
+  temp: 'temperament', traits: 'traits', seen: 'creatures seen', caught: 'creatures caught', beaten: 'trainers beaten', items: 'items picked up',
+  started: 'game started', starter: 'starter', shoes: "Warden's boots", ride: 'riding', npcs: 'companions', aff: 'affinity', relics: 'relics', staff: 'staff' };
+const NONNEG = new Set(['lvl', 'xp', 'hp', 'money', 'coins', 'gold', 'lures', 'bond', 'mood', 'fatigue', 'dur', 'floor', 'renown', 'day', 'ilvl']);
+const nameOf = x => x && typeof x === 'object' && !Array.isArray(x) ? (x.name ? x.name + (x.lvl ? ' (level ' + x.lvl + ')' : '') : x.sp || x.id || '') : '';
+const DOCTOR = {
+  'wildbond-save-v1': {
+    facts: s => [s.name || 'No name yet', `${(s.badges || []).length} badges`, `${s.coins | 0} coins`, `ranch day ${s.day || 0}`, `${(s.ranch || []).length} at the ranch`]
+      .concat((s.team || []).map(c => `${c.name} Lv ${c.lvl}`)),
+    checks: s => { const out = [];
+      if (s.started && !(s.team || []).length) out.push(['Your team is empty, so battles cannot start.', (s.ranch || []).length ? ['Move a ranch creature to the team', d => d.team.push(d.ranch.shift())] : null]);
+      for (const c of [].concat(s.team || [], s.ranch || [])) if (c.lvl > 100) out.push([`${c.name} is above level 100.`, ['Set it to 100', () => { c.lvl = 100; }]]);
+      return out; } },
+  'realmbound-save-v1': {
+    facts: s => (s.chars || []).map(h => `${h.name}: level ${h.lvl} ${h.race || ''} ${h.cls || ''}, ${Math.floor((h.money || 0) / 10000)} gold`).concat(s.guild && s.guild.name ? [`guild: ${s.guild.name}`] : []),
+    checks: s => { const out = [], hs = s.chars || [];
+      if (hs.length && !hs.some(h => h.id === s.cur)) out.push(['The current hero is missing, so the game opens on the hero list.', ['Pick the first hero', d => { d.cur = d.chars[0].id; }]]);
+      for (const h of hs) if (h.lvl > 60) out.push([`${h.name} is above the level cap (60).`, ['Set to 60', () => { h.lvl = 60; h.xp = 0; }]]);
+      return out; } },
+  'starfall-guild-save-v1': {
+    facts: s => [`${s.gold | 0} gold`, `floor ${s.floor || 1}`, `best floor ${s.best || 0}`, `renown ${s.renown || 0}`].concat((s.party || []).map(p => `${p.name} Lv ${p.lvl}`)),
+    checks: s => (s.party || []).length ? [] : [['The party is empty.', null]] }
+};
+const doc = { key: null, data: null, orig: '', paths: [] };
+function healthOf(d) {
+  const out = DOCTOR[doc.key].checks(d);
+  (function walk(o) { // numbers that must not be empty or below zero (a level below one)
+    for (const k of Object.keys(o)) {
+      const v = o[k], min = k === 'lvl' ? 1 : 0;
+      if (v && typeof v === 'object') { walk(v); continue; }
+      if (Array.isArray(o) || !NONNEG.has(k) || (v !== null && !(typeof v === 'number' && v < min))) continue;
+      out.push([`${o !== d && nameOf(o) ? nameOf(o) + ': ' : ''}${LABELS[k] || k} is ${v === null ? 'empty' : v}.`, ['Set it to ' + min, () => { o[k] = min; }]]);
+    }
+  })(d);
+  return out;
+}
+function docLoad() {
+  doc.key = $('#docGame').value; doc.orig = ls.get(doc.key) || ''; doc.data = null;
+  try { doc.data = doc.orig ? JSON.parse(doc.orig) : null; } catch (e) { $('#docMsg').textContent = 'This save could not be read: it may be damaged. Restore a backup above.'; }
+  docRender();
+}
+function docRender() {
+  const d = doc.data, dirty = d && JSON.stringify(d) !== doc.orig;
+  $('#docSave').disabled = $('#docUndo').disabled = !dirty;
+  if (!d) { $('#docSummary').innerHTML = $('#docHealth').innerHTML = $('#docTree').innerHTML = ''; if (!doc.orig) $('#docMsg').textContent = 'No save yet for this game.'; return; }
+  $('#docSummary').innerHTML = `<div class="facts">${DOCTOR[doc.key].facts(d).map(f => `<span>${esc(f)}</span>`).join('')}</div>`;
+  const issues = healthOf(d); doc.fixes = issues.map(i => i[1] && i[1][1]);
+  $('#docHealth').innerHTML = issues.length ? issues.map(([t, fix], i) => `<div class="issue">${esc(t)} ${fix ? `<button class="alt" data-fix="${i}">${esc(fix[0])}</button>` : ''}</div>`).join('')
+    : '<div class="healthy">Health check: everything looks fine.</div>';
+  const find = $('#docFind').value.trim().toLowerCase(), was = doc.orig ? JSON.parse(doc.orig) : {};
+  doc.paths = [];
+  const at = (o, p) => p.reduce((x, k) => x == null ? undefined : x[k], o);
+  function node(v, path, depth) {
+    const key = path[path.length - 1], label = path.length ? (typeof key === 'number' ? `#${key + 1}` : (LABELS[key] || key)) : '';
+    const hit = !find || String(label).toLowerCase().includes(find) || String(key).toLowerCase().includes(find);
+    if (v && typeof v === 'object') {
+      const kids = Object.keys(v).map(k => node(v[k], path.concat(Array.isArray(v) ? Number(k) : k), depth + 1)).join('');
+      if (find && !kids && !hit) return '';
+      const n = Object.keys(v).length, name = nameOf(v);
+      if (!path.length) return kids;
+      return `<details ${find || depth < 1 ? 'open' : ''}><summary>${esc(label)}${name ? ` <b>${esc(name)}</b>` : ''} <span class="meta">(${n} ${Array.isArray(v) ? 'in the list' : 'fields'})</span></summary><div class="kids">${kids || '<span class="meta">empty</span>'}</div></details>`;
+    }
+    if (!hit) return '';
+    const i = doc.paths.push(path) - 1, changed = JSON.stringify(at(was, path)) !== JSON.stringify(v);
+    const input = typeof v === 'boolean' ? `<input type="checkbox" data-i="${i}" ${v ? 'checked' : ''}> <span class="meta">${v ? 'yes' : 'no'}</span>`
+      : typeof v === 'number' ? `<input type="number" data-i="${i}" value="${v}" step="any">${v > 1e12 && v < 4e12 ? ` <span class="when">${when(v)}</span>` : ''}`
+      : `<input type="text" data-i="${i}" value="${v === null ? '' : esc(v)}" placeholder="${v === null ? 'empty' : ''}">`;
+    return `<div class="leaf${changed ? ' changed' : ''}"><label>${esc(label)}</label>${input}</div>`;
+  }
+  $('#docTree').innerHTML = node(d, [], 0) || '<div class="meta">No field matches that.</div>';
+}
+$('#docTree').addEventListener('change', e => {
+  const el = e.target.closest('[data-i]'); if (!el) return; const path = doc.paths[Number(el.dataset.i)], key = path[path.length - 1];
+  const parent = path.slice(0, -1).reduce((x, k) => x[k], doc.data), old = parent[key]; let v;
+  if (el.type === 'checkbox') v = el.checked;
+  else if (el.type === 'number') { v = Number(el.value); if (el.value === '' || !isFinite(v)) { $('#docMsg').textContent = 'That needs to be a number.'; docRender(); return; } }
+  else v = old === null && el.value === '' ? null : old === null && el.value.trim() !== '' && isFinite(Number(el.value)) ? Number(el.value) : el.value;
+  if (typeof v === 'number' && NONNEG.has(key) && v < 0) { $('#docMsg').textContent = `${LABELS[key] || key} can't be below zero.`; docRender(); return; }
+  parent[key] = v; $('#docMsg').textContent = 'Changed. Press Save my changes to keep it.'; docRender();
+});
+$('#docHealth').addEventListener('click', e => { const b = e.target.closest('[data-fix]'); if (!b) return; doc.fixes[Number(b.dataset.fix)](doc.data); $('#docMsg').textContent = 'Fixed in the editor. Press Save my changes to keep it.'; docRender(); });
+$('#docSave').onclick = () => {
+  GM.backup(doc.key, 'before the save doctor');
+  if (!ls.set(doc.key, JSON.stringify(doc.data))) { $('#docMsg').textContent = 'The save could not be written.'; return; }
+  try { const l = JSON.parse(ls.get(GM.LOG_KEY) || '[]'); l.unshift({ at: Date.now(), game: GAMES.find(g => g[1] === doc.key)[0], text: 'Save doctor: saved edits (backup made first)' }); ls.set(GM.LOG_KEY, JSON.stringify(l.slice(0, 200))); } catch (e) {}
+  docLoad(); savesUI(); logUI(); $('#docMsg').textContent = 'Saved. Your old save is in the backup list above.';
+};
+$('#docUndo').onclick = () => { docLoad(); $('#docMsg').textContent = 'Your changes were undone.'; };
+$('#docFind').addEventListener('input', docRender);
+$('#docGame').innerHTML = GAMES.map(([n, k]) => `<option value="${k}">${n}</option>`).join('');
+$('#docGame').onchange = () => { $('#docMsg').textContent = ''; docLoad(); };
+gmUI(); savesUI(); logUI(); docLoad();
 </script>
 </body>
 </html>

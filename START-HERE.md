@@ -105,6 +105,9 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-10 Claude: E3 save doctor in studio.html (summary, health check with fixes, searchable editor; per-game
+  rules in `DOCTOR`, labels in `LABELS`; backs up before writing). **Next:** review T30 when it lands; W9 design or
+  the wider walkable view (L11).
 - 2026-10-10 Claude: L11 part 2: panels, text and buttons scale with CSS `zoom` at 1700 px+ (1.12) and 2400 px+
   (1.3); canvases never zoom so taps stay exact (checked at 3440x1440 in all three games; tests pass). **Next:** review
   T30 (`codex/wildbond-league`) when it lands; then E3 save doctor, or W9 design, or the wider walkable view (L11).
