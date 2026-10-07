@@ -123,6 +123,10 @@ quests run out (around level 43). Minutes are total elapsed play when each level
   minutes without deaths; without a healer, Grave Chill and the bosses wipe it. Heroic tier 3 fails either way in that
   gear, as intended for a Heroic tier.
 
+**After D2+D3 (group XP split, journey length; same sim, Focus, 40 → 45):** Warrior solo 159 min, with four
+companions 124 (1.3× faster, down from 5×); Hunter solo 136, with companions 138 (its pet already makes it strong
+alone); Warrior with companions on Auto 137. Journey length, Warrior solo: Breezy 66 min, Classic 159, Long Road 349.
+
 ## The guild (Layer 3a) — your account becomes the guild
 
 Realmbound's big direction (Evan's favorite): the whole roster plays at once. The guild is where that lives.

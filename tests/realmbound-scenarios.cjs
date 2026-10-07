@@ -180,6 +180,17 @@ module.exports = function scenarios() {
         C.hp=rb.ST.hpMax;for(let i=0;i<10;i++){C.chillT=0;graveChill(boss,.001);}check(C.chill===5&&partyAlive().every(p=>p.chill===5),'Grave Chill stacks up to five');
         ABIL.priest.find(a=>a.id==='circle').fn();check(C.chill===0&&partyAlive().every(p=>!p.chill),'Circle of Light clears every stack');
         C.mob=null;rb.S.chars=rb.S.chars.filter(c=>c!==g);}
+      // D2+D3: group kill XP is shared with classic bonuses; journey length scales all XP
+      {const p=rb.newHero('Pacecheck','concord','human','warrior');p.lvl=30;p.xp=0;rb.S.chars.push(p);rb.S.cur=p.id;rb.boot();const C=rb.C;
+        const share=n=>{p.party=p.npcs.slice(0,n).map(x=>x.id);syncParty();return groupXP(1000);};
+        check(share(0)===1000,'a solo hero keeps all kill XP');check(share(1)===500,'a pair splits kill XP evenly');
+        check(share(2)===389&&share(3)===325&&share(4)===280,'groups of 3, 4 and 5 share kill XP with the classic bonuses');
+        p.party=[];syncParty();const xp0=p.xp;rb.gainXP(1000,false);check(p.xp-xp0===1000,'Classic journey gives XP as is');
+        p.pace='breezy';const xp1=p.xp;rb.gainXP(1000,false);check(p.xp-xp1===1600,'Breezy gives 60% more XP');
+        p.pace='long';const xp2=p.xp;rb.gainXP(1000,false);check(p.xp-xp2===600,'Long Road gives 40% less XP');
+        const b=document.createElement('button');b.dataset.act='pace';b.dataset.arg='breezy';document.body.appendChild(b);b.click();b.remove();
+        check(p.pace==='breezy','the Journal can change the journey length');
+        rb.S.chars=rb.S.chars.filter(c=>c!==p);}
       // T21: every generated item category follows the widened name bands.
       check([...Object.values(MAT),...Object.values(WEAPONS).map(w=>w.names),...Object.values(OFFH),TRINKETS].every(names=>names.length===8&&new Set(names).size===8),'every tiered item list has eight distinct names');
       check(BLUE_PRE.length===17&&new Set(BLUE_PRE).size===17,'rare prefix pool retains seven names and adds ten distinct dungeon names');

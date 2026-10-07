@@ -6,7 +6,7 @@ document.addEventListener('click',e=>{
   if(a==='cr'){const [k,v]=arg.split(':');CR.name=($('#crName')||{}).value||CR.name;CR[k]=v;openModal('create',createHTML());return;}
   if(a==='create'){if(S.chars.length>=MAX_CHARS){openModal('chars',charsHTML());return;}
     if(H()&&C)save();
-    const nm=(($('#crName')||{}).value||'').trim().replace(/[^A-Za-z' -]/g,'').slice(0,14)||pick(NAMES);const nh=newHero(nm[0].toUpperCase()+nm.slice(1),CR.faction,CR.race,CR.cls);
+    const nm=(($('#crName')||{}).value||'').trim().replace(/[^A-Za-z' -]/g,'').slice(0,14)||pick(NAMES);const nh=newHero(nm[0].toUpperCase()+nm.slice(1),CR.faction,CR.race,CR.cls);nh.pace=CR.pace;
     S.chars.push(nh);S.cur=nh.id;
     recalc();C=freshC();C.hp=ST.hpMax;C.res=CLASSES[CR.cls].res==='mana'?ST.resMax:0;closeModal();slog(`${nh.name} arrived in ${ZONES[nh.zone].name}.`);
     const first=QUESTS[nh.zone][0];accept(first.id);toast(`Welcome to ${ZONES[nh.zone].name}`);save();curKey=null;buildSlots();updateWorld();return;}
@@ -32,6 +32,7 @@ document.addEventListener('click',e=>{
     case 'zone':if(H().dun){err('Leave the dungeon first.');break;}if(C.phase==='fight'){err("You can't travel in the middle of a fight.");break;}if(!ZONE_ORDER[H().faction].includes(arg))break;if(H().lvl<ZONES[arg].lv[0]-2){err(`${ZONES[arg].name} is too dangerous before level ${ZONES[arg].lv[0]-2}.`);break;}H().zone=arg;H().grind=null;C.phase='seek';C.t=travel(12);C.mob=null;line(`You travel to ${ZONES[arg].name}.`,'l-sys');break;
     case 'talent':{const h=H(),t=TALENT_LIST[h.cls].find(x=>x.id===arg);if(!t)break;const r=h.talents[arg]||0;if(talentPoints()>0&&r<t.max&&(!t.req||treePoints(t.ti)>=t.req)){h.talents[arg]=r+1;recalc();}break;}
     case 'resettal':respec();break;
+    case 'pace':{const h=H();if(PACE[arg]&&!h.dun&&h.pace!==arg){h.pace=arg;slog(`Chose a ${PACE[arg].name} journey.`);toast(`Journey length: ${PACE[arg].name}`);}break;}
     case 'addon':H().addons.on[arg]=!H().addons.on[arg];break;
     case 'tame':startTame();break;
     case 'encwave':encAct('wave');break;

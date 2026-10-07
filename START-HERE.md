@@ -86,7 +86,8 @@ Primordial (back burner, least exciting to Evan). Plans in `docs/plans/`.
    recommendations, and the shared-systems plan: dialogue → sound → roster → world kit).
 9. ~~**D1: Wildbond cap table**~~ — done by Claude 2026-10-08. `levelCap()` in 02-state.js uses a table
    (`CAP_TABLE` in 00-data.js): 15, 25, 35, 45, 55, 60, 65, 70, then 75 with all eight badges.
-10. **D2+D3: Realmbound group XP split and journey length** (decisions 2-3) — claimed by Claude, 2026-10-08. Kill XP ÷
+10. ~~**D2+D3: Realmbound group XP split and journey length**~~ — done by Claude 2026-10-08 (measured: groups
+   1.0-1.3× solo speed; numbers in `docs/realmbound-40-60.md`). Kill XP ÷
    group size × (1, 1, 1.166, 1.3, 1.4); quest XP whole. A Breezy/Classic/Long Road setting scaling kill and quest XP
    (×1.6 / ×1 / ×0.6), chosen at character creation and changeable in town; re-run the pacing sim afterwards.
 11. **D7: shared multiverse record** — claimed by Claude, 2026-10-08: `docs/lore/multiverse.md`.

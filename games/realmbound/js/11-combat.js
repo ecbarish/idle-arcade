@@ -98,7 +98,7 @@ function onKill(){
   const h=H(),m=C.mob;C.mob=null;C.cast=null;C.taming=null;h.stats.kills++;
   line(`${m.name} dies.`,'l-sys');
   // xp
-  let x=Math.round(killXP(m)*(m.xpM||1));if(engaged())x=Math.round(x*1.1);gainXP(x,true);petGain(x);
+  let x=groupXP(Math.round(killXP(m)*(m.xpM||1)));if(engaged())x=Math.round(x*1.1);gainXP(x,true);petGain(x);
   if(m.dun){dunKill(m);return;}
   for(const p of C.party){addAff(p.n,.2);}if(C.party.length&&R()<.15)say(pick(C.party).n,'kill');
   // quest progress
@@ -142,9 +142,17 @@ function afterFight(){
   if(C.hp<ST.hpMax*.55||(mana&&C.res<ST.resMax*.4)){C.phase='rest';line('You sit down to rest.','l-sys');return;}
   C.phase='seek';C.t=travel(2.5);maybeEncounter();
 }
+/* Pacing (decided 2026-10-08, docs/research/decisions.md). Kill XP is shared by the group like classic MMOs: each
+   member gets XP x bonus / size (no bonus for 2; x1.166, x1.3, x1.4 for 3, 4, 5). Quest XP stays whole. Each hero's
+   journey length (h.pace) scales all XP: Breezy x1.6, Classic x1, Long Road x0.6. */
+const PACE={breezy:{name:'Breezy',xp:1.6,desc:'A quicker climb: 60% more experience.'},classic:{name:'Classic',xp:1,desc:'The intended pace.'},
+  long:{name:'Long Road',xp:.6,desc:'For the grind: 40% less experience. Every level is earned.'}};
+const GROUP_BONUS=[1,1,1,1.166,1.3,1.4];
+function paceMult(){return (PACE[H().pace]||PACE.classic).xp;}
+function groupXP(x){const n=1+(C&&C.party?C.party.length:0);return n<2?x:Math.max(1,Math.round(x*GROUP_BONUS[Math.min(5,n)]/n));}
 function gainXP(x,kill){
   const h=H();if(h.lvl>=LEVEL_CAP){return;}
-  let bonus=0;if(kill&&h.rested>0){bonus=Math.min(x,h.rested);h.rested-=bonus;}
+  x=Math.round(x*paceMult());let bonus=0;if(kill&&h.rested>0){bonus=Math.min(x,h.rested);h.rested-=bonus;}
   h.xp+=x+bonus;line(`You gain ${x} experience${bonus?` (+${Math.round(bonus)} rested)`:''}.`,'l-xp');
   while(h.lvl<LEVEL_CAP&&h.xp>=xpNeed(h.lvl)){h.xp-=xpNeed(h.lvl);h.lvl++;onLevel();}
   if(h.lvl>=LEVEL_CAP){h.xp=0;h.rested=0;}

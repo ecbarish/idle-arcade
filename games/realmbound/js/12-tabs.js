@@ -167,8 +167,9 @@ addons:{
     const mi=$('#macroInfo');if(mi)mi.textContent=`Auto mode plays at ${Math.round(aiEff()*100)}% efficiency. ${fmtI(h.stats.manual)} presses so far.`;}
 },
 journal:{
-  key(){return 'j';},
+  key(){return 'j'+(H().pace||'classic')+!!H().dun;},
   build(){return `<h3>Journal</h3><p class="sub">Saves in this browser every 10 seconds. Export a backup now and then.</p><div class="stats" id="jstats"></div>
+    <h4>Journey length</h4><p class="sub">How fast this hero levels. Change it any time outside a dungeon. Questing with companions shares kill experience, as in classic groups.</p><div class="choices">${Object.entries(PACE).map(([id,p])=>`<button class="choice ${(H().pace||"classic")===id?"on":""}" data-act="pace" data-arg="${id}" ${H().dun?"disabled":""}><b>${p.name}</b><span>${p.desc}</span></button>`).join("")}</div>
     <h4>Adventure log</h4><div id="jlog" class="meta"></div>
     <h4>Save</h4><textarea id="saveTxt" placeholder="Export puts your save here. Paste a save here to import it." aria-label="Save data"></textarea>
     <div class="mfoot" style="justify-content:flex-start"><button class="btn sm" data-act="export">Export</button><button class="btn sm" data-act="copy">Copy</button><button class="btn sm" data-act="import">Import pasted save</button><button class="btn sm alt" data-act="delete" id="delBtn">Delete character</button></div><p class="meta" id="saveMsg"></p>`;},

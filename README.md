@@ -42,6 +42,9 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 - **2026-10-08 (night, later)** — Decisions from the research brief (`docs/research/decisions.md`). Wildbond: the main
   story will end near level 70, so badge caps now rise 10 a badge for the first four and 5 after (55, 60, 65, 70, then
   75 with all eight); nothing changes for the four badges that exist today.
+  Realmbound: kill experience is now shared by the group with classic bonuses (questing with four companions is
+  about 1.3× faster than solo instead of 5×), and every hero has a journey length (Breezy, Classic, Long Road) chosen
+  at creation and changeable in the Journal.
 
 - **2026-10-08 (night)** — Realmbound: the Silent Barrows' bosses now breathe **Grave Chill** (T1-B), a cold that
   stacks on your whole party and hurts every second until someone heals it off, so a healer really matters there.

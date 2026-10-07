@@ -118,13 +118,14 @@ function updateWorld(){
 
 /* ---- character creation ---- */
 const NAMES=['Aldren','Brienne','Corvin','Dara','Elric','Fenna','Garrick','Hela','Isolde','Joren','Kael','Lyra','Maren','Nyssa','Orrin','Petra','Quill','Rowan','Sable','Tamsin','Ulric','Vesna','Wren','Yara','Zarek','Thrum','Grukk','Velra','Ishka','Morka'];
-let CR={name:pick(NAMES),faction:'concord',race:'human',cls:'warrior'};
+let CR={name:pick(NAMES),faction:'concord',race:'human',cls:'warrior',pace:'classic'};
 function createHTML(){
   const f=FACTIONS[CR.faction];if(!f.races.includes(CR.race))CR.race=f.races[0];
   return `<h2>Create your hero</h2><p class="sub">Two factions share a broken continent. Pick your side, your people and your path.</p>
   <h4>Faction</h4><div class="choices">${Object.entries(FACTIONS).map(([id,x])=>`<button class="choice ${CR.faction===id?'on':''}" data-act="cr" data-arg="faction:${id}"><b style="color:${x.col}">${x.name}</b><span>${x.desc}</span><span>Starts in ${ZONES[x.start].name}.</span></button>`).join('')}</div>
   <h4>Race</h4><div class="choices">${f.races.map(id=>`<button class="choice ${CR.race===id?'on':''}" data-act="cr" data-arg="race:${id}"><b>${RACES[id].name}</b><span>${RACES[id].bonus}</span></button>`).join('')}</div>
   <h4>Class</h4><div class="choices">${Object.entries(CLASSES).map(([id,k])=>`<button class="choice ${CR.cls===id?'on':''}" data-act="cr" data-arg="cls:${id}"><b style="color:${k.col}">${k.name}</b><span>${k.role} · ${k.res[0].toUpperCase()+k.res.slice(1)}</span><span>${k.desc}</span></button>`).join('')}</div>
+  <h4>Journey length</h4><div class="choices">${Object.entries(PACE).map(([id,p])=>`<button class="choice ${CR.pace===id?'on':''}" data-act="cr" data-arg="pace:${id}"><b>${p.name}</b><span>${p.desc} You can change it later in the Journal.</span></button>`).join('')}</div>
   <h4>Name</h4><input class="nameinp" id="crName" maxlength="14" value="${CR.name}" aria-label="Hero name">
   <div class="mfoot">${S.chars.length?'<button class="btn alt" data-act="chars">Back to characters</button>':''}<button class="btn" data-act="create">Enter the world</button></div>`;
 }
