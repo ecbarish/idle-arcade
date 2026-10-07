@@ -8,7 +8,19 @@ const WALK_SPEED = 5; // tiles a second
 /* fx, fy: where the tamer is drawn (slides toward S.pos); path: queued steps; grassN: tall-grass steps until the next find;
    fol: where your lead creature walks (one step behind you); spot: a trainer who just saw you; cool: trainers who beat
    you won't come at you again until you leave the area */
-const WK = { fx: 0, fy: 0, held: [], queued: null, path: [], grassN: 10, cam: null, fol: { x: 0, y: 0, fx: 0, fy: 0 }, spot: null, cool: {}, roam: [], roamT: 99 };
+/* The walking itself (steps, sliding, shortest routes, bumping into people, doors, exits and signs) is the arcade's
+   shared world kit (shared/world.js, S4); this file keeps what is Wildbond's own: grass, trainers, roamers, items. */
+const WK = Object.assign(World.walker({
+  map: () => curMap(), tiles: TILES, pos: () => S.pos, people: m => npcsOf(m),
+  busy: () => !!(B || TALK || !S.pos), speed: () => speedNow(),
+  on: {
+    person: n => talkTo(n),
+    door: (x, y) => enterDoor(curMap().doors[x + ',' + y]),
+    exit: (x, y, ch) => useExit(curMap(), ch),
+    sign: (x, y) => { W.msg = `The sign reads: "${(curMap().signs || {})[x + ',' + y] || 'The words have worn away.'}"`; },
+    step: (x, y, ch) => afterStep(curMap(), x, y, ch)
+  }
+}), { grassN: 10, cam: null, spot: null, cool: {}, roam: [], roamT: 99 });
 
 function curMap() { return MAPS[S.pos.map]; }
 function tileAt(m, x, y) { return y < 0 || y >= m.rows.length || x < 0 || x >= m.rows[0].length ? 'T' : m.rows[y][x]; }
@@ -27,8 +39,7 @@ function placeAt(id, x, y, dir) {
   const m = MAPS[id]; if (!m) return;
   if (x === undefined) [x, y, dir] = m.start;
   if (!S.pos || S.pos.map !== id) { WK.cool = {}; WK.roam = []; WK.roamT = 99; }
-  S.pos = { map: id, x, y, dir: dir || 'down' }; WK.fx = x; WK.fy = y; WK.path = []; WK.spot = null; WK.ready = true;
-  followBehind();
+  S.pos = { map: id, x, y, dir: dir || 'down' }; WK.spot = null; WK.place(x, y, dir || 'down');
   if (m.biome) S.biome = m.biome;
 }
 /* the follower starts one tile behind you if there's room, otherwise right where you are */
@@ -41,7 +52,7 @@ function ensurePos() {
   if (S.pos && MAPS[S.pos.map]) { if (!WK.ready) { WK.ready = true; WK.fx = S.pos.x; WK.fy = S.pos.y; followBehind(); } return; }
   placeAt(MAPS[S.biome] ? S.biome : 'larkhaven');
 }
-function arrived() { return Math.abs(WK.fx - S.pos.x) < 0.01 && Math.abs(WK.fy - S.pos.y) < 0.01; }
+function arrived() { return WK.arrived(); }
 /* Warden's boots (the Thorn Badge): hold Shift, or tap somewhere far away, to run. Auto-explore keeps walking. */
 const RUN_SPEED = 9;
 function speedNow() { return S.auto ? WALK_SPEED : S.ride && rideOK() ? RIDE_SPEED : S.shoes && (WK.run || WK.pathRun) ? RUN_SPEED : WALK_SPEED; }
@@ -110,16 +121,9 @@ function meetRoamer(r) {
   startBattle('wild', [newCreature(r.sp, r.lvl, { boost: 0.4 + journey().rare + (S.team.some(c => c.traits.includes('lucky')) ? 0.3 : 0) })]);
 }
 
-function tryStep(dir) {
-  if (B || TALK || !S.pos) return;
-  const m = curMap(), [dx, dy] = DIRS[dir], nx = S.pos.x + dx, ny = S.pos.y + dy, ch = tileAt(m, nx, ny);
-  S.pos.dir = dir;
-  const npc = npcAt(m, nx, ny); if (npc) { WK.path = []; talkTo(npc); return; }
-  if (TILES[ch] && TILES[ch].door) { WK.path = []; enterDoor(m.doors[nx + ',' + ny]); return; }
-  if (TILES[ch] && TILES[ch].exit) { useExit(m, ch); return; }
-  if (TILES[ch] && TILES[ch].sign) { WK.path = []; W.msg = `The sign reads: "${(m.signs || {})[nx + ',' + ny] || 'The words have worn away.'}"`; return; }
-  if (blocked(m, nx, ny)) { WK.path = []; return; }
-  WK.fol.x = S.pos.x; WK.fol.y = S.pos.y; S.pos.x = nx; S.pos.y = ny;
+function tryStep(dir) { if (S.pos) WK.step(dir); }
+/* after each step onto a new tile: items, roaming creatures, watching trainers, tall grass */
+function afterStep(m, nx, ny, ch) {
   pickUp(m, nx, ny);
   const r = WK.roam.find(o => o.x === nx && o.y === ny); if (r) { meetRoamer(r); return; }
   if (spotted(m)) return;
@@ -190,18 +194,8 @@ function talkTo(n) {
 
 /* walk to a tile by the shortest route; the last step may be onto a person, a door or an exit */
 function walkTo(tx, ty) {
-  const m = curMap(), W0 = m.rows[0].length, key = (x, y) => y * W0 + x, prev = new Map([[key(S.pos.x, S.pos.y), null]]), q = [[S.pos.x, S.pos.y]];
-  const goal = key(tx, ty);
-  while (q.length) {
-    const [x, y] = q.shift(); if (key(x, y) === goal) break;
-    for (const d in DIRS) { const nx = x + DIRS[d][0], ny = y + DIRS[d][1], k = key(nx, ny);
-      if (prev.has(k) || nx < 0 || ny < 0 || nx >= W0 || ny >= m.rows.length) continue;
-      if (k !== goal && (blocked(m, nx, ny) || TILES[tileAt(m, nx, ny)].door || TILES[tileAt(m, nx, ny)].exit)) continue;
-      prev.set(k, [key(x, y), d]); q.push([nx, ny]); }
-  }
-  if (!prev.has(goal)) return false;
-  const steps = []; for (let k = goal; prev.get(k); k = prev.get(k)[0]) steps.unshift(prev.get(k)[1]);
-  WK.path = steps; WK.pathRun = steps.length > 3; return true;
+  if (tx === S.pos.x && ty === S.pos.y) { WK.path = []; return true; }
+  const ok = WK.walkTo(tx, ty); WK.pathRun = ok && WK.path.length > 3; return ok; // far taps run, with Warden's boots
 }
 /* Auto-explore: wander to a random patch of tall grass; in town, head out toward the wild */
 function autoWalk() {
@@ -226,13 +220,7 @@ function walkTick(h) {
   else if (S.auto && alive().length) autoWalk();
 }
 /* press or tap something you're facing: talk, open a door */
-function interact() {
-  if (!S.pos || B || TALK) return false;
-  const m = curMap(), [dx, dy] = DIRS[S.pos.dir], x = S.pos.x + dx, y = S.pos.y + dy, npc = npcAt(m, x, y);
-  if (npc) { talkTo(npc); return true; }
-  if (TILES[tileAt(m, x, y)].door) { enterDoor(m.doors[x + ',' + y]); return true; }
-  return false;
-}
+function interact() { return !!S.pos && WK.interact(); }
 
 document.addEventListener('keydown', e => {
   if (!S.started || TALK || e.target.matches('input,textarea') || $('#modal').hidden === false) return;
