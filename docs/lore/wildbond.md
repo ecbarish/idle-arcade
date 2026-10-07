@@ -1,0 +1,144 @@
+# Wildbond: lore bible and region outline
+
+## Reading this record
+
+This records the game at main commit `fa7f540`, including the three Wardens, the Pocket era and the return of color. The source is [content and dialogue](../../games/wildbond/js/00-data.js), [map conversations](../../games/wildbond/js/11-maps.js), [story rewards](../../games/wildbond/js/04-world.js), and the [creature game design](../creature-game-design.md). Current game text takes precedence over older planning language.
+
+The first sections describe established canon. Where the game leaves room for interpretation, that is stated. The five later areas are **proposals for Evan to approve**, not existing places or approved content. Their names, people, badges, guardians and events must not be treated as canon or added to the game without a ticket. The region itself has no confirmed proper name yet.
+
+## A frontier with an older memory
+
+The story begins with a supply cart reaching Larkhaven at the edge of Thornwood. Roofs, a windmill and a ranch fence mark a small human foothold beside a much older forest. Maren points beyond the trees to the coast, the hills and places still unmapped. This is a frontier in the tamers' knowledge; it does not mean the land was empty before people arrived.
+
+Thornwood's oldest trees predate Larkhaven and the stories its residents tell. The guardians already belonged to their places before the present journey. Toren speaks of warm stones beyond the high pass and a watcher older than the Wardens. These clues establish an old landscape and a comparatively recent human order. They do not supply founding dates, a lost empire or a named disaster.
+
+One event does belong to the region's history: it was faded long ago. Isolde says the guardians remember it as it was, and bonds help the world remember. Why it faded, who witnessed that first change and how much was lost remain unknown. A useful interpretation is that exploration restores a relationship with the land as well as a route through it. That interpretation should guide tone without becoming an invented historical explanation.
+
+Human settlement here can be described through everyday work: supply journeys, ranch care, fishing, running lighthouse stairs and keeping mountain paths safe. Those activities appear in the game. They give the frontier a history people can touch without requiring kings, wars or institutions the story has never named.
+
+## Creatures choose their company
+
+Maren's central teaching is that nobody owns a creature. A wild creature may choose to walk with a person who treats it well. A bond is earned through that relationship, rather than conferred by a lure or a victory. Her capture advice asks the tamer to watch a creature, tire it, offer a lure and keep it calm. Trust is what makes coming home possible.
+
+The design treats every creature as an individual, with temperament, traits, potential and a family history. Feeding, training, rest and shared experience matter. The ranch belongs in the story as a place of continuing care: catching a partner begins the relationship. Maren's invitation to bring tired teams home gives that principle an ordinary, repeatable expression.
+
+The starters introduce different kinds of companionship. Cindercub curls around warm stones; Blazefang's mane brightens with trust. Ripplet blows bubbles when happy, and Tidewyrm can make waves. Mosshog allows birds to nest in its moss; Thornback fiercely guards its herd. Their later strength grows out of recognizable behavior rather than erasing their personalities.
+
+Battles are tests of a relationship under difficulty. Isolde distinguishes creatures fighting for their tamer from creatures merely fighting nearby. Nerys asks whether the team can change together. Toren asks whether pressure makes a tamer rush their partners into danger. None reduces a creature to a prize that proves its trainer's status.
+
+The seven established elements are Ember, Tide, Grove, Stone, Gale, Shade and Radiant. Current species use wolf, boar, cat, hyena, lizard, croc, spider, horse, bird and sprite families. Future design mentions more possibilities, but this outline uses only those existing elements and families. The game has not explained the elements' origin or proved that bonds are the source of their power.
+
+## Larkhaven and the people who start the journey
+
+Larkhaven is the home base: inn, shop, ranch, fenced paddock and a northward path into Thornwood. The inn heals weary teams, the shop supplies lures, and Maren welcomes visitors into the barn. Its small size makes returning personal. The same people can notice how a tamer and the world have changed.
+
+**Keeper Maren** is an experienced ranch keeper who has matched many young tamers with their first partners. Warmth does not make her sentimental in public. She corrects Wren's excuses, sends new tamers out to learn and writes to Isolde when someone deserves attention. After color returns, she jokes that four colors once sufficed, then admits the new world is pretty and asks that Isolde not be told.
+
+**Wren** starts on the same day and is the player's age, though neither age is specified. She chooses the starter with an elemental advantage and calls it strategy. She is competitive, noisy, quick with excuses and capable of sincere praise. Her Glimmerwing sat on her head until she accepted it; on the coast she boasts about arriving first while making a poor sandcastle. At Warmstep Rise a Thermwing has her scarf, and she turns retrieving it into a joke about teamwork.
+
+Wren should remain a friend whose ambition causes friction without cruelty. She wants to become Champion, recognizes the player's growing bond and keeps promising a better rematch. After her Emberfall defeat, both teams deserve the warm spring. Winning does not end their companionship or turn her into a villain.
+
+**Pip**, a seven-year-old in Larkhaven, also plans to become Champion and thinks having plenty of time is an advantage. He warns about tall grass with a child's confidence. When color returns he discovers that his shirt is yellow and questions whether it always was. His mother's brighter scarf suggests that even people who dismiss the change may respond to it.
+
+## The Wardens and their badges
+
+Wardens stand within the places they keep and wait for a challenge. They correspond, observe tamers and control passage where a road requires a badge. Isolde receives Maren's letter; Nerys receives Isolde's account. They form an order with shared duties, but the game has not named its headquarters, founder, membership rules or political authority.
+
+Their common concern is whether a tamer can travel responsibly with a team. Each test reflects the place around it. Badges recognize that achievement and raise the team's badge level cap: 15 before a badge, then 25, 35 and 45 after the three currently available. The Thorn Badge opens the coast; the Tide Badge opens Emberfall. No fourth area currently exists for the Ember Badge to open.
+
+**Warden Isolde**, keeper of Thornwood, waits at a living hawthorn gate. She judges bond, watching whether partners look back to the tamer before acting. Her team is Pebblepaw, Bogsnap and Thornback. The Thorn Badge is permission to continue north and a recognition that the partnership holds. Her final advice introduces the other guardians and asks the traveler to meet them kindly.
+
+**Warden Nerys**, keeper of the Saltmarsh, stands below the old lighthouse on tidal flats in a salt-stained hat. She judges adaptation: a team with only one way to fight cannot keep its footing when the sea changes. Her team is Wrackjaw, Spindriftfoal and Brineskit. She awards the Tide Badge and directs the traveler toward Emberfall, with warnings about hot springs and something old in the mountain. Her urgency has a practical reason: the flats will flood.
+
+**Warden Toren**, keeper of Emberfall, waits above the springs with a Glowmote napping on his sleeve. He judges patience under pressure, particularly the ability to wait for a safe opening without abandoning the effort. His team is Cragskein, Glowmote and Kilntusk. The Ember Badge recognizes a tamer who allows partners time to find their footing. Toren suggests a rest, then points toward the warm old stones beyond the high pass.
+
+## Pocket and the return of color
+
+New journeys begin in the Pocket era, where the world appears in four shades of green. The faded look has a story meaning as well as an art style. The player is encountering a region whose guardians still remember a richer appearance.
+
+The implemented turning point comes with Isolde's Thorn Badge. After the victory conversation, the warm badge accompanies a breath-like change through the forest: the sky becomes blue, distant roofs red and leaves distinct in shade. Isolde sees it too. She explains the long-ago fading and the part bonds play in reminding the world. She also gives Warden's boots, letting the tamer run.
+
+Pixel and 16-bit become selectable, with the new Pocket journey changing to 16-bit during the scene. The day/night clock belongs to the current game; Shade encounters become more common at night and Radiant ones less common. Maren, Pip and Old Tobin react to the world in ways suited to their personalities. Tobin insists the sea has always been that blue.
+
+The design proposes later restoration of light and depth. HD-2D, Diorama and modern 3D remain future eras in this snapshot. Their proposed unlocks must not be described as completed transformations. Also, current code ties color's return to the Thorn Badge, not to a mandatory Elderhorn capture. The guardians' memory explains the change in dialogue; exactly how a badge and a bond produce it is still open.
+
+## The three established areas
+
+### Thornwood — levels 2–12
+
+Thornwood begins beyond Larkhaven's northern trees and ends at Isolde's hawthorn gate. Tall grass, flowers, old trunks, ponds and a trail establish a forest people can visit without having exhausted its secrets. Its inhabitants contribute to that texture: Pebblepaw naps on granite, Duskweaver's evening webs disappear by morning, and Gnawhound packs laugh after dark. Rare Sunsparks bring living light; Galefoals run with the wind.
+
+Forager Bram challenges a passer-by near his mushroom patch and later explains where floodwater leaves the best mushrooms. Birdwatcher Lise resents interrupted observations, then admires a coordinated team. Their battles make the route inhabited without turning every resident into an antagonist. Wren's stump-side rematch shows how quickly a new partnership can become familiar.
+
+**Elderhorn** is the ancient Grove guardian, a stag-like creature catalogued in the horse family. Moss, bark and flowering antlers connect it to the oldest trees. Birds and wind go still before it appears. Lowered antlers offer a test; its acceptance is expressed by a lowered head, breath on the tamer's hands and flowering moss. Its choice to accompany the team should feel like trust granted by a place older than the traveler.
+
+### Saltmarsh Coast — levels 12–22
+
+The Thorn Badge admits the traveler to dunes, reeds, tidal pools and the flats beneath a lighthouse. Movement defines this place. Brineskit skims shallow pools; its evolution Shoalcrest makes calm channels for smaller creatures. Reedtusk leaves reed-filled trails, Wrackjaw cracks shellfish, Kiteskirl whistles before storms, and Spindriftfoal races the waterline. Elusive Foamglint glows where moonlit surf meets marsh.
+
+Old Tobin has fished here for forty years and remembers an unsettling retreat of the tide. Beachcomber Cato finds a shell that hums and is told to put it back. Lighthouse runner Marit measures her routines against the changing flats. These observations leave room for mystery without declaring every unusual shell a magical relic. Wren's race to discover the coast's keeper adds ambition and humor to the same clues.
+
+**Breakwatermane** is the ancient Tide wolf and keeper of the coast. Its mane breaks and reforms like surf. The tide retreats farther than expected before its approach, and the waves appear to wait for it. After choosing the traveler it sits calmly beside them, while Wren protests from farther up the beach. It is powerful, but the scene ends in quiet company.
+
+### Emberfall Highlands — levels 22–32
+
+The Tide Badge opens the cliff road above the coast. Warmstep Rise, ash-covered trails, black stone bowls and bubbling springs make heat both shelter and hazard. Slaglet's volcanic crust keeps out the mountain chill; Kilntusk loosens cooled lava so its herd can find shoots. Cragskein webs help smaller creatures cross cracks. Thermwing calls out sheltered ledges and Glowmote guides travelers home through steam.
+
+Ridge hiker Orsk turns a narrow trail into a challenge and blames tired legs afterward. Spring keeper Sela asks visitors to earn their soak; she suspects Toren's morning thinking is really napping. The mountain's people share its creatures' practical concern with footing, warmth and rest. Wren's scarf trouble and promised spring break belong to that same daily life.
+
+**Hearthcrown** is the Ember guardian, a stag-like creature in the horse family with ember-lit antlers. Its Wilddex says it warms frozen springs so every creature can drink. In the encounter it nudges a stone away from a partner's feet before offering its test. After acceptance, it warms the tired team's resting place and rises to share their onward journey. Its power sustains access to water rather than merely threatening an intruder.
+
+## Something old watching
+
+Isolde's warning is already supported by three guardians with distinct relationships to their homes: forest growth, the rhythm of the surf and warm highland water. Each can recognize a tamer and offer companionship. The pattern suggests an old, attentive world whose power often takes the form of care.
+
+It does not establish that guardians created the elements, caused the fading or obey the Wardens. A guardian joining a team also leaves an unanswered question about its duties at home. Later writing should preserve that uncertainty until a scene explains it. Toren's old warm stones are a continuation hook, not evidence that any particular proposed guardian below already exists.
+
+## Proposed areas 4–8 — awaiting Evan's approval
+
+Every detail in this section is a proposal. Level bands follow T14's outline rather than a finalized balance plan. Guardian names describe prospective new species within existing families. No maps, species, battles or badges are implemented by this document.
+
+### Area 4 proposal: Cloudglass Pass — levels 32–42
+
+A high pass beyond Emberfall opens into hanging mist, pale rock and terraces of wind-bent grass. Small shelters mark places where walkers wait for clouds to lift. Guides mend ropes rather than promising safe weather; travelers share soup and compare which ridges they could see that morning. The warm-stone clue could lead here, but connecting those stones to a guardian would need an approved scene.
+
+**Mix:** Gale birds and horses, Stone cats and spiders, Radiant sprites. **Warden:** Vessa, a cheerful guide who admits when visibility beats her; she judges asking for help and sharing responsibility. **Badge:** Beacon Badge. **Guardian:** Lanterncrest, a Radiant bird whose proposed light reveals sheltered resting places. **Wren beat:** she takes a shortcut to arrive first, then returns for a lost traveler; her rematch celebrates getting everyone through rather than winning the race.
+
+### Area 5 proposal: Stillreed Basin — levels 42–52
+
+Beyond the pass lies a broad freshwater basin with reed beds, ferries and orchards on raised ground. Rain can last for days, then stop so suddenly that every drip becomes audible. Boat families leave landing space for wild creatures. People know the water by what moves beneath it and make room for neighboring livelihoods rather than treating the basin as an obstacle to drain.
+
+**Mix:** Tide crocs and lizards, Grove boars, Gale birds, Shade spiders. **Warden:** Olan, a courteous ferryman with a dry joke for every unnecessary splash; he judges restraint when the stronger team could win carelessly. **Badge:** Reed Badge. **Guardian:** Stillwake, a Tide croc proposed to shelter creatures crossing flooded channels. **Wren beat:** she interrupts a rematch to free a tangled ferry rope and lets the player help, then asks for a fair restart on dry ground.
+
+### Area 6 proposal: Hollowecho Hills — levels 52–62
+
+Low hills conceal caverns where dripping water and moving air make every passage sound occupied. Surface hamlets hang bells by cave mouths so returning teams can signal before dusk. The inhabitants trade stories about echoes that answer a beat late. Exploration should feel curious rather than cruel: shade offers shelter, and a bright entrance can be harder to navigate than a familiar dark passage.
+
+**Mix:** Shade hyenas and spiders, Stone boars and cats, Radiant sprites, Tide lizards. **Warden:** Senna, an attentive surveyor who rarely raises her voice; she judges listening to a partner's warning even when it contradicts a plan. **Badge:** Echo Badge. **Guardian:** Undertone, a Shade hyena proposed to guide separated groups through sound. **Wren beat:** she recognizes her partner's unease before entering a wrong passage, then admits that listening was the cleverer move before their rematch.
+
+### Area 7 proposal: Sunthread Commons — levels 62–70
+
+Wide upland meadows gather routes from several settlements. Clear mornings give way to sudden winds, and meeting halls double as storm shelters. A regional gathering could bring ranch keepers and traveling teams together before the final stretch. Fields should show cooperation at an ordinary scale: sharing paths, repairing a shelter and letting tired creatures rest while others finish the work.
+
+**Mix:** Grove horses and boars, Radiant sprites and birds, Ember wolves, Gale horses. **Warden:** Halen, a patient organizer with a talent for remembering names; he judges making space for partners with different strengths. **Badge:** Loom Badge. **Guardian:** Meadowmantle, a Grove boar proposed to preserve sheltered nursery ground. **Wren beat:** she helps a nervous young tamer find a role in the gathering, then brings a varied team to a rematch whose story emphasizes cooperation over one star performer.
+
+### Area 8 proposal: Farwatch Reach — post-game toward level 100
+
+The outline's final reach follows an exposed coast where old stone lookouts face unfamiliar islands. Weather alternates between bright distance and abrupt sea fog. A small harbor welcomes teams returning from long expeditions; people keep careful records because a rumor can send someone into danger. This could host the eighth Warden and lead into repeat journeys, with the precise league and post-game boundary still requiring a design decision.
+
+**Mix:** Tide wolves and crocs, Gale birds, Stone spiders, Shade cats, Radiant sprites. **Warden:** Rysa, a welcoming recorder who insists on correcting her own mistakes; she judges responsibility for what a tamer learns and passes on. **Badge:** Horizon Badge. **Guardian:** Watchlight, a Radiant sprite proposed to mark safe approaches through fog. **Wren beat:** she arrives with notes she once would have guarded as an advantage, shares them with the player, then challenges them as a friend who still intends to win.
+
+## Open questions
+
+- What is the region called, and how long have Larkhaven and the Wardens existed?
+- What caused the fading? Is it a change to the land, perception, or both? Which witnesses remember it firsthand?
+- How do the guardians' memory, earned bonds and the Thorn Badge relate to the implemented return of color?
+- What are Toren's warm stones beyond the high pass, and does their watcher have any connection to Hearthcrown?
+- What continues guarding an area when its guardian chooses to accompany a tamer?
+- Where do elements come from, and can different guardians share an element without sharing an origin?
+- What does a badge certify beyond passage and growth, and who recognizes the Wardens' authority?
+- Where will the league and Champion fit? Eight badges imply a cap of 95 under the current formula, while the design describes the main journey reaching about 70. How will those two plans meet?
+- Should area 8 span the finale and post-game, or follow the finale? Its proposed level band and eighth badge remain provisional.
+- How should later light and depth restoration work without requiring a guardian capture? Current color restoration already allows that freedom.
+- What are the humming shell, unusual tidal retreat and disappearing dusk webs telling us? They may be separate mysteries.
+- Which future regions and characters does Evan want to approve before their names enter dialogue or data?
