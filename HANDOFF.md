@@ -24,6 +24,8 @@ header; keep both in step. To release:
 - Load an old save in each changed game to confirm it still works.
 - Check each changed game at phone width (375 px).
 - Add a README changelog entry headed with the version, and a dated START-HERE session-log line.
+- Bump `CACHE_VERSION` in `sw.js` for every release that changes a cached hub/game page, script, style or asset.
+  Combine PRs first, then choose a unique version; see `docs/offline.md`. Run `tests/offline.html` too.
 - Optionally tag the release in git (`git tag vX.Y.Z`).
 
 ## Shared development notes

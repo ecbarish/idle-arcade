@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Arcade v1.1.0 (2026-10-07)** — **Install and offline play (L5):** the hub prepares all four games for offline use and offers installation when supported. Updates wait for open arcade tabs to close; saves stay in the browser. External fonts fall back locally, and offline Wildbond uses HD-2D when three.js is unavailable. See [offline guide](docs/offline.md) and [browser checks](tests/offline.html).
+
 - **2026-10-10** — **Save doctor** in the Studio: pick a game to see its save at a glance (heroes, team, badges, coins),
   a health check that spots broken values (an empty level, negative coins, a missing current hero) with a one-click
   fix, and every field in plain words, searchable and editable. Nothing is written until you press Save, and the old

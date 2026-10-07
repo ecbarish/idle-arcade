@@ -56,7 +56,7 @@ Mining, Herbalism, Questing and Guard duty, the supply bank with repair kits and
 `docs/realmbound-40-60.md`; lore: `docs/lore/realmbound.md`.
 
 **Starfall Guild:** small files with checks, its own music, living torches and a night window with falling stars;
-parked for new features. **Hub and promo pages:** `index.html`, `promo.html`, `promo-wildbond.html`.
+parked for new features. **Hub and promo pages:** `index.html`, `promo.html`, `promo-wildbond.html`. L5 install/offline support (hub v1.1.0) is ready on `codex/arcade-offline`, awaiting review; `docs/offline.md` explains preparation and release cache versions.
 
 **Shared systems** (`shared/`): engine, creatures, dialogue (S1), sound with rain (S2), roster/jobs (S3), world kit
 (S4: walker + HD-2D renderer), ambience (S5). Test pages: `tests/run.html`, `tests/wildbond.html`,
@@ -68,7 +68,7 @@ burner). Plans in `docs/plans/`.
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
 **The master list is `docs/PROJECTS.md`** (every outlined project, sizes, dependencies, claims, the launch track);
-**ground rules and creative freedom: `docs/CREATIVE.md`**. Below are only the next few items in flight.
+**ground rules and creative freedom: `docs/CREATIVE.md`**. Below are only the next few items in flight. L5 is ready for review in PR #35; reviewers must bump `sw.js` cache versions whenever later game or hub changes ship.
 
 **Done so far** (details in `docs/ROADMAP.md`, the design docs and git history): T20-T28 content tickets; T1, T1-A,
 T1-B, T1-C (talents and pacing); R1 + the guild (with member favors and guild raiders); R2 (the raid); D1-D7
@@ -104,6 +104,8 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-07 Codex: L5 install/offline support complete on `codex/arcade-offline` (PR #35), awaiting review, no merge. All four games load offline, GitHub Pages subpath and failed-update rollback checked; unchanged saves, four viewport widths. Four game/sound runners and the new isolated offline checks pass. Next: Claude reviews pending PRs #31–35; another unclaimed PROJECTS item can proceed separately.
 
 - 2026-10-10 Claude: E3 save doctor in studio.html (summary, health check with fixes, searchable editor; per-game
   rules in `DOCTOR`, labels in `LABELS`; backs up before writing). **Next:** review T30 when it lands; W9 design or
