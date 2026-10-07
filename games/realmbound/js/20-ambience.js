@@ -18,7 +18,7 @@ const AMB_ZONES = {
     fx: { fog: .6, fireflies: .35 }, nightFx: { fireflies: 1 }, weather: ['drizzle', 'fog', 'storm', 'clear', 'drizzle'] },
   ashen: { clouds: 4, cloudCol: '#6e5a58', far: [{ kind: 'peaks', col: '#3c2a2e', base: .6, h: .32, par: .06, glow: '#ff6a2a' }, { kind: 'dead', col: '#2b2024', base: .74, h: .2, par: .22 }],
     fx: { embers: .7, ash: .25 }, nightFx: { embers: 1 }, weather: ['clear', 'ashfall', 'clear'] },
-  frostmere: { clouds: 4, cloudCol: '#e8eef6', aurora: 1, far: [{ kind: 'peaks', col: '#8aa3ba', base: .58, h: .32, par: .05, snow: 1 }, { kind: 'pines', col: '#46666f', base: .74, h: .24, par: .22 }],
+  frostmere: { clouds: 4, cloudCol: '#d8e5f0', aurora: 1, far: [{ kind: 'peaks', col: '#7295b6', base: .58, h: .32, par: .05, snow: 1 }, { kind: 'pines', col: '#35566a', base: .74, h: .24, par: .22 }],
     fx: { snow: .45 }, nightFx: {}, weather: ['snow', 'clear', 'blizzard', 'snow'] },
   barrowfield: { clouds: 6, birds: 3, birdCol: '#151820', far: [{ kind: 'dead', col: '#3b4653', base: .7, h: .26, par: .12 }, { kind: 'stones', col: '#44515f', base: .76, h: .2, par: .25 }],
     fx: { fog: .5, wisps: .7 }, nightFx: { wisps: 1.2 }, weather: ['fog', 'clear', 'drizzle', 'fog'] },

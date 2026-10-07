@@ -34,8 +34,8 @@ and the arcade's homepage shows them off. Any assistant may push these forward w
 | L2 | **Save safety** in every game: export / import / automatic backup slot, version tags in saves | M | System | — | open | Starfall already exports; copy its pattern; never change existing save keys |
 | L3 | **Mobile pass**: layouts, tap targets, the walkable worlds on touch, performance on a mid phone | L | Polish | G4 | open | Test at 375 px wide; scenes must stay above ~40 fps; see L11 for big screens |
 | L4 | **Onboarding**: a gentle first 10 minutes per game (what to click, what Auto does) | M | Design+Polish | — | open | Realmbound and Wildbond first; use the shared dialogue scenes |
-| L5 | **Install and offline** (web app manifest + service worker), so the arcade works like an app | S | System | — | open | GitHub Pages friendly; cache-bust on release |
-| L6 | **Credits** page and `CREDITS.md` for any outside assets | S | Polish | — | open | See CREATIVE.md "Outside assets" |
+| L5 | **Install and offline** (web app manifest + service worker), so the arcade works like an app | S | System | — | done: Codex, 2026-10-07, `codex/arcade-offline`, merged 2026-10-07 by Claude, who made it online-first (no version bumps; see docs/offline.md) | docs/offline.md; GitHub Pages scope, complete release cache, waiting updates, browser checks |
+| L6 | **Credits** page and `CREDITS.md` for any outside assets | S | Polish | — | done 2026-10-07 (Codex), merged 2026-10-07 by Claude on `codex/arcade-credits` | credits.html, CREDITS.md and full notices in licenses/; see CREATIVE.md "Outside assets" |
 | L7 | **Bug bash and balance pass**: full playthrough sims of both games, fix what they find | L | Polish | W1, W2 | open | Use the pacing sim methods in the design docs |
 | L8 | **Immersive homepage** that shows off the engines (living scene, sound, dialogue, creatures) | L | Art | G1, W2 | open | Evan: build once the games are further along (START-HERE) |
 | L9 | **Versioning and release notes**: a version number in each game, a release checklist | S | Polish | — | done 2026-10-10 (Jules) | HANDOFF.md "Releasing a version" |
@@ -51,7 +51,7 @@ move with the time of day, bounce light that carries colour into shadows, real t
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
 | G1 | **Light engine** `shared/light.js`: sun/moon model, aligned sprite shadows, fog pockets with light scattering, height fog, bounce light, colour grading, light shafts, bloom | L | System+Art | — | done 2026-10-09 (Claude) | HANDOFF.md "Light engine" once built |
-| G2 | **Zone lighting passes**: tune every Realmbound zone and dungeon and every Wildbond area to its own character (Duskwood-style care) | L | Art | G1 | open | One zone per PR is fine; before/after screenshots in the PR |
+| G2 | **Zone lighting passes**: tune every Realmbound zone and dungeon and every Wildbond area to its own character (Duskwood-style care) | L | Art | G1 | Frostmere done: Codex, 2026-10-07, `codex/realmbound-frostmere-light`, merged 2026-10-07 by Claude; other zones open | Low snow haze, cool bounce light and clearer blue mountain layers; before/after screenshots in the PR |
 | G2-saltmarsh | **Saltmarsh Coast lighting**: low sea mist, coastal bounce light and softer shafts | S | Art | G1 | done 2026-10-07 (Codex); PR #38 awaiting review | One-area pass; before/after screenshots; all other area defaults preserved |
 | G3 | **Water**: reflections of sky, sun and moon, flow, depth colour, in the HD-2D views | M | Art | G1 | open | Stillreed, Saltmarsh, the Fens |
 | G4 | **Graphics quality setting** (Low / High) and a performance budget for phones | M | System | G1 | open | Auto-pick Low on slow devices |
@@ -82,7 +82,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | F1 | **Issue forms** for playtest feedback, bugs and suggestions | S | Polish | — | done 2026-10-09 | `.github/ISSUE_TEMPLATE/`, docs/FEEDBACK.md |
 | F2 | **In-game "Send feedback" button** in every game: opens the right form with game, version, place and a small summary filled in (no personal data) | S | Polish | F1 | done 2026-10-10 (Jules) | shared/feedback.js |
 | F3 | **Triage habit**: assistants read open issues at the start of a session (docs/FEEDBACK.md) | S | Process | F1 | done 2026-10-09 | In CLAUDE.md's start-of-session steps |
-| F4 | **Tester build notes**: a short "what to try" page for each release, linked from the homepage | S | Polish | L9 | open | |
+| F4 | **Tester build notes**: a short "what to try" page for each release, linked from the homepage | S | Polish | L9 | done: Codex, 2026-10-07, `codex/playtest-notes`, merged 2026-10-07 by Claude | playtest.html; docs/playtesting.md |
 
 ## Wildbond (creature game, current focus)
 
@@ -91,11 +91,11 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | T29 | Area 7, Sunthread Commons (62-68), Warden Halen, Loom Badge | M | Data | — | done 2026-10-10 (ChatGPT) | ROADMAP.md "T29" |
 | W1 | Area 8 (66-72), the last Warden and badge | M | Data | T29 | done, merged 2026-10-10 (ChatGPT) | docs/lore/wildbond.md "Area 8 canon"; Farwatch/Rysa/Horizon/Watchlight, copied T29's shape |
 | W2 | **The league and the Champion** (about 72-75): the ending, its scenes, Wren's last battle | L | System+Data | W1 | done, merged 2026-10-07 (ChatGPT, T30) | docs/creature-game-design.md; decision 1 in docs/research/decisions.md |
-| W3 | **Post-game**: battle tower, roaming legendaries, rematch tiers, the road to 100 | L | System | W2 | part 1 (tower, league rematches) is T31 for ChatGPT; part 2 (roaming legendaries) open | |
+| W3 | **Post-game**: battle tower, roaming legendaries, rematch tiers, the road to 100 | L | System | W2 | part 1 done: Codex, 2026-10-07, `codex/wildbond-postgame` (T31), merged 2026-10-07 by Claude; part 2 (roaming legendaries) open | |
 | W4 | **Contests and races** at the ranch | M | System | — | open | docs/creature-game-design.md |
 | W5 | **Ranch jobs** on the shared roster (S3) | M | System | — | open | shared/roster.js; docs/research/decisions.md |
 | W6 | **Modern 3D era** after the Diorama | XL | Art | G5 | open | Split into parts |
-| W7 | Map polish: Stillreed's ferry landing you can see; interiors for town buildings | S | Art | — | open | |
+| W7 | Map polish: Stillreed's ferry landing you can see; interiors for town buildings | S | Art | — | Ferry landing done: Codex, 2026-10-07, `codex/wildbond-ferry-landing`, merged 2026-10-07 by Claude; interiors open | Raised crossings, reachable jetty, moored skiff and sign in all five eras; no transport mechanic |
 | W8 | Pacing pass for areas 5-8 (sim) and tuning | M | Polish | W1 | open | creature-game-design.md pacing method |
 | W9 | **Baby forms and growth (design)**: creatures hatch or are found as babies and grow through more stages (baby, young, adult, elder?), giving more room to raise them; how it meets eggs, evolution levels, caps, and old saves | M | Design | — | proposal written 2026-10-07 (Claude), waiting for Evan | Evan, 2026-10-09; write `docs/proposals/creature-growth.md` first (CREATIVE.md: new system) |
 | W10 | **Baby forms (build)**: the growth stages, baby art from the existing families, ranch care that matters more for babies | L | System+Art | W9 | open | Old saves keep their creatures as they are |

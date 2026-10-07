@@ -255,8 +255,8 @@ function drawTown(t) {
   if (TOWN.hearth) lights.push(Object.assign(TOWN.hearth, { r: TOWN.hearth.r * 2.6 }));
   const me = at(p.fx + .5, p.fy + .5); if (me) lights.push({ x: me[0], y: me[1] - me[2] * .6, r: me[2] * 2.2, col: '#ffe2b0' });
   const air = inside ? { fog: .12, col: '#c09060' } : (ZONE_LIGHT[h.zone] || { fog: .15, col: '#e0e6ea' }); // fog you move through, light shafts, the colour of the hour
-  LT.fog(cx, PW, PH, t, { ground: PH, top: PH * .25, density: air.fog * (inside ? 1 : .8) + (W.fog ? .3 : 0) + (sun.day && sun.p < .12 ? .06 : 0), col: Light.css(Light.mix(air.col, '#1a2040', !inside && !sun.day ? .55 : 0)), lights });
-  if (!inside) { LT.grade(cx, PW, PH, sun, { tint: air.tint }); if (!W.rain) LT.shafts(cx, PW, PH, t, sun, { strength: 1 }); }
+  LT.fog(cx, PW, PH, t, { ground: PH, top: PH * (air.townFogTop === undefined ? .25 : air.townFogTop), density: air.fog * (inside ? 1 : .8) + (W.fog ? .3 : 0) + (sun.day && sun.p < .12 ? .06 : 0), col: Light.css(Light.mix(air.col, '#1a2040', !inside && !sun.day ? .55 : 0)), lights });
+  if (!inside) { LT.grade(cx, PW, PH, sun, { tint: air.tint, amount: air.grade }); if (!W.rain) LT.shafts(cx, PW, PH, t, sun, { strength: air.shafts === undefined ? 1 : air.shafts }); }
   if (!inside) AMB.weather(cx, PW, PH, t, Object.assign({}, W, { px: 2, splashAnywhere: true, fireflies: night > .4 && !W.rain ? .5 : 0, onThunder: v => sfx('thunder', v) }));
   else AMB.weather(cx, PW, PH, t, { dust: .5, px: 2 });
   const dark = inside ? .8 : night; if (dark > .02) AMB.lights(cx, PW, PH, t, { dark, max: inside ? .5 : .55, tint: inside ? '#140a04' : '#0a0e2a', lights });

@@ -45,12 +45,21 @@ ART.diorama = (() => {
         case '.': case 'N': case 'S': case 'E': case 'W': top(x, z, -0.04, P.path); break;
         case '_': top(x, z, -0.02, P.sand); break;
         case '~': top(x, z, -0.22, P.water); add(cxm, -0.2, czm, 1, 0.02, 1, P.waterLt); break;
+        case 'b': top(x, z, -.14, P.water);
+          for (let i = 0; i < 4; i++) { add(cxm, .015, z + .125 + i * .25, 1, .1, .23, '#a17b4e'); add(x + .12, .07, z + .125 + i * .25, .035, .025, .035, '#503d2c'); }
+          add(x + .1, -.11, czm, .1, .28, .12, '#604b34'); add(x + .9, -.11, czm, .1, .28, .12, '#604b34'); break;
+        case 'j': top(x, z, -.22, P.water);
+          add(cxm, -.12, czm, .65, .12, .72, '#344c3f'); add(cxm, -.025, czm, .5, .06, .6, '#ae8553');
+          for (const side of [-1, 1]) { add(cxm + side * .29, .04, czm, .08, .24, .72, '#57745b'); add(cxm, .04, czm + side * .34, .52, .2, .08, '#344c3f'); }
+          for (const seat of [-.16, .16]) add(cxm, .12, czm + seat, .5, .06, .12, '#e0c28e');
+          add(cxm + .38, .15, czm, .045, .04, .85, '#cfa96d'); add(cxm + .38, .15, czm - .38, .12, .05, .16, '#e0c28e');
+          add(cxm, -.025, czm + .42, .035, .035, .2, '#ded2a7'); break;
         case 'o': top(x, z, 0, P.grass); add(cxm, -0.02, czm, 0.8, 0.06, 0.8, '#f0b070'); add(cxm + 0.15, 0.25, czm, 0.12, 0.12, 0.12, '#ffffff'); break;
         case '"': top(x, z, 0, P.grass); for (let i = 0; i < 4; i++) add(x + 0.2 + i * 0.2, 0.2 + hsh(x, z, i * 3) * 0.015, czm + ((i % 2) - 0.5) * 0.3, 0.12, 0.42 + hsh(x, z, i * 3) * 0.03, 0.12, i % 2 ? P.tall : P.tallLt); break;
         case 'f': top(x, z, 0, P.grass); add(cxm - 0.2, 0.05, czm, 0.12, 0.1, 0.12, ['#f2d24a', '#f07a9a', '#ffffff'][hsh(x, z, 2) % 3]); add(cxm + 0.25, 0.05, czm + 0.2, 0.12, 0.1, 0.12, '#ffffff'); break;
         case 'T': top(x, z, 0, P.grass); add(cxm, 0.35, czm, 0.24, 0.7, 0.24, '#6b4a2a'); add(cxm, 0.95, czm, 0.95, 0.65, 0.95, P.tree); add(cxm, 1.45, czm, 0.6, 0.4, 0.6, P.treeLt); break;
         case 'R': top(x, z, 0, P.rockBase || P.grass); add(cxm, 0.26, czm, 0.8, 0.52, 0.72, P.rock); add(cxm - 0.05, 0.58, czm, 0.5, 0.14, 0.45, P.rockLt); break;
-        case 'P': top(x, z, 0, P.grass); add(cxm, 0.3, czm, 0.1, 0.6, 0.1, '#6b4a2a'); add(cxm, 0.62, czm + 0.06, 0.7, 0.36, 0.08, '#a0703a'); break;
+        case 'P': case 'q': top(x, z, ch === 'q' ? -.22 : 0, ch === 'q' ? P.water : P.grass); add(cxm, 0.3, czm, 0.1, 0.6, 0.1, '#6b4a2a'); add(cxm, 0.62, czm + 0.06, 0.7, 0.36, 0.08, '#a0703a'); break;
         case '=': top(x, z, 0, P.grass); add(x + 0.06, 0.26, czm, 0.12, 0.52, 0.12, '#7a5028'); add(x + 0.94, 0.26, czm, 0.12, 0.52, 0.12, '#7a5028');
           add(cxm, 0.22, czm, 1, 0.08, 0.06, '#a0703a'); add(cxm, 0.42, czm, 1, 0.08, 0.06, '#a0703a'); break;
         case 'r': { const front = below === '#' || below === 'D'; add(cxm, front ? 0.75 : 0.9, czm, 1, front ? 1.5 : 1.8, 1, P.roof);

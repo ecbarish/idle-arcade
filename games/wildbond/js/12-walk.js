@@ -169,6 +169,8 @@ function trainerResult(who, result) {
 function useExit(m, ch) {
   const ex = m.exits[ch]; if (!ex) return; WK.path = [];
   const to = MAPS[ex.to];
+  if (to.tower && !towerOpen()) { W.msg = ex.locked; return; }
+  if (m.tower && towerState().active) { W.msg = "Leave with your rewards before stepping off the Spire."; return; }
   if (to.league && !leagueOpen()) { W.msg = ex.locked; return; }
   if (m.league && leagueLocked()) { W.msg = 'Tell Nelva you are leaving this attempt before returning to Farwatch.'; return; }
   if (to.biome && !biomeOpen(to.biome)) { W.msg = ex.locked || 'The way ahead is closed for now.'; return; }
@@ -180,6 +182,7 @@ function enterDoor(kind) {
   else if (kind === 'ranch') { S.tab = 'ranch'; renderTabs(true); W.msg = 'Maren waves you into the barn. Your ranch is open on the right.'; }
 }
 function talkTo(n) {
+  if (n.tower) { if (n.tower === "trainer") { if (towerState().active) towerContinue(); else towerStart(); } else talk([["orla","Every fifth floor has a quiet bench. Keep climbing or leave with what you earned; the height is never more important than your partners."]]); return; }
   if (n.league !== undefined) { leagueTalk(n.league); return; }
   const face = { up: 'down', down: 'up', left: 'right', right: 'left' }[S.pos.dir]; if (!n.trainer) n.dir = face; // trainers keep watching their path
   if (n.warden) {

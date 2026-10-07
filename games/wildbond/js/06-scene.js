@@ -60,7 +60,7 @@ const BATTLE_PLACES = {
   farwatch: { far: 'ruins', near: 'stones', water: true, fog: .35 }
 };
 function drawBattleBackdrop(t) {
-  const atLeague = S.pos && curMap().league, b = BIOMES[atLeague ? curMap().pal : S.biome], place = BATTLE_PLACES[atLeague ? 'league' : S.biome] || { far: 'dunes', near: 'stones' };
+  const atLeague = S.pos && (curMap().league || curMap().tower), b = BIOMES[atLeague ? curMap().pal : S.biome], place = BATTLE_PLACES[atLeague ? 'league' : S.biome] || { far: 'dunes', near: 'stones' };
   const night = darkness(), weather = weatherNow(), time = reduceMotion ? 0 : t;
   const px = Math.max(2, Math.round(PH / 160)), gy = PH * .8;
   cx.save();

@@ -61,7 +61,7 @@ function musicKey() {
   }
   if (S.pos) {
     const map = MAPS[S.pos.map];
-    if (map && map.league) return 'league';
+    if (map && (map.league || map.tower)) return 'league';
     if (map && !map.biome) return 'larkhaven';
     if (isNight()) return 'night';
     if (weatherNow() === 'rain') return 'rain';

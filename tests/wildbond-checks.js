@@ -178,8 +178,35 @@ function wildbondChecks() {
     for(let y=0;y<14;y++)for(let x=0;x<30;x++)if(walkable(m,x,y)&&!npcAt(m,x,y)&&!seen.has(x+','+y))return false;
     return m.items.every(it=>seen.has(it.at.join(',')))&&seen.has('0,8')&&seen.has('23,8')&&m.rows.some(r=>r.includes('~')&&r.includes('"'));
   });
-  check('Stillreed has a sign, three unique items and two route trainers at 52-56', () => {
-    const m=MAPS.stillreed;return Object.keys(m.signs).length===1&&m.items.length===3&&new Set(Object.values(MAPS).flatMap(m=>(m.items||[]).map(it=>it.id))).size===Object.values(MAPS).flatMap(m=>m.items||[]).length&&m.npcs.filter(n=>n.trainer).length===2&&m.npcs.every(n=>n.trainer.team.every(([id,l])=>SPECIES[id]&&l>=52&&l<=56));
+  check('Stillreed has two signs, three unique items and two route trainers at 52-56', () => {
+    const m=MAPS.stillreed;return Object.keys(m.signs).length===2&&m.items.length===3&&new Set(Object.values(MAPS).flatMap(m=>(m.items||[]).map(it=>it.id))).size===Object.values(MAPS).flatMap(m=>m.items||[]).length&&m.npcs.filter(n=>n.trainer).length===2&&m.npcs.every(n=>n.trainer.team.every(([id,l])=>SPECIES[id]&&l>=52&&l<=56));
+  });
+  check('Stillreed landing is reachable on dry boards while the moored skiff stays solid', () => {
+    ready();S.badges=badges.slice();wb.placeAt('stillreed',11,9,'up');const explored=S.explored;
+    for(const dir of ['up','right','right'])wb.tryStep(dir);
+    if(S.pos.x!==13||S.pos.y!==8||TALK||B||S.explored!==explored)return false;
+    wb.tryStep('up');if(S.pos.x!==13||S.pos.y!==8||!TILES.j.solid)return false;
+    wb.tryStep('down');wb.tryStep('right');return S.pos.x===14&&S.pos.y===9&&!TALK&&!B&&S.explored===explored;
+  });
+  check('Landing sign explains the mooring and asks visitors to leave creature space', () => {
+    ready();S.badges=badges.slice();wb.placeAt('stillreed',12,8,'up');wb.tryStep('up');
+    return S.pos.x===12&&S.pos.y===8&&W.msg.includes('skiff')&&W.msg.includes('small creatures');
+  });
+  check('Both Stillreed channel crossings are boards with open water beside the ferry', () => {
+    const m=MAPS.stillreed;return [4,9].every(y=>[12,13,14].every(x=>tile(m,x,y)==='b'&&walkable(m,x,y)))&&tile(m,13,7)==='j'&&tile(m,12,7)==='q'&&tile(m,14,7)==='~';
+  });
+  check('An old saved position on the lower crossing loads onto the new boards', () => {
+    ready();S.badges=badges.slice();wb.placeAt('stillreed',13,9,'right');S.items={sr1:true};S.beaten={tavil:true};save();reset();load();ensurePos();
+    return S.pos.map==='stillreed'&&S.pos.x===13&&S.pos.y===9&&tile(MAPS.stillreed,13,9)==='b'&&S.items.sr1&&S.beaten.tavil;
+  });
+  check('An old saved position beside the landing stays walkable', () => {
+    ready();S.badges=badges.slice();wb.placeAt('stillreed',11,7,'down');save();reset();load();ensurePos();
+    return S.pos.map==='stillreed'&&walkable(MAPS.stillreed,S.pos.x,S.pos.y)&&!blocked(MAPS.stillreed,S.pos.x,S.pos.y);
+  });
+  for(const era of ['pocket','pixel','bit16'])check(era+' paints distinct ferry and board tiles rather than fallback grass', () => {
+    const c=document.createElement('canvas');c.width=c.height=32;const g=c.getContext('2d'),P=worldPal(MAPS.stillreed);
+    if(!P)return false;const pixels=ch=>{g.clearRect(0,0,32,32);ART[era].tile(g,ch,0,0,32,P,0,13,7);return Array.from(g.getImageData(0,0,32,32).data).join(',');};
+    return pixels('b')!==pixels(',')&&pixels('j')!==pixels('~')&&pixels('q')!==pixels('~');
   });
   check('Stillreed wild table excludes its guardian and keeps Glassbill rare', () => {
     const w=BIOMES.stillreed.wild;return w.every(([id,n])=>basinSpecies.includes(id)&&n>0&&!SPECIES[id].unique)&&w.find(([id])=>id==='glassbill')[1]===3&&w.filter(([id])=>id!=='glassbill').every(([,n])=>n>3)&&SPECIES.stillwake.fam==='croc'&&SPECIES.stillwake.el==='Tide'&&SPECIES.stillwake.big===1&&SPECIES.stillwake.unique===1;
@@ -593,7 +620,7 @@ function wildbondChecks() {
     for (const [at, words] of Object.entries(m.signs || {})) check(id + ': sign ' + at + ' shows its text and blocks movement', () => {
       ready(); const [x, y] = at.split(',').map(Number), [px, py, dir] = beside(m, x, y);
       wb.placeAt(id, px, py, dir); wb.tryStep(dir);
-      return tile(m, x, y) === 'P' && S.pos.x === px && S.pos.y === py && W.msg === 'The sign reads: "' + words + '"';
+      return !!TILES[tile(m, x, y)].sign && S.pos.x === px && S.pos.y === py && W.msg === 'The sign reads: "' + words + '"';
     });
   }
   check('Riding requires the Ember Badge and a conscious partner', () => {
@@ -775,6 +802,87 @@ function wildbondChecks() {
     S.beaten = Object.fromEntries((map.npcs || []).filter(n => n.trainer).map(n => [n.who, true]));
     m = masteryOf(biome); return m.stars === 3 && m.dex && m.warden && m.secrets && m.hasWarden;
   });
+  // T31: exercise real state transitions, reward accounting and the walkable post-game gates.
+  function spireReady() { ready(); S.badges=Object.keys(BADGES); S.story.leagueEnding=S.story.leagueChampion=true; S.titles=['Champion']; S.eras=['pocket','pixel','bit16','hd','diorama']; ensureRanch(); placeAt('spire'); }
+  function spireWin() { towerFight(); skipTalk(); if (!B || !B.towerFloor) return false; endBattle('won'); finishBattle(); skipTalk(); return true; }
+  check('Spire road is locked before the ending and open afterward',()=>{
+    ready();S.badges=Object.keys(BADGES);placeAt('league',1,15,'left');tryStep('left');if(S.pos.map!=='league'||!W.msg.includes('Champion ending'))return false;
+    S.story.leagueEnding=true;tryStep('left');return S.pos.map==='spire'&&S.pos.x===17&&S.pos.y===14;
+  });
+  check('Spire exit returns to the league and an active climb cannot walk out',()=>{
+    spireReady();placeAt('spire',17,14,'right');towerState().active=true;tryStep('right');if(S.pos.map!=='spire')return false;
+    towerState().active=false;tryStep('right');return S.pos.map==='league'&&S.pos.x===1&&S.pos.y===15;
+  });
+  check('Tower start is rejected before the ending, outside the Spire, during battle or dialogue',()=>{
+    ready();placeAt('spire');towerStart();if(B||TALK||towerState().active)return false;
+    S.story.leagueEnding=true;placeAt('league');towerStart();if(B||TALK||towerState().active)return false;
+    placeAt('spire');talk([['orla','Wait.']]);towerStart();if(towerState().active)return false;skipTalk();return true;
+  });
+  for(const [floor,level] of [[1,75],[5,79],[10,84],[20,94],[26,100],[30,100],[100,100]])check('Spire floor '+floor+' has level '+level+' and valid evolved trainer partners',()=>{
+    const f=towerFloor(floor);return f.level===level&&f.team.length===3&&f.team.every(id=>SPECIES[id]&&!SPECIES[id].unique&&(!SPECIES[id].evo||SPECIES[id].evo.at>level))&&CAST[f.who];
+  });
+  check('Spire floor bands draw teams from all eight regions',()=>new Set(Array.from({length:30},(_,i)=>towerFloor(i+1).area)).size===8);
+  check('Named regulars return at each tenth floor and their scene uses a valid speaker',()=>{
+    spireReady();return [10,20,30,40].every(n=>{const f=towerFloor(n);return f.who===SPIRE_REGULARS[(n/10-1)%3]&&typeof SPIRE_LINES[f.who]==='string';});
+  });
+  check('Winning pays floor rewards exactly once and saves the best floor',()=>{
+    spireReady();towerStart();skipTalk();const coins=S.coins,lures=S.lures;endBattle('won');towerResult('won');
+    if(S.coins-coins!==towerReward(1,false).coins||S.lures-lures!==2||S.tower.floor!==1||S.tower.best!==1)return false;
+    finishBattle();save();reset();load();return S.tower.best===1&&S.tower.floor===1&&S.tower.active&&towerJournal().includes('Best floor 1');
+  });
+  check('Only every fifth floor heals and pauses for the rest choice',()=>{
+    spireReady();towerState().active=true;
+    for(let i=1;i<=10;i++){towerFight();skipTalk();S.team[0].hp=1;endBattle('won');S.team[0].hp=1;finishBattle();skipTalk();
+      if(i%5===0){if(!S.tower.rest||S.team[0].hp!==stOf(S.team[0]).hp)return false;towerContinue();skipTalk();}
+      else if(S.tower.rest||S.team[0].hp!==1)return false;
+      if(B){B=null;}
+    }return S.tower.best===10;
+  });
+  check('Reloading a fifth-floor rest preserves the choice and heals before continuing',()=>{
+    spireReady();Object.assign(towerState(),{active:true,floor:4,best:4});spireWin();save();reset();load();S.team[0].hp=1;
+    if(!S.tower.rest||!towerPanel().includes('Keep climbing'))return false;towerContinue();skipTalk();return B&&B.towerFloor===6&&!S.tower.rest&&S.team[0].hp===stOf(S.team[0]).hp;
+  });
+  check('Loss ends the climb and preserves previous best and rewards',()=>{
+    spireReady();Object.assign(towerState(),{active:true,floor:7,best:12});towerFight();skipTalk();const coins=S.coins,lures=S.lures;S.team[0].hp=0;endBattle('lost');finishBattle();skipTalk();
+    return !S.tower.active&&!S.tower.rest&&S.tower.floor===0&&S.tower.best===12&&S.coins===coins&&S.lures===lures&&S.pos.map==='spire'&&S.team[0].hp>0&&!S.auto;
+  });
+  check('Leaving a climb keeps rewards and best, clears the run and permits ranch changes',()=>{
+    spireReady();Object.assign(towerState(),{active:true,floor:8,best:8});const coins=S.coins;towerLeave();return S.pos.map==='league'&&!challengeLocked()&&S.tower.floor===0&&S.tower.best===8&&S.coins===coins;
+  });
+  for(const [floor,title] of [[10,'Spire Climber'],[20,'Beacon Companion'],[30,'Lightkeeper']])check('Milestone '+floor+' grants rare food, title and hatchable egg once across reloads',()=>{
+    spireReady();const first=towerMilestone(floor);if(!first||S.food.lanternseed!==2||!S.titles.includes(title)||S.eggs.length!==1||S.eggs[0].child.rar!==2||S.eggs[0].days!==2)return false;
+    save();reset();load();ensureRanch();if(towerMilestone(floor)||S.eggs.length!==1||S.food.lanternseed!==2)return false;
+    newDay(true);if(S.eggs.length!==1)return false;newDay(true);return S.eggs.length===0&&everyone().some(c=>c.rar===2&&c.born.includes('floor '+floor))&&S.titles.filter(t=>t===title).length===1;
+  });
+  check('Auto receives less total coin/lure reward and less XP for the same floor',()=>{
+    function earned(auto){spireReady();S.auto=auto;S.capMode='off';S.team=[newCreature('tidewyrm',75,{rar:4})];towerStart();skipTalk();const coin=S.coins,lure=S.lures;endBattle('won');return {coin:S.coins-coin,lure:S.lures-lure,xp:S.team[0].xp};}
+    const active=earned(false),automatic=earned(true);return active.coin>automatic.coin&&active.lure>automatic.lure&&active.xp>automatic.xp;
+  });
+  check('Turning Auto off during a floor cannot reclaim its manual reward',()=>{
+    spireReady();S.auto=true;towerStart();skipTalk();S.auto=false;const coins=S.coins;endBattle('won');return S.coins-coins===towerReward(1,true).coins;
+  });
+  check('Auto starts the next floor but waits for a fifth-floor rest choice',()=>{
+    spireReady();S.auto=true;Object.assign(towerState(),{active:true,floor:1});towerTick();if(!TALK)return false;skipTalk();if(!B||B.towerFloor!==2)return false;B=null;S.tower.floor=5;S.tower.rest=true;towerTick();return !B&&!TALK;
+  });
+  check('An active climb locks free healing, travel and team swaps',()=>{
+    spireReady();S.team.push(newCreature('bloomcourser',75));towerState().active=true;S.team[0].hp=1;restInTown();travelTo('thornwood');
+    const button=document.createElement('button');button.dataset.act='toranch';button.dataset.arg=S.team[0].uid;document.body.append(button);button.click();button.remove();
+    return S.pos.map==='spire'&&S.team[0].hp===1&&S.team.length===2&&TABS.ranch.build().includes('stays together');
+  });
+  for(const room of [0,1,2,3,4])check('League rematch '+room+' scales tiers, stamps attempts and is once each ranch day',()=>{
+    spireReady();placeAt('league');const b=STORY.find(x=>x.league===room);startLeagueRematch(room);if(!TALK||!TALK.lines.some(([,s])=>s===leagueRematchLines[castKeyOf(b.trainer)]))return false;skipTalk();
+    if(!B||B.rematch!==b.id||B.tier!==1||rematchReady(b.id))return false;endBattle('won');finishBattle();skipTalk();if(S.rematch[b.id]!==1)return false;
+    startLeagueRematch(room);skipTalk();if(B)return false;save();reset();load();placeAt('league');startLeagueRematch(room);skipTalk();if(B)return false;
+    S.day++;startLeagueRematch(room);skipTalk();return B&&B.tier===2&&B.foes.every(u=>u.c.lvl<=100);
+  });
+  check('Losing a league rematch consumes today but does not advance its tier',()=>{
+    spireReady();placeAt('league');startLeagueRematch(4);skipTalk();endBattle('lost');finishBattle();skipTalk();return !rematchReady('leagueChampion')&&rematchTier('leagueChampion')===1;
+  });
+  check('Pre-Champion saves cannot start league rematches',()=>{ready();placeAt('league');startLeagueRematch(0);return !B&&!TALK&&!S.rematchDay;});
+  check('Old Champion save gains safe tower defaults without changing cap, era or creature identity',()=>{
+    spireReady();delete S.tower;const uid=S.team[0].uid,eras=JSON.stringify(S.eras),cap=S.capMode;save();reset();load();return S.tower.best===0&&!S.tower.active&&S.tower.claimed.length===0&&S.team[0].uid===uid&&S.capMode===cap&&levelCap()===75&&JSON.stringify(S.eras)===eras&&S.titles.includes('Champion');
+  });
+  check('Invalid tower fields normalize without unlocking a pre-Champion climb',()=>{ready();S.tower={best:-3,floor:Infinity,active:true,rest:true,claimed:[10,10,'20',-10,7]};const t=towerState();return t.best===0&&t.floor===0&&!t.active&&!t.rest&&t.claimed.join(',')==='10';});
   check('view distance cycles Close, Wide, Far and widens the view (L11)', () => {
     const S = wb.S, was = S.view, seen = [];
     try { S.view = 'near'; const m1 = viewMult(); for (let i = 0; i < 3; i++) { cycleView(); seen.push(S.view); }
@@ -789,7 +897,10 @@ function wildbondChecks() {
     box.querySelector('button').dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
     const ok = JSON.stringify(S.pos) === before && !wb.WK.held.length; wb.WK.held = []; return ok;
   });
-
+  check('Healing changes the team-tab render key so the rest shows full health',()=>{spireReady();S.team[0].hp=1;const before=TABS.team.key();healAll();return TABS.team.key()!==before&&TABS.team.build().includes(S.team[0].hp+'/'+stOf(S.team[0]).hp);});
+  check('Lantern seed uses normal ranch care and cannot create a free shop purchase',()=>{spireReady();const cost=FOODS.lanternseed.cost;S.coins=cost;buyFood('lanternseed',1);ensureCare(S.team[0]);S.team[0].plan={food:'lanternseed',act:'rest'};const before=S.team[0].train.wit||0;newDay(true);return cost>0&&S.coins===0&&S.food.lanternseed===0&&S.team[0].train.wit===before+1;});
+  check('Milestone eggs that hatch during a climb stay on the ranch without changing its team',()=>{spireReady();towerState().active=true;towerMilestone(10);const uid=S.team[0].uid;newDay(true);newDay(true);return S.team.length===1&&S.team[0].uid===uid&&S.ranch.length===1&&S.ranch[0].rar===2;});
+  check('Fleeing a Spire battle ends the climb without awarding the skipped floor',()=>{spireReady();Object.assign(towerState(),{active:true,floor:2,best:2});towerFight();skipTalk();const coins=S.coins;endBattle('fled');finishBattle();skipTalk();return !S.tower.active&&S.tower.floor===0&&S.tower.best===2&&S.coins===coins;});
   // G2 Saltmarsh: inspect the real scene calls, then restore every rendering hook.
   function coastalAir(weather, part, light = true, biome = 'saltmarsh') {
     ready(); S.badges = ['thorn', 'tide']; wb.placeAt(biome); S.ranchT = DAY_SECONDS * part;

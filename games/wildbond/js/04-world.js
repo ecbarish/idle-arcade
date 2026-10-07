@@ -98,7 +98,7 @@ function storyFight(b) {
 }
 function challengeWarden() { if (!B && !TALK && wardenReady() && alive().length) story(gateHere()); }
 function seekElder() { if (!B && !TALK && elderReady() && alive().length) { S.story.elderFled = false; story(STORY[1]); } }
-function restInTown() { if (B || leagueLocked()) { if (!B) W.msg = 'Rest between league rooms; leave the attempt before visiting Larkhaven.'; return; } healAll(); W.msg = 'You rest at the Larkhaven inn. Your team is fully healed.'; }
+function restInTown() { if (B || challengeLocked()) { if (!B) W.msg = 'Rest between league rooms or at the fifth Spire floor; leave the attempt before visiting Larkhaven.'; return; } healAll(); W.msg = 'You rest at the Larkhaven inn. Your team is fully healed.'; }
 function buyLures() { if (B) return; if (S.coins < 50) { W.msg = 'Lures cost 50 coins for 5.'; return; } S.coins -= 50; S.lures += 5; W.msg = 'You buy 5 lures.'; }
 
 /* After a battle: show the result briefly, then clear it. Auto mode keeps exploring on its own. */
@@ -107,6 +107,7 @@ function worldTick(h) {
   if (TALK) return;
   if (B) { battleTick(h);
     if (B && B.over) { W.endT += h; if (W.endT > (S.auto ? 2 : 3.5)) finishBattle(); } return; }
+  if (S.pos && curMap().tower) { towerTick(); if (B || TALK) return; walkTick(h); return; }
   if (S.started) { ensurePos(); walkTick(h); }
   // Auto-explore: your tamer walks the tall grass (12-walk.js); every few seconds they check whether the team needs rest
   if (S.auto) { W.autoT += h; if (W.autoT >= 3) { W.autoT = 0; if (!alive().length || alive().length < S.team.length && alive().some(c => c.hp < stOf(c).hp * 0.3)) restInTown(); } }
@@ -130,7 +131,8 @@ function leagueBeat() { return STORY.find(b => b.league === (!S.story.leagueWren
 function leagueTalk(room) {
   if (B || TALK || !S.pos || !curMap().league || !leagueOpen()) return;
   if (room === 'keeper') { talk([['nelva', leagueLocked() ? 'Your cleared rooms are kept for today. Continue with the same team, or leave this attempt to visit the ranch.' : 'Welcome. There is a dry bench here; take your time before meeting Wren.']], () => { if (!leagueLocked()) { healAll(); save(); } }); return; }
-  if (S.story.leagueChampion) { if (!S.story.leagueEnding) leagueEnding(); else if (room === 'wren') talk([['wren','Champion! Come back to Larkhaven with me sometime. I want to show Maren our notes.']]); else { const who = castKeyOf((STORY.find(b => b.league === room) || {}).trainer) || 'avenne'; talk([[who,'Welcome back, Champion. These roads are still yours to walk. More adventures after the league are coming.']]); } return; }
+  if (S.story.leagueEnding && Number.isInteger(room)) { startLeagueRematch(room); return; }
+  if (S.story.leagueChampion) { if (!S.story.leagueEnding) leagueEnding(); else if (room === 'wren') talk([['wren','Champion! Come back to Larkhaven with me sometime. I want to show Maren our notes.']]); else { const who = castKeyOf((STORY.find(b => b.league === room) || {}).trainer) || 'avenne'; talk([[who,'Welcome back, Champion. These roads are still yours to walk. The Lighthouse Spire and daily league rematches are open.']]); } return; }
   const b = leagueBeat();
   if (!b) { W.msg = 'Return to the entrance for a fresh attempt.'; return; }
   if (leagueState().rest) { talk([['nelva','A quiet rest between courts. Your team is fully healed; take the next room when you are ready.']], () => { healAll(); S.league.rest = false; placeAt('league',7 + S.league.room * 7,9,'up'); save(); }); return; }
@@ -167,11 +169,12 @@ function leagueDefeat() {
 function leagueEnding() { talk(SCENES.leagueEnding,completeLeagueEnding); }
 function completeLeagueEnding() {
   healAll(); S.story.leagueEnding = true; S.titles = S.titles || [];
-  if (!S.titles.includes('Champion')) { S.titles.push('Champion'); slog('Champion of the Returning Light League: the world\'s colour is fully restored. The post-game is coming.'); toast('Title earned: Champion!'); sfx('badge'); }
-  S.league.active = false; placeAt('league',3,14,'down'); W.msg = 'Champion! Your journey is complete. More adventures after the league are coming.'; save();
+  if (!S.titles.includes('Champion')) { S.titles.push('Champion'); slog('Champion of the Returning Light League: the world\'s colour is fully restored. The Lighthouse Spire is open.'); toast('Title earned: Champion!'); sfx('badge'); }
+  S.league.active = false; placeAt('league',3,14,'down'); W.msg = 'Champion! Your journey is complete. The Lighthouse Spire and daily league rematches are open.'; save();
 }
 function leaguePanel() {
+  if (S.story.leagueEnding) return leagueRematchPanel();
   const run = leagueState(), b = leagueBeat();
   return '<div class="explore"><b>Returning Light League</b><p class="msg">' + (W.msg || 'Meet Wren at the gate, then follow the four courts to the Champion terrace.') + '</p><p class="meta">Day ' + (S.day || 1) + ' · ' + Math.min(4,run.room) + '/4 courts cleared. Healing rests between rooms; leaving ends this attempt. Walk with WASD/arrows, or tap a person.</p><div class="acts"><button class="btn gold" data-act="league">' + (S.story.leagueChampion ? S.story.leagueEnding ? 'Greet the Champion' : 'See the ending' : b.league === 'wren' ? 'Meet Wren at the gate' : 'Visit ' + b.title) + '</button><button class="btn alt" data-act="leagueleave">Leave for Farwatch</button></div></div>';
 }
-function leagueJournal() { return '<h4>The Returning Light League</h4><p class="sub">' + (S.story.leagueEnding ? 'Champion. The world\'s colour is fully restored. Wren, Maren and Isolde welcomed your team home. More adventures after the league are coming.' : S.story.leagueChampion ? 'Champion battle won. Return to the league to see the ending.' : S.story.leagueWren ? 'Wren\'s last gate battle is won. Today: ' + Math.min(4,leagueState().room) + '/4 courts cleared; the Champion waits beyond them.' : 'Eight badges open the league road from Farwatch. Wren waits at the gate.') + '</p>'; }
+function leagueJournal() { return '<h4>The Returning Light League</h4><p class="sub">' + (S.story.leagueEnding ? 'Champion. The world\'s colour is fully restored. Wren, Maren and Isolde welcomed your team home. The Lighthouse Spire and daily league rematches are open.' : S.story.leagueChampion ? 'Champion battle won. Return to the league to see the ending.' : S.story.leagueWren ? 'Wren\'s last gate battle is won. Today: ' + Math.min(4,leagueState().room) + '/4 courts cleared; the Champion waits beyond them.' : 'Eight badges open the league road from Farwatch. Wren waits at the gate.') + '</p>'; }

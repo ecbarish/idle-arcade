@@ -113,7 +113,7 @@ The Beacon Badge opens the descending ferry path. Rain can last for days, then s
 becomes audible. Boat families leave landing space for wild creatures. People know the water by what moves beneath
 it and make room for neighboring livelihoods rather than treating the basin as an obstacle to drain.
 
-The walkable basin has reed-grass banks around water channels, raised board crossings, a ferry landing and an orchard.
+The walkable basin has reed-grass banks around water channels, raised board crossings, a ferry landing and an orchard. The landing now has a reachable wooden jetty, a moored reed-green skiff with pale bench seats and an oar, and a water-edge sign asking visitors to keep space for small creatures (W7, 2026-10-07). Both channel crossings show their boards in every art era; the skiff is scenery, with no new travel system.
 Its west exit returns to Cloudglass; the route has two friendly trainers and three supplies to find. **Evren**, an
 orchard keeper, leaves fallen fruit for the herd before filling baskets. **Tavil**, a ferry rope-mender, values a
 sound knot that still opens and promises a ride even to the losing team.
@@ -317,6 +317,34 @@ explain the original fading, Toren's warm stones, or the guardians' origins. The
 are permanent and recorded in the Journal. The cap remains 75 with all eight badges; the road to 100 and Modern
 3D remain W3/W6, with a gentle message that more adventures after the league are coming. A reload after the
 Champion result can resume the ending, and repeated visits never duplicate the title.
+
+## Post-game canon: the Lighthouse Spire (T31 / W3 part 1)
+
+After the league ending, a dry west path from the league reaches **the Lighthouse Spire**, a coastal training
+terrace watched by keeper **Orla**. It does not explain the fading or replace the league ending. Orla counts
+partners before floors: every fifth floor offers water, healing and a choice to continue or leave with rewards.
+The same team climbs together. Losing or fleeing ends the climb; its best floor stays in the Journal.
+
+Floor themes draw on all eight areas: the early roads for floors 1–10, the middle routes for 11–20 and the last
+two areas from 21 onward. Trainer levels follow min(100, 74 + floor). **Selven**, **Niva** and **Brannic** return
+at tenth-floor intervals, remembering route sketches, listening and watching for a tired partner. They are
+friendly regulars rather than another set of Wardens. The walkable terrace uses the current coastal palette,
+art era and the league's original tune.
+
+Floor victories give coins and lures. Ten-floor milestones give two **Lantern seed** (ordinary Wits food), a
+rare regional creature egg that hatches after two ranch days, and a title: **Spire Climber** at 10,
+**Beacon Companion** at 20 and **Lightkeeper** at 30. Each milestone is claimed once per save; later tens have
+their own floor title. Eggs can share the barn's hatch queue, and hatchlings stay on the ranch during a climb.
+The seed can also be bought for 90 coins through existing food controls; it has no special stat multiplier.
+
+Edrin, Maela, Corven, Liora and Avenne each offer one higher-tier rematch per ranch day after the ending. An
+attempt is counted when the battle starts, including a loss or reload. Wren's last gate battle remains a
+story milestone. The Champion title and colour restoration remain permanent.
+
+Existing badge caps are unchanged. Soft-cap growth still slows above 75, hard cap still stops at 75, and the
+Journal's existing No cap choice grows freely toward 100. Auto earns 60% of each floor's coins, one lure instead
+of two, and the existing reduced Auto XP; it pauses at the five-floor rest choice. Milestone gifts are the same
+for everyone. Roaming legendaries and Modern 3D remain future work.
 
 ## Open questions
 

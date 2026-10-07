@@ -260,6 +260,18 @@ function paintTile(c, ch, X, Y, s, P, t, gx, gy, fine) {
     case '.': case 'N': case 'S': case 'E': case 'W': R(0, 0, 8, 8, P.path); R(v(1), v(4), 1, 1, P.pathDk); if (fine) R(v(7), v(10), 1, 1, P.pathLt); break;
     case '_': R(0, 0, 8, 8, P.sand); R(v(1), v(4), 1, 1, P.sandDk); if (fine) R(v(9), v(12), 1, 1, '#fff6d8'); break;
     case '~': { R(0, 0, 8, 8, P.water); const k = mo ? Math.floor(t * 1.5 + v(3)) % 8 : v(3); R(k, 1 + v(6) % 5, 2, 1, P.waterLt); if (fine) R((k + 4) % 8, 6, 1, 1, P.waterLt); break; }
+    case 'b': // raised boards: wet sides, pale grain and nail heads
+      R(0, 0, 8, 8, '#604b34');
+      for (let y = 0; y < 8; y += 2) { R(0, y, 8, 1.5, '#a17b4e'); R(0, y, 8, .4, '#c7a475'); if (fine) { R(1, y + .8, .5, .5, '#503d2c'); R(6.5, y + .8, .5, .5, '#503d2c'); } }
+      break;
+    case 'j': // an open reed-green skiff, moored toward the landing to the south
+      R(0, 0, 8, 8, P.water); R(.5, 6, 7, 1, P.waterLt);
+      R(2, 1, 4, 1, '#344c3f'); R(1, 2, 6, 4, '#344c3f'); R(2, 6, 4, 1, '#344c3f');
+      R(2, 2, 4, 4, '#ae8553'); R(2, 2, 4, .5, '#d8b982');
+      R(2, 3, 4, .7, '#e0c28e'); R(2, 5, 4, .7, '#e0c28e');
+      R(6, 1, .5, 5, '#cfa96d'); R(5.5, .5, 1.5, 1, '#e0c28e');
+      R(3.5, 6.5, .5, 1.5, '#ded2a7'); if (fine) { R(1, 2, .5, 4, '#57745b'); R(5, 6, 1, .5, '#182d31'); }
+      break;
     case 'o': grass(); R(0.5, 0.5, 7, 7, '#d98a52'); R(1, 1, 6, 6, '#f0b070'); { const k = mo ? (t * 2 + v(3)) % 4 : 1; R(2 + v(5) % 3, 4 - k, 1, 1, 'rgba(255,255,255,.7)'); } break;
     case '"': grass(); R(0, 4, 8, 4, P.tallDk);
       for (let i = 0; i < 4; i++) { const sw = mo ? Math.round(Math.sin(t * 2 + gx * 0.9 + i)) * 0.5 : 0, x = 0.5 + i * 2;
@@ -273,7 +285,7 @@ function paintTile(c, ch, X, Y, s, P, t, gx, gy, fine) {
     case '#': R(0, 0, 8, 8, '#eadfc4'); R(0, 7, 8, 1, '#b8a888'); if (v(1) % 2) { R(2, 2, 4, 3, '#6aa0c8'); if (fine) R(2, 2, 4, 1, '#a8d0ea'); } break;
     case 'D': R(0, 0, 8, 8, '#eadfc4'); R(2, 1, 4, 7, '#7a4a2a'); R(5, 4, 1, 1, '#f2d24a'); if (fine) R(2, 1, 4, 1, '#5a3418'); break;
     case '=': grass(); R(0, 3, 8, 1, '#a0703a'); R(0, 5, 8, 1, '#a0703a'); R(0, 2, 1, 5, '#7a5028'); R(7, 2, 1, 5, '#7a5028'); break;
-    case 'P': grass(); R(3.5, 4, 1, 4, '#6b4a2a'); R(1, 1, 6, 3.5, '#a0703a'); R(1.5, 1.8, 5, 0.5, '#6b4a2a'); R(1.5, 3, 4, 0.5, '#6b4a2a');
+    case 'P': case 'q': if (ch === 'q') R(0, 0, 8, 8, P.water); else grass(); R(3.5, 4, 1, 4, '#6b4a2a'); R(1, 1, 6, 3.5, '#a0703a'); R(1.5, 1.8, 5, 0.5, '#6b4a2a'); R(1.5, 3, 4, 0.5, '#6b4a2a');
       if (fine) { R(1, 1, 6, 0.5, '#c8985a'); R(1, 4, 6, 0.5, '#5a3a1e'); } break;
     default: grass();
   }

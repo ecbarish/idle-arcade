@@ -120,3 +120,9 @@ Wildbond and parked games are unchanged. Please review without automatic merging
 ## Main integration update — 2026-10-06
 
 Integrated main `e4c10f6` after T12 merged. Claude moved zone lore into `#zoneLore`; the two browser scenario selectors now follow that element. No gameplay changes were made in this integration. The earlier 231 browser/236 DOM passes above predate this integration. A fresh run was attempted, but the temporary Chromium and jsdom installations were no longer present; rerun `tests/run.html` on the desktop before approving the chapter. JavaScript syntax checks passed.
+
+## G2 Frostmere lighting pass (2026-10-07)
+
+Realmbound v1.0.1 treats the winter road as clear cold air above low snow haze. Blue mountain and pine layers separate from the snowy foreground; cool sky and snow bounce light tint the shadows. The road and outdoor hub use the same Frostmere profile, with less grading and softer shafts so warm night fires and windows remain visible. Weather still thickens the haze, dawn still brings mist, and the existing shared clock directs every shadow. Interiors, other zones, dungeons, encounters and saves retain their existing behavior.
+
+Before/after captures in `docs/screenshots/frostmere-{before,after}-noon.png` and `frostmere-{before,after}-town-night.png` use a level-35 Concord traveler at 1366x768, fixed noon/night and weather, with reduced motion. These are review evidence, not game assets. The G2 project remains open for other zones.

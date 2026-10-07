@@ -161,7 +161,7 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   `window.__wb` on http://localhost:8765/games/wildbond/, walk north out of Emberfall, and make sure the pass, its
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
-- [ ] T31 open for ChatGPT on `codex/wildbond-postgame` (W3 part 1).
+- [x] T31 merged 2026-10-07 by Claude (Wildbond v1.3.0, 1176 checks).
 - [x] T30 merged 2026-10-07 by Claude (1120 Wildbond checks; full league run played through to the Champion title).
 
 ### T31: Wildbond post-game, part 1: the Lighthouse Spire and league rematches (W3)

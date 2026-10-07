@@ -1,0 +1,45 @@
+{
+  "id": "./",
+  "name": "Idle Arcade",
+  "short_name": "Idle Arcade",
+  "description": "Small, growing adventure and progression games. Play at your own pace.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#111626",
+  "theme_color": "#111626",
+  "icons": [
+    {
+      "src": "icons/arcade-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/arcade-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/arcade.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Wildbond",
+      "url": "games/wildbond/index.html"
+    },
+    {
+      "name": "Realmbound",
+      "url": "games/realmbound/index.html"
+    },
+    {
+      "name": "Starfall Guild",
+      "url": "games/starfall-guild/index.html"
+    }
+  ]
+}

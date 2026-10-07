@@ -39,12 +39,23 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
-- **Wildbond v1.2.1 (2026-10-07)** — **Saltmarsh Coast lighting:** lower, thinner sea mist, blue-and-sand bounce light, gentler shafts and a softer colour grade in the lit art eras. Paths stay clearer in mist; other areas keep their original lighting.
+- **Wildbond v1.3.1 (2026-10-07)** — **Saltmarsh Coast lighting:** lower, thinner sea mist, blue-and-sand bounce light, gentler shafts and a softer colour grade in the lit art eras. Paths stay clearer in mist; other areas keep their original lighting.
+
+- **2026-10-07** — **Offline play always stays up to date.** The installable arcade now loads the newest version
+  whenever you're online and uses its saved copy only without internet (or on a very slow connection), so updates
+  never get stuck. The homepage header now has What to try, Credits and Install together.
+- **Wildbond v1.3.0 (2026-10-07)** — **The Lighthouse Spire:** Champions climb themed trainer floors from level 75 to 100, rest every five floors, and keep a best-floor record. Coins and lures each floor; once-only ten-floor milestones give Lantern seed, titles and rare ranch eggs. Auto earns less and waits at rest choices. All five league trainers offer one rematch per ranch day. Existing badge caps and saves stay intact.
 
 - **2026-10-07** — **Wildbond: see more of the world.** A new **View** button (or the V key) switches between Close,
   Wide and Far, so a big monitor shows more of the map instead of bigger tiles; desktops and ultrawides start on Wide,
   phones on Close. Works in every art style. Also: arrow keys inside the Feedback menu no longer walk your tamer.
 - **Wildbond v1.2.0 (2026-10-07)** — **The Returning Light League**, the story finale after all eight badges: Wren at the gate, four themed courts with healing rests, Champion Avenne, and a homecoming with Wren, Maren, Isolde and the guardians. Earn the Champion title and record the fully restored colour in the Journal. Cleared courts survive losses and reloads for the current ranch day; leaving ends the attempt. Post-game adventures remain future work.
+- **Wildbond v1.1.1 (2026-10-07)** — **Stillreed ferry landing:** visible raised board crossings, a moored reed-green skiff and a landing sign in every art era. The jetty is walkable, the boat stays moored, and existing routes, trainers and saves keep working. W7 town interiors remain to do.
+
+- **Realmbound v1.0.1 (2026-10-07)** — **Frostmere winter light:** low snow haze on the road and in its walkable hubs, cooler reflected light and clearer blue mountain layers. Warm night fires and windows remain visible; dawn, weather and the shared day/night shadows still shape the scene.
+- **Arcade v1.0.1 (2026-10-07)** — **What to try (F4):** the homepage links to short version-stamped playtest routes for Wildbond and Realmbound, with optional prototype checks and feedback links. New players and existing saves have separate starting points. See [playtest notes](playtest.html) and [maintainer guide](docs/playtesting.md).
+- **Arcade v1.0.1 (2026-10-07)** — A Credits page linked from the hub thanks the contributors and lists the ten font families and three.js used by the arcade. CREDITS.md records sources and usage; full third-party notices are included under licenses/. The page works without JavaScript.
+- **Arcade v1.1.0 (2026-10-07)** — **Install and offline play (L5):** the hub prepares all four games for offline use and offers installation when supported. Updates wait for open arcade tabs to close; saves stay in the browser. External fonts fall back locally, and offline Wildbond uses HD-2D when three.js is unavailable. See [offline guide](docs/offline.md) and [browser checks](tests/offline.html).
 
 - **2026-10-10** — **Save doctor** in the Studio: pick a game to see its save at a glance (heroes, team, badges, coins),
   a health check that spots broken values (an empty level, negative coins, a missing current hero) with a one-click

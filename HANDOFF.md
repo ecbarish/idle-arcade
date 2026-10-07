@@ -24,6 +24,9 @@ header; keep both in step. To release:
 - Load an old save in each changed game to confirm it still works.
 - Check each changed game at phone width (375 px).
 - Add a README changelog entry headed with the version, and a dated START-HERE session-log line.
+- Update `playtest.html` with a short version-stamped route for the release; retain older routes and anchors.
+  Follow `docs/playtesting.md`.
+- Offline play (L5) needs nothing at release: the worker loads the newest files whenever there is internet (docs/offline.md).
 - Optionally tag the release in git (`git tag vX.Y.Z`).
 
 ## Shared development notes

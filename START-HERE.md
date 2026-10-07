@@ -46,7 +46,7 @@ faded start, explained in the intro) → Pixel/16-bit → HD-2D (on the shared w
 weather with a Journal forecast, thunderstorms, living ambience and regional battle backdrops; visible wild
 creatures; ranch and breeding; challenge modes with ranch pennants, rematches, area mastery; music, effects and rain
 sounds. T30 adds the Returning Light League, Wren's gate battle, four courts and Champion Avenne, with a
-Champion title and the colour-restoration ending (v1.2.0; merged). Saltmarsh lighting v1.2.1 is complete on `codex/wildbond-saltmarsh-light` (PR #38 awaiting review). Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
+Champion title and the colour-restoration ending (v1.2.0; merged). T31/W3 part 1 adds the Lighthouse Spire and daily league rematches (v1.3.0, merged); Stillreed has a walkable ferry landing (W7). Saltmarsh lighting v1.3.1 is ready in PR #38. Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
 
 **Realmbound** (classic-MMO idle, flagship): levels 1-60 across eight zones, five classes with three talent trees
 each, five 5-person dungeons, the 10-person raid **The Hollow Throne** (opened by the Hollow Key; guild adventurers
@@ -66,6 +66,8 @@ parked for new features. **Hub and promo pages:** `index.html`, `promo.html`, `p
 **Parked:** Diamond Career (baseball), Otherworld (side lane: structural and polish tasks only), Primordial (back
 burner). Plans in `docs/plans/`.
 
+**Merged:** G2's Frostmere lighting pass (Realmbound v1.0.1): low snow haze, cool reflected light and blue mountain layers. Other G2 zones remain open.
+
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
 **The master list is `docs/PROJECTS.md`** (every outlined project, sizes, dependencies, claims, the launch track);
@@ -82,14 +84,13 @@ rain sounds; walkable Realmbound towns.
    walk into; then a walkable guild hall for Starfall Guild.
 3. ~~**T29: Wildbond area 7, Sunthread Commons**~~ (Codex; data) — done by ChatGPT, merged by Claude 2026-10-10 (branch `codex/wildbond-sunthread`): levels 62-68; ticket in
    `docs/ROADMAP.md`, "T29".
-4. **Wildbond's ending:** W1 is merged; T30/W2, the league and Champion, is merged. T31/W3 part 1 (tower and daily league rematches) is complete on `codex/wildbond-postgame`, PR #37 awaiting review. Next: later post-game parts; contests and races; the Modern 3D era.
+4. **Wildbond's ending:** W1 and T30/W2 are merged. T31/W3 part 1, the Lighthouse Spire and daily league rematches, is merged (v1.3.0). Next: roaming legendaries (W3 part 2), contests and races, and the Modern 3D era.
 5. **Realmbound next:** members' personal stories in the guild; battlegrounds (faction rivalry, the raid's closing
    hook); a second raid tier later.
+   **G2:** Frostmere is merged; Saltmarsh is ready for review (complete, PR #38 awaiting review; Wildbond v1.3.1); pick another zone for the next lighting PR.
 6. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines (a living scene on the
    ambience kit, shared sound, dialogue and creature art, a taste of each game). Build it once the games are further
    along.
-
-**G2 lighting:** Saltmarsh Coast is complete on `codex/wildbond-saltmarsh-light` (PR #38); the Frostmere pass is also awaiting review (PR #32). Pick another area for the next lighting pass.
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
@@ -110,7 +111,15 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
-- 2026-10-07 Codex: G2 Saltmarsh lighting complete on `codex/wildbond-saltmarsh-light`, PR #38 awaiting review; no merge. Wildbond v1.2.1; low sea mist, coastal bounce light and softer shafts. All four browser pages pass (Wildbond 1141, Realmbound 1519, Starfall 48, sound 21), saves/hub restored. Before/after screenshots, four widths, Low/High, reduced motion, five eras and a main-save reload verified. Keep the newer version if integrating postgame PR #37 first.
+- 2026-10-07 Codex: merged main 3e7a078 into `codex/wildbond-saltmarsh-light` (PR #38); preserved all six merged projects and Claude's online-first worker unchanged. Wildbond patch version is now 1.3.1. Saltmarsh checks and main's checks are both retained; refreshed screenshots and reran browser pages before pushing. No merge into main.
+
+- 2026-10-07 Claude: merged six ChatGPT branches: T31 post-game (Spire + league rematches, v1.3.0), W7 ferry landing,
+  G2 Frostmere lighting, F4 playtest notes, L6 credits, L5 offline. **Changed L5 to online first** (sw.js: network
+  first with a 4 s fallback to the kept copy, no `CACHE_VERSION` bumps, takes over at once; docs/offline.md says why).
+  Hub header combines What to try, Credits and Install. playtest.html gained a v1.3.0 Wildbond route. All pass:
+  Wildbond 1176, Realmbound 1534, Starfall 48, sound 21, offline 15. The browser pane can't run service workers, so
+  the live install is unchecked: on the site, the hub should say "Ready for offline play".
+- 2026-10-07 Codex: T31/W3 part 1 complete on `codex/wildbond-postgame` (PR #37), awaiting review, no merge. Wildbond v1.3.0; Spire, safe persistent rewards/eggs, daily league rematches. All four browser pages pass; real 30-floor command-driven max-level climb completed, all five art styles (including actual 3D) and four screen sizes checked. Preserved Claude’s wider view/feedback keyboard changes. Next: review pending PRs; W3 roaming legendaries remains open.
 
 - 2026-10-07 Claude: Wildbond view distance (L11: `VIEWS`, `viewMult()`, `cycleView()` in 06-scene.js; header button
   and V key; `S.view` optional, no `fresh()` change so T31 merges cleanly); feedback menu keys no longer walk. 1123
@@ -120,6 +129,7 @@ a default so work never waits.
   `codex/wildbond-postgame`. **Next for Claude:** W9 baby-forms design, or the wider walkable view (L11).
 - 2026-10-07 Codex: T30/W2 complete on `codex/wildbond-league`, awaiting PR review; no merge. Returning Light League, Wren, four courts, Avenne and the colour-restoration homecoming; Champion title, daily progress and reload recovery, v1.2.0. All four pages pass: Wildbond 1120, Realmbound 1519, Starfall 48, sound 21; saves/hub restored. Phone/laptop/desktop/3440x1440 and five eras checked.
 
+- 2026-10-07 Codex: G2 Frostmere lighting ready for review on `codex/realmbound-frostmere-light`; no merge. Realmbound v1.0.1; low snow haze, cool bounce and blue distant layers. Four browser pages pass: Realmbound 1534, Wildbond 1044, Starfall 48, sound 21; saves/hub restored. Dawn/noon/night/blizzard, hubs, High/Low, reduced motion and 375/1366/1920/3440 widths checked; save reloaded. Before/after captures in `docs/screenshots/`. Claude's league retry investigation is untouched.
 - 2026-10-10 Claude: E3 save doctor in studio.html (summary, health check with fixes, searchable editor; per-game
   rules in `DOCTOR`, labels in `LABELS`; backs up before writing). **Next:** review T30 when it lands; W9 design or
   the wider walkable view (L11).
