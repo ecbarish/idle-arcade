@@ -33,7 +33,10 @@ Object.assign(CAST, {
   evren: { name: 'Evren', skin: '#d4a27a', hair: 'bun', hairCol: '#493a2c', shirt: '#6c8650', bg: '#e0dfb9', title: 'Orchard keeper' },
   tavil: { name: 'Tavil', skin: '#946749', hair: 'short', hairCol: '#b8b49a', shirt: '#5a7d85', bg: '#d0dfd5', title: 'Ferry rope-mender' },
   veslin: { name: 'Veslin', skin: '#b28162', hair: 'bun', hairCol: '#5c4f4b', shirt: '#9e986d', bg: '#dadcc4', title: 'Bell keeper' },
-  narro: { name: 'Narro', skin: '#deb798', hair: 'short', hairCol: '#393d48', shirt: '#69808d', bg: '#cedbdf', title: 'Cave surveyor' }
+  narro: { name: 'Narro', skin: '#deb798', hair: 'short', hairCol: '#393d48', shirt: '#69808d', bg: '#cedbdf', title: 'Cave surveyor' },
+  mirel: { name: 'Mirel', skin: '#c79975', hair: 'bun', hairCol: '#55412e', shirt: '#b39255', bg: '#e9e3bc', title: 'Shelter mender' },
+  aldren: { name: 'Aldren', skin: '#8f6145', hair: 'short', hairCol: '#c5af7c', shirt: '#738e72', bg: '#dce8c8', title: 'Gathering runner' },
+  pell: { name: 'Pell', skin: '#c4956c', hair: 'hat', hairCol: '#796b58', hatCol: '#7a684c', shirt: '#aa895b', bg: '#e8dec0', title: 'Traveling peddler' }
 });
 
 const MAPS = {
@@ -263,13 +266,13 @@ const MAPS = {
     'R,,,.,,""",,,,,......,,,,"".,R',
     'R,,,............,,,,,,,,"""."R',
     'R,,",.,,RRRRR,,",,R_RR,,,"".,R',
-    'W.....,,RRRRR,""",R__R,,,,"..R',
+    'W.....,,RRRRR,""",R__R,,,,"..E',
     'R"""""",RRRRR"""""R__R,,RRR,,R',
     'R""""",,,RRR,,""",RRRR,,RRR,,R',
     'R,,",,,,,,,,,,,",,,,,,,,,,,,,R',
     'RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR'
   ],
-  exits: { W: { to: 'stillreed', x: 28, y: 9, dir: 'left' } },
+  exits: { W: { to: 'stillreed', x: 28, y: 9, dir: 'left' }, E: { to: 'sunthread', x: 1, y: 9, dir: 'right', locked: 'The gathering trail requires the Echo Badge. Listen to your partners before joining Sunthread Commons.' } },
   signs: {
     '7,5': 'Hollowecho Hills. West: Stillreed Basin. Ring the hamlet bell before dusk; answer a returning team before choosing your next passage.'
   },
@@ -327,5 +330,181 @@ const MAPS = {
     }
   ],
   wardenDone: 'Keep listening, {name}. A careful return matters more than a perfect map.'
+},
+  sunthread: {
+  "name": "Sunthread Commons",
+  "biome": "sunthread",
+  "start": [
+    1,
+    9,
+    "right"
+  ],
+  "warden": [
+    24,
+    5
+  ],
+  "rows": [
+    "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+    "T,,,,,,,,,,,,,,,,,,rrrrrrrr,,T",
+    "T,,\"\"\"\",f,T,,\"\"\",,,rrrrrrrr,,T",
+    "T,\"\"\"\"\"f,TT,\"\"\"\"\",,########,,T",
+    "T,\"\"\"\"\",,f,f,\"\"\"\"\"_________P,T",
+    "T,,\"\"\",,,,,,,,\"\"\"P__________,T",
+    "T,,,,,.......,,,,,,.........,T",
+    "T,,,,,.,,,,,.,,,,,,.,,,,,,,f,T",
+    "T,,,,,.,,,,,.....f..,,,,,T,,,T",
+    "W......,,,,,,,,,,,f,f,T,T,,,,T",
+    "T,,\"\"\"\"\"===,,,,,,,,,,\"\"\"\"\"\"T,T",
+    "T,\"\"\"\"\"\",,,,,,====,,\"\"\"\"\"\"\",,T",
+    "T,,,\"\"\",,,,,,,,,,,,,,,\"\"\"\",,,T",
+    "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
+  ],
+  "exits": {
+    "W": {
+      "to": "hollowecho",
+      "x": 28,
+      "y": 9,
+      "dir": "left"
+    }
+  },
+  "signs": {
+    "17,5": "Sunthread Commons. West: Hollowecho Hills. Follow the winding meadow path to the gathering; leave the nursery beds and resting partners room.",
+    "27,4": "The meeting hall welcomes every team. When the wind rises, bring loose shelter ties here and let the youngest creatures rest."
+  },
+  "items": [
+    {
+      "id": "st1",
+      "at": [
+        3,
+        4
+      ],
+      "give": {
+        "grain": 8
+      }
+    },
+    {
+      "id": "st2",
+      "at": [
+        14,
+        10
+      ],
+      "give": {
+        "lures": 6
+      }
+    },
+    {
+      "id": "st3",
+      "at": [
+        26,
+        11
+      ],
+      "give": {
+        "berries": 8
+      }
+    }
+  ],
+  "npcs": [
+    {
+      "who": "mirel",
+      "at": [
+        8,
+        6
+      ],
+      "dir": "down",
+      "trainer": {
+        "sight": 2,
+        "team": [
+          [
+            "clovercolt",
+            64
+          ],
+          [
+            "hemglow",
+            65
+          ]
+        ],
+        "win": [
+          [
+            "mirel",
+            "Beautifully shared. My little Hemglow still has enough light to guide the late arrivals."
+          ]
+        ],
+        "after": [
+          [
+            "mirel",
+            "We mend one tie at a time. Clovercolt holds the cord; Hemglow shows me where it has frayed."
+          ]
+        ]
+      },
+      "lines": [
+        [
+          "mirel",
+          "A friendly battle while the next shelter dries? Every partner gets a useful turn."
+        ]
+      ]
+    },
+    {
+      "who": "aldren",
+      "at": [
+        19,
+        7
+      ],
+      "dir": "left",
+      "trainer": {
+        "sight": 2,
+        "team": [
+          [
+            "pennantlark",
+            65
+          ],
+          [
+            "hearthrunner",
+            66
+          ],
+          [
+            "ribbonstride",
+            67
+          ]
+        ],
+        "win": [
+          [
+            "aldren",
+            "Well played! A quick runner and a steady helper can both carry a team."
+          ]
+        ],
+        "after": [
+          [
+            "aldren",
+            "Ribbonstride collects loose ribbons after the gusts. Hearthrunner dries them under the bench. I mostly untangle them."
+          ]
+        ]
+      },
+      "lines": [
+        [
+          "aldren",
+          "The hall is nearly ready. Shall our teams try a battle before we carry the last benches over?"
+        ]
+      ]
+    },
+    {
+      "who": "pell",
+      "at": [
+        21,
+        4
+      ],
+      "dir": "down",
+      "lines": [
+        [
+          "pell",
+          "Just passing through! I have sold a lantern to every hero who ever needed one. Brisket says that cannot possibly be true."
+        ],
+        [
+          "pell",
+          "Today I am keeping the shelter ties in one place. Brisket has found the shade. A gathering runs better when everyone knows their job."
+        ]
+      ]
+    }
+  ],
+  "wardenDone": "There is a place for your whole team here, {name}. Remember the names of those who helped you."
 }
 };

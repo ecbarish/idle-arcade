@@ -47,6 +47,10 @@ weather with a Journal forecast, thunderstorms, living ambience and regional bat
 creatures; ranch and breeding; challenge modes with ranch pennants, rematches, area mastery; music, effects and rain
 sounds. Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
 
+**T29 ready for review:** `codex/wildbond-sunthread` adds Sunthread Commons (62–68), nine species, Wren's
+gathering rematch, Meadowmantle, Warden Halen and the Loom Badge (cap 70). A connected meadow map, two trainers,
+Pell at the gathering, three supplies, weather, original music and battle scenery.
+
 **Realmbound** (classic-MMO idle, flagship): levels 1-60 across eight zones, five classes with three talent trees
 each, five 5-person dungeons, the 10-person raid **The Hollow Throne** (opened by the Hollow Key; guild adventurers
 from any hero can join), pets, mounts, companions, earned addons, quest givers in portrait scenes, music, effects and
@@ -79,7 +83,7 @@ rain sounds; walkable Realmbound towns.
 2. **S4 part 2: the world kit** (Claude) — mostly done 2026-10-09: Wildbond walks on `World.walker`; Wildclan camps and Thornvale's Abbey; the walkable guild hall. **Left:** a walkable guild hall for Starfall Guild; more hub variety (a layout per zone). Originally: move Wildbond's walking (12-walk.js) onto `World.walker` (its 769 checks
    guard it); a layout per Realmbound hub (Wildclan camps, Thornvale's abbey); the guild hall as an interior you
    walk into; then a walkable guild hall for Starfall Guild.
-3. **T29: Wildbond area 7, Sunthread Commons** (ChatGPT; data) — **sent to ChatGPT 2026-10-09** (branch `codex/wildbond-sunthread`): levels 62-68; ticket in
+3. ~~**T29: Wildbond area 7, Sunthread Commons**~~ (Codex; data) — **done, awaiting Claude's review, 2026-10-07** (branch `codex/wildbond-sunthread`): levels 62-68; ticket in
    `docs/ROADMAP.md`, "T29".
 4. **Wildbond's ending:** area 8 (66-72), then the league and the Champion (around 72-75), the post-game (battle
    tower, legendaries, the road to 100); contests and races; the Modern 3D era.
@@ -116,6 +120,10 @@ a default so work never waits.
   (linked from AGENTS.md, CLAUDE.md, here); built G1, the light engine (`shared/light.js`) in Realmbound (side view,
   towns, hall) and Wildbond (HD-2D, ambience). Tests: Realmbound 1519, Wildbond 769, Starfall 48, sound 21.
   **Next:** G2 zone lighting passes (any assistant, one zone per PR), review T29, then W1/W2 or R3 (see PROJECTS.md).
+- 2026-10-07 Codex: T29 complete on `codex/wildbond-sunthread`, awaiting review, no merge. Sunthread/Halen/Loom/
+  Meadowmantle are canon; no caps, eras, journey settings or shared-engine changes. Browser checks: Wildbond 908,
+  Realmbound 1513, Starfall 48, sound 21, all pass; saves/hub restored. Map and backdrop desktop/phone checked.
+
 - 2026-10-09 Claude (later): S4 part 2: Wildbond's walking on the shared walker; Wildclan camps (tents, firepit,
   torches, totem), Thornvale's Abbey; the guild hall interior with members, favors, chest and jobs board. Tests:
   Realmbound 1513, Wildbond 769, Starfall 48. **Next:** review T29 (Sunthread) when it lands; Starfall's walkable hall.

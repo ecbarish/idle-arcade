@@ -47,6 +47,12 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
   Ashen Ridge, cloud in Cloudglass Pass) with light scattering through it, low sun throws light shafts, the colour of
   the hour grades every scene, and bright lights bloom softly. Realmbound's header has a Graphics High/Low button.
   Also new: `docs/PROJECTS.md`, the master list of everything planned, and `docs/CREATIVE.md`, the ground rules.
+- **2026-10-07** — Wildbond area 7: Sunthread Commons (62–68), reached from Hollowecho Hills with the Echo Badge.
+  Nine new species, Clovercolt evolving into Bloomcourser at 64, Wren's gathering rematch, Meadowmantle guarding
+  the nursery, and Warden Halen's Loom Badge (cap 70). Winding meadow paths, a meeting hall, two route trainers,
+  three supplies and Pell visiting the gathering; clear mornings and sudden rain, an original zone tune, and
+  meadow hills with drifting leaves behind battles.
+
 - **2026-10-09 (later)** — **Realmbound's hubs get their own character.** Wildclan hubs are now camps: hide tents
   around a great firepit with real flames and smoke, torches, a palisade and a painted totem (the Longhouse, Forge,
   Guild lodge and Corral). Thornvale's inn is the Abbey, with a bell tower. **You can walk into your guild hall:** a
