@@ -4,6 +4,25 @@
    note per token, '.' = rest. */
 const SND = { ac: null, out: null, next: 0, step: 0, track: null };
 const TRACKS = {
+  // Original four-bar loops; each group of eight tokens is one bar.
+  // Larkhaven: C major, gentle steps home over C–Am–F–G.
+  larkhaven: { bpm: 88, mel: 'G4 . E5 G5 E5 . D5 . C5 . E5 . A4 G4 E4 . F4 . A4 C5 A4 . G4 . D5 . B4 G4 D5 B4 G4 .',
+    bass: 'C3 . G3 . C3 . G3 . A2 . E3 . A2 . E3 . F2 . C3 . F2 . C3 . G2 . D3 . G2 . D3 .' },
+  // Emberfall: G major, rising phrases with room for the highland air.
+  emberfall: { bpm: 116, mel: 'G4 D5 G5 . B5 A5 G5 . E5 . G5 B5 A5 G5 E5 . C5 E5 G5 . A5 G5 E5 C5 D5 F#5 A5 . G5 F#5 D5 .',
+    bass: 'G2 . D3 G3 G2 . D3 . E3 . B2 E3 E3 . B2 . C3 . G2 C3 C3 . G2 . D3 . A2 D3 D3 . A2 .' },
+  // Cloudglass: D major, suspended phrases and open space above the pass.
+  cloudglass: { bpm: 90, mel: 'A5 . . F#5 E5 . D5 . B4 . F#5 . A5 . . . G5 . E5 D5 E5 . A4 . C#5 . E5 . A5 G5 E5 .',
+    bass: 'D3 . . A3 . . D3 . B2 . . F#3 . . B2 . G2 . . D3 . . G2 . A2 . . E3 . . A2 .' },
+  // Wardens: A minor, a firm march resolving through E back to A.
+  warden: { bpm: 180, mel: 'A4 E5 A5 C6 B5 A5 E5 . F5 A5 C6 A5 G5 F5 E5 D5 G5 D5 B5 A5 G5 E5 D5 B4 E5 G#5 B5 E6 D6 B5 G#5 E5',
+    bass: 'A2 E3 A3 E3 A2 E3 A3 E3 F2 C3 F3 C3 F2 C3 F3 C3 G2 D3 G3 D3 G2 D3 G3 D3 E2 B2 E3 B2 E2 B2 E3 B2' },
+  // Night: slower C-major fragments; rests leave the landscape quiet.
+  night: { bpm: 68, mel: 'E5 . . G5 . E5 . . C5 . . A4 . E5 . . A4 . C5 . G4 . . . B4 . D5 . G4 . D5 .',
+    bass: 'C3 . . . G2 . . . A2 . . . E3 . . . F2 . . . C3 . . . G2 . . . D3 . . .' },
+  // Rain: C major, a steady falling figure over Dm–G–C–G.
+  rain: { bpm: 82, mel: 'A4 . F5 E5 D5 . F5 . B4 . D5 C5 B4 . A4 . G4 . E5 D5 C5 . E5 . D5 . B4 A4 G4 . B4 .',
+    bass: 'D3 . A2 . D3 . A2 . G2 . D3 . G2 . D3 . C3 . G2 . C3 . G2 . G2 . D3 . G2 . D3 .' },
   thornwood: { bpm: 104, mel: 'E5 . G5 . A5 G5 E5 . D5 . E5 . C5 . . . E5 . G5 . A5 . C6 . B5 A5 G5 . E5 . . . F5 . A5 . G5 F5 E5 . D5 . E5 . C5 . A4 . G4 . C5 . E5 . D5 . G4 . C5 . . . . .',
     bass: 'C3 . G3 . C3 . G3 . A2 . E3 . A2 . E3 . F2 . C3 . F2 . C3 . G2 . D3 . G2 . D3 .' },
   saltmarsh: { bpm: 92, mel: 'D5 . F5 A5 . G5 F5 . E5 D5 . . C5 . D5 E5 . F5 E5 . D5 C5 . . A4 . C5 D5 . E5 F5 . G5 A5 . . G5 . F5 E5 . D5 C5 . A4 D5 . . . . .',
@@ -35,7 +54,8 @@ function noise(dur, at, vol) {
   for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n);
   const s = ac.createBufferSource(), g = ac.createGain(); g.gain.value = vol || 0.4; s.buffer = buf; s.connect(g); g.connect(SND.out); s.start(at || ac.currentTime);
 }
-const VOICE = { maren: 330, wren: 620, isolde: 260, nerys: 290, toren: 240, pip: 700, tobin: 220 };
+const VOICE = { maren: 330, wren: 620, isolde: 260, nerys: 290, toren: 240, pip: 700, tobin: 220,
+  vessa: 410, bram: 280, lise: 510, cato: 350, marit: 560, orsk: 230, sela: 460 };
 function sfx(name, arg) {
   if (!sndMode() || document.hidden || !audio()) return; const t = SND.ac.currentTime, arp = (ns, d, ty, v) => ns.forEach((n, i) => tone(hz(n), d, ty || 'square', t + i * d, v || 0.35));
   switch (name) {
@@ -55,7 +75,16 @@ function sfx(name, arg) {
   }
 }
 function musicKey() {
-  if (B) return B.story && B.kind === 'wild' ? 'legend' : B.kind === 'trainer' ? 'trainer' : 'battle';
+  if (B) {
+    if (B.story && STORY.some(b => b.id === B.story && b.gate)) return 'warden';
+    return B.story && B.kind === 'wild' ? 'legend' : B.kind === 'trainer' ? 'trainer' : 'battle';
+  }
+  if (S.pos) {
+    const map = MAPS[S.pos.map];
+    if (map && !map.biome) return 'larkhaven';
+    if (isNight()) return 'night';
+    if (weatherNow() === 'rain') return 'rain';
+  }
   return TRACKS[S.biome] ? S.biome : 'thornwood';
 }
 /* a small look-ahead sequencer */
