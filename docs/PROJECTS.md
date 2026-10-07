@@ -90,7 +90,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | T29 | Area 7, Sunthread Commons (62-68), Warden Halen, Loom Badge | M | Data | — | done 2026-10-10 (ChatGPT) | ROADMAP.md "T29" |
 | W1 | Area 8 (66-72), the last Warden and badge | M | Data | T29 | done, merged 2026-10-10 (ChatGPT) | docs/lore/wildbond.md "Area 8 canon"; Farwatch/Rysa/Horizon/Watchlight, copied T29's shape |
 | W2 | **The league and the Champion** (about 72-75): the ending, its scenes, Wren's last battle | L | System+Data | W1 | done, merged 2026-10-07 (ChatGPT, T30) | docs/creature-game-design.md; decision 1 in docs/research/decisions.md |
-| W3 | **Post-game**: battle tower, roaming legendaries, rematch tiers, the road to 100 | L | System | W2 | part 1 (tower, league rematches) is T31 for ChatGPT; part 2 (roaming legendaries) open | |
+| W3 | **Post-game**: battle tower, roaming legendaries, rematch tiers, the road to 100 | L | System | W2 | part 1 claimed: Codex, 2026-10-07, `codex/wildbond-postgame` (T31); part 2 (roaming legendaries) open | |
 | W4 | **Contests and races** at the ranch | M | System | — | open | docs/creature-game-design.md |
 | W5 | **Ranch jobs** on the shared roster (S3) | M | System | — | open | shared/roster.js; docs/research/decisions.md |
 | W6 | **Modern 3D era** after the Diorama | XL | Art | G5 | open | Split into parts |
