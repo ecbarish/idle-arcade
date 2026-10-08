@@ -27,6 +27,17 @@ use it.
   with nothing to do practise there and slowly gain experience). Hob's crew put it up behind scaffolding while you watch.
 - **The town's rank:** Hamlet, then Village (a building and six jobs done), then Town. Each new rank brings a newcomer
   through the gate looking for the guild (Kaito the Archer, then Hana the Knight). The rank shows at the top.
+- **More ground as the town grows:** a Village gets a plot in the north, a Town one in the south. Four buildings to
+  choose between, each once.
+- **The Smithy, worked by hand:** adventurers keep their share of each reward, and when they have saved enough for
+  better gear (40, 80, 130 coins) they come to the smithy door. Stand at the anvil beside them and press E: a bar
+  over the anvil with a glowing middle and a spark sliding to and fro. Strike three times while the spark is in the
+  glow; three good strikes make **fine** work. Better gear means more jobs done and fewer bruises. After five pieces,
+  **Garrick** the smith walks in and asks for the forge (twelve coins a day); then he forges without you.
+- **The Apothecary:** jobs by the creek, the farms and the woods bring herbs home. At the shelf, brew three tonics
+  from two herbs (you stir the pot), and set the price on the slate: Cheap, Fair or Dear. Adventurers buy a tonic
+  before a risky job if the price seems fair to them, leave the coins in the jar, and come home half as hurt. Too
+  dear, and they go without.
 - **The end of each day:** a short report at the foot of the screen (jobs done or gone badly, meals, coins), wages, and
   new requests on the board in the morning. No interruptions during the day.
 - **Saving:** the town saves itself every few seconds and when you close the window (user://starfall.json).
@@ -35,7 +46,7 @@ use it.
 - `scripts/main.gd`: the whole town (map, people, adventurers' decisions, the counter, Bryn, the board, saving).
   `scripts/figures.gd` is copied from wildbond-godot (keep them in step until shared code has its own home).
 - **Checks:** `Godot_v4.7.2-stable_win64_console.exe --headless --path starfall-godot --script res://tests/run_tests.gd`
-  (51 checks on 2026-10-08). Run the game with `-- --no-save` to try it without touching the real town (add `--built`
-  to start with the hut built and the yard going up).
+  (85 checks on 2026-10-08). Run the game with `-- --no-save` to try it without touching the real town (add `--built`
+  to start with the hut built and the yard going up, or `--market` for all four buildings).
 - Next slices (docs/plans/starfall-village.md): more places to run by hand (the smithy, the apothecary), more plots as
   the town grows, guild members' stories, seasons as chapters.

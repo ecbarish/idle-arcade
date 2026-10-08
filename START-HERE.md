@@ -137,6 +137,9 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (later): Diamond Career v0.3.1 (Evan couldn't see the pitch: field cleared mid-throw, tap to swing, a circle at the plate). Starfall
+  Godot slice 3: the Smithy (three strikes on the anvil, Garrick takes over after five pieces), the Apothecary (brew tonics, set the
+  price), plots unlock with rank, adventurers save their share; 85 checks. ChatGPT reset: Lane A refilled with T35-T37.
 - 2026-10-08 Claude (late): merged ChatGPT's PR #56 (Otherworld test runner restores recovery backups; tests only; otherworld 38 and the new
   runner-safety page 35 pass). ChatGPT is out of usage for the week, so Claude carries both lanes. Wildbond Godot: the barn trough and the
   Nursery (breeding pairs, an egg that hatches as you walk), people stand beside you, 183 checks. Evan's idea recorded as a proposal:

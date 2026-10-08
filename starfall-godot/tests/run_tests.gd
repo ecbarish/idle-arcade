@@ -194,7 +194,7 @@ func _run() -> void:
 	# ---- building on a plot: Hob's plans, coins, scaffolding, then the building
 	check(not main.solid(main.PLOTS.west) and main.plot_at(Vector2i(3, 10)) == "west", "the west plot is open ground, staked out")
 	check(walk_to(main.PLOTS.west + Vector2i(2, 0)), "you can walk up to the plot")
-	check(main.use() and main.build_plot == "west" and main.plans().size() == 2, "using it opens Hob's plans: the healer's hut or a training yard")
+	check(main.use() and main.build_plot == "west" and main.plans().has("healer") and main.plans().has("yard"), "using it opens Hob's plans: the healer's hut, a training yard, a smithy, an apothecary")
 	main.coins = 50
 	check(not main.build("healer") and "more coins" in main.build_note and main.build_plot == "west", "too few coins: Hob says how many more")
 	main.coins = 300
@@ -248,17 +248,157 @@ func _run() -> void:
 	main._check_rank()
 	check(main.rank >= 1 and main.heroes.size() > n0 and main.heroes[n0].a.name == "Kaito", "with buildings and jobs done, Starfall becomes a Village, and Kaito arrives")
 	check("Village" in main.status.text or main.RANKS[main.rank].name in ["Village", "Town"], "the town's rank shows at the top")
+	# ---- more ground as the town grows
+	check(main.plot_at(main.PLOTS.north) == "north", "a Village gets a new plot in the north")
+	check(main.rank >= 2 or main.plot_at(main.PLOTS.south) == "", "the south plot waits for a Town")
+	# ---- the smithy: adventurers save up for better gear, and you work the hammer
+	main.build_plot = "north"
+	main.coins = 400
+	check(main.build("smithy"), "a smithy on the north plot")
+	tick(main.BUILDINGS.smithy.time + 1.0)
+	check(main.finished("smithy") == "north", "the smithy is finished")
+	main.posted.clear()
+	var buyer: Variant = hero("Yuna")
+	var send_to_smith := func(h: Variant, purse: int) -> bool:
+		h.where = "town"
+		h.a.hp = h.a.max
+		h.a.purse = purse
+		h.a.state = "to_smith"
+		h.a.waited = 0.0
+		h.a.timer = 0.0
+		main.smith_customer = h
+		main.send(h, main._step_of("north"))
+		for i in 400:
+			tick(0.1)
+			if main._customer_ready():
+				return true
+		return false
+	buyer.a.purse = 50
+	buyer.a.gear = 0
+	buyer.a.hp = buyer.a.max
+	check(main.wants_gear(buyer), "with 50 coins saved, Yuna wants better gear")
+	check(send_to_smith.call(buyer, 50), "she waits at the smithy door")
+	check(walk_to(main.forge_at()), "you can walk to the anvil beside her")
+	check(main.use() and not main.forge.is_empty(), "using the anvil lights the forge: three strikes")
+	var c_forge: int = main.coins
+	for k in 3:
+		main.forge.x = 0.5
+		main.strike()
+	check(main.forge.is_empty() and int(buyer.a.gear) == 1 and buyer.a.fine and int(buyer.a.purse) == 10 and main.coins == c_forge + 40, "three strikes in the glow: fine gear, paid from her own savings (gear %d, purse %d)" % [int(buyer.a.gear), int(buyer.a.purse)])
+	check(main.pieces == 1 and buyer.a.state == "town" and main.smith_customer == null, "and she's off again, pleased")
+	var buyer2: Variant = hero("Aki")
+	buyer2.a.gear = 0
+	check(send_to_smith.call(buyer2, 45), "Aki comes in next")
+	main.use()
+	for k in 3:
+		main.forge.x = 0.05                            # struck cold, every time
+		main.strike()
+	check(int(buyer2.a.gear) == 1 and not buyer2.a.fine, "poor strikes still make gear, just not fine work")
+	# gear makes jobs go better: fewer bruises from the same job, by the same luck
+	var test_job := func(h: Variant, gear: int, tonic: bool) -> int:
+		h.a.gear = gear
+		h.a.tonic = tonic
+		h.a.hp = h.a.max
+		h.a.job = "wolves"
+		main.rng.seed = 99
+		main._come_home(h)
+		main.queue.erase(h)
+		h.a.state = "town"
+		return int(h.a.max) - int(h.a.hp)
+	var hurt_plain: int = test_job.call(buyer2, 0, false)
+	var hurt_geared: int = test_job.call(buyer2, 3, false)
+	var hurt_tonic: int = test_job.call(buyer2, 0, true)
+	check(hurt_geared < hurt_plain and hurt_tonic < hurt_plain, "better gear and a tonic both mean coming home less hurt (%d plain, %d geared, %d with a tonic)" % [hurt_plain, hurt_geared, hurt_tonic])
+	check(not buyer2.a.tonic, "a tonic is used up on the job")
+	buyer2.a.gear = 1
+	# Garrick: after five pieces by hand a smith walks in and asks for the forge
+	main.pieces = main.SMITH_AFTER - 1
+	var buyer3: Variant = hero("Ren")
+	buyer3.a.gear = 0
+	check(send_to_smith.call(buyer3, 60), "Ren comes in with his savings")
+	main.use()
+	for k in 3:
+		main.forge.x = 0.5
+		main.strike()
+	check(main.garrick.where == "town", "after your fifth piece, Garrick the smith walks in through the gate")
+	for i in 300:
+		tick(0.1)
+		if main.garrick.path.is_empty() and (main.garrick.tile - main.me.tile).length() <= 1.01:
+			break
+	check((main.garrick.tile - main.me.tile).length() <= 1.01 or walk_to(main.garrick.tile + Vector2i.DOWN), "he comes over to the anvil")
+	talk_through()
+	check(main.use() and not main.lines.is_empty() and main.lines.any(func(l): return l.who == "garrick"), "he asks for the work")
+	talk_through()
+	talk_through()
+	check(main.smith_hired, "agree, and Garrick takes the forge")
+	walk_to(Vector2i(11, 9))
+	buyer3.a.gear = 1
+	check(send_to_smith.call(buyer3, 100), "another customer comes in")
+	for i in 200:
+		tick(0.1)
+		if int(buyer3.a.gear) == 2:
+			break
+	check(int(buyer3.a.gear) == 2 and main.pieces == main.SMITH_AFTER, "Garrick makes the gear without you")
+	main.coins = 100
+	main.day_t = main.DAY_SECONDS - 0.01
+	tick(0.1)
+	check("Garrick paid" in main.caption.text and "Gear made" in main.caption.text, "the evening report counts the gear, and Garrick's wages are paid")
+	# ---- the apothecary: brew tonics from the herbs, set the price
+	main.rank = maxi(main.rank, 2)
+	check(main.plot_at(main.PLOTS.south) == "south", "a Town gets the south plot")
+	main.build_plot = "south"
+	main.coins = 400
+	check(main.build("apothecary"), "an apothecary on the south plot")
+	tick(main.BUILDINGS.apothecary.time + 1.0)
+	main.herbs = 0
+	main.stock = 0
+	main.shelf_open = true
+	main.shelf_pick(0)
+	check(main.brewing == 0.0 and "two herbs" in main.shelf_note, "no herbs, no tonics")
+	main.herbs = 3
+	main.shelf_pick(0)
+	check(main.brewing > 0.0 and main.herbs == 1 and not main.shelf_open, "two herbs in the pot, and you stir")
+	tick(3.5)
+	check(main.stock == 3, "three tonics on the shelf")
+	var b_ap: Variant = hero("Yuna")
+	b_ap.a.job = "wolves"
+	b_ap.a.purse = 30
+	b_ap.a.tonic = false
+	main.price_i = 1
+	check(main.wants_tonic(b_ap), "a fair price before a risky job: Yuna wants a tonic")
+	var c_ap: int = main.coins
+	main.buy_tonic(b_ap)
+	check(main.stock == 2 and b_ap.a.tonic and int(b_ap.a.purse) == 18 and main.coins == c_ap + 12, "she leaves twelve coins in the jar")
+	b_ap.a.tonic = false
+	main.price_i = 2
+	check(not main.wants_tonic(b_ap), "too dear for a risky job: she goes without")
+	b_ap.a.job = "slimes"
+	main.price_i = 0
+	check(not main.wants_tonic(b_ap), "nobody needs a tonic for an easy job")
+	main.shelf_pick(1)
+	check(main.price_i == 1, "the slate changes the price (Cheap, Fair, Dear)")
+	var herbs0: int = main.herbs
+	b_ap.a.lvl = 9
+	b_ap.a.job = "slimes"
+	b_ap.a.hp = b_ap.a.max
+	main._come_home(b_ap)
+	main.queue.erase(b_ap)
+	b_ap.a.state = "town"
+	b_ap.a.lvl = 2
+	check(main.herbs > herbs0, "jobs by the creek and the woods bring herbs home")
 	# ---- saving the town and loading it back (a test file, never the real one)
 	main.no_save = false
 	main.save_path = "user://test_town.json"
 	main.coins = 77
 	var heroes_saved: int = main.heroes.size()
+	var day_saved: int = main.day
 	main.save_game()
 	main.coins = 0
 	main.heroes.clear()
 	main.built = {}
-	check(main._load() and main.coins == 77 and main.heroes.size() == heroes_saved and main.day == 3, "the town saves and loads back")
+	check(main._load() and main.coins == 77 and main.heroes.size() == heroes_saved and main.day == day_saved, "the town saves and loads back")
 	check(main.finished("healer") == "west" and main.finished("yard") == "east" and main.ama.where == "town" and main.rank >= 1, "with its buildings, Ama, and its rank")
+	check(main.finished("smithy") == "north" and main.smith_hired and main.garrick.where == "town" and main.stock == 2 and main.herbs > 0, "and its smithy, Garrick, the apothecary's shelf and herbs")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(main.save_path))
 	main.no_save = true
 	print("Starfall Godot checks: %d passed, %d failed" % [passed, failed])
