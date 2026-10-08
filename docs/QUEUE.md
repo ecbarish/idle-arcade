@@ -69,7 +69,7 @@ index.html or style.css until those phases are merged.
 | A7b | **R5** crafted gear from 55 | done, merged 2026-10-08 by Claude (Realmbound v1.5.0) | Separate PR after R6 |
 | A8a | **Otherworld browser runner save safety** | done, merged 2026-10-08 by Claude (PR #56; tests only) | Restore recovery backups too, including failed/thrown checks |
 | A8b | **Realmbound guide: rooms and commissions** | ready for review: Codex, 2026-10-08, PR #57 | Current hub/service instructions, actual pictures and generated costs |
-| A9 | **T35** Otherworld O1, a living Lanthorn | open (2026-10-08) | docs/ROADMAP.md T35; moved from Claude's B0b |
+| A9 | **T35** Otherworld O1, a living Lanthorn | claimed: Codex, 2026-10-08, codex/otherworld-living-lanthorn | docs/ROADMAP.md T35; moved from Claude's B0b |
 | A10 | **T36** Diamond Career in the game window, and a road trip | open (2026-10-08) | docs/ROADMAP.md T36 |
 | A11 | **T37** The shared creature catalogue, batch 2 | open (2026-10-08) | docs/ROADMAP.md T37; data and lore only |
 | A8 | While you wait | always | Lore and dex text polish, more checks, bugs from GitHub issues |

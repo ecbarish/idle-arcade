@@ -172,3 +172,5 @@ A6b: ready for review in PR #52 by Codex on codex/game-guides: illustrated Realm
 ## R4 consequence follow-up (2026-10-08)
 
 Ready for review in PR #53 by Codex on codex/realmbound-story-choices: ten guild arcs gain warned, recoverable consequences; repair in world conversations, retained history in the Guild record. Stacked on the A6b guide PR #52 because queue/session metadata overlaps.
+
+| OW1 | **T35: a living Lanthorn** | M | Data+Polish | OW0 | claimed: Codex, 2026-10-08, codex/otherworld-living-lanthorn | docs/ROADMAP.md T35: visible locked choices, gift costs, food/fear over three days and Archivist memories |
