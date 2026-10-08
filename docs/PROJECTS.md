@@ -23,9 +23,93 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 multi-part effort (split it). **Kinds:** Data (content in existing systems), System (new mechanics or engine work),
 Art (visuals and audio), Polish (UX, feel, fixes), Design (a plan or research, no code).
 
+## Read first: where things stand and what we've learned (updated 2026-10-08, night)
+
+These decisions and lessons override older rows below wherever they disagree. Each points to its source.
+
+- **Fleshed-out games are built in Godot** (Evan, 2026-10-08): `wildbond-godot/` (the new Wildbond) and
+  `starfall-godot/` (the Starfall village). They also play on the web: previews in `play/` (re-export after changes
+  worth showing; `play/README.md`). The browser versions stay playable and get fixes, but **no big browser screen
+  rebuilds** (the old Wildbond phases 1, 4 and 5 are being built in Godot instead). Realmbound stays in the browser for
+  now; whether it moves is an open question for Evan (START-HERE). Primordial stays light.
+- **Everything happens in the game window**, for every game (CLAUDE.md). People speak in place, menus are things you
+  hold, a thin overlay at most.
+- **Games feel like games** (docs/wildbond-plan.md principles): physical interactions, features arrive with the story,
+  full words, nothing plays itself.
+- **A world that knows where things are** (docs/proposals/depth-and-first-person.md, approved): every new thing has a
+  footprint and a height, ground gets heights, things happen where they are, **maps are data, never pictures**, and
+  nothing is drawn standing on someone (the partner stands beside you; trainers keep a gap). First person comes much
+  later, as the reward of the wild bond; the fading took depth as well as colour (canon).
+- **Stories are woven** (docs/lore/wildbond-threads.md): threads, fair clues, several truths alive until late. Canon
+  decided: the wild bond, the Unbound, heritages (docs/proposals/wildbond-heritage.md), reputation
+  (docs/proposals/reputation-and-consequence.md), the creature catalogue and evolution
+  (docs/proposals/creature-catalogue-and-evolution.md).
+- **Player text** (docs/CREATIVE.md "Writing for players"): capitalised names, the world's words, no jargon, and look at
+  the real screen. In Godot, use only plain Latin characters (the web font has no arrows, dots or circles: write
+  "Orders ready: 2 of 3", not symbols).
+- **Variety without cheap repetition** (docs/proposals/showing-the-games.md): we have the whole Ninja Adventure pack
+  (CC0, `C:\Users\evanb\Godot\NinjaAdventure`): 41 tracks, sounds, animated water and waterfalls, interiors, effects.
+  Each area gets its own furniture, sound and battle effects; people and creatures stay our own code-drawn style.
+  Credit everything in CREDITS.md. AI-generated assets are allowed (credited). Ask Evan before paying for anything;
+  downloads need his OK.
+- **Readable numbers:** stat bars measure against the strongest creature known (120) and show the number.
+- **Friends are testing now:** the Come Play page (playtest.html) says what each game is, our goals, first steps and
+  "if you're lost"; keep it current when a game changes. Full guides wait until systems settle. Trailer:
+  tools/trailer (recording flags `--demo`, `--photo`, `--colour`); Windows builds go in `Desktop\Game builds`.
+- **Starfall village** (docs/plans/starfall-village.md): one hands-on thing per place, hire people once you've
+  mastered a job, you can fail and excel, no windfalls, not a game within a game.
+- **Process:** ChatGPT works on browser games and data (never `wildbond-godot/`, `starfall-godot/` or `play/`); no PR
+  limit; Claude merges, bumps versions and keeps START-HERE, QUEUE and this file current. After any merge, check for
+  leftover conflict markers (`git grep -n "^<<<<<<< "`). Evan likes big chunks per prompt.
+- **Tools on Evan's PC:** Godot 4.7.2 and its export templates (`C:\Users\evanb\Godot`), ffmpeg
+  (`C:\Users\evanb\Tools\ffmpeg-9.0.2-essentials_build\bin`).
+
+## Wildbond in Godot (the new Wildbond; Claude's lane)
+
+Built so far (wildbond-godot/README.md): the opening (register, barn, Wren), Thornwood, Saltmarsh, Emberfall,
+Cloudglass, wild creatures and bonding, trainers and Wardens, the ranch as a place (paddock, barn, nursery, trough,
+workbench and gear), evolution shapes and conditions, heritages, music, saving. Checks: `tests/run_tests.gd`.
+
+| ID | Project | Size | Status | Notes |
+|---|---|---|---|---|
+| WG1 | **Tamer abilities** with heritages: orders that grow from who you are and who taught you (Toren's Steady) | M | open (next) | creature-catalogue-and-evolution.md §4 |
+| WG2 | **Stillreed Basin** and the areas after it (Hollowecho, Sunthread, Farwatch), from the browser data | L | open | Each with its own furniture, sound and music (variety plan) |
+| WG3 | **The league, the Champion and the Spire** in Godot | L | open | After WG2 |
+| WG4 | **The wild bond**: discovered at the edge of defeat with a Kindred creature; hints placed area by area; the first-person glimpse | L | open | §5 of the catalogue proposal; thread 2 in the ledger |
+| WG5 | **The Unbound** and reputation: a faction you can oppose, join or infiltrate; a world that remembers | L | open | reputation-and-consequence.md |
+| WG6 | **Depth, step 1**: ground heights (cliffs, ledges, the loft), footprints and heights on objects; fix the colour layer drawing you and your partner over people standing in front of you | M | open | depth-and-first-person.md part 1 |
+| WG7 | **Variety pass**: animated water and waterfalls, interiors (inn, shop, homes), element effects in battle, area sounds, edge tiles where paths and plots end | M | open | showing-the-games.md |
+| WG8 | **Maren's daily letter**, ranch jobs (Palworld-style delegation), Maren's hint for "where next" in the field book | M | open | wildbond-plan.md phase 5 |
+| WG9 | **A larger catalogue in Godot**: bodies for new families and species from ChatGPT's batches (T37) | M per batch | open | Export with tools/godot-export.ps1 |
+| WG10 | **Phone controls** for the web preview (an on-screen walk pad, tap-to-walk everywhere) | S | open | The previews are best on a computer today |
+| WG11 | **First person, later**: a 3D view generated from the same maps | XL | later | V10; after the 2D game is done |
+
+## Starfall in Godot (the village; Claude's lane)
+
+Built so far (starfall-godot/README.md): the town, the guild board, adventurers who choose their own jobs, the inn's
+counter by hand and Bryn, plots and Hob's plans, the Healer's Hut and Ama, a Training Yard, the Smithy by hand and
+Garrick, the Apothecary with prices, ranks and newcomers, music, saving. Checks: `tests/run_tests.gd`.
+
+| ID | Project | Size | Status | Notes |
+|---|---|---|---|---|
+| SV1 | **Members' stories**: short arcs per adventurer, choices that can go either way | M | open (next) | Like Realmbound's R4 |
+| SV2 | **Seasons as chapters**, festivals, travelling merchants | L | open | starfall-village.md |
+| SV3 | **Failing and excelling, visible**: a place that closes when run badly (and reopens), people who leave, rarer adventurers drawn by a well-run town | M | open | starfall-village.md "Failing and doing exceptionally" |
+| SV4 | **The tavern and placement**: a tavern you serve at; buildings near each other help a little | M | open | |
+| SV5 | **Expeditions you can see**: the wilds past the gate as a place, adventurers' camps, catalogue creatures as monsters | L | open | Shared catalogue |
+
+## Showing the games
+
+| ID | Project | Size | Status | Notes |
+|---|---|---|---|---|
+| PM1 | Come Play page for friends | S | done 2026-10-08 | playtest.html; keep it current |
+| PM2 | Web previews and Windows builds of the Godot games | S | done 2026-10-08 | play/; Desktop\Game builds; rebuild after big changes |
+| PM3 | Trailer | S | done 2026-10-08 | images/play/trailer.mp4; tools/trailer |
+| PM4 | A trailer per game, and a short "what's new" clip after big releases | S each | open | Same tools |
+
 ## Launch track (the road to a public 1.0)
 
-"Launch" means Wildbond and Realmbound are complete, polished, safe with saves and pleasant on desktop and phone,
+"Launch" means Wildbond and Realmbound are complete, polished, safe with saves and pleasant on desktop and phone (with Wildbond moving to Godot, what Launch means for it is a question for Evan in START-HERE; until he answers, these tracks still apply to the browser games),
 and the arcade's homepage shows them off. Any assistant may push these forward without asking first.
 
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
@@ -37,19 +121,19 @@ and the arcade's homepage shows them off. Any assistant may push these forward w
 | L4 | **Onboarding**: a gentle first 10 minutes per game (what to click, what Auto does) | M | Design+Polish | — | Realmbound done: Codex, merged 2026-10-08 by Claude (v1.1.0, PR #47); Wildbond onboarding comes with the Godot opening | Realmbound and Wildbond first; use the shared dialogue scenes |
 | L5 | **Install and offline** (web app manifest + service worker), so the arcade works like an app | S | System | — | done: Codex, 2026-10-07, `codex/arcade-offline`, merged 2026-10-07 by Claude, who made it online-first (no version bumps; see docs/offline.md) | docs/offline.md; GitHub Pages scope, complete release cache, waiting updates, browser checks |
 | L6 | **Credits** page and `CREDITS.md` for any outside assets | S | Polish | — | done 2026-10-07 (Codex), merged 2026-10-07 by Claude on `codex/arcade-credits` | credits.html, CREDITS.md and full notices in licenses/; see CREATIVE.md "Outside assets" |
-| L7 | **Bug bash and balance pass**: full playthrough sims of both games, fix what they find | L | Polish | W1, W2 | Wildbond audit ready for review (PR #41); Realmbound audit ready for review (PR #42) | Use the pacing sim methods in the design docs; docs/wildbond-launch-balance.md records challenge failures and remaining manual playtests |
+| L7 | **Bug bash and balance pass**: full playthrough sims of both games, fix what they find | L | Polish | W1, W2 | done: both audits merged 2026-10-07 | Use the pacing sim methods in the design docs; docs/wildbond-launch-balance.md records challenge failures and remaining manual playtests |
 | L8 | **Immersive homepage** that shows off the engines (living scene, sound, dialogue, creatures) | L | Art | G1, W2 | part 1 done 2026-10-07 (Claude): launcher/launcher.js, two styles (the living world, the arcade hall) with a player vote (docs/VOTES.md); part 2 the road (walkable, scrolling, building sites for games in design); next: phone layout, the winning style | Evan: build once the games are further along (START-HERE) |
 | L9 | **Versioning and release notes**: a version number in each game, a release checklist | S | Polish | — | done 2026-10-10 (Jules) | HANDOFF.md "Releasing a version" |
 | L10 | **Accessibility**: keyboard play everywhere, colour contrast, readable fonts, screen-reader labels | M | Polish | — | open | |
 | L11 | **Big screens**: laptop, desktop and ultrawide (3440x1440) layouts that use the space: the scene grows (wider view in the walkable worlds, more of the zone in Realmbound), panels sit side by side, text scales, canvases stay crisp at high resolution | M | Polish | — | part done 2026-10-10 (Claude): wide layouts at 1700 px and 2400 px+ in every game and the hub (a 21:9 scene on ultrawides); panel text and buttons scale (zoom 1.12 / 1.3, canvases never zoom); Wildbond view distance (Close/Wide/Far, V key; Wide by default on tall scenes). Left: a similar zoom for the Realmbound town if wanted | Evan's main screen is a 45-inch ultrawide; test at 1366x768, 1920x1080 and 3440x1440 alongside 375 px |
 
-| T8-R | **Realmbound guide and lore page** (T8, Lane A3) | M | Design | — | ready for review: Codex, 2026-10-07, PR #44 | docs/ROADMAP.md T8; Wildbond waits for its redesign. A8 opening audit ready in PR #44: docs/realmbound-first-ten-minutes.md (documentation only; L4/V1 implementation remains open) |
+| T8-R | **Realmbound guide and lore page** (T8, Lane A3) | M | Design | — | done, merged 2026-10-08 | docs/ROADMAP.md T8; Wildbond waits for its redesign. A8 opening audit ready in PR #44: docs/realmbound-first-ten-minutes.md (documentation only; L4/V1 implementation remains open) |
 
-| T8-Rb | **Realmbound guide: rooms and commissions** | S | Polish | R5, R6 | ready for review: Codex, 2026-10-08, PR #57 | Guides follow the released Smithy and Inn |
+| T8-Rb | **Realmbound guide: rooms and commissions** | S | Polish | R5, R6 | done, merged 2026-10-08 (PR #57) | Guides follow the released Smithy and Inn |
 
-| RE-G | **Godot research assessment and animation/migration research prompt** | S | Design | — | ready for review: Codex, 2026-10-07, PR #44 (documentation only, requested by Evan) | Separate research files; no Godot or shared plan edits |
+| RE-G | **Godot research assessment and animation/migration research prompt** | S | Design | — | done, merged 2026-10-08 (documentation only, requested by Evan) | Separate research files; no Godot or shared plan edits |
 
-| RE-O | **First-play research briefs for Realmbound, Starfall and the other games** | S | Design | — | Starfall review + prompt archive ready for review: Codex, 2026-10-08, PR #46 (research only; prior reports merged in #44) | docs/research/gemini-prompts.md; research does not authorize extra implementation |
+| RE-O | **First-play research briefs for Realmbound, Starfall and the other games** | S | Design | — | done: Starfall review and prompt archive merged 2026-10-08 (research only) | docs/research/gemini-prompts.md; research does not authorize extra implementation |
 
 ## Graphics: light, fog and atmosphere (S6)
 
@@ -61,7 +145,7 @@ move with the time of day, bounce light that carries colour into shadows, real t
 |---|---|---|---|---|---|---|
 | G1 | **Light engine** `shared/light.js`: sun/moon model, aligned sprite shadows, fog pockets with light scattering, height fog, bounce light, colour grading, light shafts, bloom | L | System+Art | — | done 2026-10-09 (Claude) | HANDOFF.md "Light engine" once built |
 | G2 | **Zone lighting passes**: tune every Realmbound zone and dungeon and every Wildbond area to its own character (Duskwood-style care) | L | Art | G1 | Realmbound: every zone tuned 2026-10-07 (Claude: golden dusk, a night colour per zone, bounce light; Frostmere by Codex); dungeons open. Wildbond: Saltmarsh done, the rest is T32 (ChatGPT). Frostmere done: Codex, 2026-10-07, `codex/realmbound-frostmere-light`, merged 2026-10-07 by Claude; other zones open | Low snow haze, cool bounce light and clearer blue mountain layers; before/after screenshots in the PR |
-| G2-saltmarsh | **Saltmarsh Coast lighting**: low sea mist, coastal bounce light and softer shafts | S | Art | G1 | done 2026-10-07 (Codex); PR #38 awaiting review | One-area pass; before/after screenshots; all other area defaults preserved |
+| G2-saltmarsh | **Saltmarsh Coast lighting**: low sea mist, coastal bounce light and softer shafts | S | Art | G1 | done, merged 2026-10-07 (Codex, PR #38) | One-area pass; before/after screenshots; all other area defaults preserved |
 | G3 | **Water**: reflections of sky, sun and moon, flow, depth colour, in the HD-2D views | M | Art | G1 | open | Stillreed, Saltmarsh, the Fens |
 | G4 | **Graphics quality setting** (Low / High) and a performance budget for phones | M | System | G1 | open | Auto-pick Low on slow devices |
 | G5 | **Diorama lighting**: real shadows, fog and torchlight in Wildbond's three.js era | M | Art | G1 | open | three.js r134 shadows and fog |
@@ -93,7 +177,9 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | F3 | **Triage habit**: assistants read open issues at the start of a session (docs/FEEDBACK.md) | S | Process | F1 | done 2026-10-09 | In CLAUDE.md's start-of-session steps |
 | F4 | **Tester build notes**: a short "what to try" page for each release, linked from the homepage | S | Polish | L9 | done: Codex, 2026-10-07, `codex/playtest-notes`, merged 2026-10-07 by Claude | playtest.html; docs/playtesting.md |
 
-## Wildbond (creature game, current focus)
+## Wildbond, browser version (content complete; it stays playable and gets fixes)
+
+New Wildbond work goes to **Wildbond in Godot** above. Browser data (species, maps, story) still feeds the Godot version through `tools/godot-export.ps1`, so data tickets here (new species, lore) help both.
 
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
@@ -102,27 +188,27 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | W2 | **The league and the Champion** (about 72-75): the ending, its scenes, Wren's last battle | L | System+Data | W1 | done, merged 2026-10-07 (ChatGPT, T30) | docs/creature-game-design.md; decision 1 in docs/research/decisions.md |
 | W3 | **Post-game**: battle tower, roaming legendaries, rematch tiers, the road to 100 | L | System | W2 | part 1 done: Codex, 2026-10-07, `codex/wildbond-postgame` (T31), merged 2026-10-07 by Claude; part 2 (roaming legendaries) open | |
 | W4 | **Contests and races** at the ranch | M | System | — | open | docs/creature-game-design.md |
-| W5 | **Ranch jobs** on the shared roster (S3) | M | System | — | open | shared/roster.js; docs/research/decisions.md |
-| W6 | **Modern 3D era** after the Diorama | XL | Art | G5 | open | Split into parts |
+| W5 | **Ranch jobs** on the shared roster (S3) | M | System | — | moved to Godot (WG8) | shared/roster.js; docs/research/decisions.md |
+| W6 | **Modern 3D era** after the Diorama | XL | Art | G5 | superseded by WG11 and V10 (3D from the Godot maps) | Split into parts |
 | W7 | Map polish: Stillreed's ferry landing you can see; interiors for town buildings | S | Art | — | Ferry landing done: Codex, 2026-10-07, `codex/wildbond-ferry-landing`, merged 2026-10-07 by Claude; interiors open | Raised crossings, reachable jetty, moored skiff and sign in all five eras; no transport mechanic |
-| W8 | Pacing pass for areas 5-8 (sim) and tuning | M | Polish | W1 | ready for review: Codex, PR #41 | docs/wildbond-launch-balance.md: 15-case before/after audit and level-only tuning; failed Nuzlocke starts recorded separately |
+| W8 | Pacing pass for areas 5-8 (sim) and tuning | M | Polish | W1 | done, merged 2026-10-07 | docs/wildbond-launch-balance.md: 15-case before/after audit and level-only tuning; failed Nuzlocke starts recorded separately |
 | W9 | **Baby forms and growth (design)**: creatures hatch or are found as babies and grow through more stages (baby, young, adult, elder?), giving more room to raise them; how it meets eggs, evolution levels, caps, and old saves | M | Design | — | proposal written 2026-10-07 (Claude), waiting for Evan | Evan, 2026-10-09; write `docs/proposals/creature-growth.md` first (CREATIVE.md: new system) |
 | W10 | **Baby forms (build)**: the growth stages, baby art from the existing families, ranch care that matters more for babies | L | System+Art | W9 | open | Old saves keep their creatures as they are |
-| W11 | **A larger roster**: batches of 10-12 new species per element, filling every family and element pairing (target about 150 to start), each with a dex line; ChatGPT-friendly data work | L (batches) | Data | W9 | batch 1 ready: Codex, PR #51; later batches open | T6 rules in creature-game-design.md; one batch per PR |
-| W12 | **New creature families** (body shapes beyond the current ones: serpents, golems, insects, jellyfish...) with their own art | L | Art | — | open | shared/creatures.js and 01-art.js |
-| W13 | **Character creator**: your tamer's body type (male, female, other), skin, hair style and colour, outfit; shown in the world, in scenes and in battle | M | Art+System | — | open | Evan, 2026-10-07; part of the opening (B3b); later shared with Realmbound's heroes |
-| W14 | **Creature variants**: rare looks within a species (a shimmering colour like shinies, tiny and huge sizes, unique pattern markings like Spinda), shown in the Wilddex; cosmetic, never stronger | M | Art+Data | — | ready for review: Codex, 2026-10-07, PR #43 | Evan, 2026-10-07 |
+| W11 | **A larger roster**: batches of 10-12 new species per element, filling every family and element pairing (target about 150 to start), each with a dex line; ChatGPT-friendly data work | L (batches) | Data | W9 | batch 1 merged 2026-10-08 (v1.7.0, PR #51); batch 2 is T37 (ChatGPT, A11) | T6 rules in creature-game-design.md; one batch per PR |
+| W12 | **New creature families** (body shapes beyond the current ones: serpents, golems, insects, jellyfish...) with their own art | L | Art | — | moved to Godot (WG9) | shared/creatures.js and 01-art.js |
+| W13 | **Character creator**: your tamer's body type (male, female, other), skin, hair style and colour, outfit; shown in the world, in scenes and in battle | M | Art+System | — | done in Godot 2026-10-08 (Maren's ranch register, with heritage) | Evan, 2026-10-07; part of the opening (B3b); later shared with Realmbound's heroes |
+| W14 | **Creature variants**: rare looks within a species (a shimmering colour like shinies, tiny and huge sizes, unique pattern markings like Spinda), shown in the Wilddex; cosmetic, never stronger | M | Art+Data | — | done, merged 2026-10-08 (v1.6.0, PR #43) | Evan, 2026-10-07 |
 
 ## Realmbound (classic-MMO idle, flagship)
 
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
 | R3 | **Battlegrounds**: faction rivalry, the hook the raid's ending sets up | L | Design+System | — | open | Write a plan first (CREATIVE.md: new system) |
-| R4 | **Guild members' personal stories**: short arcs per adventurer, unlocked by mood and time together | M | Data+System | — | ready for review: Codex, 2026-10-08, PR #49 | docs/realmbound-40-60.md "The guild as built" |
-| R5 | **Crafted gear from 55** from the guild economy (the plan's gear route) | M | System | — | ready for review: Codex, 2026-10-08, PR #55 | docs/realmbound-40-60.md "Loot from 40 to 60" |
-| R6 | **Hub variety**: a layout per zone (Fenwatch Post, Lanternrest Lodge...), interiors for the inn and smithy | M | Art | — | ready for review: Codex, 2026-10-08, PR #54 | js/22-town.js |
+| R4 | **Guild members' personal stories**: short arcs per adventurer, unlocked by mood and time together | M | Data+System | — | done, merged 2026-10-08 (Realmbound v1.2.0, PR #49); choices with consequences merged (v1.3.0, PR #53) | docs/realmbound-40-60.md "The guild as built" |
+| R5 | **Crafted gear from 55** from the guild economy (the plan's gear route) | M | System | — | done, merged 2026-10-08 (Realmbound v1.5.0, PR #55) | docs/realmbound-40-60.md "Loot from 40 to 60" |
+| R6 | **Hub variety**: a layout per zone (Fenwatch Post, Lanternrest Lodge...), interiors for the inn and smithy | M | Art | — | done, merged 2026-10-08 (Realmbound v1.4.0, PR #54) | js/22-town.js |
 | R7 | **Second raid tier** after The Hollow Throne | L | Data+System | — | open | docs/realmbound-40-60.md "Raids" |
-| R8 | **Pacing re-measure 1-60** with every system on; tune zone XP only | M | Polish | — | ready for review: Codex, 2026-10-07, PR #42 | docs/realmbound-40-60.md "Measured" |
+| R8 | **Pacing re-measure 1-60** with every system on; tune zone XP only | M | Polish | — | done, merged 2026-10-07 | docs/realmbound-40-60.md "Measured" |
 | R9 | Heroic tiers and loot review for the newest dungeons (Rootrot, Heartwood) | S | Polish | — | done, merged 2026-10-07 by Claude (Codex; docs/realmbound-heroic-review.md) | |
 
 ## Shared systems and the world kit
@@ -149,13 +235,13 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | V10 | **A big world, first person one day** (every game): worlds as renderer-independent data, large chunked regions, real height, then a 3D renderer (third person, later first person) | XL | System+Art | W6 | open | docs/VISION.md §10; the 2D games stay complete at every step |
 | V11 | **Walk into the arcade** (Evan, 2026-10-08): you walk through the arcade hall and through a door or portal into each game's world. **Clarified by Evan the same evening:** there is no single arcade avatar; the figure you walk as in the hall resembles the character of the game you are about to enter or have just come out of (your Wildbond tamer by Wildbond's door, your Realmbound hero, with its race, by Realmbound's), read from that game's save. A direct Play button stays for returning players | L | Art+System | L8, S4 | open: research first (docs/research/gemini-arcade-first-visit-prompt.md), then a plan | Every game runs on the same site, so the hall can read each game's saved character. The parts-built people in wildbond-godot/scripts/figures.gd can draw them; a natural Godot project after Wildbond (docs/research/decisions.md) |
 
-## Parked games (side lane: structure and polish only, until Evan says go)
+## Other games (Diamond Career and Otherworld are active in ChatGPT's lane; the rest wait for Evan)
 
 | ID | Project | Size | Kind | Status | Spec |
 |---|---|---|---|---|---|
-| SG1-SG4 | Starfall Guild stages G1-G4: careers, two expeditions, the town serves the guild, seasons become campaigns | L each | System | parked | docs/plans/starfall-guild.md |
-| OW0-OW5 | Otherworld (isekai) stages O0-O5 | L each | System | parked, needs Evan's go | docs/plans/otherworld.md, docs/ideas.md |
-| DC0-DC4 | Diamond Career (baseball) stages D0-D4 | L each | System | D0 + first D1 merged (PR #45); D1 first month merged 2026-10-08 by Claude (v0.2.0, PR #48); D1c ready for review: Codex, PR #50 (stacked on #49); later stages outlined | docs/plans/diamond-career.md, docs/plans/sports-careers.md |
+| SG1-SG4 | Starfall Guild stages G1-G4: careers, two expeditions, the town serves the guild, seasons become campaigns | L each | System | superseded by the Starfall village in Godot (SV1-SV5 above) | docs/plans/starfall-guild.md |
+| OW0-OW5 | Otherworld (isekai) stages O0-O5 | L each | System | active: O0 and O1 done (v0.2.0); next Hearthmere and the Ashen Throne | docs/plans/otherworld.md, docs/ideas.md |
+| DC0-DC4 | Diamond Career (baseball) stages D0-D4 | L each | System | D0 + first D1 merged (PR #45); D1 first month merged 2026-10-08 by Claude (v0.2.0, PR #48); D1c merged (v0.3.0, PR #50); v0.3.1 batting you can see (Claude); T36 in the game window and a road trip in progress (ChatGPT, A10); later stages outlined | docs/plans/diamond-career.md, docs/plans/sports-careers.md |
 | PR0-PR4 | Primordial stages P0-P4 | L each | System | back burner | docs/plans/primordial.md |
 | CS1 | **Card shop** (Evan's idea, 2026-10-08): run a card shop whose cards are our own catalogue creatures; packs, singles, Friday tournaments on Wildbond's element rules, regulars with stories | L | System | parked, Evan decides when | docs/proposals/showing-the-games.md |
 | MS1 | **Main Street** business game | L | System | parked (2026-10-08) | docs/research/decisions.md |
@@ -169,14 +255,14 @@ ambience. Wildbond extras: weather forecast, battle backdrops, challenge pennant
 
 ## Guide extension (2026-10-08)
 
-A6b: ready for review in PR #52 by Codex on codex/game-guides: illustrated Realmbound guide and tips; Diamond Career and Otherworld starter guides. Wildbond waits for Godot.
+A6b: merged 2026-10-08 (PR #52) by Claude; written by Codex on codex/game-guides: illustrated Realmbound guide and tips; Diamond Career and Otherworld starter guides. Wildbond waits for Godot.
 
 ## R4 consequence follow-up (2026-10-08)
 
-Ready for review in PR #53 by Codex on codex/realmbound-story-choices: ten guild arcs gain warned, recoverable consequences; repair in world conversations, retained history in the Guild record. Stacked on the A6b guide PR #52 because queue/session metadata overlaps.
+Merged 2026-10-08 (Realmbound v1.3.0, PR #53); written by Codex on codex/realmbound-story-choices: ten guild arcs gain warned, recoverable consequences; repair in world conversations, retained history in the Guild record. Stacked on the A6b guide PR #52 because queue/session metadata overlaps.
 
 ## Otherworld follow-up
 
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
-| OW1 | **T35: a living Lanthorn** | M | Data+Polish | OW0 | ready for review: Codex, 2026-10-08, PR #58 | docs/ROADMAP.md T35: visible locked choices, gift costs, food/fear over three days and Archivist memories |
+| OW1 | **T35: a living Lanthorn** | M | Data+Polish | OW0 | done, merged 2026-10-08 (Otherworld v0.2.0, PR #58) | docs/ROADMAP.md T35: visible locked choices, gift costs, food/fear over three days and Archivist memories |

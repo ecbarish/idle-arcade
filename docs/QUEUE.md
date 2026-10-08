@@ -12,8 +12,8 @@ and how much creative freedom you have are in [CREATIVE.md](CREATIVE.md).
 2. Take the **first task in your lane** whose status is `open`. Claim it: set its status here to
    `claimed: <you>, <date>, <branch>` as your branch's first commit, push, and open the pull request early (a draft is
    fine), so the claim is visible. (Claude, who works on main, pushes the claim to main.)
-3. Build it on its own branch (`codex/<topic>`, `grok/<topic>`, `claude/<topic>`), with checks; all test pages pass
-   (`tests/run.html`, `tests/wildbond.html`, `tests/starfall.html`, `tests/sound.html`, `tests/offline.html`).
+3. Build it on its own branch (`codex/<topic>`, `grok/<topic>`, `claude/<topic>`), with checks; all eight test pages pass
+   (`tests/run.html`, `wildbond.html`, `starfall.html`, `sound.html`, `offline.html`, `diamond.html`, `otherworld.html`, `runner-safety.html`; Claude also runs the Godot checks).
 4. Open a pull request (Codex and Grok never merge their own). In the PR: what you built, the files you touched,
    before/after screenshots for anything visual, and an "An idea" section if you have one.
 5. **Go straight to the next task in your lane.** Don't wait for the review.
@@ -34,21 +34,28 @@ and how much creative freedom you have are in [CREATIVE.md](CREATIVE.md).
 - **Saves:** new fields get defaults; old saves must load (add a check). Commits only as
   `206636510+ecbarish@users.noreply.github.com`.
 
-## The current goal: Launch (decided 2026-10-07)
+## The current goal (updated 2026-10-08, night)
 
-Both games are **content complete**: Wildbond has its whole story (eight areas, the league, the Champion) and a
-post-game; Realmbound runs 1-60 with dungeons, a guild and a raid. What's missing for a public launch is the launch track:
-a smooth first ten minutes, settings and save safety, a balance pass over full playthroughs, phone and accessibility
-polish, guides and lore pages, and a homepage that shows the games off. So the lanes below put **launch work first**
-and content second. When every box below is ticked, both games become **version 2.0**, the first public release, announced on the
-homepage. Only then does a new game start (Evan picks which).
+What changed since the "Launch" goal of 2026-10-07: Evan moved the fleshed-out games to **Godot** (the new Wildbond
+and the Starfall village, which also play on the web), asked that **everything happen in the game window** in every
+game, and started sharing the games with **friends** (the Come Play page, web previews, a trailer). So:
 
-**Launch checklist:** Wildbond plan phases 1-5 (docs/wildbond-plan.md) · L1 settings · L2 save safety · L3 phone pass · L4 onboarding · L7 bug bash and balance (both
-games) · L8 the arcade launcher · L10 accessibility · guides and lore pages (T8) · no open bug issues.
+1. **Friends' testing now.** Keep playtest.html, the previews in `play/` and the browser games working and current.
+   Bugs from friends come first (GitHub issues, or Evan's messages).
+2. **The new Wildbond (Godot) reaches the full journey**: the remaining areas, the league, then the deeper systems
+   (tamer abilities, the wild bond, the Unbound, reputation, depth). Claude's lane; PROJECTS.md "Wildbond in Godot".
+3. **The Starfall village grows** (Godot): members' stories, seasons, failing and excelling. Claude's lane.
+4. **The browser games move into the game window**, one at a time (Realmbound, then Diamond Career), and keep their
+   content growing (Otherworld's next worlds, Realmbound's raid tier, the creature catalogue). ChatGPT's lane.
 
-## Lane A: ChatGPT / Codex (Wildbond variety, Realmbound launch work, content)
+What a public "version 2.0" launch means now (the Godot Wildbond, or the browser games as they stand) is a question
+for Evan in START-HERE; until he answers, the old checklist below still applies to the browser games.
 
-Rewritten 2026-10-07 around docs/wildbond-plan.md. Claude is rebuilding Wildbond's screens (plan phases 1-5), so
+**Old launch checklist (browser games):** L1 settings Â· L2 save safety Â· L3 phone pass Â· L4 onboarding Â· L7 bug bash
+and balance Â· L8 the arcade launcher Â· L10 accessibility Â· guides and lore pages (T8) Â· no open bug issues.
+## Lane A: ChatGPT / Codex (browser games, data and lore, moving browser games into the game window)
+
+Updated 2026-10-08: Wildbond's new version is built in Godot by Claude (never edit `wildbond-godot/`, `starfall-godot/` or `play/`). Wildbond browser work stays in data, lore and checks: it feeds the Godot version through tools/godot-export.ps1. Earlier note: Claude was rebuilding Wildbond's browser screens (plan phases 1-5), so
 Lane A's Wildbond work stays in data, drawing and new files; don't restyle Wildbond's 05-ui.js, 06-scene.js,
 index.html or style.css until those phases are merged.
 
@@ -72,23 +79,27 @@ index.html or style.css until those phases are merged.
 | A9 | **T35** Otherworld O1, a living Lanthorn | done, merged 2026-10-08 by Claude (Otherworld v0.2.0, PR #58; 831 checks) | docs/ROADMAP.md T35; moved from Claude's B0b |
 | A10 | **T36** Diamond Career in the game window, and a road trip | open (2026-10-08) | docs/ROADMAP.md T36 |
 | A11 | **T37** The shared creature catalogue, batch 2 | open (2026-10-08) | docs/ROADMAP.md T37; data and lore only |
+| A12 | **T38** Realmbound in the game window: the plan, then part 1 | open (2026-10-08) | docs/ROADMAP.md T38 |
+| A13 | **T39** Otherworld: Hearthmere, the second world | open (2026-10-08) | docs/ROADMAP.md T39 |
+| A14 | **T40** Wildbond areas 5-8: woven clues, signs and chatter (data; flows into the Godot version) | open (2026-10-08) | docs/ROADMAP.md T40 |
 | A8 | While you wait | always | Lore and dex text polish, more checks, bugs from GitHub issues |
 | — | Done | — | A2 L7a Wildbond balance, A3 L7b Realmbound balance, R9 heroic loot review (all merged 2026-10-07) |
 
-## Lane B: Claude (reviews first, then Wildbond's plan, then launch polish)
+## Lane B: Claude (reviews first, then the Godot games: Wildbond and Starfall)
 
 | # | Task | Status | Notes |
 |---|---|---|---|
 | B0 | **Review and merge** every waiting PR, bump versions, keep START-HERE current, refill the lanes | always first | Check email, diff, tests, play it; `git merge --no-ff` |
 | B0b | **Otherworld O0: the Between and Asterhold** | part 1 done 2026-10-08 (the Between, Asterhold's whole life, 8 endings, rebirth and memories; tests/otherworld.html); O1 handed to ChatGPT 2026-10-08 (A9, T35); was: **O1, a living Lanthorn** (docs/research/otherworld-first-life-review.md: locked choices shown with reasons, every gift cost bites, the town's food and fear change over the days), then Hearthmere, the Ashen Throne | Evan unparked it 2026-10-08; docs/otherworld-design.md; browser, games/otherworld/ |
-| B1 | **Wildbond phase 1: the screen is the world** | open | docs/wildbond-plan.md: full-window scene, overlay HUD, dialogue near speakers, satchel and pause menu, bigger characters |
+| B1 | **Wildbond phase 1: the screen is the world** | done in Godot (the new Wildbond is all game window); no browser rebuild | docs/wildbond-plan.md: full-window scene, overlay HUD, dialogue near speakers, satchel and pause menu, bigger characters |
 | B2 | **Wildbond phase 2: the opening, alive** | **in Godot, mostly done 2026-10-08** (wildbond-godot/: register = character creator, Maren, the barn and the partner choice, Wren); left: prologue, Wilddex goal, guided first wild bond | Prologue, Maren in the world, the character creator (W13), choosing your partner in the barn, Wren, guided first bond, the Wilddex goal |
 | B3 | **Wildbond phase 3: battles on the field** | **in Godot, first battle done 2026-10-08** (scripts/battle.gd, rules.gd matches the browser exactly); left: Bond (catching) and Bag in wild battles, more creatures' bodies | Transition, classic layout, Fight / Bond / Bag / Run, a summary that waits |
 | B2b | **Wildbond in Godot: the move** | **Thornwood, Saltmarsh and Emberfall done 2026-10-08** (wild creatures, catching, trainers, Wardens, story moments, shop, inn, Wilddex book, saving, area battle skylines); the ranch as a place started 2026-10-08 (creatures in the paddock and barn, visit, take along, swap); Cloudglass Pass done 2026-10-08; next: the rest of the ranch (feeding at the trough, breeding stall, Maren's daily letter), evolution shapes and conditions done 2026-10-08 (data/evolution.json: three third stages, the Poolkit branch, never-evolvers, Not yet); heritages at the register done 2026-10-08 (gifts, tales, recognition); next: the ranch trough and breeding stall, Stillreed Basin, tamer abilities | docs/godot-port-plan.md: Route 1 (Thornwood) from the exported maps, wild creatures and catching, team and save (with a browser-save importer), then area by area. Checks: wildbond-godot/tests/run_tests.gd |
-| B4 | **Wildbond phase 4: menus you hold** | open | Wilddex field book, team scene, Journal with map and badge case |
-| B5 | **Wildbond phase 5: the ranch as a place** | open | Trough, posts, meadow, breeding stall, shop counter, Maren's daily letter |
-| B6 | **L10** Accessibility; **L3** phone pass part 2 | open | After phase 1 (the new layout); docs/accessibility.md |
-| B6b | **The screen is the world, for every game** | open | Evan, 2026-10-08. Realmbound first, done in Godot when Realmbound moves (docs/research/decisions.md, 2026-10-08 evening), unless it stays in the browser (the world fills the window; quests, bags, guild and the new Road guide move into the world: quest givers speak in place, bags and the quest log are things you open over the scene); then Diamond Career (the ballpark fills the screen, at-bat choices and contracts happen in the scene: the clubhouse, Iona, your home); then Starfall. One plan doc per game first, then small steps |
+| B4 | **Wildbond phase 4: menus you hold** | in Godot: the field book (J) and creature pages done; the Journal with map and badge case is part of WG8 | Wilddex field book, team scene, Journal with map and badge case |
+| B5 | **Wildbond phase 5: the ranch as a place** | in Godot: paddock, barn, nursery, trough, workbench done 2026-10-08; Maren's daily letter is WG8 | Trough, posts, meadow, breeding stall, shop counter, Maren's daily letter |
+| B6 | **L10** Accessibility; **L3** phone pass part 2 | open | Browser games now; the Godot previews need phone controls (WG10) |
+| B9 | **Next in Godot (in order):** WG1 tamer abilities, WG6 depth step 1 (including the colour-layer fix), WG7 variety pass, WG2 Stillreed Basin and on, SV1 Starfall members' stories, SV3 failing and excelling; rebuild the previews (play/) and the Come Play pictures after big steps | open | PROJECTS.md "Wildbond in Godot" and "Starfall in Godot" |
+| B6b | **The screen is the world, for every game** | Wildbond and Starfall: done in Godot; Diamond Career: ChatGPT A10 (T36); Realmbound: ChatGPT A12 (T38) | Evan, 2026-10-08. Realmbound first, done in Godot when Realmbound moves (docs/research/decisions.md, 2026-10-08 evening), unless it stays in the browser (the world fills the window; quests, bags, guild and the new Road guide move into the world: quest givers speak in place, bags and the quest log are things you open over the scene); then Diamond Career (the ballpark fills the screen, at-bat choices and contracts happen in the scene: the clubhouse, Iona, your home); then Starfall. One plan doc per game first, then small steps |
 | B6c | **V11 walk-in arcade, steps 1-2** | later (Evan: the games come first) | docs/research/arcade-first-visit-review.md: each game saves a small look record of its character; the hall puts you by the last door as that game's character, shows progress on the doors, glows the last-played door for a one-tap return |
 | B6d | **Starfall village, first slice (Godot)** | done 2026-10-08 (starfall-godot/, 33 checks); slice 2 done 2026-10-08 (plots, the Healer's Hut, a Training Yard, the town's rank and newcomers; 51 checks); slice 3 done 2026-10-08 (the Smithy worked by hand, Garrick, the Apothecary with prices, more plots, adventurers' savings; 85 checks); next: members' stories, seasons | docs/plans/starfall-village.md: the guild board, one inn run by hand, three adventurers who take bounties, return hurt and recover, hiring the first barkeep |
 | B7 | **V3** Game boxes on the launcher | open | docs/VISION.md §3 |
