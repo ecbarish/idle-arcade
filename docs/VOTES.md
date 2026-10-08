@@ -24,7 +24,7 @@ Votes.card(document.querySelector('#somewhere'), { id: 'wildbond-contests-1', ga
 Keep questions short and the choices concrete (ideally both built, so players can try them). Add the poll to the
 table above. Polls never decide things Evan reserves (CREATIVE.md "Ask Evan first"); they inform him.
 
-## Setting up the form (Evan, once; about 5 minutes)
+## Setting up the form (done 2026-10-07: Evan's form "Idle Arcade votes" is connected in shared/votes-config.js)
 
 1. Go to forms.google.com while signed in to your Google account and make a blank form called "Idle Arcade votes".
 2. Add five **Short answer** questions, in this order, named exactly: `poll`, `choice`, `game`, `version`, `tester`.
