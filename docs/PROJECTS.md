@@ -151,7 +151,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 |---|---|---|---|---|---|
 | SG1-SG4 | Starfall Guild stages G1-G4: careers, two expeditions, the town serves the guild, seasons become campaigns | L each | System | parked | docs/plans/starfall-guild.md |
 | OW0-OW5 | Otherworld (isekai) stages O0-O5 | L each | System | parked, needs Evan's go | docs/plans/otherworld.md, docs/ideas.md |
-| DC0-DC4 | Diamond Career (baseball) stages D0-D4 | L each | System | D0 + first D1 claimed: Codex, 2026-10-07, codex/diamond-career-d0 (T34); later stages outlined | docs/plans/diamond-career.md, docs/plans/sports-careers.md |
+| DC0-DC4 | Diamond Career (baseball) stages D0-D4 | L each | System | D0 + first D1 ready for review: Codex, 2026-10-08, PR #45 (T34); later stages outlined | docs/plans/diamond-career.md, docs/plans/sports-careers.md |
 | PR0-PR4 | Primordial stages P0-P4 | L each | System | back burner | docs/plans/primordial.md |
 
 ## Done (for reference; details in git history and the design docs)

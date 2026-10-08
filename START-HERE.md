@@ -125,6 +125,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Codex: T34 Diamond Career first call-up/payday prototype ready for Claude in PR #45, not merged. Both batting styles, six-game careers, contracts, home/garage, 56 Diamond checks and all six existing pages pass; keyboard/touch, saves and phone/desktop/ultrawide played. No existing version or cache bump. PR #44 research also waits, so Lane A pauses at the two-PR limit.
+
 - 2026-10-08 Claude: Evan's worries recorded: sports need no physics engine (stats model + readable moments, T34 as  written); Otherworld must not be predetermined: systemic world first, an AI storyteller layer as an experiment  (docs/otherworld-design.md). Asked Evan to approve downloading a CC0 sprite pack for Wildbond's Godot art.
 - 2026-10-08 Claude: Otherworld v0.1.0 built in games/otherworld/ (data in 00-data.js: CAST, WORLDS, GIFTS, MEMORIES,  ENDINGS, NODES, EPILOGUES; engine 01-game.js; scenes 02-scene.js): the Between, world and gift choice, name and look,  Asterhold's full life (status window, Mira, 3 branching choices, 8 endings), soul memories and rebirth both ways.  tests/otherworld.html walks every path for every gift and memory set (38 checks). Hub v1.4.0 (portal on the road).
 - 2026-10-08 Claude: Evan unparked Diamond Career and Otherworld (answers in docs/research/decisions.md). T34 for  ChatGPT (Diamond Career part 1, games/diamond-career/); docs/otherworld-design.md (choose your world from a list:  Asterhold, Hearthmere, the Ashen Throne; gifts with costs; rebirth by choice and on death); Claude builds O0.
