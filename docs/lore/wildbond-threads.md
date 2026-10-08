@@ -62,6 +62,12 @@ For each: what players can see, the candidate explanations, the decided truth (i
   sea, the watcher who failed, a bond that burned too bright. Each matches one candidate for thread 1.
 - **Decided (Evan, 2026-10-08):** all four descend from one older people who each witnessed a different part of the same
   event. Each tale is partly true. Some clues are only noticed with a given heritage.
+- **Clues placed (Godot, 2026-10-08, main.gd HERITAGES):** told at the register. Farmfolk: the land grew tired after
+  people took too much, and "one day it'll remember". Coastfolk: the tide went out further than ever and something
+  walked out of the sea; the returning water took the colour. Highlanders: something kept watch inside the mountain and
+  failed, or slept, that night. Wanderers: two things were joined that never should have been and burned so bright the
+  world went grey. Maren: four tellings at one harvest supper; "they can't all be right; maybe they can't all be wrong".
+  Tobin (to coastfolk) and the arrival lines at Saltmarsh, Emberfall and Cloudglass echo them.
 
 ### 6. Small threads to tie off early
 - Veilmote, the reserved sprite that "folds deep shade around abandoned nests, keeping their last warmth": whose nests,

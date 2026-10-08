@@ -16,13 +16,24 @@ const HAIRS := [["Black", "2a1a12"], ["Chestnut", "6b4423"], ["Copper", "a8743a"
 const TOPS := [["Red", "d8453a"], ["Amber", "e8a03a"], ["Leaf", "4f8a5a"], ["Sky", "3a6ab8"], ["Plum", "7a4aa0"], ["Cream", "eae2d0"], ["Charcoal", "3a3a44"]]
 const BOTTOMS := [["Navy", "3a4a6a"], ["Brown", "5a3a22"], ["Black", "2e2e36"], ["Olive", "6a7a3a"], ["Wine", "8a2a2a"], ["Sand", "c8b890"]]
 const OUTFITS := [["Trousers", "trousers"], ["Skirt", "skirt"], ["Overalls", "overalls"]]
-const ROWS := [["Name", []], ["Body", BODIES], ["Skin", SKINS], ["Hair", STYLES], ["Hair colour", HAIRS], ["Top", TOPS], ["Bottom", BOTTOMS], ["Outfit", OUTFITS]]
+## Your family's heritage (docs/proposals/wildbond-heritage.md): where your people come from, a small gift in bonding or
+## exploring, and the tale they tell about the fading. Everyone is human; nobody's heritage is the best one.
+const FAMILIES := [["Farmfolk", "farm"], ["Coastfolk", "coast"], ["Highlanders", "highland"], ["Wanderers", "wander"]]
+const FAMILY_TEXT := {
+	"farm": "Larkhaven's farms. Field and forest creatures trust you a little sooner.",
+	"coast": "Saltmarsh Coast. One partner for life: your lead creature's trust grows faster.",
+	"highland": "Emberfall's high villages. Trust grows faster in hard battles against tamers.",
+	"wander": "The roads of Farwatch. You find more in the tall grass.",
+}
+const ROWS := [["Name", []], ["Body", BODIES], ["Skin", SKINS], ["Hair", STYLES], ["Hair colour", HAIRS], ["Top", TOPS], ["Bottom", BOTTOMS], ["Outfit", OUTFITS], ["Family", FAMILIES]]
 const COLOUR_ROWS := [2, 4, 5, 6]
-const SIGN_ROW := 8
+const SIGN_ROW := 9
+const ROW_Y := 28
+const ROW_STEP := 13
 const INK := Color("3e2c20")
 const FAINT := Color("8a6e50")
 
-var pick := [0, 0, 1, 0, 1, 0, 0, 0]          # one choice per row (the name row uses name_i for suggestions)
+var pick := [0, 0, 1, 0, 1, 0, 0, 0, 0]          # one choice per row (the name row uses name_i for suggestions)
 var name_i := 0
 var name_text := ""
 var row := 0
@@ -53,6 +64,7 @@ func look() -> Dictionary:
 		"body": BODIES[pick[1]][1], "skin": Color(SKINS[pick[2]][1]), "style": STYLES[pick[3]][1],
 		"hair": Color(HAIRS[pick[4]][1]), "shirt": Color(TOPS[pick[5]][1]), "legs": Color(BOTTOMS[pick[6]][1]),
 		"hat": Color(BOTTOMS[pick[6]][1]).darkened(0.15), "shoes": Color("3a2a1a"), "outfit": OUTFITS[pick[7]][1],
+		"heritage": FAMILIES[pick[8]][1],
 	}
 
 func change(d: int) -> void:
@@ -105,13 +117,13 @@ func _input(e: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
 		var p := get_local_mouse_position()
-		if Rect2(204, 162, 146, 18).has_point(p):
+		if Rect2(204, 166, 146, 15).has_point(p):
 			row = SIGN_ROW
 			sign_it()
 		else:
 			for i in ROWS.size():
-				var y := 30 + i * 16
-				if p.y >= y - 9 and p.y < y + 5 and p.x > 196:
+				var y := ROW_Y + i * ROW_STEP
+				if p.y >= y - 9 and p.y < y + 4 and p.x > 196:
 					row = i
 					if p.x < 270: change(-1)
 					elif p.x > 332 or i != 0: change(1)
@@ -153,9 +165,9 @@ func _draw() -> void:
 	_text("signed, this first day of spring", Vector2(28, 190), 6, FAINT, 163)
 	# right page: the lines you fill in
 	for i in ROWS.size():
-		var y := 30 + i * 16
+		var y := ROW_Y + i * ROW_STEP
 		if i == row:
-			draw_rect(Rect2(198, y - 9, 153, 14), Color(0.85, 0.66, 0.36, 0.35))
+			draw_rect(Rect2(198, y - 9, 153, 12), Color(0.85, 0.66, 0.36, 0.35))
 		_text(ROWS[i][0], Vector2(202, y), 7, FAINT)
 		_arrow(260, y, true)
 		_arrow(342, y, false)
@@ -177,8 +189,10 @@ func _draw() -> void:
 		else:
 			var s: String = ROWS[i][1][pick[i]][0]
 			_text(s, Vector2(mid - font.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x / 2.0, y), 8, INK)
+	# what your family means, under its line
+	draw_multiline_string(font, Vector2(202, 147), FAMILY_TEXT[FAMILIES[pick[8]][1]], HORIZONTAL_ALIGNMENT_LEFT, 148, 6, 2, FAINT)
 	var on := row == SIGN_ROW
-	draw_rect(Rect2(204, 162, 146, 18), INK if on else Color("7a5a3a"))
-	_text("Sign the register", Vector2(204, 175), 9, Color("f4e9cd"), 146)
+	draw_rect(Rect2(204, 166, 146, 15), INK if on else Color("7a5a3a"))
+	_text("Sign the register", Vector2(204, 177), 9, Color("f4e9cd"), 146)
 	_text("Up/Down choose a line, Left/Right change it", Vector2(193, 190), 6, FAINT, 163)
 	_text("Type your name; Enter or click to sign", Vector2(193, 198), 6, FAINT, 163)

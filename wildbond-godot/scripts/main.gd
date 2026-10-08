@@ -307,7 +307,40 @@ func _on_signed(look: Dictionary) -> void:
 	say("", "As the ink dries, colour runs into you: your hands, your clothes, your hair. You're the only bright thing on the road.")
 	say("maren", "%s. Good name. And look at you, bright as a new penny!" % look.name)
 	say("maren", "Don't mind the rest of it. The whole valley faded long ago. Like an old photo, isn't it?")
+	var fam: Dictionary = HERITAGES.get(heritage(), HERITAGES.farm)
+	say("maren", "%s, it says here. %s" % [fam.name, fam.maren])
+	say("", fam.tale)
+	say("maren", "Every family in this valley tells it a little differently. I once heard four tellings at one harvest supper. They can't all be right. Maybe they can't all be wrong, either.")
 	say("maren", "Folk say it comes back, a little, every time someone earns a creature's trust. Come to the barn. Someone's been waiting for you.")
+
+# ---------------------------------------------------------------- heritage: where your family comes from (register.gd)
+## Each family tells the fading its own way: a partial truth, one thread of the story (docs/lore/wildbond-threads.md,
+## thread 5). People of your own heritage recognise you, and the places your family knows feel like home.
+const HERITAGES := {
+	"farm": { "name": "Larkhaven farmfolk", "maren": "A farm family! Then you know how to look after things that can't tell you what's wrong.",
+		"tale": "Your grandmother always said the land grew tired. People took and took from it, and one hard winter it simply let its colour go. \"Look after the land,\" she'd say, \"and one day it'll remember.\"" },
+	"coast": { "name": "Saltmarsh coastfolk", "maren": "Coast people. You'll have grown up with one creature at your side, then. Your lot never do anything by halves.",
+		"tale": "On the coast they say the tide went out further than it ever had, and something walked up out of the sea. When the water came back in, it took the colour with it." },
+	"highland": { "name": "Emberfall highlanders", "maren": "From the high villages! You'll be tougher than you look. Highland folk always are.",
+		"tale": "Up in the high villages they say something kept watch inside the mountain, and on the night the colour went, it failed. Or slept. Nobody up there agrees which, and they've been arguing for a hundred years." },
+	"wander": { "name": "Farwatch wanderers", "maren": "A wanderer, signing a ranch register. Well, there's a first time for everything.",
+		"tale": "Your mother used to say, by the fire, that two things were once joined that never should have been, and they burned so bright that the world went grey around them." },
+}
+## People who recognise your family, the first time you talk to them (said before their usual lines).
+const HERITAGE_TALK := {
+	"pip": { "farm": "You're from the farms! Your family's apples are the best in the valley. Everyone says so. I say so.",
+		"wander": "You're a wanderer? Have you been everywhere? Have you seen the sea? Is it big? How big?" },
+	"tobin": { "coast": "You've got the coast in you. I can tell by how you stand on sand. Your folk know about the tide, don't they? The one that went out too far." },
+}
+## Places your family knows, the first time you arrive.
+const HERITAGE_ARRIVE := {
+	"saltmarsh": { "coast": "The smell of salt and wet reeds. You're home, or near enough. Your people would say the tide is watching." },
+	"emberfall": { "highland": "Warm stone under your boots and thin, bright air. Your family's mountains. Somewhere up there, they say, something still keeps watch." },
+	"cloudglass": { "wander": "A rope strung into the cloud, a path you've never walked. Your mother would have loved this. Wanderers never feel lost on a new road." },
+}
+
+func heritage() -> String:
+	return str(my_look.get("heritage", "farm"))
 
 func _partner_name() -> String:
 	return DATA.SPECIES[partner.id].name if partner else "your partner"
@@ -458,6 +491,10 @@ func _switch() -> void:
 		restore.append({ "where": "larkhaven", "at": Vector2(BARN_DOOR) * TILE + Vector2(8, 8), "r": 0.0, "goal": 110.0 })
 		say("", "Outside, the colour has spilled out through the barn door: across the path, up the walls, into the grass.")
 		say("", "%s sniffs the bright grass, sneezes, and looks up at you as if to say: where next?" % _partner_name())
+	var arrive: String = HERITAGE_ARRIVE.get(trans_to, {}).get(heritage(), "")
+	if arrive != "" and stage == "free" and not story_done.has("arr:" + trans_to):
+		story_done["arr:" + trans_to] = true         # the first time you reach a place your family knows
+		say("", arrive)
 
 # ---------------------------------------------------------------- the loop
 func _process(dt: float) -> void:
@@ -480,6 +517,7 @@ func _process(dt: float) -> void:
 	_butterfly(dt)
 	_spotter_tick(dt)
 	_autosave(dt)
+	battle.heritage = heritage()
 	_check_evolution()
 	_bubbles(dt)
 	for m in actors():
@@ -1278,7 +1316,7 @@ func _arrived(p: Vector2i) -> void:
 	if tile_at(p) == "\"" and DATA.MAPS[map_name].has("biome"):
 		grass_n -= 1
 		if grass_n <= 0:
-			grass_n = rng.randi_range(8, 16)
+			grass_n = rng.randi_range(6, 12) if heritage() == "wander" else rng.randi_range(8, 16)   # wanderers find more in the grass
 			walk_to.clear()
 			_explore()
 
@@ -1543,6 +1581,10 @@ func _talk_here() -> bool:
 				for b in badges:                       # what folk say changes with your badges (byBadge)
 					if info.data.get("byBadge", {}).has(b):
 						talk = info.data.byBadge[b]
+				var known: String = HERITAGE_TALK.get(n.id, {}).get(heritage(), "")
+				if known != "" and not story_done.has("her:" + n.id):
+					story_done["her:" + n.id] = true   # they recognise your family, once
+					say(n.id, _fill(known))
 				for l in talk:
 					say(l[0], _fill(l[1]))
 			elif info.beaten:

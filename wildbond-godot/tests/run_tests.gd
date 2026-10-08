@@ -450,7 +450,7 @@ func _run() -> void:
 		check(main.npcs.any(func(n): return n.id == "pip" and n.where == "larkhaven"), "Pip lives in Larkhaven")
 		check(walk_to(Vector2i(20, 7)), "you can walk up to Pip")
 		main.me.face = Vector2i.RIGHT
-		check(main._talk_here() and main.lines[0].who == "pip" and "YELLOW" in main.lines[0].text, "Pip has noticed the colour since your Thorn Badge")
+		check(main._talk_here() and main.lines[0].who == "pip" and main.lines.any(func(l): return "YELLOW" in l.text), "Pip has noticed the colour since your Thorn Badge")
 		talk_through()
 	# ---- the field book
 	talk_through()
@@ -523,6 +523,57 @@ func _run() -> void:
 	main.ranch = keep_ranch
 	main._place_ranch()
 	main._lead_look()
+	# ---- heritage: your family, chosen in the register (docs/proposals/wildbond-heritage.md)
+	var reg = main.register
+	check(reg.ROWS[8][0] == "Family" and reg.look().heritage == "farm", "the register has a Family line (Farmfolk first)")
+	reg.row = 8
+	reg.change(1)
+	check(reg.look().heritage == "coast" and "partner" in reg.FAMILY_TEXT.coast, "choosing Coastfolk, with what it means written under it")
+	reg.change(-1)
+	check(main.heritage() == "farm" or main.my_look.has("heritage"), "old journeys without a family count as farmfolk")
+	var keep_look: Dictionary = main.my_look.duplicate()
+	var keep_team2: Array = main.team.duplicate()
+	var h_lead: Dictionary = main.R.make("cindercub", 10, { "rar": 1 }, main.rng)
+	var h_second: Dictionary = main.R.make("ripplet", 10, { "rar": 1 }, main.rng)
+	for c in [h_lead, h_second]:
+		c.traits = []
+		c.bond = 0.0
+		c["hold"] = 999
+	var bond_after := func(fam: String, kind: String) -> Array:
+		h_lead.bond = 0.0
+		h_second.bond = 0.0
+		main.my_look["heritage"] = fam
+		main.battle.heritage = fam
+		main.team = [h_lead, h_second]
+		var foe: Dictionary = main.R.make("glimmerwing", 3, { "rar": 1 }, main.rng)
+		main.battle.open(kind, main.team, [foe], "" if kind == "wild" else "Test")
+		for u in main.battle.foes: u.c.hp = 0
+		for i in 120:
+			tick(0.05)
+			if main.battle.state == "results": break
+		main.battle._go_to("fog_out")
+		main.battle_story = "test"
+		tick(1.5)
+		talk_through()
+		return [float(h_lead.bond), float(h_second.bond)]
+	var farm_w: Array = bond_after.call("farm", "wild")
+	var coast_w: Array = bond_after.call("coast", "wild")
+	check(is_equal_approx(coast_w[0], farm_w[0] * 1.5) and is_equal_approx(coast_w[1], farm_w[1]), "coastfolk: the lead creature's trust grows half again as fast (%s vs %s)" % [coast_w, farm_w])
+	var farm_t: Array = bond_after.call("farm", "trainer")
+	var high_t: Array = bond_after.call("highland", "trainer")
+	check(is_equal_approx(high_t[0], farm_t[0] * 1.5) and is_equal_approx(high_t[1], farm_t[1] * 1.5), "highlanders: trust grows faster in battles against tamers (%s vs %s)" % [high_t, farm_t])
+	main.team = keep_team2
+	main.my_look = keep_look
+	main.my_look["heritage"] = "farm"
+	main.story_done.erase("her:pip")
+	check(walk_to(Vector2i(20, 7)), "back over to Pip")
+	main.me.face = Vector2i.RIGHT
+	main._talk_here()
+	check(not main.lines.is_empty() and "farms" in main.lines[0].text, "Pip recognises a farm family, the first time")
+	talk_through()
+	main._talk_here()
+	check(not main.lines.is_empty() and not ("farms" in main.lines[0].text), "and only the first time")
+	talk_through()
 	# ---- saving your journey and loading it back (to a test file, never your real one)
 	talk_through()
 	main.no_save = false

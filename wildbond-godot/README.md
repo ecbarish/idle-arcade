@@ -57,6 +57,11 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   (wandering, sniffing, sitting, watching you come over), the rest on the barn floor. Walk up to one (or tap it) to see
   its page (level, trust, moves, strengths) and **Take along**, or with a full team **Swap in** and choose who rests
   instead. The creature at the front of your team is the one that walks with you.
+- **Heritage** (docs/proposals/wildbond-heritage.md): the register's ninth line is your **Family**: Larkhaven farmfolk
+  (field and forest creatures trust you a little sooner), Saltmarsh coastfolk (your lead creature's trust grows half
+  again as fast), Emberfall highlanders (trust grows faster in battles against tamers) or Farwatch wanderers (you find
+  more in the tall grass). When you sign, Maren asks, and you remember your family's tale of the fading (each a different
+  part of the truth). Pip and Tobin recognise their own people; reaching your family's country brings a memory of home.
 - **Evolution with shapes and conditions** (`data/evolution.json`): you're asked when a creature is ready to change
   (Let it change, or Not yet; "not yet" waits a level). New third stages for the starter lines, each with its own
   condition: Blazefang becomes **Pyremane** at 32 in the heat of Emberfall; Tidewyrm becomes **Deeptide** only for a
@@ -87,7 +92,7 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   See it: add `--write-movie <folder>/f.png --fixed-fps 10 --quit-after 200 -- --demo` (the demo plays the opening by
   itself) and look at the frames.
 - **Checks:** `Godot_v4.7.2-stable_win64_console.exe --headless --path wildbond-godot --script res://tests/run_tests.gd`
-  plays the opening, the first battle, Thornwood, a catch, the Warden and a save by itself; must stay all-pass (165 checks on 2026-10-08). `tests/battle_odds.gd` measures how winnable a battle is; run the game with `-- --skip-opening` to start in Thornwood (add `--at=saltmarsh` for the coast, `--at=emberfall` for the highlands, `--at=cloudglass` for the pass, `--at=larkhaven --ranch` to see creatures at the ranch, `--book` to open the field book).
+  plays the opening, the first battle, Thornwood, a catch, the Warden and a save by itself; must stay all-pass (173 checks on 2026-10-08). `tests/battle_odds.gd` measures how winnable a battle is; run the game with `-- --skip-opening` to start in Thornwood (add `--at=saltmarsh` for the coast, `--at=emberfall` for the highlands, `--at=cloudglass` for the pass, `--at=larkhaven --ranch` to see creatures at the ranch, `--book` to open the field book).
 - **Builds for sharing:** `tools/godot-build.ps1` (web: play/wildbond/, Windows: export/Wildbond-trial-windows.zip),
   once Godot's export templates are installed (Editor > Manage Export Templates > Download and Install).
 - Click or tap anywhere to walk there; tap a creature in the barn to walk up and meet it.

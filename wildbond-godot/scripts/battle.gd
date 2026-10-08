@@ -39,6 +39,7 @@ var results: Array = []                       # lines on the results page
 var rng := RandomNumberGenerator.new()
 var font: Font
 var demo := false
+var heritage := "farm"                        # your family's heritage (main.gd): a small gift in bonding (register.gd FAMILY_TEXT)
 var area := ""                                 # the area the battle happens in (main.gd sets it): its sky and skyline
 var max_level := 15                           # the level cap (main.gd sets it from your badges, CAP_TABLE)
 var bag: Dictionary = { "lures": 0, "berries": 0 }  # the satchel (main.gd owns it): lures for Bond, berries for Bag
@@ -365,7 +366,12 @@ func _end(r: String) -> void:
 			var xp := roundi(base * (0.3 if u.c.hp <= 0 else 1.0) * scale)
 			results.append("%s gained %d XP." % [u.c.name, xp])
 			results.append_array(R.grow(u.c, xp, max_level))
-			if u.c.hp > 0 and R.add_bond(u.c, 0.5 if kind == "wild" else 2.0):
+			var gain := 0.5 if kind == "wild" else 2.0
+			if heritage == "coast" and u == allies[0]:
+				gain *= 1.5                             # coastfolk: one partner for life
+			if heritage == "highland" and kind != "wild":
+				gain *= 1.5                             # highlanders: trust grows in hard battles
+			if u.c.hp > 0 and R.add_bond(u.c, gain):
 				results.append("%s trusts you more: %s." % [u.c.name, R.BOND[R.bond_lvl(u.c)][0]])
 	elif r == "lost":
 		results.append("Your team is exhausted.")
@@ -687,6 +693,8 @@ func _calm() -> void:
 	var hp_pct: float = float(c.hp) / u.st.hp
 	var base: float = 0.12 if R.sp(c).get("unique", false) else [0.55, 0.42, 0.3, 0.2, 0.1, 0.05][int(c.rar)]
 	var ch: float = base * (1.5 - hp_pct) * (1.6 if q == "perfect" else (1.3 if q == "good" else 1.0))
+	if heritage == "farm" and str(R.sp(c).el) in ["Grove", "Gale"]:
+		ch *= 1.2                                   # farmfolk: field and forest creatures trust you a little sooner
 	for a in allies:
 		if "gentle" in a.c.traits:
 			ch *= 1.15

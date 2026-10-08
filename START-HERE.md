@@ -137,6 +137,11 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (night, continued): Wildbond Godot heritages: a Family line in Maren's register (farmfolk, coastfolk,
+  highlanders, wanderers), each a small bonding/exploring gift and its own tale of the fading told at signing (clues in
+  docs/lore/wildbond-threads.md thread 5), recognition by Pip and Tobin, arrival memories; 173 checks. Also organised Evan's
+  PC on request (outside the repo; plan in his Desktop\PC Cleanup).
+
 - 2026-10-08 Claude (night, continued): merged ChatGPT's R6 (Realmbound v1.4.0, regional town layouts, walk-in inns and smithies;
   7370 checks). Wildbond Godot: evolution with shapes and conditions (data/evolution.json; Pyremane by place, Deeptide by trust,
   Elderthorn with a companion, Poolkit's three-way branch; you're asked, Not yet waits a level; hints in the field book); creatures
