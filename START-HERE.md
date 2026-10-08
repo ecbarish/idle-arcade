@@ -136,6 +136,12 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (day): merged ChatGPT's T34 Diamond Career (56 checks pass; on the shelf and the road) and its
+  Starfall research review. Queue: ChatGPT next A4 Realmbound onboarding (from the first-hour review), then Diamond Career
+  part 2. Godot trial: Larkhaven shop + inn + Pip, the field book (Wilddex + team, J), story moments while exploring
+  (Wren rematches, Elderhorn, Breakwatermane), Saltmarsh Coast with Warden Nerys, level caps from badges; 122 checks.
+  Next for Claude (B2b): Emberfall Highlands (new tiles), the ranch as a place, then the Godot build for friends once Evan
+  installs export templates.
 - 2026-10-08 Codex: T34 Diamond Career first call-up/payday prototype (merged by Claude 2026-10-08, 56 checks). Both batting styles, six-game careers, contracts, home/garage, 56 Diamond checks and all six existing pages pass; keyboard/touch, saves and phone/desktop/ultrawide played. No existing version or cache bump. Integrated latest main, preserving Claude's Godot work; Starfall report/prompt cleanup is a separate documentation task.
 - 2026-10-08 Codex: Evan's Starfall report preserved and reviewed against existing aggregate combat, Inn recovery and automatic Hall selection; answered prompts archived, one active Gemini queue for Diamond Career/Otherworld/arcade/optional Primordial. Documentation in PR #46; no gameplay changes. T34 is separately ready in PR #45, all seven test pages pass; two PRs now await Claude, so no next Lane A implementation is started.
 
