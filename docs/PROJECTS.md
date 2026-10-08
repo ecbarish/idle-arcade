@@ -102,7 +102,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | W11 | **A larger roster**: batches of 10-12 new species per element, filling every family and element pairing (target about 150 to start), each with a dex line; ChatGPT-friendly data work | L (batches) | Data | W9 | open | T6 rules in creature-game-design.md; one batch per PR |
 | W12 | **New creature families** (body shapes beyond the current ones: serpents, golems, insects, jellyfish...) with their own art | L | Art | — | open | shared/creatures.js and 01-art.js |
 | W13 | **Character creator**: your tamer's body type (male, female, other), skin, hair style and colour, outfit; shown in the world, in scenes and in battle | M | Art+System | — | open | Evan, 2026-10-07; part of the opening (B3b); later shared with Realmbound's heroes |
-| W14 | **Creature variants**: rare looks within a species (a shimmering colour like shinies, tiny and huge sizes, unique pattern markings like Spinda), shown in the Wilddex; cosmetic, never stronger | M | Art+Data | — | claimed: Codex, 2026-10-07, `codex/wildbond-variants` | Evan, 2026-10-07 |
+| W14 | **Creature variants**: rare looks within a species (a shimmering colour like shinies, tiny and huge sizes, unique pattern markings like Spinda), shown in the Wilddex; cosmetic, never stronger | M | Art+Data | — | ready for review: Codex, 2026-10-07, PR #43 | Evan, 2026-10-07 |
 
 ## Realmbound (classic-MMO idle, flagship)
 

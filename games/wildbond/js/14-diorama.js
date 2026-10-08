@@ -98,7 +98,7 @@ ART.diorama = (() => {
   }
   function thingGeo(q) {
     if (q.kind === 'item') return voxelGeo('item', 16, 16, c2 => paintItem(c2, 0, 0, 16, 0, true), 1 / 18);
-    if (q.kind === 'pet') return voxelGeo('c:' + q.sp.name + ':' + (q.right ? 1 : 0), 44, 40, c2 => ART.bit16.creature(c2, 12, 34, 1, q.sp, q.right, 0), 1 / 22);
+    if (q.kind === 'pet') return voxelGeo('c:' + q.sp.name + ':' + variantKey(q.sp.variant) + ':' + (q.right ? 1 : 0), 44, 40, c2 => ART.bit16.creature(c2, 12, 34, 1, q.sp, q.right, 0), 1 / 22);
     const L = q.look; return voxelGeo(`w:${L.skin}${L.hair}${L.hairCol}${L.hatCol || ''}${L.shirt}:${q.dir}:${q.step}`, 24, 28, c2 => paintWalker(c2, 4, 10, 16, L, q.dir, q.step, true), 1 / 16);
   }
 

@@ -4,9 +4,9 @@ function toast(m) { const el = document.createElement('div'); el.className = 'to
 const elChip = e => e ? `<span class="el" style="--c:${ELEMENTS[e].col}">${e}</span>` : '';
 const rarTag = r => r ? `<span class="rar r${r}">${Cr.RARITY[r].name}</span>` : '';
 function bar(cur, max, cls) { return `<div class="bar ${cls || ''}"><i style="width:${Math.max(0, Math.min(100, cur / max * 100))}%"></i></div>`; }
-function portrait(id, sm) { return `<canvas class="pic${sm ? ' sm' : ''}" width="${sm ? 56 : 72}" height="${sm ? 44 : 56}" data-sp="${id}"></canvas>`; }
+function portrait(id, sm, individual) { return `<canvas class="pic${sm ? ' sm' : ''}" width="${sm ? 56 : 72}" height="${sm ? 44 : 56}" data-sp="${id}"${individual && individual.variant ? ` data-variant="${encodeURIComponent(JSON.stringify(individual.variant))}"` : ""}></canvas>`; }
 function drawPortraits(root) { (root || document).querySelectorAll('canvas[data-sp]').forEach(cv => { if (cv.dataset.done) return; cv.dataset.done = 1;
-  const c = eraCtx(cv.getContext('2d')); c.imageSmoothingEnabled = false; const s = SPECIES[cv.dataset.sp], p = Math.max(2, Math.floor(cv.height / 18));
+  const c = eraCtx(cv.getContext('2d')); c.imageSmoothingEnabled = false; const s = variantPortrait(cv), p = Math.max(2, Math.floor(cv.height / 18));
   art().creature(c, cv.width / 2 - 2 * p, cv.height - 3, p, s, false, 0, cv.dataset.seen === '0' ? { col: '#2a3a40' } : null); }); }
 
 /* ---- header ---- */
@@ -72,7 +72,7 @@ const TABS = {
   dex: { key: () => Object.keys(S.seen).length + ':' + Object.keys(S.caught).length,
     build: () => { const ids = Object.keys(SPECIES); return `<h3>Wilddex</h3><p class="sub">${Object.keys(S.caught).length} caught · ${Object.keys(S.seen).length} seen · ${ids.length} known in this region.</p><div class="dex">` +
       ids.map(id => { const s = SPECIES[id], seen = S.seen[id], got = S.caught[id];
-        return `<div class="dx ${got ? '' : 'faded'}"><canvas class="pic sm" width="56" height="44" data-sp="${id}" data-seen="${seen ? 1 : 0}"></canvas><div><b>${seen ? s.name : '???'}</b> ${seen ? elChip(s.el) : ''}<div class="meta">${got ? s.dex : seen ? 'Seen, not caught.' : 'Not yet seen.'}</div></div></div>`; }).join('') + '</div>'; } },
+        return `<div class="dx ${got ? '' : 'faded'}"><canvas class="pic sm" width="56" height="44" data-sp="${id}" data-seen="${seen ? 1 : 0}"></canvas><div><b>${seen ? s.name : '???'}</b> ${seen ? elChip(s.el) : ''}<div class="meta">${got ? s.dex : seen ? 'Seen, not caught.' : 'Not yet seen.'}</div>${variantDexHTML(id)}</div></div>`; }).join('') + '</div>'; } },
   journal: { key: () => S.log.length + S.era + S.journey + S.capMode + S.xpShare + !!B + S.badges.length + ':' + (S.day || 1) + ':' + Math.floor(dayPart() * 3) + ':' + (S.pos && S.pos.map) + ':' + leagueState().room + ':' + !!S.story.leagueEnding + ':' + towerState().best + ':' + towerState().floor + ':' + towerState().rest,
     build: () => `<h3>Journal</h3><div class="stats"><div>Battles <b>${S.stats.battles}</b></div><div>Wins <b>${S.stats.wins}</b></div><div>Caught <b>${S.stats.caught}</b></div><div>Played <b>${fmtTime(S.stats.play)}</b></div></div>
       ${forecastHTML()}
@@ -110,10 +110,11 @@ function capNote(c) {
 }
 function cardHTML(c, i, inTeam) {
   const s = sp(c), st = stOf(c), mv = movesOf(c), bl = Cr.bondLvl(c), T = Cr.TEMPERAMENTS[c.temp];
-  return `<div class="ccard">${portrait(c.sp)}<div class="cbody">
+  return `<div class="ccard">${portrait(c.sp, false, c)}<div class="cbody">
     <div class="cn">${c.name} <span class="lv">Lv ${c.lvl}</span> ${elChip(s.el)} ${rarTag(c.rar)}</div>
     <div class="meta">${s.name !== c.name ? s.name + ' · ' : ''}${T.name}${T.up ? ` (+${Cr.STAT_NAME[T.up]}, −${Cr.STAT_NAME[T.down]})` : ''} · ${Cr.BOND[bl].n}${c.traits.length ? ' · ' + c.traits.map(t => Cr.TRAITS[t].name).join(', ') : ''}</div>
     ${bar(c.hp, st.hp, 'hp')}<div class="meta">${c.hp <= 0 ? 'Fainted, needs rest' : `${c.hp}/${st.hp} health`} · ${capNote(c)}${s.evo && c.lvl < s.evo.at ? ` · evolves at ${s.evo.at}` : ''}</div>
+    ${variantLabel(c) ? `<div class="meta">${variantLabel(c)} · Cosmetic only.</div>` : ""}
     <div class="role">${roleOf(s)}</div>
     <div class="grades">${Cr.STATS.map(k => `<span title="${Cr.STAT_NAME[k]}: ${STAT_HELP[k]}. Potential ${Cr.grade(c.pot[k])} (F to S: how far this stat can grow).">${Cr.STAT_NAME[k]} <b>${st[k]}</b> <i class="g${Cr.grade(c.pot[k])}">${Cr.grade(c.pot[k])}</i></span>`).join('')}</div>
     <details class="cmoves"><summary>Moves: ${mv.map(m => MOVES[m].name).join(', ')}</summary>${mv.map(m => `<div><b>${MOVES[m].name}</b>: ${moveInfo(m)}</div>`).join('')}</details>

@@ -162,7 +162,7 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
 - [ ] T32 open for ChatGPT on `codex/wildbond-area-light` (G2, every other Wildbond area).
-- [ ] T33 open for ChatGPT on `codex/wildbond-variants` (W14, creature variants). Read docs/wildbond-plan.md first.
+- [x] T33 ready for review in PR #43 on `codex/wildbond-variants` (W14, creature variants). Read docs/wildbond-plan.md first.
 
 ### T33: Wildbond creature variants (W14)
 Evan (2026-10-07): "it would be cool for some creatures, even though they're the same creature, to have some unique
