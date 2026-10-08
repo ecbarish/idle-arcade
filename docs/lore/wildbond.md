@@ -358,3 +358,10 @@ for everyone. Roaming legendaries and Modern 3D remain future work.
 - How should later light and depth restoration work without requiring a guardian capture? Current color restoration already allows that freedom.
 - What are the humming shell, unusual tidal retreat and disappearing dusk webs telling us? They may be separate mysteries.
 - Which future regions and characters does Evan want to approve before their names enter dialogue or data?
+
+
+## Roster batch one (W11)
+
+The early roads also shelter Fernruff and its grown form Briarwatch (Grove wolves), Poolkit and Rilllynx (Tide cats), Bogbough (Grove croc), Dewspinner (Tide spider), Cairnclasp (Stone lizard), Kilnchirp (Ember bird), Tumbletusk (Gale boar) and Slatehoof (Stone horse). Their dex lines concern shared shelter, riverbanks, careful crossings and nesting. Hearthlaugh is a rare Radiant hyena in Emberfall: it never evolves, and grows through practice with its companions. These are ordinary species, not new guardians.
+
+Veilmote is a solitary Shade sprite whose dex describes warming abandoned nests. It is reserved unique-species data with no implemented encounter yet; it does not explain the fading or replace Undertone. See [the roster record](../wildbond-roster-batch1.md). Possible Realmbound habitats in shared/catalogue/wildbond-batch1.json remain proposals, not established sightings or encounters.
