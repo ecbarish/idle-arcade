@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Realmbound (2026-10-07): a lore-first field guide, first fifteen minutes, systems, earned addons and tips, with late discoveries folded away. [Read the booklet](guides/realmbound.html); reference tables follow current game data.
+
 - Wildbond (2026-10-07): cosmetic Gleaming colours, tiny/huge sizes and individual markings, with inherited egg looks and seen/bonded Wilddex notes. Old creatures stay ordinary; stats are unchanged. [Design and checks](docs/wildbond-variants.md).
 
 - **Wildbond v1.5.2, Realmbound v1.0.3 (2026-10-07)** — Wildbond: a day (and the ranch day) now lasts an hour

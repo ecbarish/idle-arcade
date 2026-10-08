@@ -55,7 +55,7 @@ index.html or style.css until those phases are merged.
 |---|---|---|---|
 | A1 | **T33** Wildbond creature variants (W14) | ready for review: Codex, 2026-10-07, PR #43 | docs/ROADMAP.md T33: a rare shimmering colour, tiny/huge sizes, seeded markings; cosmetic only |
 | A2 | **T32** Wildbond lighting for every other area (G2) | blocked: profile-only scope cannot select town/league/Spire; see docs/proposals/wildbond-area-air.md | Finish if started; otherwise after A1. Only `AREA_AIR` values and their checks in 06-scene.js |
-| A3 | **T8** Realmbound guide and lore pages | claimed: Codex, 2026-10-07, `codex/realmbound-guide` | ROADMAP T8, Realmbound first; Wildbond's guide waits for its redesign |
+| A3 | **T8** Realmbound guide and lore pages | ready for review: Codex, 2026-10-07, PR #44 | ROADMAP T8, Realmbound first; Wildbond's guide waits for its redesign |
 | A4 | **L4 + V1** Realmbound onboarding and prologue | open | A narrated prologue in its own engine, then a gentle first ten minutes told by people in the world (docs/VISION.md §1) |
 | A5 | **R4** Guild members' personal stories | open | 3-4 beats per adventurer, unlocked by mood and time together; one outcome that can go either way (VISION §9) |
 | A6 | **W11** A larger Wildbond roster, batch 1 | open | After A1; 10-12 species filling empty family/element pairs (T6 rules); data only |

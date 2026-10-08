@@ -602,6 +602,8 @@ games/wildbond/js/00-data.js only. Change no other file.
   (cheeky, competitive, warm) and match the existing tone. You may add one new `CAST` speaker if a scene needs one.
 - Claude handles the code side: raising the level cap, the Saltmarsh Warden and the `tide` badge.
 
+Realmbound portion ready for review: Codex, 2026-10-07, PR #44 (`guides/realmbound.html`). Other game guides remain open; Wildbond waits for its redesign.
+
 ### T8: Game guides
 One guide page per game, written like a good fan wiki or strategy guide: lore first, then how to play, then tips.
 - **Files:** `guides/index.html` (lists the guides), `guides/guide.css` (shared look, readable at phone width, 16px

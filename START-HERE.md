@@ -125,6 +125,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-07 Codex: T8 Realmbound guide ready in PR #44, stacked on T33 #43; static 2800-word lore/booklet, generated references and hub card link. All five pages pass (1254/4173/48/21/15), phone through ultrawide, links/spoilers/save safety checked. T32 scope conflict documented in docs/proposals/wildbond-area-air.md; no partial lighting shipped. Two PRs await review; no version/cache bump or merge.
+
 - 2026-10-07 Codex: T33/W14 variants ready in PR #43 (codex/wildbond-variants): Gleaming, tiny/huge and seeded markings, cosmetic only; egg inheritance, old-save defaults, Wilddex records and all-era art. All five pages pass (1254/4173/48/21/15), saves/hub restored, phone through ultrawide and actual Diorama checked. Small label/drawing adapters only; no restyle, version/cache bump or merge. Continuing Lane A.
 
 - 2026-10-07 Claude: saved Gemini's research (docs/research/creature-games-ux.md) and mapped its lessons onto  docs/wildbond-plan.md phases. Evan is considering a standalone game: options and a recommendation (Godot, small  trial first) are Question 1 in Questions for Evan; the screen rebuild waits for his answer.
