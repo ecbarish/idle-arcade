@@ -1,5 +1,17 @@
 # Research brief: the big open decisions (2026-10-08)
 
+## Direction (Evan, 2026-10-08, evening): every game will likely move to a game engine
+
+Evan: "I'm pretty sure we'll likely have to move all to the game engine, but a web version works too because it gives
+access everywhere." Godot exports to the browser as well as desktop and phones, so moving keeps the web version. What
+this means now:
+- **Keep content as data apart from the code** in every game (Wildbond's `tools/godot-export.ps1` is the model), so a
+  later move rebuilds screens rather than rewriting the game.
+- **Big screen rebuilds wait for the move** (for example Realmbound's "everything in the game window", QUEUE B6b): do
+  them once, in Godot, unless a game is staying in the browser. Small fixes and content continue in the browser.
+- **The walk-in arcade (PROJECTS V11) is the natural next Godot project after Wildbond**, run on the website through
+  the web export.
+- Order of moves and timing are still open; Wildbond's trial decides how well it works first.
 ## Decided (Evan, 2026-10-08): Diamond Career and Otherworld start now, in the browser
 
 Evan: "I want to work on the sports game and the anime game as well, I dont know why we ignore them?" They had been
