@@ -60,6 +60,15 @@ games) · L8 the arcade launcher · L10 accessibility · guides and lore pages (
 | A9 | **W11** A larger Wildbond roster, batch 1 | open | 10-12 species filling empty family/element pairs; repeat as A9b, A9c... |
 | A10 | **R6** Realmbound hub variety; **R5** crafted gear from 55 | open | One PR each |
 | A11 | While you wait | always | Lore and dex text polish, more checks, bugs from GitHub issues |
+| A2 | **R9** Heroic tiers and loot review for Rootrot and Heartwood | ready for review: Codex, 2026-10-07, PR #40 | Realmbound data; compare with Sanctum/Foundry heroics; checks for every tier's loot |
+| A3 | **W8** Wildbond pacing pass for areas 5-8 plus the league (sim) | open | Use the pacing sim in docs/creature-game-design.md; tune only wild levels, XP and trainer levels; record measured times |
+| A4 | **R4** Guild members' personal stories | open | 3-4 short beats per adventurer, unlocked by mood and time together (docs/realmbound-40-60.md "The guild as built"); talk scenes in the guild hall; their voices from docs/lore/realmbound.md |
+| A5 | **W4** Contests and races at the ranch | open | Write a short "Design" section first (docs/creature-game-design.md has notes); contests judge stats and bond, races use speed and stamina; held at Larkhaven on certain ranch days; prizes are food, titles and cosmetics, never power you can only get there |
+| A6 | **R6** Realmbound hub variety | open | A layout per zone hub (Fenwatch Post, Lanternrest Lodge...) and interiors for the inn and smithy in js/22-town.js; keep walking checks passing |
+| A7 | **G3** Water in Wildbond's HD-2D view | open | Reflections of sky, sun and moon, gentle flow, depth colour (Stillreed, Saltmarsh, Farwatch); 13-hd.js only |
+| A8 | **R5** Crafted gear from level 55 | open | docs/realmbound-40-60.md "Loot from 40 to 60"; uses the guild bank's supplies |
+| A9 | **W11** A larger Wildbond roster, batch 1 | open | 10-12 species filling empty family/element pairs (T6 rules in docs/creature-game-design.md), placed in the areas where they fit; one batch per PR, then repeat as A9b, A9c... |
+| A10 | While you wait | always | Lore and dex text polish, more checks, small bugs from GitHub issues labelled for Wildbond or Realmbound |
 
 ## Lane B: Claude (reviews first, then the launch systems)
 
