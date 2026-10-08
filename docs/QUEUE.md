@@ -61,7 +61,7 @@ index.html or style.css until those phases are merged.
 | A4 | **L4 + V1** Realmbound onboarding: the first quest, told by people | done, merged 2026-10-08 by Claude (Realmbound v1.1.0) | docs/realmbound-onboarding.md: arrival scene on the first questgiver, optional road guidance; legacy heroes stay quiet |
 | A4b | **Diamond Career part 2** | done, merged 2026-10-08 by Claude | docs/diamond-career-first-month.md: second contract, a 30-day first month, Iona's notebook |
 | A5 | **R4** Guild members' personal stories | ready for review: Codex, 2026-10-08, PR #49 | 3-4 beats per adventurer, unlocked by mood and time together; one outcome that can go either way (VISION §9) |
-| A5b | **D1c** Diamond Career: swings you understand | open | From docs/research/diamond-first-contract-review.md: Timing mode shows Contact / Power (no hidden carried-over stance); results say when a pitch was off the plate and separate good-contact-caught from weak contact; one visible effect of Eye growth noted by Iona. Checks for each; old saves load |
+| A5b | **D1c** Diamond Career: swings you understand | claimed: Codex, 2026-10-08, codex/diamond-swings | From docs/research/diamond-first-contract-review.md: Timing mode shows Contact / Power (no hidden carried-over stance); results say when a pitch was off the plate and separate good-contact-caught from weak contact; one visible effect of Eye growth noted by Iona. Checks for each; old saves load |
 | A6 | **W11** A larger Wildbond roster, batch 1 | open | After A1; 10-12 species filling empty family/element pairs (T6 rules); data only |
 | A7 | **R6** Realmbound hub variety; **R5** crafted gear from 55 | open | One PR each |
 | A8 | While you wait | always | Lore and dex text polish, more checks, bugs from GitHub issues |
