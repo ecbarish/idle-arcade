@@ -106,3 +106,9 @@ Soft growth beyond 75 is a trickle and Hard prevents it. Neither rule was change
 scope. Manual runs with less trained teams, different starters/seeds, Hard/No cap and combined modes
 remain useful launch playtests. The failed Classic/Long Nuzlocke starts also need a cautious human pass
 before describing challenge difficulty as launch-ready.
+
+## Main integration after measurement
+
+Integrated main 03312b5 (Wildbond v1.5.0), preserving Claude's new turn-based battles, earned autopilot, onboarding and challenge-unlock changes. The measurements above describe the prior real-time default; they do not validate turn-based pacing. Remeasure that new default before launch. Existing area-level and incoming-cap regressions pass unchanged. The runner now also restores the new wildbond-modes-unlocked preference after Champion fixtures; this prevents checks from changing a player's mode availability.
+
+Post-integration checks: Realmbound 4150, Wildbond 1225, Starfall 48, sound 21, offline 15; all storage restored and no page errors.
