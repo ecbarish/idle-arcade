@@ -15,3 +15,5 @@ T32 is deferred with the concrete selector proposal in docs/proposals/wildbond-a
 ## An idea
 
 When the launcher gets physical game boxes, present this booklet from the box's back while preserving its ordinary HTML link. A small “start here” bookmark could guide newcomers directly to the first-fifteen-minutes section.
+
+Opening follow-up: [first-ten-minutes audit and implementation brief](realmbound-first-ten-minutes.md). Four isolated creator/combat browser diagnostics confirmed immediate Focus fallback, the skipped first request and ready objectives awaiting manual reward choice. The guide now explains those existing behaviors; no gameplay changes were made.

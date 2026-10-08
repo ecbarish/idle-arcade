@@ -125,6 +125,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-07 Codex: at Evan's request, left Godot and Wildbond to Claude. Lane A8 Realmbound opening audit added to PR #44: four isolated browser diagnostics and an L4/V1 implementation brief in docs/realmbound-first-ten-minutes.md; corrected the guide's Focus fallback explanation. Documentation only; no gameplay, versions or merge.
+
 - 2026-10-07 Codex: T8 Realmbound guide ready in PR #44, stacked on T33 #43; static 2800-word lore/booklet, generated references and hub card link. All five pages pass (1254/4173/48/21/15), phone through ultrawide, links/spoilers/save safety checked. T32 scope conflict documented in docs/proposals/wildbond-area-air.md; no partial lighting shipped. Two PRs await review; no version/cache bump or merge.
 
 - 2026-10-07 Codex: T33/W14 variants ready in PR #43 (codex/wildbond-variants): Gleaming, tiny/huge and seeded markings, cosmetic only; egg inheritance, old-save defaults, Wilddex records and all-era art. All five pages pass (1254/4173/48/21/15), saves/hub restored, phone through ultrawide and actual Diorama checked. Small label/drawing adapters only; no restyle, version/cache bump or merge. Continuing Lane A.
