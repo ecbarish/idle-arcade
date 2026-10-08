@@ -33,3 +33,22 @@ without a person (or Claude) checking it. Never pointed at Claude's folder or th
 ## Lane D (docs/QUEUE.md)
 Small tasks of the kinds above, read-only first. Its results go in `C:\Users\evanb\Local-AI\logs\`; anything useful is
 brought into a normal `codex/` branch by ChatGPT or Claude after review.
+
+## Making it better (Evan asked, 2026-10-08)
+"Teaching" a model usually doesn't mean retraining it. In order of value for effort:
+
+1. **A bigger working memory.** It has 16,384 tokens, and ran out partway through one guide check. Evan's RTX 4090
+   (24 GB) can hold about 64,000 if Ollama stores its memory compactly (two Ollama settings:
+   `OLLAMA_FLASH_ATTENTION=1`, `OLLAMA_KV_CACHE_TYPE=q8_0`, plus a model variant with `num_ctx 65536`). No download.
+2. **Teach it with what it reads, not by retraining:** a one-page project primer it loads on every task (our rules in
+   brief, where things are, the test commands), two or three worked examples of a good answer for each kind of task,
+   and a `lessons.md` that grows every time a reviewer catches a mistake ("the guide's gifts are paraphrased; that is
+   not a mismatch"). This is how it improves week to week.
+3. **Let it check its own work:** allow it to run the Node checks (`node tests/realmbound-smoke.cjs` and similar) and
+   simple scripts, so "done" means "the check passed", not "I think so".
+4. **Try models built for agent work** and keep whichever scores best on our own five-task benchmark (real tasks with
+   known answers, kept in Local-AI/benchmark): `gpt-oss:20b` (about 14 GB, strong at using tools, long memory) and
+   Devstral Small (about 14 GB, made for coding agents). Downloads need Evan's OK.
+5. **Fix the runner** (Lane D0) so queued tasks actually run through OpenCode.
+6. **Real fine-tuning** (training it on our code) is possible on a 4090 with free tools, but needs hundreds of
+   good examples and a lot of care for a modest gain. Not worth it yet; revisit if the helper becomes a daily tool.
