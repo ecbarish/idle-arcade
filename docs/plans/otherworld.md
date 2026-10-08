@@ -3,7 +3,7 @@
 **Unparked 2026-10-08:** Evan's answers are in docs/research/decisions.md (top); the plan to follow is
 docs/otherworld-design.md (choose your world from a list; rebirth by choice and on death). Claude builds O0.
 
-Status: planned concept only; no playable game directory. Implementation remains parked until explicitly authorized. [Research](RESEARCH.md#otherworld-a-life-worth-living-again); [portfolio plan](README.md).
+Status: active browser game. Asterhold and living Lanthorn are merged; Hearthmere is ready in PR #63 and the Ashen Throne in PR #65. All three worlds are playable on that branch. The original staged outline below remains the longer-term plan; skill XP, merging and systemic exploration are not built. The queue's completed living-Lanthorn O1 content ticket is distinct from the skill-evolution stage named O1 below. [Research](RESEARCH.md#otherworld-a-life-worth-living-again); [portfolio plan](README.md).
 
 ## The experience to protect
 

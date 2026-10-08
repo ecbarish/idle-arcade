@@ -56,7 +56,7 @@ function otherworldChecks() {
 
   // T35: exercise every memory combination, every gift and hungry/frightened alternatives, not only the happy route.
   const keys = Object.keys(MEMORIES);
-  const asterKeys = keys.filter(k => !['thaw','shelter'].includes(k));
+  const asterKeys = keys.filter(k => ['tide','oldroot','guildmaster','lantern','seed','rootsong','broth'].includes(k));
   for (let mask = 0; mask < (1 << asterKeys.length); mask++) {
     const mem = Object.fromEntries(asterKeys.filter((k, i) => mask & (1 << i)).map(k => [k, true]));
     for (const gift of Object.keys(GIFTS.asterhold)) for (const town of [
@@ -242,6 +242,77 @@ function otherworldChecks() {
   check('corrupt new Hearthmere counters get bounded defaults without wiping choices or memories',()=>{
     const l=hf();l.hearth={day:Infinity,stores:NaN,warmth:-3,welcome:99};l.flags.puddle=true;l.mem.thaw=true;ow.prepareLife(l,true);
     return l.hearth.day===1&&l.hearth.stores===1&&l.hearth.warmth===0&&l.hearth.welcome===3&&l.flags.puddle&&l.mem.thaw;
+  });
+
+  // OW0c: authored branch graph plus the real Return dispatcher and its in-flight saves.
+  const af=(gift='return',mem={})=>ow.prepareLife({world:'ashen',gift,name:'Test',flags:{},at:'s_wake',silver:0,status:false,mem});
+  const withA=fn=>{const old=ow.S;try{ow.S={...fresh(),life:af()};return fn(ow.S.life);}finally{ow.S=old;}};
+  for(const gift of Object.keys(GIFTS.ashen))for(const mem of [{},{broth:true},{thaw:true},{bellcode:true},{mercy:true},{broth:true,thaw:true,bellcode:true,mercy:true}]){
+    const r=explore('ashen',gift,mem);
+    check('Ashen Throne paths: '+gift+', memories '+Object.keys(mem),()=>{if(r.problems.length)throw Error(r.problems.join('; '));return r.endings.has('e_ash_hearth')&&r.endings.has('e_ash_quay');});
+  }
+  check('all three worlds now have a playable opening and exactly three gifts',()=>Object.keys(WORLDS).every(w=>NODES[WORLDS[w].start]&&Object.keys(GIFTS[w]).length===3));
+  check('Return death resets objects, choices, entered receipts and world day, but preserves only learned knowledge',()=>withA(l=>{
+    l.flags={shelter:true,supplies:true,kael:true};l.entered={s_gift:true};l.silver=19;l.ash.day=3;l.ash.knowledge.store=true;const beforeMem=JSON.stringify(ow.S.mem);
+    ow.finish('e_ash_death');ow.D.skip();const r=ow.S.life;
+    return r===l&&r.at==='s_wake'&&r.ash.returns===1&&r.ash.day===1&&r.ash.knowledge.store&&r.silver===0&&Object.keys(r.flags).length===0&&!r.entered.s_gift&&!r.ending&&ow.S.lives.length===0&&JSON.stringify(ow.S.mem)===beforeMem;
+  }));
+  check('saving during Return death resumes the rewind once, not a duplicate finished life',()=>withA(l=>{
+    l.ash.knowledge.store=true;ow.finish('e_ash_death');ow.save();ow.S=fresh();ow.load();const r=ow.S.life;ow.finish(r.ending);ow.D.skip();
+    if(r.ash.returns!==1||ow.S.lives.length)return false;ow.save();ow.S=fresh();ow.load();ow.run(ow.S.life.at);return ow.S.life.ash.returns===1&&!ow.S.life.ending&&ow.S.lives.length===0;
+  }));
+  check('Return can repeat without granting a soul memory, then the player can deliberately leave the dawn',()=>withA(l=>{
+    for(let i=0;i<3;i++){ow.finish('e_ash_death');ow.D.skip();}
+    if(l.ash.returns!==3||!NODES.s_wake.choices[1].need(l)||ow.S.lives.length||Object.keys(ow.S.mem).length)return false;
+    ow.finish('e_ash_rest');ow.D.skip();return ow.S.life===null&&ow.S.lives.length===1&&ow.S.lives[0].ending==='e_ash_rest'&&ow.S.mem.bellcode;
+  }));
+  check('Return resets friendship: Kael and the world do not remember the previous dawn',()=>withA(l=>{
+    l.flags.kael=true;l.flags.recordPublic=true;ow.finish('e_ash_death');ow.D.skip();return !l.flags.kael&&!l.flags.recordPublic&&ow.linesOf(NODES.s_wake).some(([,t])=>t.includes('Nobody remembers'));
+  }));
+  check('non-Return deaths finish normally with fewer promised memories',()=>withA(l=>{
+    l.gift='oath';ow.finish('e_ash_death');ow.D.skip();return ow.S.life===null&&ow.S.lives.length===1&&Object.keys(ow.S.mem).join()==='bellcode';
+  }));
+  check('Blood Oath gives a promise; breaking it closes manual shelter work but keeps rescue available',()=>{
+    const l=af('oath');NODES.s_gift.fx(l);NODES.s_square.choices[1].fx(l);l.flags.supplies=true;
+    return l.flags.sworn&&l.flags.oathBroken&&!NODES.s_work.choices[0].need(l)&&!NODES.s_dusk.choices[0].need(l)&&!NODES.s_dusk.choices[1].need&&townEpilogue(l,'e_ash_quay').some(([,t])=>t.includes('loosens slowly'));
+  });
+  check('Silence learns the store but costs recognition; shared work restores it, chosen unseen work does not',()=>{
+    const l=af('silence');NODES.s_gift.fx(l);if(!l.flags.forgotten||!l.flags.records||!l.ash.knowledge.store)return false;
+    l.flags.recordPublic=true;if(NODES.s_dusk.choices[2].need(l))return false;NODES.s_work.choices[0].fx(l);
+    if(l.flags.forgotten||!NODES.s_dusk.choices[2].need(l))return false;NODES.s_work.choices[2].fx(l);return l.flags.forgotten&&NODES.s_dusk.choices[3].need(l);
+  });
+  check('Ashen locked choices show their reason and cannot run by numbered key',()=>withA(l=>{
+    l.gift='oath';l.flags.oathBroken=true;ow.run('s_work');ow.D.skip();const before=JSON.stringify(l),button=ow.D.el.querySelector('.dlg-choices button');ow.D.choose(0);document.dispatchEvent(new KeyboardEvent('keydown',{key:'1',bubbles:true}));
+    return button.disabled&&/hands shut/.test(button.textContent)&&JSON.stringify(l)===before;
+  }));
+  check('Return preserves a record actually read, but the warning passage does not invent it',()=>withA(l=>{
+    NODES.s_closed.fx(l);if(NODES.s_square.choices[3].need(l))return false;
+    NODES.s_store.fx(l);ow.finish('e_ash_death');ow.D.skip();return !l.flags.records&&l.ash.knowledge.record&&NODES.s_square.choices[3].need(l);
+  }));
+  check('locked first response keeps a readable dark background after shared dialogue styles load',()=>withA(l=>{
+    l.gift='oath';l.flags.oathBroken=true;ow.run('s_work');ow.D.skip();const b=ow.D.el.querySelector('.dlg-choices button'),style=getComputedStyle(b);return b.disabled&&style.backgroundColor==='rgb(37, 32, 56)'&&style.color==='rgb(170, 162, 184)';
+  }));
+  check('new world defaults retain old life records and carried memories on load',()=>withA(l=>{
+    delete l.ash;l.flags.kael=true;ow.S.mem.oldroot=true;ow.S.lives=[{world:'hearthmere',gift:'green',ending:'e_hearth_shared',name:'Before',at:1}];ow.save();ow.S=fresh();ow.load();return ow.S.life.ash.day===1&&ow.S.life.ash.returns===0&&ow.S.life.flags.kael&&ow.S.mem.oldroot&&ow.S.lives.length===1;
+  }));
+  check('Ashen gift receipts and final-day state do not repeat on save reload',()=>withA(l=>{
+    l.gift='silence';ow.run('s_gift');ow.save();const before=JSON.stringify(l);ow.S=fresh();ow.load();ow.run('s_gift');if(JSON.stringify(ow.S.life)!==before)return false;
+    ow.run('s_dusk');ow.save();const dusk=JSON.stringify(ow.S.life);ow.S=fresh();ow.load();ow.run('s_dusk');return JSON.stringify(ow.S.life)===dusk;
+  }));
+  check('Ashen final epilogue reload records exactly one life and its precise keep list',()=>withA(l=>{
+    ow.finish('e_ash_hearth');ow.save();ow.S=fresh();ow.load();ow.finish(ow.S.life.ending);ow.D.skip();return ow.S.life===null&&ow.S.lives.length===1&&Object.keys(ow.S.mem).sort().join()==='bellcode,mercy';
+  }));
+  check('an Ashen memory opens a working Hearthmere option; it does not merely change flavor',()=>{
+    const l=hf('green'),c=NODES.h_well.choices.find(c=>c.t.includes('quay'));if(c.need(l))return false;l.mem.bellcode=true;if(!c.need(l))return false;c.fx(l);return l.flags.puddle&&l.flags.listened&&l.hearth.welcome===1;
+  });
+  check('Hearthmere recipe changes the Ashen shelter route without a stat bonus',()=>{
+    const no=af('return'),yes=af('return',{broth:true});const c=NODES.s_work.choices[3];if(c.need(no)||!c.need(yes))return false;c.fx(yes);return NODES.s_dusk.choices[0].need(yes)&&yes.silver===0;
+  });
+  check('stale Return callback cannot reset a replacement life',()=>withA(l=>{
+    ow.finish('e_ash_death');const replacement=af('silence');ow.S.life=replacement;const before=JSON.stringify(replacement);ow.D.skip();return JSON.stringify(replacement)===before&&ow.S.lives.length===0;
+  }));
+  check('Ashen rendering state and counters stay bounded without erasing learned knowledge',()=>{
+    const l=af();l.ash={day:NaN,returns:-9,knowledge:{store:true}};ow.prepareLife(l,true);return l.ash.day===1&&l.ash.returns===0&&l.ash.knowledge.store;
   });
   return out;
 }

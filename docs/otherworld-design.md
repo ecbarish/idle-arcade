@@ -17,7 +17,7 @@ Direction (Claude's recommendation, pending Evan's nod):
 2. **An AI storyteller on top, as an experiment.** A language model voices characters and narration inside the
    rules (the rules decide what is true; the model only describes and converses), with authored lines as the
    fallback. Try a free in-browser model first (runs on the player's computer: free, private, a large download,
-   weaker); a paid API needs a server or the player's own key and must respect the ~US$200 project budget.
+   weaker); a paid API needs a server or the player's own key and requires Evan's approval before any cost. No paid AI service is used in these authored lives.
 
 ## The experience
 Your old life ends. You wake in **the Between**, a quiet place outside every world, where a keeper of souls (the
@@ -81,3 +81,7 @@ save and reload around choices, rebirth keeps exactly what the preview promised)
 - Can the player be reborn as something other than a human (beastfolk, elf, a monster)? [Later worlds, yes.]
 - Romance: companions can become close; romance between adult characters, written tastefully (VISION §9)? [Yes, later.]
 - How long should one life be? [20-40 minutes now; longer lives as worlds grow.]
+
+## Third browser life, ready for review (2026-10-08)
+
+Hearthmere is ready in PR #63; the Ashen Throne is ready in PR #65. All three approved worlds now have complete authored lives on the stacked branch. See [the Ashen implementation record](otherworld-ashen.md) for canon, gift costs, Return save semantics, outcomes and validation. These compact lives establish the narrative loop; systemic skill progression and walkable exploration remain later work.

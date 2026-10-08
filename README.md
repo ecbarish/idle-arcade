@@ -13,7 +13,7 @@ and the hub page shows where you left off in every one.
 | [Starfall Guild](games/starfall-guild/) | Prototype | Kairosoft-style adventurer guild: recruit, class combos, dungeon autobattle, town, staff, seasons |
 | [Realmbound](games/realmbound/) | Prototype | Classic-MMO-inspired adventure: two factions, 5 classes including a pet-taming Hunter, levels 1–40, quests, loot, Focus/Auto play, addons as automation ([design](docs/realmbound-design.md)) |
 | [Diamond Career](games/diamond-career/) | Prototype | Batter career from first call-up through a 30-day paid month, timing/tactical batting, two contract terms, calendar salary and permanent home/garage purchases |
-| Otherworld | Idea | Anime isekai: status window, evolving skills, story arcs, guild ranks F to S, reincarnation |
+| [Otherworld](games/otherworld/) | Prototype | Three authored lives: Asterhold, Hearthmere and the Ashen Throne; costly gifts, choices, endings and knowledge carried between lives |
 
 Design plans live in [docs/](docs/): [Realmbound](docs/realmbound-design.md), [idea backlog](docs/ideas.md).
 
@@ -38,6 +38,8 @@ then open http://localhost:8765/
 Anyone continuing this project (any AI assistant or person): open [START-HERE.md](START-HERE.md).
 
 ## Changelog
+
+- Otherworld (2026-10-08): the Ashen Throne opens: Kael, a fallen house, three costly gifts, five final outcomes plus a death route, Return's remembered dawns and cross-world knowledge. The guide now covers all three worlds.
 
 - Wildbond (2026-10-08): four later-road witnesses, fair clues in signs and Warden lines, and small mysteries answered after each badge. Heritage recognition is ready as exported data for the Godot areas.
 

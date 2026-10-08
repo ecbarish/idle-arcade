@@ -84,6 +84,7 @@ index.html or style.css until those phases are merged.
 | A12 | **T38** Realmbound in the game window: the plan, then part 1 | open (2026-10-08) | docs/ROADMAP.md T38 |
 | A13 | **T39** Otherworld: Hearthmere, the second world | open (2026-10-08) | docs/ROADMAP.md T39 |
 | A14 | **T40** Wildbond areas 5-8: woven clues, signs and chatter (data; flows into the Godot version) | open (2026-10-08) | docs/ROADMAP.md T40 |
+| A15 | **OW0c** Otherworld: the Ashen Throne, complete third life | ready: PR #65 (Codex, 2026-10-08), stacked on #64 | docs/otherworld-design.md: Kael, three gifts with costs, endings and cross-world memories; Evan authorized further development |
 | A8 | While you wait | always | Lore and dex text polish, more checks, bugs from GitHub issues |
 | — | Done | — | A2 L7a Wildbond balance, A3 L7b Realmbound balance, R9 heroic loot review (all merged 2026-10-07) |
 
