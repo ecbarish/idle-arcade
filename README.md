@@ -39,6 +39,10 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Wildbond v1.5.2, Realmbound v1.0.3 (2026-10-07)** — Wildbond: a day (and the ranch day) now lasts an hour
+  instead of five minutes; autopilot and Auto-explore are switched off for now; the late areas' levels are smoothed
+  so Wardens sit within your level cap (ChatGPT's launch balance). Realmbound: levels 40-60 in the last three zones
+  now take about 20 hours as designed (they took about 10; ChatGPT's launch balance).
 - **Wildbond v1.5.1 (2026-10-07)** — Battle results wait for you to press Continue (and a loss says what happens
   next); your tamer wears a red shirt and blue cap so you can find them; the view starts close; the faded start is
   softer; the Ranch only appears once a creature has bonded with you, breeding after the first badge, and challenge

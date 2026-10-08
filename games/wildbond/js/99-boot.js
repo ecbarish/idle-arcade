@@ -1,5 +1,5 @@
 'use strict';
-const VERSION = '1.5.1'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
+const VERSION = '1.5.2'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
 /* Clicks, keys, the game loop and startup. */
 function findC(uid) { uid = Number(uid); return S.team.find(c => c.uid === uid) || S.ranch.find(c => c.uid === uid); }
 document.addEventListener('click', e => {
@@ -37,7 +37,7 @@ document.addEventListener('click', e => {
     case 'elder': seekElder(); break;
     case 'rest': restInTown(); break;
     case 'lures': buyLures(); break;
-    case 'auto': S.auto = !S.auto; W.autoT = 2; toast(S.auto ? 'Auto-explore on: your team explores and fights on its own.' : 'Auto-explore off.'); break;
+    case 'auto': if (!autoEarned() && !S.auto) break; S.auto = !S.auto; W.autoT = 2; toast(S.auto ? 'Auto-explore on: your team explores and fights on its own.' : 'Auto-explore off.'); break;
     case 'cmd': command(arg); break;
     case 'calm': calmNow(); break;
     case 'continue': finishBattle(); break;

@@ -936,8 +936,8 @@ function wildbondChecks() {
     if (B.wait === null || B.lines.length !== n0 || B.allies.concat(B.foes).map(u => u.c.hp).join() !== hp0) return false;
     const m = movesOf(B.wait.c)[0]; chooseTurn(m); return B.wait === null && B.lines.some(l => l.t.includes(MOVES[m].name));
   });
-  check('autopilot and Auto-explore are earned with the first badge', () => {
-    const keep = S.badges.slice(); try { S.badges = []; const before = !autoEarned(); S.badges = ['thorn']; return before && autoEarned(); } finally { S.badges = keep; }
+  check('autopilot and Auto-explore are switched off for now, even with badges, and a day lasts an hour', () => {
+    const keep = S.badges.slice(); try { S.badges = ['thorn', 'tide']; renderAll(); return !autoEarned() && document.querySelector('#autoBtn').hidden && DAY_SECONDS === 3600; } finally { S.badges = keep; }
   });
   check('the Thorn Badge lifts the faded colour', () => {
     ready(); S.faded = true; S.era = 'bit16'; S.badges = []; const g = STORY.find(b => b.gate === 'thorn'); wb.startBattle('trainer', [wb.newCreature('cindercub', 3)], { trainer: g.trainer, story: g.id });

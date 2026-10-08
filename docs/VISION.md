@@ -81,6 +81,14 @@ and can form close bonds, friendships and, for adult characters, romance written
 explicit). A Fable-like reputation colours how places greet you. Start small: a few real choices in Realmbound's
 story with visible consequences, the guild stories (R4) with loyalty and an outcome that can go either way.
 
+**10. A big world, and one day first person** (V10, 2026-10-07): "I dont want the world to be small. Eventually the goal
+may be to make this a first person game with an open world map and its explorable ... (this goes for each game)."
+Groundwork, in order: keep every game's world as data that any renderer can draw (Wildbond already draws the same
+maps five ways: Pocket, 16-bit, HD-2D, Diorama, and later Modern 3D); grow maps from single screens into large
+connected regions loaded in pieces (chunks) with the camera following you; give places real height (cliffs, stairs,
+bridges) so a 3D renderer has something to stand on; then a three.js renderer with a third-person camera, then first
+person. The 2D games stay complete and playable at every step.
+
 ## What this changes right away
 
 - The Launch plan stays, but onboarding (L4) becomes "the prologue and the first ten minutes" (V1 feeds it).

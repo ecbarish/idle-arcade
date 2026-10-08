@@ -52,3 +52,12 @@ Today the 3D "Diorama" look unlocks with the third badge and draws the same tile
 1. In Part 1 the camera and sprites get bigger in every look (a closer default view, larger characters).
 2. The planned Modern 3D era (W6) is where Wildbond gets bigger, more detailed places built for 3D, with a camera
    behind your shoulder. That's a large project for after launch; the walkable 2D world stays the base.
+
+## Evan's third round of notes (2026-10-07)
+- **Autopilot and Auto-explore are off for now** (v1.5.2); they come back later as a deliberate unlock if they earn a place.
+- **A day lasts an hour** (v1.5.2), not five minutes: day and night are slow enough to enjoy, and night encounters and
+  lighting still come round in a play session. The ranch day is the same hour (eggs take two hours, not ten minutes).
+- **Characters present in the intro:** Maren walks up and talks to you in the world, shows off creatures, Wren runs in
+  (opening part 2, queue B3b). Speech appears over the scene near the speaker, not only in a box at the bottom.
+- **A character creator** (W13) and **creature variants** like shinies, sizes and markings (W14).
+- **Bigger worlds, first person one day** (docs/VISION.md §10).

@@ -58,6 +58,7 @@ function load() { const o = Arcade.load(KEY); if (!o) return; S = Object.assign(
   S.league = Object.assign({ day: 0, room: 0, active: false, rest: false }, o.league || {});
   S.league.room = Math.max(0, Math.min(5, Math.floor(Number(S.league.room) || 0)));
   leagueState(); towerState();
+  if (!autoEarned()) S.auto = false; // Auto-explore is off until it returns as an unlock (03-battle.js AUTOPILOT)
   // older saves began in color: they keep it, and get the faded Pocket look as an extra
   if (!S.eras.includes('pocket')) S.eras.unshift('pocket');
   if (S.badges.includes('thorn')) { for (const e of ['pixel', 'bit16']) if (!S.eras.includes(e)) S.eras.push(e); S.shoes = true; }

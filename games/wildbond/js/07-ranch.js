@@ -2,7 +2,7 @@
 /* Ranch days, training, food and breeding.
    A ranch day passes every DAY_SECONDS of play (and while you're away). Each creature follows its daily plan:
    a food and an activity. Training raises "trained points" (every 4 add 1 to a stat), limited per stat and in total. */
-const DAY_SECONDS = 300;
+const DAY_SECONDS = 3600; // one ranch day (and one day-night cycle) is an hour of play (Evan, 2026-10-07: five minutes felt overwhelming)
 const TRAIN_CAP = 40, TRAIN_TOTAL = 120;
 const FOODS = {
   meat: { name: 'Meat', cost: 4, stat: 'pow' }, grain: { name: 'Grain', cost: 3, stat: 'hp' },

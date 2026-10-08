@@ -27,7 +27,8 @@ function living(side) { return (side === 'a' ? B.allies : B.foes).filter(u => u.
 function front(side) { return living(side)[0]; }
 /* Who's in charge: Auto-explore, or (once earned with the first badge) autopilot after 12 idle seconds. Before that
    the battle never plays itself (Evan, 2026-10-07: "Autopilot took over and did the fight"). */
-function autoEarned() { return S.badges.length >= 1; }
+const AUTOPILOT = false; // Evan, 2026-10-07: no autopilot or Auto-explore for now; it returns later as a deliberate unlock
+function autoEarned() { return AUTOPILOT && S.badges.length >= 1; }
 function isAuto() { return S.auto || (autoEarned() && B.t - B.lastInput > 12); }
 /* Battle style: 'turn' (the classic way: the battle pauses on your creature's turn and you choose its move) or
    'active' (real time: they fight on their own and you steer with commands). New journeys start turn-based. */

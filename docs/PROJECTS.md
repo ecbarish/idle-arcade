@@ -101,6 +101,8 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | W10 | **Baby forms (build)**: the growth stages, baby art from the existing families, ranch care that matters more for babies | L | System+Art | W9 | open | Old saves keep their creatures as they are |
 | W11 | **A larger roster**: batches of 10-12 new species per element, filling every family and element pairing (target about 150 to start), each with a dex line; ChatGPT-friendly data work | L (batches) | Data | W9 | open | T6 rules in creature-game-design.md; one batch per PR |
 | W12 | **New creature families** (body shapes beyond the current ones: serpents, golems, insects, jellyfish...) with their own art | L | Art | — | open | shared/creatures.js and 01-art.js |
+| W13 | **Character creator**: your tamer's body type (male, female, other), skin, hair style and colour, outfit; shown in the world, in scenes and in battle | M | Art+System | — | open | Evan, 2026-10-07; part of the opening (B3b); later shared with Realmbound's heroes |
+| W14 | **Creature variants**: rare looks within a species (a shimmering colour like shinies, tiny and huge sizes, unique pattern markings like Spinda), shown in the Wilddex; cosmetic, never stronger | M | Art+Data | — | open | Evan, 2026-10-07 |
 
 ## Realmbound (classic-MMO idle, flagship)
 
@@ -135,6 +137,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | V7 | **Nodes** in Realmbound: camps grow into villages and towns from what the guild and the bots do there; neglect fades them | L | System | V5 | open | The Ashes of Creation idea, single-player |
 | V8 | **Automation as earned QoL and delegation** (not skipping play): review each game's Auto against docs/VISION.md §8 | M | Design+Polish | — | open | Answers "when does full Auto unlock" |
 | V9 | **Choices that matter** (Mass Effect, Fable): a remembered world state per save, story choices with lasting consequences, companions with loyalty and personal arcs who can be lost in rare warned moments, bonds and tasteful romance between adult characters, reputation | L | Design+System | R4 | open | Start with a few Realmbound story choices and the guild stories; Design doc first (CREATIVE.md "Ask Evan first" for permanent loss) |
+| V10 | **A big world, first person one day** (every game): worlds as renderer-independent data, large chunked regions, real height, then a 3D renderer (third person, later first person) | XL | System+Art | W6 | open | docs/VISION.md §10; the 2D games stay complete at every step |
 
 ## Parked games (side lane: structure and polish only, until Evan says go)
 
