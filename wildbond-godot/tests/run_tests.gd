@@ -420,6 +420,44 @@ func _run() -> void:
 	check(main.book.visible and main.book.seen.size() >= 3 and main.book.team == main.team, "J opens the field book: your Wilddex and team")
 	main.book.close()
 	check(not main.book.visible, "and closes it")
+	# ---- Maren's ranch: creatures you aren't carrying live in the paddock and the barn, where you can visit them
+	talk_through()
+	var keep_team: Array = main.team.duplicate()
+	var keep_ranch: Array = main.ranch.duplicate()
+	main.team = [main.team[0]]
+	main.ranch = [main.R.make("fernruff", 10, { "rar": 1 }, main.rng), main.R.make("poolkit", 12, { "rar": 1 }, main.rng)]
+	main._place_ranch()
+	check(main.ranch_movers.size() == 2 and main.ranch_movers.all(func(m): return m.where == "larkhaven" and main.PADDOCK.has_point(m.tile)), "creatures at the ranch stand in Maren's paddock")
+	var fern: Variant = main.ranch_movers[0]
+	main._tap(fern.pos + Vector2(8, 8))               # tap it: you walk over (following if it wanders) and meet it
+	for i in 200:
+		tick(0.05)
+		if main.card.visible: break
+	check(main.card.visible and main.card.buttons == ["Take along", "Let it rest"], "tapping a ranch creature walks you over and opens its page: Take along or Let it rest (me %s, it %s)" % [main.me.tile, fern.tile])
+	main.card._pick(0)
+	check(main.team.size() == 2 and main.team[1].sp == "fernruff" and main.ranch.size() == 1 and main.ranch_movers.size() == 1, "Take along: it joins your team and leaves the paddock")
+	talk_through()
+	main.team.append(main.R.make("bogbough", 9, { "rar": 1 }, main.rng))
+	main._visit(main.ranch_movers[0])
+	check(main.card.visible and main.card.buttons[0] == "Swap in", "with a full team the page offers a swap")
+	main.card._pick(0)
+	check(main.card.visible and main.card.buttons.size() == 4 and main.card.buttons[3] == "Never mind", "and asks who rests at the ranch instead (your three, or never mind)")
+	var lead: String = main.team[0].sp
+	main.card._pick(0)
+	check(main.team[0].sp == "poolkit" and main.ranch.size() == 1 and main.ranch[0].sp == lead, "the swap: Poolkit joins, your old lead creature goes to rest")
+	check(main.partner.look.kind == "cat", "the new lead creature is the one that walks with you")
+	talk_through()
+	for k in 5:
+		main.ranch.append(main.R.make("dewspinner", 8, { "rar": 1 }, main.rng))
+	main._place_ranch()
+	check(main.ranch_movers.filter(func(m): return m.where == "larkhaven").size() == 4 and main.ranch_movers.filter(func(m): return m.where == "barn").size() == 2, "four creatures in the paddock, the rest inside the barn")
+	main._visit(main.ranch_movers[0])
+	main.card._pick(1)
+	check(not main.card.visible and main.team.size() == 3 and main.ranch.size() == 6, "Let it rest changes nothing")
+	main.team = keep_team
+	main.ranch = keep_ranch
+	main._place_ranch()
+	main._lead_look()
 	# ---- saving your journey and loading it back (to a test file, never your real one)
 	talk_through()
 	main.no_save = false
@@ -437,6 +475,7 @@ func _run() -> void:
 	check(main.bag.lures == lures_saved and "thorn" in main.badges and main.team.size() == team_saved, "with your satchel, badges and team intact")
 	check(main.team[0].lvl == lvl_saved and typeof(main.team[0].lvl) == TYPE_INT and main.R.stats(main.team[0]).hp > 0, "creatures come back whole (level %d)" % main.team[0].lvl)
 	check(main._gate_open("thornwood") and main.npc_info.bram.beaten, "beaten trainers and the open gate are remembered")
+	check(main.ranch_movers.size() == main.ranch.size(), "the ranch creatures are back in the paddock after loading (%d)" % main.ranch.size())
 	check(main._save_summary().begins_with(str(main.my_look.name)), "the start page sums it up: %s" % main._save_summary())
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(main.save_path))
 	main.no_save = true

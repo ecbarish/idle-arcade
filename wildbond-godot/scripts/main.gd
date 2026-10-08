@@ -177,6 +177,7 @@ func _ready() -> void:
 	card = Card.new()
 	$UI.add_child(card)
 	card.chosen.connect(_on_chosen)
+	card.picked.connect(_on_card_pick)
 	battle = Battle.new()
 	battle.looks = CREATURE_LOOKS
 	battle.floor_tex = FLOOR
@@ -322,7 +323,7 @@ func tile_at(p: Vector2i) -> String:
 
 func actors() -> Array:
 	var out: Array = []
-	for m in [me, maren, pup, wren] + starters + npcs:
+	for m in [me, maren, pup, wren] + starters + npcs + ranch_movers:
 		if m.where == map_name:
 			out.append(m)
 	return out
@@ -511,12 +512,15 @@ func _process(dt: float) -> void:
 			else:
 				walk_to.clear()                      # something stepped in the way: stop here
 		elif meet_after:
-			if (me.tile - meet_after.tile).length() <= 1.01 and stage == "barn_choose":
-				_meet(meet_after)
+			if (me.tile - meet_after.tile).length() <= 1.01 and (stage == "barn_choose" or meet_after in ranch_movers):
+				if stage == "barn_choose":
+					_meet(meet_after)
+				else:
+					_visit(meet_after)
 				meet_after = null
 			elif meet_tries < 4:
 				meet_tries += 1                          # it wandered off a step: follow it
-				walk_to = route(me.tile, meet_after.tile + Vector2i.DOWN)
+				walk_to = route(me.tile, _stand_by(meet_after.tile))
 				if walk_to.is_empty():
 					meet_after = null
 			else:
@@ -601,6 +605,15 @@ func _tap(at: Vector2) -> void:
 				meet_after = s
 				meet_tries = 0
 				goal = s.tile + Vector2i.DOWN          # stand in front of its stall
+	if stage == "free":
+		for m in ranch_movers:
+			if m.where == map_name and m.tile == goal:
+				if (me.tile - goal).length() <= 1.01:
+					_visit(m)
+					return
+				meet_after = m
+				meet_tries = 0
+				goal = _stand_by(m.tile)               # walk up beside it
 	if goal == me.tile:
 		return
 	var r := route(me.tile, goal)
@@ -1318,7 +1331,8 @@ func _after_wild(result: String) -> void:
 			say("", "%s joins your team." % c.name)
 		else:
 			ranch.append(c)
-			say("", "%s heads to Maren's ranch, where your other creatures rest." % c.name)
+			_place_ranch()
+			say("", "%s heads to Maren's ranch. You'll find it in the paddock by her barn, or resting inside." % c.name)
 	if result == "lost":
 		var lost := roundi(bag.coins * 0.1)
 		bag.coins -= lost
@@ -1367,7 +1381,11 @@ func _skip_opening() -> void:
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("--at="):
 			start = a.substr(5)                          # e.g. -- --skip-opening --at=saltmarsh
-	var st: Array = DATA.MAPS[start].get("start", [13, 14, "up"])
+	if "--ranch" in OS.get_cmdline_user_args():       # a few creatures at the ranch, to see it (-- --skip-opening --at=larkhaven --ranch)
+		for sp in ["fernruff", "poolkit", "hearthlaugh", "slatehoof", "kilnchirp", "dewspinner"]:
+			ranch.append(R.make(sp, 12, { "rar": 1 }, rng))
+		_place_ranch()
+	var st: Array = DATA.MAPS[start].get("start", [16, 12, "up"] if start == "larkhaven" else [13, 14, "up"])
 	if start != "thornwood":
 		badges = ["thorn"] if start == "saltmarsh" else ["thorn", "tide"]
 		team[0].lvl = 14 if start == "saltmarsh" else 24
@@ -1515,6 +1533,10 @@ func _talk_here() -> bool:
 			else:
 				_challenge(n)
 			return true
+	for m in ranch_movers:
+		if m.where == map_name and (me.tile - m.tile).length() <= 1.01:
+			_visit(m)
+			return true
 	var ahead: Vector2i = me.tile + me.face
 	if tile_at(ahead) == "P":
 		var key := "%d,%d" % [ahead.x, ahead.y]
@@ -1596,6 +1618,7 @@ func _load_game() -> bool:
 		my_look[k] = Color(d.look[k]) if k in ["skin", "hair", "hat", "shirt", "legs", "shoes", "apron"] else d.look[k]
 	team = d.team.map(_fix_creature)
 	ranch = d.ranch.map(_fix_creature)
+	_place_ranch()
 	for k in d.bag:
 		bag[k] = int(d.bag[k])                       # the same satchel the battle screen holds
 	badges = d.badges
@@ -1613,6 +1636,7 @@ func _load_game() -> bool:
 		if s.id == d.partner:
 			partner = s
 			partner.home = Rect2i()
+	_lead_look()
 	painted = true
 	spilled = true
 	stage = "free"
@@ -1856,3 +1880,98 @@ func _draw_rock(o: Vector2, n: int) -> void:
 		draw_rect(Rect2(o + Vector2(r[0], top + i), Vector2(w, 1)), shade)
 	draw_rect(Rect2(o + Vector2(6, top + 2), Vector2(3, 1)), c.lightened(0.35))     # where the light catches it
 	draw_rect(Rect2(o + Vector2(9, top + 6), Vector2(1, 2)), c.darkened(0.35))      # a crack
+
+# ---------------------------------------------------------------- Maren's ranch: your other creatures, at home
+## Creatures you aren't carrying live at the ranch, where you can see them: the first four out in the paddock, the rest
+## on the barn floor. Walk up to one (or tap it) to see its page and take it along, or swap it for one of your team.
+## The creature leading your team is the one that follows you around.
+const BARN_FLOOR := Rect2i(2, 5, 20, 4)       # the open straw in the barn, below the stalls
+var ranch_movers: Array[Mover] = []          # one per creature in `ranch`, in the same order
+var card_mode := "starter"                   # what the open creature page is for: starter, ranch, swap
+var visiting := -1                           # which ranch creature's page is open
+
+func _place_ranch() -> void:
+	ranch_movers.clear()
+	for i in ranch.size():
+		var out := i < 4
+		var home: Rect2i = PADDOCK if out else BARN_FLOOR
+		var k := i if out else i - 4
+		var n := k * (2 if out else 3) + 1                   # spread out, a gap between each
+		var m := Mover.new("ranch", "larkhaven" if out else "barn", home.position + Vector2i(n % home.size.x, (n / home.size.x) % home.size.y))
+		m.look = CREATURE_LOOKS.get(ranch[i].sp, Figures.look_for(R.sp(ranch[i])))
+		m.home = home
+		m.right = i % 2 == 0
+		ranch_movers.append(m)
+
+## The creature at the front of your team walks with you.
+func _lead_look() -> void:
+	if partner and not team.is_empty():
+		partner.look = CREATURE_LOOKS.get(team[0].sp, Figures.look_for(R.sp(team[0])))
+
+## A free spot beside a tile to stand on (to talk to a creature there).
+func _stand_by(p: Vector2i) -> Vector2i:
+	for d in [Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP]:
+		if walkable(p + d) and not route(me.tile, p + d).is_empty():
+			return p + d
+	return p + Vector2i.DOWN
+
+func _visit(m: Mover) -> void:
+	var i := ranch_movers.find(m)
+	if i < 0 or card.visible:
+		return
+	walk_to.clear()
+	me.face = m.tile - me.tile
+	_stop(m)
+	m.right = me.pos.x > m.pos.x
+	visiting = i
+	card_mode = "ranch"
+	card.open(ranch[i].sp, ranch_info(ranch[i]), ["Take along" if team.size() < 3 else "Swap in", "Let it rest"])
+
+## A creature's page at the ranch: the same page as in Maren's barn, with its own level, trust and moves.
+func ranch_info(c: Dictionary) -> Dictionary:
+	var s: Dictionary = R.sp(c)
+	var weak: Array = []
+	for e in DATA.ELEMENTS:
+		if s.el in DATA.ELEMENTS[e].beats:
+			weak.append(e)
+	var moves: Array = R.moves_of(c).map(func(mv): return DATA.MOVES[mv].name)
+	return {
+		"name": c.name, "el": s.el, "dex": s.dex, "base": s.base, "moves": moves,
+		"look": CREATURE_LOOKS.get(c.sp, Figures.look_for(s)), "role": role_of(s.base),
+		"strong": " and ".join(DATA.ELEMENTS[s.el].beats), "weak": " and ".join(weak) if not weak.is_empty() else "nothing in particular",
+		"moves_line": "Knows %s." % " and ".join(moves),
+		"note": "Level %d. Trust: %s. Resting at Maren's ranch." % [c.lvl, R.BOND[R.bond_lvl(c)][0]],
+	}
+
+func _on_card_pick(i: int) -> void:
+	if card_mode == "ranch" and i == 0 and visiting >= 0:
+		if team.size() < 3:
+			_take_along(visiting, -1)
+		else:
+			# a full team: who goes to rest instead?
+			card_mode = "swap"
+			var info := ranch_info(ranch[visiting])
+			info.note = "Your team is full. Who rests at the ranch instead?"
+			var names: Array = team.map(func(c): return c.name)
+			card.open(ranch[visiting].sp, info, names + ["Never mind"])
+		return
+	if card_mode == "swap" and visiting >= 0 and i < team.size():
+		_take_along(visiting, i)
+		return
+	visiting = -1
+
+## Take a ranch creature along: into a free place in your team, or in place of team member `ti`, who goes to rest.
+func _take_along(ri: int, ti: int) -> void:
+	var c: Dictionary = ranch[ri]
+	ranch.remove_at(ri)
+	if ti >= 0:
+		var out: Dictionary = team[ti]
+		team[ti] = c
+		ranch.append(out)
+		say("", "%s trots over to join you, and %s settles in at the ranch for a rest." % [c.name, out.name])
+	else:
+		team.append(c)
+		say("", "%s trots over to join your team." % c.name)
+	visiting = -1
+	_lead_look()
+	_place_ranch()

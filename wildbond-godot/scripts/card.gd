@@ -6,6 +6,7 @@ extends Control
 
 signal chosen(id: String)
 signal closed
+signal picked(index: int)                     # with custom buttons (the ranch): which one was pressed
 const Figures := preload("res://scripts/figures.gd")
 const INK := Color("3e2c20")
 const FAINT := Color("8a6e50")
@@ -14,7 +15,8 @@ const EL_COL := { "Ember": Color("d8642e"), "Tide": Color("3a8fd8"), "Grove": Co
 
 var id := ""
 var info: Dictionary = {}                     # name, el, dex, base, moves, strong, weak, role, maren, look
-var sel := 0                                  # 0 choose, 1 not yet
+var sel := 0                                  # 0 choose, 1 not yet (or the custom button picked)
+var buttons: Array = []                       # custom choices (the ranch); empty: "Choose <name>" / "Not yet"
 var t := 0.0
 var font: Font
 
@@ -24,12 +26,23 @@ func _ready() -> void:
 	font = ThemeDB.fallback_font
 	visible = false
 
-func open(creature_id: String, data: Dictionary) -> void:
+func open(creature_id: String, data: Dictionary, btns: Array = []) -> void:
 	id = creature_id
 	info = data
-	sel = 1                                    # "Not yet" first, so a stray Enter never chooses by accident
+	buttons = btns
+	sel = _count() - 1                         # the last choice ("Not yet") first, so a stray Enter never chooses by accident
 	t = 0.0
 	visible = true
+
+func _count() -> int:
+	return buttons.size() if not buttons.is_empty() else 2
+
+func _pick(i: int) -> void:
+	if buttons.is_empty():
+		_close(i == 0)
+		return
+	visible = false
+	picked.emit(i)
 
 func _close(choose: bool) -> void:
 	visible = false
@@ -43,18 +56,23 @@ func _input(e: InputEvent) -> void:
 		return
 	if e is InputEventKey and e.pressed and not e.echo:
 		match e.keycode:
-			KEY_LEFT, KEY_RIGHT, KEY_A, KEY_D, KEY_TAB: sel = 1 - sel
-			KEY_ENTER, KEY_KP_ENTER, KEY_SPACE, KEY_E: _close(sel == 0)
-			KEY_ESCAPE, KEY_BACKSPACE: _close(false)
+			KEY_LEFT, KEY_A: sel = (sel + _count() - 1) % _count()
+			KEY_RIGHT, KEY_D, KEY_TAB: sel = (sel + 1) % _count()
+			KEY_ENTER, KEY_KP_ENTER, KEY_SPACE, KEY_E: _pick(sel)
+			KEY_ESCAPE, KEY_BACKSPACE: _pick(_count() - 1)
 		get_viewport().set_input_as_handled()
 	elif e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
 		var p := get_local_mouse_position()
-		if _btn(0).has_point(p): _close(true)
-		elif _btn(1).has_point(p): _close(false)
+		for i in _count():
+			if _btn(i).has_point(p):
+				_pick(i)
 		get_viewport().set_input_as_handled()
 
 func _btn(i: int) -> Rect2:
-	return Rect2(196 + i * 82, 182, 76, 16)
+	if _count() == 2:
+		return Rect2(196 + i * 82, 182, 76, 16)
+	var w := (160.0 - 4.0 * (_count() - 1)) / _count()       # more choices share the same row
+	return Rect2(192 + i * (w + 4), 182, w, 16)
 
 func _process(dt: float) -> void:
 	if visible:
@@ -104,14 +122,15 @@ func _draw() -> void:
 		draw_rect(Rect2(sx + 30, sy + 2, 44, 5), Color("e4d6b4"))
 		draw_rect(Rect2(sx + 30, sy + 2, 44.0 * clampf(v / 80.0, 0.0, 1.0), 5), el_col.darkened(0.1))
 	y += 44
-	y = _para("Starts with %s." % " and ".join(info.moves), Vector2(190, y), 158, 7, INK) + 1
+	y = _para(info.get("moves_line", "Starts with %s." % " and ".join(info.moves)), Vector2(190, y), 158, 7, INK) + 1
 	y = _para("Strong against %s, weak to %s." % [info.strong, info.weak], Vector2(190, y), 158, 7, INK) + 3
-	_para("Maren: \"%s\"" % info.maren, Vector2(190, y), 158, 7, FAINT)
-	# the two choices
-	for i in 2:
+	_para(info.get("note", "Maren: \"%s\"" % info.get("maren", "")), Vector2(190, y), 158, 7, FAINT)
+	# the choices
+	for i in _count():
 		var r := _btn(i)
 		var on := sel == i
 		draw_rect(r, INK if on else Color("7a5a3a"))
 		if on:
 			draw_rect(Rect2(r.position - Vector2(1, 1), r.size + Vector2(2, 2)), Color("f2d24a"), false, 1.0)
-		_text(("Choose " + info.name) if i == 0 else "Not yet", r.position + Vector2(0, 11), 8, Color("f4e9cd"), r.size.x)
+		var label: String = buttons[i] if not buttons.is_empty() else (("Choose " + info.name) if i == 0 else "Not yet")
+		_text(label, r.position + Vector2(0, 11), 8 if _count() <= 2 else 7, Color("f4e9cd"), r.size.x)
