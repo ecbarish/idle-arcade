@@ -1,20 +1,23 @@
 'use strict';
 /* A bounded first professional month: six daily games, then two six-game series on a 24-day renewal.
    All dates move by player choices, not elapsed time. First-payday payment IDs stay unchanged. */
-function contractOffer(c) { return c && (c.generation === 1 ? DC.renewals : DC.offers)[c.offer]; }
-function termEnd(c) { return c.start + (c.generation === 1 ? 24 : 6); }
-function salaryId(c,i) { return c.generation === 1 ? 'contract-1-salary-' + i : 'salary-' + i; }
+function contractOffer(c) { return c && (c.generation === 2 ? ROAD_OFFERS : c.generation === 1 ? DC.renewals : DC.offers)[c.offer]; }
+function termEnd(c) { return c.start + (c.generation === 2 ? 30 : c.generation === 1 ? 24 : 6); }
+function salaryId(c,i) { return c.generation ? 'contract-'+c.generation+'-salary-' + i : 'salary-' + i; }
 function contractDue(s) { return !!(s.contract && s.day >= termEnd(s.contract)); }
 function careerPhase(s) {
+  if (s.road) { if(s.day>=s.road.end)s.road.closed=true; return s.road.closed?'month':'home'; }
   if (!s.contract) return s.played >= 6 ? 'offers' : 'clubhouse';
   if (s.month && s.day >= s.month.end) { s.month.closed = true; return 'month'; }
   return contractDue(s) && s.contract.generation !== 1 ? 'offers' : 'home';
 }
 function beginSeries(s) {
+  if(s.road)return nextRoadSeries(s);
   if (s.phase !== 'home' || !s.contract || contractDue(s) || s.played !== 6) return false;
   s.played=0; s.series++; s.season=lineStats(); s.prepared=false; return true;
 }
 function finishMonth(s) {
+  if(s.road){ if(s.phase!=='home'||!contractDue(s))return false; s.road.closed=true; s.phase='month'; return true; }
   if (s.phase !== 'home' || !s.month || !s.contract || s.contract.generation !== 1 || !contractDue(s)) return false;
   advanceDays(s, Math.max(0,s.month.end-s.day)); s.phase=careerPhase(s); return true;
 }
@@ -36,7 +39,7 @@ function coachGame(s,a) {
 }
 function normalizeCalendar(s,raw) {
   if(!s.contract)return;
-  s.contract.generation=s.contract.generation===1?1:0;
+  s.contract.generation=[1,2].includes(s.contract.generation)?s.contract.generation:0;
   if(!s.month){ // Original prototype saves begin their month now; earned wealth and all history stay intact.
     const start=s.day;
     s.month={start,end:start+30,games:0,wins:0,record:lineStats(),closed:false};

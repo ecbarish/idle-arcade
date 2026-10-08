@@ -137,6 +137,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 · Codex: T36 ready in PR #59: Diamond Career fills the window with objects for career records and a second month at three away parks; deliberate bus choices, no signing windfall, exact calendar pay. All eight pages pass (Diamond 122), real UI and reload at all four widths; no Godot or version overlap.
+
 - 2026-10-08 Claude (night): Evan approved the downloads: Godot export templates installed, ffmpeg in C:SERSEVANBTOOLS. WEB PREVIEWS
   OF THE NEW WILDBOND AND STARFALL LIVE AT PLAY/ (LINKED FROM COME PLAY), WINDOWS ZIPS IN DESKTOPGAME BUILDS, A 56-SECOND TRAILER
   (IMAGES/PLAY/TRAILER.MP4, ON THE COME PLAY PAGE; TOOLS/TRAILER). MERGED CHATGPT PR #57 AND #58 (OTHERWORLD V0.2.0).

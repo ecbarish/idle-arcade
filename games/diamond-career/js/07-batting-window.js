@@ -9,13 +9,19 @@ function renderBattingWindow() {
   const flying=timing&&pitchClock.running;
   tip.hidden=!flying;
   stage.classList.toggle('pitch-flying',flying);
-  host.hidden=!(timing||S.phase==='result')||flying;
+  host.hidden=!(S.phase==='pitch'||S.phase==='result')||flying;
   if(host.hidden){host.replaceChildren();return;}
   if(S.phase==='result'){
     host.innerHTML='<p class="field-result" role="status">'+esc(S.active.last.text)+'</p>'+btn('continue',S.active.last.ended?'Watch the game move on':'Next pitch',true);
     return;
   }
   const p=S.active.pitch;
+  if(S.mode==='tactical') {
+    host.innerHTML='<fieldset><legend>Your approach</legend><div class="field-choices">'+['patience','contact','power'].map(x=>'<button data-stance="'+x+'" aria-pressed="'+(S.stance===x)+'" class="'+(S.stance===x?'selected':'')+'">'+x[0].toUpperCase()+x.slice(1)+'</button>').join('')+'</div></fieldset>'+
+      '<p class="field-cue">'+esc(S.active.pitcher.name)+' favors '+esc(S.active.pitcher.favorite)+'. This release shows '+esc(DC.pitches[p.hint].cue)+'. A clue, not a promise.</p>'+
+      '<label for="field-guess">Read the pitch</label><select id="field-guess">'+Object.keys(DC.pitches).map(x=>'<option '+(S.guess===x?'selected':'')+'>'+x+'</option>').join('')+'</select><div class="field-choices">'+btn('tactical','Commit to your read',true)+btn('take','Let it go')+'</div>';
+    return;
+  }
   // Loaded old pitches keep the original cue model; never reroll an existing hint.
   const chance=Number.isFinite(p.cueChance)&&p.cueChance>=0&&p.cueChance<=1?p.cueChance:cueAccuracy({discipline:50});
   host.innerHTML='<fieldset><legend>Your swing</legend><div class="field-choices">'+['contact','power'].map(x=>'<button data-stance="'+x+'" aria-pressed="'+(timingStance(S)===x)+'" class="'+(timingStance(S)===x?'selected':'')+'">'+x[0].toUpperCase()+x.slice(1)+'</button>').join('')+'</div></fieldset>'+
@@ -34,3 +40,5 @@ document.querySelector('#stage').addEventListener('pointerdown',e=>{
   if(S.phase!=='pitch'||S.mode!=='timing'||!pitchClock.running||sceneState||e.target.closest('button,a,input,select'))return;
   e.preventDefault();actCareer('swing');
 });
+
+document.querySelector('#batting-window').addEventListener('change',e=>{if(e.target.id==='field-guess'){S.guess=e.target.value;saveCareer();}});

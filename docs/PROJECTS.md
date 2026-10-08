@@ -185,4 +185,4 @@ Ready for review in PR #53 by Codex on codex/realmbound-story-choices: ten guild
 
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
-| D1d | **T36: in the game window and a road trip** | L | Polish+Data | D1c | claimed: Codex, 2026-10-08, codex/diamond-career-window | docs/ROADMAP.md T36; keep existing features reachable, three away parks and calendar pay |
+| D1d | **T36: in the game window and a road trip** | L | Polish+Data | D1c | ready for review: Codex, 2026-10-08, PR #59 | docs/ROADMAP.md T36; keep existing features reachable, three away parks and calendar pay |

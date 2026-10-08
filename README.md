@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Diamond Career (2026-10-08): the scene fills the window; locker, calendar, notebook and pay envelope replace the side panel. A deliberate second-month road term visits three parks with bus preparations, local people and calendar salary; 122 checks.
+
 - Previews and a trailer (2026-10-08): the new Wildbond and Starfall play in the browser (play/wildbond/, play/starfall/), and a one-minute trailer opens the Come Play page.
 
 - Come Play page (2026-10-08): playtest.html is now the page to send friends: what each game does today, where it's heading, what playing feels like, first steps and help if you're lost, pictures, and Wildbond's element chart. Wildbond v1.7.1: the starter page shows each stat's number, and the bars measure against the strongest creature known (120), said on the page. Wildbond Godot: the same yardstick on every creature page, and your partner steps round to stand beside you instead of peeking over your head.
