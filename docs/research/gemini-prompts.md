@@ -6,10 +6,10 @@ Updated by Codex, 2026-10-08, after Evan's Wildbond/Godot, Realmbound and Starfa
 |---|---|---|---|
 | 1 | [Diamond Career: the first call-up and payday](gemini-diamond-first-payday-prompt.md) | `diamond-first-contract-research.md` | Understandable batting feedback, fair call-up gates, a real pay/playing-time choice and a satisfying first purchase |
 | 2 | [Otherworld: a first life with agency](gemini-otherworld-first-life-prompt.md) | `otherworld-first-life-research.md` | Choices with visible consequences, gifts with costs, satisfying endings/rebirth and a small systemic-world experiment |
-| 3 | [Arcade: first visit and playtesting](gemini-arcade-first-visit-prompt.md) | `arcade-first-visit-research.md` | Choosing a game, browser/native expectations, discoverability and reusable newcomer tests |
+| 2 | [Arcade: first visit and playtesting](gemini-arcade-first-visit-prompt.md) | `arcade-first-visit-research.md` | Choosing a game, browser/native expectations, discoverability and reusable newcomer tests |
 | Optional, lower priority | [Primordial: the first adaptation cycle](gemini-primordial-first-cycle-prompt.md) | `primordial-first-cycle-research.md` | Whether the evolution/idle niche has a distinct enjoyable loop worth revisiting |
 
-**My next pick is Diamond Career.** Its first slice is built in PR #45, so we can compare research with concrete decisions and an actual playtest. Research should refine the slice, not block playing it or demand a full league first. Otherworld is next; neither has a supplied research answer yet.
+**Diamond Career is answered** (2026-10-08): [the report](diamond-first-contract-research.md) and [Claude's review against the code](diamond-first-contract-review.md). Gemini did not see the game, so most of it is generic; the review keeps three things. **Next pick: Otherworld.** When pasting a prompt, also paste the repository link so Gemini can read the actual code.
 
 Answered prompts have moved to [the archive](archive/README.md): Wildbond creature UX, Godot production, Realmbound and Starfall. Reports stay available with separate reviews. See [how to use research](first-play-research-pack.md) and [current owner decisions](decisions.md).
 
