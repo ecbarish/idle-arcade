@@ -255,7 +255,7 @@ func tile_at(p: Vector2i) -> String:
 func solid(p: Vector2i) -> bool:
 	if tile_at(p) in SOLID:
 		return true
-	return plot_at(p) != "" and built.has(plot_at(p))
+	return (plot_at(p) != "" and built.has(plot_at(p))) or _prop_at(p) != ""
 
 ## The plot a tile belongs to ("" if none).
 func plot_at(p: Vector2i) -> String:
@@ -1273,8 +1273,8 @@ func _ground(x: int, y: int, ch: String) -> void:
 		_tex(NATURE, Vector2i(1, 10), Vector2i.ONE, o)
 	elif ch in "r#":
 		_tex(NATURE, Vector2i(0, 10), Vector2i.ONE, o)                 # garden bushes; the buildings stand over them
-	elif ch == "p":
-		_tex(FLOOR, Vector2i(12, 8), Vector2i.ONE, o)                  # cleared, trodden ground
+	elif ch == "p" and not _plot_done(plot_at(Vector2i(x, y))):
+		_tex(FLOOR, Vector2i(12, 8), Vector2i.ONE, o)                  # cleared, trodden ground (grass grows back round a finished building)
 
 ## A plot: staked out and roped while it waits; scaffolding while Hob's crew work; then the building itself.
 func _draw_plot(k: String) -> void:
@@ -1282,8 +1282,11 @@ func _draw_plot(k: String) -> void:
 		return                                   # not staked out yet: just grass
 	var o := Vector2(PLOTS[k]) * TILE
 	var wood := Color("6b4a2a")
-	for c in [Vector2.ZERO, Vector2(16, 0), Vector2(0, 16), Vector2(16, 16)]:
-		_tex(FLOOR, Vector2i(12, 8), Vector2i.ONE, o + c)         # cleared, trodden ground
+	if not _plot_done(k):
+		for c in [Vector2.ZERO, Vector2(16, 0), Vector2(0, 16), Vector2(16, 16)]:
+			_tex(FLOOR, Vector2i(12, 8), Vector2i.ONE, o + c)     # cleared, trodden ground while it waits or goes up
+	else:
+		_doorstep(k)
 	if not built.has(k):
 		for c in [Vector2(1, 2), Vector2(29, 2), Vector2(1, 28), Vector2(29, 28)]:
 			draw_rect(Rect2(o + c, Vector2(2, 5)), wood)
@@ -1443,7 +1446,7 @@ func _update_ui() -> void:
 		var line: Dictionary = lines[0]
 		var who: Mover = speaker(line.who)
 		var name := str(line.who).capitalize()
-		bubble_text.text = (name + ": " if name != "" else "") + str(line.text) + "   ▸"
+		bubble_text.text = (name + ": " if name != "" else "") + str(line.text) + "   â–¸"
 		bubble.size = Vector2(240, 0)
 		bubble.reset_size()
 		if who:
@@ -1490,7 +1493,7 @@ func _draw_board_view() -> void:
 		if up:
 			board_view.draw_rect(Rect2(r.position + Vector2(r.size.x / 2 - 2, -2), Vector2(4, 4)), Color("c84a3a"))   # the pin
 		board_view.draw_multiline_string(font, r.position + Vector2(5, 13), j.name, HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 10, 8, -1, Color("3e2c20"))
-		board_view.draw_string(font, r.position + Vector2(5, 40), "%s · %d coins" % [DANGER_WORD[int(j.danger)], int(j.reward)], HORIZONTAL_ALIGNMENT_LEFT, -1, 7, Color("8a3a2a"))
+		board_view.draw_string(font, r.position + Vector2(5, 40), "%s Â· %d coins" % [DANGER_WORD[int(j.danger)], int(j.reward)], HORIZONTAL_ALIGNMENT_LEFT, -1, 7, Color("8a3a2a"))
 		board_view.draw_multiline_string(font, r.position + Vector2(5, 52), j.text, HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 10, 7, -1, Color("5a4636"))
 		board_view.draw_string(font, r.position + Vector2(5, r.size.y - 5), "Pinned up" if up else "Pin it up", HORIZONTAL_ALIGNMENT_LEFT, -1, 7, Color("3e2c20") if up else Color("8a6e50"))
 	var done := _note_rect(notices.size())
@@ -1714,3 +1717,51 @@ func _draw_shelf(font: Font) -> void:
 	board_view.draw_string(font, Vector2(52, 168), "Change the price: Cheap (6), Fair (12) or Dear (20).", HORIZONTAL_ALIGNMENT_LEFT, -1, 7, Color("5a4a5a"))
 	if shelf_note != "":
 		board_view.draw_string(font, Vector2(32, 180), shelf_note, HORIZONTAL_ALIGNMENT_CENTER, 320, 7, Color("a03a2a"))
+
+# ---------------------------------------------------------------- finished buildings settle into the town
+## A finished building stands on grass again, with flat stones at its door and one thing of its own beside it (a barrel
+## by the smithy, a planter by the apothecary, an herb bed by the healer, a weapon rack by the yard). That thing is
+## real: it stands on its tile and nobody walks through it.
+func _plot_done(k: String) -> bool:
+	return k != "" and built.has(k) and float(built[k].left) <= 0.0
+
+## The tile beside a finished building where its own thing stands ("" if none there).
+func _prop_at(p: Vector2i) -> String:
+	for k in PLOTS:
+		if _plot_done(k) and p == PLOTS[k] + Vector2i(2, 1):
+			return built[k].what
+	return ""
+
+func _doorstep(k: String) -> void:
+	var s := Vector2(_step_of(k)) * TILE
+	for st in ([] if built[k].what == "yard" else [Vector2(2, 1), Vector2(8, 3)]):   # (two flat stones at the door; an open yard has none)
+		draw_rect(Rect2(s + st - Vector2(1, 1), Vector2(7, 5)), Color(0, 0, 0, 0.35))
+		draw_rect(Rect2(s + st, Vector2(5, 3)), Color("b8b0a0"))
+		draw_rect(Rect2(s + st, Vector2(5, 1)), Color("d8d0c0"))
+	var o := Vector2(PLOTS[k] + Vector2i(2, 1)) * TILE
+	draw_rect(Rect2(o + Vector2(2, 13), Vector2(12, 3)), Color(0, 0, 0, 0.22))           # its shadow on the grass
+	match built[k].what:
+		"smithy":
+			draw_rect(Rect2(o + Vector2(1, 3), Vector2(8, 12)), Figures.OUTLINE)          # a water barrel for quenching
+			draw_rect(Rect2(o + Vector2(2, 4), Vector2(6, 10)), Color("7a5236"))
+			draw_rect(Rect2(o + Vector2(2, 7), Vector2(6, 1)), Color("4a4e58")); draw_rect(Rect2(o + Vector2(2, 11), Vector2(6, 1)), Color("4a4e58"))
+			draw_rect(Rect2(o + Vector2(3, 4), Vector2(4, 2)), Color("4a7ab0"))
+			draw_circle(o + Vector2(12, 9), 4.5, Figures.OUTLINE)                          # and a grindstone
+			draw_circle(o + Vector2(12, 9), 3.5, Color("a8a49a"))
+			draw_rect(Rect2(o + Vector2(11, 12), Vector2(2, 3)), Color("6b4a2a"))
+		"apothecary":
+			draw_rect(Rect2(o + Vector2(1, 8), Vector2(14, 7)), Figures.OUTLINE)          # a planter of herbs
+			draw_rect(Rect2(o + Vector2(2, 9), Vector2(12, 5)), Color("8a6a44"))
+			for i in 4:
+				draw_rect(Rect2(o + Vector2(3 + i * 3, 4 + (i % 2) * 2), Vector2(2, 5 - (i % 2) * 2)), [Color("6aa84a"), Color("a868c8"), Color("4a8a5a"), Color("e8c040")][i])
+		"healer":
+			draw_rect(Rect2(o + Vector2(1, 6), Vector2(14, 9)), Color("6a4a2a"))           # an herb bed in rows
+			for r in 3:
+				for c in 4:
+					draw_rect(Rect2(o + Vector2(2 + c * 3, 7 + r * 3), Vector2(2, 2)), [Color("7cc05a"), Color("5d9a3e"), Color("a8d070")][(r + c) % 3])
+		"yard":
+			draw_rect(Rect2(o + Vector2(2, 4), Vector2(2, 11)), Color("6b4a2a"))           # a rack of practice weapons
+			draw_rect(Rect2(o + Vector2(12, 4), Vector2(2, 11)), Color("6b4a2a"))
+			draw_rect(Rect2(o + Vector2(1, 5), Vector2(14, 2)), Color("8a6a44"))
+			for i in 3:
+				draw_rect(Rect2(o + Vector2(5 + i * 2, 2), Vector2(1, 11)), [Color("c8c8c0"), Color("a07040"), Color("c8c8c0")][i])
