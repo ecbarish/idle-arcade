@@ -95,6 +95,13 @@ var got_items := {}                          # items already picked up, by id
 var grass_n := 10                            # tall-grass steps until the next find (8-16, like the browser)
 var battle_story := ""                       # "rival1" for Wren's battle; empty for wild ones
 var satchel: Label
+var then_do := Callable()                    # runs when the current conversation ends
+var npcs: Array[Mover] = []                  # people out in the world (from the game data): trainers, Wardens
+var npc_info := {}                           # id -> { data from the map, beaten, warden }
+var badges: Array = []
+var spotter: Mover = null                    # a trainer who has seen you and is walking over
+var spot_t := 0.0
+const BUILT := ["larkhaven", "thornwood"]    # the maps the Godot version has so far
 var starters: Array[Mover] = []
 var partner: Mover = null
 var map_name := "larkhaven"
@@ -140,6 +147,7 @@ func _ready() -> void:
 	R.DATA = DATA
 	pup.look = CREATURE_LOOKS.pup
 	pup.home = PADDOCK
+	_make_npcs()
 	var x := 8
 	for id in DATA.STARTERS:
 		var m := Mover.new(id, "barn", Vector2i(x, 4))
@@ -198,7 +206,12 @@ func advance() -> void:
 		return
 	lines.pop_front()
 	if lines.is_empty():
-		_after_talk()
+		if then_do.is_valid():
+			var f := then_do
+			then_do = Callable()
+			f.call()                                     # what happens when this conversation ends (a battle, a badge...)
+		else:
+			_after_talk()
 
 func _after_talk() -> void:
 	match stage:
@@ -271,7 +284,7 @@ func tile_at(p: Vector2i) -> String:
 
 func actors() -> Array:
 	var out: Array = []
-	for m in [me, maren, pup, wren] + starters:
+	for m in [me, maren, pup, wren] + starters + npcs:
 		if m.where == map_name:
 			out.append(m)
 	return out
@@ -297,7 +310,7 @@ func route(from: Vector2i, to: Vector2i) -> Array[Vector2i]:
 			break
 		for d in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
 			var n: Vector2i = c + d
-			if prev.has(n) or solid(tile_at(n)) or (tile_at(n) == "D" and n != to):
+			if prev.has(n) or solid(tile_at(n)) or (tile_at(n) == "D" and n != to) or (n != to and _someone_standing(n)):
 				continue
 			prev[n] = c
 			queue.append(n)
@@ -327,8 +340,10 @@ func _check_doors() -> void:
 		var block := ""
 		if ex.is_empty():
 			block = "The road ends here for now."
-		elif ex.has("locked"):
+		elif ex.has("locked") and not _gate_open(map_name):
 			block = ex.locked
+		elif ex.to not in BUILT:
+			block = "The road goes on to %s. That part of the valley is still being built in the Godot version." % DATA.MAPS[ex.to].name
 		elif stage != "free":
 			block = "Maren calls after you: \"Not yet, love! Finish up here first.\""
 		if block != "":
@@ -417,6 +432,7 @@ func _process(dt: float) -> void:
 	if demo:
 		_demo(dt)
 	_butterfly(dt)
+	_spotter_tick(dt)
 	_bubbles(dt)
 	for m in actors():
 		if m.is_creature():
@@ -503,6 +519,7 @@ func _walk(m: Mover, dt: float) -> void:
 		m.path.pop_front()
 		if m == me:
 			_arrived(nxt)
+			_check_spotted()
 
 func _unhandled_input(e: InputEvent) -> void:
 	var pressed: bool = (e.is_action_pressed("ui_accept") or (e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_E)
@@ -511,6 +528,8 @@ func _unhandled_input(e: InputEvent) -> void:
 		return
 	if not lines.is_empty():
 		advance()
+	elif stage == "free" and not (e is InputEventMouseButton) and not battle.visible and _talk_here():
+		pass
 	elif stage == "free" and maren.where == map_name and (me.tile - maren.tile).length() <= 1.01 and not (e is InputEventMouseButton and Vector2i((get_global_mouse_position() / TILE).floor()) != maren.tile):
 		_maren_heals()
 	elif e is InputEventMouseButton:
@@ -756,6 +775,13 @@ func _draw() -> void:
 		draw_rect(Rect2(m.pos + Vector2(3, 14), Vector2(10, 2)), Color(0, 0, 0, 0.25))   # a soft shadow
 		if not _is_painted(m):
 			_draw_actor(self, m, i)
+	if spotter and spot_t < 0.9:
+		# the "!" over a trainer who has just seen you
+		var ex := spotter.pos + Vector2(4, -18 - minf(spot_t * 20.0, 4.0))
+		draw_rect(Rect2(ex, Vector2(8, 11)), Figures.OUTLINE)
+		draw_rect(Rect2(ex + Vector2(1, 1), Vector2(6, 9)), Color("fdf6e6"))
+		draw_rect(Rect2(ex + Vector2(3, 2), Vector2(2, 4)), Color("c83a2a"))
+		draw_rect(Rect2(ex + Vector2(3, 7), Vector2(2, 2)), Color("c83a2a"))
 	if map_name == "barn":
 		_draw_barn_light()
 	# the butterfly (or moth) and Ripplet's bubbles
@@ -823,7 +849,7 @@ func _draw_actor(ci: CanvasItem, m: Mover, i: int) -> void:
 	var face := m.face
 	if not walking and face == Vector2i.DOWN and fmod(t + i, 6.0) > 5.2:
 		face = Vector2i.LEFT if int(t + i) % 2 == 0 else Vector2i.RIGHT   # a glance around while standing
-	var look: Dictionary = my_look if m == me else LOOKS.get(m.id, LOOKS.maren)
+	var look: Dictionary = my_look if m == me else (LOOKS[m.id] if LOOKS.has(m.id) else _cast_look(m.id))
 	Figures.person(ci, m.pos + Vector2(2, -5), face, walking, int(m.step_t * 8.0) % 4, fmod(t + i * 1.7, 3.3) < 0.12, look)
 
 # ---------------------------------------------------------------- inside the barn (drawn in code: warm wood and straw)
@@ -1000,7 +1026,7 @@ func _update_ui() -> void:
 	if bubble.visible:
 		bubble_text.text = line.text + "   ▸"
 		var who: Mover = null
-		for m in [maren, wren]:
+		for m in [maren, wren] + npcs:
 			if line.who == m.id and m.where == map_name:
 				who = m
 		var w := 240.0
@@ -1097,6 +1123,11 @@ func _fill(s: String) -> String:
 	return s.replace("{name}", my_look.get("name", "Tamer")).replace("{starter}", _partner_name()).replace("{rival}", rival_c.get("name", "its partner"))
 
 func _on_battle(result: String) -> void:
+	if battle_story.begins_with("trainer:"):
+		var who := battle_story.substr(8)
+		battle_story = ""
+		_after_trainer(who, result)
+		return
 	if battle_story != "rival1":
 		_after_wild(result)
 		return
@@ -1228,7 +1259,7 @@ func _satchel_text() -> String:
 	var dex := 0
 	for k in seen:
 		dex += 1
-	return "Lures %d   Berries %d   Coins %d   Wilddex %d / %d" % [bag.lures, bag.berries, bag.coins, dex, DATA.SPECIES.size()]
+	return "Badges %d   Lures %d   Berries %d   Coins %d   Wilddex %d / %d" % [badges.size(), bag.lures, bag.berries, bag.coins, dex, DATA.SPECIES.size()]
 
 ## For testing and recordings (run with -- --skip-opening): start in Thornwood with Ripplet, as if the opening were done.
 func _skip_opening() -> void:
@@ -1252,3 +1283,143 @@ func _skip_opening() -> void:
 	fade_in = 1.0
 	_go("thornwood", Vector2i(13, 14), Vector2i.UP)
 	trans_t = 0.29
+
+# ---------------------------------------------------------------- people of the valley: route trainers and Wardens
+## Everyone standing in the built maps, from the game data (MAPS[..].npcs and the Warden's spot), dressed from CAST.
+func _make_npcs() -> void:
+	for map_id in BUILT:
+		if map_id == "larkhaven":
+			continue                                 # Larkhaven's people are in the story already (Maren, Wren)
+		var m: Dictionary = DATA.MAPS[map_id]
+		for n in m.get("npcs", []):
+			var mv := Mover.new(n.who, map_id, Vector2i(int(n.at[0]), int(n.at[1])))
+			mv.face = DIRS.get(n.get("dir", "down"), Vector2i.DOWN)
+			mv.right = mv.face.x >= 0
+			npcs.append(mv)
+			npc_info[n.who] = { "data": n, "beaten": false, "warden": false }
+		if m.has("warden"):
+			var beat: Dictionary = {}
+			for b in DATA.STORY:
+				if b.get("id", "") == "warden" and map_id == "thornwood":
+					beat = b
+			var who := "isolde"
+			var mv := Mover.new(who, map_id, Vector2i(int(m.warden[0]), int(m.warden[1])))
+			mv.face = Vector2i.DOWN
+			npcs.append(mv)
+			npc_info[who] = { "data": beat, "beaten": false, "warden": true }
+
+## A person's look from CAST in the game data (skin, hair style and colour, shirt), as parts for figures.gd.
+func _cast_look(who: String) -> Dictionary:
+	var c: Dictionary = DATA.CAST.get(who, {})
+	var style: String = c.get("hair", "short")
+	if style not in ["cap", "short", "long", "ponytail", "bun", "spiky"]:
+		style = "short"
+	var shirt := Color(c.get("shirt", "#7a6a5a"))
+	return { "skin": Color(c.get("skin", "#e8c4a0")), "hair": Color(c.get("hairCol", "#4a3a2a")), "shirt": shirt,
+		"legs": shirt.darkened(0.45), "style": style, "body": "narrow" if style in ["long", "bun", "ponytail"] else "broad" }
+
+## Whether a map's gate is open: its Warden has been beaten (or it has none).
+func _gate_open(map_id: String) -> bool:
+	for n in npcs:
+		if n.where == map_id and npc_info[n.id].warden:
+			return npc_info[n.id].beaten
+	return true
+
+## After each of your steps: has a trainer who hasn't battled you yet seen you? (They look straight ahead, `sight` tiles.)
+func _check_spotted() -> void:
+	if spotter or stage != "free" or battle.visible:
+		return
+	for n in npcs:
+		var info: Dictionary = npc_info[n.id]
+		if n.where != map_name or info.warden or info.beaten or not info.data.has("trainer"):
+			continue
+		var sight := int(info.data.trainer.get("sight", 3))
+		for k in range(1, sight + 1):
+			var p: Vector2i = n.tile + n.face * k
+			if solid(tile_at(p)):
+				break
+			if p == me.tile:
+				spotter = n
+				walk_to.clear()
+				me.face = -n.face
+				n.path = route(n.tile, me.tile - n.face) if k > 1 else []
+				n.speed = 5.0
+				spot_t = 0.0
+				return
+
+func _spotter_tick(dt: float) -> void:
+	if not spotter:
+		return
+	spot_t += dt
+	if spot_t < 0.7 or not spotter.path.is_empty():
+		return                                       # the "!" over their head, then they walk over
+	var n := spotter
+	spotter = null
+	n.speed = 4.0
+	n.face = me.tile - n.tile
+	_challenge(n)
+
+## A trainer or a Warden challenges you: their lines, then the battle.
+func _challenge(n: Mover) -> void:
+	var info: Dictionary = npc_info[n.id]
+	var d: Dictionary = info.data
+	for l in (d.get("lines", []) as Array):
+		say(l[0], _fill(l[1]))
+	var team_data: Array = d.trainer.team if d.has("trainer") and d.trainer is Dictionary else d.get("team", [])
+	then_do = func():
+		var foes: Array = []
+		for t2 in team_data:
+			foes.append(R.make(t2[0], int(t2[1]), { "rar": 1 }, rng))
+			seen[t2[0]] = true
+		battle_story = "trainer:" + n.id
+		battle.open("trainer", team, foes, DATA.CAST.get(n.id, {}).get("name", n.id.capitalize()))
+
+func _after_trainer(who: String, result: String) -> void:
+	var info: Dictionary = npc_info[who]
+	var d: Dictionary = info.data
+	if result == "won":
+		info.beaten = true
+		var lv_sum := 0
+		for f in battle.foes:
+			lv_sum += int(f.c.lvl)
+		var coins := roundi(lv_sum * 12 * float(DATA.JOURNEY.classic.coins))
+		bag.coins += coins
+		var win: Array = d.trainer.win if d.has("trainer") and d.trainer is Dictionary else d.get("win", [])
+		for l in win:
+			say(l[0], _fill(l[1]))
+		say("", "You win %d coins." % coins)
+		if info.warden:
+			var badge: String = d.get("gate", "thorn")
+			badges.append(badge)
+			restore.append({ "where": map_name, "at": me.pos + Vector2(8, 8), "r": 0.0, "goal": 200.0 })
+			say("", "You earned the %s! The hawthorn gate creaks open, and colour runs out across Thornwood." % DATA.BADGES[badge].name)
+	else:
+		_after_wild("lost")
+
+## Talking to someone beside you: a trainer you've beaten, a Warden, or a sign in front of you.
+func _talk_here() -> bool:
+	for n in npcs:
+		if n.where == map_name and (me.tile - n.tile).length() <= 1.01:
+			var info: Dictionary = npc_info[n.id]
+			n.face = me.tile - n.tile
+			if info.warden and info.beaten:
+				say(n.id, _fill(DATA.MAPS[map_name].get("wardenDone", "The gate is yours, {name}.")))
+			elif info.beaten:
+				for l in (info.data.trainer.get("after", []) as Array):
+					say(l[0], _fill(l[1]))
+			else:
+				_challenge(n)
+			return true
+	var ahead: Vector2i = me.tile + me.face
+	if tile_at(ahead) == "P":
+		var key := "%d,%d" % [ahead.x, ahead.y]
+		say("", str(DATA.MAPS[map_name].get("signs", {}).get(key, "The sign is too weathered to read.")))
+		return true
+	return false
+
+## Whether someone is standing still on a tile (people in the world and Maren), so walks go around them.
+func _someone_standing(p: Vector2i) -> bool:
+	for m in npcs + [maren]:
+		if m.where == map_name and m.tile == p and m.path.is_empty():
+			return true
+	return false

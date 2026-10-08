@@ -461,7 +461,9 @@ func _spot(u: Dictionary) -> Vector2:
 		var k := allies.find(u)
 		return [Vector2(112, 162), Vector2(50, 146), Vector2(168, 142)][k] if allies.size() > 1 else Vector2(100, 158)
 	var i := foes.find(u)
-	return Vector2(286 - i * 26, 92 - i * 4)
+	if foes.size() == 1:
+		return Vector2(286, 92)
+	return [Vector2(300, 96), Vector2(246, 86), Vector2(348, 84)][i]
 
 func _draw() -> void:
 	if state == "off":

@@ -206,6 +206,31 @@ func _run() -> void:
 	tick(1.0)
 	check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 14), "the north road leads to Thornwood, arriving where the map says")
 	check(main.partner.where == "thornwood", "your partner comes too")
+	# ---- a route trainer spots you, walks over and battles (Bram, from the game data)
+	check(main.npcs.size() == 3, "Thornwood has Bram, Lise and Warden Isolde")
+	main.npc_info.lise.beaten = true                # keep Lise out of the way for these checks
+	main.walk_to = main.route(main.me.tile, Vector2i(14, 10))
+	for i in 200:
+		tick(0.05)
+		if main.spotter or not main.lines.is_empty(): break
+	check(main.spotter != null or not main.lines.is_empty(), "walking into Bram's line of sight gets you spotted")
+	for i in 100:
+		tick(0.05)
+		if not main.lines.is_empty(): break
+	check(not main.lines.is_empty() and main.lines[0].who == "bram", "Bram walks over and speaks")
+	talk_through()
+	check(main.battle.visible and main.battle.kind == "trainer" and main.battle.foes.size() == 2, "Bram's battle: his two creatures at once")
+	var coins0: int = main.bag.coins
+	for u in main.battle.foes: u.c.hp = 0           # the checks win this one outright
+	for i in 100:
+		tick(0.05)
+		if main.battle.state == "results": break
+	check(main.battle.result == "won", "beating Bram")
+	main.battle._go_to("fog_out")
+	tick(1.5)
+	check(main.npc_info.bram.beaten and main.bag.coins > coins0, "Bram counts as beaten and pays out coins (%d)" % (main.bag.coins - coins0))
+	talk_through()
+	check(not main._gate_open("thornwood"), "the hawthorn gate stays shut until you beat the Warden")
 	var lures0: int = main.bag.lures
 	check(walk_to(Vector2i(27, 10)), "you can walk to the lures lying in the grass")
 	check(main.bag.lures == lures0 + 3 and main.got_items.has("tw2"), "picking up 3 lures (%d)" % main.bag.lures)
@@ -249,6 +274,31 @@ func _run() -> void:
 		tick(1.5)
 		if bt2.result == "caught":
 			check(main.team.size() == team0 + 1 and main.bonded.has(foe.sp), "the creature you calmed joins your team")
+		talk_through()
+	# ---- Warden Isolde at the hawthorn gate: her scene, her battle, the Thorn Badge, the gate
+	if main.map_name == "thornwood" and not main.battle.visible:
+		check(walk_to(Vector2i(12, 2)), "you can walk up to Warden Isolde")
+		main.me.face = Vector2i.UP
+		var ev2 := InputEventKey.new()
+		ev2.pressed = true
+		ev2.keycode = KEY_ENTER
+		ev2.physical_keycode = KEY_ENTER
+		main._unhandled_input(ev2)
+		check(not main.lines.is_empty() and main.lines.size() == main.DATA.STORY.filter(func(b): return b.id == "warden")[0].lines.size(), "Isolde's scene from the game data")
+		talk_through()
+		check(main.battle.visible and main.battle.foes.size() == 3 and main.battle.trainer == "Warden Isolde", "the Warden battle: three creatures")
+		for u in main.battle.foes: u.c.hp = 0
+		for i in 100:
+			tick(0.05)
+			if main.battle.state == "results": break
+		main.battle._go_to("fog_out")
+		tick(1.5)
+		check("thorn" in main.badges and main._gate_open("thornwood"), "the Thorn Badge, and the gate opens")
+		talk_through()
+		check(walk_to(Vector2i(13, 1)), "you can walk to the open gate (at %s, stage %s, lines %d, battle %s, map %s)" % [main.me.tile, main.stage, main.lines.size(), main.battle.visible, main.map_name])
+		main._step(Vector2i.UP)
+		tick(1.0)
+		check(main.map_name == "thornwood" and not main.lines.is_empty() and "still being built" in main.lines[0].text, "past the gate: the coast isn't built in Godot yet, and the game says so")
 		talk_through()
 	# ---- Maren heals your team
 	if main.map_name != "larkhaven":
