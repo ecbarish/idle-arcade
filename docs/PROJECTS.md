@@ -31,7 +31,7 @@ and the arcade's homepage shows them off. Any assistant may push these forward w
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
 | L1 | **Shared settings panel** in every game: sound, graphics quality (S6), reduced motion, text size | M | Polish | G1 | open | One `shared/settings.js`; respects `prefers-reduced-motion` by default |
-| L2 | **Save safety** in every game: export / import / automatic backup slot, version tags in saves | M | System | — | open | Starfall already exports; copy its pattern; never change existing save keys |
+| L2 | **Save safety** in every game: export / import / automatic backup slot, version tags in saves | M | System | — | done 2026-10-07 (Claude): automatic backups and recovery in shared/engine.js, "Your save" box (download, load a file, restore) in all three games | Starfall already exports; copy its pattern; never change existing save keys |
 | L3 | **Mobile pass**: layouts, tap targets, the walkable worlds on touch, performance on a mid phone | L | Polish | G4 | open | Test at 375 px wide; scenes must stay above ~40 fps; see L11 for big screens |
 | L4 | **Onboarding**: a gentle first 10 minutes per game (what to click, what Auto does) | M | Design+Polish | — | open | Realmbound and Wildbond first; use the shared dialogue scenes |
 | L5 | **Install and offline** (web app manifest + service worker), so the arcade works like an app | S | System | — | done: Codex, 2026-10-07, `codex/arcade-offline`, merged 2026-10-07 by Claude, who made it online-first (no version bumps; see docs/offline.md) | docs/offline.md; GitHub Pages scope, complete release cache, waiting updates, browser checks |

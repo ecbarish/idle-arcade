@@ -1,6 +1,7 @@
 'use strict';
 /* Game state, saving, and helpers for creatures in your care. */
 const KEY = 'wildbond-save-v1';
+Arcade.validators[KEY] = o => Array.isArray(o.team) && Array.isArray(o.ranch); // L2: what a Wildbond save looks like
 const Cr = window.Creatures;
 const $ = s => document.querySelector(s);
 const { fmt, fmtI, fmtTime } = window.Arcade;

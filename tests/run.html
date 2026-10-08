@@ -23,7 +23,7 @@ button.addEventListener('click',async()=>{
   button.disabled=true;results.replaceChildren();summary.textContent='Running…';
   const keys=['realmbound-save-v1','arcade-index-v1'],backup=new Map();let frame;
   try{
-    for(const key of keys)backup.set(key,localStorage.getItem(key));
+    for(const key of keys.concat(Object.keys(localStorage).filter(k=>k.startsWith('arcade-backup:'))))backup.set(key,localStorage.getItem(key)); // automatic save backups too (engine.js)
     const [scenarioResponse,bootResponse]=await Promise.all([fetch('realmbound-scenarios.cjs'),fetch('../games/realmbound/js/99-boot.js')]);
     if(!scenarioResponse.ok||!bootResponse.ok)throw Error('Could not load scenario or boot source. Serve the repository root over HTTP.');
     const scenarioText=await scenarioResponse.text(),bootText=await bootResponse.text();
@@ -40,6 +40,7 @@ button.addEventListener('click',async()=>{
   }catch(error){result(false,error.message);summary.textContent='FAIL — '+error.message;summary.className='fail';}
   finally{
     if(frame)frame.remove();
+    for(const k of Object.keys(localStorage))if(k.startsWith('arcade-backup:')&&!backup.has(k))localStorage.removeItem(k);
     for(const [key,value] of backup){if(value===null)localStorage.removeItem(key);else localStorage.setItem(key,value);}
     button.disabled=false;
   }

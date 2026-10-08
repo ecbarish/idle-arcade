@@ -12,7 +12,7 @@
   function backup(saveKey, why) {
     try { const raw = localStorage.getItem(saveKey); if (!raw) return false;
       const k = BK_PREFIX + saveKey + ':' + Date.now(); localStorage.setItem(k, JSON.stringify({ at: Date.now(), why: why || 'backup', data: raw }));
-      const all = Object.keys(localStorage).filter(x => x.startsWith(BK_PREFIX + saveKey + ':')).sort().reverse();
+      const all = Object.keys(localStorage).filter(x => x.startsWith(BK_PREFIX + saveKey + ':') && !x.includes(':auto-')).sort().reverse(); // automatic backups (engine.js) rotate on their own
       for (const old of all.slice(8)) localStorage.removeItem(old); return true; } catch (e) { return false; }
   }
   function log(game, text) { try { const l = JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); l.unshift({ at: Date.now(), game, text }); localStorage.setItem(LOG_KEY, JSON.stringify(l.slice(0, 200))); } catch (e) {} }

@@ -85,7 +85,7 @@ const TABS = {
       ${challengeHTML()}
       <h4>Art style</h4><p class="sub">The world's look evolves as you progress. Unlocked styles can be switched any time.</p><div class="eras">${ERAS.map(e => { const on = S.eras.includes(e.id) && ART[e.id];
         return `<button class="era ${S.era === e.id ? 'cur' : ''}" data-act="era" data-arg="${e.id}" ${on ? '' : 'disabled'}><b>${e.name}</b><span>${on ? (S.era === e.id ? 'In use' : 'Use this style') : e.soon ? `Coming soon · ${e.unlock}` : e.unlock}</span></button>`; }).join('')}</div>
-      ${leagueJournal()}${towerJournal()}<h4>Story so far</h4><div class="logl">${S.log.slice(0, 20).map(m => `<div>${m}</div>`).join('')}</div>` }
+      ${leagueJournal()}${towerJournal()}<h4>Your save</h4><p class="sub">Saved in this browser as you play, with automatic backups. Download a copy now and then, or move it to another device.</p>${Arcade.saveToolsHTML(KEY, 'btn sm')}<h4>Story so far</h4><div class="logl">${S.log.slice(0, 20).map(m => `<div>${m}</div>`).join('')}</div>` }
 };
 /* Weather forecasts use the same three periods per ranch day as the walking scene. */
 function forecastHTML() {

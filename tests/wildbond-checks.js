@@ -883,6 +883,29 @@ function wildbondChecks() {
     spireReady();delete S.tower;const uid=S.team[0].uid,eras=JSON.stringify(S.eras),cap=S.capMode;save();reset();load();return S.tower.best===0&&!S.tower.active&&S.tower.claimed.length===0&&S.team[0].uid===uid&&S.capMode===cap&&levelCap()===75&&JSON.stringify(S.eras)===eras&&S.titles.includes('Champion');
   });
   check('Invalid tower fields normalize without unlocking a pre-Champion climb',()=>{ready();S.tower={best:-3,floor:Infinity,active:true,rest:true,claimed:[10,10,'20',-10,7]};const t=towerState();return t.best===0&&t.floor===0&&!t.active&&!t.rest&&t.claimed.join(',')==='10';});
+  // L2 save safety (shared/engine.js): automatic backups, recovery from a damaged save, any save format, validators
+  check('saving keeps an automatic backup of the save', () => {
+    const key = 'wildbond-save-v1'; save(); // the first save of a visit makes one; after that at most every 10 minutes
+    const b = Arcade.backups(key).find(x => x.k.endsWith(':auto-recent'));
+    return b && Arcade.validators[key](JSON.parse(b.data)) && b.ver === VERSION && Arcade.backups(key).some(x => x.k.includes(':auto-day-'));
+  });
+  check('a damaged save loads from the newest backup instead of starting over', () => {
+    const key = 'wildbond-save-v1', good = localStorage.getItem(key);
+    try { localStorage.setItem(key, '{"team":[broken'); const o = Arcade.load(key);
+      document.querySelectorAll('[role="status"]').forEach(d => { if (/could not be read/.test(d.textContent)) d.remove(); });
+      return o && Array.isArray(o.team) && Arcade.recovered[key]; }
+    finally { localStorage.setItem(key, good); delete Arcade.recovered[key]; }
+  });
+  check('saves load from an exported code or a downloaded file alike', () => {
+    const o = { team: [], ranch: [], coins: 7 };
+    return Arcade.decodeAny(Arcade.encode(o)).coins === 7 && Arcade.decodeAny(JSON.stringify(o)).coins === 7;
+  });
+  check("another game's save is refused (validators)", () => {
+    const v = Arcade.validators['wildbond-save-v1']; return v({ team: [], ranch: [] }) && !v({ chars: [], v: 2 });
+  });
+  check('the Journal shows Your save with download, load and backups', () => {
+    const html = TABS.journal.build(); return /Your save/.test(html) && /data-arcsave="download"/.test(html) && /data-arcsave="file"/.test(html) && /Automatic backups/.test(html);
+  });
   check('view distance cycles Close, Wide, Far and widens the view (L11)', () => {
     const S = wb.S, was = S.view, seen = [];
     try { S.view = 'near'; const m1 = viewMult(); for (let i = 0; i < 3; i++) { cycleView(); seen.push(S.view); }
@@ -973,6 +996,7 @@ function wildbondChecks() {
     // Destroy the writer (timers and beforeunload save) BEFORE restoring the originals.
     if (active.frame) { active.frame.remove(); active.frame = null; }
     const errors = [];
+    for (const k of Object.keys(localStorage)) if (k.startsWith('arcade-backup:') && !active.backup.has(k)) localStorage.removeItem(k);
     for (const [key, value] of active.backup) {
       try {
         if (value === null) localStorage.removeItem(key); else localStorage.setItem(key, value);
@@ -990,7 +1014,7 @@ function wildbondChecks() {
     try {
       if (location.hostname !== 'localhost' || !/^https?:$/.test(location.protocol)) throw Error('Open this page through serve.ps1 at http://localhost:8765/tests/wildbond.html.');
       // Finish ALL reads before changing storage; if backup fails, no game is loaded.
-      const backup = new Map(keys.map(key => [key, localStorage.getItem(key)]));
+      const backup = new Map(keys.concat(Object.keys(localStorage).filter(k => k.startsWith('arcade-backup:'))).map(key => [key, localStorage.getItem(key)])); // automatic save backups too (engine.js)
       active = { backup, frame: null };
       localStorage.removeItem(keys[0]);
       const frame = document.createElement('iframe'); frame.title = 'Wildbond test instance'; active.frame = frame;

@@ -115,6 +115,7 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-07 Claude: L2 save safety (Lane B1): shared/engine.js keeps automatic backups (arcade-backup:<key>:auto-recent  and auto-day-<date>, Studio format), load() recovers from them, `Arcade.saveToolsHTML(KEY)` box in all three games,  `Arcade.validators`; GM pruning skips auto backups; test runners restore backup keys. Wildbond 1199, Realmbound 1537,  Starfall 48, sound 21.
 - 2026-10-07 Claude: decided with Evan: the next phase is **Launch** (both games content complete, not launch ready).  docs/QUEUE.md now leads with the launch checklist; Lane A: T32, then bug bash and balance (both games), guides and  lore pages (T8 unparked), onboarding; Lane B: save safety, settings, the arcade launcher, phone, accessibility.  Both games become 2.0 at Launch; a new game only after (docs/research/decisions.md).
 - 2026-10-07 Claude: docs/QUEUE.md, the autopilot work queue: a lane per assistant (A Codex, B Claude, C Grok/other),  the loop (claim, build, PR, next; max two open PRs), and rules that avoid conflicts (Claude bumps versions and edits  START-HERE's status sections at merge).
 - 2026-10-07 Claude: G2 for every Realmbound zone (23-light.js `ZONE_LIGHT`: per-zone `night` colour, bounce, grade,  shafts, fogTop; 20-ambience.js `ambFront` holds the visual dark to 30% while the sun is up, fixing grey sunsets;  towns use the zone night). Realmbound v1.0.2, 1537 checks. **Next for Claude:** G2 dungeons, or W3 part 2 (roaming  legendaries); review T32 when ChatGPT finishes.

@@ -1,6 +1,7 @@
 'use strict';
 
 const KEY='starfall-guild-save-v1';
+Arcade.validators[KEY]=o=>!!(o&&o.stats&&Array.isArray(o.party)); // L2: what a Starfall Guild save looks like
 const $=s=>document.querySelector(s);
 const now=()=>Date.now();
 

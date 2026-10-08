@@ -117,7 +117,7 @@ ledger:{
     <h4>Guild diary</h4><ul class="logl" id="logl"></ul>
     <h4>Save</h4><textarea id="saveTxt" placeholder="Export puts your save here. Paste a save here to import it." aria-label="Save data"></textarea>
     <div class="btnrow"><button class="btn" data-act="save">Save now</button><button class="btn" data-act="export">Export</button><button class="btn" data-act="copy">Copy</button><button class="btn" data-act="import">Import pasted save</button><button class="btn red" data-act="reset">Erase everything</button></div>
-    <p class="sub" id="saveMsg"></p>`;},
+    <p class="sub" id="saveMsg"></p>${Arcade.saveToolsHTML(KEY,'btn')}`;},
   update(){const s=S.stats,set=(id,v)=>{const e=$('#'+id);if(e)e.textContent=v;};set('l1',fmtTime(s.play));set('l2',fmtTime(s.run));set('l3',s.seasons);set('l4',floorName(s.bestEver));set('l5',fmtI(s.kills));set('l6',s.bosses);set('l7',s.recruits);set('l8',fmt(S.renownLife));
     const L=$('#logl'),html=S.log.slice(0,25).map(m=>`<li>${m}</li>`).join('');if(L.dataset.h!==html){L.innerHTML=html;L.dataset.h=html;}}
 }};

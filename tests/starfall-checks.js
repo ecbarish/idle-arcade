@@ -227,6 +227,7 @@ async function starfallChecks(oldSave) {
     // Destroy the writer (timers and beforeunload save) BEFORE restoring the originals.
     if (active.frame) { active.frame.remove(); active.frame = null; }
     const errors = [];
+    for (const k of Object.keys(localStorage)) if (k.startsWith('arcade-backup:') && !active.backup.has(k)) localStorage.removeItem(k);
     for (const [key, value] of active.backup) {
       try {
         if (value === null) localStorage.removeItem(key); else localStorage.setItem(key, value);
@@ -244,7 +245,7 @@ async function starfallChecks(oldSave) {
     try {
       if (location.hostname !== 'localhost' || !/^https?:$/.test(location.protocol)) throw Error('Open this page through serve.ps1 at http://localhost:8765/tests/starfall.html.');
       // Finish ALL reads before changing storage; if backup fails, no game is loaded.
-      const backup = new Map(keys.map(key => [key, localStorage.getItem(key)]));
+      const backup = new Map(keys.concat(Object.keys(localStorage).filter(k => k.startsWith('arcade-backup:'))).map(key => [key, localStorage.getItem(key)])); // automatic save backups too (engine.js)
       active = { backup, frame: null };
       localStorage.removeItem(keys[0]);
       // The unchanged canvas uses its visible bounds; reopen it for repeated runs.
