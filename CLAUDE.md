@@ -42,6 +42,11 @@ the very end, so running out of usage never strands work.
 - **Games feel like games** (Evan, 2026-10-07, after playing Wildbond): the screen is the world; interactions are
   physical (walk to the shop, the trough, the person); features arrive through the story; everything is readable in
   full words; nothing plays itself. The principles in docs/wildbond-plan.md apply to every game.
+- **Budget and scope** (Evan, 2026-10-07, docs/research/owner-direction-2026-10-07.md): about **US$200 total cash**
+  for the whole project unless he revisits it; prefer free tools and freely usable assets; no subscriptions or
+  speculative purchases. Platforms stay open (browser, Godot or other, per game, decided by evidence). Every game
+  belongs in the discussion (Starfall valued; Primordial lower priority). Automation serves play: earned conveniences
+  that remove repetition, never skipping the parts players enjoy.
 - **Read docs/VISION.md** (2026-10-07): old soul, modern craft; prologues, a Classic/Enhanced/Modern look, game boxes,
   procedural content, a living world of bots, friends, Realmbound nodes. Projects V1-V8 in PROJECTS.md.
 - **The journey and the grind are the fun**, but the player picks the pace (journey-length settings, badge level

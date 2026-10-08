@@ -125,6 +125,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude: merged ChatGPT's branch: Wildbond creature variants (T33: Gleaming, tiny/huge, markings; cosmetic;  js/19-variants.js) -> Wildbond v1.6.0, the Realmbound field guide (guides/realmbound.html), and research: its careful  review of Gemini's Godot report (docs/research/godot-production-slice-review.md: keep/try/defer/reject) and Evan's  direction (docs/research/owner-direction-2026-10-07.md: ~US$200 cash ceiling, platforms open, automation serves play).  Godot trial: vertex snapping off (transform snapping only, per Godot docs). Wildbond 1254, Realmbound 4173, offline 15.
+- 2026-10-08 Claude: Evan played the Godot trial: "this feels much better". Fixed his notes (Maren off the gate,  fences join vertically, four-way facing with walk frames and idle breathing, cub tail wag and trot). His animation  bar ("better than the first Pokémon") needs real sprite art: docs/wildbond-plan.md "Art and animation".
 - 2026-10-07 Codex: saved Evan's supplied Gemini Godot report verbatim as docs/research/godot-production-slice.md; review beside it fact-checks snapping, MSDF, saves and web constraints, rejects invented stamina/chemistry requirements and unsupported schedule. Research only, PR #44; no trial edits, installs or plan adoption.
 
 - 2026-10-07 Codex: recorded Evan's clarified direction in docs/research/owner-direction-2026-10-07.md: open platform choice, approximate US$200 total cash budget, earned help for tedium rather than universal full Auto; Otherworld/Diamond remain in design discussions. Updated the old control contract in docs/plans/README.md to prevent conflicting instructions. Documentation only, PR #44.

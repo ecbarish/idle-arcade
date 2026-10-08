@@ -40,6 +40,7 @@ class Mover:
 	var speed := 4.0
 	var right := true
 	var step_t := 0.0
+	var face := Vector2i.DOWN                # which way they look: front, back or side
 	func _init(t: Vector2i) -> void:
 		tile = t
 		pos = Vector2(t) * 16.0
@@ -89,7 +90,7 @@ func _after_talk() -> void:
 		maren.path = route(maren.tile, Vector2i(11, 8))
 	elif stage == "maren_talks":
 		stage = "to_paddock"
-		maren.path = route(maren.tile, Vector2i(16, 12))
+		maren.path = route(maren.tile, Vector2i(18, 12))   # beside the gate, not in front of it
 		caption.text = "Walk to the little one in the paddock (arrow keys or WASD). Press Enter beside it."
 	elif stage == "bonded":
 		stage = "free"
@@ -168,6 +169,7 @@ func _walk(m: Mover, dt: float) -> void:
 		return
 	var nxt: Vector2i = m.path[0]
 	var goal := Vector2(nxt) * TILE
+	m.face = nxt - m.tile
 	if goal.x != m.pos.x:
 		m.right = goal.x > m.pos.x
 	m.pos = m.pos.move_toward(goal, dt * m.speed * TILE)
@@ -220,17 +222,58 @@ func _draw() -> void:
 			_draw_tile(x, y, MAP[y][x])
 	var actors := [[me, TAMER], [maren, MAREN], [cub, CUB]]
 	actors.sort_custom(func(a, b): return a[0].pos.y < b[0].pos.y)
-	for a in actors:
-		var m: Mover = a[0]
+	for i in actors.size():
+		var m: Mover = actors[i][0]
+		var base: Array = actors[i][1]
+		var walking := not m.path.is_empty()
+		var frame := int(m.step_t * 8.0) % 2      # which foot is up
 		var bob := 0.0
-		if not m.path.is_empty():
-			bob = -1.0 if int(t * 8.0) % 2 == 0 else 0.0
+		if walking:
+			bob = -1.0 if frame == 0 else 0.0
+		elif fmod(t + i * 0.8, 2.4) < 0.4:
+			bob = -1.0                             # a breath while standing still
 		if m == cub and cub_bonded and stage == "bonded":
-			bob = -abs(sin(t * 6.0)) * 3.0     # it hops for joy
+			bob = -abs(sin(t * 6.0)) * 3.0         # it hops for joy
 		draw_rect(Rect2(m.pos + Vector2(3, 14), Vector2(10, 2)), Color(0, 0, 0, 0.25))   # a soft shadow
-		var sprite: Array = a[1]
-		var off := Vector2(3, 1) if sprite.size() > 8 else Vector2(2, 7)
-		_draw_sprite(sprite, m.pos + off + Vector2(0, bob), m.right or sprite.size() > 8)
+		if base.size() > 8:
+			_draw_sprite(person_pose(base, m.face, walking, frame), m.pos + Vector2(3, 1 + bob), m.face != Vector2i.LEFT)
+		else:
+			_draw_sprite(creature_pose(base, walking, frame), m.pos + Vector2(2, 7 + bob), m.right)
+
+## A person's look from the way they face: front (both eyes), back (all hair), side (one eye, flipped for left),
+## with the feet stepping in turn while they walk.
+func person_pose(rows: Array, face: Vector2i, walking: bool, frame: int) -> Array:
+	var out: Array = rows.duplicate()
+	var hair: String = rows[0].strip_edges(true, true).replace(".", "")[0]
+	if face == Vector2i.UP:
+		for y in range(2, 5):
+			out[y] = (out[y] as String).replace("E", hair).replace("S", hair)
+	elif face.x != 0:
+		var row: String = out[3]
+		out[3] = row.substr(0, 5).replace("E", "S") + row.substr(5)
+	if walking:
+		var w: int = (out[0] as String).length()
+		var last: String = out[out.size() - 1]
+		var keep := ""
+		for x in w:
+			var lifted := (x < w / 2) if frame == 0 else (x >= w / 2)
+			keep += "." if lifted else last[x]
+		out[out.size() - 1] = keep
+	return out
+
+## A creature's look: the tail wags, and the legs trot in pairs while it walks.
+func creature_pose(rows: Array, walking: bool, frame: int) -> Array:
+	var out: Array = rows.duplicate()
+	if int(t * 5.0) % 2 == 0:                  # tail up, then down
+		out[1] = "O" + (out[1] as String).substr(1)
+		out[2] = "." + (out[2] as String).substr(1)
+	if walking:
+		var legs: String = out[out.size() - 1]
+		var cols := [2, 7] if frame == 0 else [4, 9]
+		for c in cols:
+			legs = legs.substr(0, c) + "." + legs.substr(c + 1)
+		out[out.size() - 1] = legs
+	return out
 
 func _draw_sprite(rows: Array, at: Vector2, right: bool) -> void:
 	var w: int = rows[0].length()
@@ -270,10 +313,25 @@ func _draw_tile(x: int, y: int, ch: String) -> void:
 			draw_rect(Rect2(o, Vector2(16, 16)), Color("c8a874"))
 			draw_rect(Rect2(o + Vector2(3 + n, 5 + n), Vector2(2, 1)), Color("a88a5a"))
 		"=":
+			# fences join their neighbours: rails run across, down, or both at a corner, with a post in the middle
 			draw_rect(Rect2(o, Vector2(16, 16)), grass)
-			draw_rect(Rect2(o + Vector2(0, 6), Vector2(16, 2)), Color("a0703a"))
-			draw_rect(Rect2(o + Vector2(0, 10), Vector2(16, 2)), Color("a0703a"))
-			draw_rect(Rect2(o + Vector2(1, 4), Vector2(2, 10)), Color("7a5028"))
+			var rail := Color("a0703a")
+			var l := tile_at(Vector2i(x - 1, y)) == "=" or tile_at(Vector2i(x - 1, y)) == "."
+			var r := tile_at(Vector2i(x + 1, y)) == "=" or tile_at(Vector2i(x + 1, y)) == "."
+			var u := tile_at(Vector2i(x, y - 1)) == "="
+			var d := tile_at(Vector2i(x, y + 1)) == "="
+			if l or r or not (u or d):
+				var x0 := 0 if l else 7
+				var x1 := 16 if r else 9
+				draw_rect(Rect2(o + Vector2(x0, 6), Vector2(x1 - x0, 2)), rail)
+				draw_rect(Rect2(o + Vector2(x0, 10), Vector2(x1 - x0, 2)), rail)
+			if u or d:
+				var y0 := 0 if u else 6
+				var y1 := 16 if d else 12
+				draw_rect(Rect2(o + Vector2(6, y0), Vector2(1, y1 - y0)), rail)
+				draw_rect(Rect2(o + Vector2(9, y0), Vector2(1, y1 - y0)), rail)
+			draw_rect(Rect2(o + Vector2(6, 4), Vector2(4, 10)), Color("7a5028"))   # the post
+			draw_rect(Rect2(o + Vector2(6, 4), Vector2(4, 1)), Color("b8885a"))
 		"P":
 			draw_rect(Rect2(o, Vector2(16, 16)), Color("c8a874"))
 			draw_rect(Rect2(o + Vector2(7, 7), Vector2(2, 9)), Color("6b4a2a"))
