@@ -263,7 +263,7 @@ func _after_talk() -> void:
 	match stage:
 		"intro":
 			stage = "maren_walks"
-			maren.path = route(maren.tile, Vector2i(11, 8))
+			maren.path = route(maren.tile, me.tile + Vector2i.RIGHT)   # beside you, not below (our people are taller than a tile)
 		"maren_talks":
 			stage = "register"
 			register.open()
@@ -538,6 +538,9 @@ func _process(dt: float) -> void:
 			say(l[0], _fill(l[1]))
 	if stage == "maren_walks" and maren.path.is_empty() and maren.pos.distance_to(Vector2(maren.tile) * TILE) < 0.5:
 		stage = "maren_talks"
+		me.face = maren.tile - me.tile                  # you turn to each other
+		maren.face = me.tile - maren.tile
+		maren.right = maren.face.x > 0
 		say("maren", "There you are! You must be the new tamer. I'm Maren. I keep the ranch.")
 		say("maren", "Before anything else: the ranch register. Every tamer in the valley signs it. Write yourself in, love.")
 	var free_to_walk: bool = stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and not shop.visible and not book.visible and trans_t < 0.0
@@ -628,6 +631,10 @@ func _unhandled_input(e: InputEvent) -> void:
 		advance()
 	elif stage == "free" and not (e is InputEventMouseButton) and not battle.visible and _talk_here():
 		pass
+	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _near_trough():
+		_feed()
+	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _near_stall():
+		_breed_here()
 	elif stage == "free" and maren.where == map_name and (me.tile - maren.tile).length() <= 1.01 and not (e is InputEventMouseButton and Vector2i((get_global_mouse_position() / TILE).floor()) != maren.tile):
 		_maren_heals()
 	elif e is InputEventMouseButton:
@@ -980,7 +987,7 @@ func _draw_barn() -> void:
 			var n := (x * 7 + y * 13) % 11
 			if ch in ",h|tbd":
 				_boards(o, x, y)
-				if y <= 4 and ch == "," and x > 6 and x < 18:      # straw bedding in the stalls
+				if y <= 4 and ch == "," and ((x > 6 and x < 18) or BREED_STALL.has_point(Vector2i(x, y))):      # straw bedding in the stalls
 					draw_rect(Rect2(o + Vector2(0, 1 if y == 3 else 0), Vector2(16, 15 if y == 3 else 12)), STRAW.darkened(0.35))
 					for k in 9:
 						draw_rect(Rect2(o + Vector2((n * 3 + k * 5) % 13, (k * 7 + n) % 14), Vector2(3, 1)), STRAW.darkened(0.12 * (k % 2)))
@@ -1034,6 +1041,20 @@ func _draw_barn() -> void:
 		draw_rect(Rect2(o, Vector2(30, 8)), Color("2e3a32"))
 		var nm: String = DATA.SPECIES[s.id].name
 		draw_string(ThemeDB.fallback_font, o + Vector2(0, 7), nm, HORIZONTAL_ALIGNMENT_CENTER, 30, 6, Color("e8e4d8"))
+	# the breeding stall's board, and an egg in its straw when there is one
+	var bo := Vector2(BREED_STALL.position) * TILE + Vector2(9, -12)
+	draw_rect(Rect2(bo - Vector2(1, 1), Vector2(32, 10)), Figures.OUTLINE)
+	draw_rect(Rect2(bo, Vector2(30, 8)), Color("2e3a32"))
+	draw_string(ThemeDB.fallback_font, bo + Vector2(0, 7), "Nursery", HORIZONTAL_ALIGNMENT_CENTER, 30, 6, Color("e8e4d8"))
+	if not egg.is_empty():
+		var eo := Vector2(BREED_STALL.position + Vector2i(1, 1)) * TILE + Vector2(4, 3)
+		draw_rect(Rect2(eo + Vector2(-2, 9), Vector2(12, 3)), STRAW.darkened(0.2))   # its nest
+		draw_rect(Rect2(eo + Vector2(1, -1), Vector2(6, 12)), Figures.OUTLINE)
+		draw_rect(Rect2(eo + Vector2(0, 1), Vector2(8, 9)), Figures.OUTLINE)
+		draw_rect(Rect2(eo + Vector2(2, 0), Vector2(4, 10)), Color("f4ecd8"))
+		draw_rect(Rect2(eo + Vector2(1, 2), Vector2(6, 7)), Color("f4ecd8"))
+		draw_rect(Rect2(eo + Vector2(2, 3), Vector2(1, 1)), Color("c89a6a")); draw_rect(Rect2(eo + Vector2(5, 6), Vector2(1, 1)), Color("c89a6a"))
+		draw_rect(Rect2(eo + Vector2(3, 7), Vector2(1, 1)), Color("c89a6a"))
 	# a lantern on the post by the door
 	var lo := Vector2(13, 11) * TILE + Vector2(4, 2)
 	draw_rect(Rect2(lo - Vector2(1, 1), Vector2(6, 8)), Figures.OUTLINE)
@@ -1305,6 +1326,8 @@ func _draw_water(x: int, y: int, o: Vector2, n: int) -> void:
 func _arrived(p: Vector2i) -> void:
 	if map_name == "barn" or stage != "free":
 		return
+	if map_name != "larkhaven":
+		_egg_step()                                  # the egg warms while you're out on your journey
 	for it in DATA.MAPS[map_name].get("items", []):
 		if not got_items.has(it.id) and Vector2i(int(it.at[0]), int(it.at[1])) == p:
 			got_items[it.id] = true
@@ -1312,7 +1335,7 @@ func _arrived(p: Vector2i) -> void:
 			for k in it.give:
 				bag[k] = int(bag.get(k, 0)) + int(it.give[k])
 				found.append("%d %s" % [int(it.give[k]), k])
-			say("", "You found %s!" % " and ".join(found))
+			say("", "You found %s!" % R.words(found))
 	if tile_at(p) == "\"" and DATA.MAPS[map_name].has("biome"):
 		grass_n -= 1
 		if grass_n <= 0:
@@ -1446,6 +1469,15 @@ func _skip_opening() -> void:
 		badges = ["thorn", "tide", "ember"].slice(0, at)
 		team[0].lvl = [5, 14, 24, 34][at]
 		team[0].hp = R.stats(team[0]).hp
+	if "--nursery" in OS.get_cmdline_user_args() and ranch.size() >= 2:   # two in the nursery and an egg in the straw (with --ranch)
+		for c in team: c["hold"] = 999                    # (a picture of the nursery, not of a change)
+		ranch[0]["stall"] = true
+		ranch[1]["stall"] = true
+		egg = { "child": R.make("fernruff", 3, { "rar": 1 }, rng), "steps": EGG_STEPS, "from": [ranch[0].name, ranch[1].name] }
+		_place_ranch()
+		_go("barn", Vector2i(5, 6), Vector2i.UP)
+		trans_t = 0.29
+		return
 	_go(start, Vector2i(int(st[0]), int(st[1])), DIRS.get(st[2], Vector2i.UP))
 	trans_t = 0.29
 
@@ -1513,7 +1545,10 @@ func _check_spotted() -> void:
 				spotter = n
 				walk_to.clear()
 				me.face = -n.face
-				n.path = route(n.tile, me.tile - n.face) if k > 1 else []
+				# they walk over and stop in front of you; coming up or down the screen they keep a tile's gap, since
+				# people are taller than a tile and would otherwise stand on each other
+				var gap := 2 if n.face.y != 0 else 1
+				n.path = route(n.tile, me.tile - n.face * gap) if k > gap else []
 				n.speed = 5.0
 				spot_t = 0.0
 				return
@@ -1646,7 +1681,7 @@ func save_game() -> void:
 	var d := { "v": 1, "saved": Time.get_datetime_string_from_system(), "look": look, "team": team, "ranch": ranch, "bag": bag,
 		"badges": badges, "seen": seen, "bonded": bonded, "items": got_items, "beaten": beaten,
 		"restore": restore.map(func(r): return { "where": r.where, "x": r.at.x, "y": r.at.y, "goal": r.goal }),
-		"explored": explored_in, "story": story_done, "retry": story_retry,
+		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg,
 		"map": map_name, "x": me.tile.x, "y": me.tile.y, "partner": partner.id if partner else "" }
 	var f := FileAccess.open(save_path, FileAccess.WRITE)
 	if f:
@@ -1695,6 +1730,10 @@ func _load_game() -> bool:
 	explored_in = d.get("explored", {})
 	story_done = d.get("story", {})
 	story_retry = d.get("retry", {})
+	egg = d.get("egg", {})
+	if not egg.is_empty():
+		egg.steps = int(egg.steps)
+		egg.child = _fix_creature(egg.child)
 	for k in d.beaten:
 		if npc_info.has(k):
 			npc_info[k].beaten = true
@@ -1977,16 +2016,110 @@ var visiting := -1                           # which ranch creature's page is op
 
 func _place_ranch() -> void:
 	ranch_movers.clear()
+	var free_i := 0                                          # creatures not in the breeding stall, in order
+	var stall_i := 0
 	for i in ranch.size():
-		var out := i < 4
-		var home: Rect2i = PADDOCK if out else BARN_FLOOR
-		var k := i if out else i - 4
-		var n := k * (2 if out else 3) + 1                   # spread out, a gap between each
-		var m := Mover.new("ranch", "larkhaven" if out else "barn", home.position + Vector2i(n % home.size.x, (n / home.size.x) % home.size.y))
+		var m: Mover
+		if ranch[i].get("stall", false):
+			m = Mover.new("ranch", "barn", BREED_STALL.position + Vector2i(stall_i * 2, 0))
+			m.home = BREED_STALL
+			stall_i += 1
+		else:
+			var out := free_i < 4
+			var home: Rect2i = PADDOCK if out else BARN_FLOOR
+			var k := free_i if out else free_i - 4
+			var n := k * (2 if out else 3) + 1               # spread out, a gap between each
+			m = Mover.new("ranch", "larkhaven" if out else "barn", home.position + Vector2i(n % home.size.x, (n / home.size.x) % home.size.y))
+			m.home = home
+			free_i += 1
 		m.look = CREATURE_LOOKS.get(ranch[i].sp, Figures.look_for(R.sp(ranch[i])))
-		m.home = home
 		m.right = i % 2 == 0
 		ranch_movers.append(m)
+
+# ---------------------------------------------------------------- the barn's trough and breeding stall
+## The trough (right wall of Maren's barn): berries in it, and your ranch creatures come to eat and trust you more.
+## The breeding stall (the empty stall on the left): send two ranch creatures in from their page; when both are there,
+## ask at the stall. An egg sits in the straw and hatches after you've walked a while on your journey.
+const BARN_TROUGH := [Vector2i(22, 7), Vector2i(22, 8)]
+const BREED_STALL := Rect2i(3, 3, 3, 2)
+const EGG_STEPS := 200
+var egg: Dictionary = {}                     # { child, steps, from }
+
+func in_stall() -> Array:
+	return ranch.filter(func(c): return c.get("stall", false))
+
+func _near_trough() -> bool:
+	return map_name == "barn" and BARN_TROUGH.any(func(t): return (me.tile - t).length() <= 1.01)
+
+func _near_stall() -> bool:
+	return map_name == "barn" and me.tile.y == BREED_STALL.end.y and me.tile.x >= BREED_STALL.position.x and me.tile.x < BREED_STALL.end.x
+
+func _feed() -> void:
+	if int(bag.berries) < 2:
+		say("", "The trough is empty. Two berries make a feed; the shop in Larkhaven sells them.")
+		return
+	bag.berries = int(bag.berries) - 2
+	for c in ranch:
+		R.add_bond(c, 3.0)
+	for m in ranch_movers:
+		if m.where == "barn" and m.home == BARN_FLOOR:
+			m.path = route(m.tile, Vector2i(21, 6 + ranch_movers.find(m) % 4))   # they come to eat
+	say("", "You tip berries into the trough. Your ranch creatures crowd round, tails going, and trust you a little more.")
+
+func _breed_here() -> void:
+	if not egg.is_empty():
+		say("", "The egg lies warm in the straw. It'll hatch once you've been out walking a while (about %d more steps)." % int(egg.steps))
+		return
+	var pair := in_stall()
+	if pair.size() < 2:
+		say("", "The breeding stall. Bring two of your ranch creatures here: open a creature's page in the paddock or the barn, and choose To the stall.")
+		return
+	var info := R.breed_info(pair[0], pair[1])
+	if not info.ok:
+		say("maren", str(info.why))
+		return
+	breed_opts = info.opts
+	var shown: String = pair[0].sp if info.get("hybrid", false) else str(info.opts[0])   # a hybrid stays a surprise
+	var future: Dictionary = pair[0].duplicate()
+	future.sp = shown
+	future.name = DATA.SPECIES[shown].name
+	var page := ranch_info(future)
+	page.note = "%s and %s. %s An egg costs %d coins for Maren's care." % [pair[0].name, pair[1].name, info.text, R.BREED_COST]
+	card_mode = "breed"
+	card.open(shown, page, ["Have an egg (%d coins)" % R.BREED_COST, "Not now"])
+
+var breed_opts: Array = []
+
+func _lay_egg() -> void:
+	var pair := in_stall()
+	if pair.size() < 2 or not egg.is_empty():
+		return
+	if int(bag.coins) < R.BREED_COST:
+		say("maren", "An egg needs looking after, love: %d coins for the straw and the warm lamp. Come back when you have them." % R.BREED_COST)
+		return
+	bag.coins = int(bag.coins) - R.BREED_COST
+	var id: String = breed_opts[rng.randi() % breed_opts.size()]
+	egg = { "child": R.breed(pair[0], pair[1], id, rng), "steps": EGG_STEPS, "from": [pair[0].name, pair[1].name] }
+	for c in pair:
+		c.erase("stall")                              # the parents go back to the ranch
+	_place_ranch()
+	say("", "%s and %s settle in the straw together. By morning there's an egg, warm and speckled." % [pair[0].name, pair[1].name])
+	say("maren", "Well, look at that! Off you go on your journey, love. It'll hatch while you're out walking. I'll send word.")
+
+## Each step on your journey warms the egg; when it hatches, word comes from the ranch.
+func _egg_step() -> void:
+	if egg.is_empty():
+		return
+	egg.steps = int(egg.steps) - 1
+	if int(egg.steps) > 0:
+		return
+	var c: Dictionary = egg.child
+	egg = {}
+	ranch.append(c)
+	seen[c.sp] = true
+	bonded[c.sp] = true
+	_place_ranch()
+	say("", "A runner from Larkhaven catches you up: Maren says the egg has hatched! A little %s is waiting for you at the ranch." % DATA.SPECIES[c.sp].name)
 
 ## The creature at the front of your team walks with you.
 func _lead_look() -> void:
@@ -2010,7 +2143,8 @@ func _visit(m: Mover) -> void:
 	m.right = me.pos.x > m.pos.x
 	visiting = i
 	card_mode = "ranch"
-	card.open(ranch[i].sp, ranch_info(ranch[i]), ["Take along" if team.size() < 3 else "Swap in", "Let it rest"])
+	var stall_btn := "Out of the stall" if ranch[i].get("stall", false) else "To the stall"
+	card.open(ranch[i].sp, ranch_info(ranch[i]), ["Take along" if team.size() < 3 else "Swap in", stall_btn, "Let it rest"])
 
 ## A creature's page at the ranch: the same page as in Maren's barn, with its own level, trust and moves.
 func ranch_info(c: Dictionary) -> Dictionary:
@@ -2023,12 +2157,29 @@ func ranch_info(c: Dictionary) -> Dictionary:
 	return {
 		"name": c.name, "el": s.el, "dex": s.dex, "base": s.base, "moves": moves,
 		"look": CREATURE_LOOKS.get(c.sp, Figures.look_for(s)), "role": role_of(s.base),
-		"strong": " and ".join(DATA.ELEMENTS[s.el].beats), "weak": " and ".join(weak) if not weak.is_empty() else "nothing in particular",
-		"moves_line": "Knows %s." % " and ".join(moves),
+		"strong": R.words(DATA.ELEMENTS[s.el].beats), "weak": R.words(weak) if not weak.is_empty() else "nothing in particular",
+		"moves_line": "Knows %s." % R.words(moves),
 		"note": "Level %d. Trust: %s. Resting at Maren's ranch." % [c.lvl, R.BOND[R.bond_lvl(c)][0]],
 	}
 
 func _on_card_pick(i: int) -> void:
+	if card_mode == "breed":
+		if i == 0:
+			_lay_egg()
+		return
+	if card_mode == "ranch" and i == 1 and visiting >= 0:
+		var c: Dictionary = ranch[visiting]
+		visiting = -1
+		if c.get("stall", false):
+			c.erase("stall")
+			say("", "%s trots out of the breeding stall." % c.name)
+		elif in_stall().size() >= 2:
+			say("", "The breeding stall already has two creatures in it.")
+		else:
+			c["stall"] = true
+			say("", "%s goes to the breeding stall in Maren's barn." % c.name)
+		_place_ranch()
+		return
 	if card_mode == "evolve" and not evolving.is_empty():
 		var c: Dictionary = evolving
 		evolving = {}

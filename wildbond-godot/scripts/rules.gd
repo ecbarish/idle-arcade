@@ -56,6 +56,65 @@ static func make(species_id: String, lvl: int, opts: Dictionary, rng: RandomNumb
 	c.hp = stats(c).hp
 	return c
 
+## Breeding (games/wildbond/js/07-ranch.js breedInfo, shared/creatures.js breed): which pairs can have an egg, and
+## what hatches. Same family: one of the parents' base forms. Some different families make a hybrid (HYBRIDS).
+const BREED_COST := 80
+static func base_form(id: String) -> String:
+	for k in DATA.SPECIES:
+		var e = DATA.SPECIES[k].get("evo")
+		if e and str(e.to) == id:
+			return base_form(k)
+	for k in DATA.get("EVOS", {}):
+		for o in DATA.EVOS[k]:
+			if str(o.to) == id:
+				return base_form(k)
+	return id
+
+static func breed_info(a: Dictionary, b: Dictionary) -> Dictionary:
+	if a.is_empty() or b.is_empty() or a == b:
+		return { "ok": false, "why": "Two different creatures are needed." }
+	if sp(a).get("unique", false) or sp(b).get("unique", false):
+		return { "ok": false, "why": "Guardians don't have eggs. They belong to their places." }
+	for c in [a, b]:
+		if c.lvl < 8:
+			return { "ok": false, "why": "%s is too young yet (level 8 at least)." % c.name }
+		if bond_lvl(c) < 1:
+			return { "ok": false, "why": "%s doesn't trust you enough yet (Friendly at least)." % c.name }
+	var fa: String = sp(a).fam
+	var fb: String = sp(b).fam
+	if fa == fb:
+		var opts: Array = []
+		for id in [base_form(a.sp), base_form(b.sp)]:
+			if id not in opts:
+				opts.append(id)
+		return { "ok": true, "opts": opts, "text": "Same family: the egg will hatch into %s." % " or ".join(opts.map(func(i): return DATA.SPECIES[i].name)) }
+	var pair := [fa, fb]
+	pair.sort()
+	var hy: String = DATA.get("HYBRIDS", {}).get("+".join(pair), "")
+	if hy != "":
+		return { "ok": true, "opts": [hy], "hybrid": true, "text": "These two seem to get along... something new might hatch." }
+	return { "ok": false, "why": "These two families won't have an egg together. Try a pair from the same family, or experiment." }
+
+static func breed(a: Dictionary, b: Dictionary, id: String, rng: RandomNumberGenerator) -> Dictionary:
+	var pot := {}
+	for s in STATS:
+		var lo := mini(int(a.pot[s]), int(b.pot[s]))
+		var hi := maxi(int(a.pot[s]), int(b.pot[s]))
+		var v := rng.randi_range(lo, hi)
+		if rng.randf() < 0.12:
+			v = mini(31, hi + rng.randi_range(1, 3))         # now and then, better than either parent
+		pot[s] = v
+	var traits: Array = []
+	for t in a.traits + b.traits:
+		if t not in traits and rng.randf() < 0.5:
+			traits.append(t)
+	var rar: int = clampi(maxi(int(a.rar), int(b.rar)) - (1 if rng.randf() < 0.6 else 0) + (1 if rng.randf() < 0.05 else 0), 0, 5)
+	var c := make(id, 3, { "rar": rar, "pot": pot, "traits": traits.slice(0, 3), "temp": [a.temp, b.temp][rng.randi() % 2] }, rng)
+	c.bond = 20.0
+	c["gen"] = maxi(int(a.get("gen", 1)), int(b.get("gen", 1))) + 1
+	c["parents"] = [a.name, b.name]
+	return c
+
 ## Stats from species, potential, level, temperament, rarity and bond (Creatures.stats): a Pokemon-style curve.
 static func stats(c: Dictionary) -> Dictionary:
 	var base: Dictionary = sp(c).base
@@ -214,3 +273,10 @@ static func atb_rate(u: Dictionary) -> float:
 static func roll_rarity(boost: float, rng: RandomNumberGenerator) -> int:
 	var r := rng.randf() / (1.0 + boost)
 	return 3 if r < 0.004 else (2 if r < 0.03 else (1 if r < 0.15 else 0))
+
+## A list in plain words: "A", "A and B", "A, B and C".
+static func words(list: Array) -> String:
+	var l: Array = list.map(func(x): return str(x))
+	if l.size() <= 2:
+		return " and ".join(l)
+	return ", ".join(l.slice(0, -1)) + " and " + l[-1]

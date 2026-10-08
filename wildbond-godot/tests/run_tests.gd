@@ -51,6 +51,8 @@ func walk_to(goal: Vector2i) -> bool:
 		tick(0.05)
 		if main.me.tile == goal and main.me.path.is_empty():
 			return true
+		if main.walk_to.is_empty() and main.me.path.is_empty() and i % 10 == 9:
+			main.walk_to = main.route(main.me.tile, goal)   # someone crossed our path: set off again, as a player would
 	return false
 
 func _run() -> void:
@@ -481,7 +483,7 @@ func _run() -> void:
 	for i in 200:
 		tick(0.05)
 		if main.card.visible: break
-	check(main.card.visible and main.card.buttons == ["Take along", "Let it rest"], "tapping a ranch creature walks you over and opens its page: Take along or Let it rest (me %s, it %s, card %s %s %s, lines %s, stage %s, team %s)" % [main.me.tile, fern.tile, main.card.visible, main.card_mode, main.card.buttons, main.lines.map(func(l): return l.text.left(30)), main.stage, main.team.map(func(c): return [c.sp, c.lvl, c.get("hold")])])
+	check(main.card.visible and main.card.buttons == ["Take along", "To the stall", "Let it rest"], "tapping a ranch creature walks you over and opens its page: Take along, To the stall or Let it rest (me %s, it %s, card %s %s %s, lines %s, stage %s, team %s)" % [main.me.tile, fern.tile, main.card.visible, main.card_mode, main.card.buttons, main.lines.map(func(l): return l.text.left(30)), main.stage, main.team.map(func(c): return [c.sp, c.lvl, c.get("hold")])])
 	main.card._pick(0)
 	check(main.team.size() == 2 and main.team[1].sp == "fernruff" and main.ranch.size() == 1 and main.ranch_movers.size() == 1, "Take along: it joins your team and leaves the paddock")
 	talk_through()
@@ -500,8 +502,47 @@ func _run() -> void:
 	main._place_ranch()
 	check(main.ranch_movers.filter(func(m): return m.where == "larkhaven").size() == 4 and main.ranch_movers.filter(func(m): return m.where == "barn").size() == 2, "four creatures in the paddock, the rest inside the barn")
 	main._visit(main.ranch_movers[0])
-	main.card._pick(1)
+	main.card._pick(2)
 	check(not main.card.visible and main.team.size() == 3 and main.ranch.size() == 6, "Let it rest changes nothing")
+	# ---- the barn: the trough and the nursery (breeding)
+	var keep_tile: Vector2i = main.me.tile
+	main.ranch = [main.R.make("cindercub", 10, { "rar": 1 }, main.rng), main.R.make("blazefang", 16, { "rar": 2 }, main.rng), main.R.make("poolkit", 3, { "rar": 1 }, main.rng)]
+	main.ranch[0].bond = 25.0
+	main.ranch[1].bond = 30.0
+	main._place_ranch()
+	main._set_map("barn")
+	main.me.tile = Vector2i(21, 7)
+	main.bag.berries = 3
+	var b0: float = main.ranch[2].bond
+	check(main._near_trough(), "standing by the trough in Maren's barn")
+	main._feed()
+	check(int(main.bag.berries) == 1 and main.ranch[2].bond > b0, "two berries in the trough: your ranch creatures trust you more")
+	talk_through()
+	main._feed()
+	check(int(main.bag.berries) == 1 and main.lines.size() > 0 and "empty" in main.lines[0].text, "with one berry left the trough stays empty")
+	talk_through()
+	for k in 3:
+		main._visit(main.ranch_movers[k])
+		main.card._pick(1)
+		talk_through()
+	check(main.in_stall().size() == 2 and not main.ranch[2].get("stall", false), "two creatures go to the nursery; a third is turned away")
+	check(main.ranch_movers.filter(func(m): return main.BREED_STALL.has_point(m.tile)).size() == 2, "and they stand in its straw")
+	main.me.tile = Vector2i(4, 5)
+	check(main._near_stall(), "standing at the nursery")
+	main.bag.coins = 100
+	main._breed_here()
+	check(main.card.visible and main.card_mode == "breed" and main.breed_opts == ["cindercub"], "a wolf pair: the egg will be a Cindercub (%s)" % [main.breed_opts])
+	main.card._pick(0)
+	check(int(main.bag.coins) == 20 and not main.egg.is_empty() and main.egg.child.sp == "cindercub" and main.in_stall().is_empty(), "an egg for 80 coins; the parents go back to the ranch")
+	talk_through()
+	var n_ranch: int = main.ranch.size()
+	for k in main.EGG_STEPS:
+		main._egg_step()
+	check(main.egg.is_empty() and main.ranch.size() == n_ranch + 1 and main.ranch[-1].lvl == 3 and int(main.ranch[-1].gen) == 2, "after a walk on your journey the egg hatches into the ranch")
+	talk_through()
+	check(not main.R.breed_info(main.ranch[0], main.ranch[2]).ok, "a level-3 creature is too young to breed")
+	main._set_map("larkhaven")
+	main.me.tile = keep_tile
 	# ---- a creature ready to change: you're asked, and "not yet" is respected until it grows again
 	var cub: Dictionary = main.R.make("cindercub", 14, { "rar": 1 }, main.rng)
 	main.team = [cub]

@@ -122,7 +122,7 @@ func _draw() -> void:
 		draw_rect(Rect2(sx + 30, sy + 2, 44, 5), Color("e4d6b4"))
 		draw_rect(Rect2(sx + 30, sy + 2, 44.0 * clampf(v / 80.0, 0.0, 1.0), 5), el_col.darkened(0.1))
 	y += 44
-	y = _para(info.get("moves_line", "Starts with %s." % " and ".join(info.moves)), Vector2(190, y), 158, 7, INK) + 1
+	y = _para(info.get("moves_line", "Starts with %s." % preload("res://scripts/rules.gd").words(info.moves)), Vector2(190, y), 158, 7, INK) + 1
 	y = _para("Strong against %s, weak to %s." % [info.strong, info.weak], Vector2(190, y), 158, 7, INK) + 3
 	_para(info.get("note", "Maren: \"%s\"" % info.get("maren", "")), Vector2(190, y), 158, 7, FAINT)
 	# the choices
