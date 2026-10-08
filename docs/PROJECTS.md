@@ -36,7 +36,7 @@ and the arcade's homepage shows them off. Any assistant may push these forward w
 | L4 | **Onboarding**: a gentle first 10 minutes per game (what to click, what Auto does) | M | Design+Polish | — | open | Realmbound and Wildbond first; use the shared dialogue scenes |
 | L5 | **Install and offline** (web app manifest + service worker), so the arcade works like an app | S | System | — | done: Codex, 2026-10-07, `codex/arcade-offline`, merged 2026-10-07 by Claude, who made it online-first (no version bumps; see docs/offline.md) | docs/offline.md; GitHub Pages scope, complete release cache, waiting updates, browser checks |
 | L6 | **Credits** page and `CREDITS.md` for any outside assets | S | Polish | — | done 2026-10-07 (Codex), merged 2026-10-07 by Claude on `codex/arcade-credits` | credits.html, CREDITS.md and full notices in licenses/; see CREATIVE.md "Outside assets" |
-| L7 | **Bug bash and balance pass**: full playthrough sims of both games, fix what they find | L | Polish | W1, W2 | Wildbond audit ready for review (PR #41); Realmbound open | Use the pacing sim methods in the design docs; docs/wildbond-launch-balance.md records challenge failures and remaining manual playtests |
+| L7 | **Bug bash and balance pass**: full playthrough sims of both games, fix what they find | L | Polish | W1, W2 | Wildbond audit ready for review (PR #41); Realmbound claimed by Codex (`codex/realmbound-launch-balance`) | Use the pacing sim methods in the design docs; docs/wildbond-launch-balance.md records challenge failures and remaining manual playtests |
 | L8 | **Immersive homepage** that shows off the engines (living scene, sound, dialogue, creatures) | L | Art | G1, W2 | part 1 done 2026-10-07 (Claude): launcher/launcher.js, two styles (the living world, the arcade hall) with a player vote (docs/VOTES.md); part 2 the road (walkable, scrolling, building sites for games in design); next: phone layout, the winning style | Evan: build once the games are further along (START-HERE) |
 | L9 | **Versioning and release notes**: a version number in each game, a release checklist | S | Polish | — | done 2026-10-10 (Jules) | HANDOFF.md "Releasing a version" |
 | L10 | **Accessibility**: keyboard play everywhere, colour contrast, readable fonts, screen-reader labels | M | Polish | — | open | |
@@ -111,7 +111,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | R5 | **Crafted gear from 55** from the guild economy (the plan's gear route) | M | System | — | open | docs/realmbound-40-60.md "Loot from 40 to 60" |
 | R6 | **Hub variety**: a layout per zone (Fenwatch Post, Lanternrest Lodge...), interiors for the inn and smithy | M | Art | — | open | js/22-town.js |
 | R7 | **Second raid tier** after The Hollow Throne | L | Data+System | — | open | docs/realmbound-40-60.md "Raids" |
-| R8 | **Pacing re-measure 1-60** with every system on; tune zone XP only | M | Polish | — | open | docs/realmbound-40-60.md "Measured" |
+| R8 | **Pacing re-measure 1-60** with every system on; tune zone XP only | M | Polish | — | claimed: Codex, 2026-10-07, `codex/realmbound-launch-balance` | docs/realmbound-40-60.md "Measured" |
 | R9 | Heroic tiers and loot review for the newest dungeons (Rootrot, Heartwood) | S | Polish | — | done, merged 2026-10-07 by Claude (Codex; docs/realmbound-heroic-review.md) | |
 
 ## Shared systems and the world kit
