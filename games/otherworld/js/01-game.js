@@ -12,6 +12,7 @@ Arcade.validators[KEY] = o => !!(o && Array.isArray(o.lives) && o.mem && typeof 
 function load() {
   const o = Arcade.load(KEY); if (!o || !Arcade.validators[KEY](o)) return;
   S = Object.assign(fresh(), o); S.look = Object.assign(fresh().look, o.look || {});
+  if (S.life) prepareLife(S.life, true);
 }
 function save() {
   Arcade.save(KEY, S);
@@ -23,25 +24,43 @@ function save() {
 /* ---------------------------------------------------------------- the story runner */
 let D = null, sceneState = null;
 function linesOf(n) { return typeof n.lines === 'function' ? n.lines(S.life) : n.lines || []; }
-function choicesOf(n) { return (n.choices || []).filter(c => !c.need || c.need(S.life)); }
+function choicesOf(n) { return n.choices || []; }
+function choiceReady(c, life = S.life) { return !!c && !!life && (!c.need || !!c.need(life)); }
+function storyNext(next, life) { return typeof next === 'function' ? next(life) : next; }
+const escapeStory = text => String(text).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function choiceLabel(c, life) {
+  const title = typeof c.t === 'function' ? c.t(life) : c.t;
+  return escapeStory(title) + (!choiceReady(c, life) ? '<span class="choice-why">' + escapeStory(typeof c.why === 'function' ? c.why(life) : c.why) + '</span>' : '');
+}
 function run(id) {
   const n = NODES[id], life = S.life; if (!n || !life) return;
-  life.at = id; if (n.fx) n.fx(life);
+  prepareLife(life);
+  life.at = id;
+  if (!life.entered[id]) { if (n.fx) n.fx(life); life.entered[id] = true; }
   setScene(n.bg, !!n.night);
   if (n.status) life.status = true;
   save(); renderHUD();
   const avail = choicesOf(n);
   if (n.status) showStatus();
   D.play(linesOf(n), i => {
-    if (avail.length) { const c = avail[i || 0]; if (c.fx) c.fx(life); if (c.end) finish(c.end); else run(c.go); }
+    if (S.life !== life || life.at !== id) return;
+    if (avail.length) {
+      const c = avail[i || 0];
+      if (!c || !choiceReady(c, life)) { run(id); return; }
+      if (c.fx) c.fx(life);
+      if (c.end) finish(c.end); else run(storyNext(c.go, life));
+    }
     else if (n.end) finish(typeof n.end === 'function' ? n.end(life) : n.end);
-    else run(n.go);
-  }, avail.length ? { choices: avail.map(c => c.t) } : undefined);
+    else run(storyNext(n.go, life));
+  }, avail.length ? { choices: avail.map(c => choiceLabel(c, life)) } : undefined);
 }
 /* an ending: its scene, then the soul keeps what the ending gives, and you return to the Between */
 function finish(endId) {
   const e = ENDINGS[endId], life = S.life;
-  D.play(EPILOGUES[endId] || [], () => {
+  if (!e || !life) return;
+  life.ending = endId; save();
+  D.play([...(EPILOGUES[endId] || []), ...townEpilogue(life, endId)], () => {
+    if (S.life !== life) return;
     const learned = e.keep.filter(k => !S.mem[k]);
     for (const k of e.keep) S.mem[k] = true;
     S.lives.push({ world: life.world, gift: life.gift, name: life.name, ending: endId, at: Date.now() });
@@ -59,6 +78,7 @@ function toBetween(ending, learned) {
     if (learned.length) lines.push(['archivist', 'Your soul keeps this, into every life to come: ' + learned.map(k => MEMORIES[k]).join(' ')]);
     else lines.push(['archivist', 'Nothing new for your soul this time, but you\'ll carry what you already know.']);
   }
+  lines.push(...archivistMemories(S.mem));
   S.met = true; save();
   D.play(lines, () => chooseWorld());
 }
@@ -86,6 +106,7 @@ function chooseSelf(world, gift) {
 function begin(world, gift) {
   S.name = (document.getElementById('pname').value || '').trim().replace(/[<>&"]/g, '').slice(0, 16) || STORY_NAMES[0];
   S.life = { world, gift, name: S.name, flags: {}, at: WORLDS[world].start, silver: 0, status: false, mem: Object.assign({}, S.mem) };
+  prepareLife(S.life);
   panel().hidden = true; save();
   D.play([['archivist', `${WORLDS[world].name}, then, with ${GIFTS[world][gift].name}. Live it well, {name}. Bring me back a good story.`]], () => run(WORLDS[world].start));
 }

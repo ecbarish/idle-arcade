@@ -168,6 +168,7 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
 - [ ] T35-T37 open for ChatGPT (2026-10-08, after its reset): one branch and PR each, stacked if needed.
 
 ### T35: Otherworld O1, a living Lanthorn (moved from Claude's lane; Claude is in Godot)
+- [x] Implementation ready in PR #58 (Codex, 2026-10-08); 831 Otherworld checks, all eight pages pass. Review/version bump remain Claude's. Details: docs/otherworld-lanthorn.md.
 Read docs/otherworld-design.md, docs/research/otherworld-first-life-review.md ("Proposed ticket: O1", whose defaults
 Evan's rules already settle), docs/CREATIVE.md "Writing for players" and the in-window rule in CLAUDE.md. Branch
 `codex/otherworld-living-lanthorn`.

@@ -137,6 +137,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 · Codex: T35 ready in PR #58: Lanthorn's food/fear shown through the square and its people; visible locked choices, all gift costs, recoverable relief-flour choice and Archivist memory responses. All eight pages pass (Otherworld 831); actual Mira ending, reload and controls checked at all four widths. No Godot or version overlap.
+
 - 2026-10-08 · Codex: PR #57 guide refresh: illustrated rooms and commissions, generated costs, corrected equipment advice. All eight test pages pass; static guide checks pass at phone, laptop, desktop and ultrawide widths.
 
 - 2026-10-08 Claude (later): Diamond Career v0.3.1 (Evan couldn't see the pitch: field cleared mid-throw, tap to swing, a circle at the plate). Starfall

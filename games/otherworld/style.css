@@ -34,3 +34,13 @@
   --dlg-muted:#c8c0e0;--dlg-name-font:'Cormorant Garamond',serif;--dlg-btn:#ffd27a;--dlg-btn-ink:#2a1a08}
 .dlg-otherworld.dlg{left:50%;right:auto;transform:translateX(-50%);width:min(860px,94vw);bottom:18px}
 @media (prefers-reduced-motion:reduce){.choose,.status{animation:none}}
+
+/* Locked decisions explain themselves in the same portrait scene, with no side panel. */
+.dlg-otherworld .choice-why{display:block;margin-top:5px;font-size:12px;line-height:1.4;font-weight:400;color:#d0c7de}
+.dlg-otherworld .dlg-choices button{max-width:100%;text-align:left;white-space:normal;min-height:44px;border-radius:12px}
+.dlg-otherworld .dlg-choices button:disabled{background:#252038;color:#aaa2b8;border-color:#635b76;cursor:default}
+.dlg-otherworld.dlg{max-height:calc(100dvh - 120px);overflow-y:auto;overscroll-behavior:contain}
+.dlg-otherworld .dlg-choices{display:none;flex-direction:column;align-items:stretch}
+.dlg-otherworld.asking .dlg-choices{display:flex}
+.dlg-otherworld .dlg-choices button:focus-visible{outline:3px solid #ffe3a0;outline-offset:2px}
+@media(max-width:560px){.dlg-otherworld.dlg{bottom:8px;max-height:calc(100dvh - 130px)}.dlg-otherworld .dlg-choices button{font-size:13px}.dlg-otherworld .choice-why{font-size:12px}}
