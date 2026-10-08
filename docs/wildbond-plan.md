@@ -107,6 +107,11 @@ with real proportions and visible legs, like our code-drawn tamer and Maren (abo
 with more frames; **our own original art** is the path (Evan wants our own identity anyway). Any future pack must
 match this look before it's used.
 
+**3D and every world (Evan, 2026-10-08):** assets must carry over to 3D and maybe first person, and fit any of our
+games. So characters are built from **parts** (head, body, arms, legs) that become a simple 3D rig and drive the
+character creator; environment pieces are **separate objects with a footprint and height** (a tree, a house, a
+fence) that a 3D renderer can stand up, recoloured per world. The Diorama era already extrudes pixel art into voxels.
+
 ## How we'll know it works
 Evan replays the first hour after each phase. A new player should be able to say, within ten minutes: who Maren and
 Wren are, why the world is faded, how to bond with a creature, what the Wilddex is for, and where to go next, without

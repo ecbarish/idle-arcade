@@ -235,11 +235,79 @@ func _draw() -> void:
 		if m == cub and cub_bonded and stage == "bonded":
 			bob = -abs(sin(t * 6.0)) * 3.0         # it hops for joy
 		draw_rect(Rect2(m.pos + Vector2(3, 14), Vector2(10, 2)), Color(0, 0, 0, 0.25))   # a soft shadow
-		if base.size() > 8:
-			_draw_sprite(person_pose(base, m.face, walking, frame), m.pos + Vector2(3, 1 + bob), m.face != Vector2i.LEFT)
+		if m == me or m == maren:
+			draw_person(m, LOOKS["tamer" if m == me else "maren"], walking, float(i))
 		else:
 			_draw_sprite(creature_pose(base, walking, frame), m.pos + Vector2(2, 7 + bob), m.right)
 
+
+## People are built from parts (head, hair, body, arms, legs or a skirt), not flat pictures, so the same figure can
+## walk four ways with swinging arms, blink and glance around, be recoloured in the character creator, and later
+## become a simple 3D rig. About 12x20 pixels, standing on their tile with a dark outline (docs/wildbond-plan.md).
+const LOOKS := {
+	"tamer": { "skin": Color("f1c9a0"), "hair": Color("6b4423"), "hat": Color("2a3f6b"), "shirt": Color("d8453a"), "legs": Color("3a4a6a"), "shoes": Color("3a2a1a"), "style": "cap" },
+	"maren": { "skin": Color("e8c4a0"), "hair": Color("c9c3b8"), "shirt": Color("7a5236"), "apron": Color("4f8a5a"), "legs": Color("7a5236"), "shoes": Color("3a2a1a"), "style": "bun", "skirt": true },
+}
+const OUTLINE := Color("1e1a22")
+
+func draw_person(m: Mover, look: Dictionary, walking: bool, seed: float) -> void:
+	var face := m.face
+	var frame := int(m.step_t * 8.0) % 4 if walking else 0       # 0 left foot up, 1 pass, 2 right foot up, 3 pass
+	var blink := fmod(t + seed * 1.7, 3.3) < 0.12
+	if not walking and face == Vector2i.DOWN and fmod(t + seed, 6.0) > 5.2:
+		face = Vector2i.LEFT if int(t + seed) % 2 == 0 else Vector2i.RIGHT   # a glance around while standing
+	var bob := -1 if walking and (frame == 1 or frame == 3) else 0
+	var o := m.pos + Vector2(2, -5 + bob)
+	var side := face.x != 0
+	var swing := 1 if frame == 0 else (-1 if frame == 2 else 0)
+	var parts: Array = []                                           # [x, y, w, h, colour], outlined together
+	var shade: Color = (look.shirt as Color).darkened(0.25)
+	# legs (or a skirt), with the stepping foot lifted
+	if look.get("skirt", false):
+		parts.append([3, 13, 6, 3, look.legs]); parts.append([2, 16, 8, 2, look.legs])
+		parts.append([3 + (1 if frame == 0 else 0), 18, 2, 1, look.shoes]); parts.append([7 - (1 if frame == 2 else 0), 18, 2, 1, look.shoes])
+	elif side:
+		var fwd := 1 if face == Vector2i.RIGHT else -1
+		parts.append([5 + swing * fwd, 13, 2, 5 - (1 if frame == 0 else 0), look.legs]); parts.append([5 - swing * fwd, 13, 2, 5 - (1 if frame == 2 else 0), (look.legs as Color).darkened(0.2)])
+		parts.append([5 + swing * fwd + (1 if face == Vector2i.RIGHT else -1), 18 - (1 if frame == 0 else 0), 2, 1, look.shoes])
+	else:
+		var up_l := 1 if frame == 0 else 0
+		var up_r := 1 if frame == 2 else 0
+		parts.append([3, 13, 3, 5 - up_l, look.legs]); parts.append([6, 13, 3, 5 - up_r, (look.legs as Color).darkened(0.12)])
+		parts.append([3, 18 - up_l, 3, 1, look.shoes]); parts.append([6, 18 - up_r, 3, 1, look.shoes])
+	# body, apron and arms (arms swing against the legs)
+	parts.append([3, 7, 6, 6, look.shirt]); parts.append([7, 7, 2, 6, shade])
+	if look.has("apron") and face != Vector2i.UP:
+		parts.append([4 if not side else (5 if face == Vector2i.RIGHT else 3), 8, 4, 6, look.apron])
+	if side:
+		parts.append([5 - swing, 8, 2, 4, shade]); parts.append([5 - swing, 12, 2, 1, look.skin])
+	else:
+		parts.append([1, 7 + swing, 2, 4, look.shirt]); parts.append([1, 11 + swing, 2, 1, look.skin])
+		parts.append([9, 7 - swing, 2, 4, shade]); parts.append([9, 11 - swing, 2, 1, look.skin])
+	# head, hair and eyes
+	parts.append([5, 6, 2, 1, look.skin]); parts.append([3, 0, 6, 6, look.skin])
+	match look.get("style", "short"):
+		"cap":
+			parts.append([3, 0, 6, 2, look.hat])
+			if face == Vector2i.DOWN: parts.append([3, 2, 6, 1, look.hat])
+			elif side: parts.append([(8 if face == Vector2i.RIGHT else 1), 2, 3, 1, look.hat])
+			parts.append([(3 if face != Vector2i.LEFT else 7), 2, 2, 3 if face != Vector2i.UP else 4, look.hair])
+		"bun":
+			parts.append([3, 0, 6, 2, look.hair]); parts.append([5, -2, 2, 2, look.hair])
+			if not side: parts.append([3, 2, 1, 3, look.hair]); parts.append([8, 2, 1, 3, look.hair])
+			else: parts.append([(3 if face == Vector2i.RIGHT else 7), 1, 2, 4, look.hair]); parts.append([(2 if face == Vector2i.RIGHT else 8), 0, 2, 3, look.hair])   # the bun at the back of her head
+	if face == Vector2i.UP:
+		parts.append([3, 2, 6, 4, look.hair] if look.style == "cap" else [3, 1, 6, 5, look.hair])
+	var eye := Color("222222") if not blink else (look.skin as Color).darkened(0.3)
+	if face == Vector2i.DOWN:
+		parts.append([4, 3, 1, 1, eye]); parts.append([7, 3, 1, 1, eye])
+	elif side:
+		parts.append([7 if face == Vector2i.RIGHT else 4, 3, 1, 1, eye])
+	# outline first, then the parts on top
+	for p in parts:
+		draw_rect(Rect2(o + Vector2(p[0] - 1, p[1] - 1), Vector2(p[2] + 2, p[3] + 2)), OUTLINE)
+	for p in parts:
+		draw_rect(Rect2(o + Vector2(p[0], p[1]), Vector2(p[2], p[3])), p[4])
 ## A person's look from the way they face: front (both eyes), back (all hair), side (one eye, flipped for left),
 ## with the feet stepping in turn while they walk.
 func person_pose(rows: Array, face: Vector2i, walking: bool, frame: int) -> Array:
