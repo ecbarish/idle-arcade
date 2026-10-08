@@ -45,6 +45,8 @@ and the arcade's homepage shows them off. Any assistant may push these forward w
 
 | T8-R | **Realmbound guide and lore page** (T8, Lane A3) | M | Design | — | ready for review: Codex, 2026-10-07, PR #44 | docs/ROADMAP.md T8; Wildbond waits for its redesign. A8 opening audit ready in PR #44: docs/realmbound-first-ten-minutes.md (documentation only; L4/V1 implementation remains open) |
 
+| T8-Rb | **Realmbound guide: rooms and commissions** | S | Polish | R5, R6 | claimed: Codex, 2026-10-08, codex/realmbound-guide-services | Guides follow the released Smithy and Inn |
+
 | RE-G | **Godot research assessment and animation/migration research prompt** | S | Design | — | ready for review: Codex, 2026-10-07, PR #44 (documentation only, requested by Evan) | Separate research files; no Godot or shared plan edits |
 
 | RE-O | **First-play research briefs for Realmbound, Starfall and the other games** | S | Design | — | Starfall review + prompt archive ready for review: Codex, 2026-10-08, PR #46 (research only; prior reports merged in #44) | docs/research/gemini-prompts.md; research does not authorize extra implementation |
