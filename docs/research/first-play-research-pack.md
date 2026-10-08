@@ -4,7 +4,7 @@ Evan, 2026-10-07: Wildbond's play session showed that we need to understand what
 
 ## Run these next
 
-The Godot art/animation/migration report is already researching in Gemini, as Evan confirmed. Keep that thread separate so its technical decisions do not swallow the other games' design questions.
+The Godot report has arrived: [supplied text](godot-production-slice.md), preserved as received, and [Codex review/corrections](godot-production-slice-review.md). It contains useful leads but unsupported mandates and invented project rules; it is not adopted as the build plan. Keep that thread separate so its technical decisions do not swallow the other games' design questions.
 
 | Order | Research brief to copy into Gemini | Report destination | What it should help decide |
 |---|---|---|---|

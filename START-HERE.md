@@ -125,6 +125,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-07 Codex: saved Evan's supplied Gemini Godot report verbatim as docs/research/godot-production-slice.md; review beside it fact-checks snapping, MSDF, saves and web constraints, rejects invented stamina/chemistry requirements and unsupported schedule. Research only, PR #44; no trial edits, installs or plan adoption.
+
 - 2026-10-07 Codex: recorded Evan's clarified direction in docs/research/owner-direction-2026-10-07.md: open platform choice, approximate US$200 total cash budget, earned help for tedium rather than universal full Auto; Otherworld/Diamond remain in design discussions. Updated the old control contract in docs/plans/README.md to prevent conflicting instructions. Documentation only, PR #44.
 
 - 2026-10-07 Codex: Evan confirmed Godot production research is running in Gemini and requested research for the other games. Added docs/research/first-play-research-pack.md with full Realmbound/Starfall/arcade prompts, parked-game briefs and a newcomer completion gate. Research only; no gameplay/Claude files changed; PR #44.
