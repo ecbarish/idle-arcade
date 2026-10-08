@@ -7,7 +7,8 @@ function chooseStarter(id, name, pace, modes) {
   if (JOURNEY[pace]) S.journey = pace;
   S.modes = Object.assign({}, modes || {}); if (S.modes.randomizer) S.modes.seed = 1 + Math.floor(Math.random() * 2e9); // challenge modes (15-challenge.js)
   const c = newCreature(id, 5, { rar: 1, born: 'Your first partner, from Larkhaven.' });
-  S.started = true; S.starter = id; S.team = [c]; S.seen[id] = S.caught[id] = true; placeAt('larkhaven');
+  // new journeys: turn-based battles, and the world in colour but faded until the first badge (v1.4.0)
+  S.started = true; S.battleStyle = 'turn'; S.faded = true; S.era = 'bit16'; for (const e of ['bit16']) if (!S.eras.includes(e)) S.eras.push(e); S.starter = id; S.team = [c]; S.seen[id] = S.caught[id] = true; placeAt('larkhaven');
   slog(`${S.name} arrived in Larkhaven and chose ${c.name}.`);
   // the rival picks the starter that beats yours
   const rival = newCreature(COUNTER[id], 4, { rar: 1 });
@@ -28,7 +29,7 @@ function storyWin(id) {
     // the first badge brings the world\'s color back (Pocket -> 16-bit), and Warden's boots for running
     const newEra = g.gate === 'thorn' && !S.eras.includes('bit16');
     if (g.gate === 'thorn') { for (const e of ['pixel', 'bit16']) if (!S.eras.includes(e)) S.eras.push(e); S.shoes = true; }
-    const faded = newEra && S.era === 'pocket';
+    const faded = (newEra && S.era === 'pocket') || (g.gate === 'thorn' && S.faded); // S.faded: a new journey's washed-out colour (v1.4.0)
     // the second badge brings light and depth (16-bit -> HD-2D), weather, and wild creatures you can see
     const newHD = g.gate === 'tide' && !S.eras.includes('hd'); if (newHD) S.eras.push('hd');
     const flat = newHD && S.era === 'bit16';
@@ -37,7 +38,7 @@ function storyWin(id) {
     const lit = newDio && S.era === 'hd';
     W.afterDone = () => { toast(`You earned the ${badge}!`); sfx('badge');
       setTimeout(() => toast(S.capMode === 'off' ? 'Your team feels stronger.' : `Your creatures can now grow to level ${levelCap()}.`), 2000);
-      if (faded) setTimeout(() => { S.era = 'bit16'; recolor(); slog('Color came back to the world. Isolde gave you Warden\'s boots.');
+      if (faded) setTimeout(() => { S.faded = false; if (S.era === 'pocket') S.era = 'bit16'; recolor(); slog('Color came back to the world. Isolde gave you Warden\'s boots.');
         talk(SCENES.colorReturns, () => toast('New art styles unlocked: Pixel and 16-bit. Switch any time in the Journal. Hold Shift to run.')); }, 900);
       else if (newEra) setTimeout(() => toast('The world shimmers... the 16-bit art style is unlocked. Switch it in the Journal. Hold Shift to run.'), 4500);
       if (flat) setTimeout(() => { S.era = 'hd'; recolor(); slog('Light and depth came back to the world. Weather rolls in, and wild creatures can be seen in the grass.');
@@ -168,7 +169,7 @@ function leagueDefeat() {
 }
 function leagueEnding() { talk(SCENES.leagueEnding,completeLeagueEnding); }
 function completeLeagueEnding() {
-  healAll(); S.story.leagueEnding = true; S.titles = S.titles || [];
+  healAll(); S.story.leagueEnding = true; S.titles = S.titles || []; unlockModes(); // challenge modes open for the next journey (05-ui.js)
   if (!S.titles.includes('Champion')) { S.titles.push('Champion'); slog('Champion of the Returning Light League: the world\'s colour is fully restored. The Lighthouse Spire is open.'); toast('Title earned: Champion!'); sfx('badge'); }
   S.league.active = false; placeAt('league',3,14,'down'); W.msg = 'Champion! Your journey is complete. The Lighthouse Spire and daily league rematches are open.'; save();
 }
