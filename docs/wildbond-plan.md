@@ -105,7 +105,15 @@ one character and one creature properly as the template.
 liked what you had before." Its chibi style (big heads, tiny feet) is not Wildbond's look. **Art direction:** characters
 with real proportions and visible legs, like our code-drawn tamer and Maren (about 10x14 to 16x24 pixels), animated
 with more frames; **our own original art** is the path (Evan wants our own identity anyway). Any future pack must
-match this look before it's used.
+match this look before it's used. **Environment uses the pack (2026-10-08):** Evan liked its structures and nature,
+so Larkhaven's ground, paths, trees, bushes, flowers and cottages now come from its CC0 tilesets (CREDITS.md); fences,
+the sign, people and creatures stay code-drawn.
+
+**No fan-made Pokémon sprites (decided 2026-10-08):** fan sprites of Pokémon are copies of Nintendo/Game Freak's
+characters, so no fan licence can make them safe to use, and Wildbond needs its own creatures anyway. Fan *original*
+creature ("fakemon") art is fine only with a clear CC0, CC-BY or free-for-games licence. Good places to look: OpenGameArt
+(CC0 monster packs), itch.io free packs, Kenney, and the Ninja Adventure pack's own monster sheets. Our creatures stay
+our own design; outside art is a placeholder or a reference for style.
 
 **3D and every world (Evan, 2026-10-08):** assets must carry over to 3D and maybe first person, and fit any of our
 games. So characters are built from **parts** (head, body, arms, legs) that become a simple 3D rig and drive the

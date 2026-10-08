@@ -217,9 +217,17 @@ func _demo(dt: float) -> void:
 
 # ---------------------------------------------------------------- drawing
 func _draw() -> void:
+	# 1. the ground (Ninja Adventure tiles, CC0): grass everywhere, dirt on paths, flowers here and there
 	for y in MAP.size():
 		for x in MAP[0].length():
-			_draw_tile(x, y, MAP[y][x])
+			_draw_ground(x, y, MAP[y][x])
+	# 2. fences and the signpost (drawn in code; they already looked right)
+	for y in MAP.size():
+		for x in MAP[0].length():
+			if MAP[y][x] in "=P":
+				_draw_tile(x, y, MAP[y][x])
+	# 3. houses and trees: standing objects with a footprint (so a 3D renderer can stand them up later)
+	_draw_structures()
 	var actors := [[me, TAMER], [maren, MAREN], [cub, CUB]]
 	actors.sort_custom(func(a, b): return a[0].pos.y < b[0].pos.y)
 	for i in actors.size():
@@ -382,7 +390,6 @@ func _draw_tile(x: int, y: int, ch: String) -> void:
 			draw_rect(Rect2(o + Vector2(3 + n, 5 + n), Vector2(2, 1)), Color("a88a5a"))
 		"=":
 			# fences join their neighbours: rails run across, down, or both at a corner, with a post in the middle
-			draw_rect(Rect2(o, Vector2(16, 16)), grass)
 			var rail := Color("a0703a")
 			var l := tile_at(Vector2i(x - 1, y)) == "=" or tile_at(Vector2i(x - 1, y)) == "."
 			var r := tile_at(Vector2i(x + 1, y)) == "=" or tile_at(Vector2i(x + 1, y)) == "."
@@ -401,9 +408,14 @@ func _draw_tile(x: int, y: int, ch: String) -> void:
 			draw_rect(Rect2(o + Vector2(6, 4), Vector2(4, 10)), Color("7a5028"))   # the post
 			draw_rect(Rect2(o + Vector2(6, 4), Vector2(4, 1)), Color("b8885a"))
 		"P":
-			draw_rect(Rect2(o, Vector2(16, 16)), Color("c8a874"))
-			draw_rect(Rect2(o + Vector2(7, 7), Vector2(2, 9)), Color("6b4a2a"))
-			draw_rect(Rect2(o + Vector2(2, 2), Vector2(12, 7)), Color("a0703a"))
+			# the ground underneath comes from the tileset (_draw_ground); the sign gets an outline so it reads on any ground
+			draw_rect(Rect2(o + Vector2(6, 7), Vector2(4, 9)), OUTLINE)
+			draw_rect(Rect2(o + Vector2(7, 7), Vector2(2, 8)), Color("6b4a2a"))
+			draw_rect(Rect2(o + Vector2(1, 1), Vector2(14, 9)), OUTLINE)
+			draw_rect(Rect2(o + Vector2(2, 2), Vector2(12, 7)), Color("d8a868"))
+			draw_rect(Rect2(o + Vector2(2, 5), Vector2(12, 1)), Color("a0703a"))
+			draw_rect(Rect2(o + Vector2(4, 3), Vector2(6, 1)), Color("6b4a2a"))
+			draw_rect(Rect2(o + Vector2(4, 7), Vector2(8, 1)), Color("6b4a2a"))
 		_:
 			draw_rect(Rect2(o, Vector2(16, 16)), grass)
 			draw_rect(Rect2(o + Vector2(2 + n * 2, 3 + n), Vector2(1, 2)), Color("7cae52"))
@@ -440,3 +452,45 @@ func _update_ui() -> void:
 	var mat: ShaderMaterial = $FadeWorld/Shade.material
 	mat.set_shader_parameter("points", pts)
 	mat.set_shader_parameter("count", restore.size())
+
+# ---------------------------------------------------------------- the environment (Ninja Adventure tilesets, CC0)
+# Evan (2026-10-08) liked the pack's structures and nature. Figures stay our own (draw_person). Each tile or object
+# is picked by its cell in a 16x16 grid: floor.png (ground), nature.png (trees, bushes, flowers), house.png (houses).
+const FLOOR := preload("res://assets/env/floor.png")
+const NATURE := preload("res://assets/env/nature.png")
+const HOUSE := preload("res://assets/env/house.png")
+func _tex(tex: Texture2D, cell: Vector2i, size: Vector2i, at: Vector2) -> void:
+	draw_texture_rect_region(tex, Rect2(at, Vector2(size) * 16.0), Rect2(Vector2(cell) * 16.0, Vector2(size) * 16.0))
+func _is_path(x: int, y: int) -> bool:
+	return tile_at(Vector2i(x, y)) in ".N"
+func _draw_ground(x: int, y: int, ch: String) -> void:
+	var o := Vector2(x, y) * TILE
+	var n := (x * 7 + y * 13) % 9
+	_tex(FLOOR, Vector2i(11 + (n if n < 5 else 0), 12), Vector2i.ONE, o)          # grass, with a few tufts
+	if _is_path(x, y):
+		# dirt with soft grass edges where the path ends (the tileset's 3x3 edge set)
+		var up := _is_path(x, y - 1); var down := _is_path(x, y + 1); var left := _is_path(x - 1, y); var right := _is_path(x + 1, y)
+		var cell := Vector2i(12, 8)
+		if (up or down) and (left or right):
+			cell = Vector2i(11 if not left else (13 if not right else 12), 7 if not up else (9 if not down else 8))
+		_tex(FLOOR, cell, Vector2i.ONE, o)
+	elif ch == "f":
+		_tex(NATURE, [Vector2i(0, 11), Vector2i(3, 11), Vector2i(6, 11)][n % 3], Vector2i.ONE, o)
+func _draw_structures() -> void:
+	var doors: Array[Vector2i] = []
+	for y in MAP.size():
+		for x in MAP[0].length():
+			if MAP[y][x] == "D": doors.append(Vector2i(x, y))
+	for y in MAP.size():
+		for x in MAP[0].length():
+			var ch: String = MAP[y][x]
+			if ch == "T":
+				_tex(NATURE, Vector2i(1, 10), Vector2i.ONE, Vector2(x, y) * TILE)        # a hedge bush under the treeline
+			elif ch in "r#" and not doors.any(func(d): return abs(x - d.x) <= 1 and y >= d.y - 2 and y <= d.y):
+				_tex(NATURE, Vector2i(0, 10), Vector2i.ONE, Vector2(x, y) * TILE)        # garden bushes beside each cottage
+	for d in doors:
+		_tex(HOUSE, Vector2i(0, 0), Vector2i(3, 3), Vector2(d.x - 1, d.y - 2) * TILE)  # the cottage, door on our door
+	for y in MAP.size():                                                                # big trees, back to front
+		for x in MAP[0].length():
+			if MAP[y][x] == "T" and (x + y) % 2 == 0:       # staggered, half a tile off the grid, so the edge reads as woods
+				_tex(NATURE, Vector2i(0 if (x * 3 + y) % 4 < 2 else 2, 0), Vector2i(2, 2), Vector2(x - 0.5, y - (1.5 if tile_at(Vector2i(x, y - 1)) == "T" else 0.25)) * TILE)   # edge rows sit low so they never hide the town
