@@ -93,3 +93,45 @@ function frame(ms) {
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
+
+/* Lanthorn's needs appear as bread, shutters and people, never as score bars. */
+SCENES.market = function(t) {
+  const p = px(), gy = H * .50, view = townView(S.life), dusk = view.day === 3;
+  AMB.sky(cx, W, H, t, { top: dusk ? '#967986' : '#91b6c6', bottom: dusk ? '#edbc91' : '#f7e6bf',
+    sun: true, sunX: W * .13, sunY: H * .14, clouds: { n: 3 }, h: gy });
+  AMB.far(cx, W, H, t, { layers: [{ kind: 'oaks', col: '#53654c', base: .45, h: .2, par: .03, seed: 6 }], px: p });
+  R(0, gy, W, H - gy, '#786346'); R(0, gy + p * 5, W, p * 8, '#ac9065');
+  const scale = Math.min(p, W / 120), house = (x, closed) => {
+    const y = gy - scale * 21;
+    R(x, y, scale * 20, scale * 21, '#c9ac80'); R(x - scale, y - scale * 4, scale * 22, scale * 5, '#704d43');
+    R(x + scale * 3, y + scale * 4, scale * 5, scale * 6, '#4c7180');
+    if (closed) { R(x + scale * 2, y + scale * 3, scale * 7, scale * 8, '#594634'); R(x + scale * 5, y + scale * 3, scale, scale * 8, '#382d25'); }
+    R(x + scale * 12, y + scale * 9, scale * 5, scale * 12, '#4f392c');
+  };
+  for (let i = 0; i < 4; i++) house(W * (.05 + i * .24), i < view.shutters);
+  // Bread stalls face the square: more than one can remain when flour was shared.
+  for (let i = 0; i < 4; i++) {
+    const x = W * (.04 + i * .16), y = gy + p * 5, s = scale;
+    R(x, y - s * 10, s, s * 13, '#5c4330'); R(x + s * 12, y - s * 10, s, s * 13, '#5c4330');
+    R(x - s, y - s * 11, s * 15, s * 3, i < view.stalls ? '#a15a3f' : '#665349');
+    R(x, y, s * 13, s * 3, '#815b3b');
+    if (i < view.stalls) for (let b = 0; b < (view.scarce ? 1 : 3); b++) { R(x + s * (1 + b * 4), y - s * 2, s * 3, s * 2, '#e6b66d'); R(x + s * (2 + b * 4), y - s * 2, s, s, '#f6d491'); }
+    else { R(x + s * 3, y - s * 2, s * 6, s * 2, '#463d30'); R(x + s * 4, y - s * 2, s * 4, s, '#786346'); }
+  }
+  const wx = W * .82, wy = gy + p * 10, s = scale;
+  R(wx - s * 7, wy, s * 14, s * 8, '#6d7370'); R(wx - s * 6, wy + s, s * 12, s * 3, '#273d43');
+  R(wx - s * 8, wy - s * 17, s * 2, s * 20, '#624936'); R(wx + s * 6, wy - s * 17, s * 2, s * 20, '#624936');
+  R(wx - s * 10, wy - s * 19, s * 20, s * 3, '#78543e'); R(wx, wy - s * 16, s, s * 14, '#c3a17a');
+  function person(x, y, i) {
+    const bob = reduce ? 0 : Math.sin(t * 1.1 + i) * s * .15;
+    R(x - s, y + s * 5, s * 5, s, 'rgba(25,20,17,.35)');
+    R(x, y - s * 5 + bob, s * 3, s * 3, ['#d4a580','#e7c3a0','#b68362'][i % 3]);
+    R(x, y - s * 6 + bob, s * 3, s, '#49372a');
+    R(x - s, y - s * 2 + bob, s * 5, s * 5, ['#65735b','#a06650','#68748b'][i % 3]);
+    R(x, y + s * 3, s, s * 3, '#3f352e'); R(x + s * 2, y + s * 3, s, s * 3, '#3f352e');
+  }
+  person(W * .19, gy + p * 12, 1); // Ressa stays beside the stall; Bren minds the well.
+  person(wx - s * 11, wy + s * 9, 0);
+  for (let i = 0; i < view.queue; i++) person(wx + s * (11 + (i % 2) * 7), wy + s * (4 + Math.floor(i / 2) * 9), i + 2);
+  AMB.lights(cx, W, H, t, { dark: dusk ? .35 : .12, max: .25, lights: [{ x: W * .2, y: gy, r: H * .35, col: '#ffd090' }] });
+};

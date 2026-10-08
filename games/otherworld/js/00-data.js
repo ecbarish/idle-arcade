@@ -1,6 +1,6 @@
 'use strict';
 /* Otherworld: the worlds, gifts, people and stories (docs/otherworld-design.md). Data only.
-   A story node: { bg, lines (or a function of the life), choices: [{ t, go, need(life), fx(life) }], go, end }.
+   A story node: { bg, lines (or a function of the life), choices: [{ t, go, need(life), why, fx(life) }], go, end }.
    Lines are [who, text] for shared/dialogue.js; '' is narration; {name} is the player's name. */
 const KEY = 'otherworld-save-v1';
 
@@ -68,7 +68,7 @@ const NODES = {
     ['hesta', 'Name? ... {name}. Another one from nowhere. Hand on the crystal, please.'],
     ['', 'The crystal hums under your palm. Light unfolds into a pale blue window that hangs in the air in front of you, full of words.'],
     ...{ appraisal: [['hesta', 'Appraisal. Oh, wonderful. And don\'t look at me like that, I can feel you reading my age.']],
-      pocket: [['hesta', 'Pocket Space! The porters will love you. You\'ll never be allowed to say no to a job again.']],
+      pocket: [['hesta', 'Pocket Space! The porters will love you. Saying no is going to be harder than you think.']],
       sword: [['hesta', 'Sword Saint\'s... well. Keep your hands where I can see them, please.']] }[life.gift],
     ['hesta', 'Rank F. Welcome to the guild. With the tide coming, everyone\'s needed.']], go: 'a_mira' },
   a_mira: { bg: 'guild', lines: life => [
@@ -107,8 +107,8 @@ const NODES = {
     ['', 'The ground shakes. A stampede of boars comes thundering through the clearing, straight at you.']],
     fx: life => { if (life.gift === 'appraisal') life.flags.truth = true; life.flags.saw = true; },
     choices: [
-      { t: 'Stand and fight', need: life => life.gift === 'sword', go: 'a_alone_live', fx: life => { life.flags.swordwalk = true; } },
-      { t: 'Call it by its name', need: life => life.mem.oldroot || life.gift === 'appraisal', go: 'a_alone_live', fx: life => { life.flags.named = true; } },
+      { t: 'Stand and fight', why: 'You would need the Sword Saint\'s Instinct to stand against a stampede.', need: life => life.gift === 'sword', go: 'a_alone_live', fx: life => { life.flags.swordwalk = true; } },
+      { t: 'Call it by its name', why: 'You do not know its name. Appraisal or a memory of Oldroot could tell you.', need: life => life.mem.oldroot || life.gift === 'appraisal', go: 'a_alone_live', fx: life => { life.flags.named = true; } },
       { t: 'Run', end: 'e_death_tide' }] },
   a_alone_live: { bg: 'forest', lines: life => [
     ...(has(life, 'named') ? [['', 'You say its name. The great roots shift, closing around you like cupped hands, and the stampede breaks around them.']]
@@ -122,7 +122,7 @@ const NODES = {
     choices: [
       { t: 'Defend the walls', go: 'a_walls', fx: life => { life.flags.walls = true; } },
       { t: 'Go to the heart of the Deepwood', go: 'a_heart', fx: life => { life.flags.source = true; } },
-      { t: 'Expose Voss\'s plan to the hall', need: life => has(life, 'betrayal') || (has(life, 'truth') && life.gift === 'appraisal') || life.mem.guildmaster,
+      { t: 'Expose Voss\'s plan to the hall', why: 'You would need to have seen the truth of Voss, heard Corvin\'s confession, or remembered his plan.', need: life => has(life, 'betrayal') || (has(life, 'truth') && life.gift === 'appraisal') || life.mem.guildmaster,
         go: 'a_exposed', fx: life => { life.flags.exposed = true; } }] },
   a_exposed: { bg: 'guild', night: true, lines: [
     ['', 'You say it plainly: the farms aren\'t empty, and Voss knows it. The hall goes quiet, then loud.'],
@@ -138,8 +138,8 @@ const NODES = {
     ...(life.mem.oldroot ? [['', 'You know this tree. You\'ve stood here before, in another life.']] : [])],
     choices: [
       { t: 'Strike it down', go: 'a_strike' },
-      { t: 'Hold Mira\'s lantern to the rot', need: life => has(life, 'mira'), end: 'e_lantern' },
-      { t: 'Call it by its name', need: life => life.mem.oldroot || has(life, 'named') || (life.gift === 'appraisal' && has(life, 'truth')), end: 'e_oldroot' },
+      { t: 'Hold Mira\'s lantern to the rot', why: 'Mira would need to be here with her lantern.', need: life => has(life, 'mira'), end: 'e_lantern' },
+      { t: 'Call it by its name', why: 'You have not learned Oldroot\'s name in this life or another.', need: life => life.mem.oldroot || has(life, 'named') || (life.gift === 'appraisal' && has(life, 'truth')), end: 'e_oldroot' },
       { t: 'Take the rot into yourself', end: 'e_forest' }] },
   a_strike: { bg: 'heart', night: true, lines: life => life.gift === 'sword' || has(life, 'bolts') || has(life, 'exposed') ? [
     ['', life.gift === 'sword' ? 'Once you begin, you cannot stop. Your blade finds the heart of the rot, and the heart of the tree behind it.' : 'Bolts and blades and the whole guild together: the great tree falls.'],

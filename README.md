@@ -40,6 +40,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 ## Changelog
 
 - Come Play page (2026-10-08): playtest.html is now the page to send friends: what each game does today, where it's heading, what playing feels like, first steps and help if you're lost, pictures, and Wildbond's element chart. Wildbond v1.7.1: the starter page shows each stat's number, and the bars measure against the strongest creature known (120), said on the page. Wildbond Godot: the same yardstick on every creature page, and your partner steps round to stand beside you instead of peeking over your head.
+- Otherworld v0.2.0 (2026-10-08): a living Lanthorn over three days, visible locked choices, consequences for every gift, changing bread prices and neighbors, and memories recognized by the Archivist. Reload-safe scenes and endings; 831 checks.
+
 - Realmbound (2026-10-08): illustrated guide to walk-in Inn and Smithy services and level-55 guild commissions, with costs generated from the game data.
 
 - Diamond Career v0.3.1 (2026-10-08): batting you can see. Nothing covers the field while the ball is coming: tap anywhere on the field (or press Space) to swing, a circle at the plate lights up at the moment to swing, the controls sit high on the field clear of the plate, and the at-bat box says plainly how to hit (Evan's report).
