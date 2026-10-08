@@ -32,3 +32,13 @@ Phone (375x812), laptop (1366x768), desktop (1920x1080) and ultrawide (3440x1440
 ## Follow-ups
 
 Each later step should replace a notebook page with its planned physical interaction only when that interaction is ready. Never remove the old route before its replacement exists. Full-screen layout alone does not turn the existing auto-combat road into a free-roaming world. Realmbound's possible Godot move remains Evan's open decision.
+
+## Implementation and verification
+
+Part 1 is ready in PR #62, stacked on #61 (Claude's recovered plan). New field-window.css and js/29-field-window.js own the viewport and transient paperwork. Small hooks in combat/town pause reading, boot clears the book, and existing town labels use the HUD. Road figures retain their pixel renderer; their scale is bounded by viewport width and a 600px scene-height reference so a phone does not create a giant figure. Every transaction still calls its existing handler. Guild adventurers' delegated jobs keep their real-clock accounting; the paused book does not mint or delete supplies.
+
+All eight browser test pages pass: Realmbound 7,738 scenarios in the final run (NPC fixtures can vary the baseline by 16), Wildbond 1,485, Diamond Career 122, Otherworld 831, Starfall 48, sound 21, offline 15 and runner safety 35. Twenty-five new scenarios cover transient state, saved-data preservation, every page, input ownership, combat pause in Focus and Auto, hero changes and dialog priority. Runners preserve saves, hub and recovery backups exactly.
+
+Actual Chrome mouse/keyboard UI checks at 375x812, 1366x768, 1920x1080 and 3440x1440: full canvas, Journal, no ability keys through reading, Satchel equipment, Map hunt selection, portrait quest acceptance, every page, reload with exact gear/bag/money/quest/hunt preservation, town walking blocked through the Satchel, and Smithy choices. These use isolated prepared saves, not an unassisted full campaign playtest. Default sound remains off.
+
+Before/after and the Journal, Satchel, quest giver, town and Smithy at all four widths live in docs/screenshots/realmbound-window/. No Godot, shared engine, game version or service worker changes. Current notebook tabs are a migration bridge; making every menu a distinct physical interaction is still follow-up work.

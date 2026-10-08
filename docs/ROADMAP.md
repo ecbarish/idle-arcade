@@ -168,6 +168,7 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
 - [ ] T38-T40 open for ChatGPT (2026-10-08, night), after T36 and T37. Read PROJECTS.md "Read first" before starting.
 
 ### T38: Realmbound in the game window (the plan, then part 1)
+- [x] Plan and part 1 ready in PR #62 (Codex, 2026-10-08): world viewport, carried Journal/Satchel, all existing feature routes retained; 25 new scenarios and all eight pages pass; before/after at four widths. No release bump.
 Evan, 2026-10-08: every game happens in the game window (CLAUDE.md); Realmbound stays in the browser for now. Branch
 `codex/realmbound-window`.
 - **First a plan** in `docs/plans/realmbound-in-window.md`: every panel Realmbound shows today (quests, bags,

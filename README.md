@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Realmbound (2026-10-08): the world fills the window, with a Quest Journal and Satchel opened over it, a folded road map and all existing pages in the Field Kit. Reading pauses the world; portrait scenes remain in place. Four sizes checked, no save or balance changes.
+
 - Wildbond catalogue (2026-10-08): fourteen creatures across eight empty family/element pairs, three long growth lines, three never-evolvers and a conditional Saillet branch authored for Godot. Reach lore maps all 31 zone beasts without changing Realmbound. Browser roster: 107; 1,485 checks.
 
 - Diamond Career (2026-10-08): the scene fills the window; locker, calendar, notebook and pay envelope replace the side panel. A deliberate second-month road term visits three parks with bus preparations, local people and calendar salary; 122 checks.

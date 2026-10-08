@@ -48,7 +48,7 @@ function drawBeast(c,x,y,p,col,fam,right,t){
   c.restore();
 }
 function frame(ms){requestAnimationFrame(frame);if(!PW||!H()||!C||document.hidden)return;const t=ms/1000;if(townActive()){drawTown(t);return;}TOWN.on=false;TOWN.last=null;const h=H(),z=h.dun?dungeonDef():ZONES[h.zone];
-  const gy=PH*.78,p=Math.max(2,Math.floor(PH/42));const AMBS=ambBack(t,gy,p); // sky, scenery, ground, torches, campfire (20-ambience.js)
+  const gy=Math.min(PH*.78,PH-(PW<700?230:155)),p=Math.max(2,Math.floor(Math.min(PH,Math.max(240,PW*.7),600)/42));const AMBS=ambBack(t,gy,p); // sky, scenery, ground, torches, campfire (20-ambience.js)
   if(C.phase==='intown'||C.phase==='town')ambTown(gy,t,AMBS);
   AMBS.sun=realmSun();realmShadows(gy,p,t,AMBS.sun,AMBS.lights); // real shadows along the sun, or away from the fire (23-light.js)
   const walk=(C.phase==='seek'||C.phase==='town')&&!reduce?Math.sin(t*8)*p*.6:0;

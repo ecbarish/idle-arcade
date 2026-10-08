@@ -211,6 +211,8 @@ New Wildbond work goes to **Wildbond in Godot** above. Browser data (species, ma
 | R8 | **Pacing re-measure 1-60** with every system on; tune zone XP only | M | Polish | — | done, merged 2026-10-07 | docs/realmbound-40-60.md "Measured" |
 | R9 | Heroic tiers and loot review for the newest dungeons (Rootrot, Heartwood) | S | Polish | — | done, merged 2026-10-07 by Claude (Codex; docs/realmbound-heroic-review.md) | |
 
+| RB-W1 | **T38 Realmbound in the game window, plan and part 1** | M | Polish | — | ready for review: Codex, 2026-10-08, PR #62 | ROADMAP T38; world fills the window, Quest Journal and Satchel overlays; no gameplay/balance or version changes |
+
 ## Shared systems and the world kit
 
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
@@ -266,5 +268,3 @@ Merged 2026-10-08 (Realmbound v1.3.0, PR #53); written by Codex on codex/realmbo
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
 | OW1 | **T35: a living Lanthorn** | M | Data+Polish | OW0 | done, merged 2026-10-08 (Otherworld v0.2.0, PR #58) | docs/ROADMAP.md T35: visible locked choices, gift costs, food/fear over three days and Archivist memories |
-
-| RB-W1 | **T38 Realmbound in the game window, plan and part 1** | M | Polish | — | claimed: Codex, 2026-10-08, codex/realmbound-window | ROADMAP T38; world fills the window, Quest Journal and Satchel overlays; no gameplay/balance or version changes |

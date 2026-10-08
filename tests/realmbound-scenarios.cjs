@@ -966,5 +966,25 @@ module.exports = function scenarios() {
           const legacy=migrate({chars:[Object.assign({},hero,{bags:[],onboarding:null})],cur:hero.id});const activeAccount=S;S=legacy;boot();check(!H().bags.length&&bank().ore===0,'R5: pre-crafting save boots without a new mandatory field');S=activeAccount;
         }finally{clearTownService();S.chars=keepChars;S.cur=keepCur;S.guild=keepGuild;S.bank=keepBank;PW=keepWidth;TOWN.inside=false;TOWN.on=false;if(H())boot();}
       }
-      rb.save();return checks;
-    };
+      rb.save();
+      if(typeof openRealmNotebook==='function'){
+        const hero=newHero('Bookkeeper','concord','human','warrior');hero.onboarding={arrival:true,hints:{}};S.chars=[hero];S.cur=hero.id;boot();C.phase='seek';C.t=20;
+        check(!realmNotebookOpen()&&document.querySelector('.menu').hidden,'T38: fresh or legacy boot leaves paperwork put away');
+        const before=JSON.stringify({hero,Skeys:Object.keys(S)});check(openRealmNotebook('quests'),'T38: Quest Journal opens over the scene');
+        const timers=JSON.stringify({run:C.run,t:C.t,hp:C.hp,cds:C.cds});step(1);check(JSON.stringify({run:C.run,t:C.t,hp:C.hp,cds:C.cds})===timers,'T38: reading preserves health and world/combat clocks');
+        hero.mode='auto';step(2);check(JSON.stringify({run:C.run,t:C.t,hp:C.hp,cds:C.cds})===timers,'T38: Auto also waits while the notebook is open');hero.mode='focus';
+        check(document.querySelector('.world').inert&&document.querySelector('.menu').getAttribute('aria-modal')==='true','T38: notebook owns input and announces a dialog');
+        closeRealmNotebook(false);check(!realmNotebookOpen()&&!document.querySelector('.world').inert,'T38: putting away restores world input');
+        check(before===JSON.stringify({hero,Skeys:Object.keys(S)}),'T38: opening and closing adds no save fields or hero changes');
+        check(!openRealmNotebook('not-a-page')&&!openRealmNotebook('pets'),'T38: invalid pages and warrior pet notes cannot open');
+        for(const key of ['quests','bags','char','friends','mounts','talents','addons','supplies','journal','map','road','log']){check(openRealmNotebook(key),'T38: existing feature reachable in '+key);closeRealmNotebook(false);}
+        openRealmNotebook('bags');boot();check(!realmNotebookOpen()&&document.querySelector('.menu').hidden,'T38: character boot/import clears transient open book');
+        openRealmNotebook('quests');const alt=newHero('Second','wild','grishar','hunter');alt.onboarding={arrival:true,hints:{}};S.chars.push(alt);S.cur=alt.id;syncRealmNotebook();check(!realmNotebookOpen()&&!document.querySelector('.world').inert,'T38: hero switch cannot retain another hero notebook');
+        boot();check(openRealmNotebook('pets'),'T38: Hunter companion notes remain reachable');closeRealmNotebook(false);
+        openModal('chars',charsHTML());check(!openRealmNotebook('bags'),'T38: existing character dialogs take priority');closeModal();
+        const q=QUESTS[alt.zone][0];questOffer(q.id);check(!openRealmNotebook('quests'),'T38: portrait conversations take priority over paperwork');RTALK=null;SCN.el.hidden=true;
+        closeRealmNotebook(false);
+      }
+
+return checks;
+};

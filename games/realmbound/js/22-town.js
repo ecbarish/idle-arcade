@@ -98,7 +98,7 @@ function pellHere(now) { return Math.floor((now === undefined ? Date.now() : now
 const TOWN_WALK = World.walker({
   map: () => TOWN.map, tiles: TOWN_TILES, pos: () => TOWN.pos,
   people: () => { const ps = townPeople(); return ps.concat(ps.filter(p => p.mule).map(p => ({ at: p.mule, isMule: 1, id: 'brisket' }))); },
-  busy: () => !!RTALK || !!modalKind, speed: () => 4.5,
+  busy: () => !!RTALK || !!modalKind || (typeof realmNotebookOpen==='function' && realmNotebookOpen()), speed: () => 4.5,
   on: { person: townTalk, door: (x, y) => townDoor(TOWN.map.doors[x + ',' + y]), exit: townExit, sign: townSign }
 });
 function townActive() { const h = H(); return !!(h && C && !h.dun && C.phase === 'intown' && PW > 0); }
@@ -181,6 +181,7 @@ function clearTownService(){
 }
 /* Auto: stroll to the smithy, then out of the gate */
 function townAutoTick() {
+  if(typeof realmNotebookOpen==='function' && realmNotebookOpen())return;
   if (!TOWN.auto && aiOn() && !RTALK) { TOWN.auto = 'smith'; C.townT = Math.max(C.townT || 0, 25); } // Auto took over while you stood around
   if (!TOWN.auto || !aiOn() || RTALK || !TOWN_WALK.arrived() || TOWN_WALK.path.length) return;
   if (TOWN.inside) { TOWN_WALK.walkTo(TOWN.map.start[0], TOWN.map.rows.length - 1); return; } // out of the hall first
@@ -297,6 +298,7 @@ function drawTown(t) {
   const dark = inside ? .8 : night; if (dark > .02) AMB.lights(cx, PW, PH, t, { dark, max: inside ? .5 : .55, tint: inside ? '#140a04' : air.night || '#0a0e2a', lights });
   if (!inside) AMB.flash(cx, PW, PH, t);
   LT.bloom(cx, cv, PW, PH, sun);
+  if(typeof renderRealmFieldLocation==='function')return; // The viewport HUD owns labels and walking hints.
   // where you are, top left
   const fs = Math.max(12, Math.round(PH / 17)); cx.font = `700 ${fs}px Alegreya Sans, sans-serif`; const text = inside ? inGuildHall() ? `${G().name} · Guild Hall` : buildingName(townBuildings().find(b=>b.kind===TOWN.inside)) : hubName(), lw = cx.measureText(text).width + 16;
   cx.fillStyle = 'rgba(20,16,12,.72)'; cx.fillRect(8, 8, lw, fs * 1.6); cx.fillStyle = '#f2c14e'; cx.textBaseline = 'middle'; cx.fillText(text, 16, 8 + fs * .82); cx.textBaseline = 'alphabetic';

@@ -2,6 +2,7 @@
 const VERSION = '1.5.0'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
 /* =================== boot =================== */
 function boot(){
+  closeRealmNotebook(false);
   clearArrival(); clearMemberStory(); clearTownService();
   const h=H();
   SND.render();renderGfxBtn();
