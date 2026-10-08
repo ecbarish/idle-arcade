@@ -317,3 +317,8 @@ Members cannot take jobs or be dismissed while their saved raid is open, includi
 Leaving or finishing restores the leader's previous party and frees the members; jobs stay stopped until
 you assign them again. Raid friendship, memories and mood write to the original adventurer, so a different
 guild hero's run is remembered after saving and reloading. No extra save fields or migration are needed.
+
+
+## Heroic loot review (R9, 2026-10-07)
+
+Rootrot Hollow and The Heartwood Vault already use the shared earned Heroic ladder and the same seven-item boss reward budget as Sanctum and Foundry. Normal and high-tier rewards, scaling and save continuity are checked without changing balance. See [the measured tier table and review](realmbound-heroic-review.md).

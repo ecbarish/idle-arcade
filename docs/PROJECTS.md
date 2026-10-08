@@ -112,7 +112,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | R6 | **Hub variety**: a layout per zone (Fenwatch Post, Lanternrest Lodge...), interiors for the inn and smithy | M | Art | — | open | js/22-town.js |
 | R7 | **Second raid tier** after The Hollow Throne | L | Data+System | — | open | docs/realmbound-40-60.md "Raids" |
 | R8 | **Pacing re-measure 1-60** with every system on; tune zone XP only | M | Polish | — | open | docs/realmbound-40-60.md "Measured" |
-| R9 | Heroic tiers and loot review for the newest dungeons (Rootrot, Heartwood) | S | Polish | — | claimed: Codex, 2026-10-07, `codex/realmbound-heroic-review` | |
+| R9 | Heroic tiers and loot review for the newest dungeons (Rootrot, Heartwood) | S | Polish | — | ready for review: Codex, 2026-10-07, PR #40 | |
 
 ## Shared systems and the world kit
 

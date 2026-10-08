@@ -663,5 +663,48 @@ module.exports = function scenarios() {
       const oldBlade=genItem(45,1,'weapon',{cls:'warrior',type:'sword'});oldBlade.name='Tempered Longblade';rb.S.chars.find(c=>c.id===h.id).bags.push(oldBlade);rb.save();
       const saved=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1'))).chars.find(c=>c.id===h.id).bags.find(it=>it.id===oldBlade.id);
       check(saved.name==='Tempered Longblade'&&saved.ilvl===45,'saved high-level items retain their original generated names');
+
+      // R9: exercise real encounter spawning and loot delivery, not a copy of the generator.
+      const review = rb.newHero('Heroic Reviewer','concord','human','warrior');
+      review.lvl=60;review.mode='focus';for(const n of review.npcs)n.offset=0;
+      rb.S.chars=[review];rb.S.cur=review.id;rb.boot();
+      const reviewParty=review.npcs.slice(0,4).map(n=>n.id);
+      for(const id of ['sanctum','foundry','rootrot','heartwood']){
+        const def=rb.DUNGEONS[id],tiers=['rootrot','heartwood'].includes(id)?Array.from({length:31},(_,n)=>n).concat(40):[0,1,4,10,28,29,40];
+        check(def.enc.filter(e=>e.boss).map(e=>e.loot).join(',')==='2,2,3',id+': three bosses share the established seven-item reward budget');
+        check(def.enc.filter(e=>!e.boss).every(e=>!e.loot),id+': trash does not award boss gear');
+        for(const tier of tiers){
+          review.zone=def.zone;review.dun=null;rb.boot();const record=rb.dungeonStats(id);record.best=tier-1;
+          rb.startDungeon(tier+1,reviewParty,id);check(!review.dun,id+' Heroic '+tier+': cannot skip the next earned tier');
+          rb.startDungeon(tier,reviewParty,id);check(review.dun&&review.dun.tier===tier,id+' tier '+tier+': next earned tier is playable');
+          check(review.dun.mods.length===(tier>=4?2:tier>=1?1:0)&&new Set(review.dun.mods).size===review.dun.mods.length,id+' tier '+tier+': correct distinct modifiers');
+          const clears=record.clears,keepTake=takeLoot;let count=0;
+          try{
+            // Keep review fixtures out of bags while retaining the actual boss loot panel.
+            takeLoot=()=>{};
+            for(let step=0;step<def.enc.length;step++){
+              review.dun.step=step;rb.spawnDungeon();const mob=rb.C.mob,e=def.enc[step],tm=Math.pow(1.3,tier),mods=review.dun.mods;
+              const hp=e.boss?(30+e.lvl*28)*e.hpM*(mods.includes('tyrannical')?1.3:1):(30+e.lvl*28)*1.1*e.n*(e.hpM||1)*(mods.includes('fortified')?1.3:1);
+              const damage=(3+e.lvl*2.3)*(e.boss?e.dmgM*(mods.includes('tyrannical')?1.15:1):(.6+.4*e.n)*1.3)*tm;
+              check(mob.max===Math.round(hp*tm)&&Math.abs(mob.dmg-damage)<Math.max(1,damage)*1e-12,id+' tier '+tier+' encounter '+step+': health and damage match earned Heroic difficulty');
+              rb.C.lastInput=rb.C.run;dunKill(mob);const gear=rb.C.loot&&rb.C.loot.items||[];
+              check(gear.length===(e.loot||0),id+' tier '+tier+' encounter '+step+': exact boss gear count reaches the loot panel');
+              for(const it of gear){
+                check(it.ilvl===e.lvl+1+2*tier+(it.rar===4?3:0)&&[3,4].includes(it.rar)&&(!e.final?it.rar===3:true),id+' tier '+tier+': boss reward item level and rarity');
+                check(it.name&&!it.name.includes('undefined')&&it.dur===100&&Number.isFinite(it.value)&&Object.values(it.stats).every(v=>Number.isFinite(v)&&v>0),id+' tier '+tier+': generated reward remains valid beyond level 60');
+                if(tier>=29&&e.final)check(it.rar===4,id+' tier '+tier+': established final-boss Epic chance has saturated');
+              }
+              count+=gear.length;
+              if(e.final){check(record.clears===clears,id+' tier '+tier+': final loot waits for collection before recording clear');rb.C.loot.items=[];afterDungeonPull();}
+            }
+          }finally{takeLoot=keepTake;}
+          check(count===7&&record.best===tier&&record.clears===clears+1&&!review.dun,id+' tier '+tier+': collection records one clear and unlocks the next Heroic');
+        }
+      }
+      // Normal and Heroic progression and earned items survive an ordinary old-format save.
+      review.drecords.rootrot={best:4,clears:5,runs:7};review.drecords.heartwood={best:1,clears:2,runs:3};
+      review.bags=[genItem(61,3,'chest',{cls:'warrior'}),genItem(64,4,'weapon',{cls:'warrior'})];
+      rb.save();const restored=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1'))).chars.find(c=>c.id===review.id);
+      check(JSON.stringify(restored.drecords)===JSON.stringify(review.drecords)&&JSON.stringify(restored.bags)===JSON.stringify(review.bags),'R9: old-format save retains independent Heroic records and earned high-level loot');
       rb.save();return checks;
     };

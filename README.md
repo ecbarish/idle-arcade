@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Realmbound (2026-10-07)** — Reviewed Rootrot and Heartwood's normal and Heroic loot against Sanctum and Foundry; added browser checks through Heroic 30 and a high-tier boundary. Existing balance and rewards are retained.
+
 - **Realmbound v1.0.2 (2026-10-07)** — **Every zone has its own light.** Sunsets are warm and golden instead of a grey
   wash (the night now falls after the sun sets, not before), each zone has its own night (violet desert, ember-red
   ridge, murky teal marsh, olive forest, amber Crown's Heart...), and light bounces off each zone's ground.

@@ -38,7 +38,7 @@ and how much creative freedom you have are in [CREATIVE.md](CREATIVE.md).
 | # | Task | Status | Notes |
 |---|---|---|---|
 | A1 | **T32** Wildbond lighting for every other area (G2) | claimed: Codex (ticket T32) | docs/ROADMAP.md T32 |
-| A2 | **R9** Heroic tiers and loot review for Rootrot and Heartwood | claimed: Codex, 2026-10-07, `codex/realmbound-heroic-review` | Realmbound data; compare with Sanctum/Foundry heroics; checks for every tier's loot |
+| A2 | **R9** Heroic tiers and loot review for Rootrot and Heartwood | ready for review: Codex, 2026-10-07, PR #40 | Realmbound data; compare with Sanctum/Foundry heroics; checks for every tier's loot |
 | A3 | **W8** Wildbond pacing pass for areas 5-8 plus the league (sim) | open | Use the pacing sim in docs/creature-game-design.md; tune only wild levels, XP and trainer levels; record measured times |
 | A4 | **R4** Guild members' personal stories | open | 3-4 short beats per adventurer, unlocked by mood and time together (docs/realmbound-40-60.md "The guild as built"); talk scenes in the guild hall; their voices from docs/lore/realmbound.md |
 | A5 | **W4** Contests and races at the ranch | open | Write a short "Design" section first (docs/creature-game-design.md has notes); contests judge stats and bond, races use speed and stamina; held at Larkhaven on certain ranch days; prizes are food, titles and cosmetics, never power you can only get there |
