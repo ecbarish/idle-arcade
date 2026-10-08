@@ -35,6 +35,10 @@
     '.arc-set-opts button[aria-pressed="true"]{background:#f2c14e;color:#1a1020;border-color:#f2c14e;font-weight:700}.arc-set-opts button:focus-visible,.arc-set-x:focus-visible{outline:2px solid #8be0d6;outline-offset:2px}' +
     '.arc-set-note{font-size:13px;opacity:.8;margin:4px 0 0}.arc-set-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px}' +
     '.arc-set-x{font:inherit;min-height:40px;padding:6px 14px;border-radius:8px;border:0;background:#f2c14e;color:#1a1020;font-weight:700;cursor:pointer}';
+  /* Phones and touch screens (L3, 2026-10-07): every button, menu and tab at least 40px tall so a thumb hits it;
+     desktop layouts are unchanged. Every game loads this file, so one rule covers the arcade. */
+  css += '@media (max-width:720px),(pointer:coarse){button,select,.tgl,.arc-file,a.home,a.btn{min-height:40px}button{min-width:40px}' +
+    'a.home{display:inline-flex;align-items:center;padding-inline:10px}.arc-set-opts button{min-height:44px}}';
   var st = document.createElement('style'); st.textContent = css; (document.head || document.documentElement).appendChild(st);
 
   function create(o) {
