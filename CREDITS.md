@@ -38,5 +38,6 @@ Before adding an outside asset or library, record its name, author/copyright, ex
 **Ninja Adventure - Asset Pack** by **Pixel-Boy** and **AAA** ([itch.io](https://pixel-boy.itch.io/ninja-adventure-asset-pack)),
 CC0 1.0 (public domain dedication; attribution not required, given with thanks). Downloaded 2026-10-07 (update #8,
 March 2026). Used in `wildbond-godot/assets/ninja/` (the tamer: *Boy*; Maren: *OldWoman*; the first partner:
-*Racoon*; their face portraits). The full licence is copied there as LICENSE.txt. Evan, 2026-10-08: free packs are
+*Racoon*; their face portraits). **Removed the same day:** Evan didn't like its chibi proportions (big heads, no visible
+legs) and preferred our own code-drawn figures, so nothing from the pack is in the game now. Evan, 2026-10-08: free packs are
 placeholders to save time; the goal is the arcade's own original art and identity.

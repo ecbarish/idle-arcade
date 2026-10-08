@@ -29,7 +29,6 @@ const MAREN := ["...GGGG...", "..GGGGGG..", "..GSSSSG..", "..SESSES..", "..SSSSS
 	".SDAAAADS.", ".SDAAAADS.", "..DAAAAD..", "..DDDDDD..", "..DDDDDD..", "...K..K...", "...K..K..."]
 const CUB := [".........O.O", ".........OOO", "O..OOOOOOOEO", "OOOOOOOOOOOW", ".OOOOOOOOOO.", "..OOOOOOOO..",
 	"..O.O..O.O..", "..K.K..K.K.."]
-const SHEETS := { "tamer": preload("res://assets/ninja/tamer_walk.png"), "maren": preload("res://assets/ninja/maren_walk.png"), "cub": preload("res://assets/ninja/cub_walk.png") }
 const PAL := { "C": Color("2a3f6b"), "S": Color("f1c9a0"), "E": Color("222222"), "R": Color("d8453a"), "B": Color("3a4a6a"),
 	"K": Color("3a2a1a"), "G": Color("c9c3b8"), "A": Color("4f8a5a"), "D": Color("7a5236"), "O": Color("d8642e"), "W": Color("f4e4c8") }
 
@@ -221,26 +220,25 @@ func _draw() -> void:
 	for y in MAP.size():
 		for x in MAP[0].length():
 			_draw_tile(x, y, MAP[y][x])
-	var actors := [[me, "tamer"], [maren, "maren"], [cub, "cub"]]
+	var actors := [[me, TAMER], [maren, MAREN], [cub, CUB]]
 	actors.sort_custom(func(a, b): return a[0].pos.y < b[0].pos.y)
-	# Real sprite sheets (Ninja Adventure, CC0, assets/ninja): columns are directions (down, up, left, right), rows the
-	# steps of the walk. The tamer and the cub have four steps; Maren has two.
 	for i in actors.size():
 		var m: Mover = actors[i][0]
-		var sheet: Texture2D = SHEETS[actors[i][1]]
-		var steps := int(sheet.get_height() / 16.0)
+		var base: Array = actors[i][1]
 		var walking := not m.path.is_empty()
+		var frame := int(m.step_t * 8.0) % 2      # which foot is up
 		var bob := 0.0
-		var row := 0
 		if walking:
-			row = int(m.step_t * 8.0) % steps
+			bob = -1.0 if frame == 0 else 0.0
 		elif fmod(t + i * 0.8, 2.4) < 0.4:
 			bob = -1.0                             # a breath while standing still
 		if m == cub and cub_bonded and stage == "bonded":
 			bob = -abs(sin(t * 6.0)) * 3.0         # it hops for joy
-		draw_rect(Rect2(m.pos + Vector2(3, 13), Vector2(10, 3)), Color(0, 0, 0, 0.25))   # a soft shadow
-		var col: int = { Vector2i.DOWN: 0, Vector2i.UP: 1, Vector2i.LEFT: 2, Vector2i.RIGHT: 3 }.get(m.face, 0)
-		draw_texture_rect_region(sheet, Rect2(m.pos + Vector2(0, bob), Vector2(16, 16)), Rect2(col * 16, row * 16, 16, 16))
+		draw_rect(Rect2(m.pos + Vector2(3, 14), Vector2(10, 2)), Color(0, 0, 0, 0.25))   # a soft shadow
+		if base.size() > 8:
+			_draw_sprite(person_pose(base, m.face, walking, frame), m.pos + Vector2(3, 1 + bob), m.face != Vector2i.LEFT)
+		else:
+			_draw_sprite(creature_pose(base, walking, frame), m.pos + Vector2(2, 7 + bob), m.right)
 
 ## A person's look from the way they face: front (both eyes), back (all hair), side (one eye, flipped for left),
 ## with the feet stepping in turn while they walk.
