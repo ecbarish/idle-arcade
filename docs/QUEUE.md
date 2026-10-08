@@ -70,6 +70,7 @@ games) · L8 the arcade launcher · L10 accessibility · guides and lore pages (
 | B2 | **L1** Shared settings panel | done 2026-10-07 | shared/settings.js: sound, graphics, reduced motion, text size, view distance; every game |
 | B3 | **L8** The arcade launcher | part 1 done 2026-10-07 (both styles + vote); part 2 done 2026-10-07: the road (a walkable, side-scrolling living world; poll launcher-style-2) | The homepage as a place: a living scene (the light and ambience engines), each game a door or cabinet you walk to, sound, the shared universe's characters; keeps the shelf as a fallback |
 | B4 | **L3** Phone pass | part 1 done 2026-10-07 | Every game at 375 px: tap targets, the walkable worlds on touch, performance on a mid phone |
+| B3b | **Wildbond opening, part 2** | open | Prologue, choosing your partner in Maren's barn, the Wilddex goal with research rewards, a guided first bond; docs/wildbond-opening.md |
 | B4b | **V3** Game boxes on the launcher | open | Box front and back, the booklet (T8 guide), an era slider; docs/VISION.md §3 |
 | B5 | **L10** Accessibility | open | Keyboard play, contrast, labels; `docs/accessibility.md` |
 | B6 | **G2** Realmbound dungeon lighting | open | DUN_LIGHT in 23-light.js |

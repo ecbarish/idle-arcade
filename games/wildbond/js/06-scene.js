@@ -9,6 +9,7 @@ const AX = [0.38, 0.25, 0.12], FX = [0.62, 0.75, 0.88];
 
 function frame(ms) {
   requestAnimationFrame(frame); if (!PW || document.hidden) return;
+  if (document.body.classList.contains('faded') !== !!S.faded) document.body.classList.toggle('faded', !!S.faded); // a new journey's washed-out colour, until the Thorn Badge
   const t = ms / 1000, A = art(), p = Math.max(2, Math.floor(PH / 46)), mo = !reduceMotion; cx = eraCtx(cxRaw);
   dioramaShow(false); // the 3D view turns itself back on when it draws (14-diorama.js)
   cx.save();

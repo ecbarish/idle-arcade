@@ -42,6 +42,18 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 - Wildbond (2026-10-07): smoother Stillreed entry and late Wardens within incoming badge caps; a reproducible full-run pacing audit across three journeys and four challenges, with failed challenge attempts recorded separately. [Measurements](docs/wildbond-launch-balance.md).
 
 
+- **Wildbond v1.5.0 (2026-10-07)** — From Evan's second play: **turn-based battles** for new journeys (the battle
+  pauses on your creature's turn and you pick its move, each described in plain words; the real-time style is in
+  Settings), **no autopilot until your first badge** (it used to take over from the first second), a new journey
+  starts **in faded colour** instead of four greens (the Thorn Badge brings full colour back), **no menu buttons that
+  skip the world** (walk to the inn, the shop, the Warden and the road; riding to visited places is earned with the
+  third badge), and creature cards that say what a creature is good at (Tank, Bruiser, Caster...) and what every
+  stat and move does.
+- **Wildbond v1.4.0 (2026-10-07)** — **A clearer start** (from Evan's first play): tap a partner to see its Wilddex
+  page (stats, moves, strengths), choose a story name, roll a random one or type your own, then press **Begin**.
+  Challenge modes now unlock once you've been Champion. After the first battle Maren explains where your creatures
+  live and hands you her **Wilddex**, with a goal: over a hundred kinds to find. Two of her opening lines that a typo
+  had hidden are back. Plan for the rest of the opening: docs/wildbond-opening.md.
 - **2026-10-07** — **Easier on phones.** Every button, tab and menu in every game is now big enough to tap
   comfortably on a phone or touch screen (desktop is unchanged), and phones open the homepage on the road style.
 - **Arcade v1.3.0 (2026-10-07)** — **The road**, a third homepage style: walk your character (with a partner creature

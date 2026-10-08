@@ -16,7 +16,7 @@ function startBattle(kind, foes, opts) {
     towerFloor: opts.towerFloor || 0, towerSerial: opts.towerSerial || 0, towerAuto: !!opts.towerAuto,
     leagueDay: opts.leagueDay || null, rematch: opts.rematch || null, tier: opts.tier || 0, firstMeet: kind === 'wild' && firstMetHere(), // 15-challenge.js
     allies: S.team.filter(c => c.hp > 0).map(c => unit(c, 'a')), foes: foes.map(c => unit(c, 'f')),
-    cmd: 1, cmdT: 0, t: 0, tele: null, lines: [], over: null, capture: null, fx: [], bursts: [], shake: 0, lastInput: -99 };
+    cmd: 1, cmdT: 0, t: 0, tele: null, lines: [], over: null, capture: null, fx: [], bursts: [], shake: 0, lastInput: 0, wait: null };
   for (const u of B.foes) S.seen[u.c.sp] = true;
   S.stats.battles++;
   const names = B.foes.map(u => `${u.c.name} (Lv ${u.c.lvl})`).join(', ');
@@ -25,7 +25,22 @@ function startBattle(kind, foes, opts) {
 function bline(t, cls) { B.lines.push({ t, cls }); if (B.lines.length > 40) B.lines.shift(); }
 function living(side) { return (side === 'a' ? B.allies : B.foes).filter(u => u.c.hp > 0); }
 function front(side) { return living(side)[0]; }
-function isAuto() { return S.auto || B.t - B.lastInput > 12; }
+/* Who's in charge: Auto-explore, or (once earned with the first badge) autopilot after 12 idle seconds. Before that
+   the battle never plays itself (Evan, 2026-10-07: "Autopilot took over and did the fight"). */
+function autoEarned() { return S.badges.length >= 1; }
+function isAuto() { return S.auto || (autoEarned() && B.t - B.lastInput > 12); }
+/* Battle style: 'turn' (the classic way: the battle pauses on your creature's turn and you choose its move) or
+   'active' (real time: they fight on their own and you steer with commands). New journeys start turn-based. */
+function turnStyle() { return (S.battleStyle || 'active') === 'turn'; }
+function chooseTurn(m) {
+  if (!B || !B.wait || B.over) return; const u = B.wait; if (!movesOf(u.c).includes(m) || u.cds[m] > 0) return;
+  B.wait = null; B.lastInput = B.t; u.atb = 0; act(u, m); Cr.addBond(u.c, 0.3);
+}
+function moveInfo(m) {
+  const mv = MOVES[m], el = mv.el ? mv.el + ' ' : '', how = mv.spec ? 'special (uses Wits)' : 'physical (uses Power)';
+  return { hit: `${el}${how} attack, power ${mv.pow}`, aoe: `${el}hits every foe, power ${mv.pow}`, dot: `${el}poisons a foe over time`, buff: 'your team hits harder for a while',
+    haste: 'your team acts faster for a while', guard: 'your team braces against damage', slow: 'slows a foe down', heal: 'heals your most hurt ally' }[mv.kind] || '';
+}
 
 function advantage(el, target) {
   if (!el) return 1; const te = sp(target.c).el;
@@ -135,6 +150,9 @@ function battleTick(h) {
   B.t += h; if (B.towerFloor && S.auto) B.towerAuto = true;
   if (B.capture) { const c = B.capture; c.pos += c.dir * h * 0.9; if (c.pos > 1) { c.pos = 1; c.dir = -1; } if (c.pos < 0) { c.pos = 0; c.dir = 1; }
     if (isAuto() && B.t - B.lastInput > 12) calmNow(); return; }
+  // turn-based: the whole battle waits while you choose (autopilot or Auto-explore chooses for you, once earned)
+  if (B.wait) { if (!living('f').length) return endBattle('won'); if (!living('a').length) return endBattle('lost');
+    if (B.wait.c.hp <= 0) B.wait = null; else if (isAuto()) { const u = B.wait; B.wait = null; u.atb = 0; act(u); } else return; }
   B.cmdT += h; if (B.cmdT >= 5) { B.cmdT = 0; B.cmd = Math.min(3, B.cmd + 1); }
   if (isAuto() && B.cmd >= 3) command('focus', true);
   if (B.tele) { B.tele.t -= h; if (B.tele.t <= 0) { const { u, m } = B.tele; B.tele = null;
@@ -147,7 +165,7 @@ function battleTick(h) {
     u.anim = Math.max(0, u.anim - h);
     if (u.c.hp <= 0 || (B.tele && B.tele.u === u)) continue;
     u.atb += h * (u.st.spd + 40) / 100 * (u.buff.haste > 0 ? 1.3 : 1) * (u.buff.slow > 0 ? 0.6 : 1) * (u.c.traits.includes('swift') ? 1.1 : 1);
-    if (u.atb >= ACT_AT) { u.atb = 0; act(u); }
+    if (u.atb >= ACT_AT) { if (u.side === 'a' && turnStyle() && !isAuto()) { u.atb = ACT_AT; B.wait = u; bline(`${u.c.name}'s turn. Choose a move.`, 'sys'); return; } u.atb = 0; act(u); }
     if (!living('f').length) return endBattle('won');
     if (!living('a').length) return endBattle('lost');
   }

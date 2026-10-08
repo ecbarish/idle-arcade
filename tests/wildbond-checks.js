@@ -144,9 +144,10 @@ function wildbondChecks() {
     check(g.trainer + ': can be challenged on their own map', () => {
       ready(); const area = g.biome || 'thornwood'; const map = Object.keys(MAPS).find(id => MAPS[id].biome === area);
       wb.placeAt(map); S.explored = g.at; S.exploredIn = { [area]: g.at }; renderAll();
-      const button = document.querySelector('[data-act="warden"]');
-      if (!wb.wardenReady() || !button || button.textContent !== 'Challenge ' + g.trainer) return false;
-      button.click(); const scene = !!TALK && !talkEl.hidden; skipTalk();
+      // no menu button any more (Evan, 2026-10-07): you walk up to the Warden standing on their map
+      const warden = npcsOf(MAPS[map]).find(n => n.warden && n.warden.id === g.id);
+      if (!wb.wardenReady() || !warden || document.querySelector('[data-act="warden"]')) return false;
+      talkTo(warden); const scene = !!TALK && !talkEl.hidden; skipTalk();
       return scene && !!wb.B && wb.B.story === g.id && wb.B.trainer === g.trainer;
     });
     check(g.trainer + ': actual victory awards their badge', () => {
@@ -907,12 +908,58 @@ function wildbondChecks() {
     spireReady();delete S.tower;const uid=S.team[0].uid,eras=JSON.stringify(S.eras),cap=S.capMode;save();reset();load();return S.tower.best===0&&!S.tower.active&&S.tower.claimed.length===0&&S.team[0].uid===uid&&S.capMode===cap&&levelCap()===75&&JSON.stringify(S.eras)===eras&&S.titles.includes('Champion');
   });
   check('Invalid tower fields normalize without unlocking a pre-Champion climb',()=>{ready();S.tower={best:-3,floor:Infinity,active:true,rest:true,claimed:[10,10,'20',-10,7]};const t=towerState();return t.best===0&&t.floor===0&&!t.active&&!t.rest&&t.claimed.join(',')==='10';});
+  // The start screen (Evan's first-play notes): pick shows a page, nothing starts until Begin; names; modes locked
+  check('the start screen asks you to choose before it starts, and Begin waits for a pick', () => {
+    const keep = START.pick; START.pick = null;
+    try { const html = startHTML(); return /data-act="pickstarter"/.test(html) && /id="beginBtn"[^>]*disabled/.test(html) && !/data-act="starter"/.test(html) &&
+      STORY_NAMES.every(n => html.includes('data-arg="' + n + '"')) && /namerand/.test(html); } finally { START.pick = keep; }
+  });
+  check("picking a partner shows its Wilddex page (stats, first moves, strengths)", () => {
+    const html = starterCard('cindercub'); return /Health/.test(html) && /Starts with/.test(html) && /Strong against/.test(html);
+  });
+  check('challenge modes stay locked on a first journey and unlock once you are Champion', () => {
+    const keep = localStorage.getItem('wildbond-modes-unlocked'), titles = wb.S.titles;
+    try { localStorage.removeItem('wildbond-modes-unlocked'); wb.S.titles = [];
+      const locked = !modesUnlocked() && /unlock for your next journey/.test(startHTML()) && !/data-act="mode"/.test(startHTML());
+      wb.S.titles = ['Champion']; const open = modesUnlocked() && /data-act="mode"/.test(startHTML());
+      return locked && open; }
+    finally { wb.S.titles = titles; if (keep === null) localStorage.removeItem('wildbond-modes-unlocked'); else localStorage.setItem('wildbond-modes-unlocked', keep); }
+  });
+  check('every opening scene line is a real line (no swallowed lines)', () => ['intro', 'rival1', 'rival1Win'].every(k => SCENES[k].every(l => Array.isArray(l) && typeof l[1] === 'string' && l[1].length > 5)));
+  // Evan's second play notes: turn-based battles, earned autopilot, faded colour, walking instead of menu buttons, roles
+  check('a new journey starts turn-based, in faded colour, and the battle waits for your move', () => {
+    reset(); wb.chooseStarter('ripplet', 'Test', 'classic'); skipTalk();
+    if (S.battleStyle !== 'turn' || !S.faded || S.era === 'pocket' || !wb.B) return false;
+    for (let i = 0; i < 40 && wb.B && !wb.B.wait; i++) wb.worldTick(0.2);
+    const B = wb.B; if (!B || !B.wait) return false;
+    const n0 = B.lines.length, hp0 = B.allies.concat(B.foes).map(u => u.c.hp).join(); for (let i = 0; i < 20; i++) wb.worldTick(0.5); // nothing happens while it waits (no autopilot before a badge)
+    if (B.wait === null || B.lines.length !== n0 || B.allies.concat(B.foes).map(u => u.c.hp).join() !== hp0) return false;
+    const m = movesOf(B.wait.c)[0]; chooseTurn(m); return B.wait === null && B.lines.some(l => l.t.includes(MOVES[m].name));
+  });
+  check('autopilot and Auto-explore are earned with the first badge', () => {
+    const keep = S.badges.slice(); try { S.badges = []; const before = !autoEarned(); S.badges = ['thorn']; return before && autoEarned(); } finally { S.badges = keep; }
+  });
+  check('the Thorn Badge lifts the faded colour', () => {
+    ready(); S.faded = true; S.era = 'bit16'; S.badges = []; const g = STORY.find(b => b.gate === 'thorn'); wb.startBattle('trainer', [wb.newCreature('cindercub', 3)], { trainer: g.trainer, story: g.id });
+    const st = window.setTimeout; window.setTimeout = fn => { fn(); return 0; }; // run the badge's delayed scene now
+    try { storyWin(g.id); if (W.afterDone) { const d = W.afterDone; W.afterDone = null; d(); } } finally { window.setTimeout = st; }
+    for (let i = 0; i < 10 && TALK; i++) skipTalk(); return !S.faded && S.eras.includes('pixel');
+  });
+  check('no menu buttons skip the world: no travel, rest, lure or search buttons while walking', () => {
+    ready(); wb.placeAt('larkhaven'); S.badges = []; panelKey = ''; renderAll();
+    const acts = [...document.querySelectorAll('#panel [data-act]')].map(b => b.dataset.act);
+    return !['biome', 'rest', 'lures', 'explore', 'warden'].some(a => acts.includes(a));
+  });
+  check('creature cards say what a creature is good at, in full words', () => {
+    const html = cardHTML(wb.newCreature('mosshog', 5), 0, true);
+    return /(Tank|Bruiser|Caster|Skirmisher|All-rounder)<\/b>/.test(html) && /Power <b>/.test(html) && /cmoves/.test(html);
+  });
   // L1 shared settings (shared/settings.js + js/18-settings.js)
   check('the Settings panel offers sound, graphics, view, text size and motion', () => {
     const b = document.querySelector('.arc-set-btn'); if (!b) return false; b.click();
     const labels = [...document.querySelectorAll('.arc-set-row>div:first-child')].map(d => d.textContent).join();
     document.querySelector('.arc-set [data-close]').click();
-    return labels === 'Sound,Graphics,View distance,Text size,Motion' && document.querySelector('.arc-set-bg').hidden;
+    return labels === 'Battle style,Sound,Graphics,View distance,Text size,Motion' && document.querySelector('.arc-set-bg').hidden;
   });
   check('text size scales the panels, never the scene canvas', () => {
     const keep = localStorage.getItem('arcade-settings-v1'), root = document.documentElement;
