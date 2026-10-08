@@ -164,4 +164,4 @@ ambience. Wildbond extras: weather forecast, battle backdrops, challenge pennant
 
 ## Guide extension (2026-10-08)
 
-A6b: claimed by Codex on codex/game-guides: illustrated Realmbound guide and tips; Diamond Career and Otherworld starter guides. Wildbond waits for Godot.
+A6b: ready for review in PR #52 by Codex on codex/game-guides: illustrated Realmbound guide and tips; Diamond Career and Otherworld starter guides. Wildbond waits for Godot.

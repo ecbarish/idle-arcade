@@ -137,6 +137,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 · Codex: A6b illustrated guides and Realmbound tips ready in PR #52; all seven test pages pass. Wildbond guide waits for Godot.
+
 - 2026-10-08 Claude (night): rules for player-facing text (docs/CREATIVE.md, Writing for players; Realmbound Guild Hall title fixed).
   Godot: Maren's ranch as a place: creatures not on your team live in the paddock (four) and the barn; walk up or tap one to see
   its page and Take along / Swap in (choose who rests); the lead creature walks with you. 143 Godot checks. Next (B2b):
