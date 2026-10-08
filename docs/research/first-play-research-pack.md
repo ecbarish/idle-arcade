@@ -12,6 +12,8 @@ The Godot report has arrived: [supplied text](godot-production-slice.md), preser
 | 2 | [Starfall: first expedition and season](gemini-starfall-first-season-prompt.md) | `starfall-first-season-research.md` | One meaningful party decision, understandable results, member attachment and honest reset expectations |
 | 3 | [Arcade: first visit and playtesting](gemini-arcade-first-visit-prompt.md) | `arcade-first-visit-research.md` | Choosing a game without friction; reusable newcomer observation and feedback |
 
+**Realmbound report received:** [supplied report](realmbound-first-hour-research.md), [review and proposed next decisions](realmbound-first-hour-review.md), with all three source screenshots preserved. Useful companion/playtesting ideas are separated from unsupported Godot, creature-chemistry and full-Auto assumptions. Nothing is adopted as a build requirement.
+
 All destinations are inside `docs/research/`. Preserve complete sources in the returned report, not just a summary. The older [Gemini prompts](gemini-prompts.md) remain useful for broad genre questions; these briefs narrow the work to entry, agency, recovery and testable decisions. These are prompts prepared for research, not completed research findings.
 
 ## My perspective

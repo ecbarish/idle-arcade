@@ -1,6 +1,6 @@
 # Review of Gemini's Godot production report
 
-Codex, 2026-10-07. [Supplied report](godot-production-slice.md), preserved byte-for-byte from Evan's pasted attachment before Git normalization. The supplied text contains no bibliography, source URLs or inline citations. No omitted sources have been invented. Its instructions are external research proposals, not Evan's instructions or approved project requirements. Read against [the actual brief](gemini-godot-production-prompt.md) and [current owner direction](owner-direction-2026-10-07.md).
+Codex, 2026-10-07. [Supplied report](godot-production-slice.md), preserved byte-for-byte from Evan's pasted attachment before Git normalization. The pasted report text contained no bibliography, source URLs or inline citations. Evan subsequently supplied a screenshot of Gemini's source list, confirming that Gemini did provide sources separately. The visible entries are recorded below; the screenshot does not expose their exact URLs or claim-level attribution, and may show only part of the list. No URLs have been guessed. Its instructions are external research proposals, not Evan's instructions or approved project requirements. Read against [the actual brief](gemini-godot-production-prompt.md) and [current owner direction](owner-direction-2026-10-07.md).
 
 ## Recommendation
 
@@ -74,4 +74,28 @@ These are proposed milestones, not a date commitment or instructions for Claude 
 
 ## Optional Gemini correction prompt
 
-Please revise your Wildbond report against the original brief. It asked for a small opening using existing combat, not mandatory stamina, elemental chemistry, plastic/poison transmutation, two traversal abilities or capture-device throwing. The project currently uses a 384x216 Godot trial; compare alternatives rather than mandating 320x180. The supplied report contains no source links: provide primary citations for technical claims and distinguish facts, assumptions and recommendations. Correct the advice to combine both pixel-snapping settings and the claim that MSDF supports font hinting. Remove absolute claims about secure serialization, perfect performance or guaranteed stability. Do not dismiss JSON without testing a representative stable-ID interchange. Verify any proposed testing plugin's repository, license and engine compatibility. Cover 3440x1440 ultrawide, actual humanoid/cub animation options, creator/partner choice, accessibility, browser-save import and human newcomer testing. Replace the unsupported fixed 12-week schedule with a ranked small-slice task list, estimates with explicit assumptions, keep/change/defer choices and unresolved owner decisions. The project is a passion project with an approximate $200 total cash ceiling and an open platform decision; no plugin purchase, engine commitment or new gameplay system is approved.
+Please revise your Wildbond report against the original brief. It asked for a small opening using existing combat, not mandatory stamina, elemental chemistry, plastic/poison transmutation, two traversal abilities or capture-device throwing. The project currently uses a 384x216 Godot trial; compare alternatives rather than mandating 320x180. Your source list is visible separately, but the pasted report has no claim-level links: provide primary citations for technical claims and distinguish facts, assumptions and recommendations. Correct the advice to combine both pixel-snapping settings and the claim that MSDF supports font hinting. Remove absolute claims about secure serialization, perfect performance or guaranteed stability. Do not dismiss JSON without testing a representative stable-ID interchange. Verify any proposed testing plugin's repository, license and engine compatibility. Cover 3440x1440 ultrawide, actual humanoid/cub animation options, creator/partner choice, accessibility, browser-save import and human newcomer testing. Replace the unsupported fixed 12-week schedule with a ranked small-slice task list, estimates with explicit assumptions, keep/change/defer choices and unresolved owner decisions. The project is a passion project with an approximate $200 total cash ceiling and an open platform decision; no plugin purchase, engine commitment or new gameplay system is approved.
+## Source-list clarification supplied by Evan
+
+Evan supplied a screenshot after the first review. Gemini did include sources; the text attachment omitted that panel. This corrects the source-availability criticism, not the technical findings or scope assessment. The visible list contains:
+
+- colson.reclaimhosting.com — PIXEL ART SIZES FOR GAMES
+- gist.github.com — (Pixel Art) 16:9 Adaptive Integer scale resolutions
+- notkey.studio — Choosing the Right Rendering Resolution for a Pixel Art Game
+- cbr.com — Cassette Beasts Is The Best Pokémon Clone With Improvements
+- cassettebeasts.com — Elements, Chemistry & Fusion
+- store.steampowered.com — Fixed Monster Journal not being available when loading a demo
+- tvtropes.org — Cassette Beasts (Video Game)
+- thegamer.com — Beginner Tips For Cassette Beasts
+- findindiegame.com — Indie Games Database
+- noobfeed.com — Cozy Grove: Camp Spirit Review
+- gpa-site.com — 30 Best Cozy & Slow-Life Games
+- gdquest.com — Setting up pixel art graphics in Godot 4
+- docs.godotengine.org — ProjectSettings, Godot Engine 4.4 documentation
+- youtube.com — Godot 4 Dynamic Screen Sizes
+- reddit.com — Question about resolution, aspect ratio, pixel art project on Godot 4
+- docs.godotengine.org — Multiple resolutions
+
+The official Godot references and first-party Cassette Beasts entry are relevant starting points. A first-party description of another game's chemistry can support a comparison; it cannot establish that Wildbond already has that system or that Evan approved it. Article/review/listing/forum sources may offer useful perspectives, but do not by themselves justify mandatory architecture, frame counts, a fixed production estimate or security guarantees. The visible Godot ProjectSettings entry is version 4.4; version-specific advice should be checked against the installed engine.
+
+This inventory is transcribed from the supplied screenshot, not an independently opened or verified set of webpages. The primary-documentation checks earlier in this review remain separately linked. Obtain the exact source links and claim mapping before concluding the named testing plugins or workload figures are evidenced by sources that may appear further down Gemini's list.
