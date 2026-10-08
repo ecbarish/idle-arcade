@@ -1,5 +1,8 @@
 # Otherworld development plan
 
+**Unparked 2026-10-08:** Evan's answers are in docs/research/decisions.md (top); the plan to follow is
+docs/otherworld-design.md (choose your world from a list; rebirth by choice and on death). Claude builds O0.
+
 Status: planned concept only; no playable game directory. Implementation remains parked until explicitly authorized. [Research](RESEARCH.md#otherworld-a-life-worth-living-again); [portfolio plan](README.md).
 
 ## The experience to protect

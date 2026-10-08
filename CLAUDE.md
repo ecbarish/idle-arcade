@@ -83,7 +83,8 @@ the very end, so running out of usage never strands work.
   playtest notes, the Studio (GM tools, save doctor). Shared code in `shared/`.
 - **Direction:** docs/VISION.md (V1-V10: prologues, a modern look, game boxes, procedural content, a world of bots,
   friends, nodes, automation as earned QoL, choices that matter, a big world and one day first person).
-- Parked: Primordial, Starfall Guild, Diamond Career, Otherworld (a new game starts only after Launch).
+- **Diamond Career** (ChatGPT, T34) and **Otherworld** (Claude, docs/otherworld-design.md) started 2026-10-08 in the
+  browser. Starfall Guild is valued but waiting; Primordial is lower priority.
 
 ## Latest owner direction and Codex handoff — 2026-10-06
 

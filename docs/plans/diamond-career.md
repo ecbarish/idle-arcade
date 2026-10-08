@@ -1,5 +1,8 @@
 # Diamond Career: first sports module
 
+**Unparked 2026-10-08:** batter first, timing and tactical batting both (switchable); browser first. ChatGPT builds
+part 1 (docs/ROADMAP.md T34).
+
 Status: planned concept only; no playable game directory. Implementation remains parked until explicitly authorized. See [the expanded sports-career plan](sports-careers.md) for the owner's multi-sport, player-to-management and salary/lifestyle direction. Baseball is the first module, not the limit of the project. [Research](RESEARCH.md#diamond-career-understandable-advancement-short-playable-moments); [portfolio plan](README.md).
 
 ## The experience to protect

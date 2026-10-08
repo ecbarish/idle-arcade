@@ -1,5 +1,19 @@
 # Research brief: the big open decisions (2026-10-08)
 
+## Decided (Evan, 2026-10-08): Diamond Career and Otherworld start now, in the browser
+
+Evan: "I want to work on the sports game and the anime game as well, I dont know why we ignore them?" They had been
+parked by the earlier finish-and-launch-first decision (below), which this replaces for these two games. Answers to
+the plans' open owner questions:
+- **Platform:** "path of least resistance": both start in the browser (both assistants can build and test there; they
+  join the arcade launcher), following docs/wildbond-plan.md's "games feel like games" principles from day one. A game
+  that outgrows the browser can move to Godot like Wildbond.
+- **Diamond Career:** batting offers **both** a timing mode and a tactical mode, switchable; batter first.
+- **Otherworld:** the player **chooses the world they are reborn into from a list** of very different worlds (tones and
+  stories differ the way anime worlds do), with branching choices and consequences, for replayability. Rebirth happens
+  **both** by choice (after finishing a life) and on death.
+- **Owners:** ChatGPT builds Diamond Career (T34); Claude designs and builds Otherworld's first life (docs/otherworld-design.md).
+
 ## Decided (Evan with Claude, 2026-10-07): finish and launch before starting a new game
 
 Evan asked whether the games are "full games" yet, and what comes next: another game, lore and wiki pages, a better

@@ -162,7 +162,37 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
 - [ ] T32 open for ChatGPT on `codex/wildbond-area-light` (G2, every other Wildbond area).
-- [x] T33 ready for review in PR #43 on `codex/wildbond-variants` (W14, creature variants). Read docs/wildbond-plan.md first.
+- [x] T33 merged 2026-10-08 by Claude (Wildbond v1.6.0, PR #43).
+- [ ] T34 open for ChatGPT on `codex/diamond-career-d0` (Diamond Career's first at-bats and first payday).
+
+### T34: Diamond Career, part 1: the first call-up and the first payday (D0 + the start of D1)
+Evan (2026-10-08) unparked the sports game. Read docs/plans/diamond-career.md, docs/plans/sports-careers.md,
+docs/research/decisions.md (top entry: his answers), docs/wildbond-plan.md (the principles: games feel like games;
+they apply to every game) and docs/CREATIVE.md. You have creative freedom (names, the fictional league, writing); put a
+"Design" section at the top of the PR. Original fictional clubs and players only.
+- **A new browser game** in `games/diamond-career/` (index.html, style.css, js/ in numbered files like the other
+  games), using shared/engine.js (saves, with `Arcade.validators` and `Arcade.saveToolsHTML`), shared/settings.js
+  (Settings.create with its own rows), shared/sound.js, shared/feedback.js. Save key `diamond-career-save-v1`.
+- **The player:** a short creator (name, bats left or right, a few looks), position: a batter. A fictional development
+  club and a short series (about six games).
+- **At-bats in both styles (Evan's choice), switchable in Settings:** *Timing*: the pitch comes in and you swing at
+  the right moment (keyboard, mouse and touch); *Tactical*: read the pitcher and choose patience, contact or power and
+  a guess at the pitch; your stats and the read decide the result. Manual play improves the odds, never guarantees a
+  home run. Count, outs, bases and scoring always correct; the result explained in plain words ("you were early on
+  the change-up"). Key moments are played; the rest of each game simulates from the same model, with a short summary.
+- **The first payday:** after the series the coach evaluates you against visible thresholds; two contract offers with
+  a real tradeoff (more money vs more playing time); a salary ledger paid on the calendar; a first purchase in a small
+  **home/garage scene** (a better apartment or a first car), never mandatory upkeep.
+- **Feels like a game, not a form:** the at-bat is a ballpark scene drawn in code (the pitcher, the ball, your batter,
+  the crowd), with the count, outs and bases as a scoreboard in the scene; between games, a clubhouse or home scene.
+  Readable on a phone and a 3440x1440 ultrawide.
+- **The arcade:** add Diamond Career to the hub's `GAMES` list (status "Prototype", a cover) and give it a place in
+  launcher/launcher.js: on the road it is currently a building site (`drawSite`); when it gets an `href`, add a
+  `DRAW` entry (a small ballpark) so the road and the living world draw it, and a hall cabinet screen via its cover.
+- **Checks:** a new tests/diamond.html (count rules, walks and strikeouts, outs and innings, runners and scoring,
+  simulation totals over many games, both batting modes, contract and salary ledger, purchase, save and reload,
+  old/empty saves). All test pages pass. Don't bump other games' versions.
+
 
 ### T33: Wildbond creature variants (W14)
 Evan (2026-10-07): "it would be cool for some creatures, even though they're the same creature, to have some unique

@@ -54,6 +54,7 @@ index.html or style.css until those phases are merged.
 | # | Task | Status | Notes |
 |---|---|---|---|
 | A1 | **T33** Wildbond creature variants (W14) | done, merged 2026-10-08 by Claude (Wildbond v1.6.0) | docs/ROADMAP.md T33: a rare shimmering colour, tiny/huge sizes, seeded markings; cosmetic only |
+| A0 | **T34** Diamond Career part 1: the first call-up and the first payday | open | Evan unparked it 2026-10-08; docs/ROADMAP.md T34; browser, games/diamond-career/ |
 | A2 | **T32** Wildbond lighting for every other area (G2) | blocked: profile-only scope cannot select town/league/Spire; see docs/proposals/wildbond-area-air.md | Finish if started; otherwise after A1. Only `AREA_AIR` values and their checks in 06-scene.js |
 | A3 | **T8** Realmbound guide and lore pages | ready for review: Codex, 2026-10-07, PR #44 | ROADMAP T8, Realmbound first; Wildbond's guide waits for its redesign |
 | A4 | **L4 + V1** Realmbound onboarding and prologue | open | A narrated prologue in its own engine, then a gentle first ten minutes told by people in the world (docs/VISION.md §1) |
@@ -68,6 +69,7 @@ index.html or style.css until those phases are merged.
 | # | Task | Status | Notes |
 |---|---|---|---|
 | B0 | **Review and merge** every waiting PR, bump versions, keep START-HERE current, refill the lanes | always first | Check email, diff, tests, play it; `git merge --no-ff` |
+| B0b | **Otherworld O0: the Between and Asterhold** | open | Evan unparked it 2026-10-08; docs/otherworld-design.md; browser, games/otherworld/ |
 | B1 | **Wildbond phase 1: the screen is the world** | open | docs/wildbond-plan.md: full-window scene, overlay HUD, dialogue near speakers, satchel and pause menu, bigger characters |
 | B2 | **Wildbond phase 2: the opening, alive** | open | Prologue, Maren in the world, the character creator (W13), choosing your partner in the barn, Wren, guided first bond, the Wilddex goal |
 | B3 | **Wildbond phase 3: battles on the field** | open | Transition, classic layout, Fight / Bond / Bag / Run, a summary that waits |
