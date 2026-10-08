@@ -10,3 +10,8 @@ cloud task on a `codex/<topic>` branch, open a pull request, and don't switch br
 **What to work on:** `docs/PROJECTS.md` is the master list of every outlined project (with a launch track); claim one
 there before you start. **How much is yours to decide:** `docs/CREATIVE.md` gives the ground rules, the quality bar
 and three levels of creative freedom. Your own ideas and perspective are welcome; that page says how to bring them.
+
+**Autopilot:** `docs/QUEUE.md` gives each assistant a lane (Codex: Lane A; a third AI such as Grok: Lane C). Work
+your lane top to bottom without waiting to be prompted: claim, build, open a PR, then start the next task (at most two
+open PRs). Don't bump game versions or edit START-HERE's "Where we are"/"Up next"; Claude does that when merging.
+Branch prefixes: `codex/<topic>`, `grok/<topic>`, `<ai>/<topic>`.

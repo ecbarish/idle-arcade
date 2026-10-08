@@ -102,6 +102,10 @@ Sports should support athlete careers and team management across sports. Salarie
 
 Winter Road (PR #7) and these plans (PR #8) are merged and live; `tests/run.html` passed (231) before merging. Wider T1 remains open. Wildbond stays Claude's lane. Open owner decisions: full-Auto unlock timing, the second sport, and whether purchases (homes/cars) have gameplay effects.
 
+## Autopilot (Evan, 2026-10-07)
+docs/QUEUE.md has a lane per assistant. Claude's lane starts with reviewing and merging every waiting PR (Codex,
+Grok), bumping game versions on merge, keeping START-HERE current and refilling the lanes from PROJECTS.md.
+
 ## Working style (Evan, 2026-10-09)
 Evan wants **larger chunks per prompt**: when he says "proceed", finish several queue items in one go (review and merge
 ChatGPT's branches, write ChatGPT a sizeable ticket, then build more than one item yourself), committing after each.

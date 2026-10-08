@@ -70,6 +70,10 @@ burner). Plans in `docs/plans/`.
 
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
+**Autopilot (2026-10-07):** every assistant now works its own lane in [docs/QUEUE.md](docs/QUEUE.md), top to bottom,
+without waiting for Evan: Codex/ChatGPT has Lane A, Claude Lane B (reviews first), a third AI (Grok) Lane C. The list
+below is background; QUEUE.md is what to do next.
+
 **The master list is `docs/PROJECTS.md`** (every outlined project, sizes, dependencies, claims, the launch track);
 **ground rules and creative freedom: `docs/CREATIVE.md`**. Below are only the next few items in flight.
 
@@ -111,6 +115,7 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-07 Claude: docs/QUEUE.md, the autopilot work queue: a lane per assistant (A Codex, B Claude, C Grok/other),  the loop (claim, build, PR, next; max two open PRs), and rules that avoid conflicts (Claude bumps versions and edits  START-HERE's status sections at merge).
 - 2026-10-07 Claude: G2 for every Realmbound zone (23-light.js `ZONE_LIGHT`: per-zone `night` colour, bounce, grade,  shafts, fogTop; 20-ambience.js `ambFront` holds the visual dark to 30% while the sun is up, fixing grey sunsets;  towns use the zone night). Realmbound v1.0.2, 1537 checks. **Next for Claude:** G2 dungeons, or W3 part 2 (roaming  legendaries); review T32 when ChatGPT finishes.
 - 2026-10-07 Claude: merged G2 Saltmarsh lighting (ChatGPT; Wildbond v1.3.1, 1194 checks); wrote T32 (lighting for  every other Wildbond area, `codex/wildbond-area-light`) for ChatGPT. **Next for Claude:** G2 for Realmbound zones and  dungeons (not Frostmere), or W3 part 2 (roaming legendaries).
 - 2026-10-07 Claude: merged six ChatGPT branches: T31 post-game (Spire + league rematches, v1.3.0), W7 ferry landing,
