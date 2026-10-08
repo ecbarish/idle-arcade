@@ -143,6 +143,7 @@ function townTalk(n) {
 }
 /* a guild adventurer in the hall: their favor if they have one, otherwise a word that shows their mood */
 function memberTalk(key) {
+  if (playMemberStoryRepair(key, false)) return;
   if (!memberStoryProblem(key) && playMemberStory(key, false)) return;
   const w = workerOf(key); if (!w) return; const mood = w.m.mood, face = mood >= 70 ? ':happy' : mood < 30 ? ':sad' : '';
   const req = typeof memberRequest === 'function' ? memberRequest(key) : null;
@@ -152,7 +153,8 @@ function memberTalk(key) {
   const lines = mood >= 70 ? ['Best hall in the realm, and I\'ve slept in a few. Point me at something and I\'ll do it.', 'When you\'re out there, we hear about it. Makes a person proud to wear the colours.']
     : mood >= 30 ? ['Quiet day. I wouldn\'t mind a job, or a road with you, if one comes up.', 'The hearth is warm. Still, I joined to be useful.']
     : ['I\'ve been sitting by this fire a long while. Do you still need me?', 'Nobody\'s asked for me in days. I\'m starting to wonder why I signed.'];
-  SCN.play([[w.name + face, lines[Math.floor(Date.now() / 60000) % lines.length]]], null);
+  const state = memberStoryState(key), personal = memberStoryResult(w.name, state);
+  SCN.play([[w.name + (memberStoryHurt(state) ? ':sad' : face), personal || lines[Math.floor(Date.now() / 60000) % lines.length]]], null);
 }
 /* Auto: stroll to the smithy, then out of the gate */
 function townAutoTick() {

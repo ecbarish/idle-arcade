@@ -137,6 +137,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 · Codex: R4 follow-up ready in PR #53, stacked on guide PR #52; ten warned guild choices, portrait consequences and recoverable trust. All seven test pages pass (Realmbound 6935); no versions bumped. Two PRs await review.
+
 - 2026-10-08 · Codex: A6b illustrated guides and Realmbound tips ready in PR #52; all seven test pages pass. Wildbond guide waits for Godot.
 
 - **2026-10-08 (Codex):** W11 batch 1 ready in PR #51: twelve definitions, ten missing pairs, two evolution lines, strong single-form Hearthlaugh and proposed cross-world habitat manifest. Seven pages pass (Wildbond 1354); actual Godot export includes all 93 species. Evan requested this extra piece while #49/#50 await review; no merges, versions or Godot edits. docs/wildbond-roster-batch1.md records availability and checks.
