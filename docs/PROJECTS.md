@@ -116,7 +116,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 |---|---|---|---|---|---|---|
 | R3 | **Battlegrounds**: faction rivalry, the hook the raid's ending sets up | L | Design+System | — | open | Write a plan first (CREATIVE.md: new system) |
 | R4 | **Guild members' personal stories**: short arcs per adventurer, unlocked by mood and time together | M | Data+System | — | ready for review: Codex, 2026-10-08, PR #49 | docs/realmbound-40-60.md "The guild as built" |
-| R5 | **Crafted gear from 55** from the guild economy (the plan's gear route) | M | System | — | open | docs/realmbound-40-60.md "Loot from 40 to 60" |
+| R5 | **Crafted gear from 55** from the guild economy (the plan's gear route) | M | System | — | ready for review: Codex, 2026-10-08, PR #55 | docs/realmbound-40-60.md "Loot from 40 to 60" |
 | R6 | **Hub variety**: a layout per zone (Fenwatch Post, Lanternrest Lodge...), interiors for the inn and smithy | M | Art | — | ready for review: Codex, 2026-10-08, PR #54 | js/22-town.js |
 | R7 | **Second raid tier** after The Hollow Throne | L | Data+System | — | open | docs/realmbound-40-60.md "Raids" |
 | R8 | **Pacing re-measure 1-60** with every system on; tune zone XP only | M | Polish | — | ready for review: Codex, 2026-10-07, PR #42 | docs/realmbound-40-60.md "Measured" |

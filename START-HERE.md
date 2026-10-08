@@ -137,6 +137,7 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 · Codex: R5 ready in PR #55: deterministic level-55 rare gear from guild ore/herbs, commissioned in Smithy portrait scenes. All seven browser pages pass (Realmbound 7729); real purchase/cancel/locked flows checked at all four widths, old saves and shared-bank safety covered; no version bumps.
 - 2026-10-08 Claude (night, continued): Wildbond Godot heritages: a Family line in Maren's register (farmfolk, coastfolk,
   highlanders, wanderers), each a small bonding/exploring gift and its own tale of the fading told at signing (clues in
   docs/lore/wildbond-threads.md thread 5), recognition by Pip and Tobin, arrival memories; 173 checks. Also organised Evan's

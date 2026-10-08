@@ -228,3 +228,6 @@ textarea{width:100%;min-height:60px;background:#000;color:var(--fg);border:1px s
 @media (max-width:520px){.scene:has(.member-story-dialogue:not([hidden])){min-height:560px;aspect-ratio:auto}}
 
 @media(max-width:520px){.scene:has(.town-service-dialogue:not([hidden])){min-height:420px;aspect-ratio:auto}}
+
+.guild-craft-preview{font-size:13px;line-height:1.4;border-block:1px solid #896b32;padding:6px 0;margin:6px 0}.craft-unavailable{color:#ffe0a8;margin-top:4px}
+@media(max-width:520px){.scene:has(.guild-craft-preview){min-height:480px;aspect-ratio:auto}}

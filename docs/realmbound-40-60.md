@@ -84,6 +84,7 @@ open a new reactive window (the existing Counterstrike/opening system), so Focus
   Shield Wall also reduces damage to the party). The single legendary questline stays reserved for later.
 - **Every band has a gear route for imperfect players:** quest rewards (uncommon), the band's dungeon (rare, Heroic
   tiers for more), the legendary elite (rare/epic reins as now), and from 55 crafted gear from the guild economy.
+  R5 now provides fixed item-level-55 rares for every class and slot through the Smith inside a Smithy, using guild ore/herbs plus a coin fee. Full costs and trade-offs: [Guild commissions](realmbound-crafted-gear.md).
 
 ## Pacing from 40 to 60 (to be measured, then tuned)
 

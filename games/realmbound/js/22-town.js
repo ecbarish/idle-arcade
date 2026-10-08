@@ -165,18 +165,19 @@ function talkTownService(n){
   if(RTALK||!H()||!TOWN.inside||inGuildHall()||aiOn())return false;
   const room=TOWN.inside,hero=H(),account=S,price=repairCost(),junk=hero.bags.filter(i=>i.junk).reduce((sum,i)=>sum+i.value,0);
   let settled=false;const serviceState={cancelled:false};
-  const inn=room==='inn',choices=inn?['Rest with your companions','Another time']:['Sell scraps · '+moneyTxt(junk),'Repair equipment · '+moneyTxt(price),'Sell scraps and repair','Another time'];
+  const inn=room==='inn',choices=inn?['Rest with your companions','Another time']:['Sell scraps · '+moneyTxt(junk),'Repair equipment · '+moneyTxt(price),'Sell scraps and repair','Another time','Commission guild gear'];
   SCN.play([[n.name,inn?'There is a warm bowl and a quiet bed for everyone who came with you. Will you stay a while?':'Set your pack down. I can buy the scraps, mend your equipment, or take care of both.']],choice=>{
     if(settled||serviceState.cancelled)return;settled=true;
     SCN.el.classList.remove('town-service-dialogue');
     if(S!==account||H()!==hero||TOWN.inside!==room||hero.mode==='auto')return;
+    if(!inn&&choice===4){openGuildGear(n);return;}
     if(inn&&choice===0){C.hp=ST.hpMax;if(CLASSES[hero.cls].res==='mana')C.res=ST.resMax;for(const p of C.party){p.dead=false;p.hp=compStats(p.n).hpMax;}line('You and your companions rest by the hearth.','l-heal');sfx('heal');}
     else if(!inn&&choice<3){if(choice===0||choice===2)sellJunk(false);if(choice===1||choice===2)repairAll(false);renderTab(true);sfx('coin');}
     save();
   },{choices});RTALK.townService=true;RTALK.serviceState=serviceState;C.lastInput=C.run;TOWN.auto=null;SCN.el.classList.add('town-service-dialogue');SCN.el.scrollIntoView({block:'center'});return true;
 }
 function clearTownService(){
-  if(RTALK&&RTALK.townService){RTALK.serviceState.cancelled=true;RTALK=null;SCN.el.hidden=true;SCN.el.classList.remove('town-service-dialogue');}
+  if(RTALK&&RTALK.townService){RTALK.serviceState.cancelled=true;removeGuildGearPreview();RTALK=null;SCN.el.hidden=true;SCN.el.classList.remove('town-service-dialogue');}
 }
 /* Auto: stroll to the smithy, then out of the gate */
 function townAutoTick() {
