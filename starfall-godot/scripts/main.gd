@@ -315,6 +315,7 @@ func send(m: Mover, to: Vector2i) -> bool:
 # ---------------------------------------------------------------- the loop
 func _process(dt: float) -> void:
 	t += dt
+	_music_tick(dt)
 	_day(dt)
 	_player(dt)
 	for h in heroes:
@@ -461,6 +462,10 @@ func use() -> bool:
 	return false
 
 func _unhandled_input(e: InputEvent) -> void:
+	if e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_M:
+		music_on = not music_on                  # M: music on or off
+		get_viewport().set_input_as_handled()
+		return
 	if not forge.is_empty():
 		if e.is_action_pressed("ui_accept") or (e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_E) or (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT):
 			strike()
@@ -1765,3 +1770,35 @@ func _doorstep(k: String) -> void:
 			draw_rect(Rect2(o + Vector2(1, 5), Vector2(14, 2)), Color("8a6a44"))
 			for i in 3:
 				draw_rect(Rect2(o + Vector2(5 + i * 2, 2), Vector2(1, 11)), [Color("c8c8c0"), Color("a07040"), Color("c8c8c0")][i])
+
+# ---------------------------------------------------------------- music (Ninja Adventure pack, CC0; assets/music)
+## A bright tune through the working day, a gentler one as evening comes (the last fifth of the day). M: off and on.
+const MUSIC_VOL := -14.0
+var music: AudioStreamPlayer
+var music_now := ""
+var music_on := true
+
+func _music_key() -> String:
+	return "evening" if day_t > DAY_SECONDS * 0.8 else "town"
+
+func _music_tick(dt: float) -> void:
+	if music == null:
+		music = AudioStreamPlayer.new()
+		music.volume_db = -60.0
+		add_child(music)
+	var want := _music_key() if music_on else ""
+	if want != music_now:
+		music.volume_db = move_toward(music.volume_db, -60.0, dt * 60.0)
+		if music.volume_db <= -59.0 or not music.playing:
+			music_now = want
+			var path := "res://assets/music/%s.ogg" % want
+			if want != "" and ResourceLoader.exists(path):
+				var s: AudioStream = load(path)
+				if s is AudioStreamOggVorbis:
+					(s as AudioStreamOggVorbis).loop = true
+				music.stream = s
+				music.play()
+			else:
+				music.stop()
+	elif music.playing:
+		music.volume_db = move_toward(music.volume_db, MUSIC_VOL, dt * 30.0)

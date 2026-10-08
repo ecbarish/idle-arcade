@@ -38,6 +38,7 @@ use it.
   from two herbs (you stir the pot), and set the price on the slate: Cheap, Fair or Dear. Adventurers buy a tonic
   before a risky job if the price seems fair to them, leave the coins in the jar, and come home half as hurt. Too
   dear, and they go without.
+- **Music:** a bright tune through the working day, a gentler one as evening comes. Press **M** to turn it off and on.
 - **The end of each day:** a short report at the foot of the screen (jobs done or gone badly, meals, coins), wages, and
   new requests on the board in the morning. No interruptions during the day.
 - **Saving:** the town saves itself every few seconds and when you close the window (user://starfall.json).

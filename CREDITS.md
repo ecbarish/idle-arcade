@@ -46,4 +46,4 @@ pack's licence file beside them. People and creatures stay our own. Evan, 2026-1
 placeholders to save time; the goal is the arcade's own original art and identity. **Music since 2026-10-08:** `wildbond-godot/assets/music/` holds nine of the pack's tracks, unchanged and renamed by
 place: *Lost Village* (faded.ogg), *Calm Village* (larkhaven.ogg), *Peaceful* (barn.ogg), *Clearing* (thornwood.ogg),
 *Sunny* (saltmarsh.ogg), *Adventure* (emberfall.ogg), *Ascension* (cloudglass.ogg), *Fight* (wild.ogg) and the second
-*Fight* (trainer.ogg). Starfall's Godot town uses the same pack's tiles (`starfall-godot/assets/env/`).
+*Fight* (trainer.ogg). Starfall's Godot town uses the same pack's tiles (`starfall-godot/assets/env/`) and two tracks in `starfall-godot/assets/music/`: *Good Time* (town.ogg) and *Chill* (evening.ogg).
