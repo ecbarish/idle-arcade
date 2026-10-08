@@ -125,6 +125,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-07 Codex: Evan confirmed Godot production research is running in Gemini and requested research for the other games. Added docs/research/first-play-research-pack.md with full Realmbound/Starfall/arcade prompts, parked-game briefs and a newcomer completion gate. Research only; no gameplay/Claude files changed; PR #44.
+
 - 2026-10-07 Codex: reviewed Gemini's creature research and the Godot trial at Evan's request; docs/research/codex-godot-assessment.md adds priorities and migration cautions, gemini-godot-production-prompt.md asks for art/animation and safe-port research. Installed Godot 4.7.2 verified; short headless startup passed. No trial/plan/gameplay changes; documents in PR #44.
 
 - 2026-10-07 Codex: at Evan's request, left Godot and Wildbond to Claude. Lane A8 Realmbound opening audit added to PR #44: four isolated browser diagnostics and an L4/V1 implementation brief in docs/realmbound-first-ten-minutes.md; corrected the guide's Focus fallback explanation. Documentation only; no gameplay, versions or merge.
