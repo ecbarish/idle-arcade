@@ -15,3 +15,6 @@ and three levels of creative freedom. Your own ideas and perspective are welcome
 your lane top to bottom without waiting to be prompted: claim, build, open a PR, then start the next task (at most two
 open PRs). Don't bump game versions or edit START-HERE's "Where we are"/"Up next"; Claude does that when merging.
 Branch prefixes: `codex/<topic>`, `grok/<topic>`, `<ai>/<topic>`.
+
+**The vision:** read `docs/VISION.md` (Evan, 2026-10-07) before proposing big features; its projects are V1-V8 in
+`docs/PROJECTS.md`. Automation now means earned quality of life and delegation to characters, not skipping play.
