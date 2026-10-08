@@ -519,6 +519,7 @@ func _process(dt: float) -> void:
 	_spotter_tick(dt)
 	_autosave(dt)
 	battle.heritage = heritage()
+	battle.taught = taught
 	_check_evolution()
 	_bubbles(dt)
 	for m in actors():
@@ -1642,8 +1643,22 @@ func _after_trainer(who: String, result: String) -> void:
 			badges.append(badge)
 			restore.append({ "where": map_name, "at": me.pos + Vector2(8, 8), "r": 0.0, "goal": 200.0 })
 			say("", "You earned the %s! The way onward opens, and colour runs out across %s." % [DATA.BADGES[badge].name, DATA.MAPS[map_name].name])
+			if TEACHERS.has(badge) and not TEACHERS[badge].order in taught:
+				var tch: Dictionary = TEACHERS[badge]
+				for l in tch.lines:
+					say(who, l)
+				taught.append(tch.order)
+				say("", "You learned an order: %s. You'll find it under Orders in battle." % tch.name)
 	else:
 		_after_wild("lost")
+
+## Orders people teach you (battle.gd ORDERS), after you've earned their badge. More teachers come with more areas.
+const TEACHERS := {
+	"ember": { "order": "steady", "name": "Steady", "lines": [
+		"Before you go. Your creatures fight hard, but they panic when the poison takes or their legs go slow. I've watched it.",
+		"Speak low. Slow. Let them hear you're not afraid, and they won't be either. Up here we call it Steady. Use it." ] },
+}
+var taught: Array = []                       # orders you've been taught (saved)
 
 ## Talking to someone beside you: a trainer you've beaten, a Warden, or a sign in front of you.
 func _talk_here() -> bool:
@@ -1723,7 +1738,7 @@ func save_game() -> void:
 	var d := { "v": 1, "saved": Time.get_datetime_string_from_system(), "look": look, "team": team, "ranch": ranch, "bag": bag,
 		"badges": badges, "seen": seen, "bonded": bonded, "items": got_items, "beaten": beaten,
 		"restore": restore.map(func(r): return { "where": r.where, "x": r.at.x, "y": r.at.y, "goal": r.goal }),
-		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned,
+		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned, "taught": taught,
 		"map": map_name, "x": me.tile.x, "y": me.tile.y, "partner": partner.id if partner else "" }
 	var f := FileAccess.open(save_path, FileAccess.WRITE)
 	if f:
@@ -1772,6 +1787,7 @@ func _load_game() -> bool:
 	explored_in = d.get("explored", {})
 	story_done = d.get("story", {})
 	story_retry = d.get("retry", {})
+	taught = Array(d.get("taught", []))
 	gear_owned = {}
 	for k in d.get("gear", {}):
 		gear_owned[k] = int(d.gear[k])
