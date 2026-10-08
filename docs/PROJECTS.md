@@ -46,7 +46,7 @@ and the arcade's homepage shows them off. Any assistant may push these forward w
 
 | RE-G | **Godot research assessment and animation/migration research prompt** | S | Design | — | ready for review: Codex, 2026-10-07, PR #44 (documentation only, requested by Evan) | Separate research files; no Godot or shared plan edits |
 
-| RE-O | **First-play research briefs for Realmbound, Starfall and the other games** | S | Design | — | ready for review: Codex, 2026-10-07, PR #44 (research only, requested by Evan) | docs/research/first-play-research-pack.md; parked games stay parked |
+| RE-O | **First-play research briefs for Realmbound, Starfall and the other games** | S | Design | — | Starfall report + remaining prompt cleanup claimed: Codex, 2026-10-08, codex/starfall-research-prompts (research only, requested by Evan) | docs/research/first-play-research-pack.md; parked games stay parked |
 
 ## Graphics: light, fog and atmosphere (S6)
 
