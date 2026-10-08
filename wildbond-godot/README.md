@@ -40,6 +40,11 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
 - Check it without a window: `Godot_v4.7.2-stable_win64_console.exe --headless --path wildbond-godot --quit-after 120`.
   See it: add `--write-movie <folder>/f.png --fixed-fps 10 --quit-after 200 -- --demo` (the demo plays the opening by
   itself) and look at the frames.
+- **Checks:** `Godot_v4.7.2-stable_win64_console.exe --headless --path wildbond-godot --script res://tests/run_tests.gd`
+  plays the opening by itself and must stay all-pass (38 checks on 2026-10-08).
+- **Builds for sharing:** `tools/godot-build.ps1` (web: play/wildbond/, Windows: export/Wildbond-trial-windows.zip),
+  once Godot's export templates are installed (Editor > Manage Export Templates > Download and Install).
+- Click or tap anywhere to walk there; tap a creature in the barn to walk up and meet it.
 - The `.godot/` folder is Godot's cache and isn't saved in git.
 
 ## Evan's verdict (2026-10-08)

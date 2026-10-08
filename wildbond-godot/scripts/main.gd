@@ -117,6 +117,8 @@ var fly := Vector2.ZERO                      # a butterfly (a moth in the barn) 
 var fly_scare := 0.0
 var bubbles: Array = []                      # Ripplet's bubbles: [{p: Vector2, t: float}]
 var bubble_cd := 0.0
+var walk_to: Array[Vector2i] = []           # click or tap to walk: the steps still to take
+var meet_after: Mover = null                 # walking up to a creature you tapped, to meet it on arrival
 var rng := RandomNumberGenerator.new()
 var register: Control
 var card: Control
@@ -351,7 +353,19 @@ func _process(dt: float) -> void:
 		elif Input.is_action_pressed("ui_left") or Input.is_physical_key_pressed(KEY_A): d = Vector2i.LEFT
 		elif Input.is_action_pressed("ui_right") or Input.is_physical_key_pressed(KEY_D): d = Vector2i.RIGHT
 		if d != Vector2i.ZERO:
+			walk_to.clear()                          # the keys always win over a tapped walk
+			meet_after = null
 			_step(d)
+		elif not walk_to.is_empty():
+			var nxt: Vector2i = walk_to.pop_front()
+			if (nxt - me.tile).length() == 1 and (walkable(nxt) or (partner and nxt == partner.tile)):
+				_step(nxt - me.tile)
+			else:
+				walk_to.clear()                      # something stepped in the way: stop here
+		elif meet_after:
+			if (me.tile - meet_after.tile).length() <= 1.01 and stage == "barn_choose":
+				_meet(meet_after)
+			meet_after = null
 	_check_doors()
 	for r in restore:
 		r.r = move_toward(r.r, r.goal, dt * 70.0)
@@ -395,10 +409,34 @@ func _unhandled_input(e: InputEvent) -> void:
 		return
 	if not lines.is_empty():
 		advance()
+	elif e is InputEventMouseButton:
+		_tap(get_global_mouse_position())
 	elif stage == "barn_choose" and not card.visible:
 		var s := _starter_beside_me()
 		if s:
 			_meet(s)
+
+## Click or tap: walk there (around anything in the way). Tap a creature in the barn to walk up and meet it.
+func _tap(at: Vector2) -> void:
+	if not (stage in ["to_barn", "barn_choose", "free"] and not card.visible and trans_t < 0.0):
+		return
+	var goal := Vector2i((at / TILE).floor())
+	meet_after = null
+	if stage == "barn_choose":
+		for s in starters:
+			if s.where == map_name and s.tile == goal:
+				if (me.tile - goal).length() <= 1.01:
+					_meet(s)
+					return
+				meet_after = s
+				goal = s.tile + Vector2i.DOWN          # stand in front of its stall
+	if goal == me.tile:
+		return
+	var r := route(me.tile, goal)
+	if r.is_empty() or not (walkable(goal) or (partner and goal == partner.tile) or goal == BARN_DOOR or goal == BARN_EXIT):
+		meet_after = null
+		return
+	walk_to = r
 
 func _starter_beside_me() -> Mover:
 	for s in starters:
