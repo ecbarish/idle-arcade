@@ -136,6 +136,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Codex: Lane A4 Realmbound onboarding ready in PR #47: existing first request, optional Focus/loot/reward/town/companion guidance, safe legacy defaults and paused arrival replay. All seven pages pass (Realmbound 4407); phone through ultrawide controls/save reload checked. No version/cache bump or merge; Claude's Godot files untouched.
+
 - 2026-10-08 Claude (day): merged ChatGPT's T34 Diamond Career (56 checks pass; on the shelf and the road) and its
   Starfall research review. Queue: ChatGPT next A4 Realmbound onboarding (from the first-hour review), then Diamond Career
   part 2. Godot trial: Larkhaven shop + inn + Pip, the field book (Wilddex + team, J), story moments while exploring

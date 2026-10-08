@@ -32,6 +32,7 @@ function buildSlots(){const b=bar();slotsKey=H().cls+H().lvl+JSON.stringify(H().
   $('#slots').innerHTML=b.map((a,i)=>`<button class="ab" data-act="press" data-arg="${i}" id="ab-${i}" aria-label="${a.name}"><span class="key">${i+1}</span><span class="ic">${a.name}</span><span class="cd" id="abc-${i}"></span><span class="cdn" id="abn-${i}"></span></button>`).join('');
   b.forEach((a,i)=>{$('#ab-'+i).dataset.tipAb=i;});}
 function updateWorld(){
+  renderRoadGuide();
   const h=H(),K=CLASSES[h.cls],z=ZONES[h.zone];
   $('#who').innerHTML=`<span><span class="crest" style="background:${FACTIONS[h.faction].col}"></span>${FACTIONS[h.faction].name}</span><span>${moneyStr(h.money)}</span>`;
   $('#zoneName').textContent=z.name;$('#zoneSub').textContent=`Level ${z.lv[0]}–${z.lv[1]} · ${hubName()}${z.faction?'':' · Contested territory'}`;$('#zoneLore').textContent=z.lore||'';

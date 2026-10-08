@@ -733,5 +733,49 @@ module.exports = function scenarios() {
         const old=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1'))).chars.find(c=>c.id===xpHero.id);
         check(old.xp===12345&&old.rested===6789&&old.lvl===52,'late-zone tuning does not rewrite earned XP, rested XP or saved levels');
       }finally{rb.S.guild=keepGuild;rb.C.party=keepParty;}
+
+      // L4/V1: both faction requests, every resource, optional guidance and legacy saves.
+      for(const faction of ['concord','wild'])for(const cls of Object.keys(CLASSES)){
+        const hero=rb.newHero('Roadtester',faction,FACTIONS[faction].races[0],cls);
+        rb.S.chars=[hero];rb.S.cur=hero.id;rb.boot();const q=QUESTS[hero.zone][0];rb.accept(q.id);
+        beginArrival(false);
+        check(arrivalPaused()&&RTALK.lines.some(l=>l[0]===giver(q)&&l[1]===q.text),faction+'/'+cls+': existing giver speaks the real first request');
+        const before={run:rb.C.run,hp:rb.C.hp,xp:hero.xp,money:hero.money,play:hero.stats.play};rb.step(30);
+        check(rb.C.run===before.run&&rb.C.hp===before.hp&&hero.xp===before.xp&&hero.money===before.money&&hero.stats.play===before.play,faction+'/'+cls+': no combat or play time behind arrival');
+        SCN.skip();check(!arrivalPaused()&&!RTALK&&hero.onboarding.arrival,faction+'/'+cls+': Skip resumes the world');
+        check(hero.quests.active.filter(id=>id===q.id).length===1,faction+'/'+cls+': first quest accepted exactly once');
+        rb.boot();check(!RTALK,faction+'/'+cls+': completed arrival does not replay on load');
+        rb.C.phase='fight';rb.spawn();rb.C.gcd=0;rb.C.cast=null;rb.C.res=CLASSES[cls].res==='rage'?0:ST.resMax;
+        const action=roadAction(),hint=roadHint();
+        check(hint&&hint.id==='fight'&&hint.text.includes('15 seconds')&&hint.text.includes('Basic attacks'),faction+'/'+cls+': existing Focus and fallback explained');
+        const available=bar().find(a=>canUse(a,true));
+        check(available?action.includes(available.name)&&knows(available.id):action.includes('Rage'),faction+'/'+cls+': advice follows usable action or rage limitation');
+        const run=rb.C.run;rb.step(.1);check(rb.C.run>run,faction+'/'+cls+': combat resumes after Skip');
+        hero.stats.manual=1;rb.C.phase='loot';rb.C.mob=null;rb.C.loot={money:5,items:[genItem(1,1,'hands',{cls})]};
+        check(roadHint().id==='loot'&&roadHint().text.includes('60 manual loots'),faction+'/'+cls+': corpse hint respects earned AutoLoot');
+        const money=hero.money;lootAll();check(hero.money===money+5&&hero.stats.loots===1&&roadHint().id==='bags',faction+'/'+cls+': manual loot connects to Bags without auto equip');
+        check(!hero.addons.unl.autoloot&&!hero.addons.unl.questhelper,faction+'/'+cls+': guidance grants no addons');
+        hero.quests.prog[q.id]=q.n;check(roadHint().id==='reward',faction+'/'+cls+': objective readiness points to reward choice');
+        hero.bags=Array.from({length:16},()=>({id:uid(),junk:true,name:'Test scrap',value:1}));const xp=hero.xp;
+        rb.turnIn(q.id,0,false);check(!hero.quests.done[q.id]&&hero.xp===xp&&roadHint().id==='reward',faction+'/'+cls+': full bag keeps the reward available and explains recovery');
+        hero.bags=[];rb.turnIn(q.id,0,false);check(hero.quests.done[q.id]&&roadHint().id==='home',faction+'/'+cls+': real turn-in leads to optional town visit');
+        hero.onboarding.hints.home=true;rb.C.phase='intown';
+        check(roadHint().id==='town'&&roadHint().text.includes('Repairs are optional'),faction+'/'+cls+': no paid service blocks guidance');
+        hero.money=0;rb.C.hp=1;townDoor({kind:'inn'});check(rb.C.hp===ST.hpMax&&hero.money===0,faction+'/'+cls+': existing free inn rest works without money');
+        hero.stats.equips=1;rb.C.phase='seek';const n=hero.npcs[0];rb.C.enc={id:n.id,t:25,kind:'resting',waved:false};
+        const party=hero.party.slice(),aff=n.aff;check(roadHint().id==='companion'&&roadHint().title.includes(n.name)&&roadHint().text.includes(ROLE_NAME[roleOf(n)].toLowerCase()),faction+'/'+cls+': introduces an actual encountered companion and role');
+        renderRoadGuide();check(n.aff===aff&&hero.party.join(',')===party.join(','),faction+'/'+cls+': companion introduction never auto recruits or grants affinity');
+        hero.onboarding.hints.companion=true;check(!roadHint(),faction+'/'+cls+': dismissed companion guidance stays dismissed');
+        delete hero.onboarding;const legacy=rb.migrate(JSON.parse(JSON.stringify(rb.S))).chars[0];
+        check(legacy.onboarding===null&&legacy.money===hero.money&&legacy.quests.done[q.id],faction+'/'+cls+': legacy default preserves money and quests');
+        rb.S.chars=[legacy];rb.S.cur=legacy.id;rb.boot();check(!RTALK&&!roadHint(),faction+'/'+cls+': legacy hero is not unexpectedly guided');
+        const saved=JSON.stringify(legacy);beginArrival(true);check(arrivalPaused(),faction+'/'+cls+': deliberate replay pauses its scene');SCN.skip();
+        check(JSON.stringify(legacy)===saved&&!arrivalPaused(),faction+'/'+cls+': replay changes no hero progress or mode');
+      }
+      const interrupted=rb.newHero('Interrupted','concord','human','mage');rb.S.chars=[interrupted];rb.S.cur=interrupted.id;rb.boot();rb.accept('t1');beginArrival(false);clearArrival();
+      check(!RTALK&&!arrivalPaused()&&!interrupted.onboarding.arrival,'interrupted arrival clears scene and safely stays pending');rb.boot();check(arrivalPaused(),'pending arrival resumes after reloading');SCN.skip();
+      const historical=JSON.parse(JSON.stringify(interrupted));delete historical.onboarding;
+      check(rb.migrate({hero:historical}).chars[0].onboarding===null,'single-hero historical save defaults to no onboarding');
+      interrupted.onboarding={arrival:true,hints:null};check(!roadState(interrupted)&&!roadHint(),'malformed optional guidance is ignored safely');
       rb.save();return checks;
     };
