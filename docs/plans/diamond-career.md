@@ -1,6 +1,9 @@
 # Diamond Career: first sports module
 
 **Unparked 2026-10-08:** batter first, timing and tactical batting both (switchable); browser first. ChatGPT builds
+**No physics engine (Evan's worry, 2026-10-08):** like Retro Bowl, New Star Soccer and Baseball Superstars, outcomes
+come from a statistics model (batter vs pitcher, weighted rolls); the player acts in short readable moments (timing or
+a tactical read); animation only shows the result. The rest of each game simulates. This is T34's approach.
 part 1 (docs/ROADMAP.md T34).
 
 Status: planned concept only; no playable game directory. Implementation remains parked until explicitly authorized. See [the expanded sports-career plan](sports-careers.md) for the owner's multi-sport, player-to-management and salary/lifestyle direction. Baseball is the first module, not the limit of the project. [Research](RESEARCH.md#diamond-career-understandable-advancement-short-playable-moments); [portfolio plan](README.md).

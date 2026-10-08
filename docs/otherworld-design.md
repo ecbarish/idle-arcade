@@ -6,6 +6,19 @@ desire to engage." Rebirth happens both by choice and on death. Built in the bro
 Background: docs/plans/otherworld.md (stages O0-O5) and its research. Principles: docs/wildbond-plan.md (games feel
 like games; they apply to every game) and docs/VISION.md §9 (choices that matter).
 
+## Not predetermined (Evan, 2026-10-08): systemic first, an AI storyteller later
+"I worry an anime game is too hard to tackle because it would more benefit from an AI token interaction where things
+can change rather than be scripted or planned ... I do not want things to be pre-determined by any means."
+Direction (Claude's recommendation, pending Evan's nod):
+1. **A systemic world.** Like Dwarf Fortress, RimWorld, Crusader Kings and Wildermyth: people with traits, goals,
+   relationships and memories; factions, places and needs; events that grow out of that state (a rival remembers, a
+   saved town prospers, a companion with a grudge may turn). Gifts change rules, not just unlock scenes. The
+   authored Asterhold story becomes the seed and the tutorial life, not the whole game.
+2. **An AI storyteller on top, as an experiment.** A language model voices characters and narration inside the
+   rules (the rules decide what is true; the model only describes and converses), with authored lines as the
+   fallback. Try a free in-browser model first (runs on the player's computer: free, private, a large download,
+   weaker); a paid API needs a server or the player's own key and must respect the ~US$200 project budget.
+
 ## The experience
 Your old life ends. You wake in **the Between**, a quiet place outside every world, where a keeper of souls (the
 **Archivist**, warm, a little tired, very curious about you) offers you a new life. You choose **which world** to be
