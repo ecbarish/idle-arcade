@@ -467,10 +467,11 @@ func _spot(u: Dictionary) -> Vector2:
 		return Vector2(286, 92)
 	return [Vector2(300, 96), Vector2(246, 86), Vector2(348, 84)][i]
 
-## Emberfall's skyline: the area's warm sky (from the game data), two ranges of ridges, and steam from a spring
-## drifting up behind the far one.
+## A mountain skyline from the area's colours in the game data: two ranges of ridges; steam from a spring in Emberfall,
+## sharper peaks and banks of cloud up in Cloudglass.
+const MOUNTAIN_AREAS := { "emberfall": Color(0.65, 0.54, 0.41, 0.35), "cloudglass": Color(0.62, 0.68, 0.72, 0.38) }
 func _draw_highlands() -> void:
-	var b: Dictionary = R.DATA.get("BIOMES", {}).get("emberfall", {})
+	var b: Dictionary = R.DATA.get("BIOMES", {}).get(area, {})
 	var sky: Array = b.get("sky", ["#a6a6bf", "#efd0aa"])
 	var top := Color(sky[0])
 	var low := Color(sky[1])
@@ -482,8 +483,13 @@ func _draw_highlands() -> void:
 		var base := 52.0 if layer == 0 else 66.0
 		for x in range(0, 384, 2):
 			var h := 14.0 + sin(x * 0.021 + layer * 2.0) * 9.0 + sin(x * 0.067 + layer) * 4.0 + absf(sin(x * 0.013 + layer * 4.0)) * 10.0
+			if area == "cloudglass":
+				h += absf(fmod(x * 0.05 + layer * 3.0, 2.0) - 1.0) * 14.0           # the pass: sharper, higher peaks
 			draw_rect(Rect2(x, base - h, 2, h + 2), col)
-		if layer == 0:
+		if layer == 0 and area == "cloudglass":
+			for k in 4:                                                           # snow on the far peaks, and a drifting bank of cloud
+				draw_circle(Vector2(fmod(k * 110.0 + t * 6.0, 440.0) - 30.0, 30.0 + k % 2 * 10.0), 16.0, Color(0.95, 0.97, 0.99, 0.45))
+		if layer == 0 and area == "emberfall":
 			for k in 3:                                                           # steam behind the near ridge
 				var ph := fmod(t * 0.2 + k / 3.0, 1.0)
 				draw_circle(Vector2(232 + sin(t + k) * 4.0 + ph * 10.0, 50 - ph * 30.0), 3.0 + ph * 7.0, Color(1, 1, 1, 0.35 * (1.0 - ph)))
@@ -492,7 +498,7 @@ func _draw() -> void:
 	if state == "off":
 		return
 	# the field: sky, a line of trees, grass (Ninja Adventure tiles), and the two platforms
-	if area == "emberfall":
+	if MOUNTAIN_AREAS.has(area):
 		_draw_highlands()
 	else:
 		draw_rect(Rect2(0, 0, 384, 70), Color("a8d0ea"))
@@ -502,8 +508,8 @@ func _draw() -> void:
 	for y in range(64, 216, 16):
 		for x in range(0, 384, 16):
 			draw_texture_rect_region(floor_tex, Rect2(x, y, 16, 16), Rect2(16 * (11 + (x * 7 + y * 3) % 5), 192, 16, 16))
-	if area == "emberfall":
-		draw_rect(Rect2(0, 64, 384, 152), Color(0.65, 0.54, 0.41, 0.35))           # dry, warm highland turf
+	if MOUNTAIN_AREAS.has(area):
+		draw_rect(Rect2(0, 64, 384, 152), MOUNTAIN_AREAS[area])                    # the area's mountain turf
 	for side in ["f", "a"]:
 		var c := Vector2(286, 94) if side == "f" else Vector2(100, 160)
 		var rx := 50.0 if side == "f" else 62.0

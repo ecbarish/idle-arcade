@@ -354,6 +354,28 @@ func _run() -> void:
 		check(main._beat_here("emberfall").get("id", "") == "rival4", "Wren waits on Warmstep Rise after a few explorations")
 		main.explored_in["emberfall"] = 0
 		check(not main._gate_open("emberfall"), "the high path north into the cloud stays roped until Toren is beaten")
+		# ---- up the high path into Cloudglass Pass with the Ember Badge
+		main.npc_info.orsk.beaten = true                # (walk past the ridge trainers for this check)
+		main.npc_info.sela.beaten = true
+		main.npc_info.toren.beaten = true
+		main.badges.append("ember")
+		check(walk_to(Vector2i(13, 8)) and walk_to(Vector2i(13, 1)), "you can climb to the foot of the high path")
+		main._step(Vector2i.UP)
+		tick(1.0)
+		check(main.map_name == "cloudglass" and main.me.tile == Vector2i(13, 12), "with the Ember Badge: up into Cloudglass Pass, arriving where the map says")
+		check(main.level_cap() == 45 and main.battle.area == "cloudglass" and main.CLIFF == main.MOUNTAINS.cloudglass.rock, "three badges: cap 45; the pass has its own cold stone and its own battle skyline")
+		check(main.npcs.any(func(n): return n.id == "vessa" and n.where == "cloudglass" and main.npc_info.vessa.warden), "Warden Vessa keeps the shelter at the top")
+		check(main.npcs.any(func(n): return n.id == "ilka") and main.npcs.any(func(n): return n.id == "teodor"), "Ilka the rope-mender and Teodor on the trail")
+		main.explored_in["cloudglass"] = 6
+		check(main._beat_here("cloudglass").get("id", "") == "rival5", "Wren is somewhere in the cloud after a few explorations")
+		main.explored_in["cloudglass"] = 0
+		main._step(Vector2i.DOWN)
+		tick(1.0)
+		check(main.map_name == "emberfall" and main.me.tile == Vector2i(13, 1) and main.CLIFF == main.MOUNTAINS.emberfall.rock, "and back down to the warm stone of Emberfall")
+		talk_through()
+		check(walk_to(Vector2i(13, 8)) and walk_to(Vector2i(1, 8)), "back along the ridge path to the coast road")
+		main.badges.erase("ember")
+		main.npc_info.toren.beaten = false
 		main._step(Vector2i.LEFT)
 		tick(1.0)
 		check(main.map_name == "saltmarsh" and main.me.tile == Vector2i(28, 8), "and back down to the coast")

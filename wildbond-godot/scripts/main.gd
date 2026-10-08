@@ -112,7 +112,7 @@ var npc_info := {}                           # id -> { data from the map, beaten
 var badges: Array = []
 var spotter: Mover = null                    # a trainer who has seen you and is walking over
 var spot_t := 0.0
-const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall"]    # the maps the Godot version has so far
+const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass"]    # the maps the Godot version has so far
 var starters: Array[Mover] = []
 var partner: Mover = null
 var map_name := "larkhaven"
@@ -235,6 +235,9 @@ func _set_map(n: String) -> void:
 	place.modulate.a = 1.0
 	if battle:
 		battle.area = "" if n == "barn" else str(DATA.MAPS[n].get("biome", ""))   # battles take place in the area you're in
+	if MOUNTAINS.has(n):
+		CLIFF = MOUNTAINS[n].rock
+		TURF = MOUNTAINS[n].turf
 
 # ---------------------------------------------------------------- dialogue
 func say(who: String, text: String) -> void:
@@ -838,6 +841,8 @@ func _draw() -> void:
 	if map_name == "emberfall":
 		_draw_steam()
 		_draw_embers()
+	if map_name == "cloudglass":
+		_draw_clouds()
 	if spotter and spot_t < 0.9:
 		# the "!" over a trainer who has just seen you
 		var ex := spotter.pos + Vector2(4, -18 - minf(spot_t * 20.0, 4.0))
@@ -1133,8 +1138,8 @@ func _draw_ground(x: int, y: int, ch: String) -> void:
 	var o := Vector2(x, y) * TILE
 	var n := (x * 7 + y * 13) % 9
 	_tex(FLOOR, Vector2i(11 + (n if n < 5 else 0), 12), Vector2i.ONE, o)          # grass, with a few tufts
-	if map_name == "emberfall":
-		draw_rect(Rect2(o, Vector2(16, 16)), Color(0.65, 0.54, 0.41, 0.32))       # highland turf, dry and warm (the area's ground colour)
+	if MOUNTAINS.has(map_name):
+		draw_rect(Rect2(o, Vector2(16, 16)), TURF)                                # mountain turf in the area's own colour
 		if ch == "R":
 			if _mountain().has(Vector2i(x, y)):
 				_draw_cliff(x, y, o, n)
@@ -1387,8 +1392,10 @@ func _skip_opening() -> void:
 		_place_ranch()
 	var st: Array = DATA.MAPS[start].get("start", [16, 12, "up"] if start == "larkhaven" else [13, 14, "up"])
 	if start != "thornwood":
-		badges = ["thorn"] if start == "saltmarsh" else ["thorn", "tide"]
-		team[0].lvl = 14 if start == "saltmarsh" else 24
+		var order := ["thornwood", "saltmarsh", "emberfall", "cloudglass"]
+		var at := maxi(1, order.find(start))
+		badges = ["thorn", "tide", "ember"].slice(0, at)
+		team[0].lvl = [5, 14, 24, 34][at]
 		team[0].hp = R.stats(team[0]).hp
 	_go(start, Vector2i(int(st[0]), int(st[1])), DIRS.get(st[2], Vector2i.UP))
 	trans_t = 0.29
@@ -1760,7 +1767,13 @@ func _draw_sand(x: int, y: int, o: Vector2, n: int) -> void:
 
 ## Emberfall's mountain: rock that fills the edge of the map, with layered strata, a sunlit rim where the rock meets
 ## open ground above it, and a dark cliff face where it drops to the ground below.
-const CLIFF := Color("8a7464")
+## The mountain areas: their rock and the tint on their turf (warm in Emberfall, cold grey-blue up in Cloudglass).
+const MOUNTAINS := {
+	"emberfall": { "rock": Color("8a7464"), "turf": Color(0.65, 0.54, 0.41, 0.32) },
+	"cloudglass": { "rock": Color("8d97a3"), "turf": Color(0.62, 0.68, 0.72, 0.34) },
+}
+var CLIFF := Color("8a7464")
+var TURF := Color(0.65, 0.54, 0.41, 0.32)
 var _mountains := {}                         # map -> the rock tiles joined to the map's edge (the rest are boulders)
 func _mountain() -> Dictionary:
 	if _mountains.has(map_name):
@@ -1825,7 +1838,7 @@ func _draw_cliff(x: int, y: int, o: Vector2, n: int) -> void:
 func _turf(o: Vector2, r: Rect2, n: int) -> void:
 	var cell := Vector2(11 + (n if n < 5 else 0), 12) * 16.0
 	draw_texture_rect_region(FLOOR, Rect2(o + r.position, r.size), Rect2(cell + r.position, r.size))
-	draw_rect(Rect2(o + r.position, r.size), Color(0.65, 0.54, 0.41, 0.32))
+	draw_rect(Rect2(o + r.position, r.size), TURF)
 
 ## A hot spring: a pool of warm mineral water (amber, like the browser's) in a rim of dark stone, with bubbles that rise
 ## and pop. The steam is drawn over everything (_draw_steam).
@@ -1853,6 +1866,18 @@ func _draw_steam() -> void:
 				var ph := fmod(t * 0.22 + x * 0.37 + y * 0.61 + k / 3.0, 1.0)
 				var p := Vector2(x * TILE + 8 + sin(t * 0.9 + k * 2.0 + x) * 3.0 + ph * 6.0, y * TILE + 8 - ph * 34.0)
 				draw_circle(p, 2.0 + ph * 5.0, Color(1, 1, 1, 0.3 * (1.0 - ph) * minf(1.0, ph * 5.0)))
+
+## Cloudglass: banks of cloud drift across the pass, each a cluster of soft puffs. Now and then the cloud comes
+## down thicker ("If the cloud comes down, stop and shout"), then lifts again.
+func _draw_clouds() -> void:
+	var w := float(cur_map()[0].length() * TILE)
+	var thick := 0.5 + 0.5 * sin(t * 0.07)                     # the cloud comes down, and lifts, over a minute or so
+	for i in 7:
+		var y := 20.0 + fmod(i * 61.0, 180.0)
+		var x := fmod(i * 137.0 + t * (4.0 + i % 3), w + 120.0) - 60.0
+		for k in 5:
+			var off := Vector2(k * 11.0 - 22.0, sin(i + k) * 4.0)
+			draw_circle(Vector2(x, y) + off, 9.0 + (k % 3) * 4.0, Color(0.94, 0.96, 0.98, (0.12 + 0.16 * thick) * (1.0 - abs(k - 2) * 0.15)))
 
 func _draw_embers() -> void:
 	# a few sparks from the vents drift up across the highlands, flickering as they cool

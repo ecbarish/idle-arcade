@@ -48,7 +48,11 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   cliff faces (rock out in the meadow stands as boulders), warm dry turf, amber hot springs that bubble and steam, and
   sparks drifting up from the vents. Orsk the ridge hiker, Sela the spring keeper, and Warden Toren above the springs
   (the Ember Badge); Wren at Warmstep Rise and Hearthcrown, the guardian stag, as you explore. Battles here have the
-  highland sky and ridges. The high path north to Cloudglass Pass is next to build.
+  highland sky and ridges.
+- **Cloudglass Pass:** up the high path with the Ember Badge. Cold grey-blue stone, boulders on the slopes, and banks of
+  cloud that drift across the pass and now and then come down thick before lifting. Ilka the rope-mender, Teodor on the
+  trail, and Warden Vessa in her shelter at the top (the Beacon Badge); Wren somewhere in the cloud and the lamp-bird as
+  you explore. Battles have sharp peaks and drifting cloud. Stillreed Basin, beyond, is next to build.
 - **Maren's ranch, as a place:** creatures you aren't carrying live where you can see them: up to four in the paddock
   (wandering, sniffing, sitting, watching you come over), the rest on the barn floor. Walk up to one (or tap it) to see
   its page (level, trust, moves, strengths) and **Take along**, or with a full team **Swap in** and choose who rests
@@ -77,7 +81,7 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   See it: add `--write-movie <folder>/f.png --fixed-fps 10 --quit-after 200 -- --demo` (the demo plays the opening by
   itself) and look at the frames.
 - **Checks:** `Godot_v4.7.2-stable_win64_console.exe --headless --path wildbond-godot --script res://tests/run_tests.gd`
-  plays the opening, the first battle, Thornwood, a catch, the Warden and a save by itself; must stay all-pass (143 checks on 2026-10-08). `tests/battle_odds.gd` measures how winnable a battle is; run the game with `-- --skip-opening` to start in Thornwood (add `--at=saltmarsh` for the coast, `--at=emberfall` for the highlands, `--at=larkhaven --ranch` to see creatures at the ranch).
+  plays the opening, the first battle, Thornwood, a catch, the Warden and a save by itself; must stay all-pass (151 checks on 2026-10-08). `tests/battle_odds.gd` measures how winnable a battle is; run the game with `-- --skip-opening` to start in Thornwood (add `--at=saltmarsh` for the coast, `--at=emberfall` for the highlands, `--at=cloudglass` for the pass, `--at=larkhaven --ranch` to see creatures at the ranch).
 - **Builds for sharing:** `tools/godot-build.ps1` (web: play/wildbond/, Windows: export/Wildbond-trial-windows.zip),
   once Godot's export templates are installed (Editor > Manage Export Templates > Download and Install).
 - Click or tap anywhere to walk there; tap a creature in the barn to walk up and meet it.
