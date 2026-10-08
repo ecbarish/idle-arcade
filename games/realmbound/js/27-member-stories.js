@@ -128,7 +128,7 @@ function playMemberStory(key, replay) {
 function openMemberStoryBook() {
   if (!H() || !guildOn() || RTALK) return false;
   C.lastInput = C.run; TOWN.auto = null;
-  openModal('memberstories', '<h3>The hearth book · ' + G().name + '</h3>' + memberStoriesHTML()); return true;
+  openModal('memberstories', '<h3>The hearth book · ' + G().name + '</h3>' + memberStoriesHTML() + '<div class="mfoot"><button class="btn alt" data-act="close">Back to the world</button></div>'); return true;
 }
 function clearMemberStory(key) {
   if (RTALK && RTALK.memberStory && (key === undefined || RTALK.memberStoryKey === key)) { RTALK = null; SCN.el.hidden = true; MEMBER_STORY_FACE = null; SCN.el.classList.remove('member-story-dialogue'); }
