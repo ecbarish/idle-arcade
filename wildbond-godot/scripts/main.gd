@@ -955,6 +955,38 @@ func _draw_painted() -> void:
 	list.sort_custom(func(a, b): return a.pos.y < b.pos.y)
 	for m in list:
 		_draw_actor(colour_layer, m, 0)
+	# true depth: anyone standing in front of you (lower on the screen, overlapping) is drawn again on top, faded just
+	# as the world is faded where they stand, so the colour layer never puts you in front of them
+	for o in actors():
+		if _is_painted(o):
+			continue
+		for m in list:
+			if o.pos.y > m.pos.y + 0.5 and absf(o.pos.x - m.pos.x) < 15.0 and o.pos.y - m.pos.y < 26.0:
+				_draw_actor(colour_layer, o, 0, 1.0 - _restored_at(o.pos + Vector2(8, 8)))
+				break
+
+## How much colour has come back at a point in the world (0 faded, 1 restored), as the fade shader computes it.
+func _restored_at(p: Vector2) -> float:
+	var best := 0.0
+	for r in restore:
+		if r.where == map_name and float(r.r) > 0.0:
+			best = maxf(best, 1.0 - smoothstep(float(r.r) * 0.8, float(r.r), p.distance_to(r.at)))
+	return best
+
+## A look with every colour washed out the way the fade shader does it (amount 0 = untouched, 1 = fully faded).
+func _faded_look(look: Dictionary, amount: float) -> Dictionary:
+	if amount <= 0.0:
+		return look
+	var out := {}
+	var fade: float = 0.78 * amount
+	for k in look:
+		var v = look[k]
+		if v is Color:
+			var g: float = v.r * 0.299 + v.g * 0.587 + v.b * 0.114
+			out[k] = Color(lerpf(v.r, g * 1.03, fade), lerpf(v.g, g, fade), lerpf(v.b, g * 0.92, fade), v.a)
+		else:
+			out[k] = v
+	return out
 	if paint_t >= 0.0 and paint_t < 1.4:
 		# the ink sparkles outward as you're painted in
 		var cols := [my_look.shirt, my_look.hair, my_look.legs, Color("f2d24a")]
@@ -965,7 +997,7 @@ func _draw_painted() -> void:
 			c.a = 1.0 - paint_t / 1.4
 			colour_layer.draw_rect(Rect2(me.pos + Vector2(8, 6) + Vector2(cos(a), sin(a)) * d, Vector2(1, 1)), c)
 
-func _draw_actor(ci: CanvasItem, m: Mover, i: int) -> void:
+func _draw_actor(ci: CanvasItem, m: Mover, i: int, fade_amt := 0.0) -> void:
 	var walking := not m.path.is_empty()
 	if m.is_creature():
 		var happy: bool = m.act == "curious" or (m == partner and stage == "bonded")
@@ -978,13 +1010,13 @@ func _draw_actor(ci: CanvasItem, m: Mover, i: int) -> void:
 			"bird": m.look.kind == "boar" and not walking and fmod(t + 3.0, 16.0) < 10.0,
 		}
 		var wiggle := (1.0 if int(t * 16.0) % 2 == 0 else -1.0) if m.act == "pounce" and m.act_t > 0.4 and m.act_t < 0.8 else 0.0
-		Figures.creature(ci, m.pos + Vector2(-1 + wiggle, 4 + m.hop), m.right, pose, m.look)
+		Figures.creature(ci, m.pos + Vector2(-1 + wiggle, 4 + m.hop), m.right, pose, _faded_look(m.look, fade_amt))
 		return
 	var face := m.face
 	if not walking and face == Vector2i.DOWN and fmod(t + i, 6.0) > 5.2:
 		face = Vector2i.LEFT if int(t + i) % 2 == 0 else Vector2i.RIGHT   # a glance around while standing
 	var look: Dictionary = my_look if m == me else (LOOKS[m.id] if LOOKS.has(m.id) else _cast_look(m.id))
-	Figures.person(ci, m.pos + Vector2(2, -5), face, walking, int(m.step_t * 8.0) % 4, fmod(t + i * 1.7, 3.3) < 0.12, look)
+	Figures.person(ci, m.pos + Vector2(2, -5), face, walking, int(m.step_t * 8.0) % 4, fmod(t + i * 1.7, 3.3) < 0.12, _faded_look(look, fade_amt))
 
 # ---------------------------------------------------------------- inside the barn (drawn in code: warm wood and straw)
 const WOOD := Color("7a5236")
@@ -1498,6 +1530,12 @@ func _skip_opening() -> void:
 		team[0].hp = R.stats(team[0]).hp
 	if "--photo" in OS.get_cmdline_user_args():      # pictures of the world: nobody asks to evolve mid-shot
 		for c in team: c["hold"] = 999
+	if "--depth" in OS.get_cmdline_user_args():       # a picture of depth: Maren stands just in front of you (-- --skip-opening --at=larkhaven --depth)
+		(func():
+			maren.where = map_name
+			maren.tile = me.tile + Vector2i.DOWN
+			maren.pos = Vector2(maren.tile) * TILE
+			maren.path.clear()).call_deferred()
 	if "--colour" in OS.get_cmdline_user_args():     # the area with its colour fully back (for pictures of the restored valley)
 		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "barn"]:
 			restore.append({ "where": m, "at": Vector2(192, 108), "r": 5000.0, "goal": 5000.0 })

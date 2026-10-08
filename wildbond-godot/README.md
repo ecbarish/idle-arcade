@@ -77,6 +77,7 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   and on.
 - **People stand beside you, not on you:** Maren comes to your side to talk, and trainers who walk up from above or
   below stop a step further off, so tall figures never cover each other.
+  Whoever stands in front of you is drawn in front of you, even though you are in colour and they are still faded.
 - **Heritage** (docs/proposals/wildbond-heritage.md): the register's ninth line is your **Family**: Larkhaven farmfolk
   (field and forest creatures trust you a little sooner), Saltmarsh coastfolk (your lead creature's trust grows half
   again as fast), Emberfall highlanders (trust grows faster in battles against tamers) or Farwatch wanderers (you find

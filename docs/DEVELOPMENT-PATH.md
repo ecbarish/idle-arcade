@@ -66,7 +66,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 
 **WB-M2: who you are and where you stand.**
 - [x] WB2.1 [Claude] Tamer abilities with heritages (WG1): done 2026-10-08 (Orders menu: Rally, a family order, Toren's Steady).
-- [ ] WB2.2 [Claude] Depth step 1 (WG6): ground heights, object footprints and heights, the colour layer drawn in true
+- [ ] WB2.2 [Claude] Depth step 1 (WG6): ground heights, object footprints and heights (part 1 done 2026-10-08: the colour layer drawn in true depth order, people in front of you faded as the world is); the colour layer drawn in true
   depth order.
 - [ ] WB2.3 [Claude] Variety pass (WG7): animated water and waterfalls, element effects in battle, area sounds, edge
   tiles.
