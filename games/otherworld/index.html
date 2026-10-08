@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Otherworld</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="stage" id="stage" aria-label="Otherworld">
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <header class="hud">
+    <div class="hud-left"><a class="home" href="../../index.html">← Arcade</a><span id="where" class="where">The Between</span></div>
+    <div class="hud-right" id="hudRight"><button id="statusBtn" class="hbtn" hidden>Status</button><span class="version-label">v0.1.0</span>
+      <div class="feedback-container"><button class="hbtn" aria-haspopup="true" aria-expanded="false">Feedback</button></div></div>
+  </header>
+  <section id="choose" class="choose" hidden></section>
+  <section id="status" class="status" hidden role="dialog" aria-label="Status window"></section>
+</main>
+<script src="../../shared/engine.js"></script>
+<script src="../../shared/settings.js"></script>
+<script src="../../shared/dialogue.js"></script>
+<script src="../../shared/ambience.js"></script>
+<script src="../../shared/feedback.js"></script>
+<script src="js/00-data.js"></script>
+<script src="js/01-game.js"></script>
+<script src="js/02-scene.js"></script>
+<script src="js/99-boot.js"></script>
+</body>
+</html>

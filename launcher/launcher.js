@@ -146,10 +146,20 @@
   /* Evan liked a character he controls and a world that can grow: the living world as a road you walk along.
      Each game is a stop; games still in design are building sites with a "coming soon" sign. A new game is one more
      stop at the end of the road. */
-  const DRAW = { primordial: drawTidePool, wildbond: drawLarkhaven, realmbound: drawThornvale, 'starfall-guild': drawGate };
-  const STOPS = PLACES.map(pl => Object.assign({}, pl)).concat(A.GAMES.filter(g => !g.href).map(g => ({ id: g.id, name: g.title, col: '#d8d0c0', site: true })));
+  const DRAW = { primordial: drawTidePool, wildbond: drawLarkhaven, realmbound: drawThornvale, 'starfall-guild': drawGate, otherworld: drawPortal };
+  // every game is a stop: the four places, then later games (a portal or a ballpark once playable, a building site until then)
+  const STOPS = PLACES.map(pl => Object.assign({}, pl)).concat(A.GAMES.filter(g => !PLACES.some(p => p.id === g.id)).map(g => ({ id: g.id, name: g.title, col: g.href ? '#bfe9ff' : '#d8d0c0', site: !(g.href && DRAW[g.id]) })));
   const ROAD = { x: 0, target: null, go: null, dir: 1, keys: {}, cam: 0 };
   const spacing = () => Math.max(W * .42, H * 1.1), stopX = i => spacing() * (i + .7), roadEnd = () => stopX(STOPS.length - 1) + spacing() * .7;
+  function drawPortal(pl, gy, p, t, st, lights) { // Otherworld: a standing stone arch, a summoning circle turning inside it
+    const x = pl.x * W, stone = st.day ? '#9a958a' : '#46443e';
+    R(x - p * 12, gy - p * 30, p * 4, p * 30, stone); R(x + p * 8, gy - p * 30, p * 4, p * 30, stone); R(x - p * 13, gy - p * 33, p * 26, p * 4, st.day ? '#8a857a' : '#3a3832');
+    cx.save(); cx.translate(x, gy - p * 15); cx.rotate(reduce ? 0 : t * .5); cx.strokeStyle = 'rgba(180,230,255,.9)'; cx.lineWidth = Math.max(1, p * .5);
+    for (const k of [1, .7, .4]) { cx.beginPath(); cx.arc(0, 0, p * 8 * k, 0, 7); cx.stroke(); }
+    cx.beginPath(); for (let i = 0; i <= 6; i++) { const a = i * Math.PI * 4 / 6; cx.lineTo(Math.cos(a) * p * 5.6, Math.sin(a) * p * 5.6); } cx.stroke(); cx.restore();
+    glow(x, gy - p * 15, p * 14, 'rgba(160,220,255,.9)', st.day ? .25 : .5); lights.push({ x, y: gy - p * 15, r: p * 22, col: '#bfe9ff' });
+    if (hover === pl.id) glow(x, gy - p * 15, p * 28, '#bfe9ff', .3);
+  }
   function drawSite(pl, gy, p, t, st, lights) { // a building site: scaffolding, a half-built frame, a signpost
     const x = pl.x * W, wood = st.day ? '#a07a4a' : '#4a3a28', iron = st.day ? '#6a6a72' : '#33343a';
     for (const dx of [-18, -6, 6, 18]) R(x + dx * p, gy - p * 26, p, p * 26, wood);

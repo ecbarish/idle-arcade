@@ -69,7 +69,7 @@ index.html or style.css until those phases are merged.
 | # | Task | Status | Notes |
 |---|---|---|---|
 | B0 | **Review and merge** every waiting PR, bump versions, keep START-HERE current, refill the lanes | always first | Check email, diff, tests, play it; `git merge --no-ff` |
-| B0b | **Otherworld O0: the Between and Asterhold** | open | Evan unparked it 2026-10-08; docs/otherworld-design.md; browser, games/otherworld/ |
+| B0b | **Otherworld O0: the Between and Asterhold** | part 1 done 2026-10-08 (the Between, Asterhold's whole life, 8 endings, rebirth and memories; tests/otherworld.html); next: Hearthmere, the Ashen Throne | Evan unparked it 2026-10-08; docs/otherworld-design.md; browser, games/otherworld/ |
 | B1 | **Wildbond phase 1: the screen is the world** | open | docs/wildbond-plan.md: full-window scene, overlay HUD, dialogue near speakers, satchel and pause menu, bigger characters |
 | B2 | **Wildbond phase 2: the opening, alive** | open | Prologue, Maren in the world, the character creator (W13), choosing your partner in the barn, Wren, guided first bond, the Wilddex goal |
 | B3 | **Wildbond phase 3: battles on the field** | open | Transition, classic layout, Fight / Bond / Bag / Run, a summary that waits |

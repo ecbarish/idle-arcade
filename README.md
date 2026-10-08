@@ -39,6 +39,12 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Otherworld v0.1.0 (2026-10-08), a new game** — Your old life ends. In **the Between**, a starlit library of lives,
+  the Archivist lets you choose your next world (Asterhold now; Hearthmere and the Ashen Throne are still being
+  woven) and one gift, each a strength with a cost. Live a life in **Asterhold**: wake in a hay cart, touch the guild
+  crystal and watch your **status window** appear, meet Mira, and make three choices that branch toward a beast tide,
+  with eight endings (hopeful, bittersweet, strange, and a couple of deaths). Your soul keeps memories that open new
+  choices in your next life. Playable from the homepage (a portal at the end of the road). Arcade v1.4.0.
 - Realmbound (2026-10-07): documented the first-ten-minutes browser audit and onboarding brief; the guide explains immediate Focus fallback and manual quest rewards. No gameplay changes.
 
 - Realmbound (2026-10-07): a lore-first field guide, first fifteen minutes, systems, earned addons and tips, with late discoveries folded away. [Read the booklet](guides/realmbound.html); reference tables follow current game data.
