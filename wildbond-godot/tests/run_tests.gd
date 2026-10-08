@@ -59,6 +59,41 @@ func _run() -> void:
 	check(main.role_of(D.SPECIES.cindercub.base).begins_with("Skirmisher"), "Cindercub is a Skirmisher")
 	check(main.role_of(D.SPECIES.ripplet.base).begins_with("All-rounder"), "Ripplet is an All-rounder")
 	check(main.role_of({ "hp": 90, "pow": 40, "grd": 90, "spd": 30, "wit": 40, "spi": 90 }).begins_with("Tank"), "a tough creature is a Tank")
+	# ---- the rules give the browser game's exact numbers (values taken from the browser on 2026-10-08)
+	var R := preload("res://scripts/rules.gd")
+	R.DATA = D
+	var mk := func(s: String, lvl: int, temp: String) -> Dictionary:
+		var c := { "sp": s, "name": D.SPECIES[s].name, "lvl": lvl, "xp": 0, "rar": 1, "temp": temp, "traits": [], "bond": 0.0,
+			"pot": { "hp": 10, "pow": 12, "grd": 8, "spd": 14, "wit": 9, "spi": 11 } }
+		return c
+	var a: Dictionary = mk.call("cindercub", 5, "bold")
+	var b: Dictionary = mk.call("ripplet", 4, "calm")
+	var c3: Dictionary = mk.call("mosshog", 7, "lazy")
+	var sa: Dictionary = R.stats(a)
+	var sb: Dictionary = R.stats(b)
+	var sc: Dictionary = R.stats(c3)
+	check(sa == { "hp": 21, "pow": 13, "grd": 9, "spd": 12, "wit": 11, "spi": 11 }, "Cindercub's stats match the browser: %s" % sa)
+	check(sb == { "hp": 19, "pow": 10, "grd": 10, "spd": 9, "wit": 11, "spi": 10 }, "Ripplet's stats match the browser: %s" % sb)
+	check(sc == { "hp": 30, "pow": 14, "grd": 14, "spd": 10, "wit": 12, "spi": 13 }, "Mosshog's stats match the browser: %s" % sc)
+	var U := func(c: Dictionary, st: Dictionary, side: String) -> Dictionary: return { "c": c, "st": st, "side": side, "buff": {}, "cds": {} }
+	var d1: Dictionary = R.damage(U.call(a, sa, "a"), U.call(b, sb, "f"), D.MOVES.emberSnap, 1.0, 0.5, 0.5)
+	var d2: Dictionary = R.damage(U.call(b, sb, "f"), U.call(a, sa, "a"), D.MOVES.bubbleJet, 1.0, 0.5, 0.5)
+	var d3: Dictionary = R.damage(U.call(c3, sc, "a"), U.call(a, sa, "f"), D.MOVES.vineLash, 1.3, 0.5, 0.5)
+	var d4: Dictionary = R.damage(U.call(a, sa, "a"), U.call(c3, sc, "f"), D.MOVES.bite, 1.0, 0.01, 0.01)
+	check(d1.d == 5 and is_equal_approx(d1.adv, 0.67) and not d1.crit, "Ember Snap on Ripplet: 5, not very effective (%s)" % d1)
+	check(d2.d == 10 and d2.adv == 1.5, "Bubble Jet on Cindercub: 10, it hits hard (%s)" % d2)
+	check(d3.d == 10, "Vine Lash with a 1.3 boost: 10 (%s)" % d3)
+	check(d4.d == 6 and d4.crit, "a critical Bite: 6 (%s)" % d4)
+	check(R.xp_need(5) == 187 and R.xp_need(13) == 1426, "XP needed per level matches")
+	check(R.moves_of(a) == ["bite", "emberSnap"], "moves at level 5")
+	var a12 := a.duplicate(true)
+	a12.lvl = 12
+	check(R.moves_of(a12) == ["bite", "emberSnap", "howl", "flameRush"], "moves at level 12")
+	var g := a.duplicate(true)
+	g.lvl = 13
+	g.hp = 1
+	var msgs: Array = R.grow(g, 2000, 20)
+	check(g.lvl == 14 and g.sp == "blazefang" and msgs.any(func(m): return "evolved into Blazefang" in m), "levelling up to 14 evolves Cindercub: %s" % [msgs])
 	# ---- the map: closed doors, the barn opens with the story
 	check(not main.walkable(Vector2i(4, 4)), "cottage doors stay shut")
 	check(not main.walkable(main.BARN_DOOR), "the barn is shut before you sign the register")
