@@ -38,7 +38,8 @@
     { id: 'primordial', x: .075, w: .13, name: 'The tide pool', col: '#5fd0c8' },
     { id: 'wildbond', x: .3, w: .3, name: 'Larkhaven', col: '#7fe0a0' },
     { id: 'realmbound', x: .645, w: .3, name: 'Thornvale', col: '#ffd27a' },
-    { id: 'starfall-guild', x: .88, w: .2, name: 'The Starfall gate', col: '#b48aff' }
+    { id: 'starfall-guild', x: .855, w: .16, name: 'The Starfall gate', col: '#b48aff' },
+    { id: 'baseball', x: .97, w: .06, name: 'Lamplight Field', col: '#ffd281' }
   ];
   const nightOf = st => st.day ? Math.max(0, 1 - st.elev * 4) * .6 * (st.golden > .6 ? 1 : 0) : 1;
   /* the sky, the hills and the ground with its winding road; scroll moves the far layers (the road style) */
@@ -64,8 +65,7 @@
     drawLarkhaven(PLACES[1], gy, p, t, st, lights);
     drawThornvale(PLACES[2], gy, p, t, st, lights);
     drawGate(PLACES[3], gy, p, t, st, lights);
-    // Diamond Career, in design: stadium lights glowing over the far hill at night
-    if (!st.day) { R(W * .955, gy - H * .3, p, H * .1, '#3a4058'); R(W * .945, gy - H * .32, p * 6, p * 2, '#fff6c8'); lights.push({ x: W * .955, y: gy - H * .31, r: H * .12, col: '#fff6c8' }); }
+    drawBallpark(PLACES[4], gy, p * .5, t, st, lights);
     AMB.life(cx, W, H, t, { birds: st.day ? 3 : 0, bats: st.day ? 0 : 3, y0: .1, y1: .35, px: p });
     AMB.weather(cx, W, H, t, { fireflies: st.day ? 0 : .6, leaves: st.day ? .15 : 0, ground: gy, px: p });
     LT.fog(cx, W, H, t, { ground: H, top: gy - H * .12, density: st.day && st.p < .2 ? .35 : .18, col: st.day ? '#e8f0f0' : '#2a3450', lights });
@@ -146,7 +146,7 @@
   /* Evan liked a character he controls and a world that can grow: the living world as a road you walk along.
      Each game is a stop; games still in design are building sites with a "coming soon" sign. A new game is one more
      stop at the end of the road. */
-  const DRAW = { primordial: drawTidePool, wildbond: drawLarkhaven, realmbound: drawThornvale, 'starfall-guild': drawGate, otherworld: drawPortal };
+  const DRAW = { primordial: drawTidePool, wildbond: drawLarkhaven, realmbound: drawThornvale, 'starfall-guild': drawGate, baseball: drawBallpark, otherworld: drawPortal };
   // every game is a stop: the four places, then later games (a portal or a ballpark once playable, a building site until then)
   const STOPS = PLACES.map(pl => Object.assign({}, pl)).concat(A.GAMES.filter(g => !PLACES.some(p => p.id === g.id)).map(g => ({ id: g.id, name: g.title, col: g.href ? '#bfe9ff' : '#d8d0c0', site: !(g.href && DRAW[g.id]) })));
   const ROAD = { x: 0, target: null, go: null, dir: 1, keys: {}, cam: 0 };
@@ -159,6 +159,16 @@
     cx.beginPath(); for (let i = 0; i <= 6; i++) { const a = i * Math.PI * 4 / 6; cx.lineTo(Math.cos(a) * p * 5.6, Math.sin(a) * p * 5.6); } cx.stroke(); cx.restore();
     glow(x, gy - p * 15, p * 14, 'rgba(160,220,255,.9)', st.day ? .25 : .5); lights.push({ x, y: gy - p * 15, r: p * 22, col: '#bfe9ff' });
     if (hover === pl.id) glow(x, gy - p * 15, p * 28, '#bfe9ff', .3);
+  }
+  function drawBallpark(pl, gy, p, t, st, lights) {
+    const x=pl.x*W;
+    R(x-p*22,gy-p*10,p*44,p*10,st.day?'#396947':'#203d32');
+    R(x-p*25,gy-p*15,p*50,p*5,st.day?'#65716b':'#333f42');
+    for(let i=0;i<12;i++)R(x-p*23+i*p*4,gy-p*14,p*2,p*2,i%2?'#d4b97a':'#759ea4');
+    cx.fillStyle=st.day?'#b99062':'#735c43';cx.beginPath();cx.moveTo(x,gy);cx.lineTo(x+p*12,gy-p*6);cx.lineTo(x,gy-p*12);cx.lineTo(x-p*12,gy-p*6);cx.closePath();cx.fill();
+    [[0,0],[12,-6],[0,-12],[-12,-6]].forEach(([a,b])=>R(x+a*p-p,gy+b*p-p,p*2,p*2,'#eaddbd'));
+    for(const side of [-1,1]){R(x+side*p*27,gy-p*31,p,p*31,'#465560');R(x+side*p*27-p*4,gy-p*32,p*9,p*3,st.day?'#d3d2bc':'#fff1c6');if(!st.day)lights.push({x:x+side*p*27,y:gy-p*31,r:p*25,col:'#fff1c6'});}
+    if(hover===pl.id)glow(x,gy-p*10,p*34,'#ffd281',.3);
   }
   function drawSite(pl, gy, p, t, st, lights) { // a building site: scaffolding, a half-built frame, a signpost
     const x = pl.x * W, wood = st.day ? '#a07a4a' : '#4a3a28', iron = st.day ? '#6a6a72' : '#33343a';

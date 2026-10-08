@@ -163,7 +163,7 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
 
 - [ ] T32 open for ChatGPT on `codex/wildbond-area-light` (G2, every other Wildbond area).
 - [x] T33 merged 2026-10-08 by Claude (Wildbond v1.6.0, PR #43).
-- [ ] T34 open for ChatGPT on `codex/diamond-career-d0` (Diamond Career's first at-bats and first payday).
+- [x] T34 implemented by Codex on `codex/diamond-career-d0`, PR #45 ready for review (2026-10-08; not merged).
 
 ### T34: Diamond Career, part 1: the first call-up and the first payday (D0 + the start of D1)
 Evan (2026-10-08) unparked the sports game. Read docs/plans/diamond-career.md, docs/plans/sports-careers.md,

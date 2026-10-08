@@ -148,9 +148,9 @@ const GAMES=[
   {id:'wildbond',title:'Wildbond',tcls:'t-wildbond',status:['Beta','s-play'],href:'games/wildbond/index.html',
    blurb:'Pick a partner, meet your rival Wren and walk from Larkhaven across eight regions, earning eight Warden badges on the way to the league and its Champion. Catch, raise and breed creatures, climb the Lighthouse Spire after the story, and watch a faded world grow from Game Boy greens into a 3D diorama.',
    tags:['Catch & raise','Evolving art','Full story'],cover:'wildbond'},
-  {id:'baseball',title:'Diamond Career',tcls:'t-baseball',status:['In design','s-design'],
-   blurb:'Create a player, climb from the minors on your contract, spend what you earn, and later run the whole club. Step in for key at-bats or let them simulate.',
-   tags:['Baseball','Career','Team management'],cover:'baseball'},
+  {id:'baseball',title:'Diamond Career',tcls:'t-baseball',status:['Prototype','s-proto'],href:'games/diamond-career/index.html',
+   blurb:'Six games under the lights. Time your swing or read the pitcher, earn a call-up, choose more pay or more playing time, and bring your first payday home.',
+   tags:['Baseball','Two batting styles','First payday'],cover:'baseball'},
   {id:'otherworld',title:'Otherworld',tcls:'t-otherworld',status:['Prototype','s-proto'],href:'games/otherworld/index.html',
    blurb:'Your old life ends. In the Between, the Archivist lets you choose your next world, each a different kind of story, and one gift with a cost. Live a life, make choices that branch, reach your ending, and carry soul memories into the next life.',
    tags:['Isekai','Story arcs','Reincarnation'],cover:'otherworld'},
@@ -158,7 +158,7 @@ const GAMES=[
 const ago=t=>{const s=(Date.now()-t)/1000;if(s<90)return'just now';if(s<3600)return Math.round(s/60)+' min ago';if(s<86400)return Math.round(s/3600)+' h ago';return Math.round(s/86400)+' days ago';};
 
 /* Each game's save key in localStorage, used by "Reset progress" */
-const SAVE_KEYS={'otherworld':'otherworld-save-v1','primordial':'primordial-save-v1','starfall-guild':'starfall-guild-save-v1','realmbound':'realmbound-save-v1','wildbond':'wildbond-save-v1'};
+const SAVE_KEYS={'baseball':'diamond-career-save-v1','otherworld':'otherworld-save-v1','primordial':'primordial-save-v1','starfall-guild':'starfall-guild-save-v1','realmbound':'realmbound-save-v1','wildbond':'wildbond-save-v1'};
 const idx=Arcade.readIndex();
 const shelf=document.getElementById('shelf');
 shelf.innerHTML=GAMES.map(g=>{

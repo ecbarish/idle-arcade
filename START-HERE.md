@@ -136,6 +136,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Codex: T34 Diamond Career first call-up/payday prototype ready for Claude in PR #45, not merged. Both batting styles, six-game careers, contracts, home/garage, 56 Diamond checks and all six existing pages pass; keyboard/touch, saves and phone/desktop/ultrawide played. No existing version or cache bump. Integrated latest main, preserving Claude's Godot work; Starfall report/prompt cleanup is a separate documentation task.
+
 - 2026-10-08 Claude (overnight, continued): Godot trial, Thornwood playable from the exported data: roads between maps,
   tall grass + water + items, exploring like the browser (62% wild creature), Bond (lure + calm meter, browser catch
   formula), Bag berries, catches restore colour, team of three + ranch, Bram/Lise spot and battle, Warden Isolde and the
