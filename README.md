@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Checks (2026-10-08): Otherworld browser tests restore recovery backups as well as saves and hub progress; a 35-check regression page covers failures, exceptions, timeouts and overlapping clicks.
+
 - Realmbound v1.5.0 (2026-10-08): level-55 guild commissions at the Smithy, with rare gear for every class and slot, visible previews and complete supply/coin costs before confirmation.
 
 - Realmbound v1.4.0 (2026-10-08): regional town layouts, Fenwatch boardwalks, Lanternrest snow, walk-in Inns and Smithies with keepers offering rest, scrap sales and repairs.

@@ -1,22 +1,30 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Otherworld checks</title>
-<style>body{font:15px system-ui;background:#14122a;color:#eee;max-width:980px;margin:24px auto;padding:0 16px}.pass{color:#8be0a6}.fail{color:#ffaba7}#game{width:640px;height:360px;opacity:.3}</style>
-<h1>Otherworld checks</h1><p>Loads the game in a frame, checks every path through every built world, and restores your save afterwards.</p>
-<button id="run">Run checks</button><p id="summary">Ready.</p><ol id="results"></ol><div id="game"></div>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Otherworld checks</title>
+<style>body{font:15px/1.5 system-ui;background:#14122a;color:#eee;max-width:980px;margin:24px auto;padding:0 16px}.pass{color:#8be0a6}.fail{color:#ffaba7}button{font:inherit;min-height:44px;padding:8px 16px}#game{max-width:640px;opacity:.3}iframe{width:100%;height:360px;border:0}li{overflow-wrap:anywhere}</style></head><body>
+<h1>Otherworld checks</h1><p>Loads the game in a frame and checks every path through every built world. Your Otherworld save, its recovery backups, hub progress and hub backups are restored even if a check fails. Close other Otherworld and hub tabs before running.</p>
+<button id="run">Run checks</button><p id="summary" role="status">Ready.</p><ol id="results"></ol><div id="game"></div>
+<p><a href="runner-safety.html">Check the runner's save restoration</a></p>
 <script src="otherworld-checks.js"></script>
 <script>
-document.querySelector('#run').addEventListener('click', async () => {
-  const keys = ['otherworld-save-v1', 'arcade-index-v1'], backup = new Map(keys.map(k => [k, localStorage.getItem(k)]));
-  const res = document.querySelector('#results'), sum = document.querySelector('#summary'); res.innerHTML = ''; sum.textContent = 'Running…';
-  let frame;
-  try {
-    localStorage.removeItem('otherworld-save-v1');
-    frame = document.createElement('iframe'); frame.style.cssText = 'width:640px;height:360px;border:0';
-    await new Promise(r => { frame.onload = r; frame.src = '../games/otherworld/'; document.querySelector('#game').appendChild(frame); });
-    const w = frame.contentWindow; if (!w.__ow) throw Error('test hook missing');
-    const list = w.eval('(' + otherworldChecks.toString() + ')()');
-    let fail = 0; for (const c of list) { const li = document.createElement('li'); li.className = c.ok ? 'pass' : 'fail'; li.textContent = (c.ok ? 'PASS — ' : 'FAIL — ') + c.label; res.appendChild(li); if (!c.ok) fail++; }
-    sum.textContent = fail ? `FAIL — ${fail} of ${list.length} failed.` : `PASS — ${list.length} checks.`;
-  } catch (e) { sum.textContent = 'FAIL — ' + e.message; }
-  finally { if (frame) frame.remove(); for (const [k, v] of backup) { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } }
+'use strict';
+document.querySelector('#run').addEventListener('click',async()=>{
+  const button=document.querySelector('#run'),res=document.querySelector('#results'),sum=document.querySelector('#summary');
+  if(button.disabled)return;button.disabled=true;res.replaceChildren();sum.textContent='Running…';let frame,backup;
+  const managed=k=>k==='otherworld-save-v1'||k==='arcade-index-v1'||k.startsWith('arcade-backup:otherworld-save-v1:')||k.startsWith('arcade-backup:arcade-index-v1:');
+  try{
+    backup=new Map(Object.keys(localStorage).filter(managed).map(k=>[k,localStorage.getItem(k)]));
+    Object.keys(localStorage).filter(managed).forEach(k=>localStorage.removeItem(k));
+    frame=document.createElement('iframe');frame.title='Otherworld test instance';
+    await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Game did not load within 20 seconds. Serve the repository root and try again.')),20000);frame.onload=()=>{clearTimeout(timer);resolve();};frame.onerror=()=>{clearTimeout(timer);reject(Error('Game load failed.'));};frame.src='../games/otherworld/';document.querySelector('#game').appendChild(frame);});
+    const w=frame.contentWindow;if(!w.__ow)throw Error('Run these checks on localhost, using serve.ps1.');
+    const list=w.eval('('+otherworldChecks.toString()+')()');let failed=0;
+    for(const c of list){const li=document.createElement('li');li.className=c.ok?'pass':'fail';li.textContent=(c.ok?'PASS — ':'FAIL — ')+c.label;res.appendChild(li);if(!c.ok)failed++;}
+    sum.textContent=failed?'FAIL — '+failed+' of '+list.length+' failed.':'PASS — '+list.length+' checks.';
+  }catch(e){sum.textContent='FAIL — '+e.message;}
+  finally{
+    if(frame)frame.remove();
+    if(backup){Object.keys(localStorage).filter(managed).forEach(k=>localStorage.removeItem(k));for(const [k,v]of backup)localStorage.setItem(k,v);}
+    button.disabled=false;
+  }
 });
-</script></html>
+</script></body></html>
