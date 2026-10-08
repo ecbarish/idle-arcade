@@ -151,7 +151,7 @@ h4{margin:14px 0 6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase
 .btn.move span{font-size:12px;font-weight:500;opacity:.85}
 .btn.move:disabled{opacity:.45}
 /* a new journey starts in colour, but faded: the Thorn Badge lifts it (S.faded, v1.4.0) */
-body.faded #scene,body.faded canvas.pic{filter:saturate(.38) sepia(.16) brightness(1.04) contrast(.96)}
+body.faded #scene,body.faded canvas.pic{filter:saturate(.6) sepia(.1) brightness(1.03)}
 /* creature cards: role, full stat names, move details */
 .role{font-size:13px;margin:4px 0}.role b{color:var(--leaf)}
 .cmoves{font-size:13px;color:var(--muted);margin:4px 0}.cmoves summary{cursor:pointer}.cmoves div{margin:2px 0 2px 12px}

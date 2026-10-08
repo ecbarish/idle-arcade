@@ -26,7 +26,7 @@ function renderPanel() {
       el.innerHTML = `<div class="side foes">${B.foes.map((u, i) => `<div class="card" id="fu${i}"><div class="cn">${u.c.name} <span class="lv">Lv ${u.c.lvl}</span></div><div>${elChip(sp(u.c).el)}${rarTag(u.c.rar)}</div><div class="hpw"></div></div>`).join('')}</div>
         <div class="tele" id="tele" hidden></div>
         <div class="side allies">${B.allies.map((u, i) => `<div class="card" id="au${i}"><div class="cn">${u.c.name} <span class="lv">Lv ${u.c.lvl}</span></div><div class="hpw"></div><div class="atbw"></div></div>`).join('')}</div>
-        ${B.over ? `<div class="result ${B.over}">${{ won: 'Victory!', caught: 'Caught!', lost: 'Your team needs rest.', fled: 'You got away.' }[B.over]} <button class="btn" data-act="continue">Continue</button></div>` :
+        ${B.over ? `<div class="result ${B.over}">${{ won: 'Victory!', caught: 'Caught!', lost: 'Your team fainted. You will be carried back to Larkhaven to rest; the log below shows what happened.', fled: 'You got away.' }[B.over]} <button class="btn" data-act="continue">Continue</button></div>` :
         B.capture ? `<div class="capture"><div class="meter"><i class="zone" style="left:${(B.capture.zone - 0.1) * 100}%"></i><i class="mark" id="mark"></i></div><button class="btn big" data-act="calm">Calm (Space)</button></div>` :
         B.wait ? `<div class="turn"><b>${B.wait.c.name}'s turn.</b> Choose a move:</div><div class="moves">${movesOf(B.wait.c).map((m, i) => `<button class="btn move" data-act="move" data-arg="${m}" ${B.wait.cds[m] > 0 ? "disabled" : ""}><b>${MOVES[m].name} <kbd>${i + 1}</kbd></b><span>${moveInfo(m)}${B.wait.cds[m] > 0 ? " · getting ready" : ""}</span></button>`).join("")}</div>
           <div class="cmds">${modeOn("hardcore") ? "" : `<button class="btn alt" data-act="cmd" data-arg="rally" title="Heal your whole team 20%. Costs 2 command points.">Rally <kbd>R</kbd></button>`}<button class="btn alt" data-act="cmd" data-arg="guard" title="Your team takes half damage for 3 seconds. Costs 1.">Guard <kbd>G</kbd></button>${B.kind === "wild" ? `<button class="btn lure" data-act="cmd" data-arg="lure">Lure (${S.lures}) <kbd>L</kbd></button><button class="btn alt" data-act="cmd" data-arg="flee">Flee</button>` : ""}<span class="pts" id="pts"></span></div>` :
@@ -122,9 +122,10 @@ function cardHTML(c, i, inTeam) {
       <button class="btn sm alt" data-act="rename" data-arg="${c.uid}">Rename</button></div></div></div>`;
 }
 function renderTabs(force) {
+  if (S.tab === 'ranch' && !ranchOpen()) S.tab = 'team';
   const t = TABS[S.tab] || TABS.team, k = S.tab + t.key();
   if (force || k !== tabKey) { tabKey = k; $('#tabbody').innerHTML = t.build(); drawPortraits($('#tabbody')); }
-  document.querySelectorAll('.tabs [data-arg]').forEach(b => b.setAttribute('aria-selected', b.dataset.arg === S.tab ? 'true' : 'false'));
+  document.querySelectorAll('.tabs [data-arg]').forEach(b => { b.setAttribute('aria-selected', b.dataset.arg === S.tab ? 'true' : 'false'); if (b.dataset.arg === 'ranch') b.hidden = !ranchOpen(); });
 }
 let logKey = '';
 function renderLog() { const L = B ? B.lines.slice(-6) : []; const html = L.map(l => `<div class="l-${l.cls}">${l.t}</div>`).join(''); if (html !== logKey) { logKey = html; $('#blog').innerHTML = html; } $('#blog').hidden = !B; }
@@ -187,3 +188,5 @@ function roleOf(s) {
     : hit > tough + 8 ? (phys ? ['Bruiser', 'hits hard up close'] : ['Caster', 'strong elemental moves']) : ['All-rounder', 'balanced'];
   return `<b>${role[0]}</b>: ${role[1]}. Attacks mostly with ${phys ? 'physical moves (Power)' : 'special, elemental moves (Wits)'}.`;
 }
+/* The Ranch tab appears once you have a creature to look after there (your first bond, or the first badge). */
+function ranchOpen() { return S.ranch.length > 0 || S.stats.caught > 0 || S.badges.length > 0; }

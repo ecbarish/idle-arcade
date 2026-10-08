@@ -179,6 +179,7 @@ function useExit(m, ch) {
 function enterDoor(kind) {
   if (kind === 'inn') { restInTown(); W.msg = 'The innkeeper brings out warm blankets. Your team is fully healed.'; sfx('heal'); }
   else if (kind === 'shop') { buyLures(); if (W.msg === 'You buy 5 lures.') W.msg = 'The shopkeeper wraps up 5 lures for you (50 coins).'; }
+  else if (kind === 'ranch' && !ranchOpen()) W.msg = "Maren leans on the barn door: 'Once a wild creature chooses you, bring it home and I'll show you around the ranch.'";
   else if (kind === 'ranch') { S.tab = 'ranch'; renderTabs(true); W.msg = 'Maren waves you into the barn. Your ranch is open on the right.'; }
 }
 function talkTo(n) {

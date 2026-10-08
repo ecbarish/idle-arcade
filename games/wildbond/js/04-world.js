@@ -107,7 +107,7 @@ function worldTick(h) {
   S.stats.play += h; ranchTick(h); leagueState();
   if (TALK) return;
   if (B) { battleTick(h);
-    if (B && B.over) { W.endT += h; if (W.endT > (S.auto ? 2 : 3.5)) finishBattle(); } return; }
+    if (B && B.over) { W.endT += h; if (S.auto && W.endT > 2) finishBattle(); } return; } // the result waits for Continue (Evan: it vanished before he could read it)
   if (S.pos && curMap().tower) { towerTick(); if (B || TALK) return; walkTick(h); return; }
   if (S.started) { ensurePos(); walkTick(h); }
   // Auto-explore: your tamer walks the tall grass (12-walk.js); every few seconds they check whether the team needs rest

@@ -39,6 +39,11 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Wildbond v1.5.1 (2026-10-07)** — Battle results wait for you to press Continue (and a loss says what happens
+  next); your tamer wears a red shirt and blue cap so you can find them; the view starts close; the faded start is
+  softer; the Ranch only appears once a creature has bonded with you, breeding after the first badge, and challenge
+  pennants only on a challenge journey. The bigger redesign Evan asked for (all game world) is planned in
+  docs/wildbond-immersive.md.
 - **Wildbond v1.5.0 (2026-10-07)** — From Evan's second play: **turn-based battles** for new journeys (the battle
   pauses on your creature's turn and you pick its move, each described in plain words; the real-time style is in
   Settings), **no autopilot until your first badge** (it used to take over from the first second), a new journey

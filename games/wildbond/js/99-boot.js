@@ -1,5 +1,5 @@
 'use strict';
-const VERSION = '1.5.0'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
+const VERSION = '1.5.1'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
 /* Clicks, keys, the game loop and startup. */
 function findC(uid) { uid = Number(uid); return S.team.find(c => c.uid === uid) || S.ranch.find(c => c.uid === uid); }
 document.addEventListener('click', e => {

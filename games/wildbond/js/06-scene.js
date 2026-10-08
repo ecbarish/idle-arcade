@@ -103,7 +103,7 @@ function worldPal(m) {
     rock: ash ? '#7a6a64' : '#8b817a', rockDk: ash ? '#4a3c38' : '#5e5650', rockLt: ash ? '#a8948a' : '#b8aea6',
     roof: '#b0503a', roofDk: '#8a3a2a', rockBase: coast ? '#e3d3a0' : null });
 }
-const PLAYER_LOOK = { skin: '#f1c9a0', hair: 'hat', hairCol: '#6b4423', hatCol: '#6b4423', shirt: '#2f9e6b' };
+const PLAYER_LOOK = { skin: '#f1c9a0', hair: 'hat', hairCol: '#6b4423', hatCol: '#2a3f6b', shirt: '#d8453a' }; // a red shirt and blue cap that stand out against grass
 /* What's on the map right now, for any renderer: positions are in tiles (x, y = the tile's top-left corner). */
 function worldView(m, t) {
   const things = [];
@@ -139,7 +139,7 @@ function drawWorld(t, A) {
 /* View distance (L11): Close, Wide or Far, from the header button or the V key. Big screens see more of the world
    instead of bigger tiles: with no choice made, a tall scene (a desktop or ultrawide) starts on Wide. */
 const VIEWS = { near: ['Close', 1], wide: ['Wide', 1.35], far: ['Far', 1.7] };
-function viewKey() { return VIEWS[S.view] ? S.view : cv.clientHeight > 700 ? 'wide' : 'near'; }
+function viewKey() { return VIEWS[S.view] ? S.view : 'near'; } // Close by default: Evan found Wide too small to see himself
 function viewMult() { return VIEWS[viewKey()][1]; }
 function cycleView() { const ks = Object.keys(VIEWS); S.view = ks[(ks.indexOf(viewKey()) + 1) % ks.length];
   if (typeof DIO !== 'undefined') DIO.dist = 16 * viewMult(); W.msg = `View: ${VIEWS[S.view][0]}.`; renderViewBtn(); save(); }

@@ -13,7 +13,7 @@ TABS.ranch = {
     const tr = c => Cr.STATS.filter(k => c.train[k] >= 4).map(k => `${Cr.STAT_NAME[k].slice(0, 3)} +${Math.floor(c.train[k] / 4)}`).join(' · ') || 'nothing yet';
     let o = `<h3>Ranch</h3><p class="sub">Day <b>${S.day}</b> · next day in <b id="dayT"></b>. Each creature follows its daily plan: a food and an activity.
       Training adds up to ${TRAIN_CAP / 4} to a stat and ${TRAIN_TOTAL / 4} in total. Overtraining tired creatures can injure them.</p>`;
-    o += ranchPennantsHTML();
+    if (Object.keys(MODES).some(modeOn)) o += ranchPennantsHTML(); // pennants only matter on a challenge journey
     o += `<h4>Food stores</h4><div class="foods">${Object.entries(FOODS).map(([k, f]) => `<div class="food"><b>${f.name}</b> <span class="meta">${S.food[k]} left</span>
       <button class="btn sm alt" data-act="buyfood" data-arg="${k}">Buy 10 (${f.cost * 10})</button></div>`).join('')}</div>`;
     o += `<h4>Daily plans</h4>` + all.map(c => { ensureCare(c); const inTeam = S.team.includes(c);
@@ -28,9 +28,10 @@ TABS.ranch = {
     const opt = (sel, cur) => `<select data-barn="${sel}" aria-label="Parent ${sel.toUpperCase()}"><option value="">Choose…</option>${all.map(c => `<option value="${c.uid}" ${cur === c.uid ? 'selected' : ''}>${c.name} (${sp(c).name}, Lv ${c.lvl})</option>`).join('')}</select>`;
     const a = all.find(c => c.uid === BARN.a), b = all.find(c => c.uid === BARN.b), info = a && b ? breedInfo(a, b) : null;
     const hyN = Object.keys(HYBRIDS).length, hyF = Object.keys(S.hybrids).length;
-    o += `<h4>Breeding barn</h4><p class="sub">Pair two creatures at level 8+ with Friendly bond. The egg hatches in 2 days. Its potential lands between the parents', with a chance to beat both.
+    const breedOn = S.badges.includes('thorn') || S.eggs.length > 0; // Maren opens the breeding barn after the first badge (features arrive with the story)
+    if (breedOn) o += `<h4>Breeding barn</h4><p class="sub">Pair two creatures at level 8+ with Friendly bond. The egg hatches in 2 days. Its potential lands between the parents', with a chance to beat both.
       Some pairs from different families make hybrids. Hybrids discovered: ${hyF}/${hyN}.</p>`;
-    o += S.eggs.length ? `<div class="egg">Egg from ${S.eggs[0].from.join(' and ')}: hatches in ${S.eggs[0].days} day${S.eggs[0].days > 1 ? 's' : ''}.</div>` :
+    if (breedOn) o += S.eggs.length ? `<div class="egg">Egg from ${S.eggs[0].from.join(' and ')}: hatches in ${S.eggs[0].days} day${S.eggs[0].days > 1 ? 's' : ''}.</div>` :
       `<div class="barn">${opt('a', BARN.a)} <b>+</b> ${opt('b', BARN.b)}</div>
        <p class="meta">${info ? (info.ok ? info.text : info.why) : 'Choose two parents.'}</p>
        <button class="btn" data-act="breed" ${info && info.ok ? '' : 'disabled'}>Breed (${BREED_COST} coins)</button>`;
