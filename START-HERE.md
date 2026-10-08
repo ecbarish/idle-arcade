@@ -38,6 +38,7 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
   made by Codex using the defaults written here; record any decision in the Session log.
 
 ## Where we are (2026-10-09)
+**Current (2026-10-07):** the goal is Launch (docs/QUEUE.md). Wildbond follows **docs/wildbond-plan.md** (Evan'splay notes turned into principles and phases); Realmbound is balanced and gets its guide and onboarding next. Theolder detail below is history; CLAUDE.md "Where we are" has the short current summary.
 
 **Wildbond** (creature game): eight areas, each with a Warden and badge: Thornwood (2-12), Saltmarsh Coast (12-22),
 Emberfall Highlands (22-32), Cloudglass Pass (32-42), Stillreed Basin (52-60), Hollowecho Hills (58-64), Sunthread Commons (62-68),
@@ -115,6 +116,7 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-07 Claude: rewrote the plans from Evan's play notes: docs/wildbond-plan.md (one plan, principles + phases  1-7), queue lanes A and B rewritten, CLAUDE.md "Where we are" rewritten, T33 creature variants ticket for ChatGPT.
 - 2026-10-07 Claude: merged ChatGPT's launch balance (Wildbond L7a: Stillreed 46+, later Wardens within caps; Realmbound  L7b: late-zone xpMult .6 from level 40). Wildbond v1.5.2: DAY_SECONDS 3600, AUTOPILOT=false (Auto-explore off).  Recorded Evan's notes: characters present in the intro (B3b), W13 character creator, W14 creature variants, V10 big  worlds/first person. Wildbond 1225, Realmbound 4173 checks.
 - 2026-10-07 Claude: Wildbond v1.5.1 (results wait for Continue, visible tamer, close view, softer fade, ranch/breeding/  pennants appear with the story: `ranchOpen`, `breedOn`). Evan wants Wildbond to be all game world: plan in  docs/wildbond-immersive.md, queued as B3a (Claude, top priority). 1214 checks.
 - 2026-10-07 Codex: L7b/R8 Realmbound audit ready in PR #42, stacked on #41. Fifteen actual-combat class/journey runs complete story and both Heroic 1 clears; proposed late-zone 0.6 XP budget gives Classic 40–60 19.91–23.77h. All five pages pass (4173/1225/48/21/15), saves/hub restored; no version/cache bumps or merge. Two audit PRs await Claude.

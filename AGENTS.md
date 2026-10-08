@@ -18,3 +18,6 @@ Branch prefixes: `codex/<topic>`, `grok/<topic>`, `<ai>/<topic>`.
 
 **The vision:** read `docs/VISION.md` (Evan, 2026-10-07) before proposing big features; its projects are V1-V8 in
 `docs/PROJECTS.md`. Automation now means earned quality of life and delegation to characters, not skipping play.
+
+**Wildbond:** docs/wildbond-plan.md is the plan to follow (Evan's principles and phases, 2026-10-07). While Claude
+rebuilds its screens (phases 1-5), keep Wildbond work to data, drawing and new files.

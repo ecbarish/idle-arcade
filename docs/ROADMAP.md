@@ -162,6 +162,34 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
 - [ ] T32 open for ChatGPT on `codex/wildbond-area-light` (G2, every other Wildbond area).
+- [ ] T33 open for ChatGPT on `codex/wildbond-variants` (W14, creature variants). Read docs/wildbond-plan.md first.
+
+### T33: Wildbond creature variants (W14)
+Evan (2026-10-07): "it would be cool for some creatures, even though they're the same creature, to have some unique
+looks, like Pokémon has shiny, huge, tiny, Spinda... a little variety in some cases could be cool and intriguing."
+Read docs/wildbond-plan.md (the principles) and docs/CREATIVE.md; you have creative freedom on names, rates and looks.
+Put a short "Design" section at the top of the PR.
+- **Three kinds of variety, all cosmetic (never stronger or weaker):**
+  1. **A rare shimmering colour** (our "shiny"; name it to fit the lore, e.g. *Gleaming* or *Dawn-touched*: a
+     creature the faded world remembers in full colour), about 1 in 200 wild encounters, with a sparkle when it
+     appears in battle and in the world.
+  2. **Sizes**: *tiny* and *huge*, each about 1 in 25, drawn smaller or larger (and shown in the Wilddex with a
+     size note).
+  3. **Markings**: for a few families with patterns (cats, hyenas, spiders, birds...), each creature gets its own
+     seeded pattern of spots or stripes, so no two look quite alike (like Spinda).
+- **Where it lives:** an optional `c.variant` field (missing = ordinary, so old saves are unchanged), rolled in
+  `newCreature` for wild creatures and eggs; breeding can pass a variant on at a small chance. Starters and story
+  guardians are ordinary unless you have a reason. Drawn in every art era (Pocket, Pixel, 16-bit, HD-2D, Diorama):
+  most creature drawing goes through `ART[era].creature` in 01-art.js and is reused by 13-hd.js and 14-diorama.js.
+- **The Wilddex** records which variants you've seen and bonded (a small field in `S`, with defaults), and a creature's
+  card shows its variant in words ("Gleaming, huge"). Keep the UI change to a small helper (for example
+  `variantLabel(c)`) and a line on the card and the Wilddex entry: **Claude is rebuilding Wildbond's layout, battle
+  screen and menus (docs/wildbond-plan.md phases 1-4), so don't restyle or restructure 05-ui.js, 06-scene.js,
+  index.html or style.css**; put new code in a new file (e.g. js/19-variants.js) where you can.
+- **Checks:** rates within a sensible band over many rolls, old saves load unchanged, variants survive save/load and
+  breeding, every era draws them without errors, sizes stay readable, cosmetic only (stats identical). All test
+  pages pass (tests/wildbond.html, run.html, starfall.html, sound.html, offline.html). Don't bump versions (Claude does).
+
 - [x] Saltmarsh lighting merged 2026-10-07 by Claude (Wildbond v1.3.1, 1194 checks).
 
 ### T32: Wildbond lighting for every other area (G2)
