@@ -124,7 +124,7 @@ function townDoor(b) {
   if (b.kind === 'stable') { S.tab = 'mounts'; renderTab(true); line('The stablehand nods at your mounts. (Mounts tab)', 'l-sys'); return; }
   if (b.kind === 'guild') {
     if (guildOn() && townActive()) { TOWN.inside = true; TOWN.auto = null; const [x, y, d] = GUILD_HALL.start; TOWN_WALK.place(x, y, d); line(`You step into the hall of ${G().name}.`, 'l-sys'); sfx('select'); return; }
-    S.tab = 'supplies'; renderTab(true); line(guildOn() ? `You step into the hall of ${G().name}. (Guild tab)` : 'The guild hall stands empty, waiting for a charter. (Guild tab)', 'l-sys'); return; }
+    S.tab = 'supplies'; renderTab(true); line(guildOn() ? `You step into the hall of ${G().name}. (Guild tab)` : 'The Guild Hall stands empty, waiting for a charter. (Guild tab)', 'l-sys'); return; }
   if (b.kind === 'board') { S.tab = 'quests'; renderTab(true); line('You read the notices on the quest board. (Quests tab)', 'l-sys'); }
 }
 function townTalk(n) {
@@ -267,7 +267,7 @@ function drawTown(t) {
   if (!inside) AMB.flash(cx, PW, PH, t);
   LT.bloom(cx, cv, PW, PH, sun);
   // where you are, top left
-  const fs = Math.max(12, Math.round(PH / 17)); cx.font = `700 ${fs}px Alegreya Sans, sans-serif`; const text = inside ? `${G().name} · guild hall` : hubName(), lw = cx.measureText(text).width + 16;
+  const fs = Math.max(12, Math.round(PH / 17)); cx.font = `700 ${fs}px Alegreya Sans, sans-serif`; const text = inside ? `${G().name} · Guild Hall` : hubName(), lw = cx.measureText(text).width + 16;
   cx.fillStyle = 'rgba(20,16,12,.72)'; cx.fillRect(8, 8, lw, fs * 1.6); cx.fillStyle = '#f2c14e'; cx.textBaseline = 'middle'; cx.fillText(text, 16, 8 + fs * .82); cx.textBaseline = 'alphabetic';
   const hint = Math.max(10, Math.round(PH / 22)); cx.font = `600 ${hint}px Alegreya Sans, sans-serif`; cx.fillStyle = 'rgba(255,240,210,.75)'; cx.textAlign = 'right';
   cx.fillText(aiOn() ? 'Auto: off to the smithy, then the road' : inside ? 'Talk to your guild · the door: back to town' : 'Walk: arrows / WASD or tap · Enter: talk · the gate: back on the road', PW - 10, PH - 10); cx.textAlign = 'left';

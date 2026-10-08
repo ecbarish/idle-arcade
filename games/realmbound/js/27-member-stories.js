@@ -86,7 +86,7 @@ function memberStoryProblem(key) {
   return memberStoryMeetingProblem(key);
 }
 function memberStoryMeetingProblem(key) {
-  if (!H() || !inTown() || !TOWN.inside || H().dun) return 'Meet by the hearth in the guild hall.';
+  if (!H() || !inTown() || !TOWN.inside || H().dun) return 'Meet by the hearth in the Guild Hall.';
   if (ROSTER.jobOf(key) || memberRaiding(key)) return 'Return this member from their job or raid first.';
   if (H().mode === 'auto') return 'Switch to Focus to choose this story yourself.';
   return '';

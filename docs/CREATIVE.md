@@ -47,6 +47,21 @@ changes, what "good" looks like, and how much each kind of decision is yours to 
   laptop (1366x768), a desktop (1920x1080) and an ultrawide (3440x1440). Big screens should *use* the space (a larger
   scene, panels side by side, crisp at high resolution), not show a small column in the middle; phones get taps.
 
+## Writing for players (Evan, 2026-10-08)
+
+Evan saw a story box that read "Trust hurt: mood −8 at the decision; no friendship reward... no extra mood or time
+gate" under a title "The Open Seat · guild hall". Every word a player sees must pass these rules:
+
+- **Capitalise names:** places (the Guild Hall, Thornwood, Saltmarsh Coast, the Hollow Crown), titles (Warden Toren,
+  Registrar Mott), named things (the Thorn Badge, the Hearth Book). Correct spelling, grammar and punctuation always.
+- **Say it in the world's words, not the rules' words.** No "mood −8", "gate", "flag", "XP reward", "cooldown" in story
+  text. A person speaks: "Brienne won't meet your eyes. Maybe talk to her by the hearth when things have cooled." If a
+  number matters for play (damage, price, level), show it where players expect numbers, never inside a story.
+- **Read it as a first-time player.** Before shipping, look at the actual screen (phone and desktop) and ask: would
+  someone who has never played understand every word, and does it look like a game rather than a form?
+- **Games, not menus.** Prefer a person, a place or an object over a box of buttons (CLAUDE.md "In the game window").
+  Where a choice must be a button, give it in-character words ("Talk it through", not "Option 1").
+- Tests may check text exists, but a passing test doesn't prove the text reads well; look at it.
 ## Your creative freedom, by level
 
 **Decide freely** (just do it and mention it in the PR):
