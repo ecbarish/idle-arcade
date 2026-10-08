@@ -39,6 +39,13 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Wildbond v1.5.0 (2026-10-07)** — From Evan's second play: **turn-based battles** for new journeys (the battle
+  pauses on your creature's turn and you pick its move, each described in plain words; the real-time style is in
+  Settings), **no autopilot until your first badge** (it used to take over from the first second), a new journey
+  starts **in faded colour** instead of four greens (the Thorn Badge brings full colour back), **no menu buttons that
+  skip the world** (walk to the inn, the shop, the Warden and the road; riding to visited places is earned with the
+  third badge), and creature cards that say what a creature is good at (Tank, Bruiser, Caster...) and what every
+  stat and move does.
 - **Wildbond v1.4.0 (2026-10-07)** — **A clearer start** (from Evan's first play): tap a partner to see its Wilddex
   page (stats, moves, strengths), choose a story name, roll a random one or type your own, then press **Begin**.
   Challenge modes now unlock once you've been Champion. After the first battle Maren explains where your creatures

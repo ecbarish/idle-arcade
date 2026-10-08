@@ -385,7 +385,7 @@ const SCENES = {
   ],
   intro: [
     ['', 'The supply cart stops at the edge of the trees. Larkhaven is a handful of roofs, a windmill and a ranch fence that runs right up to the forest.'],
-    ['', 'Everything here looks faded, like an old picture left in the sun: the trees, the roofs, even the sky are washed in the same soft green.'],
+    ['', 'Everything here looks faded, like an old picture left in the sun: the colours are all there, but thin and grey, as if the whole valley were half asleep.'],
     ['maren', 'You made it! I\'m Maren. I keep the ranch here, and I\'ve paired more young tamers with their first partner than I can count.'],
     ['maren', 'And yes, the colour. Everyone stares on their first day. The whole region faded long ago. Our Warden, Isolde, says it comes back a little with every bond a tamer earns. Maybe you\'ll be the one to prove her right.'],
     ['maren', 'Out there is Thornwood. Past it, the coast, the hills, places nobody has mapped yet. The creatures out there are wild, but not cruel. Treat them well and some will choose to walk with you.'],
@@ -408,7 +408,7 @@ const SCENES = {
   /* the world starts faded (the Pocket era); the first badge brings its color back */
   colorReturns: [
     ['', 'The badge is warm in your hand. Then the whole forest seems to take a breath.'],
-    ['', 'The green drains out of the sky and blue pours in. Red roofs far to the south. Every leaf a different shade. Your partner\'s coat, bright as the day you met.'],
+    ['', 'The grey lifts like mist: blue pours into the sky. Red roofs far to the south. Every leaf a different shade. Your partner\'s coat, bright as the day you met.'],
     ['isolde', 'Ah. You see it too. The region was faded long ago, and the guardians still remember it as it was. Every bond you earn reminds the world a little more.'],
     ['isolde', 'Take these as well: Warden\'s boots. Hold Shift and you\'ll cover twice the ground. Now go and show Maren. She\'ll pretend she isn\'t moved.']
   ],

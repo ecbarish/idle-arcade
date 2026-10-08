@@ -144,3 +144,14 @@ h4{margin:14px 0 6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase
 @media (min-width:1700px){.app{max-width:min(2300px,94vw)}.grid{grid-template-columns:minmax(0,1.8fr) minmax(440px,1fr)}.scene{aspect-ratio:2/1}.top,.right,.left>:not(.scene),.sheet{zoom:calc(1.12 * var(--arc-text, 1))}}
 @media (min-width:2400px){.app{max-width:min(3100px,95vw)}.grid{grid-template-columns:minmax(0,2.3fr) minmax(520px,1fr)}.scene{aspect-ratio:21/9}.top,.right,.left>:not(.scene),.sheet{zoom:calc(1.32 * var(--arc-text, 1))}}
 @media (min-width:1700px) and (max-height:900px){.scene{aspect-ratio:21/8}}
+/* turn-based battles: your creature's moves, each with what it does */
+.turn{margin:6px 0 4px;font-size:15px}
+.moves{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:8px}
+.btn.move{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;padding:8px 12px}
+.btn.move span{font-size:12px;font-weight:500;opacity:.85}
+.btn.move:disabled{opacity:.45}
+/* a new journey starts in colour, but faded: the Thorn Badge lifts it (S.faded, v1.4.0) */
+body.faded #scene,body.faded canvas.pic{filter:saturate(.38) sepia(.16) brightness(1.04) contrast(.96)}
+/* creature cards: role, full stat names, move details */
+.role{font-size:13px;margin:4px 0}.role b{color:var(--leaf)}
+.cmoves{font-size:13px;color:var(--muted);margin:4px 0}.cmoves summary{cursor:pointer}.cmoves div{margin:2px 0 2px 12px}

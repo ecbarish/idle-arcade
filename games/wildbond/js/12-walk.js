@@ -174,7 +174,7 @@ function useExit(m, ch) {
   if (to.league && !leagueOpen()) { W.msg = ex.locked; return; }
   if (m.league && leagueLocked()) { W.msg = 'Tell Nelva you are leaving this attempt before returning to Farwatch.'; return; }
   if (to.biome && !biomeOpen(to.biome)) { W.msg = ex.locked || 'The way ahead is closed for now.'; return; }
-  placeAt(ex.to, ex.x, ex.y, ex.dir); W.msg = `You walk on to ${to.name}.`; slog(`Travelled to ${to.name}.`); save();
+  placeAt(ex.to, ex.x, ex.y, ex.dir); (S.visited = S.visited || {})[ex.to] = 1; W.msg = `You walk on to ${to.name}.`; slog(`Travelled to ${to.name}.`); save();
 }
 function enterDoor(kind) {
   if (kind === 'inn') { restInTown(); W.msg = 'The innkeeper brings out warm blankets. Your team is fully healed.'; sfx('heal'); }

@@ -1,5 +1,5 @@
 'use strict';
-const VERSION = '1.4.0'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
+const VERSION = '1.5.0'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
 /* Clicks, keys, the game loop and startup. */
 function findC(uid) { uid = Number(uid); return S.team.find(c => c.uid === uid) || S.ranch.find(c => c.uid === uid); }
 document.addEventListener('click', e => {
@@ -17,6 +17,8 @@ document.addEventListener('click', e => {
     case 'leagueleave': leagueLeave(); break;
     case 'sound': cycleSound(); break;
     case 'skiptalk': skipTalk(); break;
+    case 'move': chooseTurn(arg); break;
+    case 'home': if (!B && fastTravel() && !leagueLocked()) { placeAt('larkhaven'); W.msg = 'Your partner carries you home to Larkhaven.'; } break;
     case 'pickstarter': START.pick = arg; document.querySelectorAll('.starter').forEach(b => { const on = b.dataset.arg === arg; b.classList.toggle('cur', on); b.setAttribute('aria-pressed', on); });
       $('#pickinfo').innerHTML = starterCard(arg); drawPortraits($('#pickinfo')); { const bb = $('#beginBtn'); bb.disabled = false; bb.textContent = 'Begin with ' + SPECIES[arg].name; } return;
     case 'namepick': $('#tname').value = arg; return;
@@ -56,9 +58,10 @@ document.addEventListener('click', e => {
 });
 document.addEventListener('keydown', e => {
   if (!S.started || e.target.matches('input,textarea')) return; const k = e.key.toLowerCase();
-  if (B && !B.over) { if (k === 'f') command('focus'); else if (k === 'g') command('guard'); else if (k === 'r') command('rally'); else if (k === 'l') command('lure'); else if (k === ' ' && B.capture) { calmNow(); e.preventDefault(); } }
+  if (B && !B.over && B.wait && /^[1-4]$/.test(k)) { const m = movesOf(B.wait.c)[Number(k) - 1]; if (m) chooseTurn(m); }
+  else if (B && !B.over) { if (k === 'f' && !B.wait) command('focus'); else if (k === 'g') command('guard'); else if (k === 'r') command('rally'); else if (k === 'l') command('lure'); else if (k === ' ' && B.capture) { calmNow(); e.preventDefault(); } }
   else if (B && B.over && (k === 'enter' || k === ' ')) { finishBattle(); e.preventDefault(); }
-  else if (!B && k === 'e') explore();
+  else if (!B && k === 'e' && S.auto) explore(); // searching by key is gone: walk the tall grass instead
   renderAll();
 });
 
