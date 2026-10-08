@@ -14,7 +14,8 @@
   const cx = cv.getContext('2d'), reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const AMB = Ambience.create({ reduce: () => reduce }), LT = Light.create({ reduce: () => reduce, quality: () => 'high' });
   const MODE_KEY = 'arcade-launcher';
-  let mode = (() => { try { const m = localStorage.getItem(MODE_KEY); return m === 'hall' || m === 'road' ? m : 'scene'; } catch (e) { return 'scene'; } })();
+  const firstMode = () => innerWidth < 720 ? 'road' : 'scene'; // phones start on the road: it scales with height, not width (L3)
+  let mode = (() => { try { const m = localStorage.getItem(MODE_KEY); return m === 'hall' || m === 'road' || m === 'scene' ? m : firstMode(); } catch (e) { return firstMode(); } })();
   let W = 0, H = 0, hover = null, lastT = 0;
   const playable = A.GAMES.filter(g => g.href), byId = id => A.GAMES.find(g => g.id === id);
   const prog = id => { const p = A.idx[id]; return p ? p.summary : 'Not started yet'; };

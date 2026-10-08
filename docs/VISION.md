@@ -69,6 +69,18 @@ hand jobs to people and creatures who live in the world (guild members on contra
 hired help in Starfall). Full Auto stays for grinding and idle time, never for the story's best moments. This answers
 the open question "when does full Auto unlock".
 
+**9. Choices that matter, and people who remember** (V9).
+> "Mass Effect 1, 2 and 3 ... the way choices genuinely affected things was surreal. ... characters could
+> die/survive/have a relationship ... made the game feel almost alive." (He has heard Fable does some of this too.)
+
+Our version: **choices with consequences that carry forward**, and **companions with lives of their own**. Story
+decisions are remembered (a world-state record per save) and change later scenes, towns (V7 nodes), who helps you and
+who doesn't; some outcomes are permanent. Companions (Realmbound's guild members, Wildbond's Wren and the people you
+meet) have loyalty and personal arcs (R4), can be lost for good in rare high-stakes moments the player is warned about,
+and can form close bonds, friendships and, for adult characters, romance written tastefully (fade to black, never
+explicit). A Fable-like reputation colours how places greet you. Start small: a few real choices in Realmbound's
+story with visible consequences, the guild stories (R4) with loyalty and an outcome that can go either way.
+
 ## What this changes right away
 
 - The Launch plan stays, but onboarding (L4) becomes "the prologue and the first ten minutes" (V1 feeds it).
