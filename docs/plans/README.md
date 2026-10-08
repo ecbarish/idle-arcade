@@ -2,10 +2,12 @@
 
 Prepared 2026-10-06 for Evan. These documents turn comparable-game research and the owner's stated direction into proposed development stages. They are not a promise of every feature, a completed game spec or authorization to unpark implementation. `docs/ROADMAP.md` still controls approved work. This planning branch adds documentation only above the updated Winter Road branch; it implements no additional gameplay.
 
+**Current owner clarification (2026-10-07):** [platforms, budget, portfolio and earned assistance](../research/owner-direction-2026-10-07.md). Earlier requirements below and in individual plans for universal full Auto are superseded; this does not change implemented gameplay.
+
 ## Owner direction recorded during this session
 
 - Build strong basic games and upgrade their mechanics, content, presentation and capabilities over time.
-- Every game should span fully manual through fully automated play, with useful intermediate settings.
+- Historical direction: every game spanning manual through full Auto. **Superseded by the 2026-10-07 clarification:** earned assistance removes tedium; full unattended play is not a requirement.
 - Desktop and phone must play well. VR is low priority and is parked; it is not a condition for progress.
 - Sports should expand across sports, either under one game or separate modules. Player careers, team management and their different gameplay should be supported.
 - A sports contract should matter beyond a number: earned money should buy meaningful personal progress, such as homes/cars, and potentially open later opportunities.
@@ -35,26 +37,15 @@ This is source-based research, not a hands-on review of every comparator or an e
 
 We did not infer revenue, retention or commercial success from a score or a few reviews. Each development response is our hypothesis. The milestone tests tell us whether it works for this project. The source-ledger summaries are brief paraphrases; original content remains required.
 
-## Manual through fully automated play
+## Play and earned assistance (current control contract)
 
-A single Auto toggle is not sufficient to describe the target. Define who controls each layer, and allow combinations. Manual mode means controlling the meaningful actions the game actually offers; do not label choosing a build as direct action control if all combat remains automated.
+Evan's 2026-10-07 play feedback supersedes the earlier target of full automation in every game. See [owner direction](../research/owner-direction-2026-10-07.md). The goal is meaningful play with earned conveniences and optional delegation of tedious routines, not a complete unattended progression route.
 
-| Level | Player experience | Example |
-|---|---|---|
-| Full manual | Player controls available actor actions and all strategic decisions; only opponents/background simulation use AI | Play baseball actions and choose training, contract and purchases |
-| Assisted | Player retains the key layer and delegates selected routines | Play battles/at-bats; assistants handle approved care, loot or training |
-| Manager/strategist | Player chooses strategy, assignments and development; actors execute | Set a lineup, creature schedule, party plan or survival priorities |
-| Full automated | Policies govern all supported progression layers, including ordinary transitions, while the player watches or returns later | Simulate a career, pay salary once, follow training/offer policies, keep a defined savings budget and report purchases/results |
+Define the player's meaningful activity for each game first. In an adventure this includes exploring, bonding and making battle/story choices; in a guild-management game it includes recruitment, preparation and directing characters who execute orders. Automatic actor behavior is not necessarily an autopilot replacing the player.
 
-These are target capabilities, not claims about today's four playable games. Existing behavior sometimes requires manual actions for capture, quests, earned automation or special decisions. An explicit ticket must reconcile those restrictions before claiming full automation. Preserve current saves and intentional manual accomplishments.
+Unlock assistance where it removes repetition the player understands: repetitive clicks, routine sorting, known-route travel or selected chores. Auto may be earned for a useful limited role, but must not silently skip the story's best moments. Explain exactly what is delegated and allow the player to take control. Essential accessibility settings remain available without progression gates.
 
-**Unlock policy remains a decision:** Evan confirmed the control range but has not specified whether complete autopilot must exist on day one or be earned. Recommended starting point: useful basic Auto early, specialized delegation earned through progression, never sold; ensure an auto-first player has a route to those unlocks if that is the chosen policy. Current manual-specific unlocks are not changed by this document.
-
-Full automation needs sensible defaults or preselected policies for branching story, capture/breeding, spending and season/rebirth transitions. “Pause for a major choice” may be a user option, not a hidden mandatory confirmation that makes every run stall. Destructive decisions and high spending should use explicit policies and limits. A player can always take control again at a valid boundary.
-
-Manual/Auto must run the same underlying rules and save identities. Manual skill should offer a meaningful opportunity, not guaranteed victory. Existing project policy says active play is worth at least as much as Auto; measure normalized rewards and challenge outcomes rather than comparing ten active minutes with eight unattended hours. Earned automation should reduce chores instead of making unattended play unreliable.
-
-Acceptance checks for each new control layer: no double reward when switching; no AI consuming inputs queued by a player; pause/speed/offline consistency; the same loss conditions; policy choices reflected in reports; and an unattended fixture that reaches the intended milestone without a required routine click.
+Future tickets must specify the scope, unlock, feedback and boundaries of each convenience. Preserve existing save identities, intentional accomplishments and player options until a reviewed ticket changes them. Checks should cover switching without duplicate rewards, queued inputs, pause/save/offline consistency and clear results. An unattended fixture is appropriate only for the particular routine being delegated, not a mandatory proof that the entire game plays itself.
 
 ## Upgrade path shared by the portfolio
 
