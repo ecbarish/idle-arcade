@@ -65,7 +65,9 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
 
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
-**The lanes in [docs/QUEUE.md](docs/QUEUE.md) are what to do next** (its "current goal" was rewritten 2026-10-08):
+**The lanes in [docs/QUEUE.md](docs/QUEUE.md) are what to do next** (its "current goal" was rewritten 2026-10-08). **When a lane runs
+out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) supplies the next task**: the whole path for every game,
+67 deliverables with owners, no assistant is ever "finished".
 
 - **Claude (Lane B):** review and merge ChatGPT's PRs first. Then, in order: WG1 tamer abilities with heritages; WG6
   depth step 1 (ground heights, footprints, and the fix for the colour layer drawing you over people in front of you);

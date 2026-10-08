@@ -20,7 +20,10 @@ and how much creative freedom you have are in [CREATIVE.md](CREATIVE.md).
    - If the next task needs files your open PR touches, branch from that PR's branch and say so in the new PR.
    - **No limit on open PRs** (Evan, 2026-10-08: "remove the 2 PR limit in case it gets ahead"). Keep going down
      your lane; Claude reviews them in order. Keep each PR to one task so reviews stay easy.
-6. If a task is unclear or turns out to need Evan (CREATIVE.md "Ask Evan first"), write `docs/proposals/<topic>.md`,
+6. **Lane empty? Never stop and never report "finished".** Use the ticket factory in
+   [DEVELOPMENT-PATH.md](DEVELOPMENT-PATH.md) (Part 1): take the next deliverable you own from the path, write its ticket,
+   add it to your lane here, build it. The path has work for every assistant through each game's version 2.0 and beyond.
+7. If a task is unclear or turns out to need Evan (CREATIVE.md "Ask Evan first"), write `docs/proposals/<topic>.md`,
    mark the task `blocked: <why>`, and move to the next one.
 
 ## Rules that keep parallel work merging cleanly

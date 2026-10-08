@@ -72,24 +72,16 @@ the very end, so running out of usage never strands work.
   (`docs/lore/`, design docs).
 - Evan isn't a programmer: explain in plain words, show results, give clear next steps.
 
-## Where we are (rewritten 2026-10-07; update at the end of each session)
-- **The goal is Launch** (docs/QUEUE.md "The current goal"): both games content complete, now made launch ready;
-  at Launch they become version 2.0. Work happens in lanes (docs/QUEUE.md): Claude Lane B, ChatGPT Lane A.
-- **Wildbond** (v1.5.2, Claude's lane): eight areas, the league and Champion, the Lighthouse Spire, ranch, breeding,
-  five art eras, walkable maps. Evan's first plays reshaped it; **docs/wildbond-plan.md is the plan to follow**
-  (principles: all game world, physical interactions, features through the story, readable, no autopilot, one-hour
-  days, never small). Done: clear start, turn-based battles (`S.battleStyle`), faded colour start (`S.faded`), no
-  world-skipping buttons, roles and stat help. Next: phase 1, the screen is the world.
-- **Realmbound** (v1.0.3, flagship): levels 1-60, eight zones with their own light, four dungeons with Heroic tiers,
-  guild, raid, hunters and pets; balanced to ~20 hours for 40-60. Lore bible docs/lore/realmbound.md; plan
-  docs/realmbound-40-60.md. ChatGPT has its guide, onboarding and guild stories next.
-- **The arcade:** a launcher in three styles players vote on (living world, road, hall; docs/VOTES.md, votes reach
-  Evan's Google Form), shared settings, save safety with automatic backups, offline play (online first), credits,
-  playtest notes, the Studio (GM tools, save doctor). Shared code in `shared/`.
-- **Direction:** docs/VISION.md (V1-V10: prologues, a modern look, game boxes, procedural content, a world of bots,
-  friends, nodes, automation as earned QoL, choices that matter, a big world and one day first person).
-- **Diamond Career** (ChatGPT, T34) and **Otherworld** (Claude, docs/otherworld-design.md) started 2026-10-08 in the
-  browser. Starfall Guild is valued but waiting; Primordial is lower priority.
+## Where we are (rewritten 2026-10-08, late night; update at the end of each session)
+- **Read docs/PROJECTS.md "Read first"** (every decision and lesson since 2026-10-07) and **docs/DEVELOPMENT-PATH.md**
+  (the path for every game, and the ticket factory: no lane is ever "finished").
+- **The new Wildbond and the Starfall village are built in Godot** (Claude's lane): `wildbond-godot/`, `starfall-godot/`,
+  web previews in `play/` (re-export after big steps), Windows builds in `Desktop\Game builds`. Next: WB-M2 in the path
+  (tamer abilities, depth step 1, variety, interiors), then the remaining areas.
+- **Browser games** (ChatGPT's lane): Realmbound v1.6.0, Diamond Career v0.4.0, Otherworld v0.3.0, browser Wildbond
+  v1.8.0 (content complete; its data feeds the Godot version), Starfall Guild (old), Primordial (light).
+- **Friends are testing:** playtest.html (Come Play) with a trailer and the previews. Keep it current.
+- **The local helper** (Ollama on Evan's PC): small checkable jobs only (docs/research/local-ai-helper.md, Lane D).
 
 ## Latest owner direction and Codex handoff — 2026-10-06
 

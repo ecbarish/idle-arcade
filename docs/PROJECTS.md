@@ -25,7 +25,8 @@ Art (visuals and audio), Polish (UX, feel, fixes), Design (a plan or research, n
 
 ## Read first: where things stand and what we've learned (updated 2026-10-08, night)
 
-These decisions and lessons override older rows below wherever they disagree. Each points to its source.
+These decisions and lessons override older rows below wherever they disagree. Each points to its source. **The path
+for every game, and how to make your next ticket when your lane is empty: [DEVELOPMENT-PATH.md](DEVELOPMENT-PATH.md).**
 
 - **Fleshed-out games are built in Godot** (Evan, 2026-10-08): `wildbond-godot/` (the new Wildbond) and
   `starfall-godot/` (the Starfall village). They also play on the web: previews in `play/` (re-export after changes

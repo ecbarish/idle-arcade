@@ -19,8 +19,14 @@ Branch prefixes: `codex/<topic>`, `grok/<topic>`, `<ai>/<topic>`.
 **The vision:** read `docs/VISION.md` (Evan, 2026-10-07) before proposing big features; its projects are V1-V8 in
 `docs/PROJECTS.md`. Automation now means earned quality of life and delegation to characters, not skipping play.
 
-**Wildbond:** docs/wildbond-plan.md is the plan to follow (Evan's principles and phases, 2026-10-07). While Claude
-rebuilds its screens (phases 1-5), keep Wildbond work to data, drawing and new files.
+**Your lane is never finished.** When docs/QUEUE.md Lane A has nothing `open`, use the ticket factory in
+**docs/DEVELOPMENT-PATH.md** (Part 1): take the next `[ChatGPT]` or `[any]` deliverable from the path, write its ticket in
+docs/ROADMAP.md, add it to your lane, build it, open the PR, repeat. Read docs/PROJECTS.md "Read first" before starting.
+
+**Wildbond and Starfall** are now built in Godot by Claude (`wildbond-godot/`, `starfall-godot/`, web previews in `play/`):
+never edit those. Wildbond work for you is data, lore and checks in the browser game, which feeds the Godot version
+through tools/godot-export.ps1 (species, maps, lines, area briefs). docs/wildbond-plan.md's principles apply to every game.
+
 
 **In the game window, for every game** (Evan, 2026-10-08): the lessons from Wildbond apply to all games. The screen is the world: no game in a small window with panels of information beside it. Guidance, menus, stats and story happen inside the game (people who speak, things you hold and open, a thin overlay), not in boxes off to the side. A separate panel is the exception and needs a reason (for example a save tool or settings). New features in any game follow this; existing dashboard layouts (Realmbound, Starfall, Diamond Career) are queued to move into the game window.
 
