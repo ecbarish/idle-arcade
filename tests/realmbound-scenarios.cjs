@@ -777,5 +777,73 @@ module.exports = function scenarios() {
       const historical=JSON.parse(JSON.stringify(interrupted));delete historical.onboarding;
       check(rb.migrate({hero:historical}).chars[0].onboarding===null,'single-hero historical save defaults to no onboarding');
       interrupted.onboarding={arrival:true,hints:null};check(!roadState(interrupted)&&!roadHint(),'malformed optional guidance is ignored safely');
+      // R4: every named adventurer, both choices, present-party time and durable memories.
+      {
+      const storyHero=rb.newHero('Story Listener','concord','human','warrior'), storyAlt=rb.newHero('Other Listener','wild','grishar','mage');
+      storyHero.onboarding=null;storyAlt.onboarding=null;storyHero.lvl=60;storyAlt.lvl=60;
+      rb.S.chars=[storyHero,storyAlt];rb.S.cur=storyHero.id;rb.S.guild={founded:1,name:'The Story Hearth',level:1,xp:0,members:{},jobs:{},requests:{},stories:{}};rb.S.bank={ore:12,kit:3,herb:8,potion:4};rb.boot();rb.C.phase='intown';
+      const allStoryNpcs=[...storyHero.npcs.map(n=>({n,owner:storyHero})),...storyAlt.npcs.map(n=>({n,owner:storyAlt}))];
+      check(Object.keys(MEMBER_STORIES).length===32&&allStoryNpcs.every(({n})=>MEMBER_STORIES[n.name]),'R4: all 32 faction adventurers have an original personal arc');
+      check(new Set(Object.values(MEMBER_STORIES).map(s=>s[0])).size===32,'R4: each adventurer has their own story title');
+      for(const {n,owner} of allStoryNpcs){
+        n.aff=30;n.met=true;addMember(n,owner,true);const key=memberKey(owner.id,n.id),w=workerOf(key),story=MEMBER_STORIES[n.name];
+        check(story.length===7&&story.every(line=>typeof line==='string'&&line.length>5)&&story[5]!==story[6],n.name+': three voiced moments with two distinct outcomes');
+        const generated={cls:n.cls,race:n.race,pers:n.pers,hair:n.hair};
+        for(const branch of [0,1]){
+          rb.S.guild.stories[key]={seconds:0,done:0,choice:null};w.m.mood=80;n.aff=30;
+          for(let beat=0;beat<3;beat++){
+            const state=memberStoryState(key),gate=MEMBER_STORY_GATES[beat];state.seconds=gate.seconds-.1;w.m.mood=80;
+            check(/minute/.test(memberStoryProblem(key))&&!finishMemberStory(key,beat,0),n.name+'/'+branch+'/'+beat+': shared time gates completion');
+            state.seconds=gate.seconds;w.m.mood=gate.mood-.1;
+            check(/mood/.test(memberStoryProblem(key))&&!finishMemberStory(key,beat,0),n.name+'/'+branch+'/'+beat+': mood gates completion');
+            w.m.mood=gate.mood;n.aff=29;check(/Friends/.test(memberStoryProblem(key)),n.name+'/'+branch+'/'+beat+': friendship remains required');n.aff=30+2*beat;
+            check(memberStoryProblem(key)===''&&playMemberStory(key,false),n.name+'/'+branch+'/'+beat+': ready member opens existing portrait dialogue');
+            check(RTALK.memberStory&&MEMBER_STORY_FACE.name===n.name&&MEMBER_STORY_FACE.hairCol===n.hair&&MEMBER_STORY_FACE.shirt===CLASSES[n.cls].col&&RTALK.lines.some(l=>l[1]===MEMBER_STORY_VOICE[n.pers][beat]),n.name+'/'+branch+'/'+beat+': generated personality has its own voice');
+            const run=rb.C.run,play=storyHero.stats.play;rb.step(.1);check(rb.C.run===run&&storyHero.stats.play===play,n.name+'/'+branch+'/'+beat+': deliberate scene pauses game time');
+            SCN.skip();check(state.done===beat&&RTALK,n.name+'/'+branch+'/'+beat+': Skip reveals choices without accepting them');
+            const stale=RTALK.done;SCN.choose(beat===1?2:1);check(state.done===beat&&!RTALK,n.name+'/'+branch+'/'+beat+': Another time grants no progress');
+            playMemberStory(key,false);SCN.skip();SCN.choose(beat===1?branch:0);
+            check(state.done===beat+1&&n.aff===32+2*beat&&w.m.mood===gate.mood+2,n.name+'/'+branch+'/'+beat+': explicit response grants one small relationship reward');
+            const aff=n.aff,mood=w.m.mood;stale(beat===1?branch:0);check(n.aff===aff&&w.m.mood===mood,n.name+'/'+branch+'/'+beat+': stale callback cannot reward a second time');
+          }
+          const state=memberStoryState(key);check(state.choice===branch&&state.done===3&&memberStoriesHTML().includes(story[5+branch]),n.name+'/'+branch+': remembered ending appears in the hall');
+          const saved=JSON.stringify(state),aff=n.aff,mood=w.m.mood;check(playMemberStory(key,true),'R4 '+n.name+': deliberate replay opens');SCN.skip();SCN.choose(0);
+          check(JSON.stringify(state)===saved&&n.aff===aff&&w.m.mood===mood,n.name+'/'+branch+': replay is read-only');
+          check(!finishMemberStory(key,2,0)&&!playMemberStory(key,false),n.name+'/'+branch+': completed arc cannot be repeated');
+        }
+        check(JSON.stringify(generated)===JSON.stringify({cls:n.cls,race:n.race,pers:n.pers,hair:n.hair}),n.name+': stories preserve generated identity');
+      }
+      const local=storyHero.npcs[0],remote=storyAlt.npcs[0],localKey=memberKey(storyHero.id,local.id),remoteKey=memberKey(storyAlt.id,remote.id);
+      rb.S.guild.stories[localKey]={seconds:0,done:0,choice:null};rb.S.guild.stories[remoteKey]={seconds:0,done:0,choice:null};
+      rb.C.phase='seek';rb.C.party=[{n:local,dead:false},{n:local,dead:false},{n:raidGuild(remoteKey),dead:false},{n:{alt:true},dead:false}];
+      memberStoryTick(.5);check(memberStoryState(localKey).seconds===.5&&memberStoryState(remoteKey).seconds===.5,'R4: actual party seconds count once, including another hero\'s raid adventurer');
+      rb.C.party[0].dead=true;rb.C.party[1].dead=true;memberStoryTick(.5);check(memberStoryState(localKey).seconds===.5&&memberStoryState(remoteKey).seconds===1,'R4: fallen party members do not gain time together');
+      for(const phase of ['town','intown','dead','spirit']){rb.C.phase=phase;memberStoryTick(.5);}memberStoryTick(3600);memberStoryTick(NaN);memberStoryTick(-1);
+      check(memberStoryState(remoteKey).seconds===1,'R4: town, death, offline-sized and invalid ticks give no shared time');
+      rb.C.phase='seek';SCN.play([['Test','Pause']],null);memberStoryTick(.5);SCN.skip();check(memberStoryState(remoteKey).seconds===1,'R4: conversation time does not count as adventuring');
+      rb.C.phase='seek';rb.C.t=1000;const stepped=memberStoryState(remoteKey).seconds;rb.step(.1);check(Math.abs(memberStoryState(remoteKey).seconds-stepped-.1)<1e-7,'R4: real combat step advances present party time');
+      Object.defineProperty(document,'hidden',{value:true,configurable:true});try{memberStoryTick(.5);}finally{delete document.hidden;}check(Math.abs(memberStoryState(remoteKey).seconds-stepped-.1)<1e-7,'R4: hidden browser tabs give no story time');
+      const beforeSeconds=memberStoryState(remoteKey).seconds;offline(3600,false);supplyTick();check(memberStoryState(remoteKey).seconds===beforeSeconds,'R4: offline gains and jobs never unlock personal stories');
+      rb.C.phase='intown';rb.C.party=[];rb.S.guild.stories[localKey]={seconds:1800,done:0,choice:null};rb.S.guild.members[localKey].mood=80;local.aff=40;
+      storyHero.mode='auto';check(/Focus/.test(memberStoryProblem(localKey))&&!playMemberStory(localKey,false),'R4: Auto cannot open or choose a new story');storyHero.mode='focus';
+      rb.S.guild.jobs[localKey]={job:'mine',since:Date.now(),paid:0};check(/job/.test(memberStoryProblem(localKey)),'R4: working member must return before meeting');delete rb.S.guild.jobs[localKey];
+      memberStoryState(remoteKey).seconds=1800;rb.S.guild.members[remoteKey].mood=80;remote.aff=40;storyAlt.party=[remote.id];storyAlt.dun={raid:true};check(/raid/.test(memberStoryProblem(remoteKey)),'R4: saved raid reservation never silently releases a member');storyAlt.party=[];storyAlt.dun=null;
+      rb.C.phase='seek';check(/town/.test(memberStoryProblem(localKey)),'R4: meet in town, not mid-fight');rb.C.phase='intown';
+      playMemberStory(localKey,false);const callback=RTALK.done;rb.S.cur=storyAlt.id;SCN.skip();SCN.choose(0);check(memberStoryState(localKey).done===0,'R4: switching heroes during a scene prevents a stale response');rb.S.cur=storyHero.id;
+      playMemberStory(localKey,false);const departed=RTALK.done;dismissMember(localKey);check(!RTALK,'R4: leaving the guild closes a pending story');departed(0);check(memberStoryState(localKey).done===0,'R4: dismissed member cannot finish a pending scene');addMember(local,storyHero,true);rb.S.guild.members[localKey].mood=80;
+      check(finishMemberStory(localKey,0,0),'R4: returning member can continue their pending arc');
+      playMemberStory(localKey,false);const rebooted=RTALK.done;rb.boot();check(!RTALK,'R4: boot clears an interrupted story without choosing');rebooted(1);check(memberStoryState(localKey).done===1,'R4: interrupted story remains unchosen');rb.C.phase='intown';
+      const durable=JSON.stringify(memberStoryState(localKey));dismissMember(localKey);addMember(local,storyHero,true);check(JSON.stringify(memberStoryState(localKey))===durable,'R4: dismissal and rejoining preserve time and story progress');
+      rb.S.guild.members[localKey].mood=80;check(!finishMemberStory(localKey,0,0),'R4: rejoining never repeats an earned beat');
+      const economy=JSON.stringify({bank:rb.S.bank,money:storyHero.money,xp:storyHero.xp,guildxp:rb.S.guild.xp});finishMemberStory(localKey,1,1);finishMemberStory(localKey,2,0);
+      check(JSON.stringify({bank:rb.S.bank,money:storyHero.money,xp:storyHero.xp,guildxp:rb.S.guild.xp})===economy,'R4: narrative choices grant no currency, equipment or guild XP');
+      check(memberRequest(localKey)&&!rb.S.guild.requests[localKey]&&guildHTML().includes('Members asking a favor'),'R4: supply favors remain available alongside personal stories');
+      rb.save();const reloaded=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1')));check(JSON.stringify(reloaded.guild.stories)===JSON.stringify(rb.S.guild.stories),'R4: all independent account memories survive save/load');
+      const legacy=JSON.parse(JSON.stringify(rb.S));delete legacy.guild.stories;const original=JSON.stringify(legacy.chars);const migrated=rb.migrate(legacy);check(Object.keys(migrated.guild.stories).length===0&&JSON.stringify(migrated.chars)===original,'R4: older guild save gets empty stories without rewriting characters');
+      const repaired=normalizeMemberStories({bad:{done:3},[localKey]:{seconds:Infinity,done:3,choice:null},[remoteKey]:{seconds:-1,done:99,choice:1}});
+      check(!repaired.bad&&repaired[localKey].seconds===0&&repaired[localKey].done===1&&repaired[remoteKey].seconds===0&&repaired[remoteKey].done===3,'R4: malformed optional story records clamp safely without inventing an outcome');
+      rb.S.tab='supplies';const cacheBefore=TABS.supplies.key();rb.S.guild.stories[localKey]={seconds:1800,done:0,choice:null};check(TABS.supplies.key()!==cacheBefore,'R4: story readiness and choices invalidate the Guild tab cache');
+      rb.S.guild.members[localKey].mood=80;memberTalk(localKey);check(RTALK&&RTALK.memberStory,'R4: walkable hall member opens a ready personal story');SCN.skip();SCN.choose(1);
+      }
       rb.save();return checks;
     };

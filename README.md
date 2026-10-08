@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Realmbound (2026-10-08): three personal story moments for every guild adventurer, unlocked by present party time, mood and friendship. Remembered decisions have two lasting narrative outcomes; Auto never chooses them. Old saves, independent supply favors and rejoining members keep their progress. All seven test pages pass (6,675 Realmbound checks); phone, laptop, desktop and ultrawide checked. No version bump; PR #49, docs/realmbound-member-stories.md.
+
 - Realmbound v1.1.0, onboarding (2026-10-08): a skippable arrival ends on the existing first questgiver, followed by optional contextual guidance for Focus, loot, reward choice, town services and actual companions. Returning saves stay quiet; all seven test pages pass. No version or cache bump; see docs/realmbound-onboarding.md.
 
 - Diamond Career v0.2.0, first month (2026-10-08): a second contract with explicit pay/opportunity tradeoffs, 18 possible professional games across 30 calendar days, Iona's recorded coaching notes and a personal month recap. Old payment IDs and possessions persist; all seven test pages pass (83 Diamond checks). No version/cache bump; docs/diamond-career-first-month.md.

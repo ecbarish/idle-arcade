@@ -15,9 +15,9 @@ function giverLook(name) {
 const SCN = Dialogue.create({
   host: $('.scene'), theme: 'realmbound',
   get: () => RTALK, set: s => { RTALK = s; },
-  cast: who => giverLook(who),
+  cast: who => memberStoryPortrait(who) || giverLook(who),
   blip: who => sfx('blip', voiceOf(who)),
-  auto: () => !!H() && H().mode === 'auto'
+  auto: () => !!H() && H().mode === 'auto' && !(RTALK && RTALK.memberStory)
 });
 /* the Accept button in the quest log: hear the request first */
 function questOffer(id) {

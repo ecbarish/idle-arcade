@@ -140,6 +140,7 @@ function townTalk(n) {
 }
 /* a guild adventurer in the hall: their favor if they have one, otherwise a word that shows their mood */
 function memberTalk(key) {
+  if (!memberStoryProblem(key) && playMemberStory(key, false)) return;
   const w = workerOf(key); if (!w) return; const mood = w.m.mood, face = mood >= 70 ? ':happy' : mood < 30 ? ':sad' : '';
   const req = typeof memberRequest === 'function' ? memberRequest(key) : null;
   if (req) { const voice = (typeof REQUEST_VOICE !== 'undefined' && (REQUEST_VOICE[w.n.pers] || REQUEST_VOICE.cheerful)) || { hello: '' };

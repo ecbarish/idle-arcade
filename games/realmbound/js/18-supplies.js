@@ -76,7 +76,7 @@ function jobRate(id, job) { return job === 'quest' ? '3 quest runs an hour, abou
 function workers() { const h = H(); return S.chars.filter(c => c.id !== h.id).map(c => String(c.id)).concat(guildOn() ? Object.keys(S.guild.members).filter(k => workerOf(k)) : []); }
 TABS.supplies = {
   key() { const b = bank(), g = S.guild || {}; return [b.ore, b.kit, b.herb, b.potion, b.autoPot, S.cur, workers().map(id => id + ':' + (workerOf(id) || {}).lvl + ':' + (ROSTER.jobOf(id) || '')).join(','), canRepair(),
-    guildOn(), g.level, g.xp, JSON.stringify(g.requests || {}), g.members ? Object.values(g.members).map(m => Math.round(m.mood / 10)).join('') : '', (H().npcs || []).filter(n => affLvl(n) >= 2).length, H().money >= GUILD_COST, inTown(), H().lvl].join('|'); },
+    guildOn(), g.level, g.xp, JSON.stringify(g.requests || {}), memberStoriesKey(), g.members ? Object.values(g.members).map(m => Math.round(m.mood / 10)).join('') : '', (H().npcs || []).filter(n => affLvl(n) >= 2).length, H().money >= GUILD_COST, inTown(), H().lvl].join('|'); },
   build() {
     const h = H(), b = bank(), ws = workers();
     const row = (name, n, meta, btn) => `<div class="rowl"><div class="l"><b>${name}</b> <span class="num">${n}</span><div class="meta">${meta}</div></div><div class="r">${btn}</div></div>`;

@@ -221,3 +221,8 @@ textarea{width:100%;min-height:60px;background:#000;color:var(--fg);border:1px s
 .road-guide[hidden]{display:none}
 
 #arrivalControls[hidden]{display:none}
+
+/* Personal story controls keep the whole line readable on phones. */
+@media (max-width:520px){.member-story{flex-wrap:wrap;align-items:flex-start}.member-story .l{width:100%}.member-story .r{width:100%;justify-content:flex-end}}
+
+@media (max-width:520px){.scene:has(.member-story-dialogue:not([hidden])){min-height:340px;aspect-ratio:auto}}

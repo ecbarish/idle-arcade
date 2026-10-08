@@ -54,7 +54,7 @@ function foundProblem() {
 function foundGuild(name) {
   const why = foundProblem(); if (why) { err(why); return false; }
   const h = H(), s = guildSignatures(); name = String(name || '').replace(/[^A-Za-z' -]/g, '').trim().slice(0, 24) || pick(GUILD_NAMES);
-  h.money -= GUILD_COST; Object.assign(G(), { name, founded: Date.now(), founder: h.id, level: 1, xp: 0, members: {}, requests: {} });
+  h.money -= GUILD_COST; Object.assign(G(), { name, founded: Date.now(), founder: h.id, level: 1, xp: 0, members: {}, requests: {}, stories: {} });
   for (const n of s.friends) addMember(n, h, true);
   slog(`Founded the guild ${name}.`); toast(`${name} is founded!`); sfx('badge');
   line(`${name} is founded. ${s.chars.length ? 'All your characters' : 'You'}${s.friends.length ? ` and ${s.friends.map(n => n.name).join(', ')}` : ''} sign the charter.`, 'l-loot');
@@ -62,7 +62,7 @@ function foundGuild(name) {
 }
 function addMember(n, h, quiet) { G().members[memberKey(h.id, n.id)] = { mood: 60, at: Date.now(), joined: Date.now() }; if (!quiet) { addAff(n, 5, `Joined ${G().name}.`); toast(`${n.name} joins ${G().name}`); } }
 function inviteToGuild(npcId) { const h = H(), n = npcOf(npcId); if (!guildOn() || !n || n.alt || affLvl(n) < 2 || isMember(n, h)) return false; addMember(n, h); say(n, 'thanks'); return true; }
-function dismissMember(key) { if (!G().members || !G().members[key] || memberRaiding(key)) return false; ROSTER.stop(key); delete G().members[key]; return true; }
+function dismissMember(key) { if (!G().members || !G().members[key] || memberRaiding(key)) return false; ROSTER.stop(key); clearMemberStory(key); delete G().members[key]; return true; }
 /* guild XP and levels */
 function guildXP(n, why) {
   if (!guildOn() || !(n > 0)) return; const g = G(); g.xp += n;
@@ -160,7 +160,7 @@ function guildHTML() {
       <div class="aff" title="Mood ${mood}"><i style="width:${mood}%;background:${mood >= 70 ? '#7cf08a' : mood >= 30 ? '#f2c14e' : '#e0483e'}"></i></div></div>
       <div class="r"><button class="btn sm alt" data-act="guilddismiss" data-arg="${k}" ${memberRaiding(k) ? 'disabled title="Return from the raid before dismissing this member"' : ''}>Dismiss</button></div></div>`; }).join('') : '<p class="meta">No adventurers yet. Invite companions who are your Friends.</p>';
   if (cand.length) o += `<p class="meta" style="margin-top:6px">Could join: ${cand.map(n => `<button class="btn sm" data-act="guildinvite" data-arg="${n.id}">Invite ${n.name}</button>`).join(' ')}</p>`;
-  return o + memberRequestsHTML();
+  return o + memberRequestsHTML() + memberStoriesHTML();
 }
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-act]'); if (!el || !H()) return; const a = el.dataset.act, arg = el.dataset.arg;
