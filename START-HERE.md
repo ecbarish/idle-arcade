@@ -101,6 +101,8 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 · Codex: T39 ready in PR #63, stacked on #62: Hearthmere complete life, four endings, each gift cost once, visible winter consequences and cross-world knowledge. All eight pages pass (Otherworld 1,691); actual gift/ending/reload flows at four widths. No Godot/version changes.
+
 - 2026-10-08 · Codex: T38 ready in PR #62, stacked on recovered plan #61: full-window Realmbound, Quest Journal and Satchel overlays, map/road/battle record and all existing pages reachable. Reading pauses combat and town Auto; 25 new scenarios, all eight pages pass, actual equipment/quest/Smithy/reload at four widths. No Godot/version changes.
 
 - 2026-10-08 · Codex: recovered Claude's four uncommitted planning files read-only into PR #61; preserved his new Godot/browser direction and T38-T40 tickets, reconciled T36/T37 ready status. Claude's checkout remains untouched.

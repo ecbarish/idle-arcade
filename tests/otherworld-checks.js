@@ -56,8 +56,9 @@ function otherworldChecks() {
 
   // T35: exercise every memory combination, every gift and hungry/frightened alternatives, not only the happy route.
   const keys = Object.keys(MEMORIES);
-  for (let mask = 0; mask < (1 << keys.length); mask++) {
-    const mem = Object.fromEntries(keys.filter((k, i) => mask & (1 << i)).map(k => [k, true]));
+  const asterKeys = keys.filter(k => !['thaw','shelter'].includes(k));
+  for (let mask = 0; mask < (1 << asterKeys.length); mask++) {
+    const mem = Object.fromEntries(asterKeys.filter((k, i) => mask & (1 << i)).map(k => [k, true]));
     for (const gift of Object.keys(GIFTS.asterhold)) for (const town of [
       { day: 1, food: 4, fear: 1 }, { day: 1, food: 0, fear: 6 }, { day: 2, food: 6, fear: 0 }, { day: 3, food: 0, fear: 6 }
     ]) {
@@ -174,5 +175,73 @@ function otherworldChecks() {
     ow.run('a_market'); const replacement = fixture('pocket'); ow.S.life = replacement; const before = JSON.stringify(replacement); ow.D.choose(0);
     return JSON.stringify(replacement) === before;
   }));
+
+  // T39: every gift, relevant carried-memory combination and struggling/thriving inn.
+  const hk=['broth','thaw','rootsong','shelter'];
+  for(let mask=0;mask<16;mask++)for(const gift of Object.keys(GIFTS.hearthmere)){
+    const mem=Object.fromEntries(hk.filter((k,i)=>mask&(1<<i)).map(k=>[k,true]));
+    const r=explore('hearthmere',gift,mem);
+    check('Hearthmere every path: '+gift+', memories '+mask,()=>{if(r.problems.length)throw Error(r.problems.join('; '));return r.endings.size>=2;});
+  }
+  const hf=(gift='cooking',mem={})=>ow.prepareLife({world:'hearthmere',gift,name:'Test',flags:{},at:'h_key',silver:0,status:false,mem});
+  const withH=fn=>{const old=ow.S;try{ow.S={...fresh(),life:hf()};return fn(ow.S.life);}finally{ow.S=old;}};
+  check('Hearthmere offers all four reachable endings, including hope and a strange life',()=>{
+    const all=new Set();for(const g of Object.keys(GIFTS.hearthmere))for(const m of [{},{thaw:true},{rootsong:true}])explore('hearthmere',g,m).endings.forEach(e=>all.add(e));
+    return ['e_hearth_shared','e_hearth_banked','e_hearth_pass','e_hearth_lake'].every(e=>all.has(e));
+  });
+  check('Hearth Cooking helps the table but misses the caravan; costs apply once on reload',()=>withH(l=>{
+    ow.run('h_gift');const before=JSON.stringify(l);ow.save();ow.S=fresh();ow.load();ow.run('h_gift');
+    return l.flags.late&&l.hearth.stores===3&&!NODES.h_prep.choices[4].need(l)&&JSON.stringify(ow.S.life)===before;
+  }));
+  check('Spirit Speech warms the stove but unsettles neighbors; visible work can mend this',()=>{
+    const l=hf('speech');NODES.h_gift.fx(l);if(!l.flags.odd||l.hearth.warmth!==1)return false;
+    NODES.h_prep.choices[1].fx(l);return !l.flags.odd&&l.hearth.welcome===2;
+  });
+  check('Green Thumb feeds people but blocks the cart; clearing the step makes departure possible',()=>{
+    const l=hf('green');NODES.h_gift.fx(l);if(!l.flags.weeds||l.hearth.stores!==4||NODES.h_prep.choices[4].need(l))return false;
+    NODES.h_prep.choices[1].fx(l);return !l.flags.weeds&&NODES.h_prep.choices[4].need(l);
+  });
+  check('winter consumes supplies at authored dawns only once; reading has no time penalty',()=>{
+    const l=hf();l.hearth.stores=6;hearthDay(l,3);const before=JSON.stringify(l);hearthDay(l,3);hearthDay(l,1);return l.hearth.stores===4&&JSON.stringify(l)===before;
+  });
+  check('all gifts have a hopeful route without memories, not only an optimal new-game gift',()=>Object.keys(GIFTS.hearthmere).every(g=>explore('hearthmere',g,{}).endings.has('e_hearth_shared')));
+  check('the spring respects Puddle trust; borrowed songs do not skip the promise',()=>{
+    const l=hf('green',{rootsong:true});if(NODES.h_spring.choices[1].need(l))return false;l.flags.puddle=true;
+    if(!NODES.h_spring.choices[1].need(l)||NODES.h_winter.choices[3].need(l))return false;
+    NODES.h_spring.choices[1].fx(l);return NODES.h_winter.choices[3].need(l);
+  });
+  check('Hearthmere locked choices show reasons and cannot be selected by click or key',()=>withH(l=>{
+    ow.run('h_prep');ow.D.skip();const bs=[...ow.D.el.querySelectorAll('.dlg-choices button')];const before=JSON.stringify(l);
+    ow.D.choose(2);document.dispatchEvent(new KeyboardEvent('keydown',{key:'3',bubbles:true}));
+    return bs[2].disabled&&/recipe/.test(bs[2].textContent)&&JSON.stringify(l)===before;
+  }));
+  check('every Hearthmere ending returns exactly its promised memories, keeps old memories and records one life',()=>{
+    for(const e of Object.keys(ENDINGS).filter(k=>k.startsWith('e_hearth_'))){const old=ow.S;try{
+      ow.S={...fresh(),mem:{oldroot:true},life:hf()};ow.finish(e);ow.D.skip();
+      if(ow.S.life!==null||ow.S.lives.length!==1||ow.S.lives[0].world!=='hearthmere'||JSON.stringify(Object.keys(ow.S.mem).sort())!==JSON.stringify(['oldroot',...ENDINGS[e].keep].sort()))return false;
+    }finally{ow.S=old;}}return true;
+  });
+  check('Hearthmere ending reload resumes epilogue once, without inventing Asterhold villagers',()=>withH(l=>{
+    l.flags.puddle=true;ow.finish('e_hearth_lake');ow.save();ow.S=fresh();ow.load();const resumed=ow.S.life;
+    if(resumed.ending!=='e_hearth_lake'||/Ressa|Bren|Lanthorn/.test(JSON.stringify(townEpilogue(resumed,resumed.ending))))return false;
+    ow.finish(resumed.ending);ow.D.skip();return ow.S.lives.length===1&&ow.S.mem.thaw;
+  }));
+  check('Hearthmere memories travel to Asterhold as knowledge; broth creates a new working choice',()=>{
+    const l=fixture('pocket');const c=NODES.a_return_market.choices.find(c=>c.t==='Make winter broth for the well queue');
+    if(c.need(l))return false;l.mem.broth=true;const before={...l.town};if(!c.need(l))return false;c.fx(l);
+    return l.town.food===before.food+1&&l.town.fear===Math.max(0,before.fear-2)&&l.flags.hearthBroth;
+  });
+  check('Asterhold forest song opens a different Hearthmere life',()=>{
+    const no=explore('hearthmere','green',{}).endings,yes=explore('hearthmere','green',{rootsong:true}).endings;
+    return !no.has('e_hearth_lake')&&yes.has('e_hearth_lake');
+  });
+  check('scene details show winter, food, welcome and overgrowth without a score panel',()=>{
+    const l=hf('green');const before=hearthView(l);l.flags.innOpen=true;l.flags.weeds=true;l.flags.puddle=true;l.hearth={day:3,stores:4,warmth:2,welcome:3};const after=hearthView(l);
+    return after.snow>before.snow&&after.bowls>before.bowls&&after.guests>before.guests&&after.fire&&after.open&&after.weeds&&after.puddle;
+  });
+  check('corrupt new Hearthmere counters get bounded defaults without wiping choices or memories',()=>{
+    const l=hf();l.hearth={day:Infinity,stores:NaN,warmth:-3,welcome:99};l.flags.puddle=true;l.mem.thaw=true;ow.prepareLife(l,true);
+    return l.hearth.day===1&&l.hearth.stores===1&&l.hearth.warmth===0&&l.hearth.welcome===3&&l.flags.puddle&&l.mem.thaw;
+  });
   return out;
 }
