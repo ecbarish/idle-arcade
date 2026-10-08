@@ -8,6 +8,8 @@ const OUTLINE := Color("1e1a22")
 
 static func paint(ci: CanvasItem, o: Vector2, parts: Array) -> void:
 	for p in parts:
+		if p.size() > 5 and not p[5]:
+			continue                                                            # thin parts (spider legs) go without an outline
 		ci.draw_rect(Rect2(o + Vector2(p[0] - 1, p[1] - 1), Vector2(p[2] + 2, p[3] + 2)), OUTLINE)
 	for p in parts:
 		ci.draw_rect(Rect2(o + Vector2(p[0], p[1]), Vector2(p[2], p[3])), p[4])
@@ -123,6 +125,13 @@ static func creature(ci: CanvasItem, o: Vector2, right: bool, pose: Dictionary, 
 	match look.get("kind", "wolf"):
 		"lizard": P = _lizard(pose, look)
 		"boar": P = _boar(pose, look)
+		"cat": P = _cat(pose, look)
+		"hyena": P = _hyena(pose, look)
+		"croc": P = _croc(pose, look)
+		"horse": P = _horse(pose, look)
+		"bird": P = _bird(pose, look)
+		"spider": P = _spider(pose, look)
+		"sprite": P = _sprite(pose, look)
 		_: P = _wolf(pose, look)
 	if not right:
 		for p in P:
@@ -253,4 +262,183 @@ static func _boar(pose: Dictionary, look: Dictionary) -> Array:
 	P.append([15, hy + 2 + tw, 2, 3, snout]); P.append([16, hy + 3 + tw, 1, 1, dark])
 	P.append([15, hy + 5, 1, 1, Color("f4f0e0")])
 	P.append([13, hy + 1, 1, 1, _eye(pose, c)])
+	return P
+
+## A look for any species from the game data: its family's body plan in its own colour (main.gd overrides a few).
+static func look_for(species: Dictionary) -> Dictionary:
+	var c := Color(species.get("col", "#a08060"))
+	return { "kind": species.get("fam", "wolf"), "body": c, "belly": c.lightened(0.45), "dark": c.darkened(0.6),
+		"accent": c.lightened(0.25) if species.get("el", "") != "Grove" else Color("5d9a3e"), "snout": c.lightened(0.3) }
+
+## Pebblepaw's family: a slim cat with pointed ears, a long tail that curls up, stripes.
+static func _cat(pose: Dictionary, look: Dictionary) -> Array:
+	var c: Color = look.body
+	var belly: Color = look.belly
+	var dark: Color = look.dark
+	var cr: int = pose.get("crouch", 0)
+	var sit: bool = pose.get("sit", false)
+	var f := _frame(pose)
+	var wag: int = pose.get("wag", 0)
+	var by := 5 + cr
+	var P: Array = []
+	var legh := 12 - (by + 4)
+	if not sit:
+		P.append([5 + _lift(f, 1), by + 4, 1, legh - _lift(f, 1), c.darkened(0.25)])
+	P.append([12 + _lift(f, 0), by + 4, 1, legh - _lift(f, 0), c.darkened(0.25)])
+	# the tail: thin, rising and curling at the tip
+	P.append([2, by, 2, 1, c]); P.append([1, by - 3 - wag, 1, 4 + wag, c]); P.append([1, by - 4 - wag, 2, 1, dark])
+	if sit:
+		P.append([3, by + 1, 7, 4, c]); P.append([4, 10, 4, 2, c])
+	else:
+		P.append([3, by, 9, 4, c])
+	P.append([5, by + 3, 5, 1, belly]); P.append([4, by + 1, 2, 1, dark]); P.append([7, by + 1, 2, 1, dark])   # stripes
+	if not sit:
+		P.append([4 + _lift(f, 0), by + 4, 1, legh - _lift(f, 0), c])
+	P.append([11 + _lift(f, 1), by + 4, 1, legh - _lift(f, 1), c])
+	var hy := by - 4 + (2 if pose.get("sniff", false) else 0) + (1 if sit else 0)
+	var up := 1 if pose.get("ears_up", false) else 0
+	P.append([11, hy - 1 - up, 1, 2 + up, c]); P.append([14, hy - 1 - up, 1, 2 + up, c])
+	P.append([11, hy, 5, 4, c]); P.append([12, hy + 2, 4, 2, belly]); P.append([16, hy + 2, 1, 1, dark])
+	P.append([13, hy + 1, 1, 1, _eye(pose, c)]); P.append([15, hy + 1, 1, 1, _eye(pose, c)])
+	return P
+
+## Gnawhound's family: a hyena, shoulders higher than the hips, a bristly mane, round ears and spots.
+static func _hyena(pose: Dictionary, look: Dictionary) -> Array:
+	var c: Color = look.body
+	var belly: Color = look.belly
+	var dark: Color = look.dark
+	var cr: int = pose.get("crouch", 0)
+	var sit: bool = pose.get("sit", false)
+	var f := _frame(pose)
+	var wag: int = pose.get("wag", 0)
+	var by := 4 + cr
+	var P: Array = []
+	if not sit:
+		P.append([4 + _lift(f, 1), by + 6, 1, 6 - cr - _lift(f, 1), c.darkened(0.25)])
+	P.append([12 + _lift(f, 0), by + 5, 1, 7 - cr - _lift(f, 0), c.darkened(0.25)])
+	P.append([1, by + 2 - wag, 2, 2, dark])                                       # a short tufted tail
+	P.append([3, by + 2 + (1 if sit else 0), 4, 4, c]); P.append([6, by, 6, 5, c])  # the sloping back
+	P.append([7, by - 1, 5, 1, dark]); P.append([4, by + 3, 1, 1, dark]); P.append([7, by + 2, 1, 1, dark]); P.append([9, by + 3, 1, 1, dark])
+	P.append([7, by + 4, 4, 1, belly])
+	if not sit:
+		P.append([3 + _lift(f, 0), by + 6, 1, 6 - cr - _lift(f, 0), c])
+	P.append([11 + _lift(f, 1), by + 5, 1, 7 - cr - _lift(f, 1), c])
+	var hy := by - 3 + (2 if pose.get("sniff", false) else 0)
+	P.append([11, hy - 1, 2, 2, c]); P.append([11, hy - 1, 1, 1, dark])
+	P.append([11, hy, 5, 4, c]); P.append([15, hy + 1, 2, 3, belly]); P.append([16, hy + 1, 1, 1, dark])
+	P.append([14, hy + 3, 2, 1, Color("f4f0e0")])                                 # the grin
+	P.append([13, hy + 1, 1, 1, _eye(pose, c)])
+	return P
+
+## Bogsnap's family: a crocodile, long and low, a ridged back, a long jaw with a row of teeth.
+static func _croc(pose: Dictionary, look: Dictionary) -> Array:
+	var c: Color = look.body
+	var belly: Color = look.belly
+	var cr: int = pose.get("crouch", 0)
+	var f := _frame(pose)
+	var wag: int = pose.get("wag", 0)
+	var by := 7 + cr
+	var P: Array = []
+	var legh := 12 - (by + 3)
+	P.append([5 + _lift(f, 1), by + 3, 1, legh - _lift(f, 1), c.darkened(0.25)]); P.append([10 + _lift(f, 0), by + 3, 1, legh - _lift(f, 0), c.darkened(0.25)])
+	P.append([0, by + 1 - wag, 3, 2, c]); P.append([2, by, 3, 3, c])               # the heavy tail
+	P.append([4, by - 1, 8, 4, c]); P.append([5, by + 2, 6, 1, belly])
+	for i in 4:
+		P.append([3 + i * 2, by - 2, 1, 1, c.darkened(0.3)])                       # ridges
+	P.append([4 + _lift(f, 0), by + 3, 2, legh - _lift(f, 0), c]); P.append([9 + _lift(f, 1), by + 3, 2, legh - _lift(f, 1), c])
+	var open := 1 if pose.get("ears_up", false) and wag == 1 else 0              # the jaw opens a little when it's excited
+	P.append([11, by - 2, 3, 3, c]); P.append([14, by - 1, 3, 2, c]); P.append([14, by + 1 + open, 3, 1, c.darkened(0.1)])
+	P.append([14, by + 1, 1, 1, Color("f4f0e0")]); P.append([16, by + 1, 1, 1, Color("f4f0e0")])
+	P.append([12, by - 2, 1, 1, _eye(pose, c)])
+	return P
+
+## Galefoal's family: a horse, long legs, an arched neck, a flowing mane and tail.
+static func _horse(pose: Dictionary, look: Dictionary) -> Array:
+	var c: Color = look.body
+	var dark: Color = look.dark
+	var mane: Color = look.get("accent", c.lightened(0.3))
+	var f := _frame(pose)
+	var wag: int = pose.get("wag", 0)
+	var cr: int = pose.get("crouch", 0)
+	var by := 3 + cr
+	var P: Array = []
+	var legh := 12 - (by + 4)
+	P.append([4 + _lift(f, 1), by + 4, 1, legh - _lift(f, 1), c.darkened(0.25)]); P.append([11 + _lift(f, 0), by + 4, 1, legh - _lift(f, 0), c.darkened(0.25)])
+	P.append([1, by + 1 - wag, 2, 5, mane])                                       # the tail
+	P.append([3, by, 9, 4, c]); P.append([4, by + 3, 7, 1, c.lightened(0.15)])
+	P.append([3 + _lift(f, 0), by + 4, 1, legh - _lift(f, 0), c]); P.append([10 + _lift(f, 1), by + 4, 1, legh - _lift(f, 1), c])
+	P.append([3 + _lift(f, 0), 11 - _lift(f, 0), 1, 1, dark]); P.append([10 + _lift(f, 1), 11 - _lift(f, 1), 1, 1, dark])
+	var hy := by - 4 + (3 if pose.get("sniff", false) else 0)
+	P.append([11, hy + 1, 2, 4, c])                                               # the neck
+	P.append([12, hy - 1, 3, 3, c]); P.append([14, hy, 3, 2, c]); P.append([16, hy + 1, 1, 1, dark])
+	P.append([12, hy - 2, 1, 2, c]); P.append([10, hy - 1, 2, 5, mane])          # an ear and the mane
+	P.append([13, hy, 1, 1, _eye(pose, c)])
+	return P
+
+## Glimmerwing's family: a bird, round body, a wing that flaps, tail feathers, a small beak.
+static func _bird(pose: Dictionary, look: Dictionary) -> Array:
+	var c: Color = look.body
+	var belly: Color = look.belly
+	var dark: Color = look.dark
+	var flap: int = pose.get("wag", 0)
+	var f := _frame(pose)
+	var by := 5 - (1 if flap == 1 else 0)
+	var P: Array = []
+	P.append([7 + (1 if f == 1 else 0), by + 5, 1, 12 - (by + 5), dark]); P.append([9 - (1 if f == 3 else 0), by + 5, 1, 12 - (by + 5), dark])
+	P.append([2, by + 1, 3, 2, c.darkened(0.15)]); P.append([1, by, 2, 1, c.darkened(0.15)])   # tail feathers
+	P.append([4, by, 7, 5, c]); P.append([6, by + 3, 4, 2, belly])
+	match flap:
+		1: P.append([5, by - 4, 4, 4, c.lightened(0.15)]); P.append([5, by - 4, 2, 1, c.lightened(0.35)])
+		-1: P.append([5, by + 2, 5, 2, c.darkened(0.1)])
+		_: P.append([5, by + 1, 5, 2, c.lightened(0.1)])
+	var hy := by - 3 + (2 if pose.get("sniff", false) else 0)
+	P.append([10, hy, 4, 4, c]); P.append([14, hy + 2, 2, 1, Color("f2b04a")])
+	if pose.get("ears_up", false):
+		P.append([11, hy - 2, 1, 2, c.lightened(0.2)])                              # a crest
+	P.append([12, hy + 1, 1, 1, _eye(pose, c)])
+	return P
+
+## Duskweaver's family: a spider, a round body behind a small head, eight legs that bend up at the knee and splay out
+## (the front pairs reaching forward, the back pairs back), rippling as it walks; a cluster of red eyes.
+static func _spider(pose: Dictionary, look: Dictionary) -> Array:
+	var c: Color = look.body
+	var dark: Color = look.dark
+	var f := _frame(pose)
+	var cr: int = pose.get("crouch", 0)
+	var by := 6 + cr
+	var P: Array = []
+	for side in 2:                                                                # far legs first, then near ones over the body
+		var col := dark if side == 0 else dark.lightened(0.2)
+		for i in 4:
+			var dir := -1 if i < 2 else 1
+			var kx := 4 + i * 3 + (1 if side == 1 else 0)
+			var st := 1 if (f + i + side) % 2 == 1 else 0
+			if side == 1:                                                        # near legs: from under the body, down and out
+				P.append([kx, by + 4, 1, 1, col, false]); P.append([kx + dir * (1 + st), by + 5, 1, 7 - by, col, false])
+				continue
+			var top := by - 2 - (1 if i in [1, 2] else 0)
+			P.append([kx, top, 1, by + 1 - top, col, false])                      # up from the body to the knee
+			P.append([kx + dir, top, 1, 1, col, false])                           # over the knee
+			P.append([kx + dir * 2, top + 1, 1, 2, col, false])                   # down and out
+			P.append([kx + dir * (3 + st), top + 3, 1, 12 - (top + 3), col, false])   # to the ground
+		if side == 0:
+			P.append([2, by, 7, 4, c]); P.append([3, by + 1, 3, 1, c.lightened(0.2)]); P.append([5, by + 2, 2, 1, look.get("accent", dark)])
+			P.append([9, by + 1, 4, 3, c])
+	var e := Color("e84a5a") if not pose.get("blink", false) else c.darkened(0.3)
+	P.append([11, by + 2, 1, 1, e]); P.append([12, by + 1, 1, 1, e]); P.append([12, by + 3, 1, 1, e])
+	return P
+
+## Sunspark's family: a sprite, a little floating light with fluttering wings, bobbing, no feet on the ground.
+static func _sprite(pose: Dictionary, look: Dictionary) -> Array:
+	var c: Color = look.body
+	var glow := c.lightened(0.5)
+	var flap: int = pose.get("wag", 0)
+	var by := 3 - flap
+	var P: Array = []
+	var lift := 1 if flap == 1 else 0
+	P.append([4, by + 1 - lift, 3, 3 + lift, glow]); P.append([11, by + 1 - lift, 3, 3 + lift, glow])   # wings
+	P.append([6, by, 6, 6, c]); P.append([7, by + 1, 4, 4, glow]); P.append([8, by + 2, 2, 2, Color("ffffff")])
+	P.append([8, by + 7, 2, 1, c.lightened(0.2)]); P.append([9, by + 9, 1, 1, c.lightened(0.3)])   # a trail of light
+	var e := Color("3a3020") if not pose.get("blink", false) else glow
+	P.append([8, by + 2, 1, 1, e]); P.append([10, by + 2, 1, 1, e])
 	return P

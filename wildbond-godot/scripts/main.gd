@@ -125,6 +125,7 @@ var bubbles: Array = []                      # Ripplet's bubbles: [{p: Vector2, 
 var bubble_cd := 0.0
 var walk_to: Array[Vector2i] = []           # click or tap to walk: the steps still to take
 var meet_after: Mover = null                 # walking up to a creature you tapped, to meet it on arrival
+var meet_tries := 0
 var rng := RandomNumberGenerator.new()
 var register: Control
 var card: Control
@@ -406,7 +407,14 @@ func _process(dt: float) -> void:
 		elif meet_after:
 			if (me.tile - meet_after.tile).length() <= 1.01 and stage == "barn_choose":
 				_meet(meet_after)
-			meet_after = null
+				meet_after = null
+			elif meet_tries < 4:
+				meet_tries += 1                          # it wandered off a step: follow it
+				walk_to = route(me.tile, meet_after.tile + Vector2i.DOWN)
+				if walk_to.is_empty():
+					meet_after = null
+			else:
+				meet_after = null
 	_check_doors()
 	for r in restore:
 		r.r = move_toward(r.r, r.goal, dt * 70.0)
@@ -470,6 +478,7 @@ func _tap(at: Vector2) -> void:
 					_meet(s)
 					return
 				meet_after = s
+				meet_tries = 0
 				goal = s.tile + Vector2i.DOWN          # stand in front of its stall
 	if goal == me.tile:
 		return
