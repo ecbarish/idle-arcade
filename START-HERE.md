@@ -46,7 +46,7 @@ and habits, Wilddex pages), the bond flooding colour out of the barn, Wren runni
 tall grass with wild creatures, catching with Bond (lure + calm meter; each catch brings colour back), Bram and Lise,
 Warden Isolde and the Thorn Badge, items, signs, healing with Maren, all 81 creatures with bodies (ten family plans),
 and saving with a Continue page. Content comes from the
-browser game via `tools/godot-export.ps1`; checks: `tests/run_tests.gd` (98); sharing: `tools/godot-build.ps1` once
+browser game via `tools/godot-export.ps1`; checks: `tests/run_tests.gd` (109); sharing: `tools/godot-build.ps1` once
 Evan installs Godot's export templates. The plan for the move: `docs/godot-port-plan.md`.
 
 **Current (2026-10-07):** the goal is Launch (docs/QUEUE.md). Wildbond follows **docs/wildbond-plan.md** (Evan'splay notes turned into principles and phases); Realmbound is balanced and gets its guide and onboarding next. Theolder detail below is history; CLAUDE.md "Where we are" has the short current summary.

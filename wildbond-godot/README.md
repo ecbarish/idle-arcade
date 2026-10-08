@@ -38,6 +38,10 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   holds three; the rest go to Maren's ranch. **Bram and Lise** spot you and walk over to battle; **Warden Isolde**
   waits at the hawthorn gate with her scene and three creatures, and the **Thorn Badge** opens the gate (the coast is
   next to build). Lose a battle and you hurry home to Maren; talk to her any time to heal your team.
+- **Larkhaven's shop and inn:** walk into the cottage door by the paddock for the shop counter (5 lures for 50 coins,
+  berries for a tired team; you start with 120 coins, like the browser) and into the inn door for a night's rest that heals
+  your team. Pip lives in town too, and notices the colour after your first badge. (The browser's shop stands where
+  Maren's barn is here: the tall barn only fits top right, so the shop moved to the cottage by the paddock.)
 - **Every creature has a body:** ten family body plans (wolf, cat, hyena, lizard, croc, boar, horse, bird, spider,
   sprite) in each species' own colour, so all 81 creatures look like themselves (`tests/gallery.gd` draws them all).
 - **Your journey saves** (team, ranch, satchel, badges, Wilddex, items, beaten trainers, restored colour, where you
@@ -55,7 +59,7 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   See it: add `--write-movie <folder>/f.png --fixed-fps 10 --quit-after 200 -- --demo` (the demo plays the opening by
   itself) and look at the frames.
 - **Checks:** `Godot_v4.7.2-stable_win64_console.exe --headless --path wildbond-godot --script res://tests/run_tests.gd`
-  plays the opening, the first battle, Thornwood, a catch, the Warden and a save by itself; must stay all-pass (98 checks on 2026-10-08). `tests/battle_odds.gd` measures how winnable a battle is; run the game with `-- --skip-opening` to start in Thornwood.
+  plays the opening, the first battle, Thornwood, a catch, the Warden and a save by itself; must stay all-pass (109 checks on 2026-10-08). `tests/battle_odds.gd` measures how winnable a battle is; run the game with `-- --skip-opening` to start in Thornwood.
 - **Builds for sharing:** `tools/godot-build.ps1` (web: play/wildbond/, Windows: export/Wildbond-trial-windows.zip),
   once Godot's export templates are installed (Editor > Manage Export Templates > Download and Install).
 - Click or tap anywhere to walk there; tap a creature in the barn to walk up and meet it.

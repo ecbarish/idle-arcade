@@ -208,7 +208,7 @@ func _run() -> void:
 	check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 14), "the north road leads to Thornwood, arriving where the map says")
 	check(main.partner.where == "thornwood", "your partner comes too")
 	# ---- a route trainer spots you, walks over and battles (Bram, from the game data)
-	check(main.npcs.size() == 3, "Thornwood has Bram, Lise and Warden Isolde")
+	check(main.npcs.filter(func(n): return n.where == "thornwood").size() == 3, "Thornwood has Bram, Lise and Warden Isolde")
 	main.npc_info.lise.beaten = true                # keep Lise out of the way for these checks
 	main.walk_to = main.route(main.me.tile, Vector2i(14, 10))
 	for i in 200:
@@ -318,6 +318,34 @@ func _run() -> void:
 		ev.physical_keycode = KEY_ENTER
 		main._unhandled_input(ev)
 	check(main.team.all(func(c): return c.hp == main.R.stats(c).hp), "talking to Maren heals your team")
+	# ---- Larkhaven: the shop counter, the inn, and Pip
+	talk_through()
+	check(main.map_name == "larkhaven", "in Larkhaven for the shop")
+	if main.map_name == "larkhaven" and main.lines.is_empty():
+		var coins1: int = main.bag.coins
+		var lures1: int = main.bag.lures
+		main.bag.coins = maxi(coins1, 60)
+		coins1 = main.bag.coins
+		check(walk_to(Vector2i(7, 11)), "you can walk up to the shop door")
+		main._step(Vector2i.UP)
+		check(main.shop.visible, "walking into the shop door opens the counter")
+		main.shop._buy(0)
+		check(main.bag.lures == lures1 + 5 and main.bag.coins == coins1 - 50, "5 lures for 50 coins, like the browser")
+		main.bag.coins = 0
+		main.shop._buy(1)
+		check(main.bag.berries >= 0 and main.bag.coins == 0 and "coins" in main.shop.note, "no coins, no berries (the shopkeeper says so)")
+		main.shop._buy(2)
+		check(not main.shop.visible, "leaving the counter")
+		for c in main.team: c.hp = 1
+		check(walk_to(Vector2i(4, 5)), "you can walk to the inn")
+		main._step(Vector2i.UP)
+		check(main.team.all(func(c): return c.hp == main.R.stats(c).hp), "a night at the inn heals your team")
+		talk_through()
+		check(main.npcs.any(func(n): return n.id == "pip" and n.where == "larkhaven"), "Pip lives in Larkhaven")
+		check(walk_to(Vector2i(20, 7)), "you can walk up to Pip")
+		main.me.face = Vector2i.RIGHT
+		check(main._talk_here() and main.lines[0].who == "pip" and "YELLOW" in main.lines[0].text, "Pip has noticed the colour since your Thorn Badge")
+		talk_through()
 	# ---- saving your journey and loading it back (to a test file, never your real one)
 	talk_through()
 	main.no_save = false

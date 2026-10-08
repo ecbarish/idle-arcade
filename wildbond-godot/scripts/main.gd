@@ -13,6 +13,10 @@ const Register := preload("res://scripts/register.gd")
 const Card := preload("res://scripts/card.gd")
 const Battle := preload("res://scripts/battle.gd")
 const Title := preload("res://scripts/title.gd")
+const Shop := preload("res://scripts/shop.gd")
+## Larkhaven's doors in the Godot version: the inn (rest) and the shop counter. (The browser puts the shop where Maren's
+## barn stands here; the tall barn only fits top right.)
+const DOORS := { Vector2i(4, 4): "inn", Vector2i(7, 10): "shop" }
 const R := preload("res://scripts/rules.gd")
 const TILE := 16
 const BARN_SOLID := "XWh|tb"                 # inside the barn: the dark, walls, hay, stall boards, the trough, sacks
@@ -88,7 +92,7 @@ var pup := Mover.new("pup", "larkhaven", Vector2i(16, 9))
 var wren := Mover.new("wren", "gone", Vector2i(10, 0))   # your rival, who arrives late
 var team: Array = []                         # your creatures as the rules see them (rules.gd): level, XP, stats, bond
 var rival_c: Dictionary = {}
-var bag := { "lures": 5, "coins": 0, "berries": 0 }   # your satchel (the browser game starts you with 5 lures)
+var bag := { "lures": 5, "coins": 120, "berries": 0 }   # your satchel (the browser game starts you with 5 lures and 120 coins)
 var ranch: Array = []                        # creatures resting at Maren's ranch (your team holds three)
 var seen := {}                               # the Wilddex: species seen and bonded
 var bonded := {}
@@ -97,6 +101,7 @@ var grass_n := 10                            # tall-grass steps until the next f
 var battle_story := ""                       # "rival1" for Wren's battle; empty for wild ones
 var satchel: Label
 var title: Control
+var shop: Control
 var no_save := false                         # tests and recordings never touch your saved journey
 var save_path := "user://journey.json"
 var then_do := Callable()                    # runs when the current conversation ends
@@ -187,6 +192,9 @@ func _ready() -> void:
 	satchel.add_theme_color_override("font_outline_color", Color(0.1, 0.12, 0.14))
 	satchel.add_theme_constant_override("outline_size", 3)
 	$UI.add_child(satchel)
+	shop = Shop.new()
+	shop.bag = bag
+	$UI.add_child(shop)
 	title = Title.new()
 	$UI.add_child(title)
 	title.chosen.connect(_on_title)
@@ -478,7 +486,7 @@ func _process(dt: float) -> void:
 		stage = "maren_talks"
 		say("maren", "There you are! You must be the new tamer. I'm Maren. I keep the ranch.")
 		say("maren", "Before anything else: the ranch register. Every tamer in the valley signs it. Write yourself in, love.")
-	var free_to_walk: bool = stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and trans_t < 0.0
+	var free_to_walk: bool = stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and not shop.visible and trans_t < 0.0
 	if lines.is_empty() and free_to_walk and me.path.is_empty() and me.pos.distance_to(Vector2(me.tile) * TILE) < 0.5:
 		var d := Vector2i.ZERO
 		if Input.is_action_pressed("ui_up") or Input.is_physical_key_pressed(KEY_W): d = Vector2i.UP
@@ -491,7 +499,7 @@ func _process(dt: float) -> void:
 			_step(d)
 		elif not walk_to.is_empty():
 			var nxt: Vector2i = walk_to.pop_front()
-			if (nxt - me.tile).length() == 1 and (walkable(nxt) or (partner and nxt == partner.tile)):
+			if (nxt - me.tile).length() == 1 and (walkable(nxt) or (partner and nxt == partner.tile) or DOORS.has(nxt)):
 				_step(nxt - me.tile)
 			else:
 				walk_to.clear()                      # something stepped in the way: stop here
@@ -517,6 +525,9 @@ func _process(dt: float) -> void:
 func _step(d: Vector2i) -> void:
 	me.face = d
 	me.right = d.x > 0 if d.x != 0 else me.right
+	if map_name == "larkhaven" and stage == "free" and DOORS.has(me.tile + d):
+		_door(DOORS[me.tile + d])                # walking up to a door goes in
+		return
 	var was := me.tile
 	if partner and partner.where == map_name and me.tile + d == partner.tile:
 		partner.tile = was                       # your partner steps aside, swapping places with you
@@ -565,7 +576,7 @@ func _unhandled_input(e: InputEvent) -> void:
 
 ## Click or tap: walk there (around anything in the way). Tap a creature in the barn to walk up and meet it.
 func _tap(at: Vector2) -> void:
-	if not (stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and trans_t < 0.0):
+	if not (stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and not shop.visible and trans_t < 0.0):
 		return
 	var goal := Vector2i((at / TILE).floor())
 	meet_after = null
@@ -1312,10 +1323,10 @@ func _skip_opening() -> void:
 ## Everyone standing in the built maps, from the game data (MAPS[..].npcs and the Warden's spot), dressed from CAST.
 func _make_npcs() -> void:
 	for map_id in BUILT:
-		if map_id == "larkhaven":
-			continue                                 # Larkhaven's people are in the story already (Maren, Wren)
 		var m: Dictionary = DATA.MAPS[map_id]
 		for n in m.get("npcs", []):
+			if n.who == "maren":
+				continue                             # Maren is in the story already
 			var mv := Mover.new(n.who, map_id, Vector2i(int(n.at[0]), int(n.at[1])))
 			mv.face = DIRS.get(n.get("dir", "down"), Vector2i.DOWN)
 			mv.right = mv.face.x >= 0
@@ -1428,6 +1439,13 @@ func _talk_here() -> bool:
 			n.face = me.tile - n.tile
 			if info.warden and info.beaten:
 				say(n.id, _fill(DATA.MAPS[map_name].get("wardenDone", "The gate is yours, {name}.")))
+			elif not info.warden and not info.data.has("trainer"):
+				var talk: Array = info.data.get("lines", [])
+				for b in badges:                       # what folk say changes with your badges (byBadge)
+					if info.data.get("byBadge", {}).has(b):
+						talk = info.data.byBadge[b]
+				for l in talk:
+					say(l[0], _fill(l[1]))
 			elif info.beaten:
 				for l in (info.data.trainer.get("after", []) as Array):
 					say(l[0], _fill(l[1]))
@@ -1540,3 +1558,16 @@ func _load_game() -> bool:
 	trans_t = 0.29
 	say("", "Welcome back, %s." % my_look.get("name", "tamer"))
 	return true
+
+# ---------------------------------------------------------------- Larkhaven's inn and shop
+func _door(kind: String) -> void:
+	walk_to.clear()
+	if kind == "inn":
+		for c in team:
+			c.hp = R.stats(c).hp
+		say("", "The innkeeper brings out warm blankets. Your team is fully healed.")
+	elif kind == "shop":
+		shop.open([
+			{ "name": "5 lures", "give": { "lures": 5 }, "cost": 50 },
+			{ "name": "5 berries", "give": { "berries": 5 }, "cost": 5 * int(DATA.FOODS.berries.cost) },
+		])
