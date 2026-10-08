@@ -137,6 +137,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 · Codex: review polish for PR #53: rebased onto latest main; Guild Hall/Hearth Book capitalization retained; rules narration removed from portraits. Seven pages pass, including Realmbound 6935. Next A7 waits for an open review slot.
+
 - 2026-10-08 · Codex: R4 follow-up ready in PR #53, stacked on guide PR #52; ten warned guild choices, portrait consequences and recoverable trust. All seven test pages pass (Realmbound 6935); no versions bumped. Two PRs await review.
 
 - 2026-10-08 · Codex: A6b illustrated guides and Realmbound tips ready in PR #52; all seven test pages pass. Wildbond guide waits for Godot.

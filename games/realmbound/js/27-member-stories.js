@@ -153,7 +153,7 @@ function memberStoryResult(name, state) {
   return state.repaired ? stakes.after : state.reaction === 'hurt' ? stakes.hurtLine : stakes.trustLine;
 }
 function memberStoryConsequence(state) {
-  return state.reaction === 'hurt' ? state.repaired ? 'Trust repaired. The original choice remains in the record.' : 'Trust hurt: mood −8 at the decision; no friendship reward. Make amends at the hearth, with no extra mood or time gate.' : state.reaction === 'trusted' ? 'Trust kept: +2 friendship and +2 mood at the decision.' : '';
+  return state.reaction === 'hurt' ? state.repaired ? 'Trust Mended · Your choice and apology are remembered.' : 'Trust Hurt · Mood −8 when chosen; friendship unchanged. You can speak by the hearth to make amends.' : state.reaction === 'trusted' ? 'Trust Kept · Friendship +2 and Mood +2 when chosen.' : '';
 }
 function repairMemberStory(key) {
   const w = workerOf(key), state = memberStoryState(key);
@@ -165,7 +165,7 @@ function playMemberStoryRepair(key, returnToBook) {
   const w = workerOf(key), state = memberStoryState(key);
   if (RTALK || !w || !memberStoryHurt(state) || state.done < 2 || memberStoryMeetingProblem(key)) return false;
   const stakes = MEMBER_STORY_STAKES[w.name]; if (!stakes) return false;
-  return memberStoryScene(key, [['', 'Making amends restores 8 mood once. Your choice stays remembered. No payment or waiting is required.'], [w.name + ':sad', stakes.hurtLine], [H().name, stakes.repair], [w.name, 'Will you stand by that? I can forgive you. I cannot pretend the first choice never happened.']], ['Make amends', 'Another time'], choice => {
+  return memberStoryScene(key, [[w.name + ':sad', stakes.hurtLine], [H().name, stakes.repair], [w.name, 'Will you stand by that? I can forgive you. I cannot pretend the first choice never happened.']], ['Make amends', 'Another time'], choice => {
     if (choice === 0 && repairMemberStory(key)) { renderTab(true); playMemberStory(key, true, returnToBook); }
     else if (returnToBook) openMemberStoryBook();
   });
@@ -261,9 +261,8 @@ function playMemberStory(key, replay, returnToBook) {
   const expected = state.done, book = modalKind === 'memberstories' || !!returnToBook;
   const voice = MEMBER_STORY_VOICE[w.n.pers] || MEMBER_STORY_VOICE.cheerful;
   const result = memberStoryResult(w.name, state), hurt = memberStoryHurt(state);
-  const lines = replay ? [[w.name, story[1]]].concat(state.done >= 2 ? [[w.name, story[2]], [H().name, story[3 + state.choice]]] : [], result ? [['', memberStoryConsequence(state)], [w.name + (hurt ? ':sad' : ':happy'), result]] : state.done >= 3 ? [[w.name + ':happy', story[5 + state.choice]]] : [])
+  const lines = replay ? [[w.name, story[1]]].concat(state.done >= 2 ? [[w.name, story[2]], [H().name, story[3 + state.choice]]] : [], result ? [[w.name + (hurt ? ':sad' : ':happy'), result]] : state.done >= 3 ? [[w.name + ':happy', story[5 + state.choice]]] : [])
     : [[w.name + (hurt ? ':sad' : ''), hurt && expected === 2 ? 'I have something harder to remember with you.' : voice[expected]], [w.name + (hurt ? ':sad' : ''), expected === 0 ? story[1] : expected === 1 ? story[2] : result || story[5 + state.choice]]];
-  if (!replay && expected === 1 && MEMBER_STORY_STAKES[w.name]) lines.splice(1, 0, ['', 'A hurtful choice costs 8 mood and gives no friendship reward. You can make amends in this hall immediately; your member stays, and the choice remains recorded.']);
   const choices = replay ? hurt ? ['Talk it through', 'Back to the hall'] : ['Back to the hall'] : expected === 1 ? [story[3], story[4], 'Another time'] : ['Remember this', 'Another time'];
   return memberStoryScene(key, lines, choices, choice => {
     if (replay && hurt && choice === 0) { playMemberStoryRepair(key, book); return; }
@@ -277,7 +276,7 @@ function playMemberStory(key, replay, returnToBook) {
 function openMemberStoryBook() {
   if (!H() || !guildOn() || RTALK || !inTown() || !TOWN.inside || H().dun) return false;
   C.lastInput = C.run; TOWN.auto = null;
-  openModal('memberstories', '<h3>The hearth book · ' + G().name + '</h3>' + memberStoriesHTML() + '<div class="mfoot"><button class="btn alt" data-act="close">Back to the world</button></div>'); return true;
+  openModal('memberstories', '<h3>The Hearth Book · ' + G().name + '</h3>' + memberStoriesHTML() + '<div class="mfoot"><button class="btn alt" data-act="close">Back to the world</button></div>'); return true;
 }
 function clearMemberStory(key) {
   if (RTALK && RTALK.memberStory && (key === undefined || RTALK.memberStoryKey === key)) { RTALK = null; SCN.el.hidden = true; MEMBER_STORY_FACE = null; SCN.el.classList.remove('member-story-dialogue'); }
@@ -301,7 +300,7 @@ function memberStoriesHTML() {
   if (!guildOn()) return '';
   const members = Object.keys(G().members).map(key => ({ key, w: workerOf(key), story: memberStoryData(key) })).filter(x => x.story);
   if (!members.length) return '';
-  return '<h4>By the hearth · personal stories</h4><p class="sub">Three moments per adventurer, after 5 / 15 / 30 minutes together and mood 40 / 55 / 70. Present party time on the road counts; jobs and time away do not. Ordinary moments give +2 friendship and +2 mood, once. Ten decisions can hurt trust: their warning is spoken before you choose. Your choice stays with the guild, even if a member leaves. Hurt decisions cost 8 mood instead of granting a reward. Make amends at this hearth without a mood, friendship or time gate; restore 8 mood once. Your companion stays, and the record remembers.</p>' + members.map(({ key, w, story }) => {
+  return '<h4>By the hearth · personal stories</h4><p class="sub">Three moments per adventurer, after 5 / 15 / 30 minutes together and mood 40 / 55 / 70. Present party time on the road counts; jobs and time away do not. Ordinary moments give +2 friendship and +2 mood, once. Ten decisions can hurt trust: their warning is spoken before you choose. Your choice stays with the guild, even if a member leaves. Hurt decisions cost 8 mood instead of granting a reward. Make amends at this hearth without further requirements; restore 8 mood once. Your companion stays, and the record remembers.</p>' + members.map(({ key, w, story }) => {
     const state = memberStoryState(key), why = memberStoryProblem(key), meeting = memberStoryMeetingProblem(key);
     const script = memberStoryScript(w.name, state);
     const remembered = memberStoryResult(w.name, state) || (state.done >= 3 ? script[5 + state.choice] : state.done >= 2 ? 'Your choice: ' + script[3 + state.choice] + '.' : state.done ? 'First confidence remembered.' : 'They have a story to share.');

@@ -2,7 +2,7 @@
 
 ## Design
 
-Ten of 32 adventurers, five per faction, now have personal decisions that can hurt trust. Their own words state the boundary before choosing; an earlier narration states the exact eight-mood cost, the lack of a friendship reward, and immediate repair route. There is no hidden die roll or moral alignment label. The other branch preserves trust and the ordinary +2 friendship/+2 mood reward.
+Ten of 32 adventurers, five per faction, now have personal decisions that can hurt trust. Their own words state the boundary before choosing. Story scenes use only the world’s language; the Hearth Book’s rule summary shows the eight-mood cost and immediate repair route. There is no hidden die roll or moral alignment label. The other branch preserves trust and the ordinary +2 friendship/+2 mood reward.
 
 The immediate aftermath is a portrait conversation in the guild hall, with the member's generated appearance and a sad or happy expression. Hurt members speak differently when approached. An optional fourth conversation offers a concrete apology/correction, restores eight mood once, and leaves the original choice remembered. No member is forcibly dismissed, loses equipment, blocks a quest or becomes permanently unavailable. Existing mood affects guild work rates as before. Ordinary guild mood drift/departures remain the old rules, not a new consequence.
 
@@ -38,3 +38,5 @@ The Realmbound suite checks all 32 original arcs and both branches, plus all ten
 ## An idea
 
 A later engine version could keep a corrected account or returned tool physically visible by the hearth. This implementation remembers the event in conversations and records; it does not pretend those hall props already exist.
+
+Review polish (2026-10-08): rebased onto main 24f346b, preserving Claude’s Guild Hall title fixes. Removed numerical rules narration from decision, reaction and apology scenes; mechanics remain in the Hearth Book summary. The speaker and personal response remain visible on phone and desktop.

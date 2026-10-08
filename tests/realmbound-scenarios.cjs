@@ -846,7 +846,7 @@ module.exports = function scenarios() {
       check(!repaired.bad&&repaired[localKey].seconds===0&&repaired[localKey].done===1&&repaired[remoteKey].seconds===0&&repaired[remoteKey].done===3,'R4: malformed optional story records clamp safely without inventing an outcome');
       rb.S.tab='supplies';const cacheBefore=TABS.supplies.key();rb.S.guild.stories[localKey]={seconds:1800,done:0,choice:null};check(TABS.supplies.key()!==cacheBefore,'R4: story readiness and choices invalidate the Guild tab cache');
       check(guildHTML().includes('Stories remembered')&&!guildHTML().includes('memberstorybook')&&!guildHTML().includes('data-act="memberstory"')&&!guildHTML().includes(MEMBER_STORIES[local.name][0]),'R4: Guild tab contains completed records only, with no future story or conversation button');
-      TOWN.inside=true;check(openMemberStoryBook()&&modalKind==='memberstories'&&document.querySelector('#sheet').textContent.includes('The hearth book'),'R4: story index is a book opened over the world');
+      TOWN.inside=true;check(openMemberStoryBook()&&modalKind==='memberstories'&&document.querySelector('#sheet').textContent.includes('The Hearth Book'),'R4: story index is a book opened over the world');
       const bookRun=rb.C.run;rb.step(.1);check(rb.C.run===bookRun,'R4: reading the book pauses the world');
       check(playMemberStory(localKey,false)&&!modalKind,'R4: listening closes the book so it cannot hide the portrait');SCN.skip();SCN.choose(1);check(modalKind==='memberstories'&&!RTALK,'R4: deferring returns to the book without choosing');closeModal();
       townTalk({id:'registrar',lines:()=>[['Registrar Mott','Welcome to the hearth.']]});SCN.skip();SCN.choose(0);check(modalKind==='memberstories','R4: the walkable registrar lends the book');closeModal();
@@ -862,11 +862,11 @@ module.exports = function scenarios() {
         check(!normalized.reaction&&!normalized.repaired&&memberStoryScript(name,normalized)[5+legacyChoice]===MEMBER_STORIES[name][5+legacyChoice],name+': completed legacy story keeps its original kind ending');
         const earlier=normalizeMemberStories({[key]:{seconds:900,done:2,choice:legacyChoice}})[key];
         check(!earlier.reaction&&memberStoryScript(name,earlier)[2]===MEMBER_STORIES[name][2],name+': legacy decision awaiting aftermath is not rewritten or punished');
-        check(playMemberStory(key,false)&&RTALK.lines.some(l=>l[1]===stakes.dilemma)&&RTALK.lines.some(l=>/costs 8 mood/.test(l[1])),name+': portrait states personal and numeric stakes before the decision');
+        check(playMemberStory(key,false)&&RTALK.lines.some(l=>l[1]===stakes.dilemma)&&RTALK.lines.every(l=>!/mood|reward|gate|flag|XP|cooldown|[−+]8/.test(l[1])),name+': portrait explains the personal stakes without rules jargon');
         const accountBefore=JSON.stringify({bank:rb.S.bank,money:storyHero.money,xp:storyHero.xp,guildxp:rb.S.guild.xp});
         SCN.skip();SCN.choose(stakes.hurt);const state=memberStoryState(key);
         check(state.reaction==='hurt'&&!state.repaired&&w.m.mood===62&&n.aff===40&&G().members[key]===w.m,name+': hurt costs eight mood, no friendship reward, no departure');
-        check(RTALK.memberStory&&RTALK.lines.some(l=>l[1]===stakes.hurtLine)&&RTALK.lines.some(l=>/Make amends/.test(l[1])),name+': immediate world response explains the harm and way back');
+        check(RTALK.memberStory&&RTALK.lines.some(l=>l[1]===stakes.hurtLine)&&RTALK.choices.includes('Talk it through'),name+': immediate world response explains the harm and way back');
         const choiceCache=memberStoriesKey();rb.save();const reload=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1'))).guild.stories[key];
         check(reload.reaction==='hurt'&&reload.choice===stakes.hurt&&!reload.repaired,name+': reload retains unresolved consequence and chosen branch');
         SCN.skip();SCN.choose(1);check(!RTALK&&!state.repaired,name+': closing the response never makes amends automatically');
