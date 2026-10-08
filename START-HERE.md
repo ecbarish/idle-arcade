@@ -115,6 +115,7 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-07 Claude: Evan's first Wildbond play notes -> v1.4.0: start screen picks then confirms (`START.pick`,  `starterCard`, Begin), story names + random, challenge modes unlock at Champion (`modesUnlocked`, localStorage  wildbond-modes-unlocked), Maren's Wilddex goal lines, fixed a missing comma that swallowed two intro lines.  docs/wildbond-opening.md has his notes, the premise and part 2 (queue B3b). Wildbond 1209 checks.
 - 2026-10-07 Claude: vision V9 (choices that matter, Mass Effect). L3 phone pass part 1: shared/settings.js adds 40px  tap targets on phones/touch (audit at 375px: Wildbond 13, Realmbound 27, Starfall 15 small targets -> 0); launcher  starts phones on the road. Tests pass (Wildbond 1202, Realmbound 4150, Starfall 48).
 - 2026-10-07 Claude: votes confirmed working (first response in Evan's form). Wrote docs/VISION.md from Evan's  brainstorm (prologues, too-retro worry, game boxes, procedural content, bot world, friends, nodes, automation as QoL)  and projects V1-V8; CLAUDE.md, CREATIVE.md ("old soul, modern craft") and AGENTS.md point to it; queue A5 now  includes prologues, B4b game boxes.
 - 2026-10-07 Claude: votes connected to Evan's Google Form (shared/votes-config.js; a Pages build was skipped, re-pushed).  L8 part 2, the road (launcher/launcher.js `road()`, STOPS = the four games + building sites for games in design),  from Evan's feedback (hall scales better, likes a character). Poll is now `launcher-style-2`. Hub v1.3.0.

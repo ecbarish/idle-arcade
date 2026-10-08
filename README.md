@@ -39,6 +39,11 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Wildbond v1.4.0 (2026-10-07)** — **A clearer start** (from Evan's first play): tap a partner to see its Wilddex
+  page (stats, moves, strengths), choose a story name, roll a random one or type your own, then press **Begin**.
+  Challenge modes now unlock once you've been Champion. After the first battle Maren explains where your creatures
+  live and hands you her **Wilddex**, with a goal: over a hundred kinds to find. Two of her opening lines that a typo
+  had hidden are back. Plan for the rest of the opening: docs/wildbond-opening.md.
 - **2026-10-07** — **Easier on phones.** Every button, tab and menu in every game is now big enough to tap
   comfortably on a phone or touch screen (desktop is unchanged), and phones open the homepage on the road style.
 - **Arcade v1.3.0 (2026-10-07)** — **The road**, a third homepage style: walk your character (with a partner creature

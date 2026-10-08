@@ -883,6 +883,24 @@ function wildbondChecks() {
     spireReady();delete S.tower;const uid=S.team[0].uid,eras=JSON.stringify(S.eras),cap=S.capMode;save();reset();load();return S.tower.best===0&&!S.tower.active&&S.tower.claimed.length===0&&S.team[0].uid===uid&&S.capMode===cap&&levelCap()===75&&JSON.stringify(S.eras)===eras&&S.titles.includes('Champion');
   });
   check('Invalid tower fields normalize without unlocking a pre-Champion climb',()=>{ready();S.tower={best:-3,floor:Infinity,active:true,rest:true,claimed:[10,10,'20',-10,7]};const t=towerState();return t.best===0&&t.floor===0&&!t.active&&!t.rest&&t.claimed.join(',')==='10';});
+  // The start screen (Evan's first-play notes): pick shows a page, nothing starts until Begin; names; modes locked
+  check('the start screen asks you to choose before it starts, and Begin waits for a pick', () => {
+    const keep = START.pick; START.pick = null;
+    try { const html = startHTML(); return /data-act="pickstarter"/.test(html) && /id="beginBtn"[^>]*disabled/.test(html) && !/data-act="starter"/.test(html) &&
+      STORY_NAMES.every(n => html.includes('data-arg="' + n + '"')) && /namerand/.test(html); } finally { START.pick = keep; }
+  });
+  check("picking a partner shows its Wilddex page (stats, first moves, strengths)", () => {
+    const html = starterCard('cindercub'); return /Health/.test(html) && /Starts with/.test(html) && /Strong against/.test(html);
+  });
+  check('challenge modes stay locked on a first journey and unlock once you are Champion', () => {
+    const keep = localStorage.getItem('wildbond-modes-unlocked'), titles = wb.S.titles;
+    try { localStorage.removeItem('wildbond-modes-unlocked'); wb.S.titles = [];
+      const locked = !modesUnlocked() && /unlock for your next journey/.test(startHTML()) && !/data-act="mode"/.test(startHTML());
+      wb.S.titles = ['Champion']; const open = modesUnlocked() && /data-act="mode"/.test(startHTML());
+      return locked && open; }
+    finally { wb.S.titles = titles; if (keep === null) localStorage.removeItem('wildbond-modes-unlocked'); else localStorage.setItem('wildbond-modes-unlocked', keep); }
+  });
+  check('every opening scene line is a real line (no swallowed lines)', () => ['intro', 'rival1', 'rival1Win'].every(k => SCENES[k].every(l => Array.isArray(l) && typeof l[1] === 'string' && l[1].length > 5)));
   // L1 shared settings (shared/settings.js + js/18-settings.js)
   check('the Settings panel offers sound, graphics, view, text size and motion', () => {
     const b = document.querySelector('.arc-set-btn'); if (!b) return false; b.click();

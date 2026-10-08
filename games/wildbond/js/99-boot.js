@@ -1,5 +1,5 @@
 'use strict';
-const VERSION = '1.3.1'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
+const VERSION = '1.4.0'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
 /* Clicks, keys, the game loop and startup. */
 function findC(uid) { uid = Number(uid); return S.team.find(c => c.uid === uid) || S.ranch.find(c => c.uid === uid); }
 document.addEventListener('click', e => {
@@ -17,7 +17,11 @@ document.addEventListener('click', e => {
     case 'leagueleave': leagueLeave(); break;
     case 'sound': cycleSound(); break;
     case 'skiptalk': skipTalk(); break;
-    case 'starter': chooseStarter(arg, ($('#tname') || {}).value, S.journey, PICKED); closeModal(); break;
+    case 'pickstarter': START.pick = arg; document.querySelectorAll('.starter').forEach(b => { const on = b.dataset.arg === arg; b.classList.toggle('cur', on); b.setAttribute('aria-pressed', on); });
+      $('#pickinfo').innerHTML = starterCard(arg); drawPortraits($('#pickinfo')); { const bb = $('#beginBtn'); bb.disabled = false; bb.textContent = 'Begin with ' + SPECIES[arg].name; } return;
+    case 'namepick': $('#tname').value = arg; return;
+    case 'namerand': { const all = STORY_NAMES.concat(MORE_NAMES), cur = $('#tname').value; let n; do n = all[Math.floor(Math.random() * all.length)]; while (n === cur); $('#tname').value = n; return; }
+    case 'begin': if (!START.pick) return; chooseStarter(START.pick, ($('#tname').value || '').trim() || STORY_NAMES[0], S.journey, modesUnlocked() ? PICKED : {}); closeModal(); break;
     case 'mode': PICKED[arg] = !PICKED[arg]; el.classList.toggle('cur', PICKED[arg]); el.setAttribute('aria-pressed', PICKED[arg]); return;
     case 'set': { const [k, v] = arg.split(':'); if (B) break;
       if (k === 'pace' && JOURNEY[v]) { S.journey = v; el.parentNode.querySelectorAll('.era').forEach(b => { const on = b === el; b.classList.toggle('cur', on); b.setAttribute('aria-pressed', on); }); return; }
@@ -64,6 +68,7 @@ if (location.hostname === 'localhost') window.__wb = { get S() { return S; }, ge
 let started = false;
 function start() {
   if (started) return; started = true; load();
+  if ((S.titles || []).includes('Champion')) unlockModes(); // Champions from before this rule unlock challenge modes too
   if (!S.started) talk(SCENES.intro, () => openModal(startHTML())); else if (!S.team.length) openModal(startHTML());
   setupFeedback('Wildbond', VERSION, () => { if (!S.started || !S.team.length) return 'Not started'; const lead = S.team[0], sp = SPECIES[lead.sp]; return `${BIOMES[S.biome] ? BIOMES[S.biome].name : S.biome}, ${S.badges.length} badge${S.badges.length === 1 ? '' : 's'}, lead: level ${lead.lvl} ${sp ? sp.name : lead.sp}`; }); // the Feedback menu (shared/feedback.js)
   renderSoundBtn();

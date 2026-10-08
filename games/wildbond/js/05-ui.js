@@ -128,14 +128,33 @@ function renderTabs(force) {
 let logKey = '';
 function renderLog() { const L = B ? B.lines.slice(-6) : []; const html = L.map(l => `<div class="l-${l.cls}">${l.t}</div>`).join(''); if (html !== logKey) { logKey = html; $('#blog').innerHTML = html; } $('#blog').hidden = !B; }
 
+/* The start screen (Evan's first-play notes, 2026-10-07): pick a partner to see its Wilddex page, choose or roll a
+   name, then press Begin. Nothing starts until you confirm. Challenge modes are for a second journey: they unlock
+   once you've been Champion (on this device). */
+const STORY_NAMES = ['Rowan', 'Juniper', 'Briar', 'Sorrel'];
+const MORE_NAMES = ['Linden', 'Hazel', 'Alder', 'Fern', 'Rue', 'Sage', 'Tansy', 'Cedar', 'Laurel', 'Bramble', 'Heath', 'Ivy', 'Moss', 'Teasel', 'Yarrow', 'Aspen', 'Clover', 'Wick'];
+const START = { pick: null };
+function modesUnlocked() { try { return localStorage.getItem('wildbond-modes-unlocked') === '1' || (S.titles || []).includes('Champion'); } catch (e) { return (S.titles || []).includes('Champion'); } }
+function unlockModes() { try { localStorage.setItem('wildbond-modes-unlocked', '1'); } catch (e) {} }
+function starterCard(id) {
+  const s = SPECIES[id], max = 80, moves = s.learn.filter(([l]) => l <= 5).map(([, m]) => MOVES[m].name);
+  return `<div class="pickcard"><div class="pickhead">${portrait(id)}<div><b>${s.name}</b> ${elChip(s.el)}<p class="sub">${s.dex}</p></div></div>
+    <div class="pickstats">${Cr.STATS.map(k => `<span>${Cr.STAT_NAME[k]}</span><i style="width:${Math.round(Math.min(1, s.base[k] / max) * 100)}%"></i>`).join('')}</div>
+    <p class="meta">Starts with ${moves.join(' and ')}. Strong against ${SPECIES[STARTERS.find(x => COUNTER[x] === id)].name}'s element, weak to ${SPECIES[COUNTER[id]].name}'s.</p></div>`;
+}
 function startHTML() {
-  return `<h2>Welcome to Larkhaven</h2><p class="sub">A frontier town at the edge of Thornwood. Every tamer starts with one partner. Choose yours.</p>
-    <div class="starters">${STARTERS.map(id => { const s = SPECIES[id]; return `<button class="starter" data-act="starter" data-arg="${id}">${portrait(id)}<b>${s.name}</b>${elChip(s.el)}<span>${s.dex}</span></button>`; }).join('')}</div>
-    <label class="meta">Your name <input id="tname" maxlength="14" value="${S.name === 'Tamer' ? '' : S.name}" placeholder="Tamer"></label>
+  const un = modesUnlocked();
+  return `<h2>Welcome to Larkhaven</h2><p class="sub">Keeper Maren has three young creatures who are hoping for a partner. Choose one to meet it.</p>
+    <div class="starters">${STARTERS.map(id => { const s = SPECIES[id]; return `<button class="starter ${START.pick === id ? 'cur' : ''}" data-act="pickstarter" data-arg="${id}" aria-pressed="${START.pick === id}">${portrait(id)}<b>${s.name}</b>${elChip(s.el)}<span>${s.dex}</span></button>`; }).join('')}</div>
+    <div id="pickinfo">${START.pick ? starterCard(START.pick) : '<p class="meta">Tap a creature to see its Wilddex page.</p>'}</div>
+    <h4>Your name</h4><div class="namerow"><input id="tname" maxlength="14" value="${S.name === 'Tamer' ? '' : S.name}" placeholder="Type a name" aria-label="Your name">
+      ${STORY_NAMES.map(n => `<button class="btn sm alt" data-act="namepick" data-arg="${n}">${n}</button>`).join('')}<button class="btn sm alt" data-act="namerand" aria-label="A random name">🎲 Random</button></div>
     <h4>How long a journey?</h4><p class="sub">You can change this later at the Larkhaven inn (Journal tab).</p>
     ${settingRow('pace', Object.keys(JOURNEY).map(k => [k, JOURNEY[k].name, JOURNEY[k].desc]), S.journey)}
-    <h4>Challenge modes <span class="meta">(optional, mix any)</span></h4><p class="sub">Picked now, kept for the whole journey. Collect every badge with a mode on to earn its title.</p>
-    <div class="eras">${Object.keys(MODES).map(k => `<button class="era ${PICKED[k] ? 'cur' : ''}" data-act="mode" data-arg="${k}" aria-pressed="${!!PICKED[k]}"><b>${MODES[k].name}</b><span>${MODES[k].desc}</span></button>`).join('')}</div>`;
+    ${un ? `<h4>Challenge modes <span class="meta">(optional, mix any)</span></h4><p class="sub">Picked now, kept for the whole journey. Collect every badge with a mode on to earn its title.</p>
+    <div class="eras">${Object.keys(MODES).map(k => `<button class="era ${PICKED[k] ? 'cur' : ''}" data-act="mode" data-arg="${k}" aria-pressed="${!!PICKED[k]}"><b>${MODES[k].name}</b><span>${MODES[k].desc}</span></button>`).join('')}</div>`
+    : '<p class="meta">🔒 Challenge modes (Nuzlocke, Randomizer, Solo Run, Hardcore) unlock for your next journey once you become Champion.</p>'}
+    <div class="mfoot"><button class="btn gold" id="beginBtn" data-act="begin" ${START.pick ? '' : 'disabled'}>${START.pick ? 'Begin with ' + SPECIES[START.pick].name : 'Choose a partner first'}</button></div>`;
 }
 /* the Journal's challenge section: modes, titles, rematch tiers and area mastery stars */
 function challengeHTML() {

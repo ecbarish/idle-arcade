@@ -400,7 +400,10 @@ const SCENES = {
   rival1Win: [
     ['wren', 'Okay. Okay! Not bad. {rival} and I were just warming up.'],
     ['maren', 'You two will push each other a long way. Now go on, Thornwood won\'t explore itself. Bring your team back here to rest whenever they need it.'],
-    ['maren', 'And {name}? Watch how the wild ones move. Tire one out, toss a lure, and keep it calm. If it trusts you, it will come home with you.']
+    ['maren', 'And {name}? Watch how the wild ones move. Tire one out, toss a lure, and keep it calm. If it trusts you, it will come home with you.'],
+    ['maren', 'Three can travel with you at a time. The rest live here at the ranch with me, and I look after them. A creature that has bonded with you always finds its way back to you.'],
+    ['maren', 'One more thing. Here: my old Wilddex. Every creature you meet gets a sketch in it, and every one that bonds with you gets its whole page. Nobody has ever filled one.'],
+    ['maren', 'Over a hundred kinds live between here and the far coast, and some only come out in the rain, at night, or for tamers they trust. Fill it as far as you can, and bring it back to show me.']
   ],
   /* the world starts faded (the Pocket era); the first badge brings its color back */
   colorReturns: [

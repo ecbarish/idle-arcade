@@ -104,6 +104,10 @@ h4{margin:14px 0 6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase
 .starters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:14px 0}
 .starter{display:flex;flex-direction:column;gap:6px;align-items:flex-start;text-align:left;background:var(--card2);border:2px solid var(--line);border-radius:14px;padding:12px}
 .starter:hover{border-color:var(--leaf)} .starter b{font-family:var(--f-disp);font-size:20px} .starter span{font-size:13px;color:var(--muted)}
+.starter.cur{border-color:var(--leaf);box-shadow:0 0 0 3px rgba(47,158,107,.25);background:#fff}
+.pickcard{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:4px 0 10px}.pickhead{display:flex;gap:12px;align-items:flex-start}.pickhead b{font-family:var(--f-disp);font-size:20px}
+.pickstats{display:grid;grid-template-columns:70px 1fr;gap:4px 10px;align-items:center;margin:10px 0 6px;font-size:13px}.pickstats i{display:block;height:8px;border-radius:4px;background:var(--leaf);min-width:4px}
+.namerow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.namerow input{flex:1 1 160px;min-width:0}
 .toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;display:flex;flex-direction:column;gap:6px;z-index:30;pointer-events:none;width:min(420px,calc(100% - 32px))}
 .toast{background:var(--ink);color:#fff;border-radius:12px;padding:8px 14px;font-weight:700;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.2)}
 @media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}}

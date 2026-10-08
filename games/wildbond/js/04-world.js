@@ -168,7 +168,7 @@ function leagueDefeat() {
 }
 function leagueEnding() { talk(SCENES.leagueEnding,completeLeagueEnding); }
 function completeLeagueEnding() {
-  healAll(); S.story.leagueEnding = true; S.titles = S.titles || [];
+  healAll(); S.story.leagueEnding = true; S.titles = S.titles || []; unlockModes(); // challenge modes open for the next journey (05-ui.js)
   if (!S.titles.includes('Champion')) { S.titles.push('Champion'); slog('Champion of the Returning Light League: the world\'s colour is fully restored. The Lighthouse Spire is open.'); toast('Title earned: Champion!'); sfx('badge'); }
   S.league.active = false; placeAt('league',3,14,'down'); W.msg = 'Champion! Your journey is complete. The Lighthouse Spire and daily league rematches are open.'; save();
 }
