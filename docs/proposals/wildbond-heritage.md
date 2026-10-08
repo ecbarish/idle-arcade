@@ -1,7 +1,9 @@
 # Proposal: heritages for Wildbond's tamer (Evan's idea, 2026-10-08)
 
 Evan: having different races and abilities in Wildbond "could be cool. It would add another layer and make the player
-feel more connected to their character." Not decided; this is Claude's recommendation for him to say yes or no to.
+feel more connected to their character." **Approved by Evan, 2026-10-08: option A, heritages** ("this sounds similar to the way Baldur's Gate 3 might work":
+your origin gives a small edge and changes how people react). To be built in the Godot version after the opening is
+finished (QUEUE B2b).
 
 ## Fitting it to the world
 

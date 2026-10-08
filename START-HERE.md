@@ -123,10 +123,6 @@ rain sounds; walkable Realmbound towns.
 2. **Baby forms (W9):** read `docs/proposals/creature-growth.md` and answer its five questions. Default if no
    answer: the recommendations in it (life stages, babies stay on the ranch, elders, 3 ranch days, return-or-adopt).
 
-3. **Heritages for your Wildbond tamer?** (Evan's idea, 2026-10-08.) `docs/proposals/wildbond-heritage.md`: everyone human, but
-   you choose where your family comes from (farm, coast, highlands, wanderers), with a small bonding gift and how people
-   greet you. Default if no answer: hold until the Godot opening is finished.
-
 **Decided 2026-10-08 (Evan: "go with your recommendations, and yes to the shared universe where
 it makes sense"):** see the "Decided" section at the top of `docs/research/decisions.md`. New questions go here, each with
 a default so work never waits.
