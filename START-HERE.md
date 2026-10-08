@@ -38,6 +38,17 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
   made by Codex using the defaults written here; record any decision in the Session log.
 
 ## Where we are (2026-10-09)
+**Wildbond in Godot (2026-10-08, the newest work):** `wildbond-godot/` plays the whole opening: faded Larkhaven (Ninja
+Adventure CC0 tiles, our own parts-built people and creatures in `scripts/figures.gd`), Maren's ranch register (the
+character creator; signing paints you in colour), her barn with Cindercub, Ripplet and Mosshog (each with its own body
+and habits, Wilddex pages), the bond flooding colour out of the barn, Wren running in, and the first battle on the field
+(`scripts/battle.gd`, rules in `scripts/rules.gd` checked number-for-number against the browser). **Thornwood is playable:**
+tall grass with wild creatures, catching with Bond (lure + calm meter; each catch brings colour back), Bram and Lise,
+Warden Isolde and the Thorn Badge, items, signs, healing with Maren, all 81 creatures with bodies (ten family plans),
+and saving with a Continue page. Content comes from the
+browser game via `tools/godot-export.ps1`; checks: `tests/run_tests.gd` (111); sharing: `tools/godot-build.ps1` once
+Evan installs Godot's export templates. The plan for the move: `docs/godot-port-plan.md`.
+
 **Current (2026-10-07):** the goal is Launch (docs/QUEUE.md). Wildbond follows **docs/wildbond-plan.md** (Evan'splay notes turned into principles and phases); Realmbound is balanced and gets its guide and onboarding next. Theolder detail below is history; CLAUDE.md "Where we are" has the short current summary.
 
 **Wildbond** (creature game): eight areas, each with a Warden and badge: Thornwood (2-12), Saltmarsh Coast (12-22),
@@ -125,11 +136,37 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
-- 2026-10-08 Codex: T34 Diamond Career first call-up/payday prototype ready for Claude in PR #45, not merged. Both batting styles, six-game careers, contracts, home/garage, 56 Diamond checks and all six existing pages pass; keyboard/touch, saves and phone/desktop/ultrawide played. No existing version or cache bump. PR #44 research also waits, so Lane A pauses at the two-PR limit.
+- 2026-10-08 Codex: T34 Diamond Career first call-up/payday prototype ready for Claude in PR #45, not merged. Both batting styles, six-game careers, contracts, home/garage, 56 Diamond checks and all six existing pages pass; keyboard/touch, saves and phone/desktop/ultrawide played. No existing version or cache bump. Integrated latest main, preserving Claude's Godot work; Starfall report/prompt cleanup is a separate documentation task.
 
+- 2026-10-08 Claude (overnight, continued): Godot trial, Thornwood playable from the exported data: roads between maps,
+  tall grass + water + items, exploring like the browser (62% wild creature), Bond (lure + calm meter, browser catch
+  formula), Bag berries, catches restore colour, team of three + ranch, Bram/Lise spot and battle, Warden Isolde and the
+  Thorn Badge open the gate, signs, Maren heals, body plans for all ten families (81 creatures), save/load with a
+  Continue page, --skip-opening for testing; 98 Godot checks. Next (B2b): Larkhaven's shop and inn as places (lures for
+  coins), the Wilddex book, then Saltmarsh Coast from the data.
+- 2026-10-08 Claude (overnight, Evan asleep): Godot trial: the partner choice in Maren's barn (full-screen barn, three
+  starters with their own bodies and habits, Wilddex pages, Choose / Not yet, colour floods out of the barn), Wren and
+  the first battle (classic layout, turn order, orders, results); rules.gd translated and checked against the browser;
+  data bridge tools/godot-export.ps1 (Edge, no installs); click/tap to walk; a launcher that finds Godot anywhere; web
+  and Windows export presets + tools/godot-build.ps1; 64 Godot checks; docs/godot-port-plan.md answers Evan's questions.
+  Measured the first battle (battle_odds.gd): Cindercub won 5 in 100 -> Wildbond v1.6.1 (element moves at level 5:
+  97/78/100); browser checks 1254 pass. Next: Evan installs export templates; then Route 1 in Godot (B2b).
+- 2026-10-08 Claude: Godot trial: the cub (parts-based creature in scripts/figures.gd: trot, wag, sniff, sit, pounce at a
+  butterfly, watches you when you come near) and Maren's ranch register, the character creator (scripts/register.gd:
+  name, body, skin, hair, clothes; signing paints you in colour onto your own layer). Fixed after Evan's look: cabins
+  were cut off (they are 4 tiles wide), register values now centred. Next: choosing your partner in Maren's barn.
+- 2026-10-08 Claude: Godot trial environment now uses the Ninja Adventure CC0 tilesets (grass, dirt paths with edges,
+  flowers, garden bushes, cottages, a staggered woods border; scripts/main.gd _draw_ground and _draw_structures; files in
+  wildbond-godot/assets/env/). Our figures, fences and sign stay code-drawn. Fan-made Pokemon sprites ruled out
+  (Nintendo's characters; docs/wildbond-plan.md). Next: the cub's animation, the character creator, the partner choice.
+- 2026-10-08 Claude: Godot trial figures rebuilt from parts (draw_person, LOOKS in scripts/main.gd): head, hair style,  body, apron, swinging arms, legs or a skirt, 4-frame walk in four directions, blinking, idle glances, a dark  outline; the parts system is the basis for the character creator and a later 3D rig. Next: the environment  (Evan liked the pack's structures; pieces kept as separate objects with footprints so they can stand up in 3D).
+- 2026-10-08 Claude: Evan rejected the Ninja Adventure look (chibi, no visible legs; preferred our code-drawn figures).  Reverted the Godot trial to the code-drawn tamer, Maren and cub; removed the pack's files from the project. Art  direction recorded in docs/wildbond-plan.md: real proportions with legs, our own art. (The test window that raced  through the opening was the sped-up recording, not the game's real pace.)
+- 2026-10-08 Claude: downloaded Ninja Adventure (CC0, 94 MB zip in Evan's Downloads; unzipped to  C:UsersevanbGodotNinjaAdventure; only used files copied into wildbond-godot/assets/ninja). The Godot trial's  tamer, Maren and the cub are now real 4-way animated sprites. Next: the map from the pack's tilesets. Own original  art is the long-term goal (Evan).
 - 2026-10-08 Claude: Evan's worries recorded: sports need no physics engine (stats model + readable moments, T34 as  written); Otherworld must not be predetermined: systemic world first, an AI storyteller layer as an experiment  (docs/otherworld-design.md). Asked Evan to approve downloading a CC0 sprite pack for Wildbond's Godot art.
 - 2026-10-08 Claude: Otherworld v0.1.0 built in games/otherworld/ (data in 00-data.js: CAST, WORLDS, GIFTS, MEMORIES,  ENDINGS, NODES, EPILOGUES; engine 01-game.js; scenes 02-scene.js): the Between, world and gift choice, name and look,  Asterhold's full life (status window, Mira, 3 branching choices, 8 endings), soul memories and rebirth both ways.  tests/otherworld.html walks every path for every gift and memory set (38 checks). Hub v1.4.0 (portal on the road).
 - 2026-10-08 Claude: Evan unparked Diamond Career and Otherworld (answers in docs/research/decisions.md). T34 for  ChatGPT (Diamond Career part 1, games/diamond-career/); docs/otherworld-design.md (choose your world from a list:  Asterhold, Hearthmere, the Ashen Throne; gifts with costs; rebirth by choice and on death); Claude builds O0.
+- 2026-10-07 Codex: preserved Evan's Gemini Realmbound report and three source panels in docs/research/; realmbound-first-hour-review.md separates useful companion/UX lessons from incorrect Godot/creature-game/full-Auto assumptions and proposes current-game onboarding tests. Integrated main a2ddc69, preserving Claude's trial fixes. Research only; no gameplay/installs/merges into main, PR #44.
+
 - 2026-10-08 Claude: merged ChatGPT's branch: Wildbond creature variants (T33: Gleaming, tiny/huge, markings; cosmetic;  js/19-variants.js) -> Wildbond v1.6.0, the Realmbound field guide (guides/realmbound.html), and research: its careful  review of Gemini's Godot report (docs/research/godot-production-slice-review.md: keep/try/defer/reject) and Evan's  direction (docs/research/owner-direction-2026-10-07.md: ~US$200 cash ceiling, platforms open, automation serves play).  Godot trial: vertex snapping off (transform snapping only, per Godot docs). Wildbond 1254, Realmbound 4173, offline 15.
 - 2026-10-08 Claude: Evan played the Godot trial: "this feels much better". Fixed his notes (Maren off the gate,  fences join vertically, four-way facing with walk frames and idle breathing, cub tail wag and trot). His animation  bar ("better than the first Pokémon") needs real sprite art: docs/wildbond-plan.md "Art and animation".
 - 2026-10-07 Codex: saved Evan's supplied Gemini Godot report verbatim as docs/research/godot-production-slice.md; review beside it fact-checks snapping, MSDF, saves and web constraints, rejects invented stamina/chemistry requirements and unsupported schedule. Research only, PR #44; no trial edits, installs or plan adoption.

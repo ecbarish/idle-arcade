@@ -1,0 +1,176 @@
+extends Control
+## The field book you carry (docs/wildbond-plan.md phase 4, "menus you hold"): open it with Tab or J, or tap the satchel
+## line. Two pages: the Wilddex (every creature in the game: seen ones in colour, the rest dark shapes, a mark for the ones
+## that chose you; pick one for its page) and your Team (level, health, XP, moves; who rests at the ranch).
+## Arrow keys move, Q/E or 1/2 switch pages, Tab/J/Esc close. The mouse works too.
+
+signal closed
+const Figures := preload("res://scripts/figures.gd")
+const R := preload("res://scripts/rules.gd")
+const INK := Color("3e2c20")
+const FAINT := Color("8a6e50")
+const EL_COL := { "Ember": Color("e0602a"), "Tide": Color("3a8fd8"), "Grove": Color("5d9a3e"), "Gale": Color("8ac8e0"),
+	"Stone": Color("9a8a74"), "Shade": Color("6a5a8a"), "Radiant": Color("e8c84a") }
+const COLS := 8
+const ROWS := 7
+
+var ids: Array = []                            # every species, in the game's order
+var looks: Dictionary = {}                     # main.gd's few hand-made looks (starters); the rest use family plans
+var seen: Dictionary = {}
+var bonded: Dictionary = {}
+var team: Array = []
+var ranch: Array = []
+var tab := 0                                   # 0 Wilddex, 1 Team
+var sel := 0
+var t := 0.0
+var font: Font
+
+func _ready() -> void:
+	set_anchors_preset(PRESET_FULL_RECT)
+	mouse_filter = MOUSE_FILTER_STOP
+	font = ThemeDB.fallback_font
+	visible = false
+
+func open() -> void:
+	ids = R.DATA.SPECIES.keys()
+	visible = true
+	queue_redraw()
+
+func close() -> void:
+	visible = false
+	closed.emit()
+
+func _process(dt: float) -> void:
+	if visible:
+		t += dt
+		queue_redraw()
+
+func _page_start() -> int:
+	return (sel / (COLS * ROWS)) * COLS * ROWS
+
+func _cell(i: int) -> Rect2:
+	var k := i - _page_start()
+	return Rect2(34 + (k % COLS) * 19, 42 + (k / COLS) * 20, 18, 18)
+
+func _input(e: InputEvent) -> void:
+	if not visible:
+		return
+	if e is InputEventKey and e.pressed and not e.echo:
+		match e.keycode:
+			KEY_TAB, KEY_J, KEY_ESCAPE: close()
+			KEY_Q, KEY_1: tab = 0
+			KEY_E, KEY_2: tab = 1
+			KEY_LEFT, KEY_A: sel = maxi(0, sel - 1)
+			KEY_RIGHT, KEY_D: sel = mini(ids.size() - 1, sel + 1)
+			KEY_UP, KEY_W: sel = maxi(0, sel - COLS)
+			KEY_DOWN, KEY_S: sel = mini(ids.size() - 1, sel + COLS)
+		get_viewport().set_input_as_handled()
+	elif e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
+		var p := get_local_mouse_position()
+		if Rect2(30, 14, 70, 14).has_point(p): tab = 0
+		elif Rect2(102, 14, 60, 14).has_point(p): tab = 1
+		elif not Rect2(22, 10, 340, 198).has_point(p): close()
+		elif tab == 0:
+			for i in range(_page_start(), mini(ids.size(), _page_start() + COLS * ROWS)):
+				if _cell(i).has_point(p): sel = i
+			if Rect2(150, 186, 30, 12).has_point(p): sel = mini(ids.size() - 1, _page_start() + COLS * ROWS)
+			if Rect2(30, 186, 30, 12).has_point(p): sel = maxi(0, _page_start() - COLS * ROWS)
+		get_viewport().set_input_as_handled()
+
+func _look(id: String) -> Dictionary:
+	return looks.get(id, Figures.look_for(R.DATA.SPECIES[id]))
+
+func _shadow(look: Dictionary) -> Dictionary:
+	var l := look.duplicate()
+	for k in ["body", "belly", "dark", "accent", "snout"]:
+		l[k] = Color("4a4250")
+	return l
+
+func _text(s: String, at: Vector2, size: int, col: Color, width := -1.0, align := HORIZONTAL_ALIGNMENT_LEFT) -> void:
+	draw_string(font, at, s, align if width > 0 else HORIZONTAL_ALIGNMENT_LEFT, width, size, col)
+
+func _draw() -> void:
+	draw_rect(Rect2(0, 0, 384, 216), Color(0.05, 0.04, 0.06, 0.5))
+	draw_rect(Rect2(22, 10, 340, 198), Color("4a2e1a"))
+	draw_rect(Rect2(24, 12, 336, 194), Color("6e4a2c"))
+	draw_rect(Rect2(28, 16, 163, 186), Color("f2e6c8"))
+	draw_rect(Rect2(193, 16, 163, 186), Color("f4e9cd"))
+	draw_rect(Rect2(188, 16, 8, 186), Color("dccca4"))
+	# the two tabs, like ribbons
+	for i in 2:
+		var r := Rect2(30 + i * 72, 17, 66 if i == 0 else 56, 12)
+		draw_rect(r, INK if tab == i else Color("e4d6b4"))
+		_text(["Wilddex", "Team"][i], r.position + Vector2(0, 9), 7, Color("f4e9cd") if tab == i else INK, r.size.x, HORIZONTAL_ALIGNMENT_CENTER)
+	_text("%d seen, %d bonded" % [seen.size(), bonded.size()], Vector2(193, 27), 6, FAINT, 160, HORIZONTAL_ALIGNMENT_CENTER)
+	if tab == 0:
+		_draw_dex()
+	else:
+		_draw_team()
+	_text("Tab or J to close   Q / E: pages", Vector2(193, 200), 6, FAINT, 163, HORIZONTAL_ALIGNMENT_CENTER)
+
+func _draw_dex() -> void:
+	var start := _page_start()
+	for i in range(start, mini(ids.size(), start + COLS * ROWS)):
+		var id: String = ids[i]
+		var r := _cell(i)
+		if i == sel:
+			draw_rect(r.grow(1), Color(0.85, 0.66, 0.36, 0.6))
+		var known := seen.has(id)
+		var look := _look(id) if known else _shadow(_look(id))
+		Figures.creature(self, r.position + Vector2(0, 2), true, { "wag": 0 }, look)
+		if bonded.has(id):
+			draw_rect(Rect2(r.position + Vector2(13, 0), Vector2(5, 5)), Color("4aa84a"))         # chose you
+	var pages := ceili(float(ids.size()) / (COLS * ROWS))
+	_text("Page %d of %d" % [start / (COLS * ROWS) + 1, pages], Vector2(28, 196), 6, FAINT, 163, HORIZONTAL_ALIGNMENT_CENTER)
+	if start > 0: _text("< back", Vector2(32, 196), 6, INK)
+	if start + COLS * ROWS < ids.size(): _text("more >", Vector2(152, 196), 6, INK)
+	# the page for the selected creature
+	var id2: String = ids[sel]
+	var s: Dictionary = R.DATA.SPECIES[id2]
+	var known2 := seen.has(id2)
+	_text("No. %03d" % (sel + 1), Vector2(200, 60), 7, FAINT)
+	_text(s.name if known2 else "???", Vector2(193, 44), 11, INK, 163, HORIZONTAL_ALIGNMENT_CENTER)
+	draw_set_transform(Vector2(238, 64), 0, Vector2(4, 4))
+	var look2 := _look(id2) if known2 else _shadow(_look(id2))
+	Figures.creature(self, Vector2.ZERO, true, { "wag": [1, 0, -1, 0][int(t * 6.0) % 4] if known2 else 0, "blink": fmod(t, 3.0) < 0.12, "ears_up": true }, look2)
+	draw_set_transform(Vector2.ZERO)
+	if known2:
+		draw_rect(Rect2(250, 122, 48, 10), EL_COL.get(s.el, FAINT))
+		_text(s.el, Vector2(250, 130), 7, Color("fdf6e6"), 48, HORIZONTAL_ALIGNMENT_CENTER)
+		draw_multiline_string(font, Vector2(202, 146), s.dex, HORIZONTAL_ALIGNMENT_LEFT, 146, 7, -1, INK)
+		var homes: Array = []
+		for b in R.DATA.BIOMES:
+			for w in R.DATA.BIOMES[b].get("wild", []):
+				if w[0] == id2:
+					homes.append(R.DATA.BIOMES[b].name)
+		_text(("Lives in: " + ", ".join(homes)) if not homes.is_empty() else "Lives somewhere rare.", Vector2(202, 182), 6, FAINT)
+		if bonded.has(id2):
+			_text("It chose to walk with you.", Vector2(202, 191), 6, Color("3a8a3a"))
+	else:
+		draw_multiline_string(font, Vector2(202, 140), "Not seen yet. Explore the tall grass, and look in every place you visit.", HORIZONTAL_ALIGNMENT_LEFT, 146, 7, -1, FAINT)
+
+func _draw_team() -> void:
+	var y := 36.0
+	for c in team:
+		var st := R.stats(c)
+		draw_set_transform(Vector2(34, y), 0, Vector2(2, 2))
+		Figures.creature(self, Vector2.ZERO, true, { "wag": [1, 0, -1, 0][int(t * 5.0) % 4], "ears_up": true }, _look(c.sp))
+		draw_set_transform(Vector2.ZERO)
+		_text("%s   Lv %d" % [c.name, c.lvl], Vector2(74, y + 8), 8, INK)
+		var bar := Rect2(74, y + 12, 100, 4)
+		draw_rect(bar.grow(1), INK)
+		draw_rect(bar, Color("4a3a3a"))
+		var f := clampf(float(c.hp) / st.hp, 0.0, 1.0)
+		draw_rect(Rect2(bar.position, Vector2(bar.size.x * f, bar.size.y)), Color("5cc85a") if f > 0.5 else (Color("e8c03a") if f > 0.2 else Color("e0503a")))
+		_text("%d / %d HP   XP %d / %d" % [c.hp, st.hp, c.xp, R.xp_need(c.lvl)], Vector2(74, y + 24), 6, FAINT)
+		var mv: Array = R.moves_of(c).map(func(m): return R.DATA.MOVES[m].name)
+		_text(", ".join(mv), Vector2(74, y + 32), 6, INK)
+		y += 46.0
+	var x := 202.0
+	var y2 := 44.0
+	_text("At Maren's ranch", Vector2(193, 40), 8, INK, 163, HORIZONTAL_ALIGNMENT_CENTER)
+	if ranch.is_empty():
+		draw_multiline_string(font, Vector2(202, 58), "Nobody yet. Your team holds three; creatures who choose you after that rest here.", HORIZONTAL_ALIGNMENT_LEFT, 146, 7, -1, FAINT)
+	for c in ranch:
+		_text("%s, level %d" % [c.name, c.lvl], Vector2(x, y2 + 12), 7, INK)
+		y2 += 12.0

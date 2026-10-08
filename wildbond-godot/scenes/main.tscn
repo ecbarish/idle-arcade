@@ -45,8 +45,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="Painted" type="CanvasLayer" parent="."]
 layer = 2
+follow_viewport_enabled = true
+
+[node name="Figures" type="Node2D" parent="Painted"]
+
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 3
 
 [node name="Place" type="Label" parent="UI"]
 offset_left = 6.0
@@ -88,7 +94,7 @@ autowrap_mode = 3
 label_settings = SubResource("small")
 
 [node name="FadeLayer" type="CanvasLayer" parent="."]
-layer = 3
+layer = 4
 
 [node name="Fade" type="ColorRect" parent="FadeLayer"]
 anchors_preset = 15

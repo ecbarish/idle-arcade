@@ -32,3 +32,15 @@ Google Fonts source revision: `5e8a3ba899557829a76cfdac30fa512bda91d7ca` (notice
 ## Maintaining the credits
 
 Before adding an outside asset or library, record its name, author/copyright, exact source, version where applicable, use in the arcade, license and any changes here. Copy the supplied notice into licenses/ and update credits.html. Keep attribution required by the asset's license; CREATIVE.md sets the permitted-source rules. Third-party notices describe those components only; they do not grant a license for the entire arcade.
+
+## Wildbond (Godot trial): Ninja Adventure asset pack
+
+**Ninja Adventure - Asset Pack** by **Pixel-Boy** and **AAA** ([itch.io](https://pixel-boy.itch.io/ninja-adventure-asset-pack)),
+CC0 1.0 (public domain dedication; attribution not required, given with thanks). Downloaded 2026-10-07 (update #8,
+March 2026). Used in `wildbond-godot/assets/ninja/` (the tamer: *Boy*; Maren: *OldWoman*; the first partner:
+*Racoon*; their face portraits). **Removed the same day:** Evan didn't like its chibi proportions (big heads, no visible
+legs) and preferred our own code-drawn figures. **Environment in use since 2026-10-08:** Evan liked the pack's
+structures and nature, so `wildbond-godot/assets/env/` holds its *TilesetFloor* (as floor.png: grass, dirt paths),
+*TilesetNature* (nature.png: trees, bushes, flowers) and *TilesetHouse* (house.png: the cottages), unchanged, with the
+pack's licence file beside them. People and creatures stay our own. Evan, 2026-10-08: free packs are
+placeholders to save time; the goal is the arcade's own original art and identity.

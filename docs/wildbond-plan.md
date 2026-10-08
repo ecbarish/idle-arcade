@@ -101,6 +101,25 @@ packs that fit our look (CC0 or CC-BY; recorded in CREDITS.md). Godot plays spri
 step: choose an art direction and a base sprite size (likely 16x16 tiles with 16x24 characters, or 32x32), then make
 one character and one creature properly as the template.
 
+**Tried and rejected 2026-10-08:** the free CC0 Ninja Adventure pack. Evan: "the characters didn't appear to have legs ... I
+liked what you had before." Its chibi style (big heads, tiny feet) is not Wildbond's look. **Art direction:** characters
+with real proportions and visible legs, like our code-drawn tamer and Maren (about 10x14 to 16x24 pixels), animated
+with more frames; **our own original art** is the path (Evan wants our own identity anyway). Any future pack must
+match this look before it's used. **Environment uses the pack (2026-10-08):** Evan liked its structures and nature,
+so Larkhaven's ground, paths, trees, bushes, flowers and cottages now come from its CC0 tilesets (CREDITS.md); fences,
+the sign, people and creatures stay code-drawn.
+
+**No fan-made Pokemon sprites (decided 2026-10-08):** fan sprites of Pokemon are copies of Nintendo/Game Freak's
+characters, so no fan licence can make them safe to use, and Wildbond needs its own creatures anyway. Fan *original*
+creature ("fakemon") art is fine only with a clear CC0, CC-BY or free-for-games licence. Good places to look: OpenGameArt
+(CC0 monster packs), itch.io free packs, Kenney, and the Ninja Adventure pack's own monster sheets. Our creatures stay
+our own design; outside art is a placeholder or a reference for style.
+
+**3D and every world (Evan, 2026-10-08):** assets must carry over to 3D and maybe first person, and fit any of our
+games. So characters are built from **parts** (head, body, arms, legs) that become a simple 3D rig and drive the
+character creator; environment pieces are **separate objects with a footprint and height** (a tree, a house, a
+fence) that a 3D renderer can stand up, recoloured per world. The Diorama era already extrudes pixel art into voxels.
+
 ## How we'll know it works
 Evan replays the first hour after each phase. A new player should be able to say, within ten minutes: who Maren and
 Wren are, why the world is faded, how to bond with a creature, what the Wilddex is for, and where to go next, without
