@@ -137,6 +137,11 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (night): rules for player-facing text (docs/CREATIVE.md, Writing for players; Realmbound Guild Hall title fixed).
+  Godot: Maren's ranch as a place: creatures not on your team live in the paddock (four) and the barn; walk up or tap one to see
+  its page and Take along / Swap in (choose who rests); the lead creature walks with you. 143 Godot checks. Next (B2b):
+  Cloudglass Pass; then the trough, breeding stall and Maren's letter; then evolution shapes.
+
 - **2026-10-08 (Codex):** W11 batch 1 ready in PR #51: twelve definitions, ten missing pairs, two evolution lines, strong single-form Hearthlaugh and proposed cross-world habitat manifest. Seven pages pass (Wildbond 1354); actual Godot export includes all 93 species. Evan requested this extra piece while #49/#50 await review; no merges, versions or Godot edits. docs/wildbond-roster-batch1.md records availability and checks.
 
 - 2026-10-08 Claude (evening, with Evan on his phone): Gemini reports for Diamond Career, Otherworld and the walk-in arcade saved and
