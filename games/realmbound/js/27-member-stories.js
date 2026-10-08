@@ -234,7 +234,7 @@ function memberStoryProblem(key) {
   return memberStoryMeetingProblem(key);
 }
 function memberStoryMeetingProblem(key) {
-  if (!H() || !inTown() || !TOWN.inside || H().dun) return 'Meet by the hearth in the Guild Hall.';
+  if (!H() || !inTown() || !inGuildHall() || H().dun) return 'Meet by the hearth in the Guild Hall.';
   if (ROSTER.jobOf(key) || memberRaiding(key)) return 'They\'re away on a job or a raid. Call them back first.';
   if (H().mode === 'auto') return 'Switch to Focus: this is a choice you make yourself.';
   return '';
@@ -275,7 +275,7 @@ function playMemberStory(key, replay, returnToBook) {
   });
 }
 function openMemberStoryBook() {
-  if (!H() || !guildOn() || RTALK || !inTown() || !TOWN.inside || H().dun) return false;
+  if (!H() || !guildOn() || RTALK || !inTown() || !inGuildHall() || H().dun) return false;
   C.lastInput = C.run; TOWN.auto = null;
   openModal('memberstories', '<h3>The Hearth Book · ' + G().name + '</h3>' + memberStoriesHTML() + '<div class="mfoot"><button class="btn alt" data-act="close">Back to the world</button></div>'); return true;
 }

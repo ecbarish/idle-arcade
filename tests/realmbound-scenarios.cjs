@@ -892,5 +892,45 @@ module.exports = function scenarios() {
       const invalidReaction=normalizeMemberStories({[localKey]:{seconds:0,done:1,choice:null,reaction:'hurt',repaired:true},[remoteKey]:{seconds:1800,done:3,choice:1,reaction:'trusted',repaired:true}});
       check(!invalidReaction[localKey].reaction&&!invalidReaction[localKey].repaired&&!invalidReaction[remoteKey].repaired,'R4 choices: malformed unresolved and trusted records cannot invent reconciliation');
       }
+
+      // R6: exercise rendered-town behavior too (the runner's collapsed iframe has PW=0).
+      {const keepChars=S.chars,keepCur=S.cur,keepWidth=PW,keepGuild=S.guild,keepBank=S.bank;
+        const hero=newHero('Hub Walker','concord','human','warrior');hero.lvl=60;hero.onboarding=null;hero.mode='focus';S.chars=[hero];S.cur=hero.id;PW=1000;
+        const layouts=new Set();
+        try {
+          for(const zone of Object.keys(HUB_LAYOUTS))for(const faction of ['concord','wild']){
+            hero.zone=zone;hero.faction=faction;boot();C.phase='intown';C.lastInput=C.run;townEnter();closeModal();
+            const map=TOWN.map,tag=zone+'/'+faction;layouts.add(map.rows.join(''));
+            check(map.rows.length===16&&map.rows.every(r=>r.length===28),tag+': regional hub is rectangular');
+            const obstacles=townPeople().flatMap(n=>[n.at,...(n.mule?[n.mule]:[])]);
+            for(const [id,at] of Object.entries(map.people))check(map.rows[at[1]][at[0]]!=='#'&&!TOWN_TILES[map.rows[at[1]][at[0]]]?.solid,tag+': '+id+' stands on walkable ground');
+            for(const b of townBuildings()){
+              TOWN_WALK.place(...map.start);check(TOWN_WALK.walkTo(b.door,b.y+b.h-1),tag+': reachable '+b.kind+' with people and mule present');
+            }
+            for(const n of townPeople()) {TOWN_WALK.place(...map.start);check(TOWN_WALK.walkTo(...n.at),tag+': reachable conversation with '+n.id);}
+            const smith=townBuildings().find(b=>b.kind==='smith');hero.bags.push(genJunk(60,'beast'));hero.gear.weapon.dur=30;hero.money=100000;
+            TOWN_WALK.place(smith.door,smith.y+smith.h,'up');TOWN_WALK.interact();
+            check(TOWN.inside==='smith'&&hero.gear.weapon.dur===30&&hero.bags.some(i=>i.junk),tag+': entering Smithy performs no transaction');
+            const keeper=townPeople()[0];check(TOWN_WALK.walkTo(...keeper.at),tag+': Smith is reachable inside');
+            TOWN_WALK.place(7,4,'up');TOWN_WALK.interact();check(RTALK?.townService,tag+': walking to Smith opens portrait choices');
+            const before=JSON.stringify([hero.money,hero.bags,hero.gear,S.bank]),run=C.run;step(.5);
+            check(C.run===run,tag+': world pauses during service conversation');SCN.skip();SCN.choose(3);
+            check(JSON.stringify([hero.money,hero.bags,hero.gear,S.bank])===before,tag+': declining changes no equipment or supplies');
+            townTalk(keeper);const stale=RTALK.done;SCN.skip();SCN.choose(2);
+            check(!hero.bags.some(i=>i.junk)&&hero.gear.weapon.dur===100,tag+': Smith buys scraps and repairs existing equipment');
+            const paid=hero.money;hero.gear.weapon.dur=50;stale(2);check(hero.money===paid&&hero.gear.weapon.dur===50,tag+': completed service callback cannot charge twice');
+            townExit();check(TOWN.inside===false&&TOWN.pos.x===smith.door&&TOWN.pos.y===smith.y+smith.h,tag+': room exits at its regional door');
+            const inn=townBuildings().find(b=>b.kind==='inn');C.hp=1;townDoor(inn);check(TOWN.inside==='inn'&&C.hp===1,tag+': Inn waits for deliberate rest');
+            check(!openMemberStoryBook(),tag+': Inn cannot open Guild Hall stories');townTalk(townPeople()[0]);SCN.skip();SCN.choose(0);check(C.hp===ST.hpMax,tag+': Keeper restores health');
+            C.hp=1;townTalk(townPeople()[0]);const abandoned=RTALK.done;boot();const afterBoot=C.hp;abandoned(0);check(!RTALK&&C.hp===afterBoot,tag+': reloading clears and invalidates pending service');
+            C.phase='intown';hero.mode='auto';hero.bags.push(genJunk(60,'beast'));townEnter();
+            for(let i=0;i<2000&&C.phase==='intown';i++){townAutoTick();TOWN_WALK.tick(.05);}
+            check(C.phase==='seek'&&!hero.bags.some(i=>i.junk)&&!RTALK,tag+': Auto sells, repairs and finds regional road exit');hero.mode='focus';
+          }
+          check(layouts.size>=8,'R6: all eight regions have distinct footprints');
+          hero.zone='fens';boot();C.phase='intown';townEnter();check(TOWN.map.rows.join('').includes('~')&&TOWN.map.rows.join('').includes('_'),'R6: Fenwatch has water and boardwalk');
+          hero.zone='frostmere';townEnter();check(TOWN.map.rows.join('').includes('s'),'R6: Lanternrest has snow around its lodge');
+        }finally{clearTownService();PW=keepWidth;S.chars=keepChars;S.cur=keepCur;S.guild=keepGuild;S.bank=keepBank;TOWN.inside=false;TOWN.on=false;if(H())boot();}
+      }
       rb.save();return checks;
     };
