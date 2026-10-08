@@ -105,6 +105,8 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
   of the new Wildbond and Starfall live at play/ (linked from Come Play), Windows zips in Desktop\Game builds, a 56-second trailer
   (images/play/trailer.mp4, on the Come Play page; tools/trailer). Merged ChatGPT PR #57 and #58 (Otherworld v0.2.0).
 - 2026-10-08 Claude (evening): Come Play page for friends (playtest.html), stat-bar yardstick (Wildbond v1.7.1 and Godot), Starfall detail
+- 2026-10-08 · Codex: T36 ready in PR #59: Diamond Career fills the window with objects for career records and a second month at three away parks; deliberate bus choices, no signing windfall, exact calendar pay. All eight pages pass (Diamond 122), real UI and reload at all four widths; no Godot or version overlap.
+
   (finished buildings settle in), Godot Wildbond music per place, partner stands beside you. Plan: docs/proposals/showing-the-games.md
   (Godot demos need export templates: waiting on Evan). Card shop idea parked (CS1).
 - 2026-10-08 Claude (later, 2): Wildbond Godot creature gear: Maren's workbench, seven pieces that each do one thing and show on the
@@ -237,7 +239,7 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
 
 - 2026-10-07 Codex: T33/W14 variants ready in PR #43 (codex/wildbond-variants): Gleaming, tiny/huge and seeded markings, cosmetic only; egg inheritance, old-save defaults, Wilddex records and all-era art. All five pages pass (1254/4173/48/21/15), saves/hub restored, phone through ultrawide and actual Diorama checked. Small label/drawing adapters only; no restyle, version/cache bump or merge. Continuing Lane A.
 
-- 2026-10-07 Claude: Evan installed Godot 4.7.2 (unzipped to C:UsersevanbGodot). Built the trial in wildbond-godot/  (README there): faded Larkhaven on the real map at 384x216 with integer scaling, Maren walks up and speaks in  bubbles, the first bond floods colour back (fade.gdshader), the partner follows. Verified headless and with recorded  frames. Waiting for Evan to play it (Play Wildbond trial.bat) before deciding browser vs standalone.
+- 2026-10-07 Claude: Evan installed Godot 4.7.2 (unzipped to C:\Users\evanb\Godot). Built the trial in wildbond-godot/  (README there): faded Larkhaven on the real map at 384x216 with integer scaling, Maren walks up and speaks in  bubbles, the first bond floods colour back (fade.gdshader), the partner follows. Verified headless and with recorded  frames. Waiting for Evan to play it (Play Wildbond trial.bat) before deciding browser vs standalone.
 - 2026-10-07 Claude: saved Gemini's research (docs/research/creature-games-ux.md) and mapped its lessons onto  docs/wildbond-plan.md phases. Evan is considering a standalone game: options and a recommendation (Godot, small  trial first) are Question 1 in Questions for Evan; the screen rebuild waits for his answer.
 - 2026-10-07 Claude: rewrote the plans from Evan's play notes: docs/wildbond-plan.md (one plan, principles + phases  1-7), queue lanes A and B rewritten, CLAUDE.md "Where we are" rewritten, T33 creature variants ticket for ChatGPT.
 - 2026-10-07 Claude: merged ChatGPT's launch balance (Wildbond L7a: Stillreed 46+, later Wardens within caps; Realmbound  L7b: late-zone xpMult .6 from level 40). Wildbond v1.5.2: DAY_SECONDS 3600, AUTOPILOT=false (Auto-explore off).  Recorded Evan's notes: characters present in the intro (B3b), W13 character creator, W14 creature variants, V10 big  worlds/first person. Wildbond 1225, Realmbound 4173 checks.

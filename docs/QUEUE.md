@@ -77,7 +77,7 @@ index.html or style.css until those phases are merged.
 | A8a | **Otherworld browser runner save safety** | done, merged 2026-10-08 by Claude (PR #56; tests only) | Restore recovery backups too, including failed/thrown checks |
 | A8b | **Realmbound guide: rooms and commissions** | ready for review: Codex, 2026-10-08, PR #57 | Current hub/service instructions, actual pictures and generated costs |
 | A9 | **T35** Otherworld O1, a living Lanthorn | done, merged 2026-10-08 by Claude (Otherworld v0.2.0, PR #58; 831 checks) | docs/ROADMAP.md T35; moved from Claude's B0b |
-| A10 | **T36** Diamond Career in the game window, and a road trip | open (2026-10-08) | docs/ROADMAP.md T36 |
+| A10 | **T36** Diamond Career in the game window, and a road trip | ready for review: Codex, 2026-10-08, PR #59 | docs/ROADMAP.md T36 |
 | A11 | **T37** The shared creature catalogue, batch 2 | open (2026-10-08) | docs/ROADMAP.md T37; data and lore only |
 | A12 | **T38** Realmbound in the game window: the plan, then part 1 | open (2026-10-08) | docs/ROADMAP.md T38 |
 | A13 | **T39** Otherworld: Hearthmere, the second world | open (2026-10-08) | docs/ROADMAP.md T39 |

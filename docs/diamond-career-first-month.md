@@ -1,3 +1,5 @@
+> T36 follow-up: the first-month accounting below stays unchanged. The deliberate second-month road chapter and the in-world UI are now documented in [Diamond Career: the world and the road](diamond-career-world.md).
+
 # Diamond Career: the second contract and first month
 
 Lane A4b / D1, Codex, 2026-10-08. Builds on [the first-payday slice](diamond-career-first-payday.md) and the approved [sports-career direction](plans/sports-careers.md). The same batter-versus-pitcher stats model and both batting styles remain authoritative; no physics engine, new sport, club management or unattended career mode.

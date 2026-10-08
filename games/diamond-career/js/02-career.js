@@ -2,7 +2,7 @@
 function freshCareer(seed=Date.now()) {
   return {game:'diamond-career',schema:1,seed:seed>>>0,player:null,mode:'timing',sound:0,phase:'creator',day:1,
     series:0,played:0,stats:{contact:58,power:50,discipline:55},fatigue:0,record:lineStats(),season:lineStats(),
-    history:[],contract:null,ledger:[],cash:0,owned:{apartment:false,car:false},active:null,message:'',stance:'contact',guess:'fastball',prepared:false,month:null,contracts:[],notes:[]};
+    history:[],contract:null,ledger:[],cash:0,owned:{apartment:false,car:false},active:null,message:'',stance:'contact',guess:'fastball',prepared:false,month:null,contracts:[],notes:[],road:null,visits:{}};
 }
 function validCareer(o) {
   const num=n=>typeof n==='number'&&Number.isFinite(n)&&n>=0, line=s=>!!s&&Object.keys(lineStats()).every(k=>num(s[k]));
@@ -10,9 +10,10 @@ function validCareer(o) {
     !o.stats||!['contact','power','discipline'].every(k=>num(o.stats[k]))||!line(o.record)||!line(o.season)||
     !o.owned||!['apartment','car'].every(k=>typeof o.owned[k]==='boolean')||!Array.isArray(o.ledger)||!Array.isArray(o.history)||
     !o.ledger.every(e=>e&&typeof e.id==='string'&&Number.isFinite(e.amount)&&Number.isInteger(e.day)&&e.day>=1))return false;
-  if(o.contract&&o.contract.generation!==undefined&&![0,1].includes(o.contract.generation))return false;
+  if(o.contract&&o.contract.generation!==undefined&&![0,1,2].includes(o.contract.generation))return false;
   if(o.month!==undefined&&o.month!==null&&(!Number.isInteger(o.month.start)||o.month.start<1||o.month.end!==o.month.start+30||!Number.isInteger(o.month.games)||o.month.games<0||!Number.isInteger(o.month.wins)||o.month.wins<0||o.month.wins>o.month.games||!line(o.month.record)||typeof o.month.closed!=='boolean'))return false;
-  if(o.contracts!==undefined&&(!Array.isArray(o.contracts)||o.contracts.length>1||!o.contracts.every(c=>c&&DC.offers[c.offer]&&Number.isInteger(c.start)&&c.start>=1&&c.generation===0)))return false;
+  if(o.contracts!==undefined&&(!Array.isArray(o.contracts)||o.contracts.length>2||!o.contracts.every(c=>c&&DC.offers[c.offer]&&Number.isInteger(c.start)&&c.start>=1&&[0,1].includes(c.generation))))return false;
+  if (!validRoadFields(o)) return false;
   if(o.notes!==undefined&&(!Array.isArray(o.notes)||o.notes.length>6||!o.notes.every(n=>n&&Number.isInteger(n.day)&&n.day>=1&&typeof n.kind==='string'&&typeof n.text==='string')))return false;
   if(o.player&&(typeof o.player.name!=='string'||!['left','right'].includes(o.player.bats)||!Number.isInteger(o.player.look)||o.player.look<0||o.player.look>3))return false;
   if(o.contract&&(!DC.offers[o.contract.offer]||!Number.isInteger(o.contract.start)||o.contract.start<1))return false;
@@ -46,7 +47,7 @@ function migrateCareer(o) {
   normalizeCalendar(n,o);
   return n;
 }
-function effectiveStats(s) { return {...s.stats,contact:Math.max(25,s.stats.contact-s.fatigue*.15)}; }
+function effectiveStats(s) { return {...s.stats,contact:Math.max(25,s.stats.contact-s.fatigue*.15),discipline:s.stats.discipline+(s.road?.film?3:0)}; }
 function evaluation(s) {
   const obp=onBase(s.season), earned=s.season.hits>=DC.threshold.hits||obp>=DC.threshold.obp;
   return {earned,text:`${s.season.hits} hits · on-base ${rate(obp)}. Call-up target: 5 hits OR .300 on-base across six games.`};
@@ -57,11 +58,11 @@ function startCareer(s,name,bats,look) {
   s.phase='clubhouse';s.message='Iona Vale: “Six games. Find your eye, then find your swing. A walk counts as getting there.”';return true;
 }
 function startMatch(s) {
-  if(!['clubhouse','home'].includes(s.phase)||s.played>=6||(s.contract&&contractDue(s))||(s.month&&s.day>=s.month.end))return false;
+  if(!['clubhouse','home'].includes(s.phase)||s.played>=6||(s.contract&&contractDue(s))||(currentPeriod(s)&&s.day>=currentPeriod(s).end)|| (s.road&&!roadReady(s)))return false;
   const p=DC.pitchers[s.played%3],g=newGame((random(s)*4294967296)>>>0);
   const club=s.contract?contractOffer(s.contract).name:DC.club;
   const opponents=[DC.club,...DC.opponents].filter(name=>name!==club);
-  s.active={g,pitcher:p,opponent:opponents[s.played%3],pitch:null,last:null,accounted:false};
+  s.active={g,pitcher:p,opponent:s.road?ROAD_TOWNS[s.road.index].club:opponents[s.played%3],park:s.road?ROAD_TOWNS[s.road.index].id:'home',pitch:null,last:null,accounted:false};
   s.prepared=false;
   simulateToMoment(g,effectiveStats(s),p,s.contract?contractOffer(s.contract).moments:2);
   s.phase=g.finished?'summary':'pitch';if(s.phase==='summary')accountMatch(s);else nextPitch(s);return true;
@@ -88,7 +89,9 @@ function accountMatch(s) {
   for(const k of Object.keys(lineStats())){s.record[k]+=a.g.hero[k];s.season[k]+=a.g.hero[k];}
   s.history.push({series:s.series,day:s.day,opponent:a.opponent,score:copy(a.g.score),hero:copy(a.g.hero),manual:a.g.manual,innings:a.g.inning});
   if(s.history.length>60)s.history.shift();
-  if(s.month&&s.contract&&!s.month.closed){s.month.games++;if(a.g.score[1]>a.g.score[0])s.month.wins++;for(const k of Object.keys(lineStats()))s.month.record[k]+=a.g.hero[k];}
+  const period=currentPeriod(s);
+  if(period&&s.contract&&!period.closed){period.games++;if(a.g.score[1]>a.g.score[0])period.wins++;for(const k of Object.keys(lineStats()))period.record[k]+=a.g.hero[k];}
+  if(s.road)s.road.film=false;
 }
 function afterMatch(s) {
   if(s.phase!=='summary')return false;
@@ -129,7 +132,7 @@ function signContract(s,offer) {
   s.message=renewal?'Iona: “A new shirt or the same locker. The next contract is your choice. The month is still yours to play.”':e.earned?'Your first call-up. A key, a shirt with your name, and a place to belong.':'A paid development contract. Your call-up target stays in the notebook; there is time to grow.';return true;
 }
 function advanceDays(s,n) {
-  n=Number.isFinite(n)?clamp(Math.floor(n),0,30):0;const to=s.month?Math.max(s.day,Math.min(s.month.end,s.day+n)):s.day+n;
+  n=Number.isFinite(n)?clamp(Math.floor(n),0,30):0;const period=currentPeriod(s),to=period?Math.max(s.day,Math.min(period.end,s.day+n)):s.day+n;
   if(s.contract){const o=contractOffer(s.contract);o.days.forEach((offset,i)=>{const day=s.contract.start+offset;if(day<=to)credit(s,salaryId(s.contract,i),o.wage,'Salary '+(i+1)+' of '+o.days.length+' · '+o.role,day);});}
   s.day=to;return s.day;
 }

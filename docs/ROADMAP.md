@@ -216,6 +216,7 @@ Evan's rules already settle), docs/CREATIVE.md "Writing for players" and the in-
 - Checks in tests/otherworld.html for each; old saves load; all test pages pass; bump Otherworld's version.
 
 ### T36: Diamond Career in the game window, and a road trip (part 3)
+- [x] Ready in PR #59 (Codex, 2026-10-08); all eight pages pass, Diamond Career 122. Four widths checked; version bump remains Claude's. docs/diamond-career-world.md.
 Evan, 2026-10-08: every game happens in the game window (CLAUDE.md "In the game window"). Branch
 `codex/diamond-career-window`.
 - **The screen is the world:** the ballpark, the clubhouse and the home/garage scenes fill the window. Stats, the

@@ -3,12 +3,13 @@
 <body>
 <header><a href="../../index.html" aria-label="Back to Idle Arcade">← Arcade</a><div class="brand">Diamond Career <small>Prototype · v0.3.1</small></div><nav id="tools" aria-label="Game tools"><button id="sound">Sound: off</button><button id="save-tools">Your save</button></nav></header>
 <main>
-  <section id="stage" aria-label="Lamplight Field and your home"><canvas id="world" aria-label="An evening ballpark with a pitcher, batter and crowd; your home after signing"></canvas><div id="scoreboard"></div><div class="park-sign" id="place">LAMPLIGHT FIELD</div><div id="batting-window" aria-label="Your at-bat" hidden></div><div id="timing-bar" hidden><i></i><span></span><b>plate</b></div><p id="swing-tip" hidden>Swing when the ball reaches the circle: tap the field or press Space.</p></section>
-  <section id="panel" aria-label="Your career"><div id="content"></div><p class="save-warning" id="save-warning" role="status" hidden>Your browser could not save. Download your save before leaving.</p></section>
+  <section id="stage" aria-label="Lamplight Field and your home"><canvas id="world" aria-label="An evening ballpark with a pitcher, batter and crowd; your home after signing"></canvas><div id="scoreboard"></div><div class="park-sign" id="place">LAMPLIGHT FIELD</div><div id="batting-window" aria-label="Your at-bat" hidden></div><div id="timing-bar" hidden><i></i><span></span><b>plate</b></div><p id="swing-tip" hidden>Swing when the ball reaches the circle: tap the field or press Space.</p><nav id="world-objects" aria-label="Places and things in your career"></nav><nav id="world-rooms" aria-label="Go somewhere"></nav>
+  <section id="panel" aria-label="Your career"><button id="close-sheet" aria-label="Put this away">Put away ×</button><div id="content"></div><p class="save-warning" id="save-warning" role="status" hidden>Your browser could not save. Download your save before leaving.</p></section>
 </main>
 <dialog id="save-dialog" aria-labelledby="save-title"><h2 id="save-title">Your Diamond Career save</h2><div id="save-content"></div><button id="close-save">Back to the field</button></dialog>
 <script src="../../shared/engine.js"></script><script src="../../shared/settings.js"></script><script src="../../shared/sound.js"></script><script src="../../shared/dialogue.js"></script><script src="../../shared/feedback.js"></script>
 <script src="js/00-data.js"></script><script src="js/01-baseball.js"></script><script src="js/02-career.js"></script><script src="js/03-ui.js"></script><script src="js/04-scene.js"></script><script src="js/05-sound.js"></script><script src="js/06-calendar.js"></script>
 <script src="js/07-batting-window.js"></script>
+<script src="js/08-road.js"></script><script src="js/09-world-ui.js"></script>
 <script src="js/99-boot.js"></script>
 </body></html>

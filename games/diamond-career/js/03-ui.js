@@ -13,7 +13,7 @@ function chooseStance(stance) {
   if(sceneState||S.phase!=='pitch'||pitchClock.running||!['contact','power',...(S.mode==='tactical'?['patience']:[])].includes(stance))return false;
   S.stance=stance;saveCareer();renderCareer();return true;
 }
-function renderCareer() {
+function renderCareerContent() {
   if(S.mode==='timing')S.stance=timingStance(S);
   renderBattingWindow();
   const el=document.querySelector('#content'),g=S.active&&S.active.g;
@@ -52,7 +52,9 @@ function renderCareer() {
   SOUND&&SOUND.render();
 }
 function actCareer(act) {
-  if(sceneState)return;
+  if(sceneState||(careerSheet&&['ready','swing','take','tactical','continue'].includes(act)))return;
+  if(act==='start-road') { if(beginRoadMonth(S)){saveCareer();renderCareer();playBusTrip();} return; }
+  if(act==='bus') {playBusTrip();return;}
   let changed=false;
   if(act==='ready'&&S.phase==='pitch'&&S.mode==='timing'&&!pitchClock.running){S.stance=timingStance(S);pitchClock.running=true;pitchClock.elapsed=0;renderBattingWindow();return;}
   if(['swing','tactical','take'].includes(act)) {
@@ -71,7 +73,7 @@ function actCareer(act) {
   else if(act==='day'&&S.phase==='home'){advanceDays(S,1);S.phase=careerPhase(S);S.message='A quiet day at home. Any salary due today is in your ledger.';changed=true;}
   else if(act==='finish-month')changed=finishMonth(S);
   else if(act==='new-series')changed=beginSeries(S);
-  if(changed){resetClock();saveCareer();renderCareer();if(act==='train-discipline')D.play([['iona',S.message.replace(/^Iona: “|”$/g,'')]],()=>renderCareer());}
+  if(changed){resetClock();saveCareer();renderCareer();if(act==='new-series'&&S.road)playBusTrip();if(act==='rest'||act.startsWith('train-'))D.play([[act==='rest'?'':'iona',act==='train-contact'?'A clean swing, not a hurried one. Practice putting the barrel where you mean it to be.':act==='train-power'?'Use your legs before your arms. Power has a cost; keep contact in the conversation.':act==='rest'?'An evening without another drill. Your legs feel fresh again.':S.message.replace(/^Iona: “|”$/g,'')]],()=>renderCareer());}
 }
 
 function decisionHTML(){return S.notes.map(n=>`<p class="quote">Day ${n.day} · ${esc(n.text)}</p>`).join('');}

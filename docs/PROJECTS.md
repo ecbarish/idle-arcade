@@ -266,3 +266,9 @@ Merged 2026-10-08 (Realmbound v1.3.0, PR #53); written by Codex on codex/realmbo
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
 | OW1 | **T35: a living Lanthorn** | M | Data+Polish | OW0 | done, merged 2026-10-08 (Otherworld v0.2.0, PR #58) | docs/ROADMAP.md T35: visible locked choices, gift costs, food/fear over three days and Archivist memories |
+
+## Diamond Career follow-up
+
+| ID | Project | Size | Kind | Depends | Status | Spec / notes |
+|---|---|---|---|---|---|---|
+| D1d | **T36: in the game window and a road trip** | L | Polish+Data | D1c | ready for review: Codex, 2026-10-08, PR #59 | docs/ROADMAP.md T36; keep existing features reachable, three away parks and calendar pay |
