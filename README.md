@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Research (2026-10-08): preserved Gemini's Starfall report with a review against the current rules; archived answered Wildbond/Godot/Realmbound/Starfall prompts. docs/research/gemini-prompts.md now lists only unanswered Diamond Career, Otherworld, arcade and optional Primordial briefs, revised for current owner decisions and neutral playtests. No gameplay changes.
+
 - **Wildbond v1.6.1 (2026-10-08)** — **A fairer first battle.** Wren always picks the partner whose element beats yours,
   and every starter knew its element move from level 1, so the first battle was lost fast: measured over 100 battles
   each with sensible moves, Cindercub won only 5. Starters now learn their element move (Ember Snap, Bubble Jet, Vine

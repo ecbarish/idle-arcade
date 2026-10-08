@@ -1,46 +1,23 @@
-# Research prompts for Gemini (or any deep-research assistant)
+# Gemini prompts still to use
 
-Evan, 2026-10-07: Gemini's deep research on creature games looked strong, so every game gets one. Paste a prompt into
-Gemini's deep-research mode; save the answer in this folder under the file name given, then tell Claude. Results
-inform the plans (docs/wildbond-plan.md, docs/realmbound-40-60.md, docs/VISION.md); they don't override Evan.
+Updated by Codex, 2026-10-08, after Evan's Wildbond/Godot, Realmbound and Starfall reports. Only unanswered briefs are listed here. Copy the prompt from its linked file into Gemini Deep Research; save the full answer in `docs/research/` under the given name. Nothing here authorizes a new system, port or purchase.
 
-## Wildbond: `creature-games-ux.md` (running 2026-10-07)
-The first hour, character creation, battle screens, immersive menus, variants, world-based ranching, common indie
-mistakes; ends with 15 lessons. (Full prompt in the session that started it; reuse it from Evan's Gemini history.)
+| Order | Prompt to use | Save Gemini's answer as | What we still need to learn |
+|---|---|---|---|
+| 1 | [Diamond Career: the first call-up and payday](gemini-diamond-first-payday-prompt.md) | `diamond-first-contract-research.md` | Understandable batting feedback, fair call-up gates, a real pay/playing-time choice and a satisfying first purchase |
+| 2 | [Otherworld: a first life with agency](gemini-otherworld-first-life-prompt.md) | `otherworld-first-life-research.md` | Choices with visible consequences, gifts with costs, satisfying endings/rebirth and a small systemic-world experiment |
+| 3 | [Arcade: first visit and playtesting](gemini-arcade-first-visit-prompt.md) | `arcade-first-visit-research.md` | Choosing a game, browser/native expectations, discoverability and reusable newcomer tests |
+| Optional, lower priority | [Primordial: the first adaptation cycle](gemini-primordial-first-cycle-prompt.md) | `primordial-first-cycle-research.md` | Whether the evolution/idle niche has a distinct enjoyable loop worth revisiting |
 
-## Realmbound: `classic-mmo-feel.md`
-```
-Research for a browser game that recreates the feel of classic World of Warcraft (2004-2008) as a single-player
-adventure with an idle option: one hero (or a party of companions), zones from level 1 to 60, quests, dungeons,
-talents, a guild of AI companions, and a raid. Write a practical design report with concrete examples:
-1. What made classic WoW's first hours unforgettable (Northshire, Elwynn, the first dungeon, the first mount) and
-   how WoW Classic, WoW: Forever, Turtle WoW, Project Ascension and AzerothCore playerbots recreate or extend it.
-2. How single-player games make a world feel populated: playerbots, NPC adventurers, AI party members (Dragon's
-   Dogma pawns, FFXIV Trust/duty support, Kenshi), and what makes them feel like players.
-3. Quests and zone design that feel alive: storytelling through places, phasing, choices with consequences
-   (Mass Effect, Fable, The Witcher), towns that grow (Ashes of Creation's node system).
-4. Interfaces that stay immersive in an MMO-like game: action bars, quest log, map, character sheet; what classic
-   UI got right and what modern remakes improved.
-5. Idle and automation done well (Melvor Idle, IdleOn, Runescape idle skills): what to automate, what to keep
-   active, and how automation is earned as quality of life.
-6. Light, weather and day/night that make old-style graphics feel modern (WoW: Forever, Octopath, Sea of Stars).
-7. Common mistakes in fan-made and indie MMO-likes.
-End with a prioritised list of 15 specific lessons for our game.
-```
+**My next pick is Diamond Career.** Its first slice is built in PR #45, so we can compare research with concrete decisions and an actual playtest. Research should refine the slice, not block playing it or demand a full league first. Otherworld is next; neither has a supplied research answer yet.
 
-## The arcade and its launcher: `game-hubs.md`
-```
-Research for a web "arcade" that hosts several small games that share one light universe (a creature game, a
-classic-MMO game, a guild sim, an evolution game). Practical report with examples:
-1. Hubs and launchers that make you excited to pick a game: console home screens (Wii channels, PS5, Switch),
-   Nintendo's game boxes and manuals, attract modes and trailers, itch.io and Steam pages that convert visitors.
-2. Shared universes across small games (Supergiant's games, the Mana series, Kairosoft, Nintendo crossovers): what
-   links feel delightful versus forced.
-3. Playtesting and feedback loops for small teams: in-game voting, feature flags, short surveys, what to measure.
-4. Making browser games feel premium, not like "flash games": loading, transitions, sound, typography, fullscreen.
-End with 12 specific lessons for our arcade.
-```
+Answered prompts have moved to [the archive](archive/README.md): Wildbond creature UX, Godot production, Realmbound and Starfall. Reports stay available with separate reviews. See [how to use research](first-play-research-pack.md) and [current owner decisions](decisions.md).
 
-## Later (parked games, when one starts)
-Starfall Guild (guild management and autobattlers), Primordial (evolution idle), Diamond Career (sports career and
-team management), Otherworld (isekai story RPG): write a prompt in the same shape when Evan picks the next game.
+## What every remaining brief now asks for
+
+- Verify exact claims against primary sources; attach direct links and claim-level attribution. Label firsthand observation, evidence, inference and design suggestions separately. Say when our game was not inspected.
+- Start with the existing player problem and one cheap test. Do not assume an unbuilt game, reimplement existing systems or import another game's signature mechanics.
+- Respect genre: Starfall's party executes prepared orders; that does not justify fully automating a hero adventure. Accessibility is available immediately; repetitive convenience may be earned.
+- Browser is the approved starting point for Diamond Career and Otherworld; Wildbond's Godot move is being tested. Keep future choices open without prescribing the same engine for every game.
+- Prefer existing tools and free assets. Evan's approximate **$200 total project cash ceiling** is not a per-game budget or permission to spend.
+- Passing scenario tests and self-running demos do not prove a human can find a gate, understand a reward or make a meaningful decision. Use neutral newcomer observation and make ordinary mistakes recoverable.

@@ -1,0 +1,21 @@
+# Gemini prompt: Otherworld's first life and meaningful agency
+
+Unanswered. Updated by Codex, 2026-10-08. Save the full sourced response as `docs/research/otherworld-first-life-research.md`. Copy everything below the divider.
+
+---
+
+Research Otherworld, an original single-player isekai/story RPG in a small passion-project arcade. The owner approved starting in the browser: choose the world you are reborn into from a list of very different worlds, choose a gift with a cost, live a life, then keep some soul memories when reborn. Rebirth is available after completing a life and when the character dies. These directions are decided; do not ask the owner to settle them again or recommend the same mandatory engine for every game.
+
+A browser prototype already exists at github.com/ecbarish/idle-arcade in games/otherworld/: the Between and its Archivist, the playable Asterhold life, a gift choice, branching authored scenes, eight endings and memories that affect later choices. Hearthmere and the Ashen Throne are future worlds, not playable claims. Do not assume a complete open-world combat/skill simulator exists. The owner now wants more of a systemic world, rather than only choosing a predetermined script; an AI storyteller is a possible EXPERIMENT, not an approved dependency or requirement. Say whether you actually inspected the files or played the prototype. Separate current features from suggestions.
+
+Investigate:
+1. First-life onboarding: arrival, an unusual gift, its visible cost, one person worth caring about and a meaningful action. How do documented RPG openings teach effects and consequences without an overwhelming character build or an exposition dump?
+2. Agency in a small authored story: how do choices change relationships, access, resources or later scenes rather than only wording? Compare branch trees with small state-driven storylets and simulated local situations. Identify what can remain authored and where a small system earns its complexity. Do not confuse procedural text with player agency.
+3. Gifts with costs and viable paths: make at least two choices interesting, avoid a hidden objectively best gift, let the player anticipate ordinary consequences, and recover from a mistake. Avoid copying anime characters, plots or unlimited magic.
+4. Death, endings and rebirth: how can an ending feel complete before a new life starts? Explain exactly what stays and goes, give informed confirmation for irreversible choices, and show a useful memory without requiring a grind or making the first life disposable.
+5. One bounded systemic-world experiment: propose a single place, two changing needs and a few NPC reactions that work WITHOUT a live LLM. Compare it with an optional AI-narration layer whose facts are constrained by saved state. Address contradictions, repetition, save continuity, prompt injection from imported text, offline behavior, privacy and recurring cost. Do not let narration invent inventory, outcomes or canon; do not recommend installing a paid service by default.
+6. Presentation: a character's world instead of a wall of text, readable choices, pacing that waits, input accessibility, optional audio, reduced motion, phone and ultrawide. Keep the appropriate amount of prose; a story game need not disguise every sentence as a combat system.
+
+Use current primary developer talks, manuals and documented examples; attach direct sources to claims. Label observation, evidence, inference and recommendation. Avoid describing fan speculation or review anecdotes as established mechanics. Treat engine choices as future tests only if the browser slice demonstrates a real limitation. The approximate $200 ceiling is for the WHOLE passion project; time and AI tokens are the main investment. No subscriptions, assets or API spending are authorized.
+
+Deliver three small first-life approaches, a first 15-minute journey, a ranked five-item table with smallest experiments and acceptance tests, a neutral playtest script, and clear keep/try/defer boundaries. Recommend one cheap next experiment, not every possible world/skill/rebirth feature. End with no more than three genuine unresolved owner decisions. Research alone does not approve a new core system or another game port.

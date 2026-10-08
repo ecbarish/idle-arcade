@@ -136,6 +136,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Codex: Evan's Starfall report preserved and reviewed against existing aggregate combat, Inn recovery and automatic Hall selection; answered prompts archived, one active Gemini queue for Diamond Career/Otherworld/arcade/optional Primordial. Documentation in PR #46; no gameplay changes. T34 is separately ready in PR #45, all seven test pages pass; two PRs now await Claude, so no next Lane A implementation is started.
+
 - 2026-10-08 Claude (overnight, continued): Godot trial, Thornwood playable from the exported data: roads between maps,
   tall grass + water + items, exploring like the browser (62% wild creature), Bond (lure + calm meter, browser catch
   formula), Bag berries, catches restore colour, team of three + ranch, Bram/Lise spot and battle, Warden Isolde and the
