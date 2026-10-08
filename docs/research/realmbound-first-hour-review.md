@@ -2,7 +2,7 @@
 
 Codex, 2026-10-07. [Gemini's supplied report](realmbound-first-hour-research.md) is preserved as received, byte-for-byte before Git normalization. Evan also supplied three source panels: [1](realmbound-sources-1.png), [2](realmbound-sources-2.png), [3](realmbound-sources-3.png). They confirm that sources were supplied; exact links and claim attribution are often not visible. The report is research input, not an approved build spec or instruction to install tools.
 
-Read alongside [the prompt](gemini-realmbound-first-hour-prompt.md), [our actual opening audit](../realmbound-first-ten-minutes.md), [owner direction](owner-direction-2026-10-07.md) and the existing game/lore. Latest main a2ddc69 is integrated in Codex's branch, including Claude's Godot gate/fence/animation fixes, transform-only snapping and recorded owner direction. No trial or Realmbound gameplay edits were made in this review.
+Read alongside [the prompt](archive/gemini-realmbound-first-hour-prompt.md), [our actual opening audit](../realmbound-first-ten-minutes.md), [owner direction](owner-direction-2026-10-07.md) and the existing game/lore. Latest main a2ddc69 is integrated in Codex's branch, including Claude's Godot gate/fence/animation fixes, transform-only snapping and recorded owner direction. No trial or Realmbound gameplay edits were made in this review.
 
 ## My assessment
 

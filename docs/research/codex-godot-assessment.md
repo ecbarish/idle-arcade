@@ -54,7 +54,7 @@ Choose Windows as the first tested build because it is Evan's current machine. G
 
 ## Next research topic
 
-[Gemini prompt: Godot art, animation and a safe content migration](gemini-godot-production-prompt.md). This complements the first report: it asks how to deliver the desired quality with a small team, how to preserve the existing game, and what to test before committing to a full port. It does not duplicate Claude's current code fixes.
+[Gemini prompt: Godot art, animation and a safe content migration](archive/gemini-godot-production-prompt.md). This complements the first report: it asks how to deliver the desired quality with a small team, how to preserve the existing game, and what to test before committing to a full port. It does not duplicate Claude's current code fixes.
 
 ## Verified technical references
 

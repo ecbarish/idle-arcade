@@ -40,6 +40,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 ## Changelog
 
 - Diamond Career (2026-10-08): a new first-payday prototype with an original evening ballpark, two batting styles, six development games, visible call-up targets, two contracts, calendar salary and lasting home/garage purchases. Shared saves, settings, sound, feedback and launcher integration; tests/diamond.html and all six existing test pages pass. See docs/diamond-career-first-payday.md.
+- Research (2026-10-08): preserved Gemini's Starfall report with a review against the current rules; archived answered Wildbond/Godot/Realmbound/Starfall prompts. docs/research/gemini-prompts.md now lists only unanswered Diamond Career, Otherworld, arcade and optional Primordial briefs, revised for current owner decisions and neutral playtests. No gameplay changes.
 
 - **Wildbond v1.6.1 (2026-10-08)** — **A fairer first battle.** Wren always picks the partner whose element beats yours,
   and every starter knew its element move from level 1, so the first battle was lost fast: measured over 100 battles
