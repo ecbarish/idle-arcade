@@ -6,7 +6,7 @@ come from a statistics model (batter vs pitcher, weighted rolls); the player act
 a tactical read); animation only shows the result. The rest of each game simulates. This is T34's approach.
 part 1 (docs/ROADMAP.md T34).
 
-Status: browser prototype in games/diamond-career/; D0 and the first D1 payday are merged (PR #45). The second contract and first full season month are ready in PR #48; later D2–D4 remain proposals. See [the expanded sports-career plan](sports-careers.md) for the owner's multi-sport, player-to-management and salary/lifestyle direction. Baseball is the first module, not the limit of the project. [Research](RESEARCH.md#diamond-career-understandable-advancement-short-playable-moments); [portfolio plan](README.md).
+Status: browser prototype in games/diamond-career/; D0 and the first D1 payday are merged (PR #45). The second contract and first full season month are merged (PR #48, v0.2.0); later D2–D4 remain proposals. See [the expanded sports-career plan](sports-careers.md) for the owner's multi-sport, player-to-management and salary/lifestyle direction. Baseball is the first module, not the limit of the project. [Research](RESEARCH.md#diamond-career-understandable-advancement-short-playable-moments); [portfolio plan](README.md).
 
 ## The experience to protect
 

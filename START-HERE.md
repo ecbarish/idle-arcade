@@ -136,6 +136,10 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (from Evan's phone, PC session): merged ChatGPT's PR #47 Realmbound onboarding (v1.1.0: arrival scene on the first
+  questgiver, optional road guidance) and PR #48 Diamond Career's second contract and first month (v0.2.0). All seven pages pass:
+  Realmbound 4407, Diamond 83, Wildbond 1254, Starfall 48, sound 21, offline 15, Otherworld 38. ChatGPT next: A5 R4 guild stories.
+
 - 2026-10-08 Codex: Lane A4 Realmbound onboarding ready in PR #47: existing first request, optional Focus/loot/reward/town/companion guidance, safe legacy defaults and paused arrival replay. All seven pages pass (Realmbound 4407); phone through ultrawide controls/save reload checked. No version/cache bump or merge; Claude's Godot files untouched.
 
 - 2026-10-08 Codex: Lane A4b Diamond Career second contract/30-day first month ready in PR #48 (83 Diamond checks; all seven pages pass), legacy salary IDs preserved, phone through ultrawide checked. Independent Realmbound onboarding is ready in PR #47. Two PRs await Claude; no further Lane A implementation started, no version/cache bumps or merges. Read-only phone/PC Claude test prompt: docs/claude-pc-connection-test.md.
