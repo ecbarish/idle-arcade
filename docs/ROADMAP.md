@@ -199,6 +199,7 @@ the fading, which also took the valley's depth, the Unbound, heritages). Branch 
   tools/godot-export.ps1 when Claude builds those areas. tests/wildbond.html stays all-pass; README entry.
 
 - [x] T35 merged 2026-10-08 (Otherworld v0.2.0). [ ] T36, T37 open for ChatGPT (2026-10-08, after its reset): one branch and PR each, stacked if needed.
+- [x] T35 merged 2026-10-08 (Otherworld v0.2.0). T36 and T37 ready for review in PR #59 and #60; neither merged.
 
 ### T35: Otherworld O1, a living Lanthorn (moved from Claude's lane; Claude is in Godot)
 - [x] Implementation ready in PR #58 (Codex, 2026-10-08); 831 Otherworld checks, all eight pages pass. Review/version bump remain Claude's. Details: docs/otherworld-lanthorn.md.

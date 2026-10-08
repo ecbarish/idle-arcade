@@ -53,6 +53,8 @@ for Evan in START-HERE; until he answers, the old checklist below still applies 
 
 **Old launch checklist (browser games):** L1 settings Â· L2 save safety Â· L3 phone pass Â· L4 onboarding Â· L7 bug bash
 and balance Â· L8 the arcade launcher Â· L10 accessibility Â· guides and lore pages (T8) Â· no open bug issues.
+**Old launch checklist (browser games):** L1 settings · L2 save safety · L3 phone pass · L4 onboarding · L7 bug bash
+and balance · L8 the arcade launcher · L10 accessibility · guides and lore pages (T8) · no open bug issues.
 ## Lane A: ChatGPT / Codex (browser games, data and lore, moving browser games into the game window)
 
 Updated 2026-10-08: Wildbond's new version is built in Godot by Claude (never edit `wildbond-godot/`, `starfall-godot/` or `play/`). Wildbond browser work stays in data, lore and checks: it feeds the Godot version through tools/godot-export.ps1. Earlier note: Claude was rebuilding Wildbond's browser screens (plan phases 1-5), so
@@ -75,7 +77,7 @@ index.html or style.css until those phases are merged.
 | A7 | **R6** Realmbound hub variety | done, merged 2026-10-08 by Claude (Realmbound v1.4.0) | A layout per zone, inn and smithy interiors |
 | A7b | **R5** crafted gear from 55 | done, merged 2026-10-08 by Claude (Realmbound v1.5.0) | Separate PR after R6 |
 | A8a | **Otherworld browser runner save safety** | done, merged 2026-10-08 by Claude (PR #56; tests only) | Restore recovery backups too, including failed/thrown checks |
-| A8b | **Realmbound guide: rooms and commissions** | ready for review: Codex, 2026-10-08, PR #57 | Current hub/service instructions, actual pictures and generated costs |
+| A8b | **Realmbound guide: rooms and commissions** | done, merged 2026-10-08 (PR #57) | Current hub/service instructions, actual pictures and generated costs |
 | A9 | **T35** Otherworld O1, a living Lanthorn | done, merged 2026-10-08 by Claude (Otherworld v0.2.0, PR #58; 831 checks) | docs/ROADMAP.md T35; moved from Claude's B0b |
 | A10 | **T36** Diamond Career in the game window, and a road trip | ready for review: Codex, 2026-10-08, PR #59 | docs/ROADMAP.md T36 |
 | A11 | **T37** The shared creature catalogue, batch 2 | open (2026-10-08) | docs/ROADMAP.md T37; data and lore only |
