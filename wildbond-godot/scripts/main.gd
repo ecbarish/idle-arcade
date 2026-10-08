@@ -175,6 +175,9 @@ func _ready() -> void:
 	satchel.add_theme_color_override("font_outline_color", Color(0.1, 0.12, 0.14))
 	satchel.add_theme_constant_override("outline_size", 3)
 	$UI.add_child(satchel)
+	if "--skip-opening" in OS.get_cmdline_user_args():
+		_skip_opening()
+		return
 	say("", "The supply cart stops at the edge of the trees. Larkhaven: a handful of roofs and a ranch fence that runs right up to the forest.")
 	say("", "Everything here looks faded, like an old picture left in the sun. You too.")
 
@@ -1226,3 +1229,26 @@ func _satchel_text() -> String:
 	for k in seen:
 		dex += 1
 	return "Lures %d   Berries %d   Coins %d   Wilddex %d / %d" % [bag.lures, bag.berries, bag.coins, dex, DATA.SPECIES.size()]
+
+## For testing and recordings (run with -- --skip-opening): start in Thornwood with Ripplet, as if the opening were done.
+func _skip_opening() -> void:
+	my_look = LOOKS.tamer.duplicate()
+	my_look.name = "Rowan"
+	painted = true
+	spilled = true
+	for s in starters:
+		if s.id == "ripplet":
+			partner = s
+	partner.home = Rect2i()
+	team = [R.make("ripplet", 5, { "rar": 1 }, rng)]
+	rival_c = R.make("mosshog", 4, { "rar": 1 }, rng)
+	seen = { "ripplet": true, "mosshog": true }
+	bonded = { "ripplet": true }
+	wren.where = "gone"
+	maren.where = "larkhaven"
+	maren.tile = BARN_DOOR + Vector2i(1, 1)
+	maren.pos = Vector2(maren.tile) * TILE
+	stage = "free"
+	fade_in = 1.0
+	_go("thornwood", Vector2i(13, 14), Vector2i.UP)
+	trans_t = 0.29

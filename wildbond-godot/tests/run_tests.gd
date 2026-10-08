@@ -54,6 +54,8 @@ func walk_to(goal: Vector2i) -> bool:
 
 func _run() -> void:
 	main.register.keep = false
+	main.rng.seed = 2026                          # the same rolls every run, so the checks always see the same story
+	main.battle.rng.seed = 2026
 	var D: Dictionary = main.DATA
 	# ---- the data bridge: the browser game's content arrived intact
 	check(D.has("SPECIES") and D.SPECIES.size() >= 60, "creatures exported from the browser game")

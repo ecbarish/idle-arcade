@@ -220,7 +220,7 @@ func _resolve(u: Dictionary, m: String, mult: float) -> void:
 			var tg := _target(u)
 			var r := R.damage(u, tg, mv, mult, rng.randf(), rng.randf())
 			_hurt(tg, r.d, r.crit, mv.get("el"))
-			say("%s used %s%s on %s for %d%s" % [u.c.name, mv.name, ", a critical hit" if r.crit else "", tg.c.name, r.d,
+			say("%s used %s%s on %s for %d%s" % [nm(u), mv.name, ", a critical hit" if r.crit else "", nm(tg), r.d,
 				". It hits hard!" if r.adv > 1 else (". Not very effective." if r.adv < 1 else ".")])
 		"aoe":
 			for tg in them:
@@ -262,7 +262,7 @@ func _hurt(u: Dictionary, d: int, crit: bool, el) -> void:
 	if el != null:
 		sparks.append({ "u": u, "col": EL_COL.get(el, Color.WHITE), "age": 0.0 })
 	if u.c.hp <= 0:
-		say("%s fainted!" % u.c.name)
+		say("%s fainted!" % nm(u))
 
 # ---------------------------------------------------------------- your choices
 func _choose(i: int) -> void:
@@ -459,7 +459,7 @@ func _spot(u: Dictionary) -> Vector2:
 	# where a creature stands: yours close at the bottom left, the foe further off at the top right
 	if u.side == "a":
 		var k := allies.find(u)
-		return Vector2(100 - k * 30, 158 - k * 10) if allies.size() > 1 else Vector2(100, 158)
+		return [Vector2(112, 162), Vector2(50, 146), Vector2(168, 142)][k] if allies.size() > 1 else Vector2(100, 158)
 	var i := foes.find(u)
 	return Vector2(286 - i * 26, 92 - i * 4)
 
@@ -480,7 +480,9 @@ func _draw() -> void:
 		_ellipse(c, rx, rx * 0.22, Color(0.25, 0.4, 0.2, 0.55))
 		_ellipse(c + Vector2(0, -1), rx - 4, rx * 0.22 - 3, Color(0.45, 0.65, 0.32, 0.6))
 	# the creatures
-	for u in foes + allies:
+	var order: Array = foes + allies
+	order.sort_custom(func(a, b): return _spot(a).y < _spot(b).y)       # back to front
+	for u in order:
 		if u.c.hp <= 0 and u.hit <= 0.0:
 			continue
 		var sc := 4.0 if u.side == "a" else 3.0
@@ -491,9 +493,7 @@ func _draw() -> void:
 			at.x += (2.0 if int(u.hit * 30.0) % 2 == 0 else -2.0)
 			if int(u.hit * 20.0) % 2 == 0:
 				continue                                          # a blink when hit (soft: no full-screen flash)
-		var look: Dictionary = looks.get(u.c.sp, looks.get(R.sp(u.c).get("fam", ""), {}))
-		if look.is_empty():
-			look = { "kind": "wolf", "body": Color(R.sp(u.c).col), "belly": Color("f4e4c8"), "dark": Color("2a1a12") }
+		var look: Dictionary = looks.get(u.c.sp, Figures.look_for(R.sp(u.c)))
 		var pose := { "wag": [1, 0, -1, 0][int(t * 6.0) % 4], "blink": fmod(t + at.x, 3.1) < 0.12, "ears_up": true,
 			"crouch": 1 if u == wait_u else 0, "walking": u.lunge > 0.0, "frame": int(t * 12.0) % 4 }
 		draw_set_transform(at - Vector2(9, 12) * sc, 0, Vector2(sc, sc))
@@ -515,9 +515,11 @@ func _draw() -> void:
 	# health: the foe's box at the top left, yours beside your partner
 	for i in foes.size():
 		_info(foes[i], Rect2(10, 8 + i * 30, 150, 26), false)
-	for i in allies.size():
-		var top := 116.0 - (allies.size() - 1) * 38.0 + i * 38.0
-		_info(allies[i], Rect2(222, top, 154, 36), true)
+	if allies.size() == 1:
+		_info(allies[0], Rect2(222, 116, 154, 36), true)
+	else:
+		for i in allies.size():                                  # a compact line each, so the foe stays in view
+			_info_line(allies[i], Rect2(236, 162 - (allies.size() - i) * 22, 140, 20))
 	_queue()
 	if not tele.is_empty():
 		_text("%s is gathering power! Guard!" % tele.u.c.name, Vector2(10, 70), 8, Color("c83a2a"))
@@ -665,3 +667,23 @@ func _calm() -> void:
 	else:
 		say("%s%s broke free!" % ["It shies away. " if q == "miss" else "", c.name])
 	_go_to("choose" if not wait_u.is_empty() else "run")
+
+## One of your creatures on a single compact line (when your team has more than one): name, level, health.
+func _info_line(u: Dictionary, r: Rect2) -> void:
+	_box(r)
+	_text(u.c.name, r.position + Vector2(5, 9), 7, INK)
+	_text("Lv %d" % u.c.lvl, r.position + Vector2(r.size.x - 30, 9), 7, INK, 26, HORIZONTAL_ALIGNMENT_RIGHT)
+	var bar := Rect2(r.position + Vector2(5, 12), Vector2(r.size.x - 50, 4))
+	draw_rect(bar.grow(1), INK)
+	draw_rect(bar, Color("4a3a3a"))
+	var f := clampf(u.shown / u.st.hp, 0.0, 1.0)
+	draw_rect(Rect2(bar.position, Vector2(bar.size.x * f, bar.size.y)), Color("5cc85a") if f > 0.5 else (Color("e8c03a") if f > 0.2 else Color("e0503a")))
+	_text("%d/%d" % [roundi(u.shown), u.st.hp], r.position + Vector2(r.size.x - 42, 17), 6, INK, 38, HORIZONTAL_ALIGNMENT_RIGHT)
+
+## A name for the message box: a wild creature that shares a name with one of yours is "Wild ..." so you can tell them apart.
+func nm(u: Dictionary) -> String:
+	if u.side == "f" and kind == "wild":
+		for a in allies:
+			if a.c.name == u.c.name:
+				return "Wild " + u.c.name
+	return u.c.name

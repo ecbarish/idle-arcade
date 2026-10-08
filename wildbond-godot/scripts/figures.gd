@@ -314,15 +314,15 @@ static func _hyena(pose: Dictionary, look: Dictionary) -> Array:
 	var by := 4 + cr
 	var P: Array = []
 	if not sit:
-		P.append([4 + _lift(f, 1), by + 6, 1, 6 - cr - _lift(f, 1), c.darkened(0.25)])
-	P.append([12 + _lift(f, 0), by + 5, 1, 7 - cr - _lift(f, 0), c.darkened(0.25)])
+		P.append([4 + _lift(f, 1), by + 6, 1, 12 - (by + 6) - _lift(f, 1), c.darkened(0.25)])
+	P.append([12 + _lift(f, 0), by + 5, 1, 12 - (by + 5) - _lift(f, 0), c.darkened(0.25)])
 	P.append([1, by + 2 - wag, 2, 2, dark])                                       # a short tufted tail
 	P.append([3, by + 2 + (1 if sit else 0), 4, 4, c]); P.append([6, by, 6, 5, c])  # the sloping back
 	P.append([7, by - 1, 5, 1, dark]); P.append([4, by + 3, 1, 1, dark]); P.append([7, by + 2, 1, 1, dark]); P.append([9, by + 3, 1, 1, dark])
 	P.append([7, by + 4, 4, 1, belly])
 	if not sit:
-		P.append([3 + _lift(f, 0), by + 6, 1, 6 - cr - _lift(f, 0), c])
-	P.append([11 + _lift(f, 1), by + 5, 1, 7 - cr - _lift(f, 1), c])
+		P.append([3 + _lift(f, 0), by + 6, 1, 12 - (by + 6) - _lift(f, 0), c])
+	P.append([11 + _lift(f, 1), by + 5, 1, 12 - (by + 5) - _lift(f, 1), c])
 	var hy := by - 3 + (2 if pose.get("sniff", false) else 0)
 	P.append([11, hy - 1, 2, 2, c]); P.append([11, hy - 1, 1, 1, dark])
 	P.append([11, hy, 5, 4, c]); P.append([15, hy + 1, 2, 3, belly]); P.append([16, hy + 1, 1, 1, dark])
