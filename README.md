@@ -39,6 +39,10 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Realmbound (2026-10-08): ten guild stories gain warned choices that can hurt trust, immediate portrait responses and one-time conversations to make amends; older decisions keep their original endings.
+
+- Guides (2026-10-08): real game pictures, a Realmbound tips booklet, and starter guides for Diamond Career and Otherworld.
+
 - **Diamond Career v0.3.0 (2026-10-08):** Contact/Power choices and results on the field; off-plate and good/weak-contact explanations; earned Eye cue reliability explained by Iona in a portrait scene and her notebook. 102 Diamond checks pass. No version bump.
 
 - Realmbound v1.2.0 (2026-10-08): three personal story moments for every guild adventurer, unlocked by present party time, mood and friendship. Remembered decisions have two lasting narrative outcomes; Auto never chooses them. Conversations happen in the physical hall; the Guild tab only records what was heard. Old saves, independent supply favors and rejoining members keep their progress. All seven test pages pass (6,683 Realmbound checks); phone, laptop, desktop and ultrawide checked. No version bump; PR #49, docs/realmbound-member-stories.md.

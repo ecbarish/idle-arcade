@@ -161,3 +161,11 @@ Content: T14-T28 (Wildbond areas 1-6, Realmbound zones to 60, lore). Systems: T1
 R1 supplies, the guild (favors, guild raiders, walkable hall), R2 the raid, D1-D7 decisions. Shared: S1 dialogue,
 S2 sound (+ rain), S3 roster, S4 world kit (walker, HD-2D, Wildbond walking, Realmbound towns, camps, Abbey), S5
 ambience. Wildbond extras: weather forecast, battle backdrops, challenge pennants, intro for the faded start.
+
+## Guide extension (2026-10-08)
+
+A6b: ready for review in PR #52 by Codex on codex/game-guides: illustrated Realmbound guide and tips; Diamond Career and Otherworld starter guides. Wildbond waits for Godot.
+
+## R4 consequence follow-up (2026-10-08)
+
+Ready for review in PR #53 by Codex on codex/realmbound-story-choices: ten guild arcs gain warned, recoverable consequences; repair in world conversations, retained history in the Guild record. Stacked on the A6b guide PR #52 because queue/session metadata overlaps.
