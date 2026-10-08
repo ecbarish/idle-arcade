@@ -39,6 +39,9 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Wildbond (2026-10-07): smoother Stillreed entry and late Wardens within incoming badge caps; a reproducible full-run pacing audit across three journeys and four challenges, with failed challenge attempts recorded separately. [Measurements](docs/wildbond-launch-balance.md).
+
+
 - **Arcade v1.3.0 (2026-10-07)** — **The road**, a third homepage style: walk your character (with a partner creature
   trotting behind) along a road through the arcade's world, from Primordial's tide pool past Larkhaven, Thornvale and
   the Starfall gate to the building sites of the games still being designed. Arrow keys, or tap a place to walk there

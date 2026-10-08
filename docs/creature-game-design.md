@@ -280,3 +280,7 @@ Entry smoke check: a level-75 Tidewyrm/Bloomcourser/Hushmane team with rarity 1,
 ### Saltmarsh lighting pass (G2, 2026-10-07)
 
 Saltmarsh's lit eras use a lower, lighter sea-mist layer, cool sky bounce and pale sand bounce, with softer shafts and colour grading. The shared day/night clock still controls shadow direction; player and door lamps stay warm at night. Early art eras retain their existing weather appearance. This is an atmosphere pass, with no changes to weather schedules, encounters, maps or saves. Profile values and comparisons: [Saltmarsh lighting](saltmarsh-lighting.md).
+
+## Launch pacing audit (L7a / W8, 2026-10-07)
+
+See [the full before/after measurements](wildbond-launch-balance.md) and its reproducible real-worldTick browser runner. Stillreed now opens at 46-60 with an earlier Wren/route-trainer/guardian introduction; late Warden aces match incoming caps 55/60/65/70. XP rates and progression rules stay unchanged. One seeded active-player policy covers every journey and individual challenge; failed Nuzlocke starts are explicitly recorded, so their second-chance continuations do not count as challenge wins. Additional manual challenge playtests remain part of launch validation.

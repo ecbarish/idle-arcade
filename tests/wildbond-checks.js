@@ -81,6 +81,30 @@ function wildbondChecks() {
     while (WK.path.length && ticks++ < 2000) wb.worldTick(0.1);
     return ticks < 2000;
   }
+  const launchWardens = STORY.filter(b => b.gate);
+  launchWardens.forEach((gate, index) => check(gate.title + ': opponents fit the incoming hard badge cap', () => {
+    ready(); S.badges = launchWardens.slice(0,index).map(b => b.gate); S.capMode = 'hard';
+    const cap = levelCap(); S.biome = gate.biome || 'thornwood';
+    S.team = ['ripplet','mosshog','cindercub'].map(id => wb.newCreature(id,cap));
+    storyFight(gate);
+    return B && B.story === gate.id && B.foes.length === 3 && B.foes.every(u => u.c.lvl <= cap);
+  }));
+  check('Stillreed entry gives a level-44 Cloudglass team level-46 wild encounters', () => {
+    ready(); S.badges = launchWardens.slice(0,4).map(b => b.gate);
+    S.team = [wb.newCreature('tidewyrm',44)]; wb.placeAt('stillreed');
+    return Array.from({length:30}, () => wildLvl()).every(level => level === 46);
+  });
+  check('Stillreed wild levels still follow the team and stop at 60', () => {
+    ready(); S.biome = 'stillreed'; S.team = [wb.newCreature('tidewyrm',50)];
+    const middle = Array.from({length:30}, () => wildLvl()); S.team[0].lvl = 80;
+    return middle.every(level => level >= 48 && level <= 51) && wildLvl() === 60;
+  });
+  check('Level tuning preserves an older over-cap guardian save with hard caps', () => {
+    ready(); S.badges = launchWardens.slice(0,4).map(b => b.gate); S.capMode = 'hard';
+    S.team = [wb.newCreature('stillwake',57,{rar:4})]; const uid = S.team[0].uid;
+    save(); reset(); load(); grow(S.team[0],Cr.xpNeed(57));
+    return S.team[0].uid === uid && S.team[0].sp === 'stillwake' && S.team[0].lvl === 57 && levelCap() === 55;
+  });
   check('Choosing a starter puts you in Larkhaven', () => {
     reset(); wb.chooseStarter('ripplet', 'Test Tamer', 'classic'); skipTalk();
     return S.started && S.pos.map === 'larkhaven' && S.team[0].sp === 'ripplet';
@@ -159,8 +183,8 @@ function wildbondChecks() {
       return Object.keys(s.base).sort().join(',') === 'grd,hp,pow,spd,spi,wit' && Object.values(s.base).every(n => n > 0) && (s.unique ? total >= 500 && total <= 600 : id === 'ferrycrest' ? total >= 400 && total <= 440 : total >= 280 && total <= 320);
     });
   }
-  check('Stillreed opens only with the Beacon Badge at levels 52-60', () => {
-    ready(); const b=BIOMES.stillreed; if (b.lv.join(',') !== '52,60' || b.req !== 'beacon' || biomeOpen('stillreed')) return false;
+  check('Stillreed opens only with the Beacon Badge at levels 46-60', () => {
+    ready(); const b=BIOMES.stillreed; if (b.lv.join(',') !== '46,60' || b.req !== 'beacon' || biomeOpen('stillreed')) return false;
     S.badges=badges.slice(); return biomeOpen('stillreed') && levelCap()===55;
   });
   check('Cloudglass ferry path is gated and walks into Stillreed after the badge', () => {
@@ -178,8 +202,8 @@ function wildbondChecks() {
     for(let y=0;y<14;y++)for(let x=0;x<30;x++)if(walkable(m,x,y)&&!npcAt(m,x,y)&&!seen.has(x+','+y))return false;
     return m.items.every(it=>seen.has(it.at.join(',')))&&seen.has('0,8')&&seen.has('23,8')&&m.rows.some(r=>r.includes('~')&&r.includes('"'));
   });
-  check('Stillreed has two signs, three unique items and two route trainers at 52-56', () => {
-    const m=MAPS.stillreed;return Object.keys(m.signs).length===2&&m.items.length===3&&new Set(Object.values(MAPS).flatMap(m=>(m.items||[]).map(it=>it.id))).size===Object.values(MAPS).flatMap(m=>m.items||[]).length&&m.npcs.filter(n=>n.trainer).length===2&&m.npcs.every(n=>n.trainer.team.every(([id,l])=>SPECIES[id]&&l>=52&&l<=56));
+  check('Stillreed has two signs, three unique items and two route trainers at 48-54', () => {
+    const m=MAPS.stillreed;return Object.keys(m.signs).length===2&&m.items.length===3&&new Set(Object.values(MAPS).flatMap(m=>(m.items||[]).map(it=>it.id))).size===Object.values(MAPS).flatMap(m=>m.items||[]).length&&m.npcs.filter(n=>n.trainer).length===2&&m.npcs.every(n=>n.trainer.team.every(([id,l])=>SPECIES[id]&&l>=48&&l<=54));
   });
   check('Stillreed landing is reachable on dry boards while the moored skiff stays solid', () => {
     ready();S.badges=badges.slice();wb.placeAt('stillreed',11,9,'up');const explored=S.explored;
@@ -221,14 +245,14 @@ function wildbondChecks() {
     ready();S.badges=badges.slice();S.day=4;S.ranchT=0;wb.placeAt('stillreed');return weatherNow()==='clear'&&!isNight()&&musicKey()==='stillreed';
   });
   const basinBeats=STORY.filter(b=>b.biome==='stillreed');
-  check('Stillreed story has exactly the required thresholds and team bands', () => basinBeats.length===3&&basinBeats.map(b=>b.at).join(',')==='6,14,24'&&basinBeats[0].team.every(([,l])=>l>=52&&l<=55)&&JSON.stringify(basinBeats[0].team.at(-1))==='["$rival",55]'&&JSON.stringify(basinBeats[1].wild)==='["stillwake",57,4]'&&basinBeats[2].team.map(([,l])=>l).join(',')==='54,55,57'&&basinBeats[2].gate==='reed'&&basinBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
+  check('Stillreed story has exactly the required thresholds and team bands', () => basinBeats.length===3&&basinBeats.map(b=>b.at).join(',')==='6,14,24'&&basinBeats[0].team.every(([,l])=>l>=46&&l<=50)&&JSON.stringify(basinBeats[0].team.at(-1))==='["$rival",50]'&&JSON.stringify(basinBeats[1].wild)==='["stillwake",50,4]'&&basinBeats[2].team.map(([,l])=>l).join(',')==='53,54,55'&&basinBeats[2].gate==='reed'&&basinBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
   check('Wren ferry rematch triggers at six local explores and a real victory completes it', () => {
     ready();S.badges=badges.slice();wb.placeAt('stillreed');S.explored=100;S.exploredIn={stillreed:5};wb.explore();
-    if(!TALK||!TALK.lines.some(([,t])=>t.includes('rope')))return false;skipTalk();return B&&B.story==='rival6'&&B.kind==='trainer'&&B.foes.at(-1).c.lvl===55&&finishFight()==='won'&&S.story.rival6;
+    if(!TALK||!TALK.lines.some(([,t])=>t.includes('rope')))return false;skipTalk();return B&&B.story==='rival6'&&B.kind==='trainer'&&B.foes.at(-1).c.lvl===50&&finishFight()==='won'&&S.story.rival6;
   });
   check('Stillwake triggers at fourteen local explores and a real lure records the guardian', () => {
     ready();S.badges=badges.slice();S.story.rival6=true;wb.placeAt('stillreed');S.explored=100;S.exploredIn={stillreed:13};wb.explore();if(!TALK)return false;skipTalk();
-    if(!B||B.story!=='stillwake'||B.foes[0].c.sp!=='stillwake'||B.foes[0].c.lvl!==57||B.foes[0].c.rar!==4)return false;
+    if(!B||B.story!=='stillwake'||B.foes[0].c.sp!=='stillwake'||B.foes[0].c.lvl!==50||B.foes[0].c.rar!==4)return false;
     const random=Math.random;try{Math.random=()=>0;wb.command('lure');if(!B.capture)return false;B.capture.pos=B.capture.zone;wb.calmNow();const caught=B.over==='caught';wb.finishBattle();skipTalk();return caught&&S.story.stillwake&&S.caught.stillwake&&[...S.team,...S.ranch].some(c=>c.sp==='stillwake');}finally{Math.random=random;}
   });
   check('Olan waits for 24 local explores; real victory awards Reed and cap 60 without changing eras', () => {
@@ -286,7 +310,7 @@ function wildbondChecks() {
     ready();S.badges=[...badges,'reed'];S.day=1;S.ranchT=0;wb.placeAt('hollowecho');return weatherNow()==='clear'&&!isNight()&&musicKey()==='hollowecho';
   });
   const hillBeats=STORY.filter(b=>b.biome==='hollowecho');
-  check('Hollowecho story has exactly the required thresholds and team bands', () => hillBeats.length===3&&hillBeats.map(b=>b.at).join(',')==='6,14,24'&&hillBeats[0].team.every(([,l])=>l>=58&&l<=61)&&JSON.stringify(hillBeats[0].team.at(-1))==='["$rival",61]'&&JSON.stringify(hillBeats[1].wild)==='["undertone",63,4]'&&hillBeats[2].team.map(([,l])=>l).join(',')==='60,61,63'&&hillBeats[2].gate==='echo'&&hillBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
+  check('Hollowecho story has exactly the required thresholds and team bands', () => hillBeats.length===3&&hillBeats.map(b=>b.at).join(',')==='6,14,24'&&hillBeats[0].team.every(([,l])=>l>=58&&l<=61)&&JSON.stringify(hillBeats[0].team.at(-1))==='["$rival",61]'&&JSON.stringify(hillBeats[1].wild)==='["undertone",63,4]'&&hillBeats[2].team.map(([,l])=>l).join(',')==='58,59,60'&&hillBeats[2].gate==='echo'&&hillBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
   check('Wren wrong-passage rematch triggers at six local explores and a real victory completes it', () => {
     ready();S.badges=[...badges,'reed'];wb.placeAt('hollowecho');S.explored=100;S.exploredIn={hollowecho:5};wb.explore();
     if(!TALK||!TALK.lines.some(([,t])=>t.includes('echo')))return false;skipTalk();return B&&B.story==='rival7'&&B.kind==='trainer'&&B.foes.at(-1).c.lvl===61&&finishFight()==='won'&&S.story.rival7;
@@ -351,7 +375,7 @@ function wildbondChecks() {
     ready();S.badges=[...badges,'reed','echo'];S.day=1;S.ranchT=0;wb.placeAt('sunthread');return weatherNow()==='clear'&&!isNight()&&musicKey()==='sunthread';
   });
   const commonsBeats=STORY.filter(b=>b.biome==='sunthread');
-  check('Sunthread story has exactly the required thresholds and team bands', () => commonsBeats.length===3&&commonsBeats.map(b=>b.at).join(',')==='6,14,24'&&commonsBeats[0].team.every(([,l])=>l>=64&&l<=67)&&JSON.stringify(commonsBeats[0].team.at(-1))==='["$rival",67]'&&JSON.stringify(commonsBeats[1].wild)==='["meadowmantle",67,4]'&&commonsBeats[2].team.map(([,l])=>l).join(',')==='65,66,68'&&commonsBeats[2].gate==='loom'&&commonsBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
+  check('Sunthread story has exactly the required thresholds and team bands', () => commonsBeats.length===3&&commonsBeats.map(b=>b.at).join(',')==='6,14,24'&&commonsBeats[0].team.every(([,l])=>l>=64&&l<=67)&&JSON.stringify(commonsBeats[0].team.at(-1))==='["$rival",67]'&&JSON.stringify(commonsBeats[1].wild)==='["meadowmantle",67,4]'&&commonsBeats[2].team.map(([,l])=>l).join(',')==='63,64,65'&&commonsBeats[2].gate==='loom'&&commonsBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
   check('Wren gathering rematch triggers at six local explores and a real victory completes it', () => {
     ready();S.badges=[...badges,'reed','echo'];wb.placeAt('sunthread');S.explored=100;S.exploredIn={sunthread:5};wb.explore();
     if(!TALK||!TALK.lines.some(([,t])=>t.includes('little partner')))return false;skipTalk();return B&&B.story==='rival8'&&B.kind==='trainer'&&B.foes.at(-1).c.lvl===67&&finishFight()==='won'&&S.story.rival8;
@@ -424,7 +448,7 @@ function wildbondChecks() {
     ready();S.badges=[...badges,'reed','echo','loom'];S.day=1;S.ranchT=0;wb.placeAt('farwatch');return weatherNow()==='mist'&&musicKey()==='farwatch'&&WEATHER_FX.mist.Gale===1.5&&WEATHER_FX.mist.Shade===1.5;
   });
   const reachBeats=STORY.filter(b=>b.biome==='farwatch');
-  check('Farwatch story has exactly the required thresholds and team bands', () => reachBeats.length===3&&reachBeats.map(b=>b.at).join(',')==='6,14,24'&&reachBeats[0].team.every(([,l])=>l>=68&&l<=70)&&JSON.stringify(reachBeats[0].team.at(-1))==='["$rival",70]'&&JSON.stringify(reachBeats[1].wild)==='["watchlight",71,4]'&&reachBeats[2].team.map(([,l])=>l).join(',')==='69,70,72'&&reachBeats[2].gate==='horizon'&&reachBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
+  check('Farwatch story has exactly the required thresholds and team bands', () => reachBeats.length===3&&reachBeats.map(b=>b.at).join(',')==='6,14,24'&&reachBeats[0].team.every(([,l])=>l>=68&&l<=70)&&JSON.stringify(reachBeats[0].team.at(-1))==='["$rival",70]'&&JSON.stringify(reachBeats[1].wild)==='["watchlight",71,4]'&&reachBeats[2].team.map(([,l])=>l).join(',')==='68,69,70'&&reachBeats[2].gate==='horizon'&&reachBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
   check('Wren shared-notes rematch triggers at six local explores and a real victory completes it', () => {
     ready();S.badges=[...badges,'reed','echo','loom'];wb.placeAt('farwatch');S.explored=100;S.exploredIn={farwatch:5};wb.explore();
     if(!TALK||!TALK.lines.some(([,t])=>t.includes('league')))return false;skipTalk();return B&&B.story==='rival9'&&B.kind==='trainer'&&B.foes.at(-1).c.lvl===70&&finishFight()==='won'&&S.story.rival9;
