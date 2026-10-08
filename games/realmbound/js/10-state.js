@@ -11,7 +11,7 @@ function migrate(o){
   if(!o||typeof o!=='object')return emptyS();
   if(Array.isArray(o.chars)){
     for(const h of o.chars)if(h.onboarding===undefined)h.onboarding=null;
-    if(o.guild&&o.guild.founded)o.guild.requests=o.guild.requests||{};
+    if(o.guild&&o.guild.founded){o.guild.requests=o.guild.requests||{};o.guild.stories=normalizeMemberStories(o.guild.stories);}
     return o;
   }
   const s=emptyS();s.last=o.last||Date.now();s.tab=o.tab||'quests';

@@ -8,7 +8,14 @@ function saveCareer() {
   Arcade.report('baseball',{summary:`${S.player.name} · ${S.contract?S.contract.tier:DC.club}`,detail:`Day ${S.day} · ${S.record.hits} hits · ${money(S.cash)} · ${S.owned.car?'Own car':S.owned.apartment?'Own apartment':'First season'}`});
 }
 function resetClock() { pitchClock={elapsed:0,running:false}; }
+function timingStance(s) { return s.stance==='power'?'power':'contact'; }
+function chooseStance(stance) {
+  if(sceneState||S.phase!=='pitch'||pitchClock.running||!['contact','power',...(S.mode==='tactical'?['patience']:[])].includes(stance))return false;
+  S.stance=stance;saveCareer();renderCareer();return true;
+}
 function renderCareer() {
+  if(S.mode==='timing')S.stance=timingStance(S);
+  renderBattingWindow();
   const el=document.querySelector('#content'),g=S.active&&S.active.g;
   document.querySelector('#place').textContent=['home','month'].includes(S.phase)?'BRACKENPORT · YOUR CORNER OF THE WORLD':['clubhouse','offers'].includes(S.phase)?'THE LANTERNS CLUBHOUSE':'LAMPLIGHT FIELD · BRACKENPORT';
   document.querySelector('#scoreboard').innerHTML=g?`<div class="score-teams"><span>${esc(S.active.opponent.split(' ').slice(-1)[0])} <b>${g.score[0]}</b></span><span>${esc((S.contract?contractOffer(S.contract).name:DC.club).split(' ').slice(-1)[0])} <b>${g.score[1]}</b></span></div><div>${g.finished?'FINAL':(g.half?'Bottom':'Top')+' '+g.inning} · ${g.outs} out${g.outs===1?'':'s'}</div><div class="score-count"><span>${g.count.balls} balls · ${g.count.strikes} strikes</span><span aria-label="Bases, first through third">${g.bases.map((b,i)=>`<i class="base ${b?'on':''}" title="${i+1}: ${b?'occupied':'empty'}"></i>`).join('')}</span></div>`:`<div class="eyebrow">${S.month?'Your first season month':'The first call-up'}</div><b>${esc(S.contract?contractOffer(S.contract).name:DC.club)}</b><div>${S.month?'Day '+Math.min(30,S.day-S.month.start+1)+' of 30 · '+S.month.games+' games':'Six games · your first chance'}</div>`;
@@ -22,10 +29,10 @@ function renderCareer() {
   if(S.phase==='pitch') {
     const p=S.active.pitch;
     el.innerHTML=`${header}<h2>Step into the box.</h2><p class="pitch-read">${esc(S.active.pitcher.name)} favors the ${S.active.pitcher.favorite}. This release shows ${DC.pitches[p.hint].cue}. A clue, not a promise.</p><div class="stats"><span>Game ${S.played+1}/6</span><span>${S.mode==='timing'?'Timing':'Tactical'} batting</span><span>${g.manual+1} of up to ${S.contract?contractOffer(S.contract).moments:2} key at-bats</span></div>`+
-      (S.mode==='timing'?`<p>Ready the pitch. Swing when the ball reaches the plate and the gold bar fills. Space or Enter swings; a tap works too. You can let a pitch go.</p><div class="actions">${btn('ready','Ready pitch',true)}${btn('swing','Swing',true,true)}${btn('take','Let it go',false,true)}</div>`:
+      (S.mode==='timing'?`<p>Your swing choice, pitch clue and controls are on the field. Space or Enter readies the pitch, then swings. Let it go if you want to take it.</p>`:
       `<fieldset><legend>Your approach</legend><div class="actions">${['patience','contact','power'].map(x=>`<button class="${S.stance===x?'selected':''}" data-stance="${x}" aria-pressed="${S.stance===x}">${x[0].toUpperCase()+x.slice(1)}</button>`).join('')}</div></fieldset><label for="guess">Read the pitch</label><select id="guess">${Object.keys(DC.pitches).map(x=>`<option ${S.guess===x?'selected':''}>${x}</option>`).join('')}</select><p class="muted">Patience judges the zone using your eye. Contact favors getting aboard; power trades contact for extra bases.</p><div class="actions">${btn('tactical','Commit to your read',true)}${btn('take','Let it go')}</div>`)+`<details><summary>How baseball works here</summary><p>Four balls earn a walk. Three strikes make an out. A foul cannot be strike three. Three outs switch sides. Runs count when runners reach home. Nine innings, with extras for a tie.</p><p>You play key at-bats. Teammates, opponents and your other turns use the same pitch model. This first slice has no steals, errors or double plays; runners hold on clean outs.</p></details>`;
   } else if(S.phase==='result') {
-    el.innerHTML=`${header}<div class="eyebrow">${S.active.last.ended?'At-bat complete':'Same at-bat'}</div><h2 class="result" role="status">${esc(S.active.last.text)}</h2><p>${S.active.last.runs?S.active.last.runs+' run'+(S.active.last.runs===1?'':'s')+' scored.':'The scoreboard is up to date.'}</p><p class="muted">${S.active.last.ended?'The rest of the field plays on. Your next moment waits for you.':'The count stays with you. Take a breath before the next pitch.'}</p>${btn('continue',S.active.last.ended?'Watch the game move on':'Next pitch',true)}`;
+    el.innerHTML=`${header}<div class="eyebrow">${S.active.last.ended?'At-bat complete':'Same at-bat'}</div><h2 class="result" role="status">${esc(S.active.last.text)}</h2><p>${S.active.last.runs?S.active.last.runs+' run'+(S.active.last.runs===1?'':'s')+' scored.':'The scoreboard is up to date.'}</p><p class="muted">${S.active.last.ended?'The rest of the field plays on. Your next moment waits for you.':'The count stays with you. Take a breath before the next pitch.'}</p><p class="muted">Continue from the result on the field, or press Space or Enter.</p>`;
   } else if(S.phase==='summary') {
     const h=g.hero;
     el.innerHTML=`${header}<h2>${g.score[1]>g.score[0]?'The clubhouse is buzzing.':'Tomorrow is another game.'}</h2><p>${esc(S.active.opponent)} ${g.score[0]} · ${esc(S.contract?contractOffer(S.contract).name:DC.club)} ${g.score[1]}. ${g.inning} innings.</p><div class="card"><h3>Your full game</h3><p>${h.hits} for ${h.ab} · ${h.walks} walk${h.walks===1?'':'s'} · ${h.rbi} RBI · ${h.hr} home runs.</p><p class="muted">You played ${g.manual} key at-bat${g.manual===1?'':'s'}. Other turns and both teams simulated pitch by pitch.</p></div><p>${evaluation(S).text}</p>${btn('after','Back to the clubhouse',true)}`;
@@ -40,19 +47,19 @@ function renderCareer() {
     el.innerHTML=`${header}<h2>${S.contract?'A life beyond the line.':'The coach leaves a light on.'}</h2><p class="quote">${esc(S.message)}</p>${stats}<p class="muted">${evaluation(S).text} Training helps your odds; nothing guarantees a hit.</p>`+
       (S.contract&&contractDue(S)?`${btn('finish-month','Close the month',true)}`:S.played<6?`${!S.prepared?`<h3>One preparation before the game</h3><div class="actions">${btn('train-contact','Contact +2')}${btn('train-power','Power +2')}${btn('train-discipline','Eye +2')}${btn('rest','Rest')}</div>`:'<p>Preparation done. Time for the field.</p>'}${btn('match','Play game '+(S.played+1)+' of 6',true)}`:S.contract?`${btn('new-series','Begin another six-game series',true)}`:'')+
       (o?`<h3>${money(S.cash)} to make your own</h3><p>${esc(o.name)} · ${esc(S.contract.tier)} · ${o.moments} key at-bats per game.</p><div class="actions">${btn('day','Spend a quiet day at home',false,!!S.month&&S.day>=S.month.end)}</div><p class="muted">Salary: ${money(o.wage)} on calendar days ${o.days.map(d=>S.contract.start+d).join(', ')}. ${o.days.length} payments · ${cal.paid} paid. Stated value ${money(cal.total)}. ${cal.next?'Next: '+money(cal.next.amount)+' on day '+cal.next.day+'.':'All salary paid.'} Term ends day ${cal.end}; no daily upkeep.</p>${Object.entries(DC.purchases).map(([id,p])=>`<article class="card offer"><h3>${p.name}</h3><p>${id==='apartment'?'A warm room, a sofa and your own shirt on the wall.':'Your own car in the garage. A permanent milestone, with no running costs.'}</p>${btn('buy-'+id,S.owned[id]?'Yours, permanently':'Buy · '+money(p.price),false,S.owned[id]||S.cash<p.price)}</article>`).join('')}<details><summary>Your salary ledger · ${S.ledger.length} entries</summary><table class="ledger"><tbody>${S.ledger.map(e=>`<tr><td>Day ${e.day}<br>${esc(e.label)}</td><td>${e.amount<0?'−':'+'}${money(Math.abs(e.amount))}</td></tr>`).join('')}</tbody></table></details>`:'')+
-      `<details><summary>Your notebook</summary>${decisionHTML()}<p>Contact helps you put the ball in play. Power improves extra-base chances. Eye helps judge the zone when you choose Patience. Fatigue reduces contact; rest clears it.</p><p>On-base means hits plus walks divided by plate appearances. Career: ${S.record.hits} hits in ${S.record.ab} at-bats, ${S.record.walks} walks, average ${rate(average(S.record))}.</p>${S.history.slice(-6).map(h=>`<p class="muted">Day ${h.day} · ${esc(h.opponent)} ${h.score[0]}–${h.score[1]} · ${h.hero.hits}/${h.hero.ab}</p>`).join('')}</details>`;
+      `<details><summary>Your notebook</summary>${decisionHTML()}<p>Contact helps you put the ball in play. Power improves extra-base chances. Eye helps judge the zone when you choose Patience, and makes future pitch cues more reliable. Fatigue reduces contact; rest clears it.</p><p>On-base means hits plus walks divided by plate appearances. Career: ${S.record.hits} hits in ${S.record.ab} at-bats, ${S.record.walks} walks, average ${rate(average(S.record))}.</p>${S.history.slice(-6).map(h=>`<p class="muted">Day ${h.day} · ${esc(h.opponent)} ${h.score[0]}–${h.score[1]} · ${h.hero.hits}/${h.hero.ab}</p>`).join('')}</details>`;
   }
   SOUND&&SOUND.render();
 }
 function actCareer(act) {
   if(sceneState)return;
   let changed=false;
-  if(act==='ready'&&S.phase==='pitch'&&!pitchClock.running){pitchClock.running=true;pitchClock.elapsed=0;document.querySelector('[data-act="ready"]').disabled=true;document.querySelector('[data-act="swing"]').disabled=false;document.querySelector('[data-act="take"]').disabled=false;return;}
+  if(act==='ready'&&S.phase==='pitch'&&S.mode==='timing'&&!pitchClock.running){S.stance=timingStance(S);pitchClock.running=true;pitchClock.elapsed=0;renderBattingWindow();return;}
   if(['swing','tactical','take'].includes(act)) {
     if(S.phase!=='pitch'||(S.mode==='timing'&&!pitchClock.running))return;
     let take=act==='take';
     if(act==='tactical'&&S.stance==='patience') { const p=S.active.pitch;take=random(S.active.g)<clamp(.58+(S.stats.discipline-50)*.006,.4,.85)?!p.inZone:random(S.active.g)<.3; }
-    changed=!!playPitch(S,{take,mode:S.mode,timing:pitchClock.elapsed/S.active.pitch.duration,stance:S.stance,guess:S.guess});
+    changed=!!playPitch(S,{take,mode:S.mode,timing:pitchClock.elapsed/S.active.pitch.duration,stance:S.mode==='timing'?timingStance(S):S.stance,guess:S.guess});
     if(changed){contactAt=performance.now();SOUND.sfx(typeof S.active.last.play==='number'?'hit':S.active.last.play==='ball'?'select':'miss');}
   } else if(act==='continue')changed=continueMatch(S);
   else if(act==='after')changed=afterMatch(S);
@@ -64,7 +71,7 @@ function actCareer(act) {
   else if(act==='day'&&S.phase==='home'){advanceDays(S,1);S.phase=careerPhase(S);S.message='A quiet day at home. Any salary due today is in your ledger.';changed=true;}
   else if(act==='finish-month')changed=finishMonth(S);
   else if(act==='new-series')changed=beginSeries(S);
-  if(changed){resetClock();saveCareer();renderCareer();}
+  if(changed){resetClock();saveCareer();renderCareer();if(act==='train-discipline')D.play([['iona',S.message.replace(/^Iona: “|”$/g,'')]],()=>renderCareer());}
 }
 
 function decisionHTML(){return S.notes.map(n=>`<p class="quote">Day ${n.day} · ${esc(n.text)}</p>`).join('');}

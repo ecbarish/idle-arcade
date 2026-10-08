@@ -419,3 +419,9 @@ Aven or Neral hands over **the Hollow Key** on the final turn-in and asks for te
 **the Hollow Throne**. The recorded completion of `ch14` unlocks the already-built raid; no new physical Key item,
 raid system or save field is added. The road must remain open for people returning from the throne rather than
 become another claim to its crown. Whether the factions keep that road together remains the raid's closing question.
+
+## The guild hearth: personal accounts (R4, 2026-10-08)
+
+The road adventurers' hooks above now have playable three-moment arcs. These expand motives without fixing anyone's generated class, race or personality. A confidence leads to a choice and a remembered aftermath: both paths keep the adventurer, and neither is a hidden good/bad answer. The hall remembers the chosen account or custom; no new region, faction or physical hall prop is established. Full arc titles, choices and play rules: [Guild members' personal stories](../realmbound-member-stories.md); exact lines: games/realmbound/js/27-member-stories.js.
+
+The outcomes concern road records, hospitality, care, honest warnings, repairs, shared songs and making room for other voices. They do not replace generated personality dialogue or the existing supply favors. The guild's original low-mood departure rules remain unchanged.

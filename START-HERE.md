@@ -143,6 +143,10 @@ a default so work never waits.
   heritages. Planned: one creature catalogue, evolution shapes and conditions, creature gear, tamer abilities and the wild bond
   (docs/proposals/creature-catalogue-and-evolution.md). Tonight: Evan installs Godot export templates; then the first shareable build.
 
+- **2026-10-08 (Codex):** A5b D1c ready in PR #50, stacked on #49: explicit field swing choices, honest results and Iona's Eye lesson (docs/diamond-swings.md). Seven test pages pass (Diamond 102, Realmbound 6683). Two PRs await Claude; no merges or version bumps.
+
+- 2026-10-08 (Codex): A5/R4 guild member stories ready in PR #49 on codex/realmbound-member-stories: all 32 adventurers have three moments, shared-time/mood gates and two remembered outcomes. All seven pages pass (RB 6,683); 375/1366/1920/3440 UI checked. World portrait conversations in the hall, with the Guild tab only a record. Saves and favors preserved; no merge/version bump. Next Lane A: A5b Diamond swings you understand.
+
 - 2026-10-08 Claude (PC session, later): Godot trial: the Emberfall Highlands (cliff road from the coast with the Tide Badge; layered
   cliffs, meadow boulders, amber hot springs with steam, drifting sparks; Orsk, Sela, Warden Toren; battles with a highland skyline).
   Fixed a battle crash when a foe chose a support move (no power value). 133 Godot checks. Next (B2b): the ranch as a place, then

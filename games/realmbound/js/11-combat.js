@@ -180,7 +180,8 @@ function die(){
   if(h.dun){h.dun.wipes++;line('The party wipes. Everyone runs back in.','l-hurt');for(const q of C.party){q.dead=false;q.hp=compStats(q.n).hpMax;}if(C.party.length)say(pick(C.party).n,'wipe');}
 }
 function step(h){
-  if(arrivalPaused())return; // only the optional arrival pauses combat; no time accrues behind its dialogue
+  if(arrivalPaused() || modalKind === 'memberstories' || RTALK && RTALK.memberStory)return; // deliberate stories pause the world, never pick an outcome for the player
+  memberStoryTick(h);
   const he=H();C.run+=h;he.stats.play+=h;
   C.gcd=Math.max(0,C.gcd-h);for(const k in C.cds)C.cds[k]=Math.max(0,C.cds[k]-h);
   if(C.phase==='fight')autoPotion(); // healing potions from the supply bank (18-supplies.js)

@@ -2,9 +2,9 @@
 const VERSION='0.2.0'; // Initial prototype; no existing game's version changes.
 Arcade.validators[DC.key]=validCareer;
 S=migrateCareer(Arcade.load(DC.key));
-D=Dialogue.create({host:document.querySelector('#stage'),theme:'diamond',get:()=>sceneState,set:v=>{sceneState=v;},cast:()=>({name:DC.coach,title:'Development coach',skin:'#bb7850',hair:'short',hairCol:'#353a38',shirt:'#3c7b72',bg:'#c8d4be'}),blip:()=>SOUND.sfx('blip',350),onEnd:()=>saveCareer()});
+D=Dialogue.create({host:document.querySelector('#stage'),theme:'diamond',get:()=>sceneState,set:v=>{sceneState=v;document.querySelector('#stage').classList.toggle('coach-speaking',!!v);},cast:()=>({name:DC.coach,title:'Development coach',skin:'#bb7850',hair:'short',hairCol:'#353a38',shirt:'#3c7b72',bg:'#c8d4be'}),blip:()=>SOUND.sfx('blip',350),onEnd:()=>saveCareer()});
 setupSound();
-Settings.create({mount:'#tools',btnClass:'hbtn',rows:[{label:'Batting style',options:[['timing','Timing · swing on arrival'],['tactical','Tactical · read and choose']],get:()=>S.mode,set:v=>{S.mode=v;resetClock();saveCareer();renderCareer();},note:'Switch freely. Your count and the current pitch are preserved.'}]});
+Settings.create({mount:'#tools',btnClass:'hbtn',rows:[{label:'Batting style',options:[['timing','Timing · swing on arrival'],['tactical','Tactical · read and choose']],get:()=>S.mode,set:v=>{S.mode=v;if(v==='timing')S.stance=timingStance(S);resetClock();saveCareer();renderCareer();},note:'Switch freely. Your count and the current pitch are preserved.'}]});
 setupFeedback('Diamond Career',VERSION,()=>`Day ${S.day}, ${S.phase}, ${S.mode}, game ${S.played+1}, ${S.contract?.offer||'development'}`);
 document.querySelector('#content').addEventListener('submit',e=>{
   if(e.target.id!=='creator')return;e.preventDefault();const form=new FormData(e.target);
@@ -12,7 +12,7 @@ document.querySelector('#content').addEventListener('submit',e=>{
 });
 document.querySelector('#content').addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b||b.disabled)return;
-  if(b.dataset.stance){S.stance=b.dataset.stance;saveCareer();renderCareer();}
+  if(b.dataset.stance)chooseStance(b.dataset.stance);
   else if(b.dataset.act)actCareer(b.dataset.act);
 });
 document.querySelector('#content').addEventListener('change',e=>{if(e.target.id==='guess'){S.guess=e.target.value;saveCareer();}});
@@ -27,4 +27,4 @@ document.addEventListener('keydown',e=>{
 addEventListener('pagehide',()=>saveCareer());
 document.addEventListener('visibilitychange',()=>{previousFrame=0;});
 renderCareer();requestAnimationFrame(animateWorld);
-if(location.hostname==='localhost')window.__dc={get S(){return S;},set S(v){S=v;resetClock();renderCareer();},DC,newGame,applyPlay,makePitch,resolvePitch,simulateToMoment,simulatedAction,batterOf,freshCareer,migrateCareer,validCareer,startCareer,startMatch,playPitch,continueMatch,afterMatch,training,signContract,advanceDays,purchase,evaluation,saveCareer,renderCareer,actCareer,random,lineStats,DC_TRACKS,contractOffer,termEnd,calendarStatus,beginSeries,finishMonth,careerPhase,get clock(){return pitchClock;},get D(){return D;}};
+if(location.hostname==='localhost')window.__dc={get S(){return S;},set S(v){S=v;resetClock();renderCareer();},DC,cueAccuracy,cueTruth,timingStance,chooseStance,newGame,applyPlay,makePitch,resolvePitch,simulateToMoment,simulatedAction,batterOf,freshCareer,migrateCareer,validCareer,startCareer,startMatch,playPitch,continueMatch,afterMatch,training,signContract,advanceDays,purchase,evaluation,saveCareer,renderCareer,actCareer,random,lineStats,DC_TRACKS,contractOffer,termEnd,calendarStatus,beginSeries,finishMonth,careerPhase,get clock(){return pitchClock;},get D(){return D;}};

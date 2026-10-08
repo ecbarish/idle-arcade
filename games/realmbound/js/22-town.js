@@ -85,7 +85,9 @@ function townPeople() {
 function hallPeople() {
   const list = [{ id: 'registrar', name: 'Registrar Mott', at: [7, 2], dir: 'down', look: { race: 'human', cls: 'priest', hair: '#d8d8d8' },
     lines: () => [['Registrar Mott', `Welcome home to ${G().name}. Level ${G().level}, ${Object.keys(G().members).length} adventurer${Object.keys(G().members).length === 1 ? '' : 's'} on the roll. The chest holds our supplies; the board, our work.`]] }];
-  Object.keys(G().members || {}).map(k => ({ k, w: workerOf(k) })).filter(x => x.w).slice(0, GUILD_SPOTS.length).forEach(({ k, w }, i) =>
+  const members = Object.keys(G().members || {}).map(k => ({ k, w: workerOf(k) })).filter(x => x.w), seated = members.slice(0, GUILD_SPOTS.length);
+  const guest = members.find(x => x.k === TOWN.storyGuest); if (guest && !seated.some(x => x.k === guest.k)) seated[seated.length - 1] = guest;
+  seated.forEach(({ k, w }, i) =>
     list.push({ id: 'member', key: k, name: w.name, at: GUILD_SPOTS[i], dir: i % 2 ? 'left' : 'right', look: { race: w.n.race, cls: w.cls, hair: w.n.hair || '#6b4423' } }));
   return list;
 }
@@ -99,7 +101,7 @@ const TOWN_WALK = World.walker({
 });
 function townActive() { const h = H(); return !!(h && C && !h.dun && C.phase === 'intown' && PW > 0); }
 function townEnter() {
-  TOWN.inside = false; const [x, y, d] = TOWN.map.start; TOWN_WALK.place(x, y, d); TOWN.auto = null;
+  TOWN.inside = false; TOWN.storyGuest = null; const [x, y, d] = TOWN.map.start; TOWN_WALK.place(x, y, d); TOWN.auto = null;
   if (aiOn()) { C.townT = Math.max(C.townT || 0, 25); TOWN.auto = 'smith'; }
 }
 function townExit() {
@@ -129,6 +131,7 @@ function townTalk(n) {
   if (n.isMule) { SCN.play([['Pell', 'That\'s Brisket. He doesn\'t talk, which makes him the best listener in three worlds.']], null); return; }
   const h = H();
   if (n.id === 'member') { memberTalk(n.key); return; }
+  if (n.id === 'registrar') { const hero = H(); SCN.play(n.lines(), choice => { SCN.el.classList.remove('member-story-dialogue'); if (choice === 0 && H() === hero) openMemberStoryBook(); }, { choices: ['Open the hearth book', 'Another time'] }); RTALK.memberStory = true; C.lastInput = C.run; TOWN.auto = null; SCN.el.classList.add('member-story-dialogue'); SCN.el.scrollIntoView({ block: 'center' }); return; }
   if (n.id === 'giver') { const q = (QUESTS[h.zone] || []).find(q => qState(q) === 'avail');
     if (q && h.quests.active.length < 3) { questOffer(q.id); return; }
     SCN.play([[n.name, q ? 'Your pack looks full already. Finish what you carry first, then come and see me.' : 'Nothing new on the board for you today. The road is quieter for your work.']], null); return; }
@@ -140,6 +143,7 @@ function townTalk(n) {
 }
 /* a guild adventurer in the hall: their favor if they have one, otherwise a word that shows their mood */
 function memberTalk(key) {
+  if (!memberStoryProblem(key) && playMemberStory(key, false)) return;
   const w = workerOf(key); if (!w) return; const mood = w.m.mood, face = mood >= 70 ? ':happy' : mood < 30 ? ':sad' : '';
   const req = typeof memberRequest === 'function' ? memberRequest(key) : null;
   if (req) { const voice = (typeof REQUEST_VOICE !== 'undefined' && (REQUEST_VOICE[w.n.pers] || REQUEST_VOICE.cheerful)) || { hello: '' };

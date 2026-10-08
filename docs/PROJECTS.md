@@ -115,7 +115,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
 | R3 | **Battlegrounds**: faction rivalry, the hook the raid's ending sets up | L | Design+System | — | open | Write a plan first (CREATIVE.md: new system) |
-| R4 | **Guild members' personal stories**: short arcs per adventurer, unlocked by mood and time together | M | Data+System | — | open | docs/realmbound-40-60.md "The guild as built" |
+| R4 | **Guild members' personal stories**: short arcs per adventurer, unlocked by mood and time together | M | Data+System | — | ready for review: Codex, 2026-10-08, PR #49 | docs/realmbound-40-60.md "The guild as built" |
 | R5 | **Crafted gear from 55** from the guild economy (the plan's gear route) | M | System | — | open | docs/realmbound-40-60.md "Loot from 40 to 60" |
 | R6 | **Hub variety**: a layout per zone (Fenwatch Post, Lanternrest Lodge...), interiors for the inn and smithy | M | Art | — | open | js/22-town.js |
 | R7 | **Second raid tier** after The Hollow Throne | L | Data+System | — | open | docs/realmbound-40-60.md "Raids" |
@@ -152,7 +152,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 |---|---|---|---|---|---|
 | SG1-SG4 | Starfall Guild stages G1-G4: careers, two expeditions, the town serves the guild, seasons become campaigns | L each | System | parked | docs/plans/starfall-guild.md |
 | OW0-OW5 | Otherworld (isekai) stages O0-O5 | L each | System | parked, needs Evan's go | docs/plans/otherworld.md, docs/ideas.md |
-| DC0-DC4 | Diamond Career (baseball) stages D0-D4 | L each | System | D0 + first D1 merged (PR #45); D1 first month merged 2026-10-08 by Claude (v0.2.0, PR #48); later stages outlined | docs/plans/diamond-career.md, docs/plans/sports-careers.md |
+| DC0-DC4 | Diamond Career (baseball) stages D0-D4 | L each | System | D0 + first D1 merged (PR #45); D1 first month merged 2026-10-08 by Claude (v0.2.0, PR #48); D1c ready for review: Codex, PR #50 (stacked on #49); later stages outlined | docs/plans/diamond-career.md, docs/plans/sports-careers.md |
 | PR0-PR4 | Primordial stages P0-P4 | L each | System | back burner | docs/plans/primordial.md |
 
 ## Done (for reference; details in git history and the design docs)

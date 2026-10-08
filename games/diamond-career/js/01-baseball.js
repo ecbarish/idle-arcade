@@ -44,11 +44,14 @@ function applyPlay(g,play) {
   }
   return {ended,runs,kind};
 }
-function makePitch(g,pitcher) {
+// Fallback cues can randomly match the true type. Preserve the old Eye-50 baseline.
+function cueTruth(stats={discipline:50}) { const eye=Number.isFinite(stats.discipline)?stats.discipline:50;return clamp(.78+(eye-50)*.002,.68,.88); }
+function cueAccuracy(stats) { return cueTruth(stats)+(1-cueTruth(stats))/3; }
+function makePitch(g,pitcher,stats) {
   const roll=random(g), type=roll<.5?pitcher.favorite:roll<.75?'fastball':roll<.9?'curve':'change-up';
-  const inZone=random(g)<.64, truthful=random(g)<.78;
+  const inZone=random(g)<.64, truthful=random(g)<cueTruth(stats);
   const hint=truthful?type:Object.keys(DC.pitches)[Math.floor(random(g)*3)];
-  return {type,inZone,hint,duration:DC.pitches[type].duration,skill:pitcher.skill};
+  return {type,inZone,hint,duration:DC.pitches[type].duration,skill:pitcher.skill,cueChance:cueAccuracy(stats)};
 }
 function resolvePitch(g,stats,p,action) {
   g.pitches++;
@@ -62,11 +65,12 @@ function resolvePitch(g,stats,p,action) {
     const right=action.guess===p.type; quality=right?.88:.30;
     text=right?'You read the '+p.type+' correctly.':'You expected a '+action.guess+'; it was a '+p.type+'.';
   }
+  if(!p.inZone)text+=' That pitch was off the plate; it was harder to reach.';
   const contact=clamp(.51+(stats.contact-50)*.004+(quality-.38)*.20-(p.skill-50)*.003-(stance==='power'?.12:0)-(p.inZone?0:.19),.15,.9);
   if(random(g)>contact)return {play:'strike',text:text+' Swing and miss.'};
   if(random(g)<.20)return {play:'foul',text:text+' Foul; with two strikes, the count stays there.'};
   const hitChance=clamp(.34+(stats.contact-50)*.0025+(quality-.38)*.17+(stance==='contact'?.025:0),.18,.6);
-  if(random(g)>hitChance)return {play:'out',text:text+' The fielder makes a clean out; runners hold.'};
+  if(random(g)>hitChance)return {play:'out',text:text+(quality>=.7?' Good contact, but a fielder caught it; runners hold.':' Weak contact. The fielder makes a clean out; runners hold.')};
   const power=clamp(.07+(stats.power-50)*.003+(stance==='power'?.10:0)+(quality-.38)*.05,.02,.28), r=random(g);
   const bases=r<power?4:r<power+.035?3:r<power+.25?2:1;
   return {play:bases,text:text+' '+['','A single through the gap.','A double to the fence.','A triple into the corner.','Home run!'][bases]};
