@@ -1079,7 +1079,7 @@ function wildbondChecks() {
 
 (() => {
   const button = document.querySelector('#run'), summary = document.querySelector('#summary'), results = document.querySelector('#results');
-  const keys = ['wildbond-save-v1', 'arcade-index-v1'];
+  const keys = ['wildbond-save-v1', 'arcade-index-v1', 'wildbond-modes-unlocked'];
   let active = null;
   function result(ok, label) {
     const li = document.createElement('li'); li.className = ok ? 'pass' : 'fail'; li.textContent = (ok ? 'PASS — ' : 'FAIL — ') + label; results.appendChild(li);
