@@ -798,16 +798,18 @@ module.exports = function scenarios() {
             check(/mood/.test(memberStoryProblem(key))&&!finishMemberStory(key,beat,0),n.name+'/'+branch+'/'+beat+': mood gates completion');
             w.m.mood=gate.mood;n.aff=29;check(/Friends/.test(memberStoryProblem(key)),n.name+'/'+branch+'/'+beat+': friendship remains required');n.aff=30+2*beat;
             check(memberStoryProblem(key)===''&&playMemberStory(key,false),n.name+'/'+branch+'/'+beat+': ready member opens existing portrait dialogue');
-            check(RTALK.memberStory&&hallPeople().some(p=>p.key===key)&&MEMBER_STORY_FACE.name===n.name&&MEMBER_STORY_FACE.hairCol===n.hair&&MEMBER_STORY_FACE.shirt===CLASSES[n.cls].col&&RTALK.lines.some(l=>l[1]===MEMBER_STORY_VOICE[n.pers][beat]),n.name+'/'+branch+'/'+beat+': generated personality has its own voice');
+            check(RTALK.memberStory&&hallPeople().some(p=>p.key===key)&&MEMBER_STORY_FACE.name===n.name&&MEMBER_STORY_FACE.hairCol===n.hair&&MEMBER_STORY_FACE.shirt===CLASSES[n.cls].col&&RTALK.lines.some(l=>l[1]===(memberStoryHurt(state)&&beat===2?'I have something harder to remember with you.':MEMBER_STORY_VOICE[n.pers][beat])),n.name+'/'+branch+'/'+beat+': generated personality has its own voice');
             const run=rb.C.run,play=storyHero.stats.play;rb.step(.1);check(rb.C.run===run&&storyHero.stats.play===play,n.name+'/'+branch+'/'+beat+': deliberate scene pauses game time');
             SCN.skip();check(state.done===beat&&RTALK,n.name+'/'+branch+'/'+beat+': Skip reveals choices without accepting them');
             const stale=RTALK.done;SCN.choose(beat===1?2:1);check(state.done===beat&&!RTALK,n.name+'/'+branch+'/'+beat+': Another time grants no progress');
             playMemberStory(key,false);SCN.skip();SCN.choose(beat===1?branch:0);
-            check(state.done===beat+1&&n.aff===32+2*beat&&w.m.mood===gate.mood+2,n.name+'/'+branch+'/'+beat+': explicit response grants one small relationship reward');
+            if(beat===1&&state.reaction){check(RTALK&&RTALK.memberStory&&RTALK.lines.some(l=>l[1]===memberStoryResult(n.name,state)),n.name+'/'+branch+': decision speaks its consequence in the world');SCN.skip();SCN.choose(memberStoryHurt(state)?1:0);}
+            const hurtDecision=beat===1&&memberStoryHurt(state);
+            check(state.done===beat+1&&n.aff===(hurtDecision?30+2*beat:32+2*beat)&&w.m.mood===gate.mood+(hurtDecision?-8:2),n.name+'/'+branch+'/'+beat+': explicit response grants one small relationship reward');
             const aff=n.aff,mood=w.m.mood;stale(beat===1?branch:0);check(n.aff===aff&&w.m.mood===mood,n.name+'/'+branch+'/'+beat+': stale callback cannot reward a second time');
           }
-          const state=memberStoryState(key);check(state.choice===branch&&state.done===3&&memberStoriesHTML().includes(story[5+branch]),n.name+'/'+branch+': remembered ending appears in the hall');
-          const saved=JSON.stringify(state),aff=n.aff,mood=w.m.mood;check(playMemberStory(key,true),'R4 '+n.name+': deliberate replay opens');SCN.skip();SCN.choose(0);
+          const state=memberStoryState(key);check(state.choice===branch&&state.done===3&&memberStoriesHTML().includes(memberStoryScript(n.name,state)[5+branch]),n.name+'/'+branch+': remembered ending appears in the hall');
+          const saved=JSON.stringify(state),aff=n.aff,mood=w.m.mood;check(playMemberStory(key,true),'R4 '+n.name+': deliberate replay opens');SCN.skip();SCN.choose(memberStoryHurt(state)?1:0);
           check(JSON.stringify(state)===saved&&n.aff===aff&&w.m.mood===mood,n.name+'/'+branch+': replay is read-only');
           check(!finishMemberStory(key,2,0)&&!playMemberStory(key,false),n.name+'/'+branch+': completed arc cannot be repeated');
         }
@@ -849,6 +851,46 @@ module.exports = function scenarios() {
       check(playMemberStory(localKey,false)&&!modalKind,'R4: listening closes the book so it cannot hide the portrait');SCN.skip();SCN.choose(1);check(modalKind==='memberstories'&&!RTALK,'R4: deferring returns to the book without choosing');closeModal();
       townTalk({id:'registrar',lines:()=>[['Registrar Mott','Welcome to the hearth.']]});SCN.skip();SCN.choose(0);check(modalKind==='memberstories','R4: the walkable registrar lends the book');closeModal();
       rb.S.guild.members[localKey].mood=80;memberTalk(localKey);check(RTALK&&RTALK.memberStory,'R4: walkable hall member opens a ready personal story');SCN.skip();SCN.choose(1);
+
+      // R4 follow-up: stakes, old decisions and an immediate, one-time repair in the world.
+      check(Object.keys(MEMBER_STORY_STAKES).length===10,'R4 choices: ten of 32 arcs have consequences, across both factions');
+      for(const name of Object.keys(MEMBER_STORY_STAKES)) {
+        const {n,owner}=allStoryNpcs.find(x=>x.n.name===name),key=memberKey(owner.id,n.id),w=workerOf(key),stakes=MEMBER_STORY_STAKES[name];
+        const prepare=()=>{clearMemberStory();closeModal();storyHero.mode='focus';rb.C.phase='intown';TOWN.inside=true;rb.S.guild.stories[key]={seconds:900,done:1,choice:null};w.m.mood=70;n.aff=40;};
+        prepare();
+        const legacyChoice=stakes.hurt,old={seconds:1800,done:3,choice:legacyChoice},normalized=normalizeMemberStories({[key]:old})[key];
+        check(!normalized.reaction&&!normalized.repaired&&memberStoryScript(name,normalized)[5+legacyChoice]===MEMBER_STORIES[name][5+legacyChoice],name+': completed legacy story keeps its original kind ending');
+        const earlier=normalizeMemberStories({[key]:{seconds:900,done:2,choice:legacyChoice}})[key];
+        check(!earlier.reaction&&memberStoryScript(name,earlier)[2]===MEMBER_STORIES[name][2],name+': legacy decision awaiting aftermath is not rewritten or punished');
+        check(playMemberStory(key,false)&&RTALK.lines.some(l=>l[1]===stakes.dilemma)&&RTALK.lines.some(l=>/costs 8 mood/.test(l[1])),name+': portrait states personal and numeric stakes before the decision');
+        const accountBefore=JSON.stringify({bank:rb.S.bank,money:storyHero.money,xp:storyHero.xp,guildxp:rb.S.guild.xp});
+        SCN.skip();SCN.choose(stakes.hurt);const state=memberStoryState(key);
+        check(state.reaction==='hurt'&&!state.repaired&&w.m.mood===62&&n.aff===40&&G().members[key]===w.m,name+': hurt costs eight mood, no friendship reward, no departure');
+        check(RTALK.memberStory&&RTALK.lines.some(l=>l[1]===stakes.hurtLine)&&RTALK.lines.some(l=>/Make amends/.test(l[1])),name+': immediate world response explains the harm and way back');
+        const choiceCache=memberStoriesKey();rb.save();const reload=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1'))).guild.stories[key];
+        check(reload.reaction==='hurt'&&reload.choice===stakes.hurt&&!reload.repaired,name+': reload retains unresolved consequence and chosen branch');
+        SCN.skip();SCN.choose(1);check(!RTALK&&!state.repaired,name+': closing the response never makes amends automatically');
+        w.m.mood=12;n.aff=0;state.seconds=0;
+        check(playMemberStoryRepair(key,false),name+': repair has no mood, friendship or party-time gate');
+        SCN.skip();SCN.choose(1);check(!state.repaired&&w.m.mood===12,name+': deferring repair has no cost, reward or deadline');
+        memberTalk(key);check(RTALK&&RTALK.memberStory&&RTALK.lines.some(l=>l[1]===stakes.repair),name+': walking up to hurt member starts their repair conversation');
+        const pendingRepair=RTALK.done;SCN.skip();SCN.choose(0);
+        check(state.repaired&&state.reaction==='hurt'&&state.choice===stakes.hurt&&w.m.mood===20&&n.aff===0,name+': amends restore eight mood without erasing the choice or farming affinity');
+        check(RTALK&&RTALK.lines.some(l=>l[1]===stakes.after),name+': reconciliation is spoken by the member in the game window');SCN.skip();SCN.choose(0);
+        pendingRepair(0);check(w.m.mood===20&&!repairMemberStory(key)&&!playMemberStoryRepair(key,false),name+': stale callback and repeated repair cannot farm mood');
+        check(memberStoriesKey()!==choiceCache&&memberStoryRecordsHTML().includes(stakes.after)&&memberStoryRecordsHTML().includes(memberStoryScript(name,state)[3+stakes.hurt])&&!memberStoryRecordsHTML().includes('data-act='),name+': record keeps choice and repair, no story controls in Guild tab');
+        check(JSON.stringify({bank:rb.S.bank,money:storyHero.money,xp:storyHero.xp,guildxp:rb.S.guild.xp})===accountBefore,name+': apology spends no money or supplies and grants no economy reward');
+        const repairedLoad=normalizeMemberStories({[key]:state})[key];check(repairedLoad.repaired&&repairedLoad.reaction==='hurt',name+': resolved trust survives migration');
+        prepare();finishMemberStory(key,1,1-stakes.hurt);check(memberStoryState(key).reaction==='trusted'&&w.m.mood===72&&n.aff===42&&!playMemberStoryRepair(key,false),name+': other decision preserves trust and ordinary relationship reward');
+        prepare();finishMemberStory(key,1,stakes.hurt);storyHero.mode='auto';check(!repairMemberStory(key)&&!playMemberStoryRepair(key,false),name+': Auto never chooses reconciliation');storyHero.mode='focus';
+        TOWN.inside=false;check(!repairMemberStory(key)&&!playMemberStoryRepair(key,false),name+': repair must be a meeting in the guild hall');TOWN.inside=true;
+        playMemberStoryRepair(key,false);const changedHero=RTALK.done;rb.S.cur=storyAlt.id;SCN.skip();SCN.choose(0);check(!memberStoryState(key).repaired,name+': changing listener prevents stale repair');rb.S.cur=storyHero.id;
+        playMemberStoryRepair(key,false);const changedAccount=RTALK.done,oldAccount=rb.S;S=Object.assign({},oldAccount);SCN.skip();SCN.choose(0);check(!memberStoryState(key).repaired,name+': changing account prevents stale repair');S=oldAccount;
+        playMemberStoryRepair(key,false);const departedRepair=RTALK.done;dismissMember(key);departedRepair(0);check(!RTALK&&!memberStoryState(key).repaired,name+': dismissal clears pending repair without applying it');addMember(n,owner,true);w.m=G().members[key];w.m.mood=60;
+        check(repairMemberStory(key)&&memberStoryState(key).repaired,name+': rejoining does not lose the chance to make amends');
+      }
+      const invalidReaction=normalizeMemberStories({[localKey]:{seconds:0,done:1,choice:null,reaction:'hurt',repaired:true},[remoteKey]:{seconds:1800,done:3,choice:1,reaction:'trusted',repaired:true}});
+      check(!invalidReaction[localKey].reaction&&!invalidReaction[localKey].repaired&&!invalidReaction[remoteKey].repaired,'R4 choices: malformed unresolved and trusted records cannot invent reconciliation');
       }
       rb.save();return checks;
     };

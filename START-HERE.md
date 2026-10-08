@@ -137,6 +137,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 · Codex: R4 follow-up ready in PR #53, stacked on guide PR #52; ten warned guild choices, portrait consequences and recoverable trust. All seven test pages pass (Realmbound 6935); no versions bumped. Two PRs await review.
+
 - 2026-10-08 · Codex: A6b illustrated guides and Realmbound tips ready in PR #52; all seven test pages pass. Wildbond guide waits for Godot.
 
 - 2026-10-08 Claude (night): rules for player-facing text (docs/CREATIVE.md, Writing for players; Realmbound Guild Hall title fixed).

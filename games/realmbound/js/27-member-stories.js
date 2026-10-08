@@ -37,6 +37,152 @@ const MEMBER_STORIES = {
   Ishara: ['More than the word welcome', 'A camp said welcome to an outsider, then explained every custom too late. I remember how small they tried to make themselves.', 'I want our hall to do better. Shall we ask visitors what would help, or offer a companion for their first evening?', 'Ask what would help', 'Offer an evening companion', 'We ask visitors what would make the hall easier. One answer was simply: Tell me which chair is free. We did.', 'A willing member offers company on a first evening. A visitor declined today, and we welcomed that answer too.'],
   Brakka: ['Before the warning grows', 'I carry news between watch fires. An urgent warning grows in the telling if nobody separates what they saw from what they fear.', 'I have rewritten one warning. Should we mark the evidence on a notice, or teach the hall a short call and reply?', 'Mark what was actually seen', 'Teach a clear call and reply', 'The notice separates sighting from suspicion. A traveler brought a correction, and the hall changed the warning without a quarrel.', 'Our warning call asks: Seen, or feared? The reply leaves room for both, but nobody mistakes one for the other.']
 };
+/* Ten new decisions have plain, recoverable stakes. Legacy decisions keep their original script. */
+const MEMBER_STORY_STAKES = {
+  "Brienne": {
+    "hurt": 0,
+    "dilemma": "A publisher wants our road account. Leading with our own names might draw readers, but I promised the plank-carriers equal credit. Taking the headline for ourselves would hurt my trust.",
+    "a": "Lead with our own names",
+    "b": "Give the roadkeepers equal credit",
+    "hurtLine": "The account calls us the heroes and leaves the plank-carriers in a footnote. I asked you to share the credit. I am not ready to put your name beside mine again.",
+    "trustLine": "Everyone who carried a plank has a name beside ours. The publisher shortened the headline; I would rather have a smaller story that tells the truth.",
+    "repair": "We will correct the account together and give the roadkeepers equal space.",
+    "after": "The corrected account still says who asked for the first headline. It also says who came back to set the credit right. I can write beside you again."
+  },
+  "Aldous": {
+    "hurt": 0,
+    "dilemma": "This account names someone who asked for privacy. Reading it at supper could teach the hall who needed help, but I promised not to expose their trouble. Sharing it publicly would hurt my trust.",
+    "a": "Read the named account at supper",
+    "b": "Return it to them privately",
+    "hurtLine": "The hall knows their trouble now. They asked me why I trusted you with it. I have no comfortable answer, and I will not hand you another private account yet.",
+    "trustLine": "They received the account privately. They thanked us for remembering the person without making their trouble a hall story.",
+    "repair": "We will take the named copy down and ask permission before sharing any account again.",
+    "after": "The copy is withdrawn. We cannot make the first reading unheard, but the person accepted our apology. I can trust you with a confidence again."
+  },
+  "Elowen": {
+    "hurt": 1,
+    "dilemma": "The group wants to leave before we discuss the return route. Leaving now keeps their excitement, but I need them to hear the way out. Passing over my map would make me feel dismissed.",
+    "a": "Hear the return route before leaving",
+    "b": "Leave the briefing for later",
+    "hurtLine": "Nobody asked about the way out. I folded my map and stopped offering directions. You knew why I drew it, and still treated it as a delay.",
+    "trustLine": "We named a meeting place before leaving. The eager ones grumbled, then asked for copies. You made room for caution without calling it cowardice.",
+    "repair": "We will gather the group before departing and let you finish the return briefing.",
+    "after": "You brought the group back to hear the route. I still remember the first departure, but you stayed for every question. I am offering my map again."
+  },
+  "Garrett": {
+    "hurt": 1,
+    "dilemma": "The workbench is crowded. Clearing my old tool would make room, but its repairs hold people I remember. Throwing it onto the scrap pile without asking would hurt me.",
+    "a": "Keep the repaired tool on the bench",
+    "b": "Clear it onto the scrap pile",
+    "hurtLine": "I found the bent handle on the scrap pile. You heard its story and cleared it away anyway. I will mend things beside you, but I am keeping my keepsakes to myself.",
+    "trustLine": "You made room for the repaired tool. Its handle has another stitch now, and someone asked to learn how to make one.",
+    "repair": "We will retrieve the handle and give you the choice of where it belongs.",
+    "after": "The handle came back, and this time you asked. I put it above the bench myself. We cannot undo the careless moment, but I can lend you my tools again."
+  },
+  "Maeve": {
+    "hurt": 0,
+    "dilemma": "The teller asked for a small, quiet audience. A feast would bring more listeners, but the crowd could silence them again. Booking the main feast would make me feel you had not listened.",
+    "a": "Book the reading at the main feast",
+    "b": "Arrange the quiet audience they asked for",
+    "hurtLine": "They stopped at the first cheer and could not begin again. More ears were not what they needed. I will not bring another quiet account to you while this is unresolved.",
+    "trustLine": "We listened in a small circle. The teller stopped twice; nobody filled the silence. They asked when we could meet again.",
+    "repair": "We will apologize to the teller and arrange a smaller reading only if they want it.",
+    "after": "They chose the smaller reading, and you waited through the silence. I remember the feast, but I also remember you listening properly afterward."
+  },
+  "Kesh": {
+    "hurt": 1,
+    "dilemma": "New members want my escape story. Telling only the bold parts would give them courage, but it would hide where I should have asked for help. Turning it into a boast would make me withdraw my trust.",
+    "a": "Tell the escape with its mistakes",
+    "b": "Keep only the bold parts",
+    "hurtLine": "They applauded a version I no longer recognize. A new member repeated the risky shortcut. I will travel with you, but I will not ask you to tell my story again yet.",
+    "trustLine": "I admitted the foolish part. A new member asked for help before leaving. A less impressive story did more useful work.",
+    "repair": "We will tell the missing part together and practice the safer approach.",
+    "after": "You stood beside me while we corrected the tale. Nobody pretended the boast never happened. I can ask you for help without needing to look grand again."
+  },
+  "Zula": {
+    "hurt": 0,
+    "dilemma": "One familiar refrain would be easy to learn. Replacing the camp verses would also erase the voices I collected. Replacing them rather than learning them would hurt my trust.",
+    "a": "Replace the camp verses with our refrain",
+    "b": "Learn the different verses together",
+    "hurtLine": "The hall sings easily now, but the visiting singers cannot hear their own camps in it. You made my collection quieter by making every voice ours.",
+    "trustLine": "We learned the different verses slowly. One shared refrain holds them together without taking their memories away.",
+    "repair": "We will restore the camp verses and ask their singers to teach us.",
+    "after": "The singers taught us their verses again. Our sheet keeps a note about what we removed and restored. I am willing to learn a new song beside you."
+  },
+  "Nokka": {
+    "hurt": 1,
+    "dilemma": "The borrowed tool would help our lending bench. Its owner still expects it back. Keeping it for the hall might help more hands, but breaking that promise would hurt my trust.",
+    "a": "Return the tool with its account",
+    "b": "Keep the loan on our lending bench",
+    "hurtLine": "Its owner came to collect it and found a queue of borrowers. We helped our hall by spending somebody else's permission. I will not arrange another loan for you yet.",
+    "trustLine": "The tool went home with its account. Its owner offered another loan because we treated the first as a promise.",
+    "repair": "We will return the loan, explain the delay and ask before borrowing it again.",
+    "after": "The owner took it back and heard our apology. They have not forgotten the delay. I can vouch that you returned to put it right."
+  },
+  "Tusk": {
+    "hurt": 0,
+    "dilemma": "The trophy could lift the hall's spirits on its own. I need the recovery notes beside it: the people hurt afterward are part of the victory. Displaying only the trophy would make me feel used.",
+    "a": "Display the trophy on its own",
+    "b": "Display the recovery notes beside it",
+    "hurtLine": "People praised a clean victory. You knew it was not clean. I covered the trophy and stopped answering the proud questions; I do not want you to speak for me yet.",
+    "trustLine": "People read the care notes before admiring the trophy. Some stayed to ask who still needed help. That is a victory I can share.",
+    "repair": "We will put the recovery account beside the trophy and let you tell its full cost.",
+    "after": "You stayed while I told the harder part. The display remembers its first, incomplete telling and the correction. I can share that shelf with you again."
+  },
+  "Morg": {
+    "hurt": 1,
+    "dilemma": "Both people allowed me to share the repair, but neither allowed a verdict. Naming a winner would settle supper quickly. It would also break the promise that makes this account worth keeping.",
+    "a": "Record the repair without a verdict",
+    "b": "Name a winner in the hall account",
+    "hurtLine": "One person stopped coming to supper after we named the winner. Their apology became a prize for the other. I trusted you to leave room for both accounts.",
+    "trustLine": "The account records what each person did to repair the quarrel. They ate at different tables today, but neither had to leave the hall.",
+    "repair": "We will remove the verdict and invite both people to approve the repair account.",
+    "after": "Both approved the revised account. Neither owes us a cheerful ending. I trust you more for returning to listen, and the book keeps the first verdict as a mistake we repaired."
+  }
+};
+function memberStoryScript(name, state) {
+  const original = MEMBER_STORIES[name], stakes = MEMBER_STORY_STAKES[name];
+  if (!original || !stakes || state.done >= 2 && !state.reaction) return original;
+  const script = original.slice(); script[2] = stakes.dilemma; script[3] = stakes.a; script[4] = stakes.b;
+  script[5 + stakes.hurt] = stakes.hurtLine; script[5 + (1 - stakes.hurt)] = stakes.trustLine; return script;
+}
+function memberStoryHurt(state) { return state.reaction === 'hurt' && !state.repaired; }
+function memberStoryResult(name, state) {
+  const stakes = MEMBER_STORY_STAKES[name];
+  if (!state.reaction || !stakes) return '';
+  return state.repaired ? stakes.after : state.reaction === 'hurt' ? stakes.hurtLine : stakes.trustLine;
+}
+function memberStoryConsequence(state) {
+  return state.reaction === 'hurt' ? state.repaired ? 'Trust repaired. The original choice remains in the record.' : 'Trust hurt: mood −8 at the decision; no friendship reward. Make amends at the hearth, with no extra mood or time gate.' : state.reaction === 'trusted' ? 'Trust kept: +2 friendship and +2 mood at the decision.' : '';
+}
+function repairMemberStory(key) {
+  const w = workerOf(key), state = memberStoryState(key);
+  if (!w || !MEMBER_STORY_STAKES[w.name] || !memberStoryHurt(state) || state.done < 2 || memberStoryMeetingProblem(key)) return false;
+  state.repaired = true; moodBump(w.n, 8, w.hero);
+  const memory = MEMBER_STORY_STAKES[w.name].after; line(w.name + ': ' + memory, 'l-say'); slog(w.name + ' — made amends: ' + memory); save(); return true;
+}
+function playMemberStoryRepair(key, returnToBook) {
+  const w = workerOf(key), state = memberStoryState(key);
+  if (RTALK || !w || !memberStoryHurt(state) || state.done < 2 || memberStoryMeetingProblem(key)) return false;
+  const stakes = MEMBER_STORY_STAKES[w.name]; if (!stakes) return false;
+  return memberStoryScene(key, [['', 'Making amends restores 8 mood once. Your choice stays remembered. No payment or waiting is required.'], [w.name + ':sad', stakes.hurtLine], [H().name, stakes.repair], [w.name, 'Will you stand by that? I can forgive you. I cannot pretend the first choice never happened.']], ['Make amends', 'Another time'], choice => {
+    if (choice === 0 && repairMemberStory(key)) { renderTab(true); playMemberStory(key, true, returnToBook); }
+    else if (returnToBook) openMemberStoryBook();
+  });
+}
+function memberStoryScene(key, lines, choices, onChoose) {
+  const w = workerOf(key); if (!w || RTALK) return false;
+  const hero = H(), account = S, member = w.m;
+  if (modalKind === 'memberstories') closeModal();
+  const face = Object.assign(Dialogue.lookFor(w.name, { palette: FACTION_LOOK[w.hero.faction].palette, races: [w.n.race] }), { name: w.name, hairCol: w.n.hair, shirt: CLASSES[w.cls].col, title: CLASSES[w.cls].name + ' · ' + G().name });
+  MEMBER_STORY_FACE = face;
+  SCN.play(lines, choice => {
+    if (MEMBER_STORY_FACE === face) { MEMBER_STORY_FACE = null; SCN.el.classList.remove('member-story-dialogue'); }
+    if (S !== account || H() !== hero || G().members[key] !== member) return;
+    onChoose(choice);
+  }, { choices });
+  C.lastInput = C.run; TOWN.auto = null; TOWN.storyGuest = key; RTALK.memberStory = true; RTALK.memberStoryKey = key; SCN.el.classList.add('member-story-dialogue'); SCN.el.scrollIntoView({ block: 'center' }); return true;
+}
 const MEMBER_STORY_VOICE = {
   cheerful: ['Oh, a bit of road and a bit of company! I have been wanting to tell you this.', 'Will you think this through with me?', 'You remembered. That makes this feel like our hall.'],
   gruff: ['Got a moment? This has stayed with me.', 'Two ways to do it. Hear me out.', 'Good to have someone who listens. Leave that out of the grand speeches.'],
@@ -53,7 +199,9 @@ function normalizeMemberStories(raw) {
     const done = Number.isInteger(value.done) ? clamp(value.done, 0, 3) : 0;
     const choice = value.choice === 0 || value.choice === 1 ? value.choice : null;
     // Incomplete/corrupt choices return to the decision, never silently pick an ending.
+    const reaction = done >= 2 && choice !== null && (value.reaction === 'hurt' || value.reaction === 'trusted') ? value.reaction : null;
     ledger[key] = { seconds: Number.isFinite(value.seconds) ? clamp(value.seconds, 0, 1800) : 0, done: done >= 2 && choice === null ? 1 : done, choice };
+    if (reaction) Object.assign(ledger[key], { reaction, repaired: reaction === 'hurt' && value.repaired === true });
   }
   return ledger;
 }
@@ -95,35 +243,36 @@ function finishMemberStory(key, expected, choice) {
   if (memberStoryProblem(key)) return false;
   const state = memberStoryState(key, true), w = workerOf(key), story = memberStoryData(key);
   if (state.done !== expected || (expected === 1 ? choice !== 0 && choice !== 1 : choice !== 0)) return false;
-  if (expected === 1) state.choice = choice;
+  if (expected === 1) { state.choice = choice; const stakes = MEMBER_STORY_STAKES[w.name]; if (stakes) { state.reaction = choice === stakes.hurt ? 'hurt' : 'trusted'; state.repaired = false; } }
   state.done++;
-  const memory = expected === 0 ? 'Shared ' + story[0].toLowerCase() + '.' : expected === 1 ? 'Chose: ' + story[3 + choice] + '.' : story[5 + state.choice];
-  addAff(w.n, 2, memory); moodBump(w.n, 2, w.hero);
+  const script = memberStoryScript(w.name, state);
+  const memory = expected === 0 ? 'Shared ' + story[0].toLowerCase() + '.' : expected === 1 ? 'Chose: ' + script[3 + choice] + '.' : memberStoryResult(w.name, state) || script[5 + state.choice];
+  if (expected === 1 && memberStoryHurt(state)) { moodBump(w.n, -8, w.hero); addAff(w.n, 0, memory); }
+  else { addAff(w.n, 2, memory); moodBump(w.n, 2, w.hero); }
   line(w.name + ': ' + memory, 'l-say'); slog(w.name + ' — ' + memory); sfx('quest'); save(); return true;
 }
 let MEMBER_STORY_FACE = null;
 function memberStoryPortrait(name) { return RTALK && MEMBER_STORY_FACE && name === MEMBER_STORY_FACE.name ? MEMBER_STORY_FACE : null; }
-function playMemberStory(key, replay) {
+function playMemberStory(key, replay, returnToBook) {
   if (RTALK) return false;
-  const w = workerOf(key), story = memberStoryData(key), state = memberStoryState(key);
+  const w = workerOf(key), state = memberStoryState(key), story = w && memberStoryScript(w.name, state);
   if (!w || !story || (replay ? !state.done : memberStoryProblem(key))) return false;
   if (replay && memberStoryMeetingProblem(key)) return false;
-  const hero = H(), account = S, member = w.m, expected = state.done, book = modalKind === 'memberstories';
-  if (book) closeModal();
+  const expected = state.done, book = modalKind === 'memberstories' || !!returnToBook;
   const voice = MEMBER_STORY_VOICE[w.n.pers] || MEMBER_STORY_VOICE.cheerful;
-  const lines = replay ? [[w.name, story[1]]].concat(state.done >= 2 ? [[w.name, story[2]], [hero.name, story[3 + state.choice]]] : [], state.done >= 3 ? [[w.name + ':happy', story[5 + state.choice]]] : [])
-    : [[w.name, voice[expected]], [w.name, expected === 0 ? story[1] : expected === 1 ? story[2] : story[5 + state.choice]]];
-  const choices = replay ? ['Back to the hall'] : expected === 1 ? [story[3], story[4], 'Another time'] : ['Remember this', 'Another time'];
-  const face = Object.assign(Dialogue.lookFor(w.name, { palette: FACTION_LOOK[w.hero.faction].palette, races: [w.n.race] }), { name: w.name, hairCol: w.n.hair, shirt: CLASSES[w.cls].col, title: CLASSES[w.cls].name + ' · ' + G().name });
-  MEMBER_STORY_FACE = face;
-  SCN.play(lines, choice => {
-    if (MEMBER_STORY_FACE === face) { MEMBER_STORY_FACE = null; SCN.el.classList.remove('member-story-dialogue'); }
-    // Hero/account changes, dismissal and stale callbacks cannot spend another hero's response.
-    if (S !== account || H() !== hero || G().members[key] !== member) return;
-    if (!replay && finishMemberStory(key, expected, choice)) renderTab(true);
+  const result = memberStoryResult(w.name, state), hurt = memberStoryHurt(state);
+  const lines = replay ? [[w.name, story[1]]].concat(state.done >= 2 ? [[w.name, story[2]], [H().name, story[3 + state.choice]]] : [], result ? [['', memberStoryConsequence(state)], [w.name + (hurt ? ':sad' : ':happy'), result]] : state.done >= 3 ? [[w.name + ':happy', story[5 + state.choice]]] : [])
+    : [[w.name + (hurt ? ':sad' : ''), hurt && expected === 2 ? 'I have something harder to remember with you.' : voice[expected]], [w.name + (hurt ? ':sad' : ''), expected === 0 ? story[1] : expected === 1 ? story[2] : result || story[5 + state.choice]]];
+  if (!replay && expected === 1 && MEMBER_STORY_STAKES[w.name]) lines.splice(1, 0, ['', 'A hurtful choice costs 8 mood and gives no friendship reward. You can make amends in this hall immediately; your member stays, and the choice remains recorded.']);
+  const choices = replay ? hurt ? ['Talk it through', 'Back to the hall'] : ['Back to the hall'] : expected === 1 ? [story[3], story[4], 'Another time'] : ['Remember this', 'Another time'];
+  return memberStoryScene(key, lines, choices, choice => {
+    if (replay && hurt && choice === 0) { playMemberStoryRepair(key, book); return; }
+    if (!replay && finishMemberStory(key, expected, choice)) {
+      renderTab(true);
+      if (expected === 1 && state.reaction) { playMemberStory(key, true, book); return; }
+    }
     if (book) openMemberStoryBook();
-  }, { choices });
-  C.lastInput = C.run; TOWN.auto = null; TOWN.storyGuest = key; RTALK.memberStory = true; RTALK.memberStoryKey = key; SCN.el.classList.add('member-story-dialogue'); SCN.el.scrollIntoView({ block: 'center' }); return true;
+  });
 }
 function openMemberStoryBook() {
   if (!H() || !guildOn() || RTALK || !inTown() || !TOWN.inside || H().dun) return false;
@@ -135,7 +284,7 @@ function clearMemberStory(key) {
 }
 function memberStoriesKey() {
   return guildOn() ? Object.keys(G().members).map(key => {
-    const state = memberStoryState(key); return [key, state.done, state.choice, Math.floor(state.seconds / 60), memberStoryProblem(key)].join(':');
+    const state = memberStoryState(key); return [key, state.done, state.choice, state.reaction, state.repaired, Math.floor(state.seconds / 60), memberStoryProblem(key)].join(':');
   }).join('|') : '';
 }
 function memberStoryRecordsHTML() {
@@ -143,23 +292,25 @@ function memberStoryRecordsHTML() {
   const records = Object.entries(G().stories || {}).filter(([key, state]) => state.done > 0).map(([key, state]) => ({ state, n: advNpc(key) })).filter(({ n }) => n && MEMBER_STORIES[n.name]);
   if (!records.length) return '<h4>Stories remembered</h4><p class="meta">No personal moments recorded yet. Meet your companions by the guild hearth.</p>';
   return '<h4>Stories remembered</h4>' + records.map(({ state, n }) => {
-    const story = MEMBER_STORIES[n.name];
-    const memory = state.done >= 3 ? story[5 + state.choice] : state.done >= 2 ? 'You chose: ' + story[3 + state.choice] + '.' : 'Shared a confidence: ' + story[1];
-    return '<div class="rowl member-record"><div class="l"><b>' + n.name + ' · ' + story[0] + '</b><div class="meta">' + state.done + '/3 moments remembered</div><div class="meta">' + memory + '</div></div></div>';
+    const story = memberStoryScript(n.name, state);
+    const memory = (state.reaction ? 'You chose: ' + story[3 + state.choice] + '. ' : '') + (memberStoryResult(n.name, state) || (state.done >= 3 ? story[5 + state.choice] : state.done >= 2 ? 'You chose: ' + story[3 + state.choice] + '.' : 'Shared a confidence: ' + story[1]));
+    return '<div class="rowl member-record"><div class="l"><b>' + n.name + ' · ' + story[0] + '</b><div class="meta">' + state.done + '/3 moments remembered</div><div class="meta">' + memory + '</div><div class="meta">' + memberStoryConsequence(state) + '</div></div></div>';
   }).join('');
 }
 function memberStoriesHTML() {
   if (!guildOn()) return '';
   const members = Object.keys(G().members).map(key => ({ key, w: workerOf(key), story: memberStoryData(key) })).filter(x => x.story);
   if (!members.length) return '';
-  return '<h4>By the hearth · personal stories</h4><p class="sub">Three moments per adventurer, after 5 / 15 / 30 minutes together and mood 40 / 55 / 70. Present party time on the road counts; jobs and time away do not. Each remembered moment gives +2 friendship and +2 mood, once. Your choice stays with the guild, even if a member leaves. Both endings keep your companion.</p>' + members.map(({ key, w, story }) => {
+  return '<h4>By the hearth · personal stories</h4><p class="sub">Three moments per adventurer, after 5 / 15 / 30 minutes together and mood 40 / 55 / 70. Present party time on the road counts; jobs and time away do not. Ordinary moments give +2 friendship and +2 mood, once. Ten decisions can hurt trust: their warning is spoken before you choose. Your choice stays with the guild, even if a member leaves. Hurt decisions cost 8 mood instead of granting a reward. Make amends at this hearth without a mood, friendship or time gate; restore 8 mood once. Your companion stays, and the record remembers.</p>' + members.map(({ key, w, story }) => {
     const state = memberStoryState(key), why = memberStoryProblem(key), meeting = memberStoryMeetingProblem(key);
-    const remembered = state.done >= 3 ? story[5 + state.choice] : state.done >= 2 ? 'Your choice: ' + story[3 + state.choice] + '.' : state.done ? 'First confidence remembered.' : 'They have a story to share.';
-    return '<div class="rowl member-story"><div class="l"><b>' + w.name + ' · ' + story[0] + '</b><div class="meta">' + state.done + '/3 moments · ' + Math.floor(state.seconds / 60) + ' minutes together · mood ' + Math.round(w.m.mood) + '</div><div class="meta">' + remembered + '</div><div class="meta">' + (why || 'Ready to talk. No cost or deadline.') + '</div></div><div class="r">' + (state.done < 3 ? '<button class="btn sm" data-act="memberstory" data-arg="' + key + '" ' + (why ? 'disabled' : '') + '>Listen</button>' : '') + (state.done ? '<button class="btn sm alt" data-act="membermemory" data-arg="' + key + '" ' + (meeting ? 'disabled title="' + meeting + '"' : '') + '>Remember</button>' : '') + '</div></div>';
+    const script = memberStoryScript(w.name, state);
+    const remembered = memberStoryResult(w.name, state) || (state.done >= 3 ? script[5 + state.choice] : state.done >= 2 ? 'Your choice: ' + script[3 + state.choice] + '.' : state.done ? 'First confidence remembered.' : 'They have a story to share.');
+    return '<div class="rowl member-story"><div class="l"><b>' + w.name + ' · ' + story[0] + '</b><div class="meta">' + state.done + '/3 moments · ' + Math.floor(state.seconds / 60) + ' minutes together · mood ' + Math.round(w.m.mood) + '</div><div class="meta">' + remembered + '</div><div class="meta">' + memberStoryConsequence(state) + '</div><div class="meta">' + (why || 'Ready to talk. No cost or deadline.') + '</div></div><div class="r">' + (state.done < 3 ? '<button class="btn sm" data-act="memberstory" data-arg="' + key + '" ' + (why ? 'disabled' : '') + '>Listen</button>' : '') + (memberStoryHurt(state) ? '<button class="btn sm" data-act="memberrepair" data-arg="' + key + '" ' + (meeting ? 'disabled title="' + meeting + '"' : '') + '>Make amends</button>' : '') + (state.done ? '<button class="btn sm alt" data-act="membermemory" data-arg="' + key + '" ' + (meeting ? 'disabled title="' + meeting + '"' : '') + '>Remember</button>' : '') + '</div></div>';
   }).join('');
 }
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-act]'); if (!el) return;
   if (el.dataset.act === 'memberstory') playMemberStory(el.dataset.arg, false);
+  else if (el.dataset.act === 'memberrepair') playMemberStoryRepair(el.dataset.arg, modalKind === 'memberstories');
   else if (el.dataset.act === 'membermemory') playMemberStory(el.dataset.arg, true);
 });
