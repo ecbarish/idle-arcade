@@ -2,6 +2,7 @@
 const VERSION = '1.0.3'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
 /* =================== boot =================== */
 function boot(){
+  clearArrival();
   const h=H();
   SND.render();renderGfxBtn();
   if(!h){closeModal();if(S.chars.length)openModal('chars',charsHTML());else{CR.name=pick(NAMES);openModal('create',createHTML());}return;}
@@ -11,7 +12,7 @@ function boot(){
   if(!h.npcs)h.npcs=genNpcs(h.faction);h.party=h.party||[];if(h.dun===undefined)h.dun=null;migrateDungeons(h);
   recalc();C=freshC();C.hp=h.cur?Math.min(ST.hpMax,h.cur.hp):ST.hpMax;C.res=h.cur?Math.min(ST.resMax,h.cur.res):(CLASSES[h.cls].res==='mana'?ST.resMax:0);if(C.hp<=0)C.hp=ST.hpMax*.5;
   syncParty();
-  closeModal();curKey=null;buildSlots();supplyCheckIn();updateWorld();
+  closeModal();curKey=null;buildSlots();supplyCheckIn();updateWorld();beginArrival(false);
 }
 /* test hook, local dev server only */
 if(location.hostname==='localhost')window.__rb={get S(){return S;},get C(){return C;},petStats,petOf,newHero,boot,gainXP,xpNeed,startDungeon,spawnDungeon,finishDungeon,dungeonStats,migrateDungeons,questHelper,qState,accept,turnIn,ZONES,QUESTS,DUNGEONS,npcZone,step,save,spawn,startTame,finishTame,migrate,TALENTS,TALENT_LIST,treePoints,heroRole,respecCost,respec,talentPoints,bar,get ST(){return ST;}};

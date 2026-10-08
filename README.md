@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Realmbound onboarding (2026-10-08): a skippable arrival ends on the existing first questgiver, followed by optional contextual guidance for Focus, loot, reward choice, town services and actual companions. Returning saves stay quiet; all seven test pages pass. No version or cache bump; see docs/realmbound-onboarding.md.
+
 - Diamond Career (2026-10-08): a new first-payday prototype with an original evening ballpark, two batting styles, six development games, visible call-up targets, two contracts, calendar salary and lasting home/garage purchases. Shared saves, settings, sound, feedback and launcher integration; tests/diamond.html and all six existing test pages pass. See docs/diamond-career-first-payday.md.
 - Research (2026-10-08): preserved Gemini's Starfall report with a review against the current rules; archived answered Wildbond/Godot/Realmbound/Starfall prompts. docs/research/gemini-prompts.md now lists only unanswered Diamond Career, Otherworld, arcade and optional Primordial briefs, revised for current owner decisions and neutral playtests. No gameplay changes.
 

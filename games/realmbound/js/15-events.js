@@ -7,15 +7,15 @@ document.addEventListener('click',e=>{
   if(a==='create'){if(S.chars.length>=MAX_CHARS){openModal('chars',charsHTML());return;}
     if(H()&&C)save();
     const nm=(($('#crName')||{}).value||'').trim().replace(/[^A-Za-z' -]/g,'').slice(0,14)||pick(NAMES);const nh=newHero(nm[0].toUpperCase()+nm.slice(1),CR.faction,CR.race,CR.cls);nh.pace=CR.pace;
-    S.chars.push(nh);S.cur=nh.id;
+    clearArrival();S.chars.push(nh);S.cur=nh.id;
     recalc();C=freshC();C.hp=ST.hpMax;C.res=CLASSES[CR.cls].res==='mana'?ST.resMax:0;closeModal();slog(`${nh.name} arrived in ${ZONES[nh.zone].name}.`);
-    const first=QUESTS[nh.zone][0];accept(first.id);toast(`Welcome to ${ZONES[nh.zone].name}`);save();curKey=null;buildSlots();updateWorld();return;}
+    const first=QUESTS[nh.zone][0];accept(first.id);toast(`Welcome to ${ZONES[nh.zone].name}`);save();curKey=null;buildSlots();updateWorld();beginArrival(false);return;}
   if(a==='chars'){openModal('chars',charsHTML());return;}
   if(a==='sound'){SND.cycle();return;}
   if(a==='charnew'){CR.name=pick(NAMES);openModal('create',createHTML());return;}
   if(a==='charplay'){closeModal();switchTo(Number(arg));return;}
   if(a==='chardel'){const c=S.chars.find(x=>x.id===Number(arg));if(arm(el,'Delete',`Delete ${c?c.name:''}?`))deleteChar(Number(arg));return;}
-  if(!H())return;
+  if(!H()||(arrivalPaused()&&a!=='close'))return;
   switch(a){
     case 'press':press(Number(arg));break;
     case 'mode':H().mode=arg;C.lastInput=arg==='focus'?C.run:-99;break;
@@ -80,7 +80,7 @@ document.addEventListener('click',e=>{
   if(H()&&C)updateWorld();
 });
 document.addEventListener('change',e=>{if(e.target.id==='grindSel'&&H()){H().grind=e.target.value||null;}});
-document.addEventListener('keydown',e=>{if(!H()||!C||(e.target.matches&&e.target.matches('input,textarea,select')))return;
+document.addEventListener('keydown',e=>{if(!H()||!C||arrivalPaused()||(e.target.matches&&e.target.matches('input,textarea,select')))return;
   if(/^[1-9]$/.test(e.key)){press(Number(e.key)-1);updateWorld();e.preventDefault();}
   else if(e.key==='l'||e.key==='L'){lootAll();updateWorld();}
   else if(e.key==='c'||e.key==='C'){doCombo(true);updateWorld();}
