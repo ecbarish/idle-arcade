@@ -38,6 +38,14 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
   made by Codex using the defaults written here; record any decision in the Session log.
 
 ## Where we are (2026-10-09)
+**Wildbond in Godot (2026-10-08, the newest work):** `wildbond-godot/` plays the whole opening: faded Larkhaven (Ninja
+Adventure CC0 tiles, our own parts-built people and creatures in `scripts/figures.gd`), Maren's ranch register (the
+character creator; signing paints you in colour), her barn with Cindercub, Ripplet and Mosshog (each with its own body
+and habits, Wilddex pages), the bond flooding colour out of the barn, Wren running in, and the first battle on the field
+(`scripts/battle.gd`, rules in `scripts/rules.gd` checked number-for-number against the browser). Content comes from the
+browser game via `tools/godot-export.ps1`; checks: `tests/run_tests.gd` (64); sharing: `tools/godot-build.ps1` once
+Evan installs Godot's export templates. The plan for the move: `docs/godot-port-plan.md`.
+
 **Current (2026-10-07):** the goal is Launch (docs/QUEUE.md). Wildbond follows **docs/wildbond-plan.md** (Evan'splay notes turned into principles and phases); Realmbound is balanced and gets its guide and onboarding next. Theolder detail below is history; CLAUDE.md "Where we are" has the short current summary.
 
 **Wildbond** (creature game): eight areas, each with a Warden and badge: Thornwood (2-12), Saltmarsh Coast (12-22),
@@ -125,6 +133,13 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (overnight, Evan asleep): Godot trial: the partner choice in Maren's barn (full-screen barn, three
+  starters with their own bodies and habits, Wilddex pages, Choose / Not yet, colour floods out of the barn), Wren and
+  the first battle (classic layout, turn order, orders, results); rules.gd translated and checked against the browser;
+  data bridge tools/godot-export.ps1 (Edge, no installs); click/tap to walk; a launcher that finds Godot anywhere; web
+  and Windows export presets + tools/godot-build.ps1; 64 Godot checks; docs/godot-port-plan.md answers Evan's questions.
+  Measured the first battle (battle_odds.gd): Cindercub won 5 in 100 -> Wildbond v1.6.1 (element moves at level 5:
+  97/78/100); browser checks 1254 pass. Next: Evan installs export templates; then Route 1 in Godot (B2b).
 - 2026-10-08 Claude: Godot trial: the cub (parts-based creature in scripts/figures.gd: trot, wag, sniff, sit, pounce at a
   butterfly, watches you when you come near) and Maren's ranch register, the character creator (scripts/register.gd:
   name, body, skin, hair, clothes; signing paints you in colour onto your own layer). Fixed after Evan's look: cabins
