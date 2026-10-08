@@ -1,5 +1,15 @@
 # Research brief: the big open decisions (2026-10-08)
 
+## Decided (Evan with Claude, 2026-10-07): finish and launch before starting a new game
+
+Evan asked whether the games are "full games" yet, and what comes next: another game, lore and wiki pages, a better
+launcher, or more improvement. Claude's read: Wildbond and Realmbound are **content complete** (whole story, end
+game, post-game) but not **launch ready** (no onboarding, settings, save safety, full balance pass, phone and
+accessibility polish, guides). So the next phase is **Launch**: the launch checklist in docs/QUEUE.md, which already
+includes the lore/wiki pages (guides, T8) and the arcade launcher (L8). At Launch both games become version 2.0.
+Content keeps flowing behind it (contests, guild stories, roster). A new game starts only after Launch; Evan picks
+which one then.
+
 ## Decided (Evan, 2026-10-08: "go with your recommendations, and yes to the shared universe where it makes sense")
 
 1. **Wildbond:** the main story ends near level 70. Badge caps: 15, 25, 35, 45, 55, 60, 65, 70 for 0–7 badges, 75 with
