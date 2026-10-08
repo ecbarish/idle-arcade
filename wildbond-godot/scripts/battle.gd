@@ -12,7 +12,7 @@ const INK := Color("2a2230")
 const PAPER := Color("f8f2e4")
 const EL_COL := { "Ember": Color("e0602a"), "Tide": Color("3a8fd8"), "Grove": Color("5d9a3e") }
 const SPEED := 2.5                            # battle time runs faster than real time between turns (outcomes are unchanged)
-const MENU := ["Fight", "Guard", "Rally", "Run"]
+const MENU := ["Fight", "Guard", "Rally", "Bond", "Bag", "Run"]
 
 var looks: Dictionary = {}                    # species id -> body plan (main.gd CREATURE_LOOKS)
 var floor_tex: Texture2D
@@ -39,6 +39,9 @@ var results: Array = []                       # lines on the results page
 var rng := RandomNumberGenerator.new()
 var font: Font
 var demo := false
+var bag: Dictionary = { "lures": 0, "berries": 0 }  # the satchel (main.gd owns it): lures for Bond, berries for Bag
+var caught: Array = []                        # creatures that chose you in this battle
+var cap: Dictionary = {}                      # the calm meter while you Bond: { u, pos, dir, zone }
 
 func _ready() -> void:
 	set_anchors_preset(PRESET_FULL_RECT)
@@ -65,6 +68,8 @@ func open(battle_kind: String, team: Array, foe_team: Array, who: String) -> voi
 	order_t = 0.0
 	result = ""
 	results.clear()
+	caught.clear()
+	cap = {}
 	var names := ", ".join(foes.map(func(u): return "%s (Lv %d)" % [u.c.name, u.c.lvl]))
 	say("A wild %s appeared!" % names if kind == "wild" else "%s sends out %s!" % [trainer, names])
 	_go_to("fog_in")
@@ -103,6 +108,10 @@ func _process(dt: float) -> void:
 			if state_t > 1.4: _go_to("run")
 		"run":
 			_tick(dt * SPEED)
+		"capture":
+			cap.pos += cap.dir * dt * 0.9
+			if cap.pos > 1.0: cap.pos = 1.0; cap.dir = -1.0
+			if cap.pos < 0.0: cap.pos = 0.0; cap.dir = 1.0
 		"beat":
 			if state_t > beat_t:
 				_after_beat()
@@ -281,6 +290,39 @@ func _choose(i: int) -> void:
 				R.add_bond(a.c, 1.0)
 				floats.append({ "u": a, "txt": "+%d" % hp, "col": Color("7cf08a"), "age": 0.0 })
 			say("You rally your team. Everyone recovers.")
+		"Bond":
+			if kind != "wild":
+				say("You can't bond with another tamer's creature.")
+			elif int(bag.get("lures", 0)) <= 0:
+				say("You're out of lures. You can find them in the grass, or buy them in Larkhaven.")
+			else:
+				# a lure plus a timing meter: weaker, calmer creatures are easier (startCapture)
+				var tg: Dictionary = living("f")[0]
+				for u in living("f"):
+					if float(u.c.hp) / u.st.hp < float(tg.c.hp) / tg.st.hp:
+						tg = u
+				bag.lures -= 1
+				cap = { "u": tg, "pos": 0.0, "dir": 1.0, "zone": 0.62 + rng.randf() * 0.2 }
+				say("You throw a lure at %s. Calm it: press when the marker is in the green." % tg.c.name)
+				_go_to("capture")
+		"Bag":
+			if int(bag.get("berries", 0)) <= 0:
+				say("Your bag has nothing to use in battle yet. Berries heal; you find them in the grass.")
+			else:
+				var low: Dictionary = living("a")[0]
+				for a in living("a"):
+					if float(a.c.hp) / a.st.hp < float(low.c.hp) / low.st.hp:
+						low = a
+				bag.berries -= 1
+				var hp := roundi(low.st.hp * 0.3)
+				low.c.hp = mini(low.st.hp, low.c.hp + hp)
+				floats.append({ "u": low, "txt": "+%d" % hp, "col": Color("7cf08a"), "age": 0.0 })
+				sparks.append({ "u": low, "col": Color("7cf08a"), "age": 0.0 })
+				say("%s eats a berry and recovers %d." % [low.c.name, hp])
+				var u := wait_u
+				wait_u = {}
+				u.atb = 0.0                                # eating takes its turn
+				_beat(1.0)
 		"Run":
 			if kind == "wild":
 				say("You slip away.")
@@ -304,14 +346,18 @@ func _end(r: String) -> void:
 		return
 	result = r
 	results.clear()
-	if r == "won":
-		results.append("You won!" if kind == "wild" else "You beat %s!" % trainer)
+	if r in ["won", "caught"]:
+		for c in caught:
+			results.append("%s chose to come with you!" % c.name)
+		if r == "won":
+			results.append("You won!" if kind == "wild" else "You beat %s!" % trainer)
 		var lv_sum := 0
 		for u in foes: lv_sum += u.c.lvl
+		for c in caught: lv_sum += c.lvl
 		lv_sum = maxi(lv_sum, 3)
 		var journey: Dictionary = R.DATA.JOURNEY.get("classic", { "xp": 1.0 })
 		var base: float = lv_sum * 12.0 * (1.0 if kind == "wild" else 1.6) * float(journey.get("xp", 1.0))
-		var avg := float(lv_sum) / maxf(1.0, foes.size())
+		var avg := float(lv_sum) / maxf(1.0, foes.size() + caught.size())
 		for u in allies:
 			var scale := minf(1.2, pow(maxf(1.0, avg) / u.c.lvl, 2.0))
 			var xp := roundi(base * (0.3 if u.c.hp <= 0 else 1.0) * scale)
@@ -338,10 +384,12 @@ func _input(e: InputEvent) -> void:
 	match state:
 		"choose":
 			if click:
-				for i in 4:
+				for i in MENU.size():
 					if _menu_rect(i).has_point(p): _choose(i)
 			elif ok: _choose(menu_i)
-			else: menu_i = _grid_move(menu_i, key, 4)
+			else: menu_i = _grid_move(menu_i, key, MENU.size(), 3)
+		"capture":
+			if ok or click: _calm()
 		"moves":
 			var mv := R.moves_of(wait_u.c)
 			if click:
@@ -354,22 +402,22 @@ func _input(e: InputEvent) -> void:
 				if not hit: _go_to("choose")
 			elif ok: _use_move(mv[move_i])
 			elif back: _go_to("choose")
-			else: move_i = _grid_move(move_i, key, mv.size())
+			else: move_i = _grid_move(move_i, key, mv.size(), 2)
 		"beat":
 			if ok or click: state_t = beat_t                 # skip ahead
 		"results":
 			if (ok or click) and state_t > 0.5: _go_to("fog_out")
 
-func _grid_move(i: int, key: int, n: int) -> int:
+func _grid_move(i: int, key: int, n: int, cols: int) -> int:
 	match key:
-		KEY_LEFT, KEY_A: i = i - 1 if i % 2 == 1 else i
-		KEY_RIGHT, KEY_D: i = i + 1 if i % 2 == 0 and i + 1 < n else i
-		KEY_UP, KEY_W: i = i - 2 if i >= 2 else i
-		KEY_DOWN, KEY_S: i = i + 2 if i + 2 < n else i
+		KEY_LEFT, KEY_A: i = i - 1 if i % cols > 0 else i
+		KEY_RIGHT, KEY_D: i = i + 1 if i % cols < cols - 1 and i + 1 < n else i
+		KEY_UP, KEY_W: i = i - cols if i >= cols else i
+		KEY_DOWN, KEY_S: i = i + cols if i + cols < n else i
 	return i
 
 func _menu_rect(i: int) -> Rect2:
-	return Rect2(250 + (i % 2) * 64, 170 + (i / 2) * 19, 60, 16)
+	return Rect2(244 + (i % 3) * 44, 170 + (i / 3) * 19, 41, 16)
 
 func _move_rect(i: int) -> Rect2:
 	return Rect2(14 + (i % 2) * 96, 170 + (i / 2) * 19, 92, 16)
@@ -387,7 +435,10 @@ func best_value(m: String) -> float:
 func _demo() -> void:
 	# the recorded demo: pick the strongest ready move, read the results, carry on
 	if state == "choose" and state_t > 0.8:
-		_choose(0)
+		var foe_hurt: bool = not living("f").is_empty() and float(living("f")[0].c.hp) < living("f")[0].st.hp * 0.6
+		_choose(3 if kind == "wild" and foe_hurt and int(bag.get("lures", 0)) > 0 else 0)
+	elif state == "capture" and absf(float(cap.pos) - float(cap.zone)) < 0.06:
+		_calm()
 	elif state == "moves" and state_t > 0.8:
 		var mv := R.moves_of(wait_u.c).filter(func(m): return wait_u.cds.get(m, 0.0) <= 0)
 		mv.sort_custom(func(a, b): return best_value(a) > best_value(b))
@@ -407,7 +458,8 @@ func _box(r: Rect2) -> void:
 func _spot(u: Dictionary) -> Vector2:
 	# where a creature stands: yours close at the bottom left, the foe further off at the top right
 	if u.side == "a":
-		return Vector2(100, 158)
+		var k := allies.find(u)
+		return Vector2(100 - k * 30, 158 - k * 10) if allies.size() > 1 else Vector2(100, 158)
 	var i := foes.find(u)
 	return Vector2(286 - i * 26, 92 - i * 4)
 
@@ -464,7 +516,8 @@ func _draw() -> void:
 	for i in foes.size():
 		_info(foes[i], Rect2(10, 8 + i * 30, 150, 26), false)
 	for i in allies.size():
-		_info(allies[i], Rect2(222, 116 + i * 30, 154, 36), true)
+		var top := 116.0 - (allies.size() - 1) * 38.0 + i * 38.0
+		_info(allies[i], Rect2(222, top, 154, 36), true)
 	_queue()
 	if not tele.is_empty():
 		_text("%s is gathering power! Guard!" % tele.u.c.name, Vector2(10, 70), 8, Color("c83a2a"))
@@ -474,12 +527,12 @@ func _draw() -> void:
 		"choose":
 			_text("What will %s do?" % wait_u.c.name, Vector2(16, 180), 9, INK)
 			_text("Orders: " + "●".repeat(int(orders)) + "○".repeat(3 - int(orders)) + "  (Guard 1, Rally 2)", Vector2(16, 198), 7, Color("6a5a4a"))
-			for i in 4:
+			for i in MENU.size():
 				var r := _menu_rect(i)
 				var on := i == menu_i
 				draw_rect(r, INK if on else Color("e8dcc4"))
-				var dim: bool = (MENU[i] == "Guard" and orders < 1) or (MENU[i] == "Rally" and orders < 2) or (MENU[i] == "Run" and kind != "wild")
-				_text(MENU[i], r.position + Vector2(0, 12), 9, (PAPER if on else INK) if not dim else Color("9a8a7a"), r.size.x, HORIZONTAL_ALIGNMENT_CENTER)
+				var dim: bool = (MENU[i] == "Guard" and orders < 1) or (MENU[i] == "Rally" and orders < 2) or (MENU[i] in ["Run", "Bond"] and kind != "wild") or (MENU[i] == "Bond" and int(bag.get("lures", 0)) <= 0) or (MENU[i] == "Bag" and int(bag.get("berries", 0)) <= 0)
+				_text(MENU[i], r.position + Vector2(0, 12), 8, (PAPER if on else INK) if not dim else Color("9a8a7a"), r.size.x, HORIZONTAL_ALIGNMENT_CENTER)
 		"moves":
 			var mv := R.moves_of(wait_u.c)
 			for i in mv.size():
@@ -496,6 +549,15 @@ func _draw() -> void:
 			var info_r := Rect2(208, 166, 164, 42)
 			draw_multiline_string(font, info_r.position + Vector2(4, 10), "%s: %s.%s" % [sel.name, desc,
 				" Resting." if wait_u.cds.get(mv[move_i], 0.0) > 0 else ""], HORIZONTAL_ALIGNMENT_LEFT, info_r.size.x - 8, 7, -1, INK)
+		"capture":
+			_text("Calm %s: press when the marker is in the green." % cap.u.c.name, Vector2(16, 180), 8, INK)
+			var bar := Rect2(16, 188, 352, 10)
+			draw_rect(bar.grow(1), INK)
+			draw_rect(bar, Color("d8ccb4"))
+			draw_rect(Rect2(bar.position.x + bar.size.x * (cap.zone - 0.1), bar.position.y, bar.size.x * 0.2, bar.size.y), Color("9ad08a"))
+			draw_rect(Rect2(bar.position.x + bar.size.x * (cap.zone - 0.04), bar.position.y, bar.size.x * 0.08, bar.size.y), Color("4aa84a"))
+			draw_rect(Rect2(bar.position.x + bar.size.x * cap.pos - 1, bar.position.y - 3, 3, bar.size.y + 6), INK)
+			_text("Lures left: %d" % int(bag.get("lures", 0)), Vector2(300, 180), 7, Color("6a5a4a"))
 		"results":
 			_box(Rect2(60, 30, 264, 124))
 			_text("Battle results", Vector2(60, 48), 10, INK, 264, HORIZONTAL_ALIGNMENT_CENTER)
@@ -577,3 +639,29 @@ func _queue() -> void:
 		draw_rect(Rect2(x, 7, w, 10), Color("2e5a8a") if u.side == "a" else Color("8a3a2e"))
 		_text(nm, Vector2(x + 4, 15), 7, PAPER)
 		x += w + 3
+
+# ---------------------------------------------------------------- bonding with a wild creature (calmNow)
+func _calm() -> void:
+	var off := absf(float(cap.pos) - float(cap.zone))
+	var q := "perfect" if off < 0.04 else ("good" if off < 0.1 else "miss")
+	var u: Dictionary = cap.u
+	var c: Dictionary = u.c
+	var hp_pct: float = float(c.hp) / u.st.hp
+	var base: float = 0.12 if R.sp(c).get("unique", false) else [0.55, 0.42, 0.3, 0.2, 0.1, 0.05][int(c.rar)]
+	var ch: float = base * (1.5 - hp_pct) * (1.6 if q == "perfect" else (1.3 if q == "good" else 1.0))
+	for a in allies:
+		if "gentle" in a.c.traits:
+			ch *= 1.15
+			break
+	cap = {}
+	if rng.randf() < minf(0.95, ch):
+		sparks.append({ "u": u, "col": Color("7cf08a"), "age": 0.0 })
+		foes.erase(u)
+		caught.append(c)
+		say("%s%s trusts you. It chose to come with you!" % ["Perfect calm! " if q == "perfect" else ("Nicely done. " if q == "good" else ""), c.name])
+		if living("f").is_empty():
+			_end("caught")
+			return
+	else:
+		say("%s%s broke free!" % ["It shies away. " if q == "miss" else "", c.name])
+	_go_to("choose" if not wait_u.is_empty() else "run")

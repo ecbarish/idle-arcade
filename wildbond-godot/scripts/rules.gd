@@ -182,3 +182,8 @@ static func move_info(m: String) -> String:
 ## How fast a unit's turn meter fills each second (battleTick).
 static func atb_rate(u: Dictionary) -> float:
 	return (u.st.spd + 40.0) / 100.0 * (1.3 if u.buff.get("haste", 0.0) > 0 else 1.0) * (0.6 if u.buff.get("slow", 0.0) > 0 else 1.0) * (1.1 if "swift" in u.c.traits else 1.0)
+
+## A wild creature's rarity (Creatures.rollRarity): boost raises the odds (lures, traits, a Long Road lowers them).
+static func roll_rarity(boost: float, rng: RandomNumberGenerator) -> int:
+	var r := rng.randf() / (1.0 + boost)
+	return 3 if r < 0.004 else (2 if r < 0.03 else (1 if r < 0.15 else 0))

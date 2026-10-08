@@ -7,6 +7,15 @@ extends SceneTree
 var passed := 0
 var failed := 0
 var main: Node
+var elapsed := 0.0
+
+func _process(dt: float) -> bool:
+	# a safety net: if something breaks and the checks stop, quit instead of hanging
+	elapsed += dt
+	if elapsed > 120.0:
+		print("Wildbond Godot checks: TIMED OUT (a script error stopped them; see the errors above)")
+		quit(3)
+	return false
 
 func check(ok: bool, what: String) -> void:
 	if ok:
@@ -146,12 +155,12 @@ func _run() -> void:
 	check(walk_to(main.BARN_EXIT + Vector2i.UP), "you can walk back to the barn door")
 	main._step(Vector2i.DOWN)
 	tick(1.0)
-	check(main.map_name == "town" and main.partner.where == "town", "you and Mosshog step outside")
+	check(main.map_name == "larkhaven" and main.partner.where == "larkhaven", "you and Mosshog step outside")
 	check(main.spilled and main.restore.size() == 2, "the colour spills out of the barn into town")
-	check(main.maren.where == "town", "Maren comes out of the barn with you")
+	check(main.maren.where == "larkhaven", "Maren comes out of the barn with you")
 	talk_through()
 	# ---- Wren runs in and challenges you
-	check(main.stage == "wren_runs" and main.wren.where == "town", "Wren arrives, running")
+	check(main.stage == "wren_runs" and main.wren.where == "larkhaven", "Wren arrives, running")
 	for i in 300:
 		tick(0.05)
 		if main.stage == "rival1": break
@@ -189,6 +198,73 @@ func _run() -> void:
 			break
 	tick(0.6)
 	check(main.partner.tile == before, "your partner follows in your footsteps")
+	# ---- the road north: Thornwood, its items, tall grass, a wild creature and the first catch
+	check(walk_to(Vector2i(10, 1)), "you can walk up to the road north")
+	main._step(Vector2i.UP)
+	tick(1.0)
+	check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 14), "the north road leads to Thornwood, arriving where the map says")
+	check(main.partner.where == "thornwood", "your partner comes too")
+	var lures0: int = main.bag.lures
+	check(walk_to(Vector2i(27, 10)), "you can walk to the lures lying in the grass")
+	check(main.bag.lures == lures0 + 3 and main.got_items.has("tw2"), "picking up 3 lures (%d)" % main.bag.lures)
+	talk_through()
+	var wild := false
+	for attempt in 6:
+		main.grass_n = 1
+		main.rng.seed = 11 + attempt
+		var walked := walk_to(Vector2i(20, 7))
+		if attempt == 0: check(walked or main.battle.visible or not main.lines.is_empty(), "walking into the tall grass")
+		talk_through()
+		if main.battle.visible:
+			wild = true
+			break
+		walk_to(Vector2i(14, 10))
+		talk_through()
+	check(wild and main.battle.kind == "wild", "the tall grass turns up a wild creature")
+	if wild:
+		var foe: Dictionary = main.battle.foes[0].c
+		check(foe.sp in main.DATA.BIOMES.thornwood.wild.map(func(w): return w[0]) and foe.lvl >= 2 and foe.lvl <= 12, "it lives in Thornwood, at a fitting level (%s, level %d)" % [foe.sp, foe.lvl])
+		check(main.seen.has(foe.sp), "the Wilddex records it as seen")
+		var bt2: Control = main.battle
+		var tries := 0
+		for i in 4000:
+			tick(0.05)
+			if bt2.state == "choose":
+				if int(main.bag.lures) > 0 and tries < 6:
+					var before_l: int = main.bag.lures
+					bt2._choose(3)
+					if tries == 0: check(bt2.state == "capture" and main.bag.lures == before_l - 1, "Bond throws a lure and starts the calm meter")
+					bt2.cap.pos = bt2.cap.zone
+					bt2._calm()
+					tries += 1
+				else:
+					bt2._choose(0)
+					bt2._use_move(main.R.moves_of(bt2.wait_u.c)[0])
+			if bt2.state == "results": break
+		check(bt2.state == "results", "the wild battle ends (%s, %d lures thrown)" % [bt2.result, tries])
+		var team0: int = main.team.size()
+		bt2._go_to("fog_out")
+		tick(1.5)
+		if bt2.result == "caught":
+			check(main.team.size() == team0 + 1 and main.bonded.has(foe.sp), "the creature you calmed joins your team")
+		talk_through()
+	# ---- Maren heals your team
+	if main.map_name != "larkhaven":
+		check(walk_to(Vector2i(13, 15)) or main.map_name == "larkhaven", "back down the road")
+		main._step(Vector2i.DOWN)
+		tick(1.0)
+	talk_through()
+	check(main.map_name == "larkhaven", "home to Larkhaven")
+	for c in main.team: c.hp = 1
+	main.walk_to = main.route(main.me.tile, main.maren.tile + Vector2i.LEFT)
+	tick(8.0)
+	if (main.me.tile - main.maren.tile).length() <= 1.01:
+		var ev := InputEventKey.new()
+		ev.pressed = true
+		ev.keycode = KEY_ENTER
+		ev.physical_keycode = KEY_ENTER
+		main._unhandled_input(ev)
+	check(main.team.all(func(c): return c.hp == main.R.stats(c).hp), "talking to Maren heals your team")
 	# ---- the done line
 	print("Wildbond Godot checks: %d passed, %d failed" % [passed, failed])
 	quit(1 if failed > 0 else 0)
