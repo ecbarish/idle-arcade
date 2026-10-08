@@ -45,8 +45,9 @@ and habits, Wilddex pages), the bond flooding colour out of the barn, Wren runni
 (`scripts/battle.gd`, rules in `scripts/rules.gd` checked number-for-number against the browser). **Thornwood is playable:**
 tall grass with wild creatures, catching with Bond (lure + calm meter; each catch brings colour back), Bram and Lise,
 Warden Isolde and the Thorn Badge, items, signs, healing with Maren, all 81 creatures with bodies (ten family plans),
-and saving with a Continue page. Content comes from the
-browser game via `tools/godot-export.ps1`; checks: `tests/run_tests.gd` (122); sharing: `tools/godot-build.ps1` once
+and saving with a Continue page. **Saltmarsh Coast and the Emberfall Highlands are playable too** (cliffs, hot springs,
+Orsk, Sela, Warden Toren; battles with the highland skyline). Content comes from the
+browser game via `tools/godot-export.ps1`; checks: `tests/run_tests.gd` (133); sharing: `tools/godot-build.ps1` once
 Evan installs Godot's export templates. The plan for the move: `docs/godot-port-plan.md`.
 
 **Current (2026-10-07):** the goal is Launch (docs/QUEUE.md). Wildbond follows **docs/wildbond-plan.md** (Evan'splay notes turned into principles and phases); Realmbound is balanced and gets its guide and onboarding next. Theolder detail below is history; CLAUDE.md "Where we are" has the short current summary.
@@ -135,6 +136,11 @@ a default so work never waits.
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-08 Claude (PC session, later): Godot trial: the Emberfall Highlands (cliff road from the coast with the Tide Badge; layered
+  cliffs, meadow boulders, amber hot springs with steam, drifting sparks; Orsk, Sela, Warden Toren; battles with a highland skyline).
+  Fixed a battle crash when a foe chose a support move (no power value). 133 Godot checks. Next (B2b): the ranch as a place, then
+  Cloudglass Pass; the Godot build for friends once Evan installs export templates.
 
 - 2026-10-08 Claude (from Evan's phone, PC session): merged ChatGPT's PR #47 Realmbound onboarding (v1.1.0: arrival scene on the first
   questgiver, optional road guidance) and PR #48 Diamond Career's second contract and first month (v0.2.0). All seven pages pass:
