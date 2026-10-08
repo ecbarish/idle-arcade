@@ -142,6 +142,8 @@ a default so work never waits.
   hurt (never killed), eat at the counter you run by hand, rest at the inn; Bryn takes the counter after ten meals for daily
   wages; a short end-of-day report. 33 checks. Next: building on plots, the healer, the town's rank.
 
+- 2026-10-08 · Codex: R6 ready in PR #54: eight regional hub layouts, walk-in Inn and Smithy conversations, intact Auto routes; all seven browser suites pass (Realmbound 7386), phone/laptop/desktop/ultrawide checked. Continuing R5; no version bumps.
+
 - 2026-10-08 Claude (night): merged ChatGPT's PR #52 (illustrated guides) and #53 (guild story choices that can hurt trust, with amends);
   rewrote their player-facing text in the world's words (no mood numbers or gates), Realmbound v1.3.0, 6935 checks pass. Lifted the
   two-PR limit (Evan). Starting Starfall's village in Godot (starfall-godot/).

@@ -13,19 +13,19 @@
    town works exactly as before. */
 const TOWN_TILES = { ',': {}, f: {}, '.': {}, _: {}, r: {}, '~': { solid: 1 }, T: { solid: 1 }, '#': { solid: 1 }, '=': { solid: 1 }, L: { solid: 1 },
   O: { solid: 1 }, F: { solid: 1 }, Y: { solid: 1 }, H: { solid: 1 }, B: { solid: 1 },
-  D: { door: 1 }, P: { sign: 1, solid: 1 }, C: { sign: 1, solid: 1 }, J: { sign: 1, solid: 1 }, G: { exit: 1 } };
+  s: {}, K: { solid: 1 }, E: { solid: 1 }, A: { solid: 1 }, Q: { solid: 1 }, D: { door: 1 }, P: { sign: 1, solid: 1 }, C: { sign: 1, solid: 1 }, J: { sign: 1, solid: 1 }, G: { exit: 1 } };
 const TOWN_W = 28, TOWN_H = 16;
 /* buildings: their footprint, the door on the bottom row (facing the street) and what it opens */
 const TOWN_BUILDINGS = [
   { kind: 'inn', name: 'Inn', x: 2, y: 2, w: 5, h: 3, door: 4 },
   { kind: 'smith', name: 'Smithy', x: 8, y: 3, w: 4, h: 2, door: 9 },
-  { kind: 'guild', name: 'Guild hall', x: 12, y: 1, w: 5, h: 4, door: 14 },
+  { kind: 'guild', name: 'Guild Hall', x: 12, y: 1, w: 5, h: 4, door: 14 },
   { kind: 'trainer', name: 'Trainer', x: 18, y: 3, w: 4, h: 2, door: 19 },
   { kind: 'stable', name: 'Stable', x: 23, y: 2, w: 3, h: 3, door: 24 }
 ];
 /* a few hubs rename their buildings */
 const HUB_NAMES = { thornvale: { inn: 'Abbey' } };
-function buildingName(b) { const h = H(), n = h && HUB_NAMES[h.zone]; return (n && n[b.kind]) || (townKind() === 'camp' ? { inn: 'Longhouse', smith: 'Forge', guild: 'Guild lodge', trainer: 'Trainer', stable: 'Corral' }[b.kind] : b.name); }
+function buildingName(b) { const h = H(), n = h && HUB_NAMES[h.zone]; return (n && n[b.kind]) || (townKind() === 'camp' ? { inn: 'Longhouse', smith: 'Forge', guild: 'Guild Lodge', trainer: 'Trainer', stable: 'Corral' }[b.kind] : b.name); }
 /* Concord hubs are towns; Wildclan hubs (and the Wildclan side of shared hubs) are camps */
 function townKind() { const h = H(); if (!h) return 'town'; const z = ZONES[h.zone]; return (z.faction || h.faction) === 'wild' ? 'camp' : 'town'; }
 function townMap(kind) {
@@ -62,11 +62,13 @@ const GUILD_HALL = {
 };
 const GUILD_SPOTS = [[3, 3], [12, 3], [2, 6], [13, 6], [5, 5], [10, 5], [3, 8], [12, 8]];
 const TOWN_MAPS = { town: townMap('town'), camp: townMap('camp') };
-const TOWN = { get map() { return TOWN.inside ? GUILD_HALL : TOWN_MAPS[townKind()]; }, inside: false, pos: { x: 13, y: TOWN_H - 2, dir: 'up' }, on: false, cam: null, last: null, auto: null };
+const TOWN_HUBS = Object.fromEntries(Object.keys(HUB_LAYOUTS).map(zone=>[zone,{town:makeHubMap(zone,'town'),camp:makeHubMap(zone,'camp')}]));
+const TOWN = { get map() { return inGuildHall() ? GUILD_HALL : SERVICE_ROOMS[TOWN.inside] || townOutsideMap(); }, inside: false, pos: { x: 13, y: TOWN_H - 2, dir: 'up' }, on: false, cam: null, last: null, auto: null };
 /* the people of the hub (the giver's name follows the zone's first quest giver so they're someone you know) */
 function townPeople() {
   const h = H(); if (!h) return [];
-  if (TOWN.inside) return hallPeople();
+  if (inGuildHall()) return hallPeople();
+  if (TOWN.inside) return serviceRoomPeople();
   const q = (QUESTS[h.zone] || [])[0], giverName = q ? giver(q) : 'Quartermaster Hale';
   const list = [
     { id: 'giver', name: giverName, at: [18, 9], dir: 'left', look: { race: FACTIONS[h.faction].races[0], cls: 'warrior', hair: '#6b4423' } },
@@ -105,7 +107,7 @@ function townEnter() {
   if (aiOn()) { C.townT = Math.max(C.townT || 0, 25); TOWN.auto = 'smith'; }
 }
 function townExit() {
-  if (TOWN.inside) { const b = TOWN_BUILDINGS.find(x => x.kind === 'guild'); TOWN.inside = false; TOWN_WALK.place(b.door, b.y + b.h, 'down'); line(`You step back out into ${hubName()}.`, 'l-sys'); return; }
+  if (TOWN.inside) { const b = townBuildings().find(x => x.kind === (inGuildHall() ? 'guild' : TOWN.inside)); TOWN.inside = false; TOWN_WALK.place(b.door, b.y + b.h, 'down'); line(`You step back out into ${hubName()}.`, 'l-sys'); return; }
   TOWN.auto = null; leaveTown();
 }
 function townSign(x, y) {
@@ -116,6 +118,7 @@ function townSign(x, y) {
 }
 function townDoor(b) {
   if (!b) return; const h = H();
+  if (['inn','smith'].includes(b.kind) && townActive() && !aiOn()) { TOWN.inside=b.kind;TOWN.auto=null;TOWN_WALK.place(...SERVICE_ROOMS[b.kind].start);line('You step into the '+buildingName(b)+'.','l-sys');sfx('select');return; }
   if (b.kind === 'inn') { C.hp = ST.hpMax; if (CLASSES[h.cls].res === 'mana') C.res = ST.resMax; for (const p of C.party) { p.dead = false; p.hp = compStats(p.n).hpMax; }
     line(townKind() === 'camp' ? 'You eat by the longhouse fire and sleep under heavy furs. Everyone is rested.' : HUB_NAMES[h.zone] && HUB_NAMES[h.zone].inn === 'Abbey'
       ? 'The brothers of the Abbey find you a quiet cell and a bowl of barley soup. Everyone is rested.' : 'The innkeeper sets a bowl of stew in front of you. Everyone is rested.', 'l-heal'); sfx('heal'); return; }
@@ -128,6 +131,7 @@ function townDoor(b) {
   if (b.kind === 'board') { S.tab = 'quests'; renderTab(true); line('You read the notices on the quest board. (Quests tab)', 'l-sys'); }
 }
 function townTalk(n) {
+  if(n.id==='keeper'){talkTownService(n);return;}
   if (n.isMule) { SCN.play([['Pell', 'That\'s Brisket. He doesn\'t talk, which makes him the best listener in three worlds.']], null); return; }
   const h = H();
   if (n.id === 'member') { memberTalk(n.key); return; }
@@ -156,12 +160,30 @@ function memberTalk(key) {
   const state = memberStoryState(key), personal = memberStoryResult(w.name, state);
   SCN.play([[w.name + (memberStoryHurt(state) ? ':sad' : face), personal || lines[Math.floor(Date.now() / 60000) % lines.length]]], null);
 }
+/* Services are offered by people in the room, with prices in their choice labels. */
+function talkTownService(n){
+  if(RTALK||!H()||!TOWN.inside||inGuildHall()||aiOn())return false;
+  const room=TOWN.inside,hero=H(),account=S,price=repairCost(),junk=hero.bags.filter(i=>i.junk).reduce((sum,i)=>sum+i.value,0);
+  let settled=false;const serviceState={cancelled:false};
+  const inn=room==='inn',choices=inn?['Rest with your companions','Another time']:['Sell scraps · '+moneyTxt(junk),'Repair equipment · '+moneyTxt(price),'Sell scraps and repair','Another time'];
+  SCN.play([[n.name,inn?'There is a warm bowl and a quiet bed for everyone who came with you. Will you stay a while?':'Set your pack down. I can buy the scraps, mend your equipment, or take care of both.']],choice=>{
+    if(settled||serviceState.cancelled)return;settled=true;
+    SCN.el.classList.remove('town-service-dialogue');
+    if(S!==account||H()!==hero||TOWN.inside!==room||hero.mode==='auto')return;
+    if(inn&&choice===0){C.hp=ST.hpMax;if(CLASSES[hero.cls].res==='mana')C.res=ST.resMax;for(const p of C.party){p.dead=false;p.hp=compStats(p.n).hpMax;}line('You and your companions rest by the hearth.','l-heal');sfx('heal');}
+    else if(!inn&&choice<3){if(choice===0||choice===2)sellJunk(false);if(choice===1||choice===2)repairAll(false);renderTab(true);sfx('coin');}
+    save();
+  },{choices});RTALK.townService=true;RTALK.serviceState=serviceState;C.lastInput=C.run;TOWN.auto=null;SCN.el.classList.add('town-service-dialogue');SCN.el.scrollIntoView({block:'center'});return true;
+}
+function clearTownService(){
+  if(RTALK&&RTALK.townService){RTALK.serviceState.cancelled=true;RTALK=null;SCN.el.hidden=true;SCN.el.classList.remove('town-service-dialogue');}
+}
 /* Auto: stroll to the smithy, then out of the gate */
 function townAutoTick() {
   if (!TOWN.auto && aiOn() && !RTALK) { TOWN.auto = 'smith'; C.townT = Math.max(C.townT || 0, 25); } // Auto took over while you stood around
   if (!TOWN.auto || !aiOn() || RTALK || !TOWN_WALK.arrived() || TOWN_WALK.path.length) return;
-  if (TOWN.inside) { TOWN_WALK.walkTo(7, GUILD_HALL.rows.length - 1); return; } // out of the hall first
-  if (TOWN.auto === 'smith') { const b = TOWN_BUILDINGS.find(x => x.kind === 'smith'); TOWN_WALK.walkTo(b.door, b.y + b.h - 1); TOWN.auto = 'gate'; return; }
+  if (TOWN.inside) { TOWN_WALK.walkTo(TOWN.map.start[0], TOWN.map.rows.length - 1); return; } // out of the hall first
+  if (TOWN.auto === 'smith') { const b = townBuildings().find(x => x.kind === 'smith'); TOWN_WALK.walkTo(b.door, b.y + b.h - 1); TOWN.auto = 'gate'; return; }
   if (TOWN.auto === 'gate') { TOWN_WALK.walkTo(13, TOWN_H - 1); TOWN.auto = 'out'; }
 }
 
@@ -176,13 +198,15 @@ function townPal() {
 }
 function townFlat(g, ch, X, Y, s, t, x, y) {
   const P = TOWN.pal, hsh = tHash(x, y), R = (a, b, w, h, c) => { g.fillStyle = c; g.fillRect(X + a, Y + b, w, h); };
+  if(ch==='s'){R(0,0,s,s,'#d8e3e6');R((hsh%10),3,5,1,'#b9cbd5');return;}
+  if(ch==='~'){R(0,0,s,s,'#345c6a');R(2,(reduce?5:(Math.floor(t*2)+y)%12),10,1,'#6c96a0');return;}
   if (ch === '.' || ch === 'G') { if (TOWN.inside) { R(0, 0, s, s, P.woodDk); return; } R(0, 0, s, s, P.stone); g.fillStyle = P.stoneDk; for (let i = 0; i < 4; i++) { const ox = (hsh >> (i * 3)) % 12, oy = (hsh >> (i * 5)) % 12; g.fillRect(X + ox, Y + oy, 4, 1); g.fillRect(X + ox, Y + oy, 1, 3); } return; }
   if (ch === '_') { R(0, 0, s, s, P.wood); g.fillStyle = P.woodDk; g.fillRect(X, Y + 7, s, 1); g.fillRect(X, Y + 15, s, 1); g.fillRect(X + (y % 2 ? 4 : 11), Y, 1, 7); g.fillRect(X + (y % 2 ? 9 : 2), Y + 8, 1, 7); return; }
   if (ch === 'r') { R(0, 0, s, s, P.rug); g.fillStyle = P.rugLt; g.fillRect(X + (x % 2 ? 0 : s - 2), Y, 2, s); if ((x + y) % 2) g.fillRect(X + 6, Y + 6, 4, 4); return; }
   R(0, 0, s, s, (hsh & 3) ? P.grass : P.grassDk); g.fillStyle = P.grassLt; for (let i = 0; i < 3; i++) g.fillRect(X + (hsh >> (i * 4)) % 14, Y + (hsh >> (i * 6)) % 14, 1, 2);
   if (ch === 'f') for (let i = 0; i < 5; i++) { g.fillStyle = ['#e85a7a', '#f2c14e', '#ffffff', '#b48aff'][(hsh >> i) & 3]; g.fillRect(X + (hsh >> (i * 3)) % 13 + 1, Y + (hsh >> (i * 4)) % 13 + 1, 2, 2); }
 }
-function buildingAt(x, y) { return TOWN_BUILDINGS.find(b => x >= b.x && x < b.x + b.w && y >= b.y && y < b.y + b.h); }
+function buildingAt(x, y) { return townBuildings().find(b => x >= b.x && x < b.x + b.w && y >= b.y && y < b.y + b.h); }
 /* labels don't cast shadows */
 function label(c, text, cxp, y, s) { if (TOWN.pass === 'shadow') return; const sz = Math.max(9, Math.round(s * .28)); c.font = `700 ${sz}px Alegreya Sans, sans-serif`; c.textAlign = 'center'; c.fillStyle = 'rgba(0,0,0,.55)'; c.fillText(text, cxp + 1, y + 1); c.fillStyle = '#ffe9b0'; c.fillText(text, cxp, y); c.textAlign = 'left'; }
 function townStand(c, ch, left, base, s, t, x, y, pass) {
@@ -192,9 +216,13 @@ function townStand(c, ch, left, base, s, t, x, y, pass) {
   if (ch === 'T') { const sw = reduce ? 0 : Math.sin(t * 1.3 + x) * .3; R(3, 0, 2, 4.5, '#5a3c22'); R(-.3, 4, 8.6, 5.4, P.treeDk); R(.2, 4.4, 7.6, 4.8, P.tree); R(.8 + sw, 8.8, 6.4, 3.2, P.treeDk); R(1.2 + sw, 9.1, 5.6, 2.7, P.tree); R(2 + sw * 1.5, 11.6, 4, 2, P.treeDk); R(2.4 + sw * 1.5, 11.8, 3.2, 1.6, P.tree); return; }
   if (TOWN.inside && ch === '#') { // the hall's walls: panelled wood, banners on the back wall, candles
     R(0, 0, 8, 14, P.woodDk); R(0, 0, 8, 1.2, '#3a2414'); R(0, 6, 8, .6, '#3a2414');
-    if (y === 0 && x % 3 === 1) { R(2.4, 6.6, 3.2, 6, '#2a4a8a'); R(2.4, 6.4, 3.2, .5, '#f2c14e'); R(3.6, 8.5, .8, 2, '#f2c14e'); }
+    if (inGuildHall() && y === 0 && x % 3 === 1) { R(2.4, 6.6, 3.2, 6, '#2a4a8a'); R(2.4, 6.4, 3.2, .5, '#f2c14e'); R(3.6, 8.5, .8, 2, '#f2c14e'); }
     if (y === 0 && x % 3 === 2) { R(3.6, 7, .8, 1.6, '#efe6cc'); R(3.7, 8.6, .6, .8, '#ffd36a'); }
     return; }
+  if(ch==='K'){R(1,0,6,3,P.stoneDk);R(2,3,4,5,P.stone);R(3,5,2,1,'#b6bdaf');return;}
+  if(ch==='E'){R(.4,0,7.2,2,P.woodDk);R(.8,2,6.4,1,'#ede4cb');R(1,3,6,1.4,'#537d86');R(1,3.4,6,1,'#759b9c');return;}
+  if(ch==='A'){R(2,0,4,2,'#333943');R(3,2,2,3,'#555e69');R(.5,5,7,1.4,'#9ba7b3');return;}
+  if(ch==='Q'){R(1,0,.8,7,P.woodDk);R(6,0,.8,7,P.woodDk);R(1,6,6,1,P.wood);R(3,2,.5,5,'#b7bec8');R(2,3,3,.5,'#b7bec8');return;}
   if (ch === 'H') { R(0, 0, 8, 12, '#6a6a70'); R(.6, 0, 6.8, 11, '#8a8a90'); R(1.6, 0, 4.8, 5, '#1a1410');
     if (x % 2 === 0) TOWN.hearth = AMB.fire(c, left + s, base - u * .5, px, t, { id: 'hearth', size: 1.4, smoke: false }); return; }
   if (ch === 'B') { R(-.2, 2.2, 8.4, 1.4, P.wood); R(-.2, 3.6, 8.4, .4, '#c8985a'); R(.6, 0, .8, 2.2, P.woodDk); R(6.6, 0, .8, 2.2, P.woodDk);
@@ -203,7 +231,7 @@ function townStand(c, ch, left, base, s, t, x, y, pass) {
   if (ch === 'J') { R(1, 0, .8, 6, '#5a3c22'); R(6.2, 0, .8, 6, '#5a3c22'); R(.4, 4, 7.2, 6, '#6b4a2a'); R(.8, 4.4, 6.4, 5.2, '#a0703a');
     for (const [a, b2] of [[1.2, 8.6], [3.4, 8.2], [5.2, 8.8], [2, 6.2], [4.4, 6]]) R(a, b2 - 1.4, 1.6, 1.4, '#efe6cc'); label(c, 'Jobs', left + s / 2, base - 11 * u, s); return; }
   if (ch === '#' || ch === 'D') {
-    const b = buildingAt(x, y), roof = P.roof[TOWN_BUILDINGS.indexOf(b) % P.roof.length], front = y === b.y + b.h - 1, depth = b.y + b.h - 1 - y;
+    const b = buildingAt(x, y), roof = P.roof[townBuildings().indexOf(b) % P.roof.length], front = y === b.y + b.h - 1, depth = b.y + b.h - 1 - y;
     if (camp) { // hide tents: a peaked roof of skins over a low wall
       const peak = 12 + Math.min(depth, 2) * 1.6;
       if (!front) { R(-.2, 0, 8.4, peak - 2, Ambience.mix(roof, '#000000', .2)); R(2, peak - 2, 4, 1.4, roof); R(3.5, peak - .6, 1, 2, P.woodDk); return; }
@@ -244,7 +272,7 @@ function drawTown(t) {
   for (const n of people) if (n.mule) things.push({ x: n.mule[0], y: n.mule[1], draw(c, left, base, s) { const pp = s / 16; drawBeast(c, left + s * .3, base - 14 * pp, pp, '#7a5a3a', 'horse', true, t * .5); } });
   things.push({ x: p.fx, y: p.fy, draw(c, left, base, s) { const pp = s / 11; drawHero(left + s * .14, base - 13 * pp, pp, t, c); } });
   const view = { rows: TOWN.map.rows, px: p.fx, py: p.fy, flat: townFlat, under: inside ? '_' : ',', stand: townStand, things,
-    stands: { T: 1, '#': 1, D: 1, L: 1, P: 1, O: 1, '=': 1, F: 1, Y: 1, H: 1, B: 1, C: 1, J: 1 }, noShadow: { '#': 1, D: 1, H: 1 } };
+    stands: { T: 1, '#': 1, D: 1, L: 1, P: 1, O: 1, '=': 1, F: 1, Y: 1, H: 1, B: 1, C: 1, J: 1, K: 1, E: 1, A: 1, Q: 1 }, noShadow: { '#': 1, D: 1, H: 1 } };
   if (inside) Object.assign(view, { sky: ['#1a1008', '#2a1a10'], hill: '#2a1a10', edgeFill: '#1a1008', haze: '#2a1a10', dof: false, horizon: .12, zoom: 5.2,
     skyDraw: (g, w, hh) => { g.fillStyle = '#20140c'; g.fillRect(0, 0, w, hh); g.fillStyle = '#2a1a10'; for (let x = 0; x < w; x += 24) g.fillRect(x, 0, 4, hh); } });
   else { const sky = [Ambience.mix(z.sky[0], '#070b22', night * .85), Ambience.mix(z.sky[1], '#2e3868', night * .8)];
@@ -269,10 +297,11 @@ function drawTown(t) {
   if (!inside) AMB.flash(cx, PW, PH, t);
   LT.bloom(cx, cv, PW, PH, sun);
   // where you are, top left
-  const fs = Math.max(12, Math.round(PH / 17)); cx.font = `700 ${fs}px Alegreya Sans, sans-serif`; const text = inside ? `${G().name} · Guild Hall` : hubName(), lw = cx.measureText(text).width + 16;
+  const fs = Math.max(12, Math.round(PH / 17)); cx.font = `700 ${fs}px Alegreya Sans, sans-serif`; const text = inside ? inGuildHall() ? `${G().name} · Guild Hall` : buildingName(townBuildings().find(b=>b.kind===TOWN.inside)) : hubName(), lw = cx.measureText(text).width + 16;
   cx.fillStyle = 'rgba(20,16,12,.72)'; cx.fillRect(8, 8, lw, fs * 1.6); cx.fillStyle = '#f2c14e'; cx.textBaseline = 'middle'; cx.fillText(text, 16, 8 + fs * .82); cx.textBaseline = 'alphabetic';
+  if(RTALK)return;
   const hint = Math.max(10, Math.round(PH / 22)); cx.font = `600 ${hint}px Alegreya Sans, sans-serif`; cx.fillStyle = 'rgba(255,240,210,.75)'; cx.textAlign = 'right';
-  cx.fillText(aiOn() ? 'Auto: off to the smithy, then the road' : inside ? 'Talk to your guild · the door: back to town' : 'Walk: arrows / WASD or tap · Enter: talk · the gate: back on the road', PW - 10, PH - 10); cx.textAlign = 'left';
+  cx.fillText(aiOn() ? 'Auto: off to the smithy, then the road' : inside ? (inGuildHall()?'Talk to your guild':TOWN.inside==='inn'?'Talk to the Keeper':'Talk to the Smith')+' · Door: back to town' : PW<500?'Arrows / WASD · Tap to walk · Enter to talk':'Walk: arrows / WASD or tap · Enter: talk · Gate: back to the road', PW - 10, PH - 10); cx.textAlign = 'left';
 }
 /* input while you're walking the town */
 document.addEventListener('keydown', e => {

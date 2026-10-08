@@ -100,7 +100,7 @@ function updateWorld(){
   // status + err
   const am=activeMount();
   const st={seek:d?`Moving deeper into ${dungeonDef().name}…`:am?`Riding ${am.name} to find ${targetMob().name}…`:`Looking for ${targetMob().name}…`,fight:m?(C.surge?`${m.name} is casting ${dungeonDef().surgeName}! Press D to dodge!`:`Fighting ${m.name}`):'',
-    loot:C.loot&&C.loot.dun?'Boss loot: take it, or give it to a companion':'Loot the corpse (L) before it decays',rest:d||C.party.length?'The party catches its breath…':'Resting…',dead:`You are dead. Running back to your corpse: ${Math.ceil(C.t)}s`,town:`Travelling to ${hubName()}: ${Math.ceil(C.t)}s`,intown:`In town at ${hubName()}. Open Bags to sell and repair.`}[C.phase]||'';
+    loot:C.loot&&C.loot.dun?'Boss loot: take it, or give it to a companion':'Loot the corpse (L) before it decays',rest:d||C.party.length?'The party catches its breath…':'Resting…',dead:`You are dead. Running back to your corpse: ${Math.ceil(C.t)}s`,town:`Travelling to ${hubName()}: ${Math.ceil(C.t)}s`,intown:`In town at ${hubName()}. Visit the Inn to rest or the Smithy to sell and repair.`}[C.phase]||'';
   $('#status').textContent=st;$('#err').textContent=C.errT>0?C.err:'';
   // loot window
   const lw=$('#lootwin');lw.hidden=!(C.phase==='loot'&&C.loot);if(!lw.hidden){const dl=C.loot.dun;

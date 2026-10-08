@@ -67,7 +67,7 @@ function musicKey() {
 function voiceOf(who) { let n = 0; for (const ch of String(who).split(':')[0]) n = (n * 31 + ch.charCodeAt(0)) % 997; return 260 + n % 280; }
 /* Outdoor rain follows the living backdrop; underground halls remain dry. */
 function rainLevel() {
-  const h = H(); if (!h || h.dun) return 0;
+  const h = H(); if (!h || h.dun || (townActive() && TOWN.inside)) return 0;
   const weather = zoneWeather(h.zone); return weather === 'storm' ? 1 : weather === 'rain' ? .65 : weather === 'drizzle' ? .3 : 0;
 }
 const SND = ArcadeSound.create({

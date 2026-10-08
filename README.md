@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Realmbound (2026-10-08): regional town layouts, Fenwatch boardwalks, Lanternrest snow, walk-in Inns and Smithies with keepers offering rest, scrap sales and repairs.
+
 - Realmbound v1.3.0 (2026-10-08): ten guild story choices can now hurt a member's trust, with a way to make amends by the hearth (ChatGPT); story text rewritten in the world's words (Claude). Illustrated guides for Realmbound, Diamond Career and Otherworld, and Realmbound tips.
 
 - Realmbound (2026-10-08): ten guild stories gain warned choices that can hurt trust, immediate portrait responses and one-time conversations to make amends; older decisions keep their original endings.
