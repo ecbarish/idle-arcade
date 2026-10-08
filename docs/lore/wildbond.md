@@ -365,3 +365,12 @@ for everyone. Roaming legendaries and Modern 3D remain future work.
 The early roads also shelter Fernruff and its grown form Briarwatch (Grove wolves), Poolkit and Rilllynx (Tide cats), Bogbough (Grove croc), Dewspinner (Tide spider), Cairnclasp (Stone lizard), Kilnchirp (Ember bird), Tumbletusk (Gale boar) and Slatehoof (Stone horse). Their dex lines concern shared shelter, riverbanks, careful crossings and nesting. Hearthlaugh is a rare Radiant hyena in Emberfall: it never evolves, and grows through practice with its companions. These are ordinary species, not new guardians.
 
 Veilmote is a solitary Shade sprite whose dex describes warming abandoned nests. It is reserved unique-species data with no implemented encounter yet; it does not explain the fading or replace Undertone. See [the roster record](../wildbond-roster-batch1.md). Possible Realmbound habitats in shared/catalogue/wildbond-batch1.json remain proposals, not established sightings or encounters.
+
+## Decided for future writing (Evan, 2026-10-08)
+
+Not yet in the game; recorded so every writer keeps it consistent (details in docs/proposals/creature-catalogue-and-evolution.md section 5 and docs/proposals/reputation-and-consequence.md).
+
+- **The wild bond** is a legend: a tamer and creature who trust each other completely can, at the edge of defeat, become one. It gives the game its name. Nobody alive has seen it.
+- **The fading:** long ago a wild bond fought something that was draining the land. The colour was lost because that fight was lost, or as an unintended casualty of it. The bond was trying to prevent the loss, not causing it.
+- **The Unbound:** a faction founded on an eyewitness account of that fight, which misread it as proof that bonding drains the land. They free creatures and oppose the Wardens. Partly right about some things, wrong about the cause. The player can oppose, join or infiltrate them.
+- Open: what the wild bond fought, and its tie to Toren's watcher older than the Wardens.

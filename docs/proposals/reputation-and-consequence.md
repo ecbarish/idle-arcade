@@ -7,7 +7,8 @@ people, or you were greedy, or you made things worse. Wildbond: you join a villa
 reason it falls, or you become a double agent in disguise, infiltrate their base, and find things that make you angry,
 or make you understand them and wonder if they're right.
 
-This grows VISION §9 (choices that matter). Claude's plan; the Wildbond faction's premise needs Evan's yes.
+This grows VISION §9 (choices that matter). **The Wildbond faction's premise was approved by Evan on 2026-10-08, with the
+twist below.**
 
 ## Shared rules for every game that uses it
 
@@ -26,7 +27,7 @@ This grows VISION §9 (choices that matter). Claude's plan; the Wildbond faction
 
 ## Wildbond: a faction with a point of view
 
-**Proposal (needs Evan's yes):** the valley's open question is why the colour faded (docs/lore/wildbond.md leaves it
+**Approved (Evan, 2026-10-08):** the valley's open question is why the colour faded (docs/lore/wildbond.md leaves it
 deliberately unexplained). A group, working name **the Unbound**, believes **bonding is what drained the colour**: that
 tamers taking creatures from their places weakened the land's memory, and that creatures should be freed and the
 Wardens' league ended. They "release" ranch creatures, block routes, raid Warden trials, and run a hidden base.
@@ -39,8 +40,15 @@ Wardens' league ended. They "release" ranch creatures, block routes, raid Warden
   pass their tests, walk their base, and decide whether to take it down, change it from inside, or stay.
 - **What it changes:** routes and towns (a town they freed from overhunting thanks you; a ranch they raided does not),
   how Wardens treat you, Wren's story with you, which guardians trust you, and the ending of the colour's return.
-- **Fits the wild bond:** their founder may be the last person to have seen the old fusion, which is part of why they
-  fear bonding.
+- **The truth (Evan's twist, 2026-10-08):** the Unbound's founder **saw a wild bond** long ago (a tamer and creature fused
+  as one) in the middle of a terrible fight, and the colour drained away around it. The founder took it as proof that
+  bonding devours the land. **They misunderstood:** the fused pair was fighting *against* something that was causing the
+  loss. Either the wild bond lost, or the colour was an unintended casualty of the fight against that evil. The founder's
+  written account is the Unbound's founding text; the present leader inherited it (keeping the legend's "nobody alive
+  has seen it"). Learning the truth is the turning point of the Unbound story: some members break, some refuse to
+  believe it, and the evil that was fought may not be finished.
+- **Still open (decide when writing it):** what the wild bond fought, and how it ties to Toren's watcher older than the
+  Wardens.
 
 ## Realmbound: what kind of adventurer you are
 
