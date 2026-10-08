@@ -101,17 +101,44 @@ static func grow(c: Dictionary, xp: int, cap: int) -> Array:
 		for m in moves_of(c):
 			if m not in before:
 				msgs.append("%s learned %s!" % [c.name, DATA.MOVES[m].name])
-		var evo = sp(c).get("evo")
-		if evo and c.lvl >= evo.at:
-			var old: String = c.name
-			var was_default: bool = c.name == sp(c).name
-			c.sp = evo.to
-			if was_default:
-				c.name = sp(c).name
-			msgs.append("%s evolved into %s!" % [old, sp(c).name])
 		var st := stats(c)
 		c.hp = mini(st.hp, c.hp + roundi(st.hp * 0.2))
 	return msgs
+
+## The ways a creature can change (data/evolution.json, or the browser game's single level evolution).
+static func evo_options(c: Dictionary) -> Array:
+	var evos: Dictionary = DATA.get("EVOS", {})
+	if evos.has(c.sp):
+		return evos[c.sp]
+	var evo = sp(c).get("evo")
+	return [evo] if evo else []
+
+## What a creature is ready to become right now, or "". ctx: place (the map's area), team (species ids with it).
+## Conditions: level (at), trust (bond: 1 Friendly .. 4 Bonded), a place, a companion (with). First match wins.
+static func evo_target(c: Dictionary, ctx: Dictionary = {}) -> String:
+	for o in evo_options(c):
+		if c.lvl < int(o.at):
+			continue
+		if o.has("place") and str(ctx.get("place", "")) != str(o.place):
+			continue
+		if o.has("bond") and bond_lvl(c) < int(o.bond):
+			continue
+		if o.has("with") and str(o.with) not in ctx.get("team", []):
+			continue
+		return str(o.to)
+	return ""
+
+## Change a creature into its new form, keeping everything that makes it itself (and a name you gave it).
+static func evolve(c: Dictionary, to: String) -> String:
+	var old: String = c.name
+	var was_default: bool = c.name == sp(c).name
+	c.sp = to
+	if was_default:
+		c.name = sp(c).name
+	c.erase("hold")
+	var st := stats(c)
+	c.hp = mini(st.hp, c.hp + roundi(st.hp * 0.3))
+	return old
 
 static func add_bond(c: Dictionary, v: float) -> bool:
 	var b := bond_lvl(c)

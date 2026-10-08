@@ -106,7 +106,26 @@ func _run() -> void:
 	g.lvl = 13
 	g.hp = 1
 	var msgs: Array = R.grow(g, 2000, 20)
-	check(g.lvl == 14 and g.sp == "blazefang" and msgs.any(func(m): return "evolved into Blazefang" in m), "levelling up to 14 evolves Cindercub: %s" % [msgs])
+	check(g.lvl == 14 and g.sp == "cindercub" and R.evo_target(g) == "blazefang", "at 14 Cindercub is ready to become Blazefang (you're asked; it isn't forced): %s" % [msgs])
+	check(R.evolve(g, "blazefang") == "Cindercub" and g.sp == "blazefang" and g.name == "Blazefang", "letting it change: Cindercub becomes Blazefang")
+	# ---- evolution with shapes and conditions (data/evolution.json)
+	var bf := R.make("blazefang", 32, { "rar": 1 }, main.rng)
+	check(R.evo_target(bf, { "place": "thornwood" }) == "" and R.evo_target(bf, { "place": "emberfall" }) == "pyremane", "a third stage: Blazefang becomes Pyremane at 32, but only in the heat of Emberfall")
+	var tw := R.make("tidewyrm", 32, { "rar": 1 }, main.rng)
+	tw.bond = 10.0
+	check(R.evo_target(tw) == "", "Tidewyrm won't change for a tamer it doesn't trust completely")
+	tw.bond = 150.0
+	check(R.evo_target(tw) == "deeptide", "with complete trust (Devoted) it becomes Deeptide")
+	var tb := R.make("thornback", 32, { "rar": 1 }, main.rng)
+	check(R.evo_target(tb, { "team": ["thornback"] }) == "" and R.evo_target(tb, { "team": ["thornback", "glimmerwing"] }) == "elderthorn", "Thornback becomes Elderthorn when raised alongside a Glimmerwing")
+	var pk := R.make("poolkit", 24, { "rar": 1 }, main.rng)
+	pk.bond = 0.0
+	check(R.evo_target(pk, { "place": "cloudglass" }) == "mistlynx", "a branching line: Poolkit in the cloud of the pass becomes Mistlynx")
+	check(R.evo_target(pk, { "place": "saltmarsh" }) == "rilllynx", "elsewhere, most become Rilllynx")
+	pk.bond = 150.0
+	check(R.evo_target(pk, { "place": "saltmarsh" }) == "sunlynx", "and one devoted to its tamer becomes Sunlynx")
+	check(R.evo_target(R.make("hearthlaugh", 60, { "rar": 1 }, main.rng)) == "", "Hearthlaugh never evolves; it's itself")
+	check(main.DATA.SPECIES.has("pyremane") and main.DATA.SPECIES.size() >= 98, "the new forms are in the Wilddex (%d creatures)" % main.DATA.SPECIES.size())
 	# ---- the map: closed doors, the barn opens with the story
 	check(not main.walkable(Vector2i(4, 4)), "cottage doors stay shut")
 	check(not main.walkable(main.BARN_DOOR), "the barn is shut before you sign the register")
@@ -445,6 +464,13 @@ func _run() -> void:
 	# ---- Maren's ranch: creatures you aren't carrying live in the paddock and the barn, where you can visit them
 	talk_through()
 	var keep_team: Array = main.team.duplicate()
+	for c in keep_team:
+		c["hold"] = 999                            # (these checks aren't about evolving: "not yet" for now)
+	if main.card.visible and main.card_mode == "evolve":
+		main.card._pick(1)                           # an offer that came up during the earlier checks: not yet
+		talk_through()
+		for c in keep_team:
+			c["hold"] = 999
 	var keep_ranch: Array = main.ranch.duplicate()
 	main.team = [main.team[0]]
 	main.ranch = [main.R.make("fernruff", 10, { "rar": 1 }, main.rng), main.R.make("poolkit", 12, { "rar": 1 }, main.rng)]
@@ -455,7 +481,7 @@ func _run() -> void:
 	for i in 200:
 		tick(0.05)
 		if main.card.visible: break
-	check(main.card.visible and main.card.buttons == ["Take along", "Let it rest"], "tapping a ranch creature walks you over and opens its page: Take along or Let it rest (me %s, it %s)" % [main.me.tile, fern.tile])
+	check(main.card.visible and main.card.buttons == ["Take along", "Let it rest"], "tapping a ranch creature walks you over and opens its page: Take along or Let it rest (me %s, it %s, card %s %s %s, lines %s, stage %s, team %s)" % [main.me.tile, fern.tile, main.card.visible, main.card_mode, main.card.buttons, main.lines.map(func(l): return l.text.left(30)), main.stage, main.team.map(func(c): return [c.sp, c.lvl, c.get("hold")])])
 	main.card._pick(0)
 	check(main.team.size() == 2 and main.team[1].sp == "fernruff" and main.ranch.size() == 1 and main.ranch_movers.size() == 1, "Take along: it joins your team and leaves the paddock")
 	talk_through()
@@ -476,6 +502,23 @@ func _run() -> void:
 	main._visit(main.ranch_movers[0])
 	main.card._pick(1)
 	check(not main.card.visible and main.team.size() == 3 and main.ranch.size() == 6, "Let it rest changes nothing")
+	# ---- a creature ready to change: you're asked, and "not yet" is respected until it grows again
+	var cub: Dictionary = main.R.make("cindercub", 14, { "rar": 1 }, main.rng)
+	main.team = [cub]
+	tick(0.1)
+	check(main.card.visible and main.card.buttons == ["Let it change", "Not yet"] and main.evolve_to == "blazefang", "after the battle that made it ready, Cindercub's change is offered")
+	main.card._pick(1)
+	talk_through()
+	tick(0.2)
+	check(not main.card.visible and cub.sp == "cindercub" and int(cub.hold) == 14, "Not yet: it stays itself, and isn't asked again at this level")
+	cub.lvl = 15
+	tick(0.1)
+	check(main.card.visible and main.evolve_to == "blazefang", "a level later, it's ready again")
+	main.card._pick(0)
+	check(cub.sp == "blazefang" and main.seen.has("blazefang") and main.partner.look.body == Color(main.DATA.SPECIES.blazefang.col), "Let it change: Blazefang, now walking with you")
+	talk_through()
+	for c in keep_team:
+		c.erase("hold")
 	main.team = keep_team
 	main.ranch = keep_ranch
 	main._place_ranch()

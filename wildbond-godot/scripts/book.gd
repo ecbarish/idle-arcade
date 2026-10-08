@@ -146,6 +146,10 @@ func _draw_dex() -> void:
 		_text(("Lives in: " + ", ".join(homes)) if not homes.is_empty() else "Lives somewhere rare.", Vector2(202, 182), 6, FAINT)
 		if bonded.has(id2):
 			_text("It chose to walk with you.", Vector2(202, 191), 6, Color("3a8a3a"))
+		# what Maren thinks about how it changes (evolution.json hints), once you've seen it
+		var hints: Array = R.DATA.get("EVOS", {}).get(id2, []).map(func(o): return str(o.get("hint", ""))).filter(func(h): return h != "")
+		if not hints.is_empty():
+			draw_multiline_string(font, Vector2(202, 166), "Maren: \"%s\"" % hints[0], HORIZONTAL_ALIGNMENT_LEFT, 146, 6, 2, Color("6a5a3a"))
 	else:
 		draw_multiline_string(font, Vector2(202, 140), "Not seen yet. Explore the tall grass, and look in every place you visit.", HORIZONTAL_ALIGNMENT_LEFT, 146, 7, -1, FAINT)
 

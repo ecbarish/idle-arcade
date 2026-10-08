@@ -137,6 +137,11 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (night, continued): merged ChatGPT's R6 (Realmbound v1.4.0, regional town layouts, walk-in inns and smithies;
+  7370 checks). Wildbond Godot: evolution with shapes and conditions (data/evolution.json; Pyremane by place, Deeptide by trust,
+  Elderthorn with a companion, Poolkit's three-way branch; you're asked, Not yet waits a level; hints in the field book); creatures
+  in the way step aside (the pup no longer blocks the paddock gate); 165 checks. Next (B2b): heritages at the register, the trough.
+
 - 2026-10-08 Claude (night, continued): merged ChatGPT's guide CRLF fix and Hearth Book capitals (kept the world's-words story text over
   its numbered version). Wildbond Godot: Cloudglass Pass (cold stone, drifting cloud, Ilka, Teodor, Warden Vessa; 151 checks).
   Starfall Godot slice 2: plots with Hob's plans, the Healer's Hut (Ama; hurt adventurers mend twice as fast), a Training Yard,

@@ -155,6 +155,10 @@ func _ready() -> void:
 	rng.seed = 7 if demo else Time.get_ticks_usec()
 	var j: JSON = load("res://data/wildbond.json")
 	DATA = j.data
+	var ej: JSON = load("res://data/evolution.json")       # new forms and the ways creatures change (Godot only, for now)
+	for k in ej.data.species:
+		DATA.SPECIES[k] = ej.data.species[k]
+	DATA["EVOS"] = ej.data.evos
 	R.DATA = DATA
 	pup.look = CREATURE_LOOKS.pup
 	pup.home = PADDOCK
@@ -476,6 +480,7 @@ func _process(dt: float) -> void:
 	_butterfly(dt)
 	_spotter_tick(dt)
 	_autosave(dt)
+	_check_evolution()
 	_bubbles(dt)
 	for m in actors():
 		if m.is_creature():
@@ -510,7 +515,7 @@ func _process(dt: float) -> void:
 			_step(d)
 		elif not walk_to.is_empty():
 			var nxt: Vector2i = walk_to.pop_front()
-			if (nxt - me.tile).length() == 1 and (walkable(nxt) or (partner and nxt == partner.tile) or DOORS.has(nxt)):
+			if (nxt - me.tile).length() == 1 and (walkable(nxt) or _gentle_at(nxt) != null or DOORS.has(nxt)):
 				_step(nxt - me.tile)
 			else:
 				walk_to.clear()                      # something stepped in the way: stop here
@@ -543,13 +548,14 @@ func _step(d: Vector2i) -> void:
 		_door(DOORS[me.tile + d])                # walking up to a door goes in
 		return
 	var was := me.tile
-	if partner and partner.where == map_name and me.tile + d == partner.tile:
-		partner.tile = was                       # your partner steps aside, swapping places with you
-		partner.pos = Vector2(was) * TILE
-		partner.path.clear()
+	var aside := _gentle_at(me.tile + d)
+	if aside:
+		aside.tile = was                         # your partner (or the pup, or a ranch creature) steps aside, swapping places
+		aside.pos = Vector2(was) * TILE
+		aside.path.clear()
 	if walkable(me.tile + d):
 		me.path = [me.tile + d]
-		if partner and partner.where == map_name and partner.tile != was:
+		if partner and partner.where == map_name and partner.tile != was and (aside == null or aside == partner):
 			_stop(partner)
 			partner.path = [was]
 
@@ -610,7 +616,7 @@ func _tap(at: Vector2) -> void:
 				goal = s.tile + Vector2i.DOWN          # stand in front of its stall
 	if stage == "free":
 		for m in ranch_movers:
-			if m.where == map_name and m.tile == goal:
+			if m.where == map_name and (m.tile == goal or (not m.path.is_empty() and m.path[0] == goal)):   # (it may be mid-step)
 				if (me.tile - goal).length() <= 1.01:
 					_visit(m)
 					return
@@ -1386,6 +1392,11 @@ func _skip_opening() -> void:
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("--at="):
 			start = a.substr(5)                          # e.g. -- --skip-opening --at=saltmarsh
+	if "--book" in OS.get_cmdline_user_args():        # the field book open on Poolkit, to see a page (-- --skip-opening --book)
+		seen["poolkit"] = true
+		(func():
+			_open_book()
+			book.sel = book.ids.find("poolkit")).call_deferred()
 	if "--ranch" in OS.get_cmdline_user_args():       # a few creatures at the ranch, to see it (-- --skip-opening --at=larkhaven --ranch)
 		for sp in ["fernruff", "poolkit", "hearthlaugh", "slatehoof", "kilnchirp", "dewspinner"]:
 			ranch.append(R.make(sp, 12, { "rar": 1 }, rng))
@@ -1557,6 +1568,13 @@ func _someone_standing(p: Vector2i) -> bool:
 		if m.where == map_name and m.tile == p and m.path.is_empty():
 			return true
 	return false
+
+## A creature that steps aside when you walk into it (your partner, Maren's pup, creatures at the ranch), standing on p.
+func _gentle_at(p: Vector2i) -> Mover:
+	for m in [partner, pup] + ranch_movers:
+		if m and m.where == map_name and m.tile == p and m.path.is_empty():
+			return m
+	return null
 
 # ---------------------------------------------------------------- saving your journey (user://journey.json)
 ## Saved automatically every few seconds while you're free to walk (not mid-battle or mid-conversation) and when the
@@ -1969,6 +1987,20 @@ func ranch_info(c: Dictionary) -> Dictionary:
 	}
 
 func _on_card_pick(i: int) -> void:
+	if card_mode == "evolve" and not evolving.is_empty():
+		var c: Dictionary = evolving
+		evolving = {}
+		if i == 0:
+			var old := R.evolve(c, evolve_to)
+			seen[c.sp] = true
+			bonded[c.sp] = true
+			restore.append({ "where": map_name, "at": me.pos + Vector2(8, 8), "r": 0.0, "goal": 90.0 })   # the change brings colour with it
+			say("", "Light pours off %s. When it fades, %s stands in its place, and looks up at you." % [old, DATA.SPECIES[c.sp].name])
+			_lead_look()
+		else:
+			c["hold"] = c.lvl                        # not yet: it won't ask again until it grows a level
+			say("", "%s shakes itself and settles down. It seems content as it is, for now." % c.name)
+		return
 	if card_mode == "ranch" and i == 0 and visiting >= 0:
 		if team.size() < 3:
 			_take_along(visiting, -1)
@@ -1984,6 +2016,40 @@ func _on_card_pick(i: int) -> void:
 		_take_along(visiting, i)
 		return
 	visiting = -1
+
+## Evolution (docs/proposals/creature-catalogue-and-evolution.md section 2): when a creature in your team is ready to
+## change (its level, and sometimes the place, its trust in you or a companion), you're asked: let it change, or not
+## yet. Never forced. "Not yet" waits until it grows another level.
+var evolving: Dictionary = {}
+var evolve_to := ""
+
+func _check_evolution() -> void:
+	if stage != "free" or not lines.is_empty() or battle.visible or card.visible or shop.visible or book.visible or trans_t >= 0.0:
+		return
+	var ctx := { "place": str(DATA.MAPS.get(map_name, {}).get("biome", map_name)), "team": team.map(func(x): return x.sp) }
+	for c in team:
+		if float(c.get("hold", 0)) >= c.lvl:
+			continue
+		var to := R.evo_target(c, ctx)
+		if to != "":
+			_ask_evolve(c, to)
+			return
+
+func _ask_evolve(c: Dictionary, to: String) -> void:
+	evolving = c
+	evolve_to = to
+	walk_to.clear()
+	var future: Dictionary = c.duplicate()
+	future.sp = to
+	future.name = DATA.SPECIES[to].name
+	var info := ranch_info(future)
+	var hint := ""
+	for o in R.evo_options(c):
+		if str(o.to) == to:
+			hint = str(o.get("hint", ""))
+	info.note = "%s is ready to change into %s." % [c.name, DATA.SPECIES[to].name] + (" Maren: \"%s\"" % hint if hint != "" else "")
+	card_mode = "evolve"
+	card.open(to, info, ["Let it change", "Not yet"])
 
 ## Take a ranch creature along: into a free place in your team, or in place of team member `ti`, who goes to rest.
 func _take_along(ri: int, ti: int) -> void:
