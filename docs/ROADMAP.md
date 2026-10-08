@@ -165,6 +165,49 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
 - [x] T33 merged 2026-10-08 by Claude (Wildbond v1.6.0, PR #43).
 - [x] T34 implemented by Codex on `codex/diamond-career-d0`, PR #45 ready for review (2026-10-08; not merged).
 
+- [ ] T35-T37 open for ChatGPT (2026-10-08, after its reset): one branch and PR each, stacked if needed.
+
+### T35: Otherworld O1, a living Lanthorn (moved from Claude's lane; Claude is in Godot)
+Read docs/otherworld-design.md, docs/research/otherworld-first-life-review.md ("Proposed ticket: O1", whose defaults
+Evan's rules already settle), docs/CREATIVE.md "Writing for players" and the in-window rule in CLAUDE.md. Branch
+`codex/otherworld-living-lanthorn`.
+- **Locked choices show**, greyed, each with a one-line reason in the world's words (add `why` beside `need` in the
+  data): "You'd need to have seen the truth of him", never numbers.
+- **Every gift's cost bites once.** Appraisal: someone feels you reading them and shuts a door that would otherwise
+  open. Pocket Space: Corvin asks you to carry something you shouldn't; refusing has a price, so does agreeing.
+- **The town moves.** Lanthorn tracks two needs over the days before the tide (food and fear). People's lines, prices
+  and who will help change with them, and your choices push them up or down. Authored lines chosen by the state; shown
+  in the scene (a busier or emptier market, shutters, a queue at the well), not as meters.
+- **The Archivist** reacts lightly to the memories you carry (a written line per memory).
+- Checks in tests/otherworld.html for each; old saves load; all test pages pass; bump Otherworld's version.
+
+### T36: Diamond Career in the game window, and a road trip (part 3)
+Evan, 2026-10-08: every game happens in the game window (CLAUDE.md "In the game window"). Branch
+`codex/diamond-career-window`.
+- **The screen is the world:** the ballpark, the clubhouse and the home/garage scenes fill the window. Stats, the
+  calendar, contract and ledger become things in the world (the scoreboard, a locker with your contract taped inside,
+  a wall calendar in the clubhouse, a notebook from Iona) or a thin overlay, not panels beside the scene. Keep every
+  existing feature reachable; phone (375 wide) to 3440 ultrawide; muted by default.
+- **A road trip:** the second month opens with three away series in three fictional towns, each with its own ballpark
+  look (a seaside park, a mountain park, an old brick downtown park) and one local character who remembers you if you
+  come back next season. Travel is a short scene on the team bus, with one choice per trip that matters a little
+  (rest, study film, or join the card game: rest helps stamina, film helps reads, cards help clubhouse standing).
+- No windfalls; salary on the calendar as now. Checks in tests/diamond.html; old saves load; bump its version.
+
+### T37: The shared creature catalogue, batch 2 (data and lore)
+Read docs/proposals/creature-catalogue-and-evolution.md (sections 1-2, "Order" step 2) and the evolution rules
+(Godot `wildbond-godot/data/evolution.json`: branches, three-stage lines, conditions, never-evolvers). Branch
+`codex/creature-catalogue-2`.
+- **Twelve to fifteen new creatures** for the browser Wildbond data (games/wildbond/js, like W11 batch 1): fill empty
+  family and element pairs; include at least two three-stage lines, one branching line (with its condition written as
+  a place, a trust level or a companion, e.g. "raised beside a Glimmerwing"), and one creature that never evolves and
+  says why in its dex line. Each with a dex line in the world's words and where it lives.
+- **Realmbound's beasts from the catalogue (data only):** a table in a new `docs/lore/catalogue.md` mapping each
+  Realmbound zone's beasts (wolves, boars, spiders, drakes and so on) to catalogue creatures, with any new catalogue
+  entries they need. Don't change Realmbound's code yet.
+- Running `tools/godot-export.ps1` afterwards is Claude's job; note in the PR which species are new. tests/wildbond.html
+  stays all-pass; bump Wildbond's browser version.
+
 ### T34: Diamond Career, part 1: the first call-up and the first payday (D0 + the start of D1)
 Evan (2026-10-08) unparked the sports game. Read docs/plans/diamond-career.md, docs/plans/sports-careers.md,
 docs/research/decisions.md (top entry: his answers), docs/wildbond-plan.md (the principles: games feel like games;

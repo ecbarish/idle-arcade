@@ -68,6 +68,9 @@ index.html or style.css until those phases are merged.
 | A7 | **R6** Realmbound hub variety | done, merged 2026-10-08 by Claude (Realmbound v1.4.0) | A layout per zone, inn and smithy interiors |
 | A7b | **R5** crafted gear from 55 | done, merged 2026-10-08 by Claude (Realmbound v1.5.0) | Separate PR after R6 |
 | A8a | **Otherworld browser runner save safety** | done, merged 2026-10-08 by Claude (PR #56; tests only) | Restore recovery backups too, including failed/thrown checks |
+| A9 | **T35** Otherworld O1, a living Lanthorn | open (2026-10-08) | docs/ROADMAP.md T35; moved from Claude's B0b |
+| A10 | **T36** Diamond Career in the game window, and a road trip | open (2026-10-08) | docs/ROADMAP.md T36 |
+| A11 | **T37** The shared creature catalogue, batch 2 | open (2026-10-08) | docs/ROADMAP.md T37; data and lore only |
 | A8 | While you wait | always | Lore and dex text polish, more checks, bugs from GitHub issues |
 | — | Done | — | A2 L7a Wildbond balance, A3 L7b Realmbound balance, R9 heroic loot review (all merged 2026-10-07) |
 
@@ -76,7 +79,7 @@ index.html or style.css until those phases are merged.
 | # | Task | Status | Notes |
 |---|---|---|---|
 | B0 | **Review and merge** every waiting PR, bump versions, keep START-HERE current, refill the lanes | always first | Check email, diff, tests, play it; `git merge --no-ff` |
-| B0b | **Otherworld O0: the Between and Asterhold** | part 1 done 2026-10-08 (the Between, Asterhold's whole life, 8 endings, rebirth and memories; tests/otherworld.html); next: **O1, a living Lanthorn** (docs/research/otherworld-first-life-review.md: locked choices shown with reasons, every gift cost bites, the town's food and fear change over the days), then Hearthmere, the Ashen Throne | Evan unparked it 2026-10-08; docs/otherworld-design.md; browser, games/otherworld/ |
+| B0b | **Otherworld O0: the Between and Asterhold** | part 1 done 2026-10-08 (the Between, Asterhold's whole life, 8 endings, rebirth and memories; tests/otherworld.html); O1 handed to ChatGPT 2026-10-08 (A9, T35); was: **O1, a living Lanthorn** (docs/research/otherworld-first-life-review.md: locked choices shown with reasons, every gift cost bites, the town's food and fear change over the days), then Hearthmere, the Ashen Throne | Evan unparked it 2026-10-08; docs/otherworld-design.md; browser, games/otherworld/ |
 | B1 | **Wildbond phase 1: the screen is the world** | open | docs/wildbond-plan.md: full-window scene, overlay HUD, dialogue near speakers, satchel and pause menu, bigger characters |
 | B2 | **Wildbond phase 2: the opening, alive** | **in Godot, mostly done 2026-10-08** (wildbond-godot/: register = character creator, Maren, the barn and the partner choice, Wren); left: prologue, Wilddex goal, guided first wild bond | Prologue, Maren in the world, the character creator (W13), choosing your partner in the barn, Wren, guided first bond, the Wilddex goal |
 | B3 | **Wildbond phase 3: battles on the field** | **in Godot, first battle done 2026-10-08** (scripts/battle.gd, rules.gd matches the browser exactly); left: Bond (catching) and Bag in wild battles, more creatures' bodies | Transition, classic layout, Fight / Bond / Bag / Run, a summary that waits |
