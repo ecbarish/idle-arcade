@@ -30,6 +30,7 @@ and how much creative freedom you have are in [CREATIVE.md](CREATIVE.md).
   log. Claude keeps the rest current.
 - **README changelog:** add your entry at the top, without a version number ("Wildbond (2026-10-08): ...").
 - **Stay inside your task's files.** If you must touch a file another lane owns, keep it to a few lines and say so.
+- **In the game window** (Evan, 2026-10-08): every feature in every game happens inside the game window (people, places, things you hold, a thin overlay), not in panels beside it. See CLAUDE.md.
 - **Saves:** new fields get defaults; old saves must load (add a check). Commits only as
   `206636510+ecbarish@users.noreply.github.com`.
 
@@ -79,6 +80,7 @@ index.html or style.css until those phases are merged.
 | B4 | **Wildbond phase 4: menus you hold** | open | Wilddex field book, team scene, Journal with map and badge case |
 | B5 | **Wildbond phase 5: the ranch as a place** | open | Trough, posts, meadow, breeding stall, shop counter, Maren's daily letter |
 | B6 | **L10** Accessibility; **L3** phone pass part 2 | open | After phase 1 (the new layout); docs/accessibility.md |
+| B6b | **The screen is the world, for every game** | open | Evan, 2026-10-08. Realmbound first (the world fills the window; quests, bags, guild and the new Road guide move into the world: quest givers speak in place, bags and the quest log are things you open over the scene); then Diamond Career (the ballpark fills the screen, at-bat choices and contracts happen in the scene: the clubhouse, Iona, your home); then Starfall. One plan doc per game first, then small steps |
 | B7 | **V3** Game boxes on the launcher | open | docs/VISION.md §3 |
 | B8 | **G2** Realmbound dungeon lighting; **W3 part 2** roaming legendaries; **W10** baby forms | open | After Launch is fine |
 | — | Done | — | L2 save safety, L1 settings, L8 launcher (living world, road, hall, vote), L3 phone part 1, Wildbond v1.4-1.5.2 fixes from Evan's play |
