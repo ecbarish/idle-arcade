@@ -1,0 +1,25 @@
+; Wildbond in Godot: the trial (2026-10-07). See README.md.
+config_version=5
+
+[application]
+
+config/name="Wildbond (Godot trial)"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.7")
+
+[display]
+
+window/size/viewport_width=384
+window/size/viewport_height=216
+window/size/window_width_override=1536
+window/size/window_height_override=864
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+window/stretch/scale_mode="integer"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+2d/snap/snap_2d_transforms_to_pixel=true
+2d/snap/snap_2d_vertices_to_pixel=true
+environment/defaults/default_clear_color=Color(0.07, 0.08, 0.1, 1)
