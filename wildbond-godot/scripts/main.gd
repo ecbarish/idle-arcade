@@ -20,7 +20,7 @@ const Book := preload("res://scripts/book.gd")
 const DOORS := { Vector2i(4, 4): "inn", Vector2i(7, 10): "shop" }
 const R := preload("res://scripts/rules.gd")
 const TILE := 16
-const BARN_SOLID := "XWh|tb"                 # inside the barn: the dark, walls, hay, stall boards, the trough, sacks
+const BARN_SOLID := "XWh|tbw"                # inside the barn: the dark, walls, hay, stall boards, the trough, sacks, the workbench
 const BARN := [                              # inside Maren's barn: three stalls, hay, feed sacks, a trough, the door at the bottom
 	"XXXXXXXXXXXXXXXXXXXXXXXX",
 	"XWWWWWWWWWWWWWWWWWWWWWWX",
@@ -31,7 +31,7 @@ const BARN := [                              # inside Maren's barn: three stalls
 	"X,,,,,,,,,,,,,,,,,,,,,,X",
 	"Xb,,,,,,,,,,,,,,,,,,,,tX",
 	"Xb,,,,,,,,,,,,,,,,,,,,tX",
-	"X,,,,,,,,,,,,,,,,,,,,,,X",
+	"Xw,,,,,,,,,,,,,,,,,,,,,X",
 	"Xhh,,,,,,,,,,,,,,,,,,hhX",
 	"X,,,,,,,,,,,,,,,,,,,,,,X",
 	"XWWWWWWWWWWdWWWWWWWWWWWX",
@@ -635,6 +635,8 @@ func _unhandled_input(e: InputEvent) -> void:
 		_feed()
 	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _near_stall():
 		_breed_here()
+	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _near_bench():
+		_open_bench()
 	elif stage == "free" and maren.where == map_name and (me.tile - maren.tile).length() <= 1.01 and not (e is InputEventMouseButton and Vector2i((get_global_mouse_position() / TILE).floor()) != maren.tile):
 		_maren_heals()
 	elif e is InputEventMouseButton:
@@ -985,7 +987,7 @@ func _draw_barn() -> void:
 			var ch: String = BARN[y][x]
 			var o := Vector2(x, y) * TILE
 			var n := (x * 7 + y * 13) % 11
-			if ch in ",h|tbd":
+			if ch in ",h|tbdw":
 				_boards(o, x, y)
 				if y <= 4 and ch == "," and ((x > 6 and x < 18) or BREED_STALL.has_point(Vector2i(x, y))):      # straw bedding in the stalls
 					draw_rect(Rect2(o + Vector2(0, 1 if y == 3 else 0), Vector2(16, 15 if y == 3 else 12)), STRAW.darkened(0.35))
@@ -1008,6 +1010,7 @@ func _draw_barn() -> void:
 				"|": _stall_board(o, x, y)
 				"t": _trough(o)
 				"b": _sacks(o)
+				"w": _bench(o)
 				"d":
 					draw_rect(Rect2(o + Vector2(1, 0), Vector2(14, 16)), Color("2a1c12"))
 					draw_rect(Rect2(o + Vector2(1, 9), Vector2(14, 7)), Color("6a9a48").darkened(0.2))   # grass outside
@@ -1113,6 +1116,17 @@ func _stall_board(o: Vector2, x: int, y: int) -> void:
 	draw_rect(Rect2(o + Vector2(6, 4), Vector2(4, 1)), WOOD_DARK)
 	draw_rect(Rect2(o + Vector2(6, 11), Vector2(4, 1)), WOOD_DARK)
 
+
+## Maren's workbench (the left wall of the barn): leather, cord, shells and glass, and the tools to make gear with.
+func _bench(o: Vector2) -> void:
+	draw_rect(Rect2(o + Vector2(10, 2), Vector2(6, 14)), Figures.OUTLINE)
+	draw_rect(Rect2(o + Vector2(11, 3), Vector2(5, 12)), WOOD_LIGHT)                   # the bench top, seen from above
+	draw_rect(Rect2(o + Vector2(11, 3), Vector2(5, 1)), WOOD_LIGHT.lightened(0.2))
+	draw_rect(Rect2(o + Vector2(12, 5), Vector2(3, 2)), Color("8a5a32"))              # a strip of leather
+	draw_rect(Rect2(o + Vector2(12, 9), Vector2(2, 2)), Color("e8c040"))              # a little bell
+	draw_rect(Rect2(o + Vector2(14, 12), Vector2(1, 2)), Color("6ab0e8"))             # a shell
+	draw_rect(Rect2(o + Vector2(2, 4), Vector2(6, 1)), Color("8a8a8a"))               # an awl and a knife on pegs
+	draw_rect(Rect2(o + Vector2(2, 8), Vector2(5, 1)), Color("8a8a8a"))
 func _trough(o: Vector2) -> void:
 	draw_rect(Rect2(o + Vector2(0, 4), Vector2(16, 11)), Figures.OUTLINE)
 	draw_rect(Rect2(o + Vector2(1, 5), Vector2(14, 9)), WOOD)
@@ -1469,6 +1483,17 @@ func _skip_opening() -> void:
 		badges = ["thorn", "tide", "ember"].slice(0, at)
 		team[0].lvl = [5, 14, 24, 34][at]
 		team[0].hp = R.stats(team[0]).hp
+	if "--bench" in OS.get_cmdline_user_args():      # at Maren's workbench, the partner trying on a harness (-- --skip-opening --bench)
+		for c in team: c["hold"] = 999
+		team[0]["gear"] = "harness"
+		story_done["bench"] = true
+		_lead_look()
+		_go("barn", Vector2i(2, 9), Vector2i.LEFT)
+		trans_t = 0.29
+		(func():
+			bench_i = 0
+			_open_bench()).call_deferred()
+		return
 	if "--nursery" in OS.get_cmdline_user_args() and ranch.size() >= 2:   # two in the nursery and an egg in the straw (with --ranch)
 		for c in team: c["hold"] = 999                    # (a picture of the nursery, not of a change)
 		ranch[0]["stall"] = true
@@ -1681,7 +1706,7 @@ func save_game() -> void:
 	var d := { "v": 1, "saved": Time.get_datetime_string_from_system(), "look": look, "team": team, "ranch": ranch, "bag": bag,
 		"badges": badges, "seen": seen, "bonded": bonded, "items": got_items, "beaten": beaten,
 		"restore": restore.map(func(r): return { "where": r.where, "x": r.at.x, "y": r.at.y, "goal": r.goal }),
-		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg,
+		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned,
 		"map": map_name, "x": me.tile.x, "y": me.tile.y, "partner": partner.id if partner else "" }
 	var f := FileAccess.open(save_path, FileAccess.WRITE)
 	if f:
@@ -1730,6 +1755,9 @@ func _load_game() -> bool:
 	explored_in = d.get("explored", {})
 	story_done = d.get("story", {})
 	story_retry = d.get("retry", {})
+	gear_owned = {}
+	for k in d.get("gear", {}):
+		gear_owned[k] = int(d.gear[k])
 	egg = d.get("egg", {})
 	if not egg.is_empty():
 		egg.steps = int(egg.steps)
@@ -2032,7 +2060,7 @@ func _place_ranch() -> void:
 			m = Mover.new("ranch", "larkhaven" if out else "barn", home.position + Vector2i(n % home.size.x, (n / home.size.x) % home.size.y))
 			m.home = home
 			free_i += 1
-		m.look = CREATURE_LOOKS.get(ranch[i].sp, Figures.look_for(R.sp(ranch[i])))
+		m.look = geared_look(ranch[i])
 		m.right = i % 2 == 0
 		ranch_movers.append(m)
 
@@ -2121,10 +2149,88 @@ func _egg_step() -> void:
 	_place_ranch()
 	say("", "A runner from Larkhaven catches you up: Maren says the egg has hatched! A little %s is waiting for you at the ranch." % DATA.SPECIES[c.sp].name)
 
+# ---------------------------------------------------------------- Maren's workbench: gear for your creatures
+## Stand at the workbench (left wall of the barn) and press E. The creature walking with you tries each piece on; Maren
+## makes what you don't have yet, for coins. Pieces you take off go back in your satchel for another creature.
+const BENCH := Vector2i(1, 9)
+var gear_owned: Dictionary = {}              # gear id -> how many you have, not being worn
+var bench_i := 0
+
+func _near_bench() -> bool:
+	return map_name == "barn" and (me.tile - BENCH).length() <= 1.01
+
+func _open_bench() -> void:
+	if team.is_empty():
+		return
+	if not story_done.has("bench"):
+		story_done["bench"] = true
+		say("maren", "My old workbench! I make harnesses and charms for the ranch creatures. Shells from the coast, glass from Emberfall, a bell or two.")
+		say("maren", "Bring whoever walks with you, and they can try things on. Each piece does one thing well. I'll make what you need for a few coins.")
+		then_do = _open_bench
+		return
+	var ids := R.GEAR.keys()
+	var id: String = ids[bench_i % ids.size()]
+	var g: Dictionary = R.GEAR[id]
+	var c: Dictionary = team[0]
+	var page := ranch_info(c)
+	page.look = page.look.duplicate()
+	page.look.gear = id                           # it tries the piece on, on the page
+	var wearing: String = ("%s is wearing it." % c.name) if str(c.get("gear", "")) == id else (("%s wears the %s." % [c.name, R.gear_of(c).name]) if R.gear_of(c).size() > 0 else "%s wears no gear yet." % c.name)
+	var spare := int(gear_owned.get(id, 0))
+	page.note = "%s. %s %s %s" % [g.name, g.text, wearing, "You have %d spare." % spare if spare > 0 else ""]
+	var act := "Take it off" if str(c.get("gear", "")) == id else ("Put it on" if int(gear_owned.get(id, 0)) > 0 else "Have it made (%d coins)" % int(g.cost))
+	card_mode = "bench"
+	card.open(c.sp, page, ["Previous", act, "Next", "Done"])
+
+func _bench_pick(i: int) -> void:
+	var ids := R.GEAR.keys()
+	var id: String = ids[bench_i % ids.size()]
+	var c: Dictionary = team[0]
+	match i:
+		0: bench_i = (bench_i + ids.size() - 1) % ids.size()
+		2: bench_i = (bench_i + 1) % ids.size()
+		1:
+			if str(c.get("gear", "")) == id:
+				c.erase("gear")
+				gear_owned[id] = int(gear_owned.get(id, 0)) + 1
+			elif int(gear_owned.get(id, 0)) > 0:
+				wear(c, id)
+			elif int(bag.coins) >= int(R.GEAR[id].cost):
+				bag.coins = int(bag.coins) - int(R.GEAR[id].cost)
+				gear_owned[id] = int(gear_owned.get(id, 0)) + 1
+				wear(c, id)
+				say("maren", "There! %s, made to measure. Doesn't %s look smart?" % [R.GEAR[id].name, c.name])
+			else:
+				say("maren", "That one needs %d coins for the materials, love. Come back when you have them." % int(R.GEAR[id].cost))
+		_:
+			return
+	_lead_look()
+	if lines.is_empty():
+		_open_bench()
+	else:
+		then_do = _open_bench
+
+## Put a piece on a creature: the one it wore goes back in your satchel.
+func wear(c: Dictionary, id: String) -> void:
+	var old := str(c.get("gear", ""))
+	if old != "":
+		gear_owned[old] = int(gear_owned.get(old, 0)) + 1
+	gear_owned[id] = int(gear_owned.get(id, 0)) - 1
+	c["gear"] = id
+
+## A creature's look with its gear on (the gear is drawn on whoever wears it).
+func geared_look(c: Dictionary) -> Dictionary:
+	var lk: Dictionary = CREATURE_LOOKS.get(c.sp, Figures.look_for(R.sp(c)))
+	if str(c.get("gear", "")) == "":
+		return lk
+	lk = lk.duplicate()
+	lk.gear = c.gear
+	return lk
+
 ## The creature at the front of your team walks with you.
 func _lead_look() -> void:
 	if partner and not team.is_empty():
-		partner.look = CREATURE_LOOKS.get(team[0].sp, Figures.look_for(R.sp(team[0])))
+		partner.look = geared_look(team[0])
 
 ## A free spot beside a tile to stand on (to talk to a creature there).
 func _stand_by(p: Vector2i) -> Vector2i:
@@ -2156,13 +2262,16 @@ func ranch_info(c: Dictionary) -> Dictionary:
 	var moves: Array = R.moves_of(c).map(func(mv): return DATA.MOVES[mv].name)
 	return {
 		"name": c.name, "el": s.el, "dex": s.dex, "base": s.base, "moves": moves,
-		"look": CREATURE_LOOKS.get(c.sp, Figures.look_for(s)), "role": role_of(s.base),
+		"look": geared_look(c), "role": role_of(s.base),
 		"strong": R.words(DATA.ELEMENTS[s.el].beats), "weak": R.words(weak) if not weak.is_empty() else "nothing in particular",
 		"moves_line": "Knows %s." % R.words(moves),
 		"note": "Level %d. Trust: %s. Resting at Maren's ranch." % [c.lvl, R.BOND[R.bond_lvl(c)][0]],
 	}
 
 func _on_card_pick(i: int) -> void:
+	if card_mode == "bench":
+		_bench_pick(i)
+		return
 	if card_mode == "breed":
 		if i == 0:
 			_lay_egg()

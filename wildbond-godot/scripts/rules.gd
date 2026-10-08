@@ -127,6 +127,7 @@ static func stats(c: Dictionary) -> Dictionary:
 		v = v + c.lvl + 10 if s == "hp" else v + 5
 		v += floorf(float(c.get("train", {}).get(s, 0)) / 4.0)
 		if t.up == s: v *= 1.1
+		if s == "grd" and str(c.get("gear", "")) == "harness": v *= 1.1
 		if t.down == s: v *= 0.9
 		out[s] = maxi(1, roundi(v * rm * (1.0 + 0.02 * bl)))
 	return out
@@ -229,6 +230,7 @@ static func damage(att: Dictionary, def: Dictionary, mv: Dictionary, mult: float
 	if def.buff.get("guard", 0.0) > 0: d *= 0.5 if def.side == "a" and def.buff.get("guardCmd", 0) else 0.6
 	if "ferocious" in att.c.traits: d *= 1.1
 	if "thick" in def.c.traits: d *= 0.9
+	if el != null and gear_of(def.c).get("resist", "") == el: d *= 0.75
 	var crit := crit_roll < 0.06 + (0.08 if "keen" in att.c.traits else 0.0)
 	if crit: d *= 1.5
 	return { "d": maxi(1, roundi(d)), "crit": crit, "adv": adv }
@@ -280,3 +282,18 @@ static func words(list: Array) -> String:
 	if l.size() <= 2:
 		return " and ".join(l)
 	return ", ".join(l.slice(0, -1)) + " and " + l[-1]
+
+## Creature gear (docs/proposals/creature-catalogue-and-evolution.md §3): made at Maren's workbench in the barn. Each
+## piece does one thing and shows on the creature that wears it. One piece each.
+const GEAR := {
+	"harness": { "name": "Leather Harness", "cost": 60, "col": "8a5a32", "text": "Light armour of soft leather. It takes knocks a little better." },
+	"bell": { "name": "Calm Bell", "cost": 70, "col": "e8c040", "text": "A soft bell on a cord. Trust grows half again as fast in battle." },
+	"ribbon": { "name": "Swift Ribbon", "cost": 70, "col": "e04a8a", "text": "A bright ribbon on the tail. It's quicker off the mark when a battle starts." },
+	"ember": { "name": "Ember-Glass Band", "cost": 90, "col": "e0602a", "resist": "Ember", "text": "Cool glass from Emberfall's vents. Ember moves hurt it a quarter less." },
+	"tide": { "name": "Shell Charm", "cost": 90, "col": "6ab0e8", "resist": "Tide", "text": "Saltmarsh shells on a cord. Tide moves hurt it a quarter less." },
+	"grove": { "name": "Bark Charm", "cost": 90, "col": "5d9a3e", "resist": "Grove", "text": "A knot of Thornwood bark. Grove moves hurt it a quarter less." },
+	"stone": { "name": "Slate Charm", "cost": 90, "col": "9a9488", "resist": "Stone", "text": "A thin slate from the high pass. Stone moves hurt it a quarter less." },
+}
+
+static func gear_of(c: Dictionary) -> Dictionary:
+	return GEAR.get(str(c.get("gear", "")), {})

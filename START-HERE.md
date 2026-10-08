@@ -137,6 +137,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (later, 2): Wildbond Godot creature gear: Maren's workbench, seven pieces that each do one thing and show on the
+  creature (walking, ranch, battle, page); 195 checks. Next in Claude's Godot lane: tamer abilities with heritages, then Stillreed Basin.
 - 2026-10-08 Claude (later): Diamond Career v0.3.1 (Evan couldn't see the pitch: field cleared mid-throw, tap to swing, a circle at the plate). Starfall
   Godot slice 3: the Smithy (three strikes on the anvil, Garrick takes over after five pieces), the Apothecary (brew tonics, set the
   price), plots unlock with rank, adventurers save their share; 85 checks. ChatGPT reset: Lane A refilled with T35-T37.

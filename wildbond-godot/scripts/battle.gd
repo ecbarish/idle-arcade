@@ -56,7 +56,7 @@ func unit(c: Dictionary, side: String) -> Dictionary:
 	var st := R.stats(c)
 	if c.get("hp") == null or c.hp > st.hp:
 		c.hp = st.hp
-	return { "c": c, "side": side, "st": st, "atb": rng.randf() * 1.2, "cds": {}, "buff": {}, "dots": [], "lunge": 0.0, "hit": 0.0, "shown": float(c.hp) }
+	return { "c": c, "side": side, "st": st, "atb": rng.randf() * 1.2 + (1.0 if str(c.get("gear", "")) == "ribbon" else 0.0), "cds": {}, "buff": {}, "dots": [], "lunge": 0.0, "hit": 0.0, "shown": float(c.hp) }
 
 func open(battle_kind: String, team: Array, foe_team: Array, who: String) -> void:
 	kind = battle_kind
@@ -371,6 +371,8 @@ func _end(r: String) -> void:
 				gain *= 1.5                             # coastfolk: one partner for life
 			if heritage == "highland" and kind != "wild":
 				gain *= 1.5                             # highlanders: trust grows in hard battles
+			if str(u.c.get("gear", "")) == "bell":
+				gain *= 1.5                             # the calm bell
 			if u.c.hp > 0 and R.add_bond(u.c, gain):
 				results.append("%s trusts you more: %s." % [u.c.name, R.BOND[R.bond_lvl(u.c)][0]])
 	elif r == "lost":
@@ -536,6 +538,9 @@ func _draw() -> void:
 			if int(u.hit * 20.0) % 2 == 0:
 				continue                                          # a blink when hit (soft: no full-screen flash)
 		var look: Dictionary = looks.get(u.c.sp, Figures.look_for(R.sp(u.c)))
+		if u.c.get("gear", "") != "":
+			look = look.duplicate()
+			look.gear = u.c.gear
 		var pose := { "wag": [1, 0, -1, 0][int(t * 6.0) % 4], "blink": fmod(t + at.x, 3.1) < 0.12, "ears_up": true,
 			"crouch": 1 if u == wait_u else 0, "walking": u.lunge > 0.0, "frame": int(t * 12.0) % 4 }
 		draw_set_transform(at - Vector2(9, 12) * sc, 0, Vector2(sc, sc))

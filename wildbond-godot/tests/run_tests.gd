@@ -541,6 +541,44 @@ func _run() -> void:
 	check(main.egg.is_empty() and main.ranch.size() == n_ranch + 1 and main.ranch[-1].lvl == 3 and int(main.ranch[-1].gen) == 2, "after a walk on your journey the egg hatches into the ranch")
 	talk_through()
 	check(not main.R.breed_info(main.ranch[0], main.ranch[2]).ok, "a level-3 creature is too young to breed")
+	# ---- Maren's workbench: gear for your creatures, worn and seen
+	main.me.tile = Vector2i(2, 9)
+	check(main._near_bench(), "standing at Maren's workbench")
+	main.story_done.erase("bench")
+	main._open_bench()
+	check(main.lines.size() >= 2 and main.lines[0].who == "maren", "the first time, Maren explains her workbench")
+	talk_through()
+	check(main.card.visible and main.card_mode == "bench" and main.card.buttons.size() == 4, "then whoever walks with you tries gear on (%s)" % [main.card.buttons])
+	main.card.visible = false
+	main.bench_i = main.R.GEAR.keys().find("harness")
+	main._open_bench()
+	main.bag.coins = 100
+	var wearer: Dictionary = main.team[0]
+	main.card._pick(1)
+	check(wearer.get("gear") == "harness" and int(main.bag.coins) == 40, "Maren makes a Leather Harness for 60 coins, and it goes on")
+	talk_through()
+	check(main.partner.look.get("gear") == "harness", "it shows on your partner as you walk")
+	check(main.card.visible and main.card.buttons[1] == "Take it off", "back at the bench: Take it off")
+	main.card._pick(1)
+	check(not wearer.has("gear") and int(main.gear_owned.harness) == 1, "taken off, it goes in your satchel")
+	main.card._pick(1)
+	check(wearer.get("gear") == "harness" and int(main.gear_owned.harness) == 0, "and goes back on, for nothing")
+	main.card._pick(3)
+	check(not main.card.visible, "Done closes the bench")
+	var bare: Dictionary = wearer.duplicate(true)
+	bare.erase("gear")
+	check(main.R.stats(wearer).grd > main.R.stats(bare).grd, "a harness: it takes knocks better (Guard %d against %d)" % [main.R.stats(wearer).grd, main.R.stats(bare).grd])
+	var foe_c: Dictionary = main.R.make("cindercub", 20, { "rar": 1 }, main.rng)
+	var att := { "c": foe_c, "st": main.R.stats(foe_c), "buff": {}, "side": "f" }
+	var tgt: Dictionary = main.R.make("mosshog", 20, { "rar": 1 }, main.rng)
+	var d_bare: int = main.R.damage(att, { "c": tgt, "st": main.R.stats(tgt), "buff": {}, "side": "a" }, main.DATA.MOVES.emberSnap, 1.0, 0.5, 1.0).d
+	tgt["gear"] = "ember"
+	var d_band: int = main.R.damage(att, { "c": tgt, "st": main.R.stats(tgt), "buff": {}, "side": "a" }, main.DATA.MOVES.emberSnap, 1.0, 0.5, 1.0).d
+	check(d_band < d_bare, "an Ember-Glass Band: Ember moves hurt less (%d against %d)" % [d_band, d_bare])
+	check(main.Figures._gear_parts(main.Figures._wolf({}, main.CREATURE_LOOKS.cindercub), "bell").size() > 0, "gear is drawn on the body, whatever its shape")
+	wearer.erase("gear")
+	main.gear_owned.clear()
+	main._lead_look()
 	main._set_map("larkhaven")
 	main.me.tile = keep_tile
 	# ---- a creature ready to change: you're asked, and "not yet" is respected until it grows again

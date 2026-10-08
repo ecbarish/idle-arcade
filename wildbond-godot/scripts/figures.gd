@@ -133,10 +133,37 @@ static func creature(ci: CanvasItem, o: Vector2, right: bool, pose: Dictionary, 
 		"spider": P = _spider(pose, look)
 		"sprite": P = _sprite(pose, look)
 		_: P = _wolf(pose, look)
+	if str(look.get("gear", "")) != "":
+		P.append_array(_gear_parts(P, str(look.gear)))
 	if not right:
 		for p in P:
 			p[0] = 17 - p[0] - p[2]
 	paint(ci, o, P)
+
+## Gear shows on whoever wears it (rules.gd GEAR): found on the body (the biggest part), so it fits every body plan.
+## A harness is a strap round the middle with a buckle, a bell hangs at the chest, a ribbon flies at the back, and a
+## band or charm is a collar of its colour just behind the head.
+const GEAR_COL := { "harness": Color("8a5a32"), "bell": Color("e8c040"), "ribbon": Color("e04a8a"), "ember": Color("e0602a"),
+	"tide": Color("6ab0e8"), "grove": Color("5d9a3e"), "stone": Color("9a9488") }
+static func _gear_parts(P: Array, gear: String) -> Array:
+	var body: Array = P[0]
+	for p in P:
+		if p[2] * p[3] > body[2] * body[3]:
+			body = p
+	var x: int = body[0]
+	var y: int = body[1]
+	var w: int = body[2]
+	var h: int = body[3]
+	var col: Color = GEAR_COL.get(gear, Color.WHITE)
+	match gear:
+		"harness":
+			return [[x + w / 2 - 1, y, 2, h, col, false], [x + 1, y + h / 2, w - 2, 1, col, false], [x + w / 2 - 1, y + h / 2, 2, 1, Color("e8c040"), false]]
+		"bell":
+			return [[x + w - 2, y + h - 1, 3, 1, Color("6a4a2a"), false], [x + w - 1, y + h, 2, 2, col]]
+		"ribbon":
+			return [[x - 1, y - 1, 2, 2, col], [x - 3, y - 2, 2, 1, col, false]]
+		_:
+			return [[x + w - 2, y, 1, h, col, false], [x + w - 3, y, 1, h, col.darkened(0.25), false]]
 
 static func _frame(pose: Dictionary) -> int:
 	return pose.get("frame", 0) if pose.get("walking", false) else 0
