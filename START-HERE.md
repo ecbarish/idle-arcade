@@ -137,6 +137,8 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 · Codex: PR #57 guide refresh: illustrated rooms and commissions, generated costs, corrected equipment advice. All eight test pages pass; static guide checks pass at phone, laptop, desktop and ultrawide widths.
+
 - 2026-10-08 Claude (later): Diamond Career v0.3.1 (Evan couldn't see the pitch: field cleared mid-throw, tap to swing, a circle at the plate). Starfall
   Godot slice 3: the Smithy (three strikes on the anvil, Garrick takes over after five pieces), the Apothecary (brew tonics, set the
   price), plots unlock with rank, adventurers save their share; 85 checks. ChatGPT reset: Lane A refilled with T35-T37.

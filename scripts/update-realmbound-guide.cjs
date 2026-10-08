@@ -4,17 +4,18 @@
 const fs = require('node:fs'), path = require('node:path'), vm = require('node:vm');
 const root = path.resolve(__dirname, '..'), arcade = { validators: {} };
 const context = vm.createContext({ Arcade: arcade, window: { Arcade: arcade } });
-for (const file of ['00-core.js','01-world.js','03-talents-abilities.js','07-dungeons.js','08-inventory-quests.js']) {
+for (const file of ['00-core.js','01-world.js','02-items.js','03-talents-abilities.js','07-dungeons.js','08-inventory-quests.js','28-crafted-gear.js']) {
   vm.runInContext(fs.readFileSync(path.join(root,'games/realmbound/js',file),'utf8'), context, {filename:file});
 }
 // The normal Sanctum zone is assigned by the existing dungeon runner, not its original definition.
 const runners = fs.readFileSync(path.join(root,'games/realmbound/js/09-dungeon-runs.js'),'utf8');
 vm.runInContext(runners.split('\n').find(line => line.startsWith('Object.assign(SANCTUM,')), context);
-const data = vm.runInContext('({FACTIONS,RACES,CLASSES,TALENTS,ZONES,DUNGEONS,ADDONS:ADDONS.map(({name,req,desc})=>({name,req,desc}))})',context);
+const data = vm.runInContext('({FACTIONS,RACES,CLASSES,TALENTS,ZONES,DUNGEONS,commissions:Object.keys(GUILD_GEAR_COST).map(slot=>({slot,...guildGearCost(slot,"warrior")})),ADDONS:ADDONS.map(({name,req,desc})=>({name,req,desc}))})',context);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const table = (heads, rows) => '\n<table><thead><tr>' + heads.map(h=>`<th scope="col">${esc(h)}</th>`).join('') + '</tr></thead><tbody>' + rows.map(row=>'<tr>'+row.map(cell=>`<td>${esc(cell)}</td>`).join('')+'</tr>').join('\n') + '</tbody></table>\n';
 const regions = ids => table(['Place','Level band','Hubs'], ids.map(id=>{const z=data.ZONES[id];return [z.name,z.lv.join('–'),typeof z.hub === 'string' ? z.hub : [...new Set(Object.values(z.hub))].join(' / ')];}));
 const blocks = {
+  commissions: table(['Slot','Guild ore','Guild herbs','Coin fee'],data.commissions.map(c=>[c.slot[0].toUpperCase()+c.slot.slice(1),c.ore,c.herb,Math.floor(c.money/10000)+'g '+Math.floor(c.money%10000/100)+'s '+c.money%100+'c'])),
   people: table(['People','Faction','Racial bonus'],Object.values(data.RACES).map(r=>[r.name,data.FACTIONS[r.faction].name,r.bonus])),
   classes: table(['Class and role','Rhythm','Talent trees'],Object.entries(data.CLASSES).map(([id,c])=>[c.name+' · '+c.role,c.desc,data.TALENTS[id].map(t=>t.tree).join(' / ')])),
   places: regions(['thornvale','redsand','fens','ashen','frostmere']),

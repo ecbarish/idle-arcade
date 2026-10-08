@@ -9,3 +9,5 @@ Validation: all links, section anchors and images resolve; keyboard skip links w
 Before/after phone and current phone/ultrawide captures: docs/screenshots/game-guides/. No gameplay, engine, cache or version changes.
 
 Review polish (2026-10-08): rebased onto main 24f346b. The table checker now accepts LF and CRLF checkouts while still detecting stale data; regeneration preserves the checkout’s line endings. The existing hall-location assertions accept Claude’s capitalized Guild Hall text. Real game pictures were recaptured from the updated source. No gameplay behavior changed.
+
+Service refresh (Codex, 2026-10-08): walk-in Inn/Smithy instructions, Fenwatch and commission pictures from the actual released game; crafting fees now form a generated table. Guides no longer claim an equipment-level restriction absent from canEquip(). Same four-width/static/save checks pass; all eight browser pages pass, including the new 35-check runner-safety page. No future engine gameplay is promised.

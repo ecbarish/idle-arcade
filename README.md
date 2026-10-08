@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Realmbound (2026-10-08): illustrated guide to walk-in Inn and Smithy services and level-55 guild commissions, with costs generated from the game data.
+
 - Diamond Career v0.3.1 (2026-10-08): batting you can see. Nothing covers the field while the ball is coming: tap anywhere on the field (or press Space) to swing, a circle at the plate lights up at the moment to swing, the controls sit high on the field clear of the plate, and the at-bat box says plainly how to hit (Evan's report).
 
 <<<<<<< HEAD
