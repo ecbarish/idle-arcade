@@ -101,6 +101,10 @@ packs that fit our look (CC0 or CC-BY; recorded in CREDITS.md). Godot plays spri
 step: choose an art direction and a base sprite size (likely 16x16 tiles with 16x24 characters, or 32x32), then make
 one character and one creature properly as the template.
 
+**Decided 2026-10-08 (Evan):** use the free CC0 **Ninja Adventure** pack (16x16, four-way walk animations, 60+
+monsters, tilesets, effects; CREDITS.md) as placeholder art to move fast, while building **our own original assets**
+over time for a recognisable identity. The Godot trial now uses its tamer, Maren and a partner (the Racoon).
+
 ## How we'll know it works
 Evan replays the first hour after each phase. A new player should be able to say, within ten minutes: who Maren and
 Wren are, why the world is faded, how to bond with a creature, what the Wilddex is for, and where to go next, without
