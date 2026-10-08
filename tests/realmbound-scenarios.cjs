@@ -932,5 +932,39 @@ module.exports = function scenarios() {
           hero.zone='frostmere';townEnter();check(TOWN.map.rows.join('').includes('s'),'R6: Lanternrest has snow around its lodge');
         }finally{clearTownService();PW=keepWidth;S.chars=keepChars;S.cur=keepCur;S.guild=keepGuild;S.bank=keepBank;TOWN.inside=false;TOWN.on=false;if(H())boot();}
       }
+
+      // R5: every class/slot, guarded shared-bank transactions, and the actual Smith conversation.
+      {const keepChars=S.chars,keepCur=S.cur,keepGuild=S.guild,keepBank=S.bank,keepWidth=PW;
+        const hero=newHero('Guild Crafter','concord','human','warrior'),alt=newHero('Other Purse','wild','grishar','hunter');hero.onboarding=null;alt.onboarding=null;hero.lvl=55;hero.zone='crownheart';hero.mode='focus';S.chars=[hero,alt];S.cur=hero.id;PW=1000;
+        S.guild={founded:1,name:'The Shared Anvil',level:1,xp:0,members:{},jobs:{},requests:{},stories:{}};
+        const ready=()=>{clearTownService();boot();C.phase='intown';C.lastInput=C.run;TOWN.inside='smith';hero.money=1000000;hero.bags=[];S.bank={ore:500,herb:500,kit:3,potion:4};};
+        const ledger=()=>JSON.stringify([S.bank,hero.money,hero.bags,hero.gear,alt.money,alt.bags,S.guild.xp]);
+        try{
+          for(const cls of Object.keys(CLASSES))for(const slot of SLOTS){hero.cls=cls;ready();const cost=guildGearCost(slot),before=ledger(),a=guildGearItem(cls,slot),b=guildGearItem(cls,slot);delete a.id;delete b.id;
+            check(JSON.stringify(a)===JSON.stringify(b),cls+'/'+slot+': preview is deterministic');check(ledger()===before,cls+'/'+slot+': preview spends nothing');
+            const oldGear=JSON.stringify(hero.gear),other=JSON.stringify([alt.money,alt.bags]),made=craftGuildGear(slot);
+            check(made&&made.rar===3&&made.ilvl===55&&made.crafted&&!made.set&&canEquip(made),cls+'/'+slot+': usable level-55 rare, no raid set');
+            check(hero.money===1000000-cost.money&&S.bank.ore===500-cost.ore&&S.bank.herb===500-cost.herb&&S.bank.kit===3&&S.bank.potion===4,cls+'/'+slot+': exactly one fee and guild supply debit');
+            check(JSON.stringify(hero.gear)===oldGear&&hero.bags.length===1&&hero.bags[0]===made,cls+'/'+slot+': item stays in bags until equipped');
+            check(JSON.stringify([alt.money,alt.bags])===other&&S.guild.xp===0,cls+'/'+slot+': no other hero or guild XP mutation');
+            const loaded=migrate(JSON.parse(localStorage.getItem(KEY))),saved=loaded.chars.find(c=>c.id===hero.id).bags[0];check(saved.crafted&&saved.name===made.name&&JSON.stringify(saved.stats)===JSON.stringify(made.stats),cls+'/'+slot+': crafted item survives save migration');
+            const paid=hero.money;sellItem(made.id);check(hero.money-paid===made.value&&made.value<cost.money,cls+'/'+slot+': selling cannot turn crafting into free money');
+          }
+          hero.cls='warrior';ready();hero.lvl=54;let before=ledger();check(!craftGuildGear('chest')&&ledger()===before,'R5: level-54 request cannot debit stores');hero.lvl=55;
+          const cases=[['guild',()=>S.guild.founded=0,()=>S.guild.founded=1],['road',()=>C.phase='seek',()=>C.phase='intown'],['Inn',()=>TOWN.inside='inn',()=>TOWN.inside='smith'],['raid',()=>hero.dun={raid:true},()=>hero.dun=null],['Auto',()=>hero.mode='auto',()=>hero.mode='focus'],['ore',()=>S.bank.ore=0,()=>S.bank.ore=500],['herbs',()=>S.bank.herb=0,()=>S.bank.herb=500],['money',()=>hero.money=0,()=>hero.money=1000000],['full bags',()=>hero.bags=Array.from({length:16},()=>genJunk(55,'beast')),()=>hero.bags=[]]];
+          for(const [label,change,undo]of cases){change();before=ledger();check(!!guildGearProblem('chest')&&!craftGuildGear('chest')&&ledger()===before,'R5: '+label+' refusal has no partial debit');undo();}
+          before=ledger();check(!craftGuildGear('unknown')&&ledger()===before,'R5: invalid pattern is rejected');
+          const keeper=townPeople()[0];talkTownService(keeper);SCN.skip();SCN.choose(4);check(RTALK?.townService&&RTALK.choices.includes('Weapon'),'R5: Smith offers patterns inside the world');SCN.skip();SCN.choose(0);
+          check(SCN.el.querySelector('.guild-craft-preview')?.textContent.includes('Cost:')&&RTALK.choices.includes('Commission this piece'),'R5: full cost and preview precede confirmation');before=ledger();SCN.skip();SCN.choose(1);check(ledger()===before&&!SCN.el.querySelector('.guild-craft-preview'),'R5: declining preview spends nothing');
+          SCN.skip();SCN.choose(0);const duplicate=RTALK.done;SCN.skip();SCN.choose(0);check(hero.bags.length===1&&RTALK.lines[0][1].includes('pack'),'R5: deliberate confirmation creates one item and Smith responds');const after=ledger();duplicate(0);check(ledger()===after,'R5: repeated callback cannot create or debit twice');clearTownService();
+          hero.money=0;previewGuildGear(keeper,'weapon',0);check(!RTALK.choices.includes('Commission this piece')&&SCN.el.querySelector('.guild-craft-preview').textContent.includes('fee'),'R5: unavailable commission shows reason and no purchase button');clearTownService();hero.money=1000000;
+          previewGuildGear(keeper,'weapon',0);const stale=RTALK.done;boot();before=ledger();stale(0);check(ledger()===before&&!RTALK&&!SCN.el.querySelector('.guild-craft-preview'),'R5: boot cancels preview and pending transaction');
+          C.phase='intown';TOWN.inside='smith';previewGuildGear(keeper,'weapon',0);S.cur=alt.id;before=ledger();SCN.skip();SCN.choose(0);check(ledger()===before,'R5: hero switch cannot spend another purse');S.cur=hero.id;
+          previewGuildGear(keeper,'weapon',0);const oldAccount=S;S=Object.assign({},S);before=ledger();SCN.skip();SCN.choose(0);check(ledger()===before,'R5: replaced account cannot use stale confirmation');S=oldAccount;
+          previewGuildGear(keeper,'weapon',0);hero.mode='auto';before=ledger();SCN.skip();SCN.choose(0);check(ledger()===before&&!openGuildGear(keeper),'R5: Auto never confirms or opens crafting');hero.mode='focus';
+          previewGuildGear(keeper,'weapon',0);S.bank.ore=0;before=ledger();SCN.skip();SCN.choose(0);check(ledger()===before&&RTALK.choices.length===1,'R5: supplies are rechecked when confirming');clearTownService();
+          const legacy=migrate({chars:[Object.assign({},hero,{bags:[],onboarding:null})],cur:hero.id});const activeAccount=S;S=legacy;boot();check(!H().bags.length&&bank().ore===0,'R5: pre-crafting save boots without a new mandatory field');S=activeAccount;
+        }finally{clearTownService();S.chars=keepChars;S.cur=keepCur;S.guild=keepGuild;S.bank=keepBank;PW=keepWidth;TOWN.inside=false;TOWN.on=false;if(H())boot();}
+      }
       rb.save();return checks;
     };

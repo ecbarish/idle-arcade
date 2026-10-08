@@ -101,7 +101,7 @@ function updateWorld(){
   const am=activeMount();
   const st={seek:d?`Moving deeper into ${dungeonDef().name}…`:am?`Riding ${am.name} to find ${targetMob().name}…`:`Looking for ${targetMob().name}…`,fight:m?(C.surge?`${m.name} is casting ${dungeonDef().surgeName}! Press D to dodge!`:`Fighting ${m.name}`):'',
     loot:C.loot&&C.loot.dun?'Boss loot: take it, or give it to a companion':'Loot the corpse (L) before it decays',rest:d||C.party.length?'The party catches its breath…':'Resting…',dead:`You are dead. Running back to your corpse: ${Math.ceil(C.t)}s`,town:`Travelling to ${hubName()}: ${Math.ceil(C.t)}s`,intown:`In town at ${hubName()}. Visit the Inn to rest or the Smithy to sell and repair.`}[C.phase]||'';
-  $('#status').textContent=st;$('#err').textContent=C.errT>0?C.err:'';
+  $('#status').textContent=RTALK&&RTALK.townService?'':st;$('#err').textContent=C.errT>0?C.err:'';
   // loot window
   const lw=$('#lootwin');lw.hidden=!(C.phase==='loot'&&C.loot);if(!lw.hidden){const dl=C.loot.dun;
     const html=(C.loot.money?`<li>${moneyStr(C.loot.money)}</li>`:'')+C.loot.items.map(it=>`<li style="margin:3px 0">${itemSpan(it)}${dl?` ${canEquip(it)&&score(it)>score(h.gear[it.slot])?'<span class="pill" style="color:#7cf08a">Upgrade</span>':''} <button class="btn sm" data-act="dtake" data-arg="${it.id}">Take</button> <button class="btn sm alt" data-act="dgive" data-arg="${it.id}">Give to a companion</button>`:''}</li>`).join('');
