@@ -26,6 +26,7 @@ func tick(seconds: float) -> void:
 	var steps := int(seconds / 0.05)
 	for i in steps:
 		main._process(0.05)
+		main.battle._process(0.05)
 
 func talk_through() -> void:
 	var guard := 0
@@ -138,16 +139,54 @@ func _run() -> void:
 	check(main.partner == main.starters[2] and main.stage == "bonded", "choosing Mosshog makes it your partner")
 	check(main.restore.size() == 1 and main.restore[0].where == "barn", "the bond brings colour back in the barn")
 	talk_through()
-	check(main.stage == "free", "after the bond you're free")
+	check(main.stage == "walk_out", "after the bond you walk out together")
+	check(main.team.size() == 1 and main.team[0].sp == "mosshog" and main.team[0].lvl == 5, "Mosshog joins your team at level 5")
+	check(main.rival_c.sp == "cindercub" and main.rival_c.lvl == 4, "Wren will take Cindercub, the one that beats Mosshog")
 	# ---- your partner follows you out, and the colour has spilled into town
 	check(walk_to(main.BARN_EXIT + Vector2i.UP), "you can walk back to the barn door")
 	main._step(Vector2i.DOWN)
 	tick(1.0)
 	check(main.map_name == "town" and main.partner.where == "town", "you and Mosshog step outside")
 	check(main.spilled and main.restore.size() == 2, "the colour spills out of the barn into town")
+	check(main.maren.where == "town", "Maren comes out of the barn with you")
 	talk_through()
+	# ---- Wren runs in and challenges you
+	check(main.stage == "wren_runs" and main.wren.where == "town", "Wren arrives, running")
+	for i in 300:
+		tick(0.05)
+		if main.stage == "rival1": break
+	check(main.stage == "rival1" and (main.wren.tile - main.me.tile).length() <= 1.01, "Wren stops beside you")
+	check(main.lines.size() == main.DATA.SCENES.rival1.size() and "Mosshog" in main.lines[-1].text and "Cindercub" in main.lines[-1].text, "Wren's lines name both partners")
+	talk_through()
+	check(main.stage == "battle" and main.battle.visible, "the battle starts")
+	check(main.battle.foes.size() == 1 and main.battle.allies.size() == 1 and main.battle.trainer != "", "you against Wren, one each")
+	var bt: Control = main.battle
+	var turns := 0
+	for i in 4000:
+		tick(0.05)
+		if bt.state == "choose":
+			turns += 1
+			bt._choose(0)
+			if turns == 1: check(bt.state == "moves", "Fight opens the moves")
+			var mv: Array = main.R.moves_of(bt.wait_u.c).filter(func(m): return bt.wait_u.cds.get(m, 0.0) <= 0)
+			mv.sort_custom(func(a, b): return bt.best_value(a) > bt.best_value(b))
+			bt._use_move(mv[0])
+		if bt.state == "results": break
+	check(bt.state == "results" and bt.result in ["won", "lost"], "the battle ends with a result (%s after %d turns)" % [bt.result, turns])
+	check(turns >= 2, "you get to choose on your turns")
+	if bt.result == "won":
+		check(bt.results.any(func(l): return "XP" in l) and main.team[0].xp + main.team[0].lvl > 5, "winning gives XP")
+	bt._go_to("fog_out")
+	tick(1.5)
+	check(not bt.visible and main.stage == "after_rival", "the results close and the story carries on")
+	check(main.team[0].hp == main.R.stats(main.team[0]).hp, "Maren patches your team up")
+	talk_through()
+	check(main.stage == "free", "after Wren you're free")
 	var before: Vector2i = main.me.tile
-	main._step(Vector2i.DOWN)
+	for d in [Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP]:
+		if main.walkable(main.me.tile + d):
+			main._step(d)
+			break
 	tick(0.6)
 	check(main.partner.tile == before, "your partner follows in your footsteps")
 	# ---- the done line

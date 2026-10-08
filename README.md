@@ -39,6 +39,12 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Wildbond v1.6.1 (2026-10-08)** — **A fairer first battle.** Wren always picks the partner whose element beats yours,
+  and every starter knew its element move from level 1, so the first battle was lost fast: measured over 100 battles
+  each with sensible moves, Cindercub won only 5. Starters now learn their element move (Ember Snap, Bubble Jet, Vine
+  Lash) at level 5: your partner arrives knowing it, Wren's level-4 partner learns it a little later. Now Cindercub wins
+  97 of 100, Ripplet 78, Mosshog 100, and battles last a turn or two longer. Measured with the Godot trial's copy of the
+  rules (`wildbond-godot/tests/battle_odds.gd`), which gives the browser's exact numbers.
 - **Otherworld v0.1.0 (2026-10-08), a new game** — Your old life ends. In **the Between**, a starlit library of lives,
   the Archivist lets you choose your next world (Asterhold now; Hearthmere and the Ashen Throne are still being
   woven) and one gift, each a strength with a cost. Live a life in **Asterhold**: wake in a hay cart, touch the guild

@@ -11,6 +11,8 @@ extends Node2D
 const Figures := preload("res://scripts/figures.gd")
 const Register := preload("res://scripts/register.gd")
 const Card := preload("res://scripts/card.gd")
+const Battle := preload("res://scripts/battle.gd")
+const R := preload("res://scripts/rules.gd")
 const TILE := 16
 const SOLID := "Tr#=PXWh|tb"                 # trees, roofs, walls, fences, signs, barn walls, hay, stall boards, trough
 const TOWN := [                              # Larkhaven, from games/wildbond/js/11-maps.js
@@ -52,6 +54,7 @@ const PADDOCK := Rect2i(14, 9, 5, 2)         # the open ground inside the ranch 
 const LOOKS := {
 	"tamer": { "skin": Color("f1c9a0"), "hair": Color("6b4423"), "hat": Color("2a3f6b"), "shirt": Color("d8453a"), "legs": Color("3a4a6a"), "style": "cap" },
 	"maren": { "skin": Color("e8c4a0"), "hair": Color("c9c3b8"), "shirt": Color("7a5236"), "apron": Color("4f8a5a"), "legs": Color("7a5236"), "style": "bun", "outfit": "skirt" },
+	"wren": { "skin": Color("f0c7a4"), "hair": Color("3a2230"), "shirt": Color("d85a8a"), "legs": Color("3a3a4a"), "style": "spiky" },
 }
 ## Creatures' looks: a body plan and colours (figures.gd). The starters' other facts come from data/wildbond.json.
 const CREATURE_LOOKS := {
@@ -97,6 +100,9 @@ var DATA: Dictionary = {}                    # the browser game's content: SPECI
 var me := Mover.new("me", "town", Vector2i(11, 7))
 var maren := Mover.new("maren", "town", Vector2i(7, 11))
 var pup := Mover.new("pup", "town", Vector2i(16, 9))
+var wren := Mover.new("wren", "gone", Vector2i(10, 0))   # your rival, who arrives late
+var team: Array = []                         # your creatures as the rules see them (rules.gd): level, XP, stats, bond
+var rival_c: Dictionary = {}
 var starters: Array[Mover] = []
 var partner: Mover = null
 var map_name := "town"
@@ -122,6 +128,7 @@ var meet_after: Mover = null                 # walking up to a creature you tapp
 var rng := RandomNumberGenerator.new()
 var register: Control
 var card: Control
+var battle: Control
 
 @onready var cam: Camera2D = $Camera
 @onready var fade_rect: ColorRect = $FadeLayer/Fade
@@ -136,6 +143,7 @@ func _ready() -> void:
 	rng.seed = 7 if demo else Time.get_ticks_usec()
 	var j: JSON = load("res://data/wildbond.json")
 	DATA = j.data
+	R.DATA = DATA
 	pup.look = CREATURE_LOOKS.pup
 	pup.home = PADDOCK
 	var x := 8
@@ -156,6 +164,13 @@ func _ready() -> void:
 	card = Card.new()
 	$UI.add_child(card)
 	card.chosen.connect(_on_chosen)
+	battle = Battle.new()
+	battle.looks = CREATURE_LOOKS
+	battle.floor_tex = FLOOR
+	battle.nature_tex = NATURE
+	battle.demo = demo
+	$UI.add_child(battle)
+	battle.finished.connect(_on_battle)
 	say("", "The supply cart stops at the edge of the trees. Larkhaven: a handful of roofs and a ranch fence that runs right up to the forest.")
 	say("", "Everything here looks faded, like an old picture left in the sun. You too.")
 
@@ -194,10 +209,23 @@ func _after_talk() -> void:
 			stage = "barn_choose"
 			caption.text = "Walk up to one of the three and press Enter to meet it properly."
 		"bonded":
-			stage = "free"
-			caption.text = "End of the trial. Walk out into Larkhaven; %s follows you." % _partner_name()
+			stage = "walk_out"
+			caption.text = "Walk out into Larkhaven; %s follows you." % _partner_name()
 		"spill":
+			# Wren arrives late, running down the north road
+			stage = "wren_runs"
+			wren.where = "town"
+			wren.tile = Vector2i(10, 0)
+			wren.pos = Vector2(wren.tile) * TILE
+			wren.speed = 6.0
+			wren.path = route(wren.tile, _beside_me())
+		"rival1":
+			stage = "battle"
+			battle.open("trainer", team, [rival_c], DATA.RIVAL.name if DATA.get("RIVAL") is Dictionary else "Wren")
+		"after_rival":
 			stage = "free"
+			wren.speed = 4.0
+			wren.path = route(wren.tile, Vector2i(10, 0))        # off to Thornwood, already running
 			caption.text = "End of the trial. Walk around Larkhaven with %s." % _partner_name()
 
 func _on_signed(look: Dictionary) -> void:
@@ -226,7 +254,7 @@ func tile_at(p: Vector2i) -> String:
 
 func actors() -> Array:
 	var out: Array = []
-	for m in [me, maren, pup] + starters:
+	for m in [me, maren, pup, wren] + starters:
 		if m.where == map_name:
 			out.append(m)
 	return out
@@ -310,6 +338,10 @@ func _switch() -> void:
 		say("maren", "Go and say hello. Take your time, love; this is the big one. They'll be choosing you as much as you choose them.")
 	elif trans_to == "town" and partner and not spilled:
 		spilled = true
+		maren.where = "town"                         # Maren follows you out
+		maren.tile = BARN_DOOR + Vector2i(1, 1)
+		maren.pos = Vector2(maren.tile) * TILE
+		maren.path.clear()
 		stage = "spill"
 		caption.text = ""
 		restore.append({ "where": "town", "at": Vector2(BARN_DOOR) * TILE + Vector2(8, 8), "r": 0.0, "goal": 110.0 })
@@ -341,11 +373,20 @@ func _process(dt: float) -> void:
 			_think(m, dt)
 	for m in actors():
 		_walk(m, dt)
+	if stage == "wren_runs" and wren.path.is_empty() and wren.pos.distance_to(Vector2(wren.tile) * TILE) < 0.5:
+		stage = "rival1"
+		wren.face = me.tile - wren.tile
+		me.face = wren.tile - me.tile
+		if wren.where == "town" and wren.tile.x == 10 and wren.tile.y == 0:
+			wren.tile = _beside_me()
+			wren.pos = Vector2(wren.tile) * TILE
+		for l in DATA.SCENES.rival1:
+			say(l[0], _fill(l[1]))
 	if stage == "maren_walks" and maren.path.is_empty() and maren.pos.distance_to(Vector2(maren.tile) * TILE) < 0.5:
 		stage = "maren_talks"
 		say("maren", "There you are! You must be the new tamer. I'm Maren. I keep the ranch.")
 		say("maren", "Before anything else: the ranch register. Every tamer in the valley signs it. Write yourself in, love.")
-	var free_to_walk: bool = stage in ["to_barn", "barn_choose", "free"] and not card.visible and trans_t < 0.0
+	var free_to_walk: bool = stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and trans_t < 0.0
 	if lines.is_empty() and free_to_walk and me.path.is_empty() and me.pos.distance_to(Vector2(me.tile) * TILE) < 0.5:
 		var d := Vector2i.ZERO
 		if Input.is_action_pressed("ui_up") or Input.is_physical_key_pressed(KEY_W): d = Vector2i.UP
@@ -418,7 +459,7 @@ func _unhandled_input(e: InputEvent) -> void:
 
 ## Click or tap: walk there (around anything in the way). Tap a creature in the barn to walk up and meet it.
 func _tap(at: Vector2) -> void:
-	if not (stage in ["to_barn", "barn_choose", "free"] and not card.visible and trans_t < 0.0):
+	if not (stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and trans_t < 0.0):
 		return
 	var goal := Vector2i((at / TILE).floor())
 	meet_after = null
@@ -487,6 +528,8 @@ func _on_chosen(id: String) -> void:
 		if s.id == id:
 			partner = s
 	partner.home = Rect2i()
+	team = [R.make(id, 5, { "rar": 1 }, rng)]           # level 5, like the browser game's first partner
+	rival_c = R.make(DATA.COUNTER[id], 4, { "rar": 1 }, rng)   # Wren takes the one that beats yours
 	stage = "bonded"
 	caption.text = ""
 	_stop(partner)
@@ -614,7 +657,7 @@ func _demo(dt: float) -> void:
 			_meet(_starter_beside_me())
 		else:
 			me.path = route(me.tile, goal)
-	elif stage == "free" and map_name == "barn" and me.path.is_empty():
+	elif stage == "walk_out" and map_name == "barn" and me.path.is_empty():
 		me.path = route(me.tile, BARN_EXIT)
 
 # ---------------------------------------------------------------- drawing
@@ -697,7 +740,7 @@ func _draw_actor(ci: CanvasItem, m: Mover, i: int) -> void:
 	var face := m.face
 	if not walking and face == Vector2i.DOWN and fmod(t + i, 6.0) > 5.2:
 		face = Vector2i.LEFT if int(t + i) % 2 == 0 else Vector2i.RIGHT   # a glance around while standing
-	var look: Dictionary = my_look if m == me else LOOKS.maren
+	var look: Dictionary = my_look if m == me else LOOKS.get(m.id, LOOKS.maren)
 	Figures.person(ci, m.pos + Vector2(2, -5), face, walking, int(m.step_t * 8.0) % 4, fmod(t + i * 1.7, 3.3) < 0.12, look)
 
 # ---------------------------------------------------------------- inside the barn (drawn in code: warm wood and straw)
@@ -873,7 +916,10 @@ func _update_ui() -> void:
 	bubble.visible = not line.is_empty() and trans_t < 0.0
 	if bubble.visible:
 		bubble_text.text = line.text + "   ▸"
-		var who: Mover = maren if line.who == "maren" and maren.where == map_name else null
+		var who: Mover = null
+		for m in [maren, wren]:
+			if line.who == m.id and m.where == map_name:
+				who = m
 		var w := 240.0
 		bubble.size = Vector2(w, 0)
 		bubble.reset_size()
@@ -942,3 +988,27 @@ func _draw_structures() -> void:
 				_tex(NATURE, Vector2i(0 if (x * 3 + y) % 4 < 2 else 2, 0), Vector2i(2, 2), Vector2(x - 0.5, y - (1.5 if tile_at(Vector2i(x, y - 1)) == "T" else 0.25)) * TILE)   # edge rows sit low so they never hide the town
 	# Maren's barn stands taller than the cottages and in front of the trees behind it
 	draw_texture_rect_region(HOUSE, Rect2(Vector2(BARN_DOOR.x - 1, BARN_DOOR.y - 4) * TILE, BARN_SPRITE.size), BARN_SPRITE)
+
+# ---------------------------------------------------------------- Wren and the first battle
+func _beside_me() -> Vector2i:
+	for d in [Vector2i.LEFT, Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN]:
+		var p: Vector2i = me.tile + d
+		if walkable(p) and tile_at(p) != "D" and not route(wren.tile, p).is_empty():
+			return p
+	return me.tile + Vector2i.LEFT
+
+## Story lines from the browser game, with {name}, {starter} and {rival} filled in.
+func _fill(s: String) -> String:
+	return s.replace("{name}", my_look.get("name", "Tamer")).replace("{starter}", _partner_name()).replace("{rival}", rival_c.get("name", "its partner"))
+
+func _on_battle(result: String) -> void:
+	stage = "after_rival"
+	for c in team:
+		c.hp = R.stats(c).hp                       # Maren patches everyone up after the first battle
+	if result == "won":
+		for l in DATA.SCENES.rival1Win:
+			say(l[0], _fill(l[1]))
+	else:
+		say("wren", _fill("Ha! Told you it was strategy. Don't worry, {starter} just needs a few more days with you."))
+		say("maren", _fill("There, all patched up. Losing your first battle is a fine tradition, {name}. Wren lost theirs to a goose."))
+		say("wren", "That goose was a professional.")

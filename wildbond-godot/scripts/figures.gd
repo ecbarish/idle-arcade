@@ -14,7 +14,7 @@ static func paint(ci: CanvasItem, o: Vector2, parts: Array) -> void:
 
 ## A person, about 12x21 pixels from the origin (the top of the head). face: which way they look; frame 0-3 while
 ## walking (1 and 3 lift a foot, 0 and 2 pass with a little bob). look keys: skin, hair, hat, shirt, legs, shoes,
-## apron (optional), body ("broad" | "narrow"), style ("cap" | "short" | "long" | "ponytail" | "bun"),
+## apron (optional), body ("broad" | "narrow"), style ("cap" | "short" | "long" | "ponytail" | "bun" | "spiky"),
 ## outfit ("trousers" | "skirt" | "overalls").
 static func person(ci: CanvasItem, o: Vector2, face: Vector2i, walking: bool, frame: int, blink: bool, look: Dictionary) -> void:
 	if not walking:
@@ -94,6 +94,10 @@ static func person(ci: CanvasItem, o: Vector2, face: Vector2i, walking: bool, fr
 			P.append([3, 0, 6, 2, hair])
 			if not side: P.append([3, 2, 1, 2, hair]); P.append([8, 2, 1, 2, hair])
 			else: P.append([back_x, 1, 2, 3, hair]); P.append([(1 if right else 9), 2, 2, 5, hair])
+		"spiky":
+			P.append([3, 0, 6, 2, hair]); P.append([3, -1, 1, 1, hair]); P.append([5, -2, 1, 2, hair]); P.append([7, -1, 1, 1, hair])
+			if not side: P.append([3, 2, 1, 2, hair]); P.append([8, 2, 1, 2, hair]); P.append([5, 2, 2, 1, hair])
+			else: P.append([back_x, 1, 2, 3, hair]); P.append([(2 if right else 9), 0, 1, 2, hair])
 		"bun":
 			P.append([3, 0, 6, 2, hair]); P.append([5, -2, 2, 2, hair])
 			if not side: P.append([3, 2, 1, 3, hair]); P.append([8, 2, 1, 3, hair])
