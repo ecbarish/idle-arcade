@@ -266,3 +266,5 @@ Merged 2026-10-08 (Realmbound v1.3.0, PR #53); written by Codex on codex/realmbo
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
 | OW1 | **T35: a living Lanthorn** | M | Data+Polish | OW0 | done, merged 2026-10-08 (Otherworld v0.2.0, PR #58) | docs/ROADMAP.md T35: visible locked choices, gift costs, food/fear over three days and Archivist memories |
+
+| RB-W1 | **T38 Realmbound in the game window, plan and part 1** | M | Polish | — | claimed: Codex, 2026-10-08, codex/realmbound-window | ROADMAP T38; world fills the window, Quest Journal and Satchel overlays; no gameplay/balance or version changes |
