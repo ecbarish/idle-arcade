@@ -26,6 +26,7 @@ func check(ok: bool, what: String) -> void:
 
 func _initialize() -> void:
 	main = load("res://scenes/main.tscn").instantiate()
+	main.no_save = true                           # never touch a real saved journey
 	main.demo = false
 	root.add_child(main)
 	_run.call_deferred()
@@ -317,6 +318,26 @@ func _run() -> void:
 		ev.physical_keycode = KEY_ENTER
 		main._unhandled_input(ev)
 	check(main.team.all(func(c): return c.hp == main.R.stats(c).hp), "talking to Maren heals your team")
+	# ---- saving your journey and loading it back (to a test file, never your real one)
+	talk_through()
+	main.no_save = false
+	main.save_path = "user://test_journey.json"
+	main.save_game()
+	check(FileAccess.file_exists(main.save_path), "your journey saves")
+	var lures_saved: int = main.bag.lures
+	var lvl_saved: int = main.team[0].lvl
+	var team_saved: int = main.team.size()
+	main.bag.lures = 0
+	main.badges = []
+	check(main._load_game(), "and loads back")
+	tick(1.0)
+	talk_through()
+	check(main.bag.lures == lures_saved and "thorn" in main.badges and main.team.size() == team_saved, "with your satchel, badges and team intact")
+	check(main.team[0].lvl == lvl_saved and typeof(main.team[0].lvl) == TYPE_INT and main.R.stats(main.team[0]).hp > 0, "creatures come back whole (level %d)" % main.team[0].lvl)
+	check(main._gate_open("thornwood") and main.npc_info.bram.beaten, "beaten trainers and the open gate are remembered")
+	check(main._save_summary().begins_with(str(main.my_look.name)), "the start page sums it up: %s" % main._save_summary())
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(main.save_path))
+	main.no_save = true
 	# ---- the done line
 	print("Wildbond Godot checks: %d passed, %d failed" % [passed, failed])
 	quit(1 if failed > 0 else 0)

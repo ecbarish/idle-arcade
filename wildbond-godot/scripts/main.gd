@@ -12,6 +12,7 @@ const Figures := preload("res://scripts/figures.gd")
 const Register := preload("res://scripts/register.gd")
 const Card := preload("res://scripts/card.gd")
 const Battle := preload("res://scripts/battle.gd")
+const Title := preload("res://scripts/title.gd")
 const R := preload("res://scripts/rules.gd")
 const TILE := 16
 const BARN_SOLID := "XWh|tb"                 # inside the barn: the dark, walls, hay, stall boards, the trough, sacks
@@ -95,6 +96,9 @@ var got_items := {}                          # items already picked up, by id
 var grass_n := 10                            # tall-grass steps until the next find (8-16, like the browser)
 var battle_story := ""                       # "rival1" for Wren's battle; empty for wild ones
 var satchel: Label
+var title: Control
+var no_save := false                         # tests and recordings never touch your saved journey
+var save_path := "user://journey.json"
 var then_do := Callable()                    # runs when the current conversation ends
 var npcs: Array[Mover] = []                  # people out in the world (from the game data): trainers, Wardens
 var npc_info := {}                           # id -> { data from the map, beaten, warden }
@@ -183,11 +187,30 @@ func _ready() -> void:
 	satchel.add_theme_color_override("font_outline_color", Color(0.1, 0.12, 0.14))
 	satchel.add_theme_constant_override("outline_size", 3)
 	$UI.add_child(satchel)
+	title = Title.new()
+	$UI.add_child(title)
+	title.chosen.connect(_on_title)
 	if "--skip-opening" in OS.get_cmdline_user_args():
+		no_save = true
 		_skip_opening()
 		return
+	if demo:
+		no_save = true
+	if not no_save and FileAccess.file_exists(save_path):
+		var s := _save_summary()
+		if s != "":
+			title.open(s)                            # a journey is saved: continue it, or start a new one
+			return
+	_begin_intro()
+
+func _begin_intro() -> void:
 	say("", "The supply cart stops at the edge of the trees. Larkhaven: a handful of roofs and a ranch fence that runs right up to the forest.")
 	say("", "Everything here looks faded, like an old picture left in the sun. You too.")
+
+func _on_title(choice: String) -> void:
+	if choice == "continue" and _load_game():
+		return
+	_begin_intro()
 
 func _set_map(n: String) -> void:
 	map_name = n
@@ -433,6 +456,7 @@ func _process(dt: float) -> void:
 		_demo(dt)
 	_butterfly(dt)
 	_spotter_tick(dt)
+	_autosave(dt)
 	_bubbles(dt)
 	for m in actors():
 		if m.is_creature():
@@ -1423,3 +1447,96 @@ func _someone_standing(p: Vector2i) -> bool:
 		if m.where == map_name and m.tile == p and m.path.is_empty():
 			return true
 	return false
+
+# ---------------------------------------------------------------- saving your journey (user://journey.json)
+## Saved automatically every few seconds while you're free to walk (not mid-battle or mid-conversation) and when the
+## window closes. The opening isn't saved part-way: a journey is saved from the moment you're free in Larkhaven.
+var save_t := 0.0
+
+func _autosave(dt: float) -> void:
+	save_t += dt
+	if save_t >= 5.0:
+		save_t = 0.0
+		save_game()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		save_game()
+
+func save_game() -> void:
+	if no_save or stage != "free" or battle.visible or not lines.is_empty() or trans_t >= 0.0:
+		return
+	var look := {}
+	for k in my_look:
+		look[k] = (my_look[k] as Color).to_html() if my_look[k] is Color else my_look[k]
+	var beaten: Array = []
+	for k in npc_info:
+		if npc_info[k].beaten:
+			beaten.append(k)
+	var d := { "v": 1, "saved": Time.get_datetime_string_from_system(), "look": look, "team": team, "ranch": ranch, "bag": bag,
+		"badges": badges, "seen": seen, "bonded": bonded, "items": got_items, "beaten": beaten,
+		"restore": restore.map(func(r): return { "where": r.where, "x": r.at.x, "y": r.at.y, "goal": r.goal }),
+		"map": map_name, "x": me.tile.x, "y": me.tile.y, "partner": partner.id if partner else "" }
+	var f := FileAccess.open(save_path, FileAccess.WRITE)
+	if f:
+		f.store_string(JSON.stringify(d))
+
+func _read_save() -> Dictionary:
+	var d = JSON.parse_string(FileAccess.get_file_as_string(save_path)) if FileAccess.file_exists(save_path) else null
+	if d is Dictionary and int(d.get("v", 0)) == 1 and d.get("team") is Array and not d.team.is_empty():
+		return d
+	return {}
+
+func _save_summary() -> String:
+	var d := _read_save()
+	if d.is_empty():
+		return ""
+	var where: String = "Maren's barn" if d.map == "barn" else str(DATA.MAPS.get(d.map, {}).get("name", d.map))
+	var nb: int = d.badges.size()
+	return "%s and %s, in %s. %d badge%s, %d in the Wilddex." % [d.look.get("name", "You"), DATA.SPECIES[d.team[0].sp].name if d.team[0].name == null else d.team[0].name,
+		where, nb, "" if nb == 1 else "s", d.seen.size()]
+
+## A creature read back from the save: JSON stores every number as a decimal, so whole numbers are made whole again.
+func _fix_creature(c: Dictionary) -> Dictionary:
+	for k in ["lvl", "xp", "rar", "hp"]:
+		c[k] = int(c[k])
+	for s in c.pot:
+		c.pot[s] = int(c.pot[s])
+	c.bond = float(c.bond)
+	return c
+
+func _load_game() -> bool:
+	var d := _read_save()
+	if d.is_empty():
+		return false
+	my_look = {}
+	for k in d.look:
+		my_look[k] = Color(d.look[k]) if k in ["skin", "hair", "hat", "shirt", "legs", "shoes", "apron"] else d.look[k]
+	team = d.team.map(_fix_creature)
+	ranch = d.ranch.map(_fix_creature)
+	for k in d.bag:
+		bag[k] = int(d.bag[k])                       # the same satchel the battle screen holds
+	badges = d.badges
+	seen = d.seen
+	bonded = d.bonded
+	got_items = d.items
+	for k in d.beaten:
+		if npc_info.has(k):
+			npc_info[k].beaten = true
+	restore = d.restore.map(func(r): return { "where": r.where, "at": Vector2(float(r.x), float(r.y)), "r": float(r.goal), "goal": float(r.goal) })
+	for s in starters:
+		if s.id == d.partner:
+			partner = s
+			partner.home = Rect2i()
+	painted = true
+	spilled = true
+	stage = "free"
+	wren.where = "gone"
+	maren.where = "larkhaven"
+	maren.tile = BARN_DOOR + Vector2i(1, 1)
+	maren.pos = Vector2(maren.tile) * TILE
+	fade_in = 1.0
+	_go(d.map, Vector2i(int(d.x), int(d.y)), Vector2i.DOWN)
+	trans_t = 0.29
+	say("", "Welcome back, %s." % my_look.get("name", "tamer"))
+	return true
