@@ -1,5 +1,15 @@
 # Research brief: the big open decisions (2026-10-08)
 
+## New game ideas (Evan, 2026-10-08, night)
+
+- **A village/town builder and manager** (Kairosoft's Dungeon Village, "our own spin"): earn money, hire workers,
+  automate what used to be tedious. Starfall Guild's plan already follows Dungeon Village (docs/plans/starfall-guild.md
+  G3, "the town serves the guild"). **Open for Evan:** grow Starfall into the village builder (Claude's recommendation),
+  or keep Starfall light and make a separate game.
+- **A business manager** (working name "Main Street"): own one business, then several in town; hire staff and managers
+  who automate; earn vehicles and conveniences; upgrades and progression. Like the tycoon genre, without ads or paid
+  speed-ups. A new game; parked until research (Gemini prompt given to Evan 2026-10-08) and until the current games
+  mature.
 ## Direction (Evan, 2026-10-08, later): money, AI tools, priorities, guides
 
 - **The ~$200 is not a guardrail.** "It was just a passing thought... it's irrelevant unless we need to." Stay free where
