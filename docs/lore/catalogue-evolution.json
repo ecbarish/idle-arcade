@@ -1,0 +1,24 @@
+{
+  "about": "T37 handoff only. Claude merges evos into wildbond-godot/data/evolution.json after export; existing entries, including Poolkit and starter forms, must remain. First matching condition wins; bond 3 is Devoted. Browser uses SPECIES.evo only.",
+  "evos": {
+    "saillet": [
+      {
+        "to": "fogsail",
+        "at": 18,
+        "place": "cloudglass",
+        "hint": "Maren thinks the mists of Cloudglass Pass quiet a young Saillet into a Fogsail."
+      },
+      {
+        "to": "sunfrill",
+        "at": 18,
+        "bond": 3,
+        "hint": "A Saillet devoted to its tamer may grow a sail that holds the sunlight."
+      },
+      {
+        "to": "draftscale",
+        "at": 18,
+        "hint": "Most Saillet follow the rising wind and become Draftscale."
+      }
+    ]
+  }
+}
