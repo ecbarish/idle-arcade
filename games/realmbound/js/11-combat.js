@@ -180,6 +180,7 @@ function die(){
   if(h.dun){h.dun.wipes++;line('The party wipes. Everyone runs back in.','l-hurt');for(const q of C.party){q.dead=false;q.hp=compStats(q.n).hpMax;}if(C.party.length)say(pick(C.party).n,'wipe');}
 }
 function step(h){
+  if(typeof realmNotebookOpen==='function' && realmNotebookOpen())return; // Reading carried paperwork pauses the world.
   if(arrivalPaused() || modalKind === 'memberstories' || RTALK && (RTALK.memberStory || RTALK.townService))return; // deliberate stories pause the world, never pick an outcome for the player
   memberStoryTick(h);
   const he=H();C.run+=h;he.stats.play+=h;
