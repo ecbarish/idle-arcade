@@ -141,7 +141,7 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
-- 2026-10-08 (Codex): A5/R4 guild member stories ready in PR #49 on codex/realmbound-member-stories: all 32 adventurers have three moments, shared-time/mood gates and two remembered outcomes. All seven pages pass (RB 6,681); 375/1366/1920/3440 UI checked. Saves and favors preserved; no merge/version bump. Next Lane A: A5b Diamond swings you understand.
+- 2026-10-08 (Codex): A5/R4 guild member stories ready in PR #49 on codex/realmbound-member-stories: all 32 adventurers have three moments, shared-time/mood gates and two remembered outcomes. All seven pages pass (RB 6,683); 375/1366/1920/3440 UI checked. World portrait conversations in the hall, with the Guild tab only a record. Saves and favors preserved; no merge/version bump. Next Lane A: A5b Diamond swings you understand.
 
 - 2026-10-08 Claude (PC session, later): Godot trial: the Emberfall Highlands (cliff road from the coast with the Tide Badge; layered
   cliffs, meadow boulders, amber hot springs with steam, drifting sparks; Orsk, Sela, Warden Toren; battles with a highland skyline).

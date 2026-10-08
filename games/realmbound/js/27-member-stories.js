@@ -86,7 +86,7 @@ function memberStoryProblem(key) {
   return memberStoryMeetingProblem(key);
 }
 function memberStoryMeetingProblem(key) {
-  if (!H() || !inTown() || H().dun) return 'Meet in a town or the guild hall.';
+  if (!H() || !inTown() || !TOWN.inside || H().dun) return 'Meet by the hearth in the guild hall.';
   if (ROSTER.jobOf(key) || memberRaiding(key)) return 'Return this member from their job or raid first.';
   if (H().mode === 'auto') return 'Switch to Focus to choose this story yourself.';
   return '';
@@ -123,10 +123,10 @@ function playMemberStory(key, replay) {
     if (!replay && finishMemberStory(key, expected, choice)) renderTab(true);
     if (book) openMemberStoryBook();
   }, { choices });
-  C.lastInput = C.run; TOWN.auto = null; RTALK.memberStory = true; RTALK.memberStoryKey = key; SCN.el.classList.add('member-story-dialogue'); SCN.el.scrollIntoView({ block: 'center' }); return true;
+  C.lastInput = C.run; TOWN.auto = null; TOWN.storyGuest = key; RTALK.memberStory = true; RTALK.memberStoryKey = key; SCN.el.classList.add('member-story-dialogue'); SCN.el.scrollIntoView({ block: 'center' }); return true;
 }
 function openMemberStoryBook() {
-  if (!H() || !guildOn() || RTALK) return false;
+  if (!H() || !guildOn() || RTALK || !inTown() || !TOWN.inside || H().dun) return false;
   C.lastInput = C.run; TOWN.auto = null;
   openModal('memberstories', '<h3>The hearth book · ' + G().name + '</h3>' + memberStoriesHTML() + '<div class="mfoot"><button class="btn alt" data-act="close">Back to the world</button></div>'); return true;
 }
@@ -137,6 +137,16 @@ function memberStoriesKey() {
   return guildOn() ? Object.keys(G().members).map(key => {
     const state = memberStoryState(key); return [key, state.done, state.choice, Math.floor(state.seconds / 60), memberStoryProblem(key)].join(':');
   }).join('|') : '';
+}
+function memberStoryRecordsHTML() {
+  if (!guildOn()) return '';
+  const records = Object.entries(G().stories || {}).filter(([key, state]) => state.done > 0).map(([key, state]) => ({ state, n: advNpc(key) })).filter(({ n }) => n && MEMBER_STORIES[n.name]);
+  if (!records.length) return '<h4>Stories remembered</h4><p class="meta">No personal moments recorded yet. Meet your companions by the guild hearth.</p>';
+  return '<h4>Stories remembered</h4>' + records.map(({ state, n }) => {
+    const story = MEMBER_STORIES[n.name];
+    const memory = state.done >= 3 ? story[5 + state.choice] : state.done >= 2 ? 'You chose: ' + story[3 + state.choice] + '.' : 'Shared a confidence: ' + story[1];
+    return '<div class="rowl member-record"><div class="l"><b>' + n.name + ' · ' + story[0] + '</b><div class="meta">' + state.done + '/3 moments remembered</div><div class="meta">' + memory + '</div></div></div>';
+  }).join('');
 }
 function memberStoriesHTML() {
   if (!guildOn()) return '';
@@ -150,7 +160,6 @@ function memberStoriesHTML() {
 }
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-act]'); if (!el) return;
-  if (el.dataset.act === 'memberstorybook') openMemberStoryBook();
-  else if (el.dataset.act === 'memberstory') playMemberStory(el.dataset.arg, false);
+  if (el.dataset.act === 'memberstory') playMemberStory(el.dataset.arg, false);
   else if (el.dataset.act === 'membermemory') playMemberStory(el.dataset.arg, true);
 });
