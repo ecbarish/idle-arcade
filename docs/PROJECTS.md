@@ -101,6 +101,12 @@ Garrick, the Apothecary with prices, ranks and newcomers, music, saving. Checks:
 | SV4 | **The tavern and placement**: a tavern you serve at; buildings near each other help a little | M | open | |
 | SV5 | **Expeditions you can see**: the wilds past the gate as a place, adventurers' camps, catalogue creatures as monsters | L | open | Shared catalogue |
 
+## Local development helper
+
+| ID | Project | Size | Status | Notes |
+|---|---|---|---|---|
+| LH0 | Local helper queue runner (Lane D0) | S | claimed: Codex, 2026-10-08, `codex/local-helper-runner` | OpenCode with local Ollama; review required; docs/research/local-ai-helper.md |
+
 ## Showing the games
 
 | ID | Project | Size | Status | Notes |
@@ -277,3 +283,4 @@ Merged 2026-10-08 (Realmbound v1.3.0, PR #53); written by Codex on codex/realmbo
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
 | D1d | **T36: in the game window and a road trip** | L | Polish+Data | D1c | done, merged 2026-10-08 (Diamond Career v0.4.0, PR #59) | docs/ROADMAP.md T36; keep existing features reachable, three away parks and calendar pay |
+
