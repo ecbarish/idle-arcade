@@ -883,6 +883,28 @@ function wildbondChecks() {
     spireReady();delete S.tower;const uid=S.team[0].uid,eras=JSON.stringify(S.eras),cap=S.capMode;save();reset();load();return S.tower.best===0&&!S.tower.active&&S.tower.claimed.length===0&&S.team[0].uid===uid&&S.capMode===cap&&levelCap()===75&&JSON.stringify(S.eras)===eras&&S.titles.includes('Champion');
   });
   check('Invalid tower fields normalize without unlocking a pre-Champion climb',()=>{ready();S.tower={best:-3,floor:Infinity,active:true,rest:true,claimed:[10,10,'20',-10,7]};const t=towerState();return t.best===0&&t.floor===0&&!t.active&&!t.rest&&t.claimed.join(',')==='10';});
+  // L1 shared settings (shared/settings.js + js/18-settings.js)
+  check('the Settings panel offers sound, graphics, view, text size and motion', () => {
+    const b = document.querySelector('.arc-set-btn'); if (!b) return false; b.click();
+    const labels = [...document.querySelectorAll('.arc-set-row>div:first-child')].map(d => d.textContent).join();
+    document.querySelector('.arc-set [data-close]').click();
+    return labels === 'Sound,Graphics,View distance,Text size,Motion' && document.querySelector('.arc-set-bg').hidden;
+  });
+  check('text size scales the panels, never the scene canvas', () => {
+    const keep = localStorage.getItem('arcade-settings-v1'), root = document.documentElement;
+    try { document.querySelector('.arc-set-btn').click();
+      [...document.querySelectorAll('.arc-set-opts button')].find(x => x.textContent === 'Larger').click();
+      const ok = getComputedStyle(root).getPropertyValue('--arc-text').trim() === '1.3' && Number(getComputedStyle(document.querySelector('.right')).zoom) > 1.2 &&
+        getComputedStyle(document.querySelector('.scene canvas')).zoom === '1';
+      [...document.querySelectorAll('.arc-set-opts button')].find(x => x.textContent === 'Normal').click(); document.querySelector('.arc-set [data-close]').click();
+      return ok; }
+    finally { if (keep === null) localStorage.removeItem('arcade-settings-v1'); else localStorage.setItem('arcade-settings-v1', keep); }
+  });
+  check('keys pressed inside the Settings panel never walk the tamer', () => {
+    const S = wb.S; if (!S.started || !S.pos) return true; document.querySelector('.arc-set-btn').click(); const before = JSON.stringify(S.pos);
+    document.querySelector('.arc-set').dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    const ok = JSON.stringify(S.pos) === before && !wb.WK.held.length; document.querySelector('.arc-set [data-close]').click(); wb.WK.held = []; return ok;
+  });
   // L2 save safety (shared/engine.js): automatic backups, recovery from a damaged save, any save format, validators
   check('saving keeps an automatic backup of the save', () => {
     const key = 'wildbond-save-v1'; save(); // the first save of a visit makes one; after that at most every 10 minutes

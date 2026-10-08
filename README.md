@@ -39,6 +39,9 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-07** — **A Settings panel in every game** (the ⚙ button in the header): sound, graphics quality, Wildbond's
+  view distance, and two choices that follow you across the whole arcade: **text size** (Normal, Large, Larger) and
+  **motion** (follow your device, Reduced, or Full).
 - **2026-10-07** — **Your saves are safer in every game.** Each game now keeps automatic backups (a recent one every
   10 minutes and one a day for three days); if a save is ever damaged, the game quietly loads the newest backup
   instead of starting over. A new **Your save** box (Wildbond's Journal, Realmbound's Journal, Starfall's Ledger)

@@ -135,6 +135,8 @@ h4{margin:14px 0 6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase
 .pennant b{font-family:var(--f-disp);font-weight:600}
 /* Big screens (L11; Evan plays on a 3440x1440 ultrawide): the scene takes most of the width and shows more of the
    world on ultrawides; panels stay readable; text grows a little. */
-@media (min-width:1700px){.app{max-width:min(2300px,94vw)}.grid{grid-template-columns:minmax(0,1.8fr) minmax(440px,1fr)}.scene{aspect-ratio:2/1}.top,.right,.left>:not(.scene),.sheet{zoom:1.12}}
-@media (min-width:2400px){.app{max-width:min(3100px,95vw)}.grid{grid-template-columns:minmax(0,2.3fr) minmax(520px,1fr)}.scene{aspect-ratio:21/9}.top,.right,.left>:not(.scene),.sheet{zoom:1.32}}
+/* Text size from the shared settings (L1): --arc-text multiplies the big-screen zoom below. */
+.top,.right,.left>:not(.scene),.sheet{zoom:var(--arc-text, 1)}
+@media (min-width:1700px){.app{max-width:min(2300px,94vw)}.grid{grid-template-columns:minmax(0,1.8fr) minmax(440px,1fr)}.scene{aspect-ratio:2/1}.top,.right,.left>:not(.scene),.sheet{zoom:calc(1.12 * var(--arc-text, 1))}}
+@media (min-width:2400px){.app{max-width:min(3100px,95vw)}.grid{grid-template-columns:minmax(0,2.3fr) minmax(520px,1fr)}.scene{aspect-ratio:21/9}.top,.right,.left>:not(.scene),.sheet{zoom:calc(1.32 * var(--arc-text, 1))}}
 @media (min-width:1700px) and (max-height:900px){.scene{aspect-ratio:21/8}}
