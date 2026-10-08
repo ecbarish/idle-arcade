@@ -14,6 +14,7 @@ const Card := preload("res://scripts/card.gd")
 const Battle := preload("res://scripts/battle.gd")
 const Title := preload("res://scripts/title.gd")
 const Shop := preload("res://scripts/shop.gd")
+const Book := preload("res://scripts/book.gd")
 ## Larkhaven's doors in the Godot version: the inn (rest) and the shop counter. (The browser puts the shop where Maren's
 ## barn stands here; the tall barn only fits top right.)
 const DOORS := { Vector2i(4, 4): "inn", Vector2i(7, 10): "shop" }
@@ -102,6 +103,7 @@ var battle_story := ""                       # "rival1" for Wren's battle; empty
 var satchel: Label
 var title: Control
 var shop: Control
+var book: Control
 var no_save := false                         # tests and recordings never touch your saved journey
 var save_path := "user://journey.json"
 var then_do := Callable()                    # runs when the current conversation ends
@@ -195,6 +197,9 @@ func _ready() -> void:
 	shop = Shop.new()
 	shop.bag = bag
 	$UI.add_child(shop)
+	book = Book.new()
+	book.looks = CREATURE_LOOKS
+	$UI.add_child(book)
 	title = Title.new()
 	$UI.add_child(title)
 	title.chosen.connect(_on_title)
@@ -486,7 +491,7 @@ func _process(dt: float) -> void:
 		stage = "maren_talks"
 		say("maren", "There you are! You must be the new tamer. I'm Maren. I keep the ranch.")
 		say("maren", "Before anything else: the ranch register. Every tamer in the valley signs it. Write yourself in, love.")
-	var free_to_walk: bool = stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and not shop.visible and trans_t < 0.0
+	var free_to_walk: bool = stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and not shop.visible and not book.visible and trans_t < 0.0
 	if lines.is_empty() and free_to_walk and me.path.is_empty() and me.pos.distance_to(Vector2(me.tile) * TILE) < 0.5:
 		var d := Vector2i.ZERO
 		if Input.is_action_pressed("ui_up") or Input.is_physical_key_pressed(KEY_W): d = Vector2i.UP
@@ -557,6 +562,11 @@ func _walk(m: Mover, dt: float) -> void:
 			_check_spotted()
 
 func _unhandled_input(e: InputEvent) -> void:
+	var want_book: bool = (e is InputEventKey and e.pressed and not e.echo and e.keycode in [KEY_TAB, KEY_J]) or (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT and satchel.text != "" and satchel.get_global_rect().has_point(satchel.get_global_mouse_position()))
+	if want_book and stage == "free" and lines.is_empty() and not battle.visible and not shop.visible and not book.visible:
+		_open_book()
+		get_viewport().set_input_as_handled()
+		return
 	var pressed: bool = (e.is_action_pressed("ui_accept") or (e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_E)
 		or (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT))
 	if not pressed:
@@ -576,7 +586,7 @@ func _unhandled_input(e: InputEvent) -> void:
 
 ## Click or tap: walk there (around anything in the way). Tap a creature in the barn to walk up and meet it.
 func _tap(at: Vector2) -> void:
-	if not (stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and not shop.visible and trans_t < 0.0):
+	if not (stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and not shop.visible and not book.visible and trans_t < 0.0):
 		return
 	var goal := Vector2i((at / TILE).floor())
 	meet_after = null
@@ -1294,7 +1304,7 @@ func _satchel_text() -> String:
 	var dex := 0
 	for k in seen:
 		dex += 1
-	return "Badges %d   Lures %d   Berries %d   Coins %d   Wilddex %d / %d" % [badges.size(), bag.lures, bag.berries, bag.coins, dex, DATA.SPECIES.size()]
+	return "Badges %d   Lures %d   Berries %d   Coins %d   Wilddex %d / %d  (J)" % [badges.size(), bag.lures, bag.berries, bag.coins, dex, DATA.SPECIES.size()]
 
 ## For testing and recordings (run with -- --skip-opening): start in Thornwood with Ripplet, as if the opening were done.
 func _skip_opening() -> void:
@@ -1571,3 +1581,12 @@ func _door(kind: String) -> void:
 			{ "name": "5 lures", "give": { "lures": 5 }, "cost": 50 },
 			{ "name": "5 berries", "give": { "berries": 5 }, "cost": 5 * int(DATA.FOODS.berries.cost) },
 		])
+
+## The field book (book.gd): the Wilddex and your team, from what you've seen and who chose you.
+func _open_book() -> void:
+	walk_to.clear()
+	book.seen = seen
+	book.bonded = bonded
+	book.team = team
+	book.ranch = ranch
+	book.open()

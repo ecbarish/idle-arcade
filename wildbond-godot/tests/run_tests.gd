@@ -346,6 +346,15 @@ func _run() -> void:
 		main.me.face = Vector2i.RIGHT
 		check(main._talk_here() and main.lines[0].who == "pip" and "YELLOW" in main.lines[0].text, "Pip has noticed the colour since your Thorn Badge")
 		talk_through()
+	# ---- the field book
+	talk_through()
+	var evj := InputEventKey.new()
+	evj.pressed = true
+	evj.keycode = KEY_J
+	main._unhandled_input(evj)
+	check(main.book.visible and main.book.seen.size() >= 3 and main.book.team == main.team, "J opens the field book: your Wilddex and team")
+	main.book.close()
+	check(not main.book.visible, "and closes it")
 	# ---- saving your journey and loading it back (to a test file, never your real one)
 	talk_through()
 	main.no_save = false
