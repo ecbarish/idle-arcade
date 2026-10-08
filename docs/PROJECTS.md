@@ -242,7 +242,7 @@ New Wildbond work goes to **Wildbond in Godot** above. Browser data (species, ma
 | ID | Project | Size | Kind | Status | Spec |
 |---|---|---|---|---|---|
 | SG1-SG4 | Starfall Guild stages G1-G4: careers, two expeditions, the town serves the guild, seasons become campaigns | L each | System | superseded by the Starfall village in Godot (SV1-SV5 above) | docs/plans/starfall-guild.md |
-| OW0-OW5 | Otherworld (isekai) stages O0-O5 | L each | System | active: O0 and O1 done (v0.2.0); next Hearthmere and the Ashen Throne | docs/plans/otherworld.md, docs/ideas.md |
+| OW0-OW5 | Otherworld (isekai) stages O0-O5 | L each | System | active: O0 and O1 done (v0.2.0); Hearthmere T39 claimed by Codex, 2026-10-08, codex/otherworld-hearthmere; Ashen Throne next | docs/plans/otherworld.md, docs/ideas.md |
 | DC0-DC4 | Diamond Career (baseball) stages D0-D4 | L each | System | D0 + first D1 merged (PR #45); D1 first month merged 2026-10-08 by Claude (v0.2.0, PR #48); D1c merged (v0.3.0, PR #50); v0.3.1 batting you can see (Claude); T36 in the game window and a road trip in progress (ChatGPT, A10); later stages outlined | docs/plans/diamond-career.md, docs/plans/sports-careers.md |
 | PR0-PR4 | Primordial stages P0-P4 | L each | System | back burner | docs/plans/primordial.md |
 | CS1 | **Card shop** (Evan's idea, 2026-10-08): run a card shop whose cards are our own catalogue creatures; packs, singles, Friday tournaments on Wildbond's element rules, regulars with stories | L | System | parked, Evan decides when | docs/proposals/showing-the-games.md |
