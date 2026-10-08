@@ -43,9 +43,10 @@ the very end, so running out of usage never strands work.
   physical (walk to the shop, the trough, the person); features arrive through the story; everything is readable in
   full words; nothing plays itself. The principles in docs/wildbond-plan.md apply to every game.
 - **In the game window, for every game** (Evan, 2026-10-08): the lessons from Wildbond apply to all games. The screen is the world: no game in a small window with panels of information beside it. Guidance, menus, stats and story happen inside the game (people who speak, things you hold and open, a thin overlay), not in boxes off to the side. A separate panel is the exception and needs a reason (for example a save tool or settings). New features in any game follow this; existing dashboard layouts (Realmbound, Starfall, Diamond Career) are queued to move into the game window.
-- **Budget and scope** (Evan, 2026-10-07, docs/research/owner-direction-2026-10-07.md): about **US$200 total cash**
-  for the whole project unless he revisits it; prefer free tools and freely usable assets; no subscriptions or
-  speculative purchases. Platforms stay open (browser, Godot or other, per game, decided by evidence). Every game
+- **Budget and scope** (updated by Evan 2026-10-08): free first, and there is a lot we can do for free; the earlier
+  ~US$200 figure was a passing thought, not a guardrail, so don't cite it as a limit. Ask Evan before paying for
+  anything. AI tools may generate assets (credit them in CREDITS.md). The games matter most; the walk-in arcade and
+  intros come later. Platforms stay open (browser, Godot or other, per game, decided by evidence). Every game
   belongs in the discussion (Starfall valued; Primordial lower priority). Automation serves play: earned conveniences
   that remove repetition, never skipping the parts players enjoy.
 - **Read docs/VISION.md** (2026-10-07): old soul, modern craft; prologues, a Classic/Enhanced/Modern look, game boxes,

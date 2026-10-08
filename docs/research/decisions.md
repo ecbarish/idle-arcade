@@ -1,5 +1,20 @@
 # Research brief: the big open decisions (2026-10-08)
 
+## Direction (Evan, 2026-10-08, later): money, AI tools, priorities, guides
+
+- **The ~$200 is not a guardrail.** "It was just a passing thought... it's irrelevant unless we need to." Stay free where
+  free works (most things); if something is worth paying for, ask Evan. If the arcade is ever monetised he would invest
+  more. Don't keep citing $200 as a limit.
+- **AI tools may generate assets** (art, sound, voices, music). Record each in CREDITS.md with the tool and its terms;
+  check the tool's terms allow use in a game; keep a consistent arcade look.
+- **The games matter most.** The walk-in arcade and intros are a cool extra layer for later, not a priority, and must not
+  cost much to run.
+- **A launcher:** Evan's favourite games use one. Recommendation: on the web the site is the launcher; for desktop builds
+  use **itch.io** (free; its app installs and updates games, like a launcher) before building our own.
+- **Guides and a wiki per game**, with pictures, tips and tricks, and short videos (Godot records gameplay to video for
+  free with `--write-movie`). Realmbound's guide (T8) is the start.
+- **One creature catalogue** shared across games, richer evolution, creature gear, tamer abilities:
+  docs/proposals/creature-catalogue-and-evolution.md.
 ## Direction (Evan, 2026-10-08, evening): every game will likely move to a game engine
 
 Evan: "I'm pretty sure we'll likely have to move all to the game engine, but a web version works too because it gives
