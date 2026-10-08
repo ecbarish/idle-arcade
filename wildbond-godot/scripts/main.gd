@@ -758,6 +758,13 @@ func _think(m: Mover, dt: float) -> void:
 		return
 	if m.act != "pounce":
 		m.hop = 0.0
+	# straight behind you it would peek over your head like a hat: when you stop, it comes round to stand beside you
+	if m == partner and m.path.is_empty() and me.path.is_empty() and walk_to.is_empty() and m.tile == me.tile + Vector2i.UP and m.act_t > 0.5:
+		for side in [Vector2i.RIGHT if m.right else Vector2i.LEFT, Vector2i.LEFT if m.right else Vector2i.RIGHT]:
+			if walkable(m.tile + side) and walkable(me.tile + side):
+				m.path = [m.tile + side, me.tile + side]
+				m.right = side.x < 0                     # it turns to face you
+				return
 	if m.act == "pounce":
 		# crouch and wiggle, then leap one tile at the butterfly (or on the spot)
 		if m.act_t >= 0.8 and m.path.is_empty() and m.target != m.tile and walkable(m.target):
@@ -1483,6 +1490,11 @@ func _skip_opening() -> void:
 		badges = ["thorn", "tide", "ember"].slice(0, at)
 		team[0].lvl = [5, 14, 24, 34][at]
 		team[0].hp = R.stats(team[0]).hp
+	if "--photo" in OS.get_cmdline_user_args():      # pictures of the world: nobody asks to evolve mid-shot
+		for c in team: c["hold"] = 999
+	if "--colour" in OS.get_cmdline_user_args():     # the area with its colour fully back (for pictures of the restored valley)
+		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "barn"]:
+			restore.append({ "where": m, "at": Vector2(192, 108), "r": 5000.0, "goal": 5000.0 })
 	if "--bench" in OS.get_cmdline_user_args():      # at Maren's workbench, the partner trying on a harness (-- --skip-opening --bench)
 		for c in team: c["hold"] = 999
 		team[0]["gear"] = "harness"

@@ -140,9 +140,10 @@ const START = { pick: null };
 function modesUnlocked() { try { return localStorage.getItem('wildbond-modes-unlocked') === '1' || (S.titles || []).includes('Champion'); } catch (e) { return (S.titles || []).includes('Champion'); } }
 function unlockModes() { try { localStorage.setItem('wildbond-modes-unlocked', '1'); } catch (e) {} }
 function starterCard(id) {
-  const s = SPECIES[id], max = 80, moves = s.learn.filter(([l]) => l <= 5).map(([, m]) => MOVES[m].name);
+  const s = SPECIES[id], max = 120, moves = s.learn.filter(([l]) => l <= 5).map(([, m]) => MOVES[m].name);
   return `<div class="pickcard"><div class="pickhead">${portrait(id)}<div><b>${s.name}</b> ${elChip(s.el)}<p class="sub">${s.dex}</p><p class="role">${roleOf(s)}</p></div></div>
-    <div class="pickstats">${Cr.STATS.map(k => `<span>${Cr.STAT_NAME[k]}</span><i style="width:${Math.round(Math.min(1, s.base[k] / max) * 100)}%"></i>`).join('')}</div>
+    <div class="pickstats">${Cr.STATS.map(k => `<span>${Cr.STAT_NAME[k]} ${s.base[k]}</span><i style="width:${Math.round(Math.min(1, s.base[k] / max) * 100)}%"></i>`).join('')}</div>
+    <p class="meta">Natural strength of its kind. A full bar would match the strongest creature known in the valley (about ${max}); it grows into these as it levels.</p>
     <p class="meta">Starts with ${moves.join(' and ')}. Strong against ${SPECIES[STARTERS.find(x => COUNTER[x] === id)].name}'s element, weak to ${SPECIES[COUNTER[id]].name}'s.</p></div>`;
 }
 function startHTML() {

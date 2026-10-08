@@ -4,64 +4,144 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111626">
-<title>What to try · Idle Arcade</title>
+<title>Come Play · Idle Arcade</title>
+<meta name="description" content="A small arcade of games Evan is building: a creature-bonding adventure, a fantasy world with a guild, a baseball career and more. Free in your browser.">
+<meta property="og:title" content="Idle Arcade: come play">
+<meta property="og:description" content="Wildbond, Realmbound, Diamond Career and more. Free in your browser, no sign-up.">
+<meta property="og:image" content="https://ecbarish.github.io/idle-arcade/images/play/wb-larkhaven.png">
 <style>
-:root{color-scheme:dark;--bg:#111626;--panel:#192233;--fg:#eef2fa;--muted:#bcc8dc;--gold:#ffd575;--mint:#a6ead0;--line:#41516b}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top left,#273249,var(--bg) 65%);color:var(--fg);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}
+:root{color-scheme:dark;--bg:#111626;--panel:#192233;--panel2:#1f2a3e;--fg:#eef2fa;--muted:#bcc8dc;--gold:#ffd575;--mint:#a6ead0;--line:#41516b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at top left,#273249,var(--bg) 65%);color:var(--fg);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}
 a{color:var(--mint);text-underline-offset:4px}a:hover{color:#fff}a:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:5px;border-radius:3px}
 .skip{position:absolute;left:16px;top:-100px;background:var(--panel);padding:10px 16px}.skip:focus{top:12px;z-index:2}
-.wrap{max-width:1360px;margin:0 auto;padding:24px clamp(18px,4vw,60px) 48px}nav{display:flex;flex-wrap:wrap;gap:8px 24px}nav a,.action{display:inline-flex;align-items:center;min-height:44px}
-header{max-width:72ch;margin:32px 0}.eyebrow{color:var(--gold);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}h1{font-size:clamp(32px,5vw,64px);line-height:1.12;letter-spacing:-.035em;margin:12px 0 20px}h2{font-size:26px;line-height:1.25;margin:0 0 12px}h3{font-size:18px;color:var(--gold);margin:24px 0 8px}p{margin:12px 0}header p{font-size:18px;color:var(--muted)}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}.card{padding:clamp(20px,3vw,32px);border:1px solid var(--line);border-radius:16px;background:var(--panel)}.version{display:inline-block;color:var(--gold);font-size:14px;font-weight:700;margin-bottom:14px}.card p,.card li{max-width:64ch}ol,ul{padding-left:24px}li{margin:10px 0}.question{padding-left:16px;border-left:3px solid var(--mint);color:var(--muted)}.action{font-weight:700;padding:8px 16px;border:1px solid var(--line);border-radius:8px;text-decoration:none}.links{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}.wide{margin-top:24px}.small-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 36px}summary{cursor:pointer;min-height:44px;padding:10px 0;color:var(--mint)}footer{margin-top:28px;color:var(--muted);font-size:14px;max-width:78ch}section{scroll-margin-top:24px}
-@media(min-width:2400px){body{font-size:19px}.wrap{max-width:1800px}h2{font-size:32px}h3{font-size:23px}header{margin:48px 0}.grid{gap:32px}}
-@media(max-width:720px){.grid,.small-grid{grid-template-columns:1fr}header{margin:24px 0}.wrap{padding-top:16px}.card{border-radius:12px}h2{font-size:24px}}
+.wrap{max-width:1240px;margin:0 auto;padding:24px clamp(16px,4vw,56px) 56px}
+nav{display:flex;flex-wrap:wrap;gap:4px 22px}nav a{display:inline-flex;align-items:center;min-height:44px}
+header{margin:28px 0 36px;max-width:76ch}.eyebrow{color:var(--gold);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+h1{font-size:clamp(34px,5.5vw,64px);line-height:1.08;letter-spacing:-.03em;margin:10px 0 18px}h2{font-size:clamp(26px,3vw,34px);line-height:1.2;margin:0 0 6px}h3{font-size:18px;color:var(--gold);margin:22px 0 6px}
+header p{font-size:19px;color:var(--muted)}p{margin:10px 0}.muted{color:var(--muted)}
+.hero-shot{width:100%;border-radius:14px;border:1px solid var(--line);image-rendering:pixelated;display:block;margin:6px 0 10px}
+.goals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:8px 0 40px}.goal{padding:18px 20px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}.goal b{display:block;color:var(--gold);margin-bottom:4px}
+.game{padding:clamp(18px,3vw,34px);border:1px solid var(--line);border-radius:18px;background:var(--panel);margin:0 0 30px}
+.tag{display:inline-block;font-size:13px;font-weight:700;padding:2px 10px;border-radius:999px;margin:0 6px 8px 0;background:#2b3a55;color:var(--mint)}.tag.gold{background:#4a3d1c;color:var(--gold)}
+.lede{font-size:18px;max-width:72ch}
+.shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}.shots figure{margin:0}.shots img{width:100%;display:block;border-radius:10px;border:1px solid var(--line);image-rendering:pixelated;background:#000}.shots figcaption{font-size:13px;color:var(--muted);margin-top:4px}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}.cols ul,.cols ol{padding-left:20px;margin:6px 0}.cols li{margin:6px 0}
+.play{display:inline-flex;align-items:center;min-height:48px;padding:10px 20px;border-radius:10px;background:var(--gold);color:#1b1a12;font-weight:800;text-decoration:none;margin:12px 12px 0 0}.play:hover{background:#ffe6a8;color:#1b1a12}.alt{display:inline-flex;align-items:center;min-height:48px;padding:10px 18px;border:1px solid var(--line);border-radius:10px;text-decoration:none;margin:12px 12px 0 0}
+details{margin:14px 0 0;border-top:1px solid var(--line);padding-top:4px}summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--mint);font-weight:700}
+.chart{overflow-x:auto;margin:10px 0}table{border-collapse:collapse;font-size:14px;min-width:560px}th,td{border:1px solid var(--line);padding:7px 8px;text-align:center}th{background:var(--panel2);font-weight:700}td.s{background:#244a33;color:#b9f5c9;font-weight:800}td.w{background:#4a2730;color:#ffc2c8}td.n{color:#6f7d95}
+.el{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.note{padding:12px 16px;border-left:3px solid var(--gold);background:#1c2436;border-radius:6px;margin:14px 0}
+footer{margin-top:30px;color:var(--muted);font-size:14px;max-width:80ch}
+@media(max-width:900px){.goals,.cols{grid-template-columns:1fr}.shots{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.shots{grid-template-columns:1fr}}
+@media(min-width:2200px){body{font-size:19px}.wrap{max-width:1700px}}
 </style>
 </head>
 <body>
-<a class="skip" href="#routes">Skip to what to try</a>
+<a class="skip" href="#games">Skip to the games</a>
 <div class="wrap">
-<nav aria-label="Page navigation"><a href="index.html">← Arcade</a><a href="#wildbond-1-3-0">Wildbond</a><a href="#realmbound-1-0-0">Realmbound</a><a href="#feedback">Send notes</a></nav>
-<header><span class="eyebrow">A few things to try</span><h1>Take a small adventure.<br>Tell us how it felt.</h1><p>You don't need to finish a game to help. Pick one route below, play at your own pace, and tell us one thing you enjoyed and one thing that got in your way.</p><p>These notes cover the versions named below. Your game's header shows its version; include that number with your feedback.</p></header>
-<main id="routes">
-<div class="grid">
-<section class="card" id="wildbond-1-6-1" aria-labelledby="wildbond161-title">
-<span class="version">Wildbond · v1.6.1</span><h2 id="wildbond161-title">A fairer first battle</h2><p>Wren always takes the partner whose element beats yours. Starters now learn their element move at level 5, so your partner arrives knowing it and Wren's learns it a little later.</p>
-<h3>Starting a new journey? Battle Wren</h3><ol><li>Choose any partner and battle Wren in Larkhaven. Read each move's description before you pick.</li><li>Did the battle feel winnable, and did it last long enough to make a few choices? Tell us which partner you chose.</li></ol>
-</section>
-<section class="card" id="wildbond-1-3-1" aria-labelledby="wildbond131-title">
-<span class="version">Wildbond · v1.3.1</span><h2 id="wildbond131-title">Sea mist on the coast</h2><p>Saltmarsh Coast has lower sea mist, cooler coastal shadows and gentler shafts of light. This patch changes the atmosphere in the lit art styles.</p>
-<h3>Have the Tide Badge? Revisit Saltmarsh</h3><ol><li>Choose HD-2D and walk the coastal path. Try the View button to find the distance you enjoy.</li><li>Visit by day and at night. When the Journal forecast shows mist, return to see how clearly the reeds, path and people stand out.</li></ol>
-<p class="question">Does the coast feel more like a place you want to explore? Tell us if mist hides a path or night is too dark, and include your screen size and art style.</p>
-<div class="links"><a class="action" href="games/wildbond/index.html">Play Wildbond →</a></div>
-</section>
-<section class="card" id="wildbond-1-3-0" aria-labelledby="wildbond13-title">
-<span class="version">Wildbond · v1.3.0</span><h2 id="wildbond13-title">The league, and beyond it</h2><p>The story now ends: with all eight badges, the road north from Farwatch leads to the Returning Light League. After it, Champions can climb the Lighthouse Spire (levels 75 to 100) and rematch the league once a day. Stillreed also has a ferry landing you can walk onto, and the <b>View</b> button (or V) shows more of the world on big screens.</p>
-<h3>Have all eight badges? Take on the league</h3><ol><li>Beat Wren at the gate, then the four courts in a row. Nelva heals your team between rooms; a loss keeps today's cleared rooms.</li><li>Meet Champion Avenne. Win to see the homecoming and earn the Champion title.</li><li>Walk west to the Lighthouse Spire. Climb as far as you like; every fifth floor is a rest where you can stop with your rewards.</li></ol>
-<p class="question">Did the ending feel earned? Was the Spire a reason to keep raising your team? Tell us the floor you reached and how it felt.</p>
-<h3>On a big monitor?</h3><p>Press V to switch between Close, Wide and Far. Does Wide or Far feel better on your screen?</p>
-<div class="links"><a class="action" href="games/wildbond/index.html">Play Wildbond →</a></div>
-</section>
-<section class="card" id="wildbond-1-1-0" aria-labelledby="wildbond-title">
-<span class="version">Wildbond · v1.1.0</span><h2 id="wildbond-title">From a first partner to the horizon</h2><p>The eighth area, Farwatch Reach, brings a coastal harbor, nine species, Watchlight and Warden Rysa's Horizon Badge. It is the last area before the league; the league is still to come in this release.</p>
-<h3>New here? Start with one partner</h3><ol><li>Choose a partner in Larkhaven. Walk with the arrow keys or WASD, or tap a destination; use Enter to talk when you're beside someone.</li><li>Head into Thornwood's grass. Try a battle and a catch, then find a place to rest.</li><li>Open the Team, Ranch and Journal tabs. See whether you can find your partner, its care plan and where to go next.</li></ol>
-<p class="question">Did the game make your next step clear? Did walking and choosing a move feel comfortable on your screen?</p>
-<h3>Already have the Loom Badge? Visit Farwatch</h3><ol><li>Follow Sunthread Commons' coastal road into Farwatch Reach (levels 66–72). Explore the harbor and meet the two route trainers.</li><li>Look for Wren's shared-notes rematch and Watchlight as you explore. Try the new encounters with the team you've raised.</li><li>Meet Rysa and earn the eighth badge. The badge cap is 75 with all eight badges; check your team's cap note and the Journal afterward.</li></ol>
-<p class="question">Does Farwatch feel like a place where a long journey pauses? Tell us if a path, trainer or level jump felt confusing or too steep.</p>
-<div class="links"><a class="action" href="games/wildbond/index.html">Play Wildbond →</a></div>
-</section>
-<section class="card" id="realmbound-1-0-0" aria-labelledby="realmbound-title">
-<span class="version">Realmbound · v1.0.0</span><h2 id="realmbound-title">A hero, a town and a guild</h2><p>The current build reaches level 60 and the Crown's Heart. Towns are walkable, and your guild can work, rest and join you in The Hollow Throne.</p>
-<h3>New here? Take a first quest</h3><ol><li>Create a hero, talk to a quest giver and accept a quest. Try Focus combat, then Auto when available; notice what each asks you to do.</li><li>Return to town. Walk with the arrow keys or WASD, or tap a destination, and visit the inn to heal.</li><li>Open the Journal. Find your quest progress and the Export button; keep a copy of the exported text if you'd like a backup.</li></ol>
-<p class="question">Could you tell when a quest was ready to turn in? Did the town help you find what your hero needed?</p>
-<h3>Already have a guild? Spend time in the hall</h3><ol><li>Visit the guild hall. Talk with an adventurer and read their mood and favor.</li><li>Try a job on the guild's board, then return to see its progress and the supply bank. Check that the result makes sense for the job.</li><li>At level 60, with the Hollow Key earned through the Crown's Heart quests, try gathering a raid team for The Hollow Throne. This is an optional longer route.</li></ol>
-<p class="question">Do guild members feel useful and present? If a job or raid gate is unclear, include the message you saw and your hero's level.</p>
-<div class="links"><a class="action" href="games/realmbound/index.html">Play Realmbound →</a></div>
-</section>
+<nav aria-label="Page"><a href="index.html">← The arcade</a><a href="#wildbond">Wildbond</a><a href="#realmbound">Realmbound</a><a href="#diamond">Diamond Career</a><a href="#more">More games</a><a href="#elements">Element chart</a><a href="#feedback">Tell us</a></nav>
+
+<header>
+<span class="eyebrow">Idle Arcade · made by Evan, with AI helpers</span>
+<h1>A few worlds we're building.<br>Come play one.</h1>
+<p>These are free games in your browser, on a computer or a phone, with no sign-up. Your progress saves in your own browser. They're works in progress, so you'll see them grow, and what you think shapes where they go next.</p>
+<img class="hero-shot" src="images/play/wb-larkhaven.png" alt="Larkhaven in Wildbond: thatched cottages, Maren's big wooden barn, a paddock of creatures and the player with a blue river lizard">
+<p class="muted">Above: Larkhaven, the starting village in the new version of Wildbond that's being built now.</p>
+</header>
+
+<h2>What we're going for</h2>
+<div class="goals">
+<div class="goal"><b>Real games, not menus</b>Places and people instead of buttons. You walk to the shop, kneel by the creature, serve the meal. The screen is the world.</div>
+<div class="goal"><b>Deep worlds with a story</b>Old-school soul, like early Pokémon or classic WoW: lore worth finding, threads that pay off later, and choices the world remembers.</div>
+<div class="goal"><b>Play your way</b>The journey and the grind are the fun, and you set the pace. Help comes from characters you earn (a cook, a smith, your creatures), never from a paywall. Nothing plays itself.</div>
 </div>
-<section class="card wide" aria-labelledby="comfort-title"><h2 id="comfort-title">A quick comfort check</h2><div class="small-grid"><div><h3>Try your usual screen</h3><p>On a phone, can you read a dialogue and tap a choice without pinching to zoom? On a desktop or ultrawide, are the scene and text easy to see? Name your device and browser if something feels cramped or tiny.</p></div><div><h3>Return to your save</h3><p>After a quiet moment outside a battle, close and reopen the game. Did your progress and chosen settings return? Don't reset your existing adventure just to test; a separate browser profile can give you a fresh start.</p></div></div><p class="muted">Saves live in this browser. Keep any backup text somewhere safe. This notes page does not read or change your saves.</p></section>
-<section class="card wide" aria-labelledby="other-title"><h2 id="other-title">Trying the other games?</h2><details><summary>Two small checks for the existing prototypes</summary><div class="small-grid"><div><h3>Starfall Guild · v1.0.0</h3><p>Recruit an adventurer, try a delve and return to town. Try the header's sound modes if you'd like. Was it clear how your town supports the guild?</p><a class="action" href="games/starfall-guild/index.html">Play Starfall Guild →</a></div><div><h3>Primordial · playable prototype</h3><p>Feed your specimen and look through the Field notebook. Was the first mutation choice understandable? Could you find the save export controls?</p><a class="action" href="games/primordial/index.html">Play Primordial →</a></div></div></details></section>
-<section class="card wide" id="feedback" aria-labelledby="feedback-title"><h2 id="feedback-title">One good moment. One rough edge.</h2><p>The game's <strong>Feedback</strong> button fills in its version and where you are. Use that when you can, or open a form here and add the game, header version and place yourself.</p><div class="links"><a class="action" href="https://github.com/ecbarish/idle-arcade/issues/new?template=feedback.yml">Share playtest feedback</a><a class="action" href="https://github.com/ecbarish/idle-arcade/issues/new?template=bug.yml">Report a bug</a></div><p class="muted">GitHub needs an account. You can also send Evan your notes directly. For a bug, say what you did, what you expected and what happened; a screenshot helps. A save is optional, and isn't attached by this page.</p></section>
+
+<main id="games">
+
+<section class="game" id="wildbond" aria-labelledby="wb-h">
+<span class="tag gold">Most complete</span><span class="tag">Creature adventure</span><span class="tag">Browser v1.7 · new version in progress</span>
+<h2 id="wb-h">Wildbond</h2>
+<p class="lede">The valley of Larkhaven has lost its colour. Choose a young creature as your partner, and as trust grows between you, the world remembers its colours. Travel eight areas, earn eight badges, befriend creatures instead of capturing them, raise a team on Maren's ranch, and take on the league.</p>
+<div class="shots">
+<figure><img src="images/play/wb-barn.png" alt="Inside Maren's barn, colour flooding out as the player chooses Ripplet" loading="lazy"><figcaption>Choosing your partner in Maren's barn. The bond brings the colour back.</figcaption></figure>
+<figure><img src="images/play/wb-battle.png" alt="A battle: Ripplet against Mosshog on a grassy field, with Fight, Guard, Rally, Bond, Bag and Run" loading="lazy"><figcaption>Turn-based battles. Fight, Guard against big attacks, Rally your team, or Bond to befriend.</figcaption></figure>
+<figure><img src="images/play/wb-faded.png" alt="Thornwood, faded to grey, with tall grass and a trainer on the path" loading="lazy"><figcaption>A faded area before its colour returns. Tall grass hides wild creatures.</figcaption></figure>
+<figure><img src="images/play/wb-coast.png" alt="Saltmarsh Coast in full colour: sand, sea, reeds and tamers" loading="lazy"><figcaption>Saltmarsh Coast, restored.</figcaption></figure>
+<figure><img src="images/play/wb-nursery.png" alt="The nursery stall in the barn with two creatures and an egg" loading="lazy"><figcaption>The nursery: two creatures, an egg that hatches while you travel.</figcaption></figure>
+<figure><img src="images/play/wb-gear.png" alt="A creature page: Ripplet wearing a leather harness, with its stats" loading="lazy"><figcaption>Gear your creatures wear, and you can see it on them.</figcaption></figure>
+</div>
+<div class="cols">
+<div><h3>What you'll do</h3><ul><li>Explore paths, tall grass and towns on foot.</li><li>Battle tamers on the road and the Warden of each area.</li><li>Befriend wild creatures with lures and patience.</li><li>Raise, evolve and breed your team. Some creatures change in more than one way, depending on where and how you raise them.</li></ul></div>
+<div><h3>Your first ten minutes</h3><ol><li>Pick a partner in Maren's barn. Each has an element that beats another: see the chart below.</li><li>Battle your rival Wren in town.</li><li>Walk north into Thornwood. Step into tall grass to meet wild creatures.</li><li>Heal with Maren in Larkhaven whenever your team is tired.</li></ol></div>
+<div><h3>If you're lost</h3><ul><li>The <b>Journal</b> says where to go next.</li><li>Losing a lot? Go back to the grass near town and raise your team a few levels. Badges raise the level cap.</li><li>Choose moves that hit hard against the foe's element, and <b>Guard</b> when a foe is "gathering power".</li><li>To befriend a creature, weaken it first, then Bond.</li></ul></div>
+</div>
+<div class="note"><b>Coming next:</b> the new version (pictured) is being built as a standalone game that will also play in the browser. It adds a walkable world everywhere, the nursery, gear, your family's heritage, branching evolutions, and a legend that explains the game's name. It isn't ready to share yet. The browser version is the full journey today.</div>
+<a class="play" href="games/wildbond/index.html">Play Wildbond →</a>
+</section>
+
+<section class="game" id="realmbound" aria-labelledby="rb-h">
+<span class="tag gold">Most content</span><span class="tag">Fantasy adventure</span><span class="tag">v1.5</span>
+<h2 id="rb-h">Realmbound</h2>
+<p class="lede">A single-player world in the spirit of classic online RPGs. Create a hero, take quests, gear up and grow from level 1 to 60 across eight zones, each with its own light and weather. Then lead a guild of adventurers who work, rest and have their own stories, through dungeons (with harder Heroic versions) and a raid.</p>
+<div class="shots">
+<figure><img src="guides/images/realmbound-road.png" alt="Realmbound's road with a hero on the way" loading="lazy"><figcaption>The road between towns.</figcaption></figure>
+<figure><img src="guides/images/realmbound-hearth.png" alt="A Realmbound town hearth" loading="lazy"><figcaption>Towns you walk around: inns, smiths and quest givers.</figcaption></figure>
+</div>
+<div class="cols">
+<div><h3>What you'll do</h3><ul><li>Quest, fight with your class's abilities, loot and equip.</li><li>Walk towns, visit the inn and the smithy.</li><li>Recruit a guild, send them on jobs and hear their stories.</li><li>Run dungeons (with Heroic versions) and a raid at 60.</li></ul></div>
+<div><h3>Your first fifteen minutes</h3><ol><li>Create a hero: faction, race, class, name and journey length.</li><li>Follow the first quest; the Quests tab shows what's needed.</li><li>Use your abilities yourself at first, then try Auto.</li><li>Loot, compare gear in your bags, and turn the quest in.</li></ol></div>
+<div><h3>If you're lost</h3><ul><li>Quests tab first: it names the enemy or item and where.</li><li>Hurt? Rest at the inn and repair your gear.</li><li>Pick fights closer to your level.</li><li>The <a href="guides/realmbound.html">field guide</a> explains every system.</li></ul></div>
+</div>
+<a class="play" href="games/realmbound/index.html">Play Realmbound →</a><a class="alt" href="guides/realmbound.html">Field guide</a>
+</section>
+
+<section class="game" id="diamond" aria-labelledby="dc-h">
+<span class="tag">Prototype</span><span class="tag">Baseball career</span><span class="tag">v0.3</span>
+<h2 id="dc-h">Diamond Career</h2>
+<p class="lede">Start as a young batter on a development club and try to earn your call-up. Bat by timing your swing or by reading the pitcher, sign contracts, get paid on the calendar, and spend your salary on things that last, like a better apartment or your first car.</p>
+<div class="shots"><figure><img src="images/play/dc-pitch.jpg" alt="An evening ballpark, the pitch on its way, a glowing circle at home plate" loading="lazy"><figcaption>At the plate. Swing as the ball reaches the glowing circle.</figcaption></figure></div>
+<div class="cols">
+<div><h3>How to hit</h3><ol><li>Choose Contact or Power.</li><li>Press <b>Throw the pitch</b> (or Space).</li><li>Tap the field (or Space) as the ball reaches the glowing circle at the plate. Do nothing to let it go.</li></ol></div>
+<div><h3>What you'll do</h3><ul><li>Play the key at-bats of each game; the rest plays out around you.</li><li>Choose between more money and more playing time.</li><li>Grow your eye, contact and power.</li></ul></div>
+<div><h3>Prefer to think?</h3><p>Switch to <b>Tactical</b> in Settings: read the pitcher and choose, with no reflexes needed.</p></div>
+</div>
+<a class="play" href="games/diamond-career/index.html">Play Diamond Career →</a><a class="alt" href="guides/diamond-career.html">Guide</a>
+</section>
+
+<section class="game" id="more" aria-labelledby="more-h">
+<h2 id="more-h">More in the works</h2>
+<div class="cols">
+<div><h3>Otherworld <span class="tag">Prototype</span></h3><p>Live one life in another world, with a gift that changes the choices you see. When a life ends, you keep a memory into the next. Eight endings so far.</p><a class="play" href="games/otherworld/index.html">Play Otherworld →</a></div>
+<div><h3>Starfall <span class="tag">Being rebuilt</span></h3><img class="hero-shot" src="images/play/sf-town.png" alt="Starfall town: an inn, a guild hall, a smithy, an apothecary, a healer's hut and a training yard" loading="lazy"><p>Run a frontier guild town: post jobs on the board, serve stew at the counter, work the forge, and grow from a hamlet into a market town as your adventurers grow. The new version is being built; an older browser version is <a href="games/starfall-guild/index.html">here</a>.</p></div>
+<div><h3>And later</h3><p>A walk-in arcade where your characters meet, a shared catalogue of creatures across games, and more sports careers. Every game is playable on its own, in one light, shared universe.</p></div>
+</div>
+</section>
+
+<section class="game" id="elements" aria-labelledby="el-h">
+<h2 id="el-h">Wildbond element chart</h2>
+<p>Read across from the attacking move's element. <b style="color:#b9f5c9">Strong</b> means half again as much damage, and <b style="color:#ffc2c8">weak</b> means about a third less. A creature also hits harder with moves of its own element.</p>
+<div class="chart"><table id="chart"><caption class="muted" style="caption-side:bottom;padding-top:8px">Attacking element (rows) against the defender's element (columns).</caption></table></div>
+</section>
+
+<section class="game" id="feedback" aria-labelledby="fb-h">
+<h2 id="fb-h">Tell us what you think</h2>
+<p>One good moment and one rough edge is the most helpful thing you can send. Each game has a <b>Feedback</b> button in its top bar that fills in the version and where you are. Or just message Evan: a screenshot and a sentence is perfect.</p>
+<a class="alt" href="https://github.com/ecbarish/idle-arcade/issues/new?template=feedback.yml">Share feedback (GitHub account)</a><a class="alt" href="https://github.com/ecbarish/idle-arcade/issues/new?template=bug.yml">Report a bug</a>
+<p class="muted">Your saves stay in your browser and are never sent anywhere. Each game has a "Your save" button to download a backup.</p>
+</section>
 </main>
-<footer><p>These are version-stamped playtest notes, not a promise that every feature is finished. Older routes will stay below newer notes as releases arrive. <a href="index.html">Back to the arcade</a>.</p></footer>
+
+<footer><p>Updated October 2026. Games are works in progress; versions are shown in each game's top bar. Art in the new versions uses the free Ninja Adventure pack (CC0) and art drawn in code; see the <a href="credits.html">credits</a>. <a href="index.html">Back to the arcade</a>.</p></footer>
 </div>
+<script>
+// The element chart, from Wildbond's own matchups (games/wildbond data: what each element beats).
+const BEATS={Ember:['Grove','Gale'],Tide:['Ember','Stone'],Grove:['Tide','Stone'],Stone:['Ember','Gale'],Gale:['Grove','Shade'],Shade:['Radiant','Gale'],Radiant:['Shade']};
+const COL={Ember:'#ff7a3a',Tide:'#3a9bff',Grove:'#4fc35a',Stone:'#b8946a',Gale:'#a8e0ff',Shade:'#8a5ad0',Radiant:'#ffe36a'};
+const els=Object.keys(BEATS),chip=e=>`<span class="el" style="background:${COL[e]}"></span>${e}`;
+let h='<thead><tr><th scope="col">Move ↓ · Defender →</th>'+els.map(e=>`<th scope="col">${chip(e)}</th>`).join('')+'</tr></thead><tbody>';
+for(const a of els){h+=`<tr><th scope="row">${chip(a)}</th>`+els.map(d=>BEATS[a].includes(d)?'<td class="s">Strong</td>':BEATS[d].includes(a)?'<td class="w">Weak</td>':'<td class="n">·</td>').join('')+'</tr>';}
+document.getElementById('chart').innerHTML+=h+'</tbody>';
+</script>
 </body>
 </html>
