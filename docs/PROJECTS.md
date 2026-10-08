@@ -165,3 +165,7 @@ ambience. Wildbond extras: weather forecast, battle backdrops, challenge pennant
 ## Guide extension (2026-10-08)
 
 A6b: ready for review in PR #52 by Codex on codex/game-guides: illustrated Realmbound guide and tips; Diamond Career and Otherworld starter guides. Wildbond waits for Godot.
+
+## R4 consequence follow-up (2026-10-08)
+
+Claimed by Codex on codex/realmbound-story-choices: ten guild arcs gain warned, recoverable consequences; repair in world conversations, retained history in the Guild record. Stacked on the A6b guide PR #52 because queue/session metadata overlaps.
