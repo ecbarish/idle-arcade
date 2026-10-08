@@ -109,7 +109,7 @@ match this look before it's used. **Environment uses the pack (2026-10-08):** Ev
 so Larkhaven's ground, paths, trees, bushes, flowers and cottages now come from its CC0 tilesets (CREDITS.md); fences,
 the sign, people and creatures stay code-drawn.
 
-**No fan-made Pokémon sprites (decided 2026-10-08):** fan sprites of Pokémon are copies of Nintendo/Game Freak's
+**No fan-made Pokemon sprites (decided 2026-10-08):** fan sprites of Pokemon are copies of Nintendo/Game Freak's
 characters, so no fan licence can make them safe to use, and Wildbond needs its own creatures anyway. Fan *original*
 creature ("fakemon") art is fine only with a clear CC0, CC-BY or free-for-games licence. Good places to look: OpenGameArt
 (CC0 monster packs), itch.io free packs, Kenney, and the Ninja Adventure pack's own monster sheets. Our creatures stay

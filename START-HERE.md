@@ -127,7 +127,7 @@ a default so work never waits.
 
 - 2026-10-08 Claude: Godot trial environment now uses the Ninja Adventure CC0 tilesets (grass, dirt paths with edges,
   flowers, garden bushes, cottages, a staggered woods border; scripts/main.gd _draw_ground and _draw_structures; files in
-  wildbond-godot/assets/env/). Our figures, fences and sign stay code-drawn. Fan-made Pokémon sprites ruled out
+  wildbond-godot/assets/env/). Our figures, fences and sign stay code-drawn. Fan-made Pokemon sprites ruled out
   (Nintendo's characters; docs/wildbond-plan.md). Next: the cub's animation, the character creator, the partner choice.
 - 2026-10-08 Claude: Godot trial figures rebuilt from parts (draw_person, LOOKS in scripts/main.gd): head, hair style,  body, apron, swinging arms, legs or a skirt, 4-frame walk in four directions, blinking, idle glances, a dark  outline; the parts system is the basis for the character creator and a later 3D rig. Next: the environment  (Evan liked the pack's structures; pieces kept as separate objects with footprints so they can stand up in 3D).
 - 2026-10-08 Claude: Evan rejected the Ninja Adventure look (chibi, no visible legs; preferred our code-drawn figures).  Reverted the Godot trial to the code-drawn tamer, Maren and cub; removed the pack's files from the project. Art  direction recorded in docs/wildbond-plan.md: real proportions with legs, our own art. (The test window that raced  through the opening was the sped-up recording, not the game's real pace.)
