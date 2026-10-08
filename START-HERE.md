@@ -137,7 +137,10 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
-- 2026-10-08 Claude (evening): Come Play page for friends (playtest.html), stat-bar yardstick (Wildbond v1.7.1 and Godot), Starfall detail
+- 2026-10-08 Claude (night): Evan approved the downloads: Godot export templates installed, ffmpeg in C:SERSEVANBTOOLS. WEB PREVIEWS
+  OF THE NEW WILDBOND AND STARFALL LIVE AT PLAY/ (LINKED FROM COME PLAY), WINDOWS ZIPS IN DESKTOPGAME BUILDS, A 56-SECOND TRAILER
+  (IMAGES/PLAY/TRAILER.MP4, ON THE COME PLAY PAGE; TOOLS/TRAILER). MERGED CHATGPT PR #57 AND #58 (OTHERWORLD V0.2.0).
+- 2026-10-08 CLAUDE (EVENING): Come Play page for friends (playtest.html), stat-bar yardstick (Wildbond v1.7.1 and Godot), Starfall detail
   (finished buildings settle in), Godot Wildbond music per place, partner stands beside you. Plan: docs/proposals/showing-the-games.md
   (Godot demos need export templates: waiting on Evan). Card shop idea parked (CS1).
 - 2026-10-08 Claude (later, 2): Wildbond Godot creature gear: Maren's workbench, seven pieces that each do one thing and show on the
@@ -438,7 +441,10 @@ a default so work never waits.
 - 2026-10-08 Claude (night): Evan accepted all research recommendations and a light shared universe. Built D1
   (Wildbond cap table), D2+D3 (Realmbound group XP split, journey length; groups now ~1.3× solo) and D7
   (`docs/lore/multiverse.md`). Next open: S1 shared dialogue, S2 shared sound, T22 Hollow Crown.
-- 2026-10-08 Claude (evening): research brief `docs/research/decisions.md` (level caps, group XP, pace, roster size,
+- 2026-10-08 Claude (night): Evan approved the downloads: Godot export templates installed, ffmpeg in C:SERSEVANBTOOLS. WEB PREVIEWS
+  OF THE NEW WILDBOND AND STARFALL LIVE AT PLAY/ (LINKED FROM COME PLAY), WINDOWS ZIPS IN DESKTOPGAME BUILDS, A 56-SECOND TRAILER
+  (IMAGES/PLAY/TRAILER.MP4, ON THE COME PLAY PAGE; TOOLS/TRAILER). MERGED CHATGPT PR #57 AND #58 (OTHERWORLD V0.2.0).
+- 2026-10-08 CLAUDE (EVENING): research brief `docs/research/decisions.md` (level caps, group XP, pace, roster size,
   raids, shared systems and a shared universe). Sent T25 (split Starfall Guild) to ChatGPT; Primordial to the back
   burner at Evan's request.
 - 2026-10-08 Claude (later): merged T21 (item names, ChatGPT); built T1-B (Grave Chill; pacing 40-45 measured, no XP

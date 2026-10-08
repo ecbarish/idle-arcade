@@ -16,14 +16,14 @@ element chart, a frame of reference for stat bars, and he floated a card shop ga
   (a real, solid tile); Wildbond's partner comes round to stand beside you instead of peeking over your head.
 - **Music** in the Godot Wildbond: a tune per place and for battles; Larkhaven's comes back with its colour.
 
-## A playable demo of the Godot versions (needs one step)
+## A playable demo of the Godot versions (done 2026-10-08: play/wildbond/ and play/starfall/ on the site; Windows zips in the Desktop folder Game builds)
 Friends can play the browser versions now. The Godot versions (the new Wildbond, Starfall's town) need Godot's **export
 templates** to build a Windows download and a web version we can host on the arcade's site. That's a one-time download
 from Godot's official GitHub release (about 1 GB): either Evan installs them (Godot editor: Editor menu, Manage Export
 Templates, Download and Install) or he tells Claude to download them. After that Claude can publish a web build of each
 on the site, so a link is all a friend needs.
 
-## A trailer
+## A trailer (made 2026-10-08: images/play/trailer.mp4, 56 seconds; cut by tools/trailer/make-trailer.ps1)
 The games can record themselves: `--write-movie` with `--demo` (the opening plays itself), `--photo` (no pop-ups mid
 shot) and `--colour` (an area with its colour back). A 45 to 60 second trailer, in order: the faded valley, choosing a
 partner (the colour floods out), a battle, the coast and the highlands in colour, the nursery and gear, Starfall's town
