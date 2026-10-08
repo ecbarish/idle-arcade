@@ -36,7 +36,11 @@ the very end, so running out of usage never strands work.
 ## What Evan wants (keep this in mind for every design choice)
 - **Real games, not dashboards or puzzles:** deep lore and deep gameplay, like Pokemon, Palworld, classic WoW.
   Be *in* the world: places and people instead of menu buttons. May become an app or full game someday.
-- **Earned automation, never paywalled.** Active play is always worth at least as much as idle.
+- **Earned automation, never paywalled.** Active play is always worth at least as much as idle. **Updated 2026-10-07
+  (docs/VISION.md §8):** as games deepen, automation means earned quality of life and delegating to characters (guild
+  members, ranch creatures, hired help), not skipping the fun; full Auto is for grinding and idle time.
+- **Read docs/VISION.md** (2026-10-07): old soul, modern craft; prologues, a Classic/Enhanced/Modern look, game boxes,
+  procedural content, a living world of bots, friends, Realmbound nodes. Projects V1-V8 in PROJECTS.md.
 - **The journey and the grind are the fun**, but the player picks the pace (journey-length settings, badge level
   caps, challenge modes) and there are reasons to revisit old content (rematches, rare spawns, mastery).
 - References are inspiration, not templates. Suggest better mechanics from other games when they fit

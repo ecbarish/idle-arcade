@@ -122,6 +122,19 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | S7 | **Shared roster in Starfall** (adventurers on jobs and expeditions) | M | System | — | open | docs/plans/starfall-guild.md G2 |
 | S8 | **Shared settings** (see L1) and a shared **credits** screen (see L6) | — | — | — | — | Tracked in the launch track |
 
+## Vision (Evan, 2026-10-07; read docs/VISION.md first)
+
+| ID | Project | Size | Kind | Needs | Status | Notes |
+|---|---|---|---|---|---|---|
+| V1 | **Prologues**: a short, skippable narrated "trailer" per game in its own engine; plays on first visit to its launcher place and from a button; feeds onboarding (L4) | M per game | Art+Data | L8 | open | Dialogue + ambience + light engines; optional browser speech voice |
+| V2 | **Look: Classic / Enhanced / Modern** across the arcade; Enhanced (HD-2D depth, rich light) as the first impression; a Realmbound HD-2D world view | L | Art+System | G1 | open | Poll testers on the starting look; Modern grows from W6 |
+| V3 | **Game boxes**: box art, back of the box, an instruction booklet (the T8 guide) to pick up on the launcher, with an era slider (cartridge box → DVD case → store page) | M | Art | L8, T8 | open | Box art: Gemini images (CREDITS.md) or code-drawn |
+| V4 | **Procedural content, done properly**: seeded Spire floors, Heroic dungeon layouts and affixes, weekly wild routes, rare-spawn events | L | System | W3 | open | Hand-made places stay hand-made |
+| V5 | **A living world of bots**: simulated adventurers in Realmbound's zones (questing, chat, groups, asking for help), rules-based, no server | L | System | R4 | open | Like AzerothCore playerbots; AI chat later and optional |
+| V6 | **Friends**: no-server sharing first (trade and battle codes, ghost teams, shared seeds), then a free hosted database (leaderboards, async trades), real-time co-op last | XL | System | — | open | Evan creates any service accounts himself |
+| V7 | **Nodes** in Realmbound: camps grow into villages and towns from what the guild and the bots do there; neglect fades them | L | System | V5 | open | The Ashes of Creation idea, single-player |
+| V8 | **Automation as earned QoL and delegation** (not skipping play): review each game's Auto against docs/VISION.md §8 | M | Design+Polish | — | open | Answers "when does full Auto unlock" |
+
 ## Parked games (side lane: structure and polish only, until Evan says go)
 
 | ID | Project | Size | Kind | Status | Spec |

@@ -35,6 +35,8 @@ changes, what "good" looks like, and how much each kind of decision is yours to 
 
 ## The quality bar
 
+- **Old soul, modern craft** (Evan, 2026-10-07, docs/VISION.md): pixel art and classic structure with modern light,
+  motion, sound and comfort; never retro for its own sake. First impressions should look *Enhanced*, not faded.
 - **Light first.** Every scene should have a time of day, a light source and shadows that agree with it. Things stand
   *on* the ground (contact shadows), fog sits in the low places, warm light pools around fires and windows, cool light
   fills the shade. Before/after screenshots in the PR for anything visual.
