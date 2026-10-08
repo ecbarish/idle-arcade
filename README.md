@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Diamond Career v0.3.1 (2026-10-08): batting you can see. Nothing covers the field while the ball is coming: tap anywhere on the field (or press Space) to swing, a circle at the plate lights up at the moment to swing, the controls sit high on the field clear of the plate, and the at-bat box says plainly how to hit (Evan's report).
+
 <<<<<<< HEAD
 - Realmbound v1.5.0 (2026-10-08): level-55 guild commissions at the Smithy, with rare gear for every class and slot, visible previews and complete supply/coin costs before confirmation.
 =======

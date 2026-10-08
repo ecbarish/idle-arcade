@@ -47,6 +47,8 @@ function drawBallpark(t,w,h){
   const swing=S.phase==='result'&&!S.active.last.take;
   ctx.save();ctx.translate(bx+side*3*k,by-8*k);ctx.rotate(swing?side*1.25:side*-.35);rect(-k,-12*k,k*1.5,13*k,'#e4bf7c');ctx.restore();
   person(plate[0],plate[1]+10*k,k*.75,'#223442','#ba7c56',0,'back');
+  // The circle at the plate: faint while the ball comes in, bright in the moment to swing.
+  if(pitchClock.running&&S.active?.pitch&&S.mode==='timing'){const f=pitchClock.elapsed/S.active.pitch.duration,now=Math.abs(f-1)<.1;ctx.strokeStyle=now?'#fff1b0':'#fff1b055';ctx.lineWidth=now?2:1;ctx.beginPath();ctx.ellipse(plate[0],plate[1]-2*k,(now?9:7)*k,(now?4:3)*k,0,0,Math.PI*2);ctx.stroke();if(now)glow(plate[0],plate[1]-2*k,14*k,'#fff1b055');}
   if(pitchClock.running&&S.active?.pitch){const f=clamp(pitchClock.elapsed/S.active.pitch.duration,0,1.13);const arc=S.active.pitch.type==='curve'?Math.sin(f*Math.PI)*w*.06:0;const x=mound[0]+arc,y=mound[1]-10*k+(plate[1]-mound[1]+10*k)*f;ellipse(x,y,1.5+f*2,1.5+f*2,'#fff9df');}
   if(S.phase==='result'&&typeof S.active.last.play==='number'){
     const f=reduced?1:clamp((performance.now()-contactAt)/650,0,1),bases=S.active.last.play;

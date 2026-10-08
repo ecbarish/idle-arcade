@@ -15,3 +15,17 @@
 @media(max-width:1000px){#stage.batting-play{min-height:520px}.batting-play .park-sign{top:115px}#batting-window{right:12px;bottom:12px;width:min(440px,calc(100% - 24px))}}
 @media(min-width:1001px){.batting-play #timing-bar{left:12%;width:34%;bottom:100px}}
 #batting-window{max-height:calc(100% - 150px);overflow:auto}@media(max-width:1000px){#stage.coach-speaking{min-height:520px}}
+/* While the ball is in the air the field is clear: tap it to swing. The bar's bright end is the moment to swing. */
+#swing-tip{position:absolute;left:50%;transform:translateX(-50%);top:110px;margin:0;padding:6px 12px;background:#102b2ecc;border:1px solid #9aac88;border-radius:6px;font-size:14px;color:#fff4cd;text-align:center;max-width:calc(100% - 24px);pointer-events:none}
+#swing-tip[hidden]{display:none}
+#timing-bar i{position:absolute;right:0;top:0;bottom:0;width:10%;background:#fff1b0;opacity:.85}
+#timing-bar span{position:relative}
+.pitch-flying{cursor:crosshair}
+.pitch-flying #timing-bar{bottom:24px!important}
+@media(max-width:1000px){#swing-tip{top:76px;font-size:12px}}
+/* The at-bat box sits high on the field, clear of the plate and the batter (Evan, 2026-10-08). */
+@media(min-width:1001px){#batting-window{top:16px;bottom:auto;right:16px;width:min(380px,34%)}.batting-play .park-sign{top:auto;bottom:28px}}
+@media(max-width:1000px){#batting-window{top:84px;bottom:auto}}
+.batting-play #timing-bar,.pitch-flying #timing-bar{left:auto!important;right:4%;width:30%!important;bottom:28px!important}
+@media(max-width:1000px){.batting-play #timing-bar,.pitch-flying #timing-bar{width:40%!important;bottom:14px!important}}
+.pitch-flying .park-sign{display:none}
