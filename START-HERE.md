@@ -137,6 +137,11 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (night, continued): merged ChatGPT's guide CRLF fix and Hearth Book capitals (kept the world's-words story text over
+  its numbered version). Wildbond Godot: Cloudglass Pass (cold stone, drifting cloud, Ilka, Teodor, Warden Vessa; 151 checks).
+  Starfall Godot slice 2: plots with Hob's plans, the Healer's Hut (Ama; hurt adventurers mend twice as fast), a Training Yard,
+  the town's rank (Hamlet, Village, Town) bringing newcomers through the gate; 51 checks.
+
 - 2026-10-08 Claude (night, later): Starfall's village begun in Godot (starfall-godot/, Play Starfall.bat): the town (Guild Hall,
   Lantern Inn and its counter, the guild board, the east gate), three adventurers who choose posted jobs by level and nerve, come home
   hurt (never killed), eat at the counter you run by hand, rest at the inn; Bryn takes the counter after ten meals for daily

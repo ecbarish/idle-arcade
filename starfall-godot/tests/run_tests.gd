@@ -191,14 +191,74 @@ func _run() -> void:
 	main.day_t = main.DAY_SECONDS - 0.01
 	tick(0.1)
 	check(not main.hired and "couldn't pay" in main.caption.text, "can't pay her wages: Bryn goes back to her own kitchen")
+	# ---- building on a plot: Hob's plans, coins, scaffolding, then the building
+	check(not main.solid(main.PLOTS.west) and main.plot_at(Vector2i(3, 10)) == "west", "the west plot is open ground, staked out")
+	check(walk_to(main.PLOTS.west + Vector2i(2, 0)), "you can walk up to the plot")
+	check(main.use() and main.build_plot == "west" and main.plans().size() == 2, "using it opens Hob's plans: the healer's hut or a training yard")
+	main.coins = 50
+	check(not main.build("healer") and "more coins" in main.build_note and main.build_plot == "west", "too few coins: Hob says how many more")
+	main.coins = 300
+	check(main.build("healer") and main.coins == 180 and main.build_plot == "", "building the healer's hut: 120 coins")
+	check(main.solid(main.PLOTS.west) and main.finished("healer") == "", "scaffolding goes up; it isn't finished yet")
+	tick(main.BUILDINGS.healer.time + 1.0)
+	check(main.finished("healer") == "west" and main.ama.where == "town" and "finished" in main.caption.text, "it's finished, and Ama stands at her door")
+	# ---- hurt adventurers go to Ama, and mend twice as fast
+	var patient: Variant = hero("Aki")
+	patient.where = "town"
+	patient.a.state = "town"
+	patient.a.hp = int(patient.a.max) / 4
+	check(main._bed_of(patient) == main._step_of("west"), "badly hurt, an adventurer goes to Ama's hut instead of the inn")
+	var light: Variant = hero("Yuna")
+	light.a.hp = int(light.a.max) - 2
+	check(main._bed_of(light) == main.INN_STEP, "a few bruises: the inn's bed will do")
+	main._to_bed(patient)
+	for i in 400:
+		tick(0.1)
+		if patient.where == "healer":
+			break
+	check(patient.where == "healer" and patient.a.state == "resting", "they go in to Ama")
+	var hp_in: int = int(patient.a.hp)
+	tick(1.6)
+	check(int(patient.a.hp) - hp_in >= int(ceil(float(patient.a.max) * 0.1)), "and mend quickly in her care (+%d)" % (int(patient.a.hp) - hp_in))
+	for i in 400:
+		tick(0.1)
+		if patient.where == "town":
+			break
+	check(patient.where == "town" and int(patient.a.hp) == int(patient.a.max), "mended, they come back out")
+	# ---- the training yard: idle adventurers practise and grow
+	main.build_plot = "east"
+	main.coins = 300
+	check(main.build("yard"), "a training yard on the east plot")
+	tick(main.BUILDINGS.yard.time + 1.0)
+	check(main.finished("yard") == "east", "the yard is finished")
+	main.posted.clear()
+	var trainee: Variant = hero("Ren")
+	trainee.where = "town"
+	trainee.a.state = "training"
+	trainee.a.timer = 30.0
+	trainee.a.drill = 0.0
+	main.send(trainee, main._step_of("east"))
+	var xp0: int = int(trainee.a.xp) + int(trainee.a.lvl) * 1000
+	for i in 120:
+		tick(0.1)
+	check(int(trainee.a.xp) + int(trainee.a.lvl) * 1000 > xp0, "practising at the yard brings experience")
+	# ---- the town grows: a new rank brings a newcomer through the gate
+	var n0: int = main.heroes.size()
+	main.total_jobs = 6
+	main._check_rank()
+	check(main.rank >= 1 and main.heroes.size() > n0 and main.heroes[n0].a.name == "Kaito", "with buildings and jobs done, Starfall becomes a Village, and Kaito arrives")
+	check("Village" in main.status.text or main.RANKS[main.rank].name in ["Village", "Town"], "the town's rank shows at the top")
 	# ---- saving the town and loading it back (a test file, never the real one)
 	main.no_save = false
 	main.save_path = "user://test_town.json"
 	main.coins = 77
+	var heroes_saved: int = main.heroes.size()
 	main.save_game()
 	main.coins = 0
 	main.heroes.clear()
-	check(main._load() and main.coins == 77 and main.heroes.size() == 3 and main.day == 3, "the town saves and loads back")
+	main.built = {}
+	check(main._load() and main.coins == 77 and main.heroes.size() == heroes_saved and main.day == 3, "the town saves and loads back")
+	check(main.finished("healer") == "west" and main.finished("yard") == "east" and main.ama.where == "town" and main.rank >= 1, "with its buildings, Ama, and its rank")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(main.save_path))
 	main.no_save = true
 	print("Starfall Godot checks: %d passed, %d failed" % [passed, failed])

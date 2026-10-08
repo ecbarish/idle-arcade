@@ -23,8 +23,8 @@ const MAP := [
 	"T,,c.,,,,B,,,,,,,,.,,,,T",
 	"T,,,...................E",
 	"T,f,,,,,,,..,,,,,,.....E",
-	"T,,,,,,,,,..,,,,,,,,,f,T",
-	"T,,,,,,,,,..,,,,,,,,,,,T",
+	"T,pp,,,,,,..,,,,,,,ppf,T",
+	"T,pp,,,,,,..,,,,,,,pp,,T",
 	"T,,f,,,,,,..,,,,,,,f,,,T",
 	"T,,,,,,,,,,,,,,,,,,,,,,T",
 	"TTTTTTTTTTTTTTTTTTTTTTTT",
@@ -47,6 +47,22 @@ const WAGE := 10
 const HIRE_AFTER := 10                     # meals you serve yourself before Bryn offers to take over
 const PATIENCE := 22.0                     # how long a hungry adventurer waits at the counter
 const MAX_POSTED := 2
+## Cleared plots (p on the map, 2x2) where the town can grow; each keeps its anchor (top left) tile.
+const PLOTS := { "west": Vector2i(2, 9), "east": Vector2i(19, 9) }
+## What can stand on a plot. Each does one clear thing for your adventurers.
+const BUILDINGS := {
+	"healer": { "name": "The Healer's Hut", "cost": 120, "time": 20.0,
+		"text": "Hurt adventurers go straight to Ama for treatment, and mend twice as fast as in bed at the inn." },
+	"yard": { "name": "A Training Yard", "cost": 150, "time": 25.0,
+		"text": "Posts and straw dummies. Adventurers with nothing to do practise here and slowly grow stronger." },
+}
+## The town's rank grows with what you've built and the jobs your guild has done. Each new rank brings someone new.
+const RANKS := [
+	{ "name": "Hamlet", "built": 0, "jobs": 0 },
+	{ "name": "Village", "built": 1, "jobs": 6 },
+	{ "name": "Town", "built": 2, "jobs": 16 },
+]
+const NEWCOMERS := [["Kaito", "archer", 1], ["Hana", "knight", 2]]
 
 ## Classes from the browser Starfall Guild (games/starfall-guild/js/00-data.js).
 const CLASSES := {
@@ -118,6 +134,11 @@ var save_path := "user://starfall.json"
 var save_t := 0.0
 var board_open := false
 var board_sel := 0
+var built := {}                             # plot -> { what, left: seconds of building left (0 when finished) }
+var build_plot := ""                        # the plot whose building plan is open ("" when closed)
+var total_jobs := 0                         # jobs the guild has finished, all time
+var rank := 0
+var ama := Mover.new("ama", Vector2i(-5, -5))   # the healer, once her hut stands
 
 var cam: Camera2D
 var ui: CanvasLayer
@@ -135,6 +156,8 @@ const LOOKS := {
 
 func _ready() -> void:
 	rng.randomize()
+	ama.where = "gone"
+	ama.look = { "skin": "c88a64", "hair": "f2f0ec", "shirt": "5d9a3e", "apron": "f4f0e8", "legs": "3e5a34", "style": "bun", "body": "narrow" }
 	if "--no-save" in OS.get_cmdline_user_args():
 		no_save = true                           # recordings and tries never touch the real town (-- --no-save)
 	cam = Camera2D.new()
@@ -147,6 +170,10 @@ func _ready() -> void:
 	_make_ui()
 	if not _load():
 		_new_town()
+	if "--built" in OS.get_cmdline_user_args():       # to see the town grown: -- --no-save --built
+		built = { "west": { "what": "healer", "left": 0.0 }, "east": { "what": "yard", "left": 8.0 } }
+		_place_ama()
+		lines.clear()
 	cam.position = me.pos + Vector2(8, 8)
 	cam.reset_smoothing()
 
@@ -184,8 +211,21 @@ func tile_at(p: Vector2i) -> String:
 		return "T"
 	return MAP[p.y][p.x]
 
-func walkable(p: Vector2i, who: Mover = null) -> bool:
+## Whether a tile blocks the way: trees, walls, the counter and the board, and any building on a plot.
+func solid(p: Vector2i) -> bool:
 	if tile_at(p) in SOLID:
+		return true
+	return plot_at(p) != "" and built.has(plot_at(p))
+
+## The plot a tile belongs to ("" if none).
+func plot_at(p: Vector2i) -> String:
+	for k in PLOTS:
+		if Rect2i(PLOTS[k], Vector2i(2, 2)).has_point(p):
+			return k
+	return ""
+
+func walkable(p: Vector2i, who: Mover = null) -> bool:
+	if solid(p):
 		return false
 	for m in people():
 		if m != who and m.where == "town" and (m.tile == p or (not m.path.is_empty() and m.path[0] == p)):
@@ -193,7 +233,7 @@ func walkable(p: Vector2i, who: Mover = null) -> bool:
 	return true
 
 func people() -> Array[Mover]:
-	var out: Array[Mover] = [me, bryn]
+	var out: Array[Mover] = [me, bryn, ama]
 	out.append_array(heroes)
 	return out
 
@@ -207,7 +247,7 @@ func route(from: Vector2i, to: Vector2i, who: Mover = null) -> Array[Vector2i]:
 			break
 		for d in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
 			var n: Vector2i = c + d
-			if prev.has(n) or tile_at(n) in SOLID:
+			if prev.has(n) or solid(n):
 				continue
 			if n != to and _standing(n, who):
 				continue
@@ -241,6 +281,7 @@ func _process(dt: float) -> void:
 		_hero(h, dt)
 	_bryn(dt)
 	_counter(dt)
+	_construction(dt)
 	for m in people():
 		_walk(m, dt)
 	for b in barks:
@@ -277,7 +318,7 @@ func _blocked_by_other(p: Vector2i, who: Mover) -> bool:
 
 # ---------------------------------------------------------------- you
 func _player(_dt: float) -> void:
-	if board_open or not lines.is_empty() or not me.path.is_empty() or me.pos.distance_to(Vector2(me.tile) * TILE) > 0.5:
+	if board_open or build_plot != "" or not lines.is_empty() or not me.path.is_empty() or me.pos.distance_to(Vector2(me.tile) * TILE) > 0.5:
 		return
 	var d := Vector2i.ZERO
 	if Input.is_action_pressed("ui_up") or Input.is_physical_key_pressed(KEY_W): d = Vector2i.UP
@@ -329,6 +370,24 @@ func use() -> bool:
 	if (me.tile - BOARD).length() <= 1.01:
 		open_board()
 		return true
+	for k in PLOTS:
+		var near := false
+		for d in [Vector2i.ZERO, Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
+			if plot_at(me.tile + d) == k:
+				near = true
+		if near:
+			if not built.has(k):
+				build_plot = k                       # the plan for this plot: what could stand here
+				board_sel = 0
+				walk_to.clear()
+			elif float(built[k].left) > 0.0:
+				say("", "Hob's crew are hard at work. It'll be standing soon.")
+			elif built[k].what == "healer":
+				say("ama", ["Bring me the hurt ones. Bandages, broth and quiet: that's most of medicine.", "Aki tried to leave before I'd finished with him. He won't again.",
+					"Rest is a skill, guildmaster. Your adventurers are terrible at it."][rng.randi() % 3])
+			else:
+				say("", "The training yard. Straw dummies, worn posts, and the smell of hard work.")
+			return true
 	if (me.tile - bryn.tile).length() <= 1.01:
 		talk_bryn()
 		return true
@@ -347,6 +406,10 @@ func use() -> bool:
 	return false
 
 func _unhandled_input(e: InputEvent) -> void:
+	if build_plot != "":
+		_build_input(e)
+		get_viewport().set_input_as_handled()
+		return
 	if board_open:
 		_board_input(e)
 		get_viewport().set_input_as_handled()
@@ -399,10 +462,28 @@ func _hero(h: Mover, dt: float) -> void:
 				posted.erase(job)
 				a.state = "to_board"
 				send(h, READ_AT)
+			elif finished("yard") != "" and float(a.hp) >= float(a.max) * 0.7 and rng.randf() < 0.45:
+				a.state = "training"                     # nothing to do: practise at the yard
+				a.timer = rng.randf_range(10.0, 16.0)
+				a.drill = 0.0
+				send(h, _step_of(finished("yard")) + Vector2i(rng.randi() % 2, 0))
 			elif rng.randf() < 0.6:
 				var to := TOWN_AREA.position + Vector2i(rng.randi() % TOWN_AREA.size.x, rng.randi() % TOWN_AREA.size.y)
 				if walkable(to, h):
 					send(h, to)
+		"training":
+			if not h.path.is_empty():
+				return
+			h.face = Vector2i.UP
+			a.drill = float(a.get("drill", 0.0)) + dt
+			if float(a.drill) >= 2.5:
+				a.drill = 0.0
+				gain_xp(h, 1)
+				if rng.randf() < 0.3:
+					bark(h, ["Hyah!", "Again!", "One more set.", "Take that, straw!"][rng.randi() % 4])
+			if a.timer <= 0.0 or _pick_job(h) != "":
+				a.state = "town"
+				a.timer = 0.5
 		"to_board":
 			if h.path.is_empty() and h.tile != READ_AT and a.timer <= 0.0:
 				a.timer = 1.0
@@ -431,26 +512,32 @@ func _hero(h: Mover, dt: float) -> void:
 				if h.tile != spot:
 					send(h, spot)
 		"resting":
+			var at_healer: bool = h.where == "healer"
 			if a.timer <= 0.0:
-				a.timer = 1.5                        # a little better every moment in bed
-				a.hp = mini(int(a.max), int(a.hp) + int(ceil(float(a.max) * 0.05)))
+				a.timer = 1.5                        # a little better every moment in bed; twice as fast in Ama's care
+				a.hp = mini(int(a.max), int(a.hp) + int(ceil(float(a.max) * (0.1 if at_healer else 0.05))))
 			if int(a.hp) >= int(a.max):
+				var out: Vector2i = _step_of(finished("healer")) if at_healer else INN_STEP
 				h.where = "town"
-				h.tile = INN_STEP
-				h.pos = Vector2(INN_STEP) * TILE
+				h.tile = out
+				h.pos = Vector2(out) * TILE
 				a.state = "town"
 				a.timer = 1.0
-				bark(h, ["Good as new.", "That bed is a miracle.", "Right. What's on the board?"][rng.randi() % 3])
-				send(h, INN_STEP + Vector2i(3, 2))
+				if at_healer:
+					bark(h, ["Ama says I'm a terrible patient.", "All mended. Thank you, Ama!", "Not even a scar. Well. A small one."][rng.randi() % 3])
+				else:
+					bark(h, ["Good as new.", "That bed is a miracle.", "Right. What's on the board?"][rng.randi() % 3])
+				send(h, TOWN_AREA.position + Vector2i(2 + rng.randi() % 6, 1))
 		"to_rest":
+			var bed: Vector2i = _bed_of(h)
 			if h.path.is_empty():
-				if h.tile == INN_STEP:
-					h.where = "inside"
+				if h.tile == bed:
+					h.where = "healer" if bed != INN_STEP else "inside"
 					a.state = "resting"
 					a.timer = 1.5
 				elif a.timer <= 0.0:
 					a.timer = 1.0
-					send(h, INN_STEP)
+					send(h, bed)
 
 func _pick_job(h: Mover) -> String:
 	var a: Dictionary = h.a
@@ -492,14 +579,10 @@ func _come_home(h: Mover) -> void:
 		today.done += 1
 		today.earned += cut
 		a.morale = mini(10, int(a.morale) + 1)
-		a.xp = int(a.xp) + danger * 10
-		if int(a.xp) >= int(a.lvl) * 20:
-			a.xp = int(a.xp) - int(a.lvl) * 20
-			a.lvl = int(a.lvl) + 1
-			a.max = int(float(CLASSES[a.cls].hp) * (1.0 + 0.2 * (int(a.lvl) - 1)))
-			bark(h, "Back! And I think I've got stronger. Level %d!" % a.lvl)
-		else:
+		total_jobs += 1
+		if not gain_xp(h, danger * 10):
 			bark(h, ["Done! The farmers can sleep tonight.", "Job's finished. I need food.", "Back in one piece. Mostly."][rng.randi() % 3])
+		_check_rank()
 	else:
 		today.failed += 1
 		a.morale = maxi(0, int(a.morale) - 2)
@@ -563,7 +646,142 @@ func _to_bed(h: Mover) -> void:
 	queue.erase(h)
 	h.a.state = "to_rest"
 	h.a.timer = 0.0
-	send(h, INN_STEP)
+	send(h, _bed_of(h))
+
+## Where a fed adventurer goes to recover: Ama's hut if it stands and they're properly hurt, otherwise the inn.
+func _bed_of(h: Mover) -> Vector2i:
+	if finished("healer") != "" and float(h.a.hp) < float(h.a.max) * 0.7:
+		return _step_of(finished("healer"))
+	return INN_STEP
+
+## Experience from jobs and practice; returns true (and says so) if it brought a new level.
+func gain_xp(h: Mover, n: int) -> bool:
+	var a: Dictionary = h.a
+	a.xp = int(a.xp) + n
+	if int(a.xp) < int(a.lvl) * 20:
+		return false
+	a.xp = int(a.xp) - int(a.lvl) * 20
+	a.lvl = int(a.lvl) + 1
+	a.max = int(float(CLASSES[a.cls].hp) * (1.0 + 0.2 * (int(a.lvl) - 1)))
+	bark(h, "I think I've got stronger. Level %d!" % a.lvl)
+	return true
+
+# ---------------------------------------------------------------- building on the plots
+## The plot where a finished building of this kind stands ("" if none yet).
+func finished(what: String) -> String:
+	for k in built:
+		if built[k].what == what and float(built[k].left) <= 0.0:
+			return k
+	return ""
+
+## The step in front of a plot's building, where people go in and out.
+func _step_of(plot: String) -> Vector2i:
+	if plot == "":
+		return INN_STEP
+	return PLOTS[plot] + Vector2i(0, 2)
+
+## What could still be built (each building once in town), in a steady order.
+func plans() -> Array:
+	var out: Array = []
+	for id in BUILDINGS:
+		var taken := false
+		for k in built:
+			if built[k].what == id:
+				taken = true
+		if not taken:
+			out.append(id)
+	return out
+
+var build_note := ""
+
+## Build the chosen plan on the open plot: pay, and Hob's crew put it up over the next while.
+func build(id: String) -> bool:
+	var b: Dictionary = BUILDINGS[id]
+	if coins < int(b.cost):
+		build_note = "You need %d more coins for that." % (int(b.cost) - coins)
+		return false
+	coins -= int(b.cost)
+	built[build_plot] = { "what": id, "left": float(b.time) }
+	caption.text = "Hob and his crew arrive with timber and rope. %s will be standing soon." % b.name
+	caption_t = 6.0
+	build_plot = ""
+	build_note = ""
+	return true
+
+func _construction(dt: float) -> void:
+	for k in built:
+		if float(built[k].left) <= 0.0:
+			continue
+		built[k].left = float(built[k].left) - dt
+		if float(built[k].left) <= 0.0:
+			var b: Dictionary = BUILDINGS[built[k].what]
+			caption.text = "%s is finished. The town is a little bigger." % b.name
+			caption_t = 6.0
+			if built[k].what == "healer":
+				_place_ama()
+			_check_rank()
+
+func _place_ama() -> void:
+	var k := finished("healer")
+	if k == "":
+		return
+	ama.where = "town"
+	ama.tile = _step_of(k) + Vector2i.RIGHT
+	ama.pos = Vector2(ama.tile) * TILE
+	ama.face = Vector2i.DOWN
+
+func _build_input(e: InputEvent) -> void:
+	var n := plans().size() + 1                 # the plans, then "Not now"
+	if e is InputEventKey and e.pressed and not e.echo:
+		match e.keycode:
+			KEY_UP, KEY_W, KEY_LEFT, KEY_A: board_sel = (board_sel + n - 1) % n
+			KEY_DOWN, KEY_S, KEY_RIGHT, KEY_D, KEY_TAB: board_sel = (board_sel + 1) % n
+			KEY_ENTER, KEY_KP_ENTER, KEY_SPACE, KEY_E: plan_pick(board_sel)
+			KEY_ESCAPE, KEY_BACKSPACE: build_plot = ""
+	elif e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
+		var p: Vector2 = board_view.get_local_mouse_position()
+		for i in n:
+			if _plan_rect(i, n).has_point(p):
+				plan_pick(i)
+
+func _plan_rect(i: int, n: int) -> Rect2:
+	if i == n - 1:
+		return Rect2(158, 186, 68, 16)               # "Not now"
+	return Rect2(42 + i * 102, 46, 96, 120)
+
+func plan_pick(i: int) -> void:
+	var ps := plans()
+	if i >= ps.size():
+		build_plot = ""
+		build_note = ""
+		return
+	board_sel = i
+	build(ps[i])
+
+## The town's rank: each new rank brings a newcomer through the gate, looking for the guild.
+func _check_rank() -> void:
+	if rank + 1 >= RANKS.size():
+		return
+	var built_n := 0
+	for k in built:
+		if float(built[k].left) <= 0.0:
+			built_n += 1
+	var nxt: Dictionary = RANKS[rank + 1]
+	if built_n < int(nxt.built) or total_jobs < int(nxt.jobs):
+		return
+	rank += 1
+	caption.text = "Word travels: Starfall is a %s now. Someone new is walking in through the gate." % RANKS[rank].name.to_lower()
+	caption_t = 8.0
+	if rank - 1 < NEWCOMERS.size():
+		var s: Array = NEWCOMERS[rank - 1]
+		var m := Mover.new("hero%d" % heroes.size(), GATE + Vector2i.LEFT)
+		var c: Dictionary = CLASSES[s[1]]
+		var mx := int(c.hp * (1.0 + 0.2 * (s[2] - 1)))
+		m.a = { "name": s[0], "cls": s[1], "lvl": s[2], "xp": 0, "hp": mx, "max": mx, "morale": 7, "state": "town", "job": "", "timer": 3.0, "hair": HAIR[(heroes.size() * 4 + 1) % HAIR.size()] }
+		_dress(m)
+		heroes.append(m)
+		bark(m, "Is this the guild? I heard there's honest work here.")
+		send(m, TOWN_AREA.position + Vector2i(5, 1))
 
 # ---------------------------------------------------------------- Bryn: the inn's cook, and later your barkeep
 func _bryn(_dt: float) -> void:
@@ -647,6 +865,8 @@ func bark(m: Mover, text: String) -> void:
 func speaker(who: String) -> Mover:
 	if who == "bryn":
 		return bryn
+	if who == "ama":
+		return ama if ama.where == "town" else null
 	for h in heroes:
 		if h.a.name == who and h.where == "town":
 			return h
@@ -704,6 +924,8 @@ func _draw() -> void:
 	_tex(HOUSE, Vector2i(0, 0), Vector2i(4, 3), Vector2(INN_DOOR.x - 1, INN_DOOR.y - 2) * TILE)
 	draw_texture_rect_region(HOUSE, Rect2(Vector2(HALL_DOOR.x - 1, HALL_DOOR.y - 4) * TILE, HALL_SPRITE.size), HALL_SPRITE)
 	_inn_sign()
+	for k in PLOTS:
+		_draw_plot(k)
 	_counter_draw()
 	_board_draw()
 	for y in MAP.size():
@@ -746,6 +968,55 @@ func _ground(x: int, y: int, ch: String) -> void:
 		_tex(NATURE, Vector2i(1, 10), Vector2i.ONE, o)
 	elif ch in "r#":
 		_tex(NATURE, Vector2i(0, 10), Vector2i.ONE, o)                 # garden bushes; the buildings stand over them
+	elif ch == "p":
+		_tex(FLOOR, Vector2i(12, 8), Vector2i.ONE, o)                  # cleared, trodden ground
+
+## A plot: staked out and roped while it waits; scaffolding while Hob's crew work; then the building itself.
+func _draw_plot(k: String) -> void:
+	var o := Vector2(PLOTS[k]) * TILE
+	var wood := Color("6b4a2a")
+	if not built.has(k):
+		for c in [Vector2(1, 2), Vector2(29, 2), Vector2(1, 28), Vector2(29, 28)]:
+			draw_rect(Rect2(o + c, Vector2(2, 5)), wood)
+		draw_line(o + Vector2(2, 4), o + Vector2(30, 4), Color("d8c8a4"), 1.0)
+		draw_line(o + Vector2(2, 30), o + Vector2(30, 30), Color("d8c8a4"), 1.0)
+		draw_rect(Rect2(o + Vector2(10, 12), Vector2(12, 8)), Figures.OUTLINE)    # a little sign: room to grow
+		draw_rect(Rect2(o + Vector2(11, 13), Vector2(10, 6)), Color("d8a868"))
+		draw_rect(Rect2(o + Vector2(15, 20), Vector2(2, 6)), wood)
+		return
+	var b: Dictionary = built[k]
+	var total := float(BUILDINGS[b.what].time)
+	if float(b.left) > 0.0:
+		var p := clampf(1.0 - float(b.left) / total, 0.0, 1.0)
+		var h := int(26.0 * p)
+		draw_rect(Rect2(o + Vector2(3, 30 - h), Vector2(26, h)), Color("c8a070"))         # walls going up
+		for x in [2, 15, 28]:
+			draw_rect(Rect2(o + Vector2(x, 2), Vector2(2, 28)), wood)                      # scaffold poles
+		for y in [10, 20]:
+			draw_rect(Rect2(o + Vector2(1, y), Vector2(30, 2)), Color("a0703a"))            # planks
+		if int(t * 4.0) % 2 == 0:
+			draw_rect(Rect2(o + Vector2(20, 6 + int(t * 8.0) % 3), Vector2(3, 2)), Color("8a8a84"))   # a hammer at work
+		return
+	if b.what == "healer":
+		draw_rect(Rect2(o + Vector2(1, 9), Vector2(30, 22)), Figures.OUTLINE)
+		draw_rect(Rect2(o + Vector2(2, 10), Vector2(28, 20)), Color("eadcc0"))           # whitewashed walls
+		for i in 8:                                                                      # a green thatched roof
+			draw_rect(Rect2(o + Vector2(-1 + i, 10 - i), Vector2(34 - i * 2, 2)), Color("5d8a4a").darkened(0.03 * i))
+		draw_rect(Rect2(o + Vector2(3, 20), Vector2(9, 11)), Figures.OUTLINE)            # the door, at the step
+		draw_rect(Rect2(o + Vector2(4, 21), Vector2(7, 10)), Color("7a5236"))
+		draw_rect(Rect2(o + Vector2(17, 16), Vector2(8, 6)), Color("f2d24a") if heroes.any(func(h): return h.where == "healer") else Color("5a6a7a"))
+		for i in 3:                                                                      # herbs drying under the eaves
+			draw_rect(Rect2(o + Vector2(15 + i * 4, 11), Vector2(2, 4)), [Color("6aa84a"), Color("a8c868"), Color("4a8a5a")][i])
+	else:
+		for x in [1, 29]:
+			for y in [4, 26]:
+				draw_rect(Rect2(o + Vector2(x, y), Vector2(2, 5)), wood)
+		draw_line(o + Vector2(2, 6), o + Vector2(30, 6), wood, 1.0)
+		for d in [Vector2(8, 8), Vector2(20, 12)]:                                       # straw dummies on posts
+			draw_rect(Rect2(o + d + Vector2(2, 8), Vector2(2, 10)), wood)
+			draw_rect(Rect2(o + d + Vector2(-1, 0), Vector2(8, 10)), Figures.OUTLINE)
+			draw_rect(Rect2(o + d, Vector2(6, 8)), Color("d8b860"))
+			draw_rect(Rect2(o + d + Vector2(0, 3), Vector2(6, 1)), Color("a08040"))
 
 func _counter_draw() -> void:
 	# a plank counter under a striped awning, a pot of stew steaming on it
@@ -846,15 +1117,15 @@ func _make_ui() -> void:
 	ui.add_child(board_view)
 
 func _update_ui() -> void:
-	status.text = "Day %d   Coins %d" % [day, coins]
+	status.text = "Day %d   %s of Starfall   Coins %d" % [day, RANKS[rank].name, coins]
 	if caption_t <= 0.0:
 		caption.text = ""
 	var to_screen := get_viewport().get_canvas_transform()
-	bubble.visible = not lines.is_empty() and not board_open
+	bubble.visible = not lines.is_empty() and not board_open and build_plot == ""
 	if bubble.visible:
 		var line: Dictionary = lines[0]
 		var who: Mover = speaker(line.who)
-		var name := "" if line.who == "" else ("Bryn" if line.who == "bryn" else str(line.who))
+		var name := str(line.who).capitalize()
 		bubble_text.text = (name + ": " if name != "" else "") + str(line.text) + "   ▸"
 		bubble.size = Vector2(240, 0)
 		bubble.reset_size()
@@ -878,6 +1149,9 @@ func _draw_board_view() -> void:
 		board_view.draw_rect(r, Color(0.99, 0.97, 0.92, 0.92))
 		board_view.draw_rect(r, Color(0.23, 0.17, 0.12), false, 1.0)
 		board_view.draw_string(font, r.position + Vector2(4, 8), b.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 7, Color(0.17, 0.13, 0.1))
+	if build_plot != "":
+		_draw_plans(font)
+		return
 	if not board_open:
 		return
 	# the board, close up: today's notices, pinned or not
@@ -902,10 +1176,36 @@ func _draw_board_view() -> void:
 	board_view.draw_string(font, done.position + Vector2(0, 11), "Done", HORIZONTAL_ALIGNMENT_CENTER, done.size.x, 8, Color("f4e9cd"))
 	board_view.draw_string(font, Vector2(32, 182), "Up to %d pinned. The guild keeps three coins in ten of each reward." % MAX_POSTED, HORIZONTAL_ALIGNMENT_CENTER, 320, 7, Color("e8d8b8"))
 
+## Hob's plans for a plot, close up: what could stand here, what it costs, what it does for your adventurers.
+func _draw_plans(font: Font) -> void:
+	var ps := plans()
+	var n := ps.size() + 1
+	board_view.draw_rect(Rect2(0, 0, 384, 216), Color(0.05, 0.04, 0.06, 0.55))
+	board_view.draw_rect(Rect2(28, 14, 328, 196), Color("2f3a46"))
+	board_view.draw_rect(Rect2(32, 18, 320, 188), Color("d8e0e8"))
+	board_view.draw_string(font, Vector2(32, 34), "Hob's plans for the %s plot" % build_plot, HORIZONTAL_ALIGNMENT_CENTER, 320, 11, Color("2f3a46"))
+	if ps.is_empty():
+		board_view.draw_string(font, Vector2(32, 100), "Everything Hob knows how to build already stands in Starfall.", HORIZONTAL_ALIGNMENT_CENTER, 320, 8, Color("2f3a46"))
+	for i in ps.size():
+		var b: Dictionary = BUILDINGS[ps[i]]
+		var r := _plan_rect(i, n)
+		var afford := coins >= int(b.cost)
+		board_view.draw_rect(r.grow(1), Color("f2d24a") if board_sel == i else Color(0, 0, 0, 0.3))
+		board_view.draw_rect(r, Color("f4f6f8"))
+		board_view.draw_multiline_string(font, r.position + Vector2(5, 13), b.name, HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 10, 8, -1, Color("2f3a46"))
+		board_view.draw_string(font, r.position + Vector2(5, 40), "%d coins" % int(b.cost), HORIZONTAL_ALIGNMENT_LEFT, -1, 7, Color("3a6a3a") if afford else Color("a03a2a"))
+		board_view.draw_multiline_string(font, r.position + Vector2(5, 52), b.text, HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 10, 7, -1, Color("4a5560"))
+		board_view.draw_string(font, r.position + Vector2(5, r.size.y - 5), "Build it" if afford else "Not enough coins", HORIZONTAL_ALIGNMENT_LEFT, -1, 7, Color("2f3a46") if afford else Color("8a8a8a"))
+	var done := _plan_rect(n - 1, n)
+	board_view.draw_rect(done, Color("2f3a46") if board_sel == n - 1 else Color("4a5866"))
+	board_view.draw_string(font, done.position + Vector2(0, 11), "Not now", HORIZONTAL_ALIGNMENT_CENTER, done.size.x, 8, Color("f4f6f8"))
+	if build_note != "":
+		board_view.draw_string(font, Vector2(32, 180), build_note, HORIZONTAL_ALIGNMENT_CENTER, 320, 7, Color("a03a2a"))
+
 # ---------------------------------------------------------------- saving the town (user://starfall.json)
 func _autosave(dt: float) -> void:
 	save_t += dt
-	if save_t >= 5.0 and lines.is_empty() and not board_open:
+	if save_t >= 5.0 and lines.is_empty() and not board_open and build_plot == "":
 		save_t = 0.0
 		save_game()
 
@@ -918,6 +1218,7 @@ func save_game() -> void:
 		return
 	var d := { "v": 1, "coins": coins, "day": day, "day_t": day_t, "meals": meals, "hired": hired, "offered": bryn_offered,
 		"notices": notices, "posted": posted, "today": today, "me": [me.tile.x, me.tile.y],
+		"built": built, "jobs": total_jobs, "rank": rank,
 		"heroes": heroes.map(func(h): return h.a) }
 	var f := FileAccess.open(save_path, FileAccess.WRITE)
 	if f:
@@ -938,6 +1239,10 @@ func _load() -> bool:
 	notices = d.notices
 	posted = d.posted
 	today = d.today
+	built = d.get("built", {})
+	total_jobs = int(d.get("jobs", 0))
+	rank = int(d.get("rank", 0))
+	_place_ama()
 	me.tile = Vector2i(int(d.me[0]), int(d.me[1]))
 	me.pos = Vector2(me.tile) * TILE
 	heroes.clear()

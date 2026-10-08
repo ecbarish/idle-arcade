@@ -22,6 +22,11 @@ use it.
 - **Bryn:** after you've served ten meals yourself, Bryn the cook offers to take the counter for ten coins a day. She
   serves on her own from then on. Can't pay at the end of a day, and she goes back to her own kitchen.
 - **Rest:** fed adventurers go up to bed at the inn (a lit window for each) and come back out when they're well.
+- **Building on the plots:** two staked-out plots (west and east). Walk up to one for Hob's plans: **the Healer's Hut**
+  (120 coins: badly hurt adventurers go to Ama, and mend twice as fast) or **a Training Yard** (150 coins: adventurers
+  with nothing to do practise there and slowly gain experience). Hob's crew put it up behind scaffolding while you watch.
+- **The town's rank:** Hamlet, then Village (a building and six jobs done), then Town. Each new rank brings a newcomer
+  through the gate looking for the guild (Kaito the Archer, then Hana the Knight). The rank shows at the top.
 - **The end of each day:** a short report at the foot of the screen (jobs done or gone badly, meals, coins), wages, and
   new requests on the board in the morning. No interruptions during the day.
 - **Saving:** the town saves itself every few seconds and when you close the window (user://starfall.json).
@@ -30,6 +35,7 @@ use it.
 - `scripts/main.gd`: the whole town (map, people, adventurers' decisions, the counter, Bryn, the board, saving).
   `scripts/figures.gd` is copied from wildbond-godot (keep them in step until shared code has its own home).
 - **Checks:** `Godot_v4.7.2-stable_win64_console.exe --headless --path starfall-godot --script res://tests/run_tests.gd`
-  (33 checks on 2026-10-08). Run the game with `-- --no-save` to try it without touching the real town.
-- Next slices (docs/plans/starfall-village.md): building on plots, the healer, more places to run by hand, more
-  adventurers arriving as the town grows, the town's rank.
+  (51 checks on 2026-10-08). Run the game with `-- --no-save` to try it without touching the real town (add `--built`
+  to start with the hut built and the yard going up).
+- Next slices (docs/plans/starfall-village.md): more places to run by hand (the smithy, the apothecary), more plots as
+  the town grows, guild members' stories, seasons as chapters.
