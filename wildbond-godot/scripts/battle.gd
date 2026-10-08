@@ -575,7 +575,7 @@ func _draw() -> void:
 	match state:
 		"choose":
 			_text("What will %s do?" % wait_u.c.name, Vector2(16, 180), 9, INK)
-			_text("Orders: " + "●".repeat(int(orders)) + "○".repeat(3 - int(orders)) + "  (Guard 1, Rally 2)", Vector2(16, 198), 7, Color("6a5a4a"))
+			_text("Orders ready: %d of 3  (Guard uses 1, Rally 2)" % int(orders), Vector2(16, 198), 7, Color("6a5a4a"))
 			for i in MENU.size():
 				var r := _menu_rect(i)
 				var on := i == menu_i
@@ -614,7 +614,7 @@ func _draw() -> void:
 			for line in results:
 				draw_multiline_string(font, Vector2(76, y), line, HORIZONTAL_ALIGNMENT_LEFT, 232, 8, -1, INK)
 				y += 13.0
-			_text("Continue ▸", Vector2(60, 146), 8, Color("6a5a4a"), 264, HORIZONTAL_ALIGNMENT_CENTER)
+			_text("Continue »", Vector2(60, 146), 8, Color("6a5a4a"), 264, HORIZONTAL_ALIGNMENT_CENTER)
 			if not log_lines.is_empty():
 				_text(log_lines[-1], Vector2(16, 182), 8, INK)
 		_:

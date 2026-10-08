@@ -1183,7 +1183,7 @@ func _update_ui() -> void:
 	var line: Dictionary = lines[0] if not lines.is_empty() else {}
 	bubble.visible = not line.is_empty() and trans_t < 0.0
 	if bubble.visible:
-		bubble_text.text = line.text + "   ▸"
+		bubble_text.text = line.text + "   »"
 		var who: Mover = null
 		for m in [maren, wren] + npcs:
 			if line.who == m.id and m.where == map_name:

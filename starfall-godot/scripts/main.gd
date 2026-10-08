@@ -1451,7 +1451,7 @@ func _update_ui() -> void:
 		var line: Dictionary = lines[0]
 		var who: Mover = speaker(line.who)
 		var name := str(line.who).capitalize()
-		bubble_text.text = (name + ": " if name != "" else "") + str(line.text) + "   â–¸"
+		bubble_text.text = (name + ": " if name != "" else "") + str(line.text) + "   »"
 		bubble.size = Vector2(240, 0)
 		bubble.reset_size()
 		if who:
@@ -1498,7 +1498,7 @@ func _draw_board_view() -> void:
 		if up:
 			board_view.draw_rect(Rect2(r.position + Vector2(r.size.x / 2 - 2, -2), Vector2(4, 4)), Color("c84a3a"))   # the pin
 		board_view.draw_multiline_string(font, r.position + Vector2(5, 13), j.name, HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 10, 8, -1, Color("3e2c20"))
-		board_view.draw_string(font, r.position + Vector2(5, 40), "%s Â· %d coins" % [DANGER_WORD[int(j.danger)], int(j.reward)], HORIZONTAL_ALIGNMENT_LEFT, -1, 7, Color("8a3a2a"))
+		board_view.draw_string(font, r.position + Vector2(5, 40), "%s, %d coins" % [DANGER_WORD[int(j.danger)], int(j.reward)], HORIZONTAL_ALIGNMENT_LEFT, -1, 7, Color("8a3a2a"))
 		board_view.draw_multiline_string(font, r.position + Vector2(5, 52), j.text, HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 10, 7, -1, Color("5a4636"))
 		board_view.draw_string(font, r.position + Vector2(5, r.size.y - 5), "Pinned up" if up else "Pin it up", HORIZONTAL_ALIGNMENT_LEFT, -1, 7, Color("3e2c20") if up else Color("8a6e50"))
 	var done := _note_rect(notices.size())
