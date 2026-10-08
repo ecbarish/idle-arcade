@@ -232,6 +232,34 @@ func _run() -> void:
 	check(main.npc_info.bram.beaten and main.bag.coins > coins0, "Bram counts as beaten and pays out coins (%d)" % (main.bag.coins - coins0))
 	talk_through()
 	check(not main._gate_open("thornwood"), "the hawthorn gate stays shut until you beat the Warden")
+	# ---- story moments while you explore: Wren's rematch on the trail, then the guardian of Thornwood
+	main.explored_in["thornwood"] = 11
+	main._explore()
+	check(main.wren.where == "thornwood" and not main.lines.is_empty() and main.lines.any(func(l): return l.who == "wren"), "after 12 explorations Wren catches you up on the trail")
+	talk_through()
+	check(main.battle.visible and main.battle.foes.size() == 2 and main.battle.foes.any(func(u): return u.c.sp == main.rival_c.sp), "Wren's team: a Glimmerwing and the partner Wren chose")
+	for u in main.battle.foes: u.c.hp = 0
+	for i in 100:
+		tick(0.05)
+		if main.battle.state == "results": break
+	main.battle._go_to("fog_out")
+	tick(1.5)
+	check(main.story_done.has("rival2") and main.wren.where == "gone", "beating Wren marks the moment done, and Wren heads off")
+	talk_through()
+	main.explored_in["thornwood"] = 19
+	main._explore()
+	check(not main.lines.is_empty() and "Elderhorn" in " ".join(main.lines.map(func(l): return l.text)), "at 20, Elderhorn steps out of the old trees")
+	talk_through()
+	check(main.battle.visible and main.battle.kind == "wild" and main.battle.foes[0].c.sp == "elderhorn" and main.battle.foes[0].c.rar == 4, "a legendary encounter: Elderhorn, level 11")
+	for u in main.battle.foes: u.c.hp = 0
+	for i in 100:
+		tick(0.05)
+		if main.battle.state == "results": break
+	main.battle._go_to("fog_out")
+	tick(1.5)
+	check(not main.story_done.has("elder") and int(main.story_retry.get("elder", 0)) == 26, "knocked out, it slips away and can be met again after six more explorations")
+	talk_through()
+	for c in main.team: c.hp = main.R.stats(c).hp
 	var lures0: int = main.bag.lures
 	check(walk_to(Vector2i(27, 10)), "you can walk to the lures lying in the grass")
 	check(main.bag.lures == lures0 + 3 and main.got_items.has("tw2"), "picking up 3 lures (%d)" % main.bag.lures)
@@ -299,7 +327,14 @@ func _run() -> void:
 		check(walk_to(Vector2i(13, 1)), "you can walk to the open gate (at %s, stage %s, lines %d, battle %s, map %s)" % [main.me.tile, main.stage, main.lines.size(), main.battle.visible, main.map_name])
 		main._step(Vector2i.UP)
 		tick(1.0)
-		check(main.map_name == "thornwood" and not main.lines.is_empty() and "still being built" in main.lines[0].text, "past the gate: the coast isn't built in Godot yet, and the game says so")
+		check(main.map_name == "saltmarsh" and main.me.tile == Vector2i(13, 12), "through the gate: Saltmarsh Coast, arriving where the map says")
+		check(main.level_cap() == 25, "one badge raises the level cap to 25 (CAP_TABLE)")
+		check(main.npcs.any(func(n): return n.id == "nerys" and n.where == "saltmarsh" and main.npc_info.nerys.warden), "Warden Nerys waits on the coast")
+		check(main.npcs.filter(func(n): return n.where == "saltmarsh").size() >= 4, "the coast's people: Tobin, Cato, Marit and Nerys")
+		check(walk_to(Vector2i(13, 13)) or main.map_name == "thornwood", "back to the coast road south")
+		main._step(Vector2i.DOWN)
+		tick(1.0)
+		check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 1), "and back into Thornwood by the gate")
 		talk_through()
 	# ---- Maren heals your team
 	if main.map_name != "larkhaven":

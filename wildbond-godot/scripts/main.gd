@@ -112,7 +112,7 @@ var npc_info := {}                           # id -> { data from the map, beaten
 var badges: Array = []
 var spotter: Mover = null                    # a trainer who has seen you and is walking over
 var spot_t := 0.0
-const BUILT := ["larkhaven", "thornwood"]    # the maps the Godot version has so far
+const BUILT := ["larkhaven", "thornwood", "saltmarsh"]    # the maps the Godot version has so far
 var starters: Array[Mover] = []
 var partner: Mover = null
 var map_name := "larkhaven"
@@ -186,8 +186,8 @@ func _ready() -> void:
 	battle.finished.connect(_on_battle)
 	battle.bag = bag
 	satchel = Label.new()
-	satchel.position = Vector2(220, 4)
-	satchel.size = Vector2(160, 14)
+	satchel.position = Vector2(96, 4)
+	satchel.size = Vector2(284, 14)
 	satchel.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	satchel.add_theme_font_size_override("font_size", 7)
 	satchel.add_theme_color_override("font_color", Color.WHITE)
@@ -1115,6 +1115,10 @@ func _draw_ground(x: int, y: int, ch: String) -> void:
 	var o := Vector2(x, y) * TILE
 	var n := (x * 7 + y * 13) % 9
 	_tex(FLOOR, Vector2i(11 + (n if n < 5 else 0), 12), Vector2i.ONE, o)          # grass, with a few tufts
+	if ch == "_" or (ch == "R" and "_" in [tile_at(Vector2i(x - 1, y)), tile_at(Vector2i(x + 1, y)), tile_at(Vector2i(x, y - 1))]):
+		_draw_sand(x, y, o, n)                                                     # the beach
+	if ch == "R":
+		_draw_rock(o, n)
 	if _is_path(x, y):
 		# dirt with soft grass edges where the path ends (the tileset's 3x3 edge set)
 		var up := _is_path(x, y - 1); var down := _is_path(x, y + 1); var left := _is_path(x - 1, y); var right := _is_path(x + 1, y)
@@ -1168,6 +1172,11 @@ func _fill(s: String) -> String:
 	return s.replace("{name}", my_look.get("name", "Tamer")).replace("{starter}", _partner_name()).replace("{rival}", rival_c.get("name", "its partner"))
 
 func _on_battle(result: String) -> void:
+	if battle_story.begins_with("story:"):
+		var sid := battle_story.substr(6)
+		battle_story = ""
+		_after_story(sid, result)
+		return
 	if battle_story.begins_with("trainer:"):
 		var who := battle_story.substr(8)
 		battle_story = ""
@@ -1192,8 +1201,14 @@ func _on_battle(result: String) -> void:
 ## edge drawn wherever the water meets land.
 func _draw_water(x: int, y: int, o: Vector2, n: int) -> void:
 	_tex(WATER, Vector2i(11, 0), Vector2i.ONE, o)
-	if n == 4:
-		_tex(WATER, Vector2i(11, 3), Vector2i.ONE, o)                              # a lily pad
+	var sea: bool = map_name == "saltmarsh"
+	if sea:
+		# the open sea: lines of swell that roll slowly toward the beach
+		var ph := fmod(t * 0.6 + x * 0.37 + y * 0.9, 3.0)
+		draw_rect(Rect2(o + Vector2(2 + (x * 5) % 7, 3 + ph * 3.0), Vector2(6, 1)), Color(1, 1, 1, 0.35))
+		draw_rect(Rect2(o + Vector2(9 - (y * 3) % 5, 10 + ph), Vector2(4, 1)), Color(1, 1, 1, 0.2))
+	elif n == 4:
+		_tex(WATER, Vector2i(11, 3), Vector2i.ONE, o)                              # a lily pad on the pond
 	elif n == 7 and int(t * 1.5 + x) % 3 == 0:
 		_tex(WATER, Vector2i(11, 2), Vector2i.ONE, o)                              # a glint of light
 	var shore := Color("d8c088")
@@ -1232,6 +1247,12 @@ func _explore() -> void:
 	if team.filter(func(c): return c.hp > 0).is_empty():
 		say("", "Your team is exhausted. Rest with Maren in Larkhaven first.")
 		return
+	var biome_id: String = DATA.MAPS[map_name].biome
+	explored_in[biome_id] = int(explored_in.get(biome_id, 0)) + 1
+	var b := _beat_here(biome_id)
+	if not b.is_empty():
+		_story_beat(b)
+		return
 	var r := rng.randf()
 	if r < 0.62:
 		_wild_battle()
@@ -1269,6 +1290,7 @@ func _wild_battle() -> void:
 	var foe := R.make(id, lvl, { "rar": R.roll_rarity(float(DATA.JOURNEY.classic.rare), rng) }, rng)
 	seen[id] = true
 	battle_story = ""
+	battle.max_level = level_cap()
 	battle.open("wild", team, [foe], "")
 
 func _after_wild(result: String) -> void:
@@ -1304,7 +1326,7 @@ func _satchel_text() -> String:
 	var dex := 0
 	for k in seen:
 		dex += 1
-	return "Badges %d   Lures %d   Berries %d   Coins %d   Wilddex %d / %d  (J)" % [badges.size(), bag.lures, bag.berries, bag.coins, dex, DATA.SPECIES.size()]
+	return "Badges %d  Lures %d  Berries %d  Coins %d  Wilddex %d/%d  (J: book)" % [badges.size(), bag.lures, bag.berries, bag.coins, dex, DATA.SPECIES.size()]
 
 ## For testing and recordings (run with -- --skip-opening): start in Thornwood with Ripplet, as if the opening were done.
 func _skip_opening() -> void:
@@ -1326,7 +1348,16 @@ func _skip_opening() -> void:
 	maren.pos = Vector2(maren.tile) * TILE
 	stage = "free"
 	fade_in = 1.0
-	_go("thornwood", Vector2i(13, 14), Vector2i.UP)
+	var start := "thornwood"
+	for a in OS.get_cmdline_user_args():
+		if a.begins_with("--at="):
+			start = a.substr(5)                          # e.g. -- --skip-opening --at=saltmarsh
+	var st: Array = DATA.MAPS[start].get("start", [13, 14, "up"])
+	if start != "thornwood":
+		badges = ["thorn"]
+		team[0].lvl = 14
+		team[0].hp = R.stats(team[0]).hp
+	_go(start, Vector2i(int(st[0]), int(st[1])), DIRS.get(st[2], Vector2i.UP))
 	trans_t = 0.29
 
 # ---------------------------------------------------------------- people of the valley: route trainers and Wardens
@@ -1343,11 +1374,17 @@ func _make_npcs() -> void:
 			npcs.append(mv)
 			npc_info[n.who] = { "data": n, "beaten": false, "warden": false }
 		if m.has("warden"):
+			# the Warden's scene is the story beat with a gate in this map's area (Thornwood's has no area named)
 			var beat: Dictionary = {}
 			for b in DATA.STORY:
-				if b.get("id", "") == "warden" and map_id == "thornwood":
+				if b.has("gate") and str(b.get("biome", "thornwood")) == str(m.get("biome", "")):
 					beat = b
-			var who := "isolde"
+			var who := ""
+			for l in beat.get("lines", []):
+				if who == "" and str(l[0]) != "" and not str(l[0]).begins_with("@"):
+					who = l[0]
+			if who == "":
+				continue
 			var mv := Mover.new(who, map_id, Vector2i(int(m.warden[0]), int(m.warden[1])))
 			mv.face = Vector2i.DOWN
 			npcs.append(mv)
@@ -1417,6 +1454,7 @@ func _challenge(n: Mover) -> void:
 			foes.append(R.make(t2[0], int(t2[1]), { "rar": 1 }, rng))
 			seen[t2[0]] = true
 		battle_story = "trainer:" + n.id
+		battle.max_level = level_cap()
 		battle.open("trainer", team, foes, DATA.CAST.get(n.id, {}).get("name", n.id.capitalize()))
 
 func _after_trainer(who: String, result: String) -> void:
@@ -1437,7 +1475,7 @@ func _after_trainer(who: String, result: String) -> void:
 			var badge: String = d.get("gate", "thorn")
 			badges.append(badge)
 			restore.append({ "where": map_name, "at": me.pos + Vector2(8, 8), "r": 0.0, "goal": 200.0 })
-			say("", "You earned the %s! The hawthorn gate creaks open, and colour runs out across Thornwood." % DATA.BADGES[badge].name)
+			say("", "You earned the %s! The way onward opens, and colour runs out across %s." % [DATA.BADGES[badge].name, DATA.MAPS[map_name].name])
 	else:
 		_after_wild("lost")
 
@@ -1504,6 +1542,7 @@ func save_game() -> void:
 	var d := { "v": 1, "saved": Time.get_datetime_string_from_system(), "look": look, "team": team, "ranch": ranch, "bag": bag,
 		"badges": badges, "seen": seen, "bonded": bonded, "items": got_items, "beaten": beaten,
 		"restore": restore.map(func(r): return { "where": r.where, "x": r.at.x, "y": r.at.y, "goal": r.goal }),
+		"explored": explored_in, "story": story_done, "retry": story_retry,
 		"map": map_name, "x": me.tile.x, "y": me.tile.y, "partner": partner.id if partner else "" }
 	var f := FileAccess.open(save_path, FileAccess.WRITE)
 	if f:
@@ -1548,6 +1587,9 @@ func _load_game() -> bool:
 	seen = d.seen
 	bonded = d.bonded
 	got_items = d.items
+	explored_in = d.get("explored", {})
+	story_done = d.get("story", {})
+	story_retry = d.get("retry", {})
 	for k in d.beaten:
 		if npc_info.has(k):
 			npc_info[k].beaten = true
@@ -1590,3 +1632,106 @@ func _open_book() -> void:
 	book.team = team
 	book.ranch = ranch
 	book.open()
+
+# ---------------------------------------------------------------- story moments while you explore (the browser's STORY)
+## Each area has moments that come as you explore it (STORY in the game data, `at` = explorations there): Wren catching
+## you up for a rematch, an old guardian stepping out of the trees or the surf. Wardens are met in person instead.
+var explored_in := {}                        # area -> times explored
+var story_done := {}                         # story id -> true
+var story_retry := {}                        # story id -> explorations to wait before it can come again
+
+func level_cap() -> int:
+	var t: Array = DATA.CAP_TABLE
+	return int(t[mini(badges.size(), t.size() - 1)])
+
+func _beat_here(biome_id: String) -> Dictionary:
+	for b in DATA.STORY:
+		if b.has("gate") or story_done.has(b.id) or str(b.get("biome", "thornwood")) != biome_id:
+			continue
+		if int(explored_in.get(biome_id, 0)) < int(b.get("at", 0)):
+			continue
+		if int(explored_in.get(biome_id, 0)) < int(story_retry.get(b.id, 0)):
+			continue
+		if b.has("league"):
+			continue
+		return b
+	return {}
+
+func _story_beat(b: Dictionary) -> void:
+	walk_to.clear()
+	var rival := b.has("team")
+	if rival:
+		# Wren turns up beside you for the rematch
+		wren.where = map_name
+		wren.tile = _beside_me()
+		wren.pos = Vector2(wren.tile) * TILE
+		wren.path.clear()
+		wren.face = me.tile - wren.tile
+	for l in b.get("lines", []):
+		var who: String = l[0]
+		say("" if who.begins_with("@") else who, _fill(l[1]))
+	then_do = func():
+		battle_story = "story:" + b.id
+		battle.max_level = level_cap()
+		if rival:
+			var foes: Array = []
+			for t2 in b.team:
+				var sp: String = rival_c.get("sp", "cindercub") if t2[0] == "$rival" else t2[0]
+				foes.append(R.make(sp, int(t2[1]), { "rar": 1 }, rng))
+				seen[sp] = true
+			battle.open("trainer", team, foes, DATA.CAST.wren.name)
+		else:
+			var w: Array = b.wild
+			var foe := R.make(w[0], int(w[1]), { "rar": int(w[2]) }, rng)
+			seen[w[0]] = true
+			battle.open("wild", team, [foe], "")
+
+func _after_story(id: String, result: String) -> void:
+	var b: Dictionary = {}
+	for s in DATA.STORY:
+		if s.id == id:
+			b = s
+	var caught_it: bool = not battle.caught.is_empty()
+	if b.has("wild"):
+		_after_wild(result)                          # a befriended guardian joins you like any other creature
+	if result == "won" and b.has("team") or caught_it:
+		story_done[id] = true
+		for l in b.get("win", []):
+			var who: String = l[0]
+			say("" if who.begins_with("@") else who, _fill(l[1]))
+	elif result == "won" and b.has("wild"):
+		# a guardian knocked out (not befriended) slips away and can be met again later
+		story_retry[id] = int(explored_in.get(str(b.get("biome", "thornwood")), 0)) + 6
+		say("", "%s staggers up and slips away. It might let you approach another time." % DATA.SPECIES[b.wild[0]].name)
+	else:
+		story_retry[id] = int(explored_in.get(str(b.get("biome", "thornwood")), 0)) + 4
+		if result == "lost" and b.has("team"):
+			_after_wild("lost")
+	if b.has("team"):
+		wren.where = "gone"
+
+## Sand (the floor tileset) and rocks (drawn in code: a boulder with a lit top and a dark base).
+func _draw_sand(x: int, y: int, o: Vector2, n: int) -> void:
+	_tex(FLOOR, Vector2i(1, 1), Vector2i.ONE, o)
+	if n == 2:
+		draw_rect(Rect2(o + Vector2(5, 9), Vector2(2, 1)), Color("c8a070"))          # a shell
+		draw_rect(Rect2(o + Vector2(6, 8), Vector2(1, 1)), Color("f0e0c8"))
+	elif n == 6:
+		draw_rect(Rect2(o + Vector2(10, 4), Vector2(3, 1)), Color("d8b888"))         # ripples left by the wind
+
+func _draw_rock(o: Vector2, n: int) -> void:
+	# a rounded boulder built from rows, each a little different, so no two rocks look stamped
+	var c := Color("8a8a84") if n % 2 == 0 else Color("9a8e7a")
+	var rows := [[5, 6], [3, 10], [2, 12], [1, 14], [1, 14], [1, 14], [1, 14], [2, 13], [2, 12], [3, 11]]
+	var top := 4 + n % 2
+	for i in rows.size():
+		var r: Array = rows[i]
+		var w: int = r[1] - (1 if (i + n) % 4 == 0 else 0)
+		draw_rect(Rect2(o + Vector2(r[0] - 1, top + i - 1), Vector2(w + 2, 3)), Figures.OUTLINE)
+	for i in rows.size():
+		var r: Array = rows[i]
+		var w: int = r[1] - (1 if (i + n) % 4 == 0 else 0)
+		var shade := c.lightened(0.18) if i < 3 else (c.darkened(0.22) if i > 6 else c)
+		draw_rect(Rect2(o + Vector2(r[0], top + i), Vector2(w, 1)), shade)
+	draw_rect(Rect2(o + Vector2(6, top + 2), Vector2(3, 1)), c.lightened(0.35))     # where the light catches it
+	draw_rect(Rect2(o + Vector2(9, top + 6), Vector2(1, 2)), c.darkened(0.35))      # a crack

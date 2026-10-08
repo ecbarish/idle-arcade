@@ -39,6 +39,7 @@ var results: Array = []                       # lines on the results page
 var rng := RandomNumberGenerator.new()
 var font: Font
 var demo := false
+var max_level := 15                            # the level cap (main.gd sets it from your badges, CAP_TABLE)
 var bag: Dictionary = { "lures": 0, "berries": 0 }  # the satchel (main.gd owns it): lures for Bond, berries for Bag
 var caught: Array = []                        # creatures that chose you in this battle
 var cap: Dictionary = {}                      # the calm meter while you Bond: { u, pos, dir, zone }
@@ -362,7 +363,7 @@ func _end(r: String) -> void:
 			var scale := minf(1.2, pow(maxf(1.0, avg) / u.c.lvl, 2.0))
 			var xp := roundi(base * (0.3 if u.c.hp <= 0 else 1.0) * scale)
 			results.append("%s gained %d XP." % [u.c.name, xp])
-			results.append_array(R.grow(u.c, xp, int(R.DATA.CAP_TABLE[0])))
+			results.append_array(R.grow(u.c, xp, max_level))
 			if u.c.hp > 0 and R.add_bond(u.c, 0.5 if kind == "wild" else 2.0):
 				results.append("%s trusts you more: %s." % [u.c.name, R.BOND[R.bond_lvl(u.c)][0]])
 	elif r == "lost":
