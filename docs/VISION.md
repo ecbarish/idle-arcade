@@ -69,7 +69,7 @@ hand jobs to people and creatures who live in the world (guild members on contra
 hired help in Starfall). Full Auto stays for grinding and idle time, never for the story's best moments. This answers
 the open question "when does full Auto unlock".
 
-**9. Choices that matter, and people who remember** (V9).
+**9. Choices that matter, and people who remember** (V9). Grown 2026-10-08: hero, nobody or villain, and a world that physically changes; see docs/proposals/reputation-and-consequence.md.
 > "Mass Effect 1, 2 and 3 ... the way choices genuinely affected things was surreal. ... characters could
 > die/survive/have a relationship ... made the game feel almost alive." (He has heard Fable does some of this too.)
 

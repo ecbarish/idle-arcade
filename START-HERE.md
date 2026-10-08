@@ -123,6 +123,11 @@ rain sounds; walkable Realmbound towns.
 2. **Baby forms (W9):** read `docs/proposals/creature-growth.md` and answer its five questions. Default if no
    answer: the recommendations in it (life stages, babies stay on the ranch, elders, 3 ranch days, return-or-adopt).
 
+3. **Wildbond's villain faction?** (Evan's idea, 2026-10-08.) `docs/proposals/reputation-and-consequence.md`: "the Unbound", who
+   believe bonding is what drained the valley's colour (partly right, partly not); join them, bring them down, or infiltrate
+   in disguise. It answers the fading's open question, so it needs Evan's yes. Default: hold the premise; build the shared
+   world-state record meanwhile.
+
 **Decided 2026-10-08 (Evan: "go with your recommendations, and yes to the shared universe where
 it makes sense"):** see the "Decided" section at the top of `docs/research/decisions.md`. New questions go here, each with
 a default so work never waits.
