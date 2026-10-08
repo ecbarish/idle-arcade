@@ -137,6 +137,9 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (evening): Come Play page for friends (playtest.html), stat-bar yardstick (Wildbond v1.7.1 and Godot), Starfall detail
+  (finished buildings settle in), Godot Wildbond music per place, partner stands beside you. Plan: docs/proposals/showing-the-games.md
+  (Godot demos need export templates: waiting on Evan). Card shop idea parked (CS1).
 - 2026-10-08 Claude (later, 2): Wildbond Godot creature gear: Maren's workbench, seven pieces that each do one thing and show on the
   creature (walking, ranch, battle, page); 195 checks. Next in Claude's Godot lane: tamer abilities with heritages, then Stillreed Basin.
 - 2026-10-08 Claude (later): Diamond Career v0.3.1 (Evan couldn't see the pitch: field cleared mid-throw, tap to swing, a circle at the plate). Starfall

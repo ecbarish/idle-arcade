@@ -499,6 +499,7 @@ func _switch() -> void:
 # ---------------------------------------------------------------- the loop
 func _process(dt: float) -> void:
 	t += dt
+	_music_tick(dt)
 	fade_in = min(1.0, fade_in + dt * 0.7)
 	var door_dark := 0.0
 	if trans_t >= 0.0:
@@ -618,6 +619,10 @@ func _walk(m: Mover, dt: float) -> void:
 			_check_spotted()
 
 func _unhandled_input(e: InputEvent) -> void:
+	if e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_M:
+		music_on = not music_on                  # M: music on or off
+		get_viewport().set_input_as_handled()
+		return
 	var want_book: bool = (e is InputEventKey and e.pressed and not e.echo and e.keycode in [KEY_TAB, KEY_J]) or (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT and satchel.text != "" and satchel.get_global_rect().has_point(satchel.get_global_mouse_position()))
 	if want_book and stage == "free" and lines.is_empty() and not battle.visible and not shop.visible and not book.visible:
 		_open_book()
@@ -2380,3 +2385,42 @@ func _take_along(ri: int, ti: int) -> void:
 	visiting = -1
 	_lead_look()
 	_place_ranch()
+
+# ---------------------------------------------------------------- music (Ninja Adventure pack, CC0; assets/music)
+## A tune for each place, and one for battles. Larkhaven's is a lost, quiet tune while the valley is faded, and a warm
+## village tune once the colour has spilled into town: the music comes back with the colour. M turns it off and on.
+const MUSIC_VOL := -14.0
+var music: AudioStreamPlayer
+var music_now := ""
+var music_on := true
+
+func _music_key() -> String:
+	if battle and battle.visible:
+		return "wild" if battle.kind == "wild" else "trainer"
+	if map_name == "barn":
+		return "barn"
+	if map_name == "larkhaven":
+		return "larkhaven" if spilled else "faded"
+	return map_name
+
+func _music_tick(dt: float) -> void:
+	if music == null:
+		music = AudioStreamPlayer.new()
+		music.volume_db = -60.0
+		add_child(music)
+	var want := _music_key() if music_on else ""
+	if want != music_now:
+		music.volume_db = move_toward(music.volume_db, -60.0, dt * 90.0)   # fade the old tune out...
+		if music.volume_db <= -59.0 or not music.playing:
+			music_now = want
+			var path := "res://assets/music/%s.ogg" % want
+			if want != "" and ResourceLoader.exists(path):
+				var s: AudioStream = load(path)
+				if s is AudioStreamOggVorbis:
+					(s as AudioStreamOggVorbis).loop = true
+				music.stream = s
+				music.play()
+			else:
+				music.stop()
+	elif music.playing:
+		music.volume_db = move_toward(music.volume_db, MUSIC_VOL, dt * 30.0)   # ...and the new one in

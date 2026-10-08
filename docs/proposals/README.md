@@ -8,3 +8,4 @@ When Evan approves, move it into [../PROJECTS.md](../PROJECTS.md) as a project a
 
 - [Baby forms and growing up](creature-growth.md) (W9, Claude, 2026-10-07): waiting for Evan.
 - [Depth, a world that knows where things are, and one day first person](depth-and-first-person.md) (Claude, 2026-10-08): building rules adopted now (footprints, heights, maps as data); approved 2026-10-08; the lore is canon.
+- [Showing the games, variety, and a card shop](showing-the-games.md) (Claude, 2026-10-08): Come Play page, stat yardstick, detail and music done; Godot demos need export templates (Evan installs or approves the download); trailer plan; variety plan from the Ninja Adventure pack; the card shop idea, parked.

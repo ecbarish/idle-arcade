@@ -128,6 +128,12 @@ func _run() -> void:
 	check(R.evo_target(pk, { "place": "saltmarsh" }) == "sunlynx", "and one devoted to its tamer becomes Sunlynx")
 	check(R.evo_target(R.make("hearthlaugh", 60, { "rar": 1 }, main.rng)) == "", "Hearthlaugh never evolves; it's itself")
 	check(main.DATA.SPECIES.has("pyremane") and main.DATA.SPECIES.size() >= 98, "the new forms are in the Wilddex (%d creatures)" % main.DATA.SPECIES.size())
+	# ---- music: a tune for each place; Larkhaven's comes back with its colour
+	check(main._music_key() == "faded", "the faded valley has a lost, quiet tune")
+	main.spilled = true
+	check(main._music_key() == "larkhaven", "once the colour spills into town, a warm village tune")
+	main.spilled = false
+	check(["faded", "larkhaven", "barn", "thornwood", "saltmarsh", "emberfall", "cloudglass", "wild", "trainer"].all(func(k): return ResourceLoader.exists("res://assets/music/%s.ogg" % k)), "every tune is in the game")
 	# ---- the map: closed doors, the barn opens with the story
 	check(not main.walkable(Vector2i(4, 4)), "cottage doors stay shut")
 	check(not main.walkable(main.BARN_DOOR), "the barn is shut before you sign the register")
