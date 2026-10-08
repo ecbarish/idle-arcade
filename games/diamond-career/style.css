@@ -5,3 +5,13 @@
 @media(max-width:480px){header{gap:8px}nav{width:100%;margin-left:0;justify-content:flex-end}#stage{height:36dvh;min-height:265px}h1{font-size:28px}#scoreboard{font-size:12px;min-width:260px}.score-count{font-size:12px}.actions>*{min-width:100px}.look-chips{flex-wrap:wrap}.look-chips button{min-width:40%}#panel{padding:20px 16px}.stats{gap:8px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
 @media(min-width:1001px){body{height:100dvh;display:flex;flex-direction:column}header{flex:none}main{flex:1;min-height:0;overflow:hidden}#stage{min-height:0}#panel{min-height:0;overflow:auto}}
+
+/* D1c: new choices and feedback live on the field. */
+#batting-window{position:absolute;right:16px;bottom:16px;width:min(440px,calc(100% - 32px));padding:12px 16px;background:#102b2ef2;border:1px solid #9aac88;border-radius:8px;font-size:calc(14px * var(--arc-text))}
+#batting-window[hidden]{display:none}#batting-window fieldset{margin:0}#batting-window legend{color:var(--gold)}
+.field-choices{display:flex;gap:8px}.field-choices button{flex:1;padding:8px 10px;min-width:0}.field-cue{margin:8px 0;font-size:13px;color:#f2d596}.field-help{margin:8px 0;font-size:13px}.field-result{margin:0 0 12px;overflow-wrap:anywhere}#batting-window>.primary{width:100%}
+.batting-play .park-sign{top:140px;bottom:auto;max-width:calc(100% - 24px);font-size:10px}
+.batting-play #timing-bar{bottom:250px}
+@media(max-width:1000px){#stage.batting-play{min-height:520px}.batting-play .park-sign{top:115px}#batting-window{right:12px;bottom:12px;width:min(440px,calc(100% - 24px))}}
+@media(min-width:1001px){.batting-play #timing-bar{left:12%;width:34%;bottom:100px}}
+#batting-window{max-height:calc(100% - 150px);overflow:auto}@media(max-width:1000px){#stage.coach-speaking{min-height:520px}}

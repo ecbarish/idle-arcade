@@ -35,6 +35,7 @@ function migrateCareer(o) {
   for(const k of Object.keys(n))if(o[k]!==undefined)n[k]=copy(o[k]);
   n.game='diamond-career';n.schema=1;
   n.mode=['timing','tactical'].includes(n.mode)?n.mode:'timing'; n.sound=[0,1,2].includes(n.sound)?n.sound:0;
+  n.stance=['contact','power',...(n.mode==='tactical'?['patience']:[])].includes(n.stance)?n.stance:'contact';
   n.stats={...freshCareer().stats,...(n.stats||{})}; n.owned={apartment:false,car:false,...(n.owned||{})};
   n.record={...lineStats(),...(n.record||{})}; n.season={...lineStats(),...(n.season||{})};
   if(n.player&&n.player.look===undefined)n.player.look=0;
@@ -65,7 +66,7 @@ function startMatch(s) {
   simulateToMoment(g,effectiveStats(s),p,s.contract?contractOffer(s.contract).moments:2);
   s.phase=g.finished?'summary':'pitch';if(s.phase==='summary')accountMatch(s);else nextPitch(s);return true;
 }
-function nextPitch(s) { if(!s.active||s.active.g.finished)return; s.active.pitch=makePitch(s.active.g,s.active.pitcher);s.phase='pitch'; }
+function nextPitch(s) { if(!s.active||s.active.g.finished)return; s.active.pitch=makePitch(s.active.g,s.active.pitcher,effectiveStats(s));s.phase='pitch'; }
 function playPitch(s,action) {
   if(s.phase!=='pitch'||!s.active.pitch)return false;
   const a=s.active, r=resolvePitch(a.g,effectiveStats(s),a.pitch,action), board=applyPlay(a.g,r.play);
@@ -99,7 +100,15 @@ function afterMatch(s) {
 function training(s,choice) {
   if(!['home','clubhouse'].includes(s.phase)||s.prepared)return false;
   if(choice==='rest'){if(s.fatigue>0)rememberDecision(s,'rest','Rested tired legs before returning to the field.');s.fatigue=0;s.message='A quiet evening. Your legs feel fresh again.';}
-  else if(['contact','power','discipline'].includes(choice)){s.stats[choice]=Math.min(80,s.stats[choice]+2);s.fatigue=Math.max(0,s.fatigue-4);s.message='A focused session: '+choice+' +2. Coach writes it in your notebook.';}
+  else if(['contact','power','discipline'].includes(choice)){
+    const before=s.stats[choice],chance=cueAccuracy(s.stats);
+    s.stats[choice]=Math.min(80,before+2);s.fatigue=Math.max(0,s.fatigue-4);
+    s.message='A focused session: '+choice+' +'+(s.stats[choice]-before)+'.';
+    if(choice==='discipline'){
+      s.message='Iona: “Eye '+before+' → '+s.stats.discipline+'. Your next pitch cues match the pitch about '+(cueAccuracy(s.stats)*100).toFixed(1)+'% of the time'+(s.stats.discipline>before?', up from '+(chance*100).toFixed(1)+'%':'; you are at this chapter’s training limit')+'. A clue, never a promise.”';
+      rememberDecision(s,'eye',s.message);
+    }
+  }
   else return false;
   // One useful preparation per game; choosing again is not an infinite stat button.
   s.prepared=true;return true;

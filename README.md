@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Diamond Career (2026-10-08):** Contact/Power choices and results on the field; off-plate and good/weak-contact explanations; earned Eye cue reliability explained by Iona in a portrait scene and her notebook. 102 Diamond checks pass. No version bump.
+
 - Realmbound (2026-10-08): three personal story moments for every guild adventurer, unlocked by present party time, mood and friendship. Remembered decisions have two lasting narrative outcomes; Auto never chooses them. Conversations happen in the physical hall; the Guild tab only records what was heard. Old saves, independent supply favors and rejoining members keep their progress. All seven test pages pass (6,683 Realmbound checks); phone, laptop, desktop and ultrawide checked. No version bump; PR #49, docs/realmbound-member-stories.md.
 
 - Realmbound v1.1.0, onboarding (2026-10-08): a skippable arrival ends on the existing first questgiver, followed by optional contextual guidance for Focus, loot, reward choice, town services and actual companions. Returning saves stay quiet; all seven test pages pass. No version or cache bump; see docs/realmbound-onboarding.md.
