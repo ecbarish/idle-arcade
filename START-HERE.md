@@ -126,6 +126,20 @@ a default so work never waits.
 ## Session log (newest first; one or two lines each)
 
 - 2026-10-08 Claude: Evan played the Godot trial: "this feels much better". Fixed his notes (Maren off the gate,  fences join vertically, four-way facing with walk frames and idle breathing, cub tail wag and trot). His animation  bar ("better than the first Pokémon") needs real sprite art: docs/wildbond-plan.md "Art and animation".
+- 2026-10-07 Codex: saved Evan's supplied Gemini Godot report verbatim as docs/research/godot-production-slice.md; review beside it fact-checks snapping, MSDF, saves and web constraints, rejects invented stamina/chemistry requirements and unsupported schedule. Research only, PR #44; no trial edits, installs or plan adoption.
+
+- 2026-10-07 Codex: recorded Evan's clarified direction in docs/research/owner-direction-2026-10-07.md: open platform choice, approximate US$200 total cash budget, earned help for tedium rather than universal full Auto; Otherworld/Diamond remain in design discussions. Updated the old control contract in docs/plans/README.md to prevent conflicting instructions. Documentation only, PR #44.
+
+- 2026-10-07 Codex: Evan confirmed Godot production research is running in Gemini and requested research for the other games. Added docs/research/first-play-research-pack.md with full Realmbound/Starfall/arcade prompts, parked-game briefs and a newcomer completion gate. Research only; no gameplay/Claude files changed; PR #44.
+
+- 2026-10-07 Codex: reviewed Gemini's creature research and the Godot trial at Evan's request; docs/research/codex-godot-assessment.md adds priorities and migration cautions, gemini-godot-production-prompt.md asks for art/animation and safe-port research. Installed Godot 4.7.2 verified; short headless startup passed. No trial/plan/gameplay changes; documents in PR #44.
+
+- 2026-10-07 Codex: at Evan's request, left Godot and Wildbond to Claude. Lane A8 Realmbound opening audit added to PR #44: four isolated browser diagnostics and an L4/V1 implementation brief in docs/realmbound-first-ten-minutes.md; corrected the guide's Focus fallback explanation. Documentation only; no gameplay, versions or merge.
+
+- 2026-10-07 Codex: T8 Realmbound guide ready in PR #44, stacked on T33 #43; static 2800-word lore/booklet, generated references and hub card link. All five pages pass (1254/4173/48/21/15), phone through ultrawide, links/spoilers/save safety checked. T32 scope conflict documented in docs/proposals/wildbond-area-air.md; no partial lighting shipped. Two PRs await review; no version/cache bump or merge.
+
+- 2026-10-07 Codex: T33/W14 variants ready in PR #43 (codex/wildbond-variants): Gleaming, tiny/huge and seeded markings, cosmetic only; egg inheritance, old-save defaults, Wilddex records and all-era art. All five pages pass (1254/4173/48/21/15), saves/hub restored, phone through ultrawide and actual Diorama checked. Small label/drawing adapters only; no restyle, version/cache bump or merge. Continuing Lane A.
+
 - 2026-10-07 Claude: Evan installed Godot 4.7.2 (unzipped to C:UsersevanbGodot). Built the trial in wildbond-godot/  (README there): faded Larkhaven on the real map at 384x216 with integer scaling, Maren walks up and speaks in  bubbles, the first bond floods colour back (fade.gdshader), the partner follows. Verified headless and with recorded  frames. Waiting for Evan to play it (Play Wildbond trial.bat) before deciding browser vs standalone.
 - 2026-10-07 Claude: saved Gemini's research (docs/research/creature-games-ux.md) and mapped its lessons onto  docs/wildbond-plan.md phases. Evan is considering a standalone game: options and a recommendation (Godot, small  trial first) are Question 1 in Questions for Evan; the screen rebuild waits for his answer.
 - 2026-10-07 Claude: rewrote the plans from Evan's play notes: docs/wildbond-plan.md (one plan, principles + phases  1-7), queue lanes A and B rewritten, CLAUDE.md "Where we are" rewritten, T33 creature variants ticket for ChatGPT.

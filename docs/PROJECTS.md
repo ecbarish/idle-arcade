@@ -42,6 +42,12 @@ and the arcade's homepage shows them off. Any assistant may push these forward w
 | L10 | **Accessibility**: keyboard play everywhere, colour contrast, readable fonts, screen-reader labels | M | Polish | — | open | |
 | L11 | **Big screens**: laptop, desktop and ultrawide (3440x1440) layouts that use the space: the scene grows (wider view in the walkable worlds, more of the zone in Realmbound), panels sit side by side, text scales, canvases stay crisp at high resolution | M | Polish | — | part done 2026-10-10 (Claude): wide layouts at 1700 px and 2400 px+ in every game and the hub (a 21:9 scene on ultrawides); panel text and buttons scale (zoom 1.12 / 1.3, canvases never zoom); Wildbond view distance (Close/Wide/Far, V key; Wide by default on tall scenes). Left: a similar zoom for the Realmbound town if wanted | Evan's main screen is a 45-inch ultrawide; test at 1366x768, 1920x1080 and 3440x1440 alongside 375 px |
 
+| T8-R | **Realmbound guide and lore page** (T8, Lane A3) | M | Design | — | ready for review: Codex, 2026-10-07, PR #44 | docs/ROADMAP.md T8; Wildbond waits for its redesign. A8 opening audit ready in PR #44: docs/realmbound-first-ten-minutes.md (documentation only; L4/V1 implementation remains open) |
+
+| RE-G | **Godot research assessment and animation/migration research prompt** | S | Design | — | ready for review: Codex, 2026-10-07, PR #44 (documentation only, requested by Evan) | Separate research files; no Godot or shared plan edits |
+
+| RE-O | **First-play research briefs for Realmbound, Starfall and the other games** | S | Design | — | ready for review: Codex, 2026-10-07, PR #44 (research only, requested by Evan) | docs/research/first-play-research-pack.md; parked games stay parked |
+
 ## Graphics: light, fog and atmosphere (S6)
 
 Evan (2026-10-09): *"paying attention to the details of the lighting and the shadows greatly affects the overall
@@ -102,7 +108,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | W11 | **A larger roster**: batches of 10-12 new species per element, filling every family and element pairing (target about 150 to start), each with a dex line; ChatGPT-friendly data work | L (batches) | Data | W9 | open | T6 rules in creature-game-design.md; one batch per PR |
 | W12 | **New creature families** (body shapes beyond the current ones: serpents, golems, insects, jellyfish...) with their own art | L | Art | — | open | shared/creatures.js and 01-art.js |
 | W13 | **Character creator**: your tamer's body type (male, female, other), skin, hair style and colour, outfit; shown in the world, in scenes and in battle | M | Art+System | — | open | Evan, 2026-10-07; part of the opening (B3b); later shared with Realmbound's heroes |
-| W14 | **Creature variants**: rare looks within a species (a shimmering colour like shinies, tiny and huge sizes, unique pattern markings like Spinda), shown in the Wilddex; cosmetic, never stronger | M | Art+Data | — | open | Evan, 2026-10-07 |
+| W14 | **Creature variants**: rare looks within a species (a shimmering colour like shinies, tiny and huge sizes, unique pattern markings like Spinda), shown in the Wilddex; cosmetic, never stronger | M | Art+Data | — | ready for review: Codex, 2026-10-07, PR #43 | Evan, 2026-10-07 |
 
 ## Realmbound (classic-MMO idle, flagship)
 

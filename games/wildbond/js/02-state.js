@@ -9,7 +9,7 @@ const R = Math.random, pick = a => a[Math.floor(R() * a.length)], rint = (a, b) 
 
 function fresh() {
   return { v: 1, started: false, name: 'Tamer', starter: null, team: [], ranch: [], coins: 120, lures: 5, biome: 'thornwood',
-    explored: 0, story: {}, badges: [], seen: {}, caught: {}, auto: false, era: 'pocket', eras: ['pocket'],
+    explored: 0, story: {}, badges: [], seen: {}, caught: {}, variantDex: {}, auto: false, era: 'pocket', eras: ['pocket'],
     stats: { battles: 0, wins: 0, caught: 0, play: 0 }, log: [], last: Date.now(), tab: 'team',
     journey: 'classic', capMode: 'soft', xpShare: false, pos: null, modes: {}, rematch: {}, titles: [], tower: { best: 0, floor: 0, active: false, rest: false, claimed: [], serial: 0 }, league: { day: 0, room: 0, active: false, rest: false } };
 }
@@ -55,6 +55,7 @@ function save() {
       detail: lead ? `Lead: ${lead.name}, level ${lead.lvl} · ${BIOMES[S.biome].name}` : BIOMES[S.biome].name }); }
 }
 function load() { const o = Arcade.load(KEY); if (!o) return; S = Object.assign(fresh(), o); S.stats = Object.assign(fresh().stats, o.stats || {});
+  S.variantDex = o.variantDex && typeof o.variantDex === "object" ? o.variantDex : {};
   S.league = Object.assign({ day: 0, room: 0, active: false, rest: false }, o.league || {});
   S.league.room = Math.max(0, Math.min(5, Math.floor(Number(S.league.room) || 0)));
   leagueState(); towerState();

@@ -1120,6 +1120,7 @@ function wildbondChecks() {
       const w = frame.contentWindow;
       if (!w.__wb) throw Error('Wildbond localhost test hook is unavailable.');
       for (const c of w.eval('(' + wildbondChecks.toString() + ')()')) record(c.ok, c.label);
+      for (const c of w.eval('(' + wildbondVariantChecks.toString() + ')()')) record(c.ok, c.label);
     } catch (error) {
       record(false, error.message);
     } finally {

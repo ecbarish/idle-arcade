@@ -111,7 +111,7 @@ function worldView(m, t) {
     const k = reduceMotion ? 0.5 : (Math.sin(t * 0.25 + i * 2.1) + 1) / 2;
     things.push({ kind: 'pet', x: x0 + k * (x1 - x0), y: y0 + (i % 2) * (y1 - y0), sp: sp(c), right: Math.cos(t * 0.25 + i * 2.1) > 0, t: t + i }); }); }
   for (const it of itemsLeft(m)) things.push({ kind: 'item', x: it.at[0], y: it.at[1] });
-  for (const r of WK.roam) things.push({ kind: 'pet', wild: 1, x: r.fx, y: r.fy, sp: SPECIES[r.sp], right: r.right, t: t * 1.5 + r.x });
+  for (const r of WK.roam) things.push({ kind: 'pet', wild: 1, x: r.fx, y: r.fy, sp: variantSpecies(r), right: r.right, t: t * 1.5 + r.x });
   for (const n of npcsOf(m)) things.push({ kind: 'person', x: n.at[0], y: n.at[1], look: CAST[n.who], dir: n.dir || 'down', step: 0,
     mark: (n.warden && wardenReady() && !S.story[n.warden.id]) || (WK.spot && WK.spot.n.who === n.who) });
   const lead = S.team.find(c => c.hp > 0), riding = S.ride && lead && rideOK();

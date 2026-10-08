@@ -162,7 +162,7 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
   trainers, items and Warden work and the Beacon Badge raises the level cap to 55.
 
 - [ ] T32 open for ChatGPT on `codex/wildbond-area-light` (G2, every other Wildbond area).
-- [ ] T33 open for ChatGPT on `codex/wildbond-variants` (W14, creature variants). Read docs/wildbond-plan.md first.
+- [x] T33 ready for review in PR #43 on `codex/wildbond-variants` (W14, creature variants). Read docs/wildbond-plan.md first.
 
 ### T33: Wildbond creature variants (W14)
 Evan (2026-10-07): "it would be cool for some creatures, even though they're the same creature, to have some unique
@@ -601,6 +601,8 @@ games/wildbond/js/00-data.js only. Change no other file.
   keys of `CAST` (`wren`, `maren`, `isolde`), `''` for narration, or `'@speciesId'` for a creature. Keep Wren's voice
   (cheeky, competitive, warm) and match the existing tone. You may add one new `CAST` speaker if a scene needs one.
 - Claude handles the code side: raising the level cap, the Saltmarsh Warden and the `tide` badge.
+
+Realmbound portion ready for review: Codex, 2026-10-07, PR #44 (`guides/realmbound.html`). Other game guides remain open; Wildbond waits for its redesign.
 
 ### T8: Game guides
 One guide page per game, written like a good fan wiki or strategy guide: lore first, then how to play, then tips.
