@@ -137,6 +137,11 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (night, later): Starfall's village begun in Godot (starfall-godot/, Play Starfall.bat): the town (Guild Hall,
+  Lantern Inn and its counter, the guild board, the east gate), three adventurers who choose posted jobs by level and nerve, come home
+  hurt (never killed), eat at the counter you run by hand, rest at the inn; Bryn takes the counter after ten meals for daily
+  wages; a short end-of-day report. 33 checks. Next: building on plots, the healer, the town's rank.
+
 - 2026-10-08 Claude (night): merged ChatGPT's PR #52 (illustrated guides) and #53 (guild story choices that can hurt trust, with amends);
   rewrote their player-facing text in the world's words (no mood numbers or gates), Realmbound v1.3.0, 6935 checks pass. Lifted the
   two-PR limit (Evan). Starting Starfall's village in Godot (starfall-godot/).
