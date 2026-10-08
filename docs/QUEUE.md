@@ -68,7 +68,7 @@ games) · L8 the arcade launcher · L10 accessibility · guides and lore pages (
 | B0 | **Review and merge** every waiting PR, bump versions, keep START-HERE current, refill the lanes | always first | Check email, diff, tests, play it; `git merge --no-ff` |
 | B1 | **L2** Save safety in every game | done 2026-10-07 | Export/import, an automatic backup slot, version tags; builds on the Studio's save doctor |
 | B2 | **L1** Shared settings panel | done 2026-10-07 | shared/settings.js: sound, graphics, reduced motion, text size, view distance; every game |
-| B3 | **L8** The arcade launcher | part 1 done 2026-10-07 (both styles + vote); part 2 open: the road (a walkable, side-scrolling living world, see docs/VOTES.md) | The homepage as a place: a living scene (the light and ambience engines), each game a door or cabinet you walk to, sound, the shared universe's characters; keeps the shelf as a fallback |
+| B3 | **L8** The arcade launcher | part 1 done 2026-10-07 (both styles + vote); part 2 done 2026-10-07: the road (a walkable, side-scrolling living world; poll launcher-style-2) | The homepage as a place: a living scene (the light and ambience engines), each game a door or cabinet you walk to, sound, the shared universe's characters; keeps the shelf as a fallback |
 | B4 | **L3** Phone pass | open | Every game at 375 px: tap targets, the walkable worlds on touch, performance on a mid phone |
 | B5 | **L10** Accessibility | open | Keyboard play, contrast, labels; `docs/accessibility.md` |
 | B6 | **G2** Realmbound dungeon lighting | open | DUN_LIGHT in 23-light.js |

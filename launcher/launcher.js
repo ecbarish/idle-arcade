@@ -14,7 +14,7 @@
   const cx = cv.getContext('2d'), reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const AMB = Ambience.create({ reduce: () => reduce }), LT = Light.create({ reduce: () => reduce, quality: () => 'high' });
   const MODE_KEY = 'arcade-launcher';
-  let mode = (() => { try { return localStorage.getItem(MODE_KEY) === 'hall' ? 'hall' : 'scene'; } catch (e) { return 'scene'; } })();
+  let mode = (() => { try { const m = localStorage.getItem(MODE_KEY); return m === 'hall' || m === 'road' ? m : 'scene'; } catch (e) { return 'scene'; } })();
   let W = 0, H = 0, hover = null, lastT = 0;
   const playable = A.GAMES.filter(g => g.href), byId = id => A.GAMES.find(g => g.id === id);
   const prog = id => { const p = A.idx[id]; return p ? p.summary : 'Not started yet'; };
@@ -39,20 +39,25 @@
     { id: 'realmbound', x: .645, w: .3, name: 'Thornvale', col: '#ffd27a' },
     { id: 'starfall-guild', x: .88, w: .2, name: 'The Starfall gate', col: '#b48aff' }
   ];
-  function scene(t) {
-    const st = clock(), night = st.day ? Math.max(0, 1 - st.elev * 4) * .6 * (st.golden > .6 ? 1 : 0) : 1, gy = H * .8, p = Math.max(2, Math.round(Math.min(H / 80, W / 200)));
-    const sunX = W * (.5 - st.sunX * .45), sunY = H * (.62 - st.elev * .5);
+  const nightOf = st => st.day ? Math.max(0, 1 - st.elev * 4) * .6 * (st.golden > .6 ? 1 : 0) : 1;
+  /* the sky, the hills and the ground with its winding road; scroll moves the far layers (the road style) */
+  function backdrop(t, st, gy, p, scroll, circle) {
+    const night = nightOf(st), sunX = W * (.5 - st.sunX * .45), sunY = H * (.62 - st.elev * .5);
     AMB.sky(cx, W, H, t, { top: st.day ? (st.golden > .5 ? '#6d8fc8' : '#7fb4e8') : '#0b1030', bottom: st.day ? (st.golden > .5 ? '#ffb27a' : '#d9ecf5') : '#29305c',
       night, stars: true, sun: st.day, sunX, sunY, moon: !st.day, moonX: W * .78, moonY: H * .16, clouds: { n: 5, col: st.golden > .5 ? '#ffd9c0' : '#ffffff', alpha: st.day ? .8 : .25, speed: 4 }, h: gy });
     // Otherworld, still an idea: a faint magic circle turning high in the sky
-    { cx.save(); cx.globalAlpha = .1 + .08 * night; cx.strokeStyle = '#bfe9ff'; cx.lineWidth = 1; cx.translate(W * .5, H * .16); cx.rotate(reduce ? 0 : t * .05);
+    if (circle) { cx.save(); cx.globalAlpha = .1 + .08 * night; cx.strokeStyle = '#bfe9ff'; cx.lineWidth = 1; cx.translate(W * .5, H * .16); cx.rotate(reduce ? 0 : t * .05);
       for (const k of [1, .72]) { cx.beginPath(); cx.arc(0, 0, H * .07 * k, 0, 7); cx.stroke(); } cx.restore(); }
     AMB.far(cx, W, H, t, { layers: [{ kind: 'peaks', col: st.day ? '#8aa3c0' : '#2a3352', base: .66, h: .2, par: .03, snow: 1, seed: 3 },
-      { kind: 'oaks', col: st.day ? '#4f7a4a' : '#1c2a26', base: .78, h: .16, par: .1, seed: 5 }], night, px: p });
-    // ground and a winding road through the four places
+      { kind: 'oaks', col: st.day ? '#4f7a4a' : '#1c2a26', base: .78, h: .16, par: .1, seed: 5 }], night, px: p, scroll: scroll || 0 });
     const g = cx.createLinearGradient(0, gy, 0, H); g.addColorStop(0, st.day ? '#6a9a48' : '#24361f'); g.addColorStop(1, st.day ? '#4f7a3a' : '#16241a'); cx.fillStyle = g; cx.fillRect(0, gy, W, H - gy);
-    for (let x = 0; x < W; x += p * 2) { const y = gy + H * .08 + Math.sin(x / W * 9) * H * .025; R(x, y, p * 2, p * 2, st.day ? '#c8a874' : '#5a4a36'); }
-    for (let x = 0; x < W; x += p * 6) R(x, gy, p * 3, p, st.day ? '#7cae52' : '#2d4426');
+    const off = scroll || 0;
+    for (let x = -((off % (p * 2)) + p * 2); x < W; x += p * 2) { const wx = x + off, y = gy + H * .08 + Math.sin(wx / Math.max(W, 1) * 9) * H * .025; R(x, y, p * 2, p * 2, st.day ? '#c8a874' : '#5a4a36'); }
+    for (let x = -(off % (p * 6)); x < W; x += p * 6) R(x, gy, p * 3, p, st.day ? '#7cae52' : '#2d4426');
+  }
+  function scene(t) {
+    const st = clock(), gy = H * .8, p = Math.max(2, Math.round(Math.min(H / 80, W / 200)));
+    backdrop(t, st, gy, p, 0, true);
     const lights = [];
     drawTidePool(PLACES[0], gy, p, t, st, lights);
     drawLarkhaven(PLACES[1], gy, p, t, st, lights);
@@ -136,6 +141,70 @@
     if (hover === pl.id) glow(x, gy - p * 10, W * .1, pl.col, .4);
   }
 
+  /* ===================== the road ===================== */
+  /* Evan liked a character he controls and a world that can grow: the living world as a road you walk along.
+     Each game is a stop; games still in design are building sites with a "coming soon" sign. A new game is one more
+     stop at the end of the road. */
+  const DRAW = { primordial: drawTidePool, wildbond: drawLarkhaven, realmbound: drawThornvale, 'starfall-guild': drawGate };
+  const STOPS = PLACES.map(pl => Object.assign({}, pl)).concat(A.GAMES.filter(g => !g.href).map(g => ({ id: g.id, name: g.title, col: '#d8d0c0', site: true })));
+  const ROAD = { x: 0, target: null, go: null, dir: 1, keys: {}, cam: 0 };
+  const spacing = () => Math.max(W * .42, H * 1.1), stopX = i => spacing() * (i + .7), roadEnd = () => stopX(STOPS.length - 1) + spacing() * .7;
+  function drawSite(pl, gy, p, t, st, lights) { // a building site: scaffolding, a half-built frame, a signpost
+    const x = pl.x * W, wood = st.day ? '#a07a4a' : '#4a3a28', iron = st.day ? '#6a6a72' : '#33343a';
+    for (const dx of [-18, -6, 6, 18]) R(x + dx * p, gy - p * 26, p, p * 26, wood);
+    for (const dy of [8, 16, 24]) R(x - p * 18, gy - dy * p, p * 37, p, wood);
+    for (let i = 0; i < 6; i++) R(x - p * 18 + i * p * 6, gy - p * 8 - i * p * 3, p * 2, p, wood); // a brace
+    if (pl.id === 'baseball') { // a floodlight tower and the base paths chalked out
+      R(x + p * 26, gy - p * 40, p * 2, p * 40, iron); R(x + p * 22, gy - p * 43, p * 10, p * 4, st.day ? '#cfcfd8' : '#fff6c8');
+      if (!st.day) lights.push({ x: x + p * 27, y: gy - p * 41, r: p * 30, col: '#fff6c8' });
+      cx.strokeStyle = st.day ? '#f4f0e0' : '#6a6658'; cx.lineWidth = Math.max(1, p * .5); cx.beginPath(); cx.moveTo(x, gy + p * 9); cx.lineTo(x + p * 10, gy + p * 5); cx.lineTo(x, gy + p * 1); cx.lineTo(x - p * 10, gy + p * 5); cx.closePath(); cx.stroke();
+    } else { // Otherworld: a stone arch with a summoning circle turning inside it
+      R(x - p * 12, gy - p * 30, p * 4, p * 30, st.day ? '#9a958a' : '#46443e'); R(x + p * 8, gy - p * 30, p * 4, p * 30, st.day ? '#9a958a' : '#46443e'); R(x - p * 12, gy - p * 33, p * 24, p * 4, st.day ? '#8a857a' : '#3a3832');
+      cx.save(); cx.translate(x, gy - p * 15); cx.rotate(reduce ? 0 : t * .4); cx.strokeStyle = 'rgba(180,230,255,.75)'; cx.lineWidth = Math.max(1, p * .4);
+      for (const k of [1, .7]) { cx.beginPath(); cx.arc(0, 0, p * 7 * k, 0, 7); cx.stroke(); } cx.restore(); lights.push({ x, y: gy - p * 15, r: p * 16, col: '#bfe9ff' });
+    }
+    R(x - p * 31, gy - p * 12, p, p * 12, wood); R(x - p * 40, gy - p * 16, p * 18, p * 6, st.day ? '#e8d8b0' : '#6a5a40');
+    cx.save(); cx.fillStyle = '#3a2a1a'; cx.font = `700 ${Math.max(8, Math.round(p * 2.6))}px Figtree, system-ui, sans-serif`; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+    cx.fillText('COMING SOON', x - p * 31, gy - p * 13); cx.restore();
+    if (hover === pl.id) glow(x, gy - p * 14, p * 30, '#ffffff', .2);
+  }
+  function road(t, dt) {
+    const st = clock(), gy = H * .78, p = Math.max(2, Math.round(H / 72)), end = roadEnd();
+    // walking: arrow keys, or a tap/link walks you to a stop and in
+    let vx = (ROAD.keys.right ? 1 : 0) - (ROAD.keys.left ? 1 : 0);
+    if (vx) ROAD.target = null; else if (ROAD.target !== null) { const d = ROAD.target - ROAD.x; if (Math.abs(d) < 6) { const gm = ROAD.go; ROAD.target = null; if (gm && gm.href) location.href = gm.href; } else vx = Math.sign(d); }
+    ROAD.x = Math.max(W * .08, Math.min(end - W * .05, ROAD.x + vx * H * 1.15 * dt)); if (vx) ROAD.dir = vx;
+    const cam = ROAD.cam = Math.max(0, Math.min(end - W, ROAD.x - W * .45));
+    backdrop(t, st, gy, p, cam, false);
+    const lights = [];
+    // the arcade's own signpost where the road begins
+    { const sx = W * .04 - cam; if (sx > -W * .2) { R(sx, gy - p * 14, p, p * 14, '#6a4a2a'); R(sx - p * 6, gy - p * 19, p * 22, p * 6, '#3a2a50');
+      cx.save(); cx.fillStyle = '#ffcf4d'; cx.font = `${Math.max(8, Math.round(p * 2.6))}px Bungee, Impact, sans-serif`; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.fillText('IDLE ARCADE', sx + p * 5, gy - p * 16); cx.restore(); } }
+    let near = null, nearD = Infinity;
+    STOPS.forEach((s, i) => {
+      const wx = stopX(i), sx = wx - cam, d = Math.abs(wx - ROAD.x); if (d < nearD) { nearD = d; near = s; }
+      if (sx < -W * .45 || sx > W * 1.45) return;
+      const pl = Object.assign({}, s, { x: sx / W }); (s.site ? drawSite : DRAW[s.id])(pl, gy, p, t, st, lights);
+    });
+    hover = nearD < spacing() * .3 ? near.id : null;
+    const g = hover && byId(hover);
+    if (hint) hint.textContent = g ? (g.href ? 'Press Enter (or tap) to go into ' + g.title : g.title + ' is still being built') : 'Walk with ← → or tap a place';
+    // you, and your Wildbond partner trotting behind
+    const mx = ROAD.x - cam, step = vx && !reduce ? Math.floor(t * 8) % 2 : 0;
+    walker(mx, gy + p * 4, p, ROAD.dir, step);
+    { const fx = mx - ROAD.dir * p * 14, b = step ? p : 0, q = (dx, dy, w, h, c) => R(fx + (ROAD.dir > 0 ? dx : -dx - w) * p * .9, gy + p * 4 - 8 * p * .9 + dy * p * .9 - (dy > 6 ? 0 : b * .5), w * p * .9, h * p * .9, c);
+      q(-2, 3, 9, 4, '#d8642e'); q(5, 1, 4, 4, '#d8642e'); q(7, 2, 1, 1, '#111'); q(-1, 7, 1, 2, '#b04a20'); q(5, 7, 1, 2, '#b04a20'); q(-4, 3, 2, 1, '#d8642e'); }
+    if (!st.day) lights.push({ x: mx, y: gy - p * 8, r: p * 22, col: '#ffe0b0' });
+    AMB.life(cx, W, H, t, { birds: st.day ? 3 : 0, bats: st.day ? 0 : 3, y0: .1, y1: .35, px: p });
+    AMB.weather(cx, W, H, t, { fireflies: st.day ? 0 : .6, leaves: st.day ? .15 : 0, ground: gy, px: p });
+    LT.fog(cx, W, H, t, { ground: H, top: gy - H * .12, density: st.day && st.p < .2 ? .35 : .18, col: st.day ? '#e8f0f0' : '#2a3450', lights });
+    LT.grade(cx, W, H, st, {});
+    if (!st.day) AMB.lights(cx, W, H, t, { dark: 1, max: .55, lights });
+    if (g) { const i = STOPS.findIndex(s => s.id === hover); label(stopX(i) - cam, gy - H * .5, g.title, g.href ? prog(g.id) : 'Coming soon', STOPS[i].col); }
+    // keep each place's link over the place as the road scrolls
+    hits.querySelectorAll('[data-id]').forEach(h => { const i = STOPS.findIndex(s => s.id === h.dataset.id); h.style.left = ((stopX(i) - cam) / W - .14) * 100 + '%'; });
+  }
+
   /* ===================== the arcade hall ===================== */
   const HALL = { x: .1, target: null, dir: 1, keys: {} }, CABS = playable.concat(A.GAMES.filter(g => !g.href));
   const screens = {};
@@ -183,38 +252,49 @@
 
   /* ===================== links over each place, input, the loop ===================== */
   function layoutHits() {
-    const list = mode === 'scene' ? PLACES.map(pl => ({ g: byId(pl.id), x: pl.x, w: pl.w, name: pl.name })) : CABS.map((g, i) => ({ g, x: cabX(i) / Math.max(1, W), w: Math.min(.12, H * .36 / Math.max(1, W)) + .02 }));
-    hits.innerHTML = list.map(o => o.g.href ? `<a class="launch-hit" href="${o.g.href}" data-id="${o.g.id}" style="left:${(o.x - o.w / 2) * 100}%;width:${o.w * 100}%" aria-label="${o.g.title}${o.name ? ', ' + o.name : ''}: ${prog(o.g.id)}"></a>`
-      : `<span class="launch-hit soon" data-id="${o.g.id}" style="left:${(o.x - o.w / 2) * 100}%;width:${o.w * 100}%" aria-label="${o.g.title}: coming soon" role="img"></span>`).join('');
+    const link = (g, x, w, name) => g.href ? `<a class="launch-hit" href="${g.href}" data-id="${g.id}" style="left:${(x - w / 2) * 100}%;width:${w * 100}%" aria-label="${g.title}${name ? ', ' + name : ''}: ${prog(g.id)}"></a>`
+      : `<span class="launch-hit soon" data-id="${g.id}" style="left:${(x - w / 2) * 100}%;width:${w * 100}%" aria-label="${g.title}: coming soon" role="img"></span>`;
+    hits.innerHTML = mode === 'scene' ? PLACES.map(pl => link(byId(pl.id), pl.x, pl.w, pl.name)).join('')
+      : mode === 'road' ? STOPS.map((s, i) => link(byId(s.id), (stopX(i) - ROAD.cam) / Math.max(1, W), .28, s.name)).join('')
+      : CABS.map((g, i) => link(g, cabX(i) / Math.max(1, W), Math.min(.12, H * .36 / Math.max(1, W)) + .02)).join('');
   }
-  hits.addEventListener('mouseover', e => { const h = e.target.closest('[data-id]'); hover = h ? h.dataset.id : null; });
+  const walkerOf = () => mode === 'hall' ? HALL : ROAD;
+  const xOf = id => mode === 'hall' ? cabX(CABS.findIndex(g => g.id === id)) : stopX(STOPS.findIndex(s => s.id === id));
+  hits.addEventListener('mouseover', e => { if (mode !== 'scene') return; const h = e.target.closest('[data-id]'); hover = h ? h.dataset.id : null; });
   hits.addEventListener('mouseleave', () => { if (mode === 'scene') hover = null; });
-  hits.addEventListener('focusin', e => { const h = e.target.closest('[data-id]'); if (h) { hover = h.dataset.id; if (mode === 'hall') { const i = CABS.findIndex(g => g.id === hover); HALL.x = cabX(i) / Math.max(1, W); } } });
-  hits.addEventListener('click', e => { // in the hall, a tap walks you to the cabinet first, then you go in
-    if (mode !== 'hall') return; const h = e.target.closest('[data-id]'); if (!h || e.detail === 0) return; e.preventDefault();
-    const i = CABS.findIndex(g => g.id === h.dataset.id); HALL.target = cabX(i); HALL.go = CABS[i];
+  hits.addEventListener('focusin', e => { // keyboard: tabbing to a place brings you to it
+    const h = e.target.closest('[data-id]'); if (!h) return; hover = h.dataset.id;
+    if (mode === 'hall') HALL.x = xOf(hover) / Math.max(1, W); else if (mode === 'road') ROAD.x = xOf(hover);
+  });
+  hits.addEventListener('click', e => { // in the hall and on the road, a tap walks you there first, then you go in
+    if (mode === 'scene') return; const h = e.target.closest('[data-id]'); if (!h || e.detail === 0) return; e.preventDefault();
+    const w = walkerOf(), g = byId(h.dataset.id); w.target = xOf(g.id); w.go = g;
+  });
+  root.querySelector('.launch-view').addEventListener('click', e => { // tapping empty ground on the road walks there
+    if (mode !== 'road' || e.target.closest('[data-id]')) return; const r = cv.getBoundingClientRect(); ROAD.target = ROAD.cam + (e.clientX - r.left); ROAD.go = null;
   });
   addEventListener('keydown', e => {
-    if (mode !== 'hall' || !root.contains(document.activeElement) && document.activeElement !== document.body) return;
-    const k = e.key; if (k === 'ArrowLeft' || k === 'a') { HALL.keys.left = true; e.preventDefault(); } if (k === 'ArrowRight' || k === 'd') { HALL.keys.right = true; e.preventDefault(); }
+    if (mode === 'scene' || (!root.contains(document.activeElement) && document.activeElement !== document.body)) return;
+    const w = walkerOf(), k = e.key; if (k === 'ArrowLeft' || k === 'a') { w.keys.left = true; e.preventDefault(); } if (k === 'ArrowRight' || k === 'd') { w.keys.right = true; e.preventDefault(); }
     if ((k === 'Enter' || k === ' ') && hover && document.activeElement === document.body) { const g = byId(hover); if (g && g.href) location.href = g.href; }
   });
-  addEventListener('keyup', e => { if (e.key === 'ArrowLeft' || e.key === 'a') HALL.keys.left = false; if (e.key === 'ArrowRight' || e.key === 'd') HALL.keys.right = false; });
+  addEventListener('keyup', e => { for (const w of [HALL, ROAD]) { if (e.key === 'ArrowLeft' || e.key === 'a') w.keys.left = false; if (e.key === 'ArrowRight' || e.key === 'd') w.keys.right = false; } });
   function setMode(m) {
     mode = m; try { localStorage.setItem(MODE_KEY, m); } catch (e) {}
     root.dataset.mode = m; hover = null; root.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === m)));
-    if (hint) hint.textContent = m === 'scene' ? 'Choose a place to play' : 'Walk with ← → or tap a cabinet';
+    if (hint) hint.textContent = m === 'scene' ? 'Choose a place to play' : m === 'road' ? 'Walk with ← → or tap a place' : 'Walk with ← → or tap a cabinet';
+    if (m === 'road' && !ROAD.x) { const i = Math.max(0, STOPS.findIndex(s => A.idx[s.id])); ROAD.x = stopX(i) - spacing() * .3; } // start near a game you've played
     layoutHits();
   }
   root.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
   function frame(ms) {
     const t = ms / 1000, dt = Math.min(.1, t - lastT || 0); lastT = t;
-    if (W >= 1 && H >= 1 && !document.hidden) { if (mode === 'scene') scene(reduce ? 0 : t); else hall(reduce ? 0 : t, dt); }
+    if (W >= 1 && H >= 1 && !document.hidden) { const tt = reduce ? 0 : t; if (mode === 'scene') scene(tt); else if (mode === 'road') road(tt, dt); else hall(tt, dt); }
     requestAnimationFrame(frame);
   }
   addEventListener('resize', size); size(); setMode(mode); requestAnimationFrame(frame);
-  if (window.Votes) Votes.card(root.querySelector('#launchVote'), { id: 'launcher-style-1', game: 'hub', version: A.VERSION,
-    question: 'Which homepage do you like better?', note: 'Try both with the buttons above, then pick one. This helps decide what the arcade keeps.',
-    options: [['scene', 'The living world'], ['hall', 'The arcade hall'], ['both', 'Keep both']] });
-  window.__launcher = { setMode, get mode() { return mode; }, PLACES, CABS, hall: HALL };
+  if (window.Votes) Votes.card(root.querySelector('#launchVote'), { id: 'launcher-style-2', game: 'hub', version: A.VERSION,
+    question: 'Which homepage do you like best?', note: 'Try all three with the buttons above, then pick one. This helps decide what the arcade keeps.',
+    options: [['scene', 'The living world'], ['road', 'The road'], ['hall', 'The arcade hall']] });
+  window.__launcher = { setMode, get mode() { return mode; }, PLACES, CABS, STOPS, hall: HALL, road: ROAD };
 })();

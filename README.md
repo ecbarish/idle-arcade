@@ -39,6 +39,10 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Arcade v1.3.0 (2026-10-07)** — **The road**, a third homepage style: walk your character (with a partner creature
+  trotting behind) along a road through the arcade's world, from Primordial's tide pool past Larkhaven, Thornvale and
+  the Starfall gate to the building sites of the games still being designed. Arrow keys, or tap a place to walk there
+  and go in. New games simply extend the road. The vote now asks which of the three you like best.
 - **Arcade v1.2.0 (2026-10-07)** — **The homepage is a place now, in two styles you can vote on.** *The living world*
   is one landscape on your real clock where each game is somewhere you can go: Primordial's tide pool, Larkhaven,
   Thornvale's walls and the Starfall gate (stars and lit windows at night). *The arcade hall* is a cozy room of

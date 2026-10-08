@@ -8,7 +8,8 @@ player's device and, once the form below exists, sent anonymously to a Google Fo
 
 | Poll id | Where | Question | Choices | Opened |
 |---|---|---|---|---|
-| `launcher-style-1` | Hub, under the launcher | Which homepage do you like better? | The living world (`scene`), the arcade hall (`hall`), keep both (`both`) | 2026-10-07 |
+| `launcher-style-2` | Hub, under the launcher | Which homepage do you like best? | The living world (`scene`), the road (`road`), the arcade hall (`hall`) | 2026-10-07 |
+| `launcher-style-1` | (closed: replaced by -2 when the road arrived) | Which homepage do you like better? | scene, hall, both | 2026-10-07 |
 
 **Evan's first impressions (2026-10-07, before playtesting):** the hall feels more scalable and he likes its "coming soon"
 cabinets; the living world is full at four places; he likes the idea of a controllable character interacting. Next
