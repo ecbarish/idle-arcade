@@ -105,6 +105,8 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
   of the new Wildbond and Starfall live at play/ (linked from Come Play), Windows zips in Desktop\Game builds, a 56-second trailer
   (images/play/trailer.mp4, on the Come Play page; tools/trailer). Merged ChatGPT PR #57 and #58 (Otherworld v0.2.0).
 - 2026-10-08 Claude (evening): Come Play page for friends (playtest.html), stat-bar yardstick (Wildbond v1.7.1 and Godot), Starfall detail
+- 2026-10-08 · Codex: T37 ready in PR #60 (stacked on #59): fourteen species, three growth lines, Saillet conditional handoff and all 31 Reach beasts mapped. All eight pages pass; Wildbond 1,485; actual Wilddex at four widths. Claude must export and merge Saillet options into Godot; no screen/Godot/version changes. Lane A has no further open build ticket.
+
 - 2026-10-08 · Codex: T36 ready in PR #59: Diamond Career fills the window with objects for career records and a second month at three away parks; deliberate bus choices, no signing windfall, exact calendar pay. All eight pages pass (Diamond 122), real UI and reload at all four widths; no Godot or version overlap.
 
   (finished buildings settle in), Godot Wildbond music per place, partner stands beside you. Plan: docs/proposals/showing-the-games.md

@@ -230,6 +230,7 @@ Evan, 2026-10-08: every game happens in the game window (CLAUDE.md "In the game 
 - No windfalls; salary on the calendar as now. Checks in tests/diamond.html; old saves load; bump its version.
 
 ### T37: The shared creature catalogue, batch 2 (data and lore)
+- [x] Data and lore ready in PR #60 (Codex, 2026-10-08): fourteen species, three three-stage lines, authored Saillet branch, three never-evolvers, 31 Reach beast mappings; Wildbond 1,485 and all eight pages pass. Godot export/branch activation and version bump remain Claude's. See docs/lore/catalogue.md.
 Read docs/proposals/creature-catalogue-and-evolution.md (sections 1-2, "Order" step 2) and the evolution rules
 (Godot `wildbond-godot/data/evolution.json`: branches, three-stage lines, conditions, never-evolvers). Branch
 `codex/creature-catalogue-2`.
