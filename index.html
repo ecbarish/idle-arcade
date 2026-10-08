@@ -78,6 +78,21 @@ a{color:inherit}
 .note{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;border-top:1px solid var(--line);padding-top:22px;color:var(--muted);font-size:14px}
 .note h2{font-family:var(--f-sign);font-weight:400;font-size:16px;color:var(--fg);margin:0 0 4px;letter-spacing:.02em}
 .note p{margin:0;max-width:52ch}
+/* The launcher (L8): the arcade as a place, in two styles players vote on (launcher/launcher.js) */
+.launcher{display:flex;flex-direction:column;gap:10px}
+.launch-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+.launch-modes{display:flex;gap:6px;flex-wrap:wrap}
+.launch-modes button{font:inherit;font-size:14px;min-height:44px;padding:6px 14px;border-radius:9px;border:1px solid var(--line);background:var(--bg2);color:var(--fg);cursor:pointer}
+.launch-modes button[aria-pressed="true"]{background:var(--marquee);color:#2a1d00;border-color:var(--marquee);font-weight:700}
+.launch-hint{color:var(--muted);font-size:14px}
+.launch-view{position:relative;aspect-ratio:21/9;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#0b1030}
+.launch-view canvas{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:pixelated}
+.launch-hits{position:absolute;inset:0}
+.launch-hit{position:absolute;top:8%;bottom:4%;display:block;border-radius:10px}
+.launch-hit:focus-visible{outline:3px solid var(--marquee);outline-offset:-3px}
+.launch-hit.soon{cursor:default}
+#launchVote{--vote-line:var(--line);--vote-bg:var(--bg2);--vote-on:var(--marquee)}
+@media (max-width:720px){.launch-view{aspect-ratio:4/3}}
 /* Big screens (L11): more of the shelf at once, bigger covers */
 @media (min-width:1700px){.wrap{max-width:min(2200px,92vw)}.shelf{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}}
 @media (min-width:2400px){.wrap{max-width:min(2900px,92vw)}.shelf{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}.tag{font-size:18px;max-width:80ch}}
@@ -89,14 +104,20 @@ a{color:inherit}
   <header class="marquee">
     <h1 class="sign">Idle <span>Arcade</span></h1>
     <p class="tag">A stable of idle and progression games. Each one saves on its own, so you can jump between them and pick up where you left off. New here? Meet <a href="promo.html" style="color:var(--marquee)">Realmbound →</a> or <a href="promo-wildbond.html" style="color:var(--ok)">Wildbond →</a></p>
-    <div class="header-tools"><a class="playtest-link" href="playtest.html">What to try →</a><a class="credits-link" href="credits.html">Credits</a><button class="install-btn" id="installArcade" hidden>Install arcade</button><span class="offline-status" id="offlineStatus" role="status" aria-live="polite"></span><span class="version-label">v1.1.0</span><div class="feedback-container"><button class="fb-btn" aria-haspopup="true" aria-expanded="false">Feedback</button></div></div>
+    <div class="header-tools"><a class="playtest-link" href="playtest.html">What to try →</a><a class="credits-link" href="credits.html">Credits</a><button class="install-btn" id="installArcade" hidden>Install arcade</button><span class="offline-status" id="offlineStatus" role="status" aria-live="polite"></span><span class="version-label">v1.2.0</span><div class="feedback-container"><button class="fb-btn" aria-haspopup="true" aria-expanded="false">Feedback</button></div></div>
     <details class="app-help"><summary>Play offline or add to your home screen</summary><p>Open this page online and wait for “Ready for offline play.” You can then open the arcade and its four playable games without internet. Use Install arcade when it appears, or your browser’s Install / Add to Home Screen menu. Your saves stay in this browser on this device. Without internet, lettering may use device fonts and Wildbond may use its HD-2D view while the 3D renderer is unavailable.</p></details>
   </header>
+
+  <section class="launcher" id="launcher" aria-label="Choose a game" data-mode="scene">
+    <div class="launch-bar"><div class="launch-modes" role="group" aria-label="Homepage style"><button type="button" data-mode="scene" aria-pressed="true">The living world</button><button type="button" data-mode="hall" aria-pressed="false">The arcade hall</button></div><span class="launch-hint" id="launchHint" aria-live="polite">Choose a place to play</span></div>
+    <div class="launch-view"><canvas id="launchCv" aria-hidden="true"></canvas><div class="launch-hits" id="launchHits"></div></div>
+    <div id="launchVote"></div>
+  </section>
 
   <main class="shelf" id="shelf"></main>
 
   <section class="note">
-    <div><h2>Your saves</h2><p>Progress is stored in this browser on this device. Every game has an Export button that gives you a save code to back up or move to another computer.</p></div>
+    <div><h2>Your saves</h2><p>Progress is stored in this browser on this device, with automatic backups. Each game's <b>Your save</b> box downloads your save as a file and loads it on another computer.</p></div>
     <div><h2>Automation is earned</h2><p>Managers, staff and instincts unlock from things you do in the game. Nothing here is for sale.</p></div>
     <div><h2>Always changing</h2><p>These games get tuned and extended a layer at a time. Prototypes may change a lot between visits.</p></div>
   </section>
@@ -105,10 +126,14 @@ a{color:inherit}
 <script src="shared/offline.js" defer></script>
 <script src="shared/engine.js"></script>
 <script src="shared/feedback.js"></script>
+<script src="shared/ambience.js"></script>
+<script src="shared/light.js"></script>
+<script src="shared/votes-config.js"></script>
+<script src="shared/votes.js"></script>
 <script>
 (function(){
 'use strict';
-const VERSION = '1.1.0'; // the arcade's version (L9)
+const VERSION = '1.2.0'; // the arcade's version (L9)
 setupFeedback('The arcade homepage', VERSION, () => '');
 const GAMES=[
   {id:'primordial',title:'Primordial',tcls:'t-primordial',status:['Playable','s-play'],href:'games/primordial/index.html',
@@ -117,12 +142,12 @@ const GAMES=[
   {id:'starfall-guild',title:'Starfall Guild',tcls:'t-starfall',status:['Prototype','s-proto'],href:'games/starfall-guild/index.html',
    blurb:'Run an adventurer guild. Recruit heroes, find class combos, push the dungeon, build up the town, and hire staff who manage it for you.',
    tags:['Guild sim','Autobattler','Pixel art'],cover:'starfall'},
-  {id:'realmbound',title:'Realmbound',tcls:'t-mmo',status:['Prototype','s-proto'],href:'games/realmbound/index.html',
-   blurb:'A classic-MMO adventure: pick a faction and a class, quest through Frostmere to level 40, and conquer two dungeons. Hunters tame wild beasts from common to legendary and bond with them. Play it yourself or let Auto take over.',
-   tags:['Classic MMO','Level 1–40','Dungeons'],cover:'mmo'},
-  {id:'wildbond',title:'Wildbond',tcls:'t-wildbond',status:['Early access','s-proto'],href:'games/wildbond/index.html',
-   blurb:'Pick a partner, meet Wren and walk from Larkhaven to the woods, coast, highlands and a cloudy mountain pass. Catch, train and breed creatures, earn four Warden badges, and watch a faded world grow into a 3D diorama. Choose your pace, try challenge modes or let Auto explore.',
-   tags:['Catch & raise','Evolving art','Story'],cover:'wildbond'},
+  {id:'realmbound',title:'Realmbound',tcls:'t-mmo',status:['Beta','s-play'],href:'games/realmbound/index.html',
+   blurb:'A classic-MMO adventure: pick a faction and a class, quest from level 1 to 60 through eight zones, clear four dungeons and their Heroic tiers, found a guild whose members work and fight beside you, and raid The Hollow Throne. Play it yourself or let Auto take over.',
+   tags:['Classic MMO','Level 1–60','Guild & raid'],cover:'mmo'},
+  {id:'wildbond',title:'Wildbond',tcls:'t-wildbond',status:['Beta','s-play'],href:'games/wildbond/index.html',
+   blurb:'Pick a partner, meet your rival Wren and walk from Larkhaven across eight regions, earning eight Warden badges on the way to the league and its Champion. Catch, raise and breed creatures, climb the Lighthouse Spire after the story, and watch a faded world grow from Game Boy greens into a 3D diorama.',
+   tags:['Catch & raise','Evolving art','Full story'],cover:'wildbond'},
   {id:'baseball',title:'Diamond Career',tcls:'t-baseball',status:['In design','s-design'],
    blurb:'Create a player, climb from the minors on your contract, spend what you earn, and later run the whole club. Step in for key at-bats or let them simulate.',
    tags:['Baseball','Career','Team management'],cover:'baseball'},
@@ -196,7 +221,9 @@ function size(){items.forEach(o=>{const r=o.cv.getBoundingClientRect();o.w=r.wid
 size();addEventListener('resize',size);
 function frame(ms){const t=reduce?0:ms/1000;items.forEach(o=>{if(o.w)o.fn(o.ctx,o.w,o.h,t);});if(!reduce)requestAnimationFrame(frame);}
 requestAnimationFrame(frame);
+window.ARCADE = { GAMES, covers, idx, VERSION }; // for the launcher (launcher/launcher.js)
 })();
 </script>
+<script src="launcher/launcher.js"></script>
 </body>
 </html>

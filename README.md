@@ -39,6 +39,11 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Arcade v1.2.0 (2026-10-07)** — **The homepage is a place now, in two styles you can vote on.** *The living world*
+  is one landscape on your real clock where each game is somewhere you can go: Primordial's tide pool, Larkhaven,
+  Thornvale's walls and the Starfall gate (stars and lit windows at night). *The arcade hall* is a cozy room of
+  cabinets playing each game's cover; walk along and step up to play. Switch between them and vote for your
+  favourite. Votes are a new shared feature any game can use (docs/VOTES.md).
 - **2026-10-07** — **A Settings panel in every game** (the ⚙ button in the header): sound, graphics quality, Wildbond's
   view distance, and two choices that follow you across the whole arcade: **text size** (Normal, Large, Larger) and
   **motion** (follow your device, Reduced, or Full).
