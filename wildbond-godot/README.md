@@ -13,11 +13,19 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
 - Faded Larkhaven on the real map (from games/wildbond/js/11-maps.js), drawn in code on a 384x216 pixel canvas that
   scales by whole numbers, so it stays crisp on every screen (the research's advice).
 - An opening that happens in the world: a short narration, Maren walking out of her barn up to you, her words in
-  speech bubbles over her head, then a walk to the paddock.
+  speech bubbles over her head.
+- **Maren's ranch register** (the character creator): an open book with you walking and turning on the left page;
+  name (type it or pick one), body (broad or narrow), skin, hair style and colour, top, bottom and outfit on the right.
+  Arrow keys or the mouse. **Signing paints you in:** you are drawn in colour on your own layer, the one bright thing
+  in the faded valley. Your choices are remembered for next time (user://register.json).
+- **The cub has a mind of its own:** it wanders the paddock, sniffs the grass, sits with its tail curled, and stalks
+  and pounces at a butterfly; when you come near it stops and watches you, ears up and tail going.
 - The first bond: the young creature chooses you and **colour floods back** into the world around it
   (shaders/fade.gdshader), then it follows you.
 
 ## How it's built (for assistants)
+- `scripts/figures.gd`: people and creatures built from parts, drawn by any node (the world, the register, later
+  other games and a 3D rig). `scripts/register.gd`: the ranch register.
 - `scenes/main.tscn` (the camera, the fade layer, the text layer), `scripts/main.gd` (map, walking, people, dialogue,
   the bond), `shaders/fade.gdshader` (the faded world with restored circles).
 - Check it without a window: `Godot_v4.7.2-stable_win64_console.exe --headless --path wildbond-godot --quit-after 120`.
@@ -32,5 +40,5 @@ wags and trots. His bar for animation is "better than the first Pokémon": see d
 animation" (real sprite art is the next step).
 
 ## Next, if Evan likes it
-The character creator ("paint yourself in"), choosing your partner in Maren's barn, a battle on the field, the
+Choosing your partner in Maren's barn, a battle on the field, the
 Wilddex sketchbook, and the rest of docs/wildbond-plan.md, carrying over all creatures, maps and story as data.

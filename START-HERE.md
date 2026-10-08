@@ -125,6 +125,10 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude: Godot trial: the cub (parts-based creature in scripts/figures.gd: trot, wag, sniff, sit, pounce at a
+  butterfly, watches you when you come near) and Maren's ranch register, the character creator (scripts/register.gd:
+  name, body, skin, hair, clothes; signing paints you in colour onto your own layer). Fixed after Evan's look: cabins
+  were cut off (they are 4 tiles wide), register values now centred. Next: choosing your partner in Maren's barn.
 - 2026-10-08 Claude: Godot trial environment now uses the Ninja Adventure CC0 tilesets (grass, dirt paths with edges,
   flowers, garden bushes, cottages, a staggered woods border; scripts/main.gd _draw_ground and _draw_structures; files in
   wildbond-godot/assets/env/). Our figures, fences and sign stay code-drawn. Fan-made Pokemon sprites ruled out

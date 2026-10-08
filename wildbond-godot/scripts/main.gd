@@ -1,9 +1,13 @@
 extends Node2D
 ## Wildbond in Godot: the trial slice (2026-10-07; see README.md and docs/wildbond-plan.md).
-## Faded Larkhaven, walkable on the real map; Maren walks up and speaks in bubbles over her head; you walk to a
-## young creature in the paddock and bond with it, and colour bursts back into the world around it. Everything is
-## drawn in code on a 384x216 pixel canvas scaled by whole numbers, so it stays crisp on any screen.
+## Faded Larkhaven, walkable on the real map. Maren walks up and speaks in bubbles over her head; you sign her ranch
+## register (the character creator, register.gd) and the ink paints you into the faded world in colour; you walk to a
+## young creature in the paddock and bond with it, and colour bursts back into the world around it. People and
+## creatures are built from parts (figures.gd); the ground, trees and houses are Ninja Adventure tiles (CC0).
+## Everything draws on a 384x216 pixel canvas scaled by whole numbers, so it stays crisp on any screen.
 
+const Figures := preload("res://scripts/figures.gd")
+const Register := preload("res://scripts/register.gd")
 const TILE := 16
 const SOLID := "Tr#=P"                       # trees, roofs, walls, fences and signs block you
 const MAP := [                               # Larkhaven, from games/wildbond/js/11-maps.js
@@ -22,17 +26,15 @@ const MAP := [                               # Larkhaven, from games/wildbond/js
 	"T,,,,,,..........,,,,,,T",
 	"TTTTTTTTTTTTTTTTTTTTTTTT",
 ]
-# little pixel figures, drawn from text (one character per pixel)
-const TAMER := ["...CCCC...", "..CCCCCC..", "..CSSSSC..", "..SESSES..", "..SSSSSS..", "...SSSS...", "..RRRRRR..",
-	".SRRRRRRS.", ".SRRRRRRS.", "..RRRRRR..", "..BBBBBB..", "..BB..BB..", "..BB..BB..", "..KK..KK.."]
-const MAREN := ["...GGGG...", "..GGGGGG..", "..GSSSSG..", "..SESSES..", "..SSSSSS..", "...SSSS...", "..DAAAAD..",
-	".SDAAAADS.", ".SDAAAADS.", "..DAAAAD..", "..DDDDDD..", "..DDDDDD..", "...K..K...", "...K..K..."]
-const CUB := [".........O.O", ".........OOO", "O..OOOOOOOEO", "OOOOOOOOOOOW", ".OOOOOOOOOO.", "..OOOOOOOO..",
-	"..O.O..O.O..", "..K.K..K.K.."]
-const PAL := { "C": Color("2a3f6b"), "S": Color("f1c9a0"), "E": Color("222222"), "R": Color("d8453a"), "B": Color("3a4a6a"),
-	"K": Color("3a2a1a"), "G": Color("c9c3b8"), "A": Color("4f8a5a"), "D": Color("7a5236"), "O": Color("d8642e"), "W": Color("f4e4c8") }
+const PADDOCK := Rect2i(14, 9, 5, 2)        # the open ground inside the ranch fence
+## People's looks (figures.gd explains the keys). The tamer's is replaced by what you sign in the register.
+const LOOKS := {
+	"tamer": { "skin": Color("f1c9a0"), "hair": Color("6b4423"), "hat": Color("2a3f6b"), "shirt": Color("d8453a"), "legs": Color("3a4a6a"), "style": "cap" },
+	"maren": { "skin": Color("e8c4a0"), "hair": Color("c9c3b8"), "shirt": Color("7a5236"), "apron": Color("4f8a5a"), "legs": Color("7a5236"), "style": "bun", "outfit": "skirt" },
+}
+const CUB_LOOK := { "body": Color("d8642e"), "belly": Color("f4e4c8"), "dark": Color("5a2a14") }
 
-# the people and creatures on the map: tile, smooth draw position, walking queue
+# the people and creatures on the map: tile, smooth draw position, walking queue, and what they're up to
 class Mover:
 	var tile := Vector2i.ZERO
 	var pos := Vector2.ZERO
@@ -41,6 +43,11 @@ class Mover:
 	var right := true
 	var step_t := 0.0
 	var face := Vector2i.DOWN                # which way they look: front, back or side
+	var act := "idle"                        # creatures: idle, sniff, sit, pounce, curious
+	var act_t := 0.0
+	var act_len := 1.0
+	var hop := 0.0                           # height off the ground (a pounce, a hop for joy)
+	var target := Vector2i.ZERO
 	func _init(t: Vector2i) -> void:
 		tile = t
 		pos = Vector2(t) * 16.0
@@ -48,8 +55,10 @@ class Mover:
 var me := Mover.new(Vector2i(11, 7))
 var maren := Mover.new(Vector2i(7, 11))
 var cub := Mover.new(Vector2i(16, 9))
-var maren_here := false
 var cub_bonded := false
+var my_look: Dictionary = LOOKS.tamer
+var painted := false                         # signed the register: you keep your colour in the faded world
+var paint_t := -1.0
 var restore: Array = []                      # [{at: Vector2 world px, r: float, goal: float}]
 var lines: Array = []                        # dialogue queue: [{who: "maren" | "" (narration), text}]
 var stage := "intro"
@@ -57,6 +66,10 @@ var t := 0.0
 var fade_in := 0.0
 var demo := false
 var demo_t := 0.0
+var fly := Vector2.ZERO                      # a butterfly over the paddock, for the cub to chase
+var fly_scare := 0.0
+var rng := RandomNumberGenerator.new()
+var register: Control
 
 @onready var cam: Camera2D = $Camera
 @onready var fade_rect: ColorRect = $FadeLayer/Fade
@@ -64,14 +77,21 @@ var demo_t := 0.0
 @onready var bubble_text: Label = $UI/Bubble/Text
 @onready var caption: Label = $UI/Caption
 @onready var place: Label = $UI/Place
+@onready var colour_layer: Node2D = $Painted/Figures
 
 func _ready() -> void:
 	demo = "--demo" in OS.get_cmdline_user_args()
+	rng.seed = 7 if demo else Time.get_ticks_usec()
 	cam.limit_right = MAP[0].length() * TILE
 	cam.limit_bottom = MAP.size() * TILE
 	cam.position = me.pos + Vector2(8, 8)
+	colour_layer.draw.connect(_draw_painted)
+	register = Register.new()
+	register.keep = not demo
+	$UI.add_child(register)
+	register.signed.connect(_on_signed)
 	say("", "The supply cart stops at the edge of the trees. Larkhaven: a handful of roofs and a ranch fence that runs right up to the forest.")
-	say("", "Everything here looks faded, like an old picture left in the sun.")
+	say("", "Everything here looks faded, like an old picture left in the sun. You too.")
 
 # ---------------------------------------------------------------- dialogue
 func say(who: String, text: String) -> void:
@@ -89,12 +109,26 @@ func _after_talk() -> void:
 		stage = "maren_walks"
 		maren.path = route(maren.tile, Vector2i(11, 8))
 	elif stage == "maren_talks":
+		stage = "register"
+		register.open()
+	elif stage == "signed":
 		stage = "to_paddock"
 		maren.path = route(maren.tile, Vector2i(18, 12))   # beside the gate, not in front of it
 		caption.text = "Walk to the little one in the paddock (arrow keys or WASD). Press Enter beside it."
 	elif stage == "bonded":
 		stage = "free"
 		caption.text = "End of the trial. Walk around Larkhaven; your partner follows you."
+
+func _on_signed(look: Dictionary) -> void:
+	# the ink dries and colour runs into you: you are the one bright thing in the faded valley
+	my_look = look
+	painted = true
+	paint_t = 0.0
+	stage = "signed"
+	say("", "As the ink dries, colour runs into you: your hands, your clothes, your hair. You're the only bright thing on the road.")
+	say("maren", "%s. Good name. And look at you, bright as a new penny!" % look.name)
+	say("maren", "Don't mind the rest of it. The whole valley faded long ago. Like an old photo, isn't it?")
+	say("maren", "Folk say it comes back, a little, every time someone earns a creature's trust. Come and see.")
 
 # ---------------------------------------------------------------- the map
 func tile_at(p: Vector2i) -> String:
@@ -105,7 +139,10 @@ func tile_at(p: Vector2i) -> String:
 func walkable(p: Vector2i) -> bool:
 	if tile_at(p) in SOLID:
 		return false
-	return p != cub.tile and p != maren.tile and p != me.tile
+	for m in [me, maren, cub]:
+		if p == m.tile or (not m.path.is_empty() and p == m.path[0]):
+			return false
+	return true
 
 func route(from: Vector2i, to: Vector2i) -> Array[Vector2i]:
 	# shortest walk on the grid (people only step on open tiles)
@@ -135,16 +172,19 @@ func _process(dt: float) -> void:
 	t += dt
 	fade_in = min(1.0, fade_in + dt * 0.7)
 	fade_rect.color.a = 1.0 - fade_in
+	if paint_t >= 0.0:
+		paint_t += dt
 	if demo:
 		_demo(dt)
+	_butterfly(dt)
+	_cub_think(dt)
 	_walk(maren, dt)
 	_walk(cub, dt)
 	_walk(me, dt)
 	if stage == "maren_walks" and maren.path.is_empty() and maren.pos.distance_to(Vector2(maren.tile) * TILE) < 0.5:
 		stage = "maren_talks"
 		say("maren", "There you are! You must be the new tamer. I'm Maren. I keep the ranch.")
-		say("maren", "Don't mind the colour. The whole valley faded long ago. Like an old photo, isn't it?")
-		say("maren", "Folk say it comes back, a little, every time someone earns a creature's trust. Come and see.")
+		say("maren", "Before anything else: the ranch register. Every tamer in the valley signs it. Write yourself in, love.")
 	if lines.is_empty() and stage in ["to_paddock", "free"] and me.path.is_empty() and me.pos.distance_to(Vector2(me.tile) * TILE) < 0.5:
 		var d := Vector2i.ZERO
 		if Input.is_action_pressed("ui_up") or Input.is_physical_key_pressed(KEY_W): d = Vector2i.UP
@@ -152,17 +192,23 @@ func _process(dt: float) -> void:
 		elif Input.is_action_pressed("ui_left") or Input.is_physical_key_pressed(KEY_A): d = Vector2i.LEFT
 		elif Input.is_action_pressed("ui_right") or Input.is_physical_key_pressed(KEY_D): d = Vector2i.RIGHT
 		if d != Vector2i.ZERO:
+			me.face = d
 			me.right = d.x > 0 if d.x != 0 else me.right
+			var was := me.tile
+			if cub_bonded and me.tile + d == cub.tile:
+				cub.tile = was                       # your partner steps aside, swapping places with you
+				cub.pos = Vector2(was) * TILE
 			if walkable(me.tile + d):
-				var was := me.tile
 				me.path = [me.tile + d]
-				if cub_bonded:
+				if cub_bonded and cub.tile != was:
+					_cub_stop()
 					cub.path = [was]
 	for r in restore:
 		r.r = move_toward(r.r, r.goal, dt * 70.0)
 	cam.position = cam.position.lerp(me.pos + Vector2(8, 8), min(1.0, dt * 8.0))
 	_update_ui()
 	queue_redraw()
+	colour_layer.queue_redraw()
 
 func _walk(m: Mover, dt: float) -> void:
 	if m.path.is_empty():
@@ -192,12 +238,91 @@ func bond() -> void:
 	# the first bond: the little one chooses you, and colour bursts back into the world around it
 	cub_bonded = true
 	stage = "bonded"
-	restore.append({ "at": cub.pos + Vector2(6, 4), "r": 0.0, "goal": 120.0 })
+	_cub_stop()
+	restore.append({ "at": cub.pos + Vector2(8, 8), "r": 0.0, "goal": 120.0 })
 	caption.text = ""
 	say("", "The little one sniffs your hand, then presses its head against it.")
 	say("", "Colour floods outward from where it stands: green grass, red roofs, a blue sky over the paddock.")
 	say("maren", "...Did you see that? It chose you. And the world remembered a little.")
 	say("maren", "That's a bond, love. Nobody owns a creature; they choose. Off you go, then. Look after each other.")
+
+# ---------------------------------------------------------------- the cub: a young creature with a mind of its own
+## Before the bond it potters about the paddock: wanders, sniffs the grass, sits, and stalks the butterfly. When you
+## come near it stops and watches you, ears up and tail going. After the bond it follows you and does the same things
+## whenever you stand still.
+func _cub_stop() -> void:
+	cub.act = "idle"
+	cub.act_t = 0.0
+	cub.act_len = 1.0
+	cub.hop = 0.0
+
+func _cub_think(dt: float) -> void:
+	cub.act_t += dt
+	if stage == "bonded":
+		cub.hop = -abs(sin(t * 6.0)) * 3.0         # it hops for joy
+		return
+	if cub.act != "pounce":
+		cub.hop = 0.0
+	if cub.act == "pounce":
+		# crouch and wiggle, then leap one tile at the butterfly (or straight up, once it's following you)
+		if cub.act_t >= 0.8 and cub.path.is_empty() and cub.target != cub.tile and walkable(cub.target):
+			cub.speed = 3.0
+			cub.path = [cub.target]
+			cub.target = cub.tile
+			fly_scare = 2.0
+		var k := clampf((cub.act_t - 0.8) / 0.4, 0.0, 1.0)
+		cub.hop = -sin(k * PI) * 6.0
+		if cub.act_t > 1.5:
+			cub.speed = 4.0
+			_cub_stop()
+		return
+	if not cub.path.is_empty():
+		return
+	var near := (Vector2(me.tile) - Vector2(cub.tile)).length() <= 3.0
+	if not cub_bonded and stage in ["to_paddock", "signed", "maren_talks", "register"] and near:
+		cub.act = "curious"                        # it has seen you: it stops and watches
+		cub.right = me.pos.x > cub.pos.x
+		return
+	if cub.act == "curious":
+		_cub_stop()
+	if cub.act_t < cub.act_len:
+		return
+	var r := rng.randf()
+	cub.act_t = 0.0
+	var fly_tile := Vector2i((fly / TILE).floor())
+	if r < 0.3 and not cub_bonded:
+		var dirs := [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
+		var to: Vector2i = cub.tile + dirs[rng.randi() % 4]
+		cub.act = "idle"
+		cub.act_len = rng.randf_range(0.6, 1.6)
+		if PADDOCK.has_point(to) and walkable(to):
+			cub.path = [to]
+	elif r < 0.5:
+		cub.act = "sniff"
+		cub.act_len = rng.randf_range(1.5, 3.0)
+	elif r < 0.65:
+		cub.act = "sit"
+		cub.act_len = rng.randf_range(2.5, 4.5)
+	elif r < 0.9 and (Vector2(fly_tile) - Vector2(cub.tile)).length() <= 3.0:
+		cub.act = "pounce"
+		cub.act_len = 1.5
+		cub.right = fly.x > cub.pos.x + 8
+		var step := Vector2i(signi(fly_tile.x - cub.tile.x), 0)
+		cub.target = cub.tile + step
+		if cub_bonded or not PADDOCK.has_point(cub.target):
+			cub.target = cub.tile                  # following you: it pounces on the spot
+	else:
+		cub.act = "idle"
+		cub.act_len = rng.randf_range(1.0, 2.5)
+
+func _butterfly(dt: float) -> void:
+	# it drifts over the paddock and flutters up and away whenever the cub leaps at it
+	fly_scare = max(0.0, fly_scare - dt)
+	var home := Vector2(PADDOCK.position) * TILE + Vector2(PADDOCK.size) * TILE * 0.5
+	if cub_bonded:
+		home = me.pos + Vector2(8, -10)
+	var goal := home + Vector2(sin(t * 0.7) * 30.0, cos(t * 1.1) * 8.0 - 4.0 - fly_scare * 10.0)
+	fly = goal if fly == Vector2.ZERO else fly.lerp(goal, min(1.0, dt * 1.5))
 
 # ---------------------------------------------------------------- the demo (for screenshots: run with -- --demo)
 func _demo(dt: float) -> void:
@@ -205,15 +330,19 @@ func _demo(dt: float) -> void:
 	if demo_t < 1.2:
 		return
 	demo_t = 0.0
-	if not lines.is_empty():
+	if stage == "register":
+		register.demo_step()
+	elif not lines.is_empty():
 		advance()
 	elif stage == "to_paddock" and not cub_bonded and me.path.is_empty():
 		if (me.tile - cub.tile).length() <= 1.01:
 			bond()
 		else:
-			me.path = route(me.tile, Vector2i(16, 10))
-			me.path.pop_back()
-			me.path.append(Vector2i(16, 10))
+			for d in [Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP]:
+				var to: Vector2i = cub.tile + d
+				if walkable(to) and not route(me.tile, to).is_empty():
+					me.path = route(me.tile, to)
+					break
 
 # ---------------------------------------------------------------- drawing
 func _draw() -> void:
@@ -228,166 +357,64 @@ func _draw() -> void:
 				_draw_tile(x, y, MAP[y][x])
 	# 3. houses and trees: standing objects with a footprint (so a 3D renderer can stand them up later)
 	_draw_structures()
-	var actors := [[me, TAMER], [maren, MAREN], [cub, CUB]]
-	actors.sort_custom(func(a, b): return a[0].pos.y < b[0].pos.y)
+	# 4. people and creatures, back to front; you (once signed) and your partner are drawn in colour on their own layer
+	var actors := [me, maren, cub]
+	actors.sort_custom(func(a, b): return a.pos.y < b.pos.y)
 	for i in actors.size():
-		var m: Mover = actors[i][0]
-		var base: Array = actors[i][1]
-		var walking := not m.path.is_empty()
-		var frame := int(m.step_t * 8.0) % 2      # which foot is up
-		var bob := 0.0
-		if walking:
-			bob = -1.0 if frame == 0 else 0.0
-		elif fmod(t + i * 0.8, 2.4) < 0.4:
-			bob = -1.0                             # a breath while standing still
-		if m == cub and cub_bonded and stage == "bonded":
-			bob = -abs(sin(t * 6.0)) * 3.0         # it hops for joy
+		var m: Mover = actors[i]
 		draw_rect(Rect2(m.pos + Vector2(3, 14), Vector2(10, 2)), Color(0, 0, 0, 0.25))   # a soft shadow
-		if m == me or m == maren:
-			draw_person(m, LOOKS["tamer" if m == me else "maren"], walking, float(i))
-		else:
-			_draw_sprite(creature_pose(base, walking, frame), m.pos + Vector2(2, 7 + bob), m.right)
+		if not _is_painted(m):
+			_draw_actor(self, m, i)
+	# 5. the butterfly
+	var flap := int(t * 12.0) % 2 == 0
+	var wing := Vector2(3, 3) if flap else Vector2(1, 3)
+	draw_rect(Rect2(fly + Vector2(-wing.x - 1, -1), wing + Vector2(2, 2)), Figures.OUTLINE)
+	draw_rect(Rect2(fly + Vector2(0, -1), wing + Vector2(2, 2)), Figures.OUTLINE)
+	draw_rect(Rect2(fly + Vector2(-wing.x, 0), wing), Color("f2d24a"))
+	draw_rect(Rect2(fly + Vector2(1, 0), wing), Color("f2d24a"))
+	draw_rect(Rect2(fly + Vector2(0, -1), Vector2(1, 4)), Color("3a2a1a"))
 
+func _is_painted(m: Mover) -> bool:
+	return (m == me and painted) or (m == cub and cub_bonded)
 
-## People are built from parts (head, hair, body, arms, legs or a skirt), not flat pictures, so the same figure can
-## walk four ways with swinging arms, blink and glance around, be recoloured in the character creator, and later
-## become a simple 3D rig. About 12x20 pixels, standing on their tile with a dark outline (docs/wildbond-plan.md).
-const LOOKS := {
-	"tamer": { "skin": Color("f1c9a0"), "hair": Color("6b4423"), "hat": Color("2a3f6b"), "shirt": Color("d8453a"), "legs": Color("3a4a6a"), "shoes": Color("3a2a1a"), "style": "cap" },
-	"maren": { "skin": Color("e8c4a0"), "hair": Color("c9c3b8"), "shirt": Color("7a5236"), "apron": Color("4f8a5a"), "legs": Color("7a5236"), "shoes": Color("3a2a1a"), "style": "bun", "skirt": true },
-}
-const OUTLINE := Color("1e1a22")
+func _draw_painted() -> void:
+	# the colour layer sits above the faded world, so whatever is drawn here keeps its colour everywhere
+	var actors := [me, cub].filter(func(m): return _is_painted(m))
+	actors.sort_custom(func(a, b): return a.pos.y < b.pos.y)
+	for m in actors:
+		_draw_actor(colour_layer, m, 0 if m == me else 2)
+	if paint_t >= 0.0 and paint_t < 1.4:
+		# the ink sparkles outward as you're painted in
+		var cols := [my_look.shirt, my_look.hair, my_look.legs, Color("f2d24a")]
+		for k in 12:
+			var a := k * TAU / 12.0 + paint_t
+			var d := 4.0 + paint_t * 18.0
+			var c: Color = cols[k % 4]
+			c.a = 1.0 - paint_t / 1.4
+			colour_layer.draw_rect(Rect2(me.pos + Vector2(8, 6) + Vector2(cos(a), sin(a)) * d, Vector2(1, 1)), c)
 
-func draw_person(m: Mover, look: Dictionary, walking: bool, seed: float) -> void:
+func _draw_actor(ci: CanvasItem, m: Mover, i: int) -> void:
+	var walking := not m.path.is_empty()
+	if m == cub:
+		var pose := {
+			"walking": walking, "frame": int(m.step_t * 10.0) % 4, "blink": fmod(t + 1.3, 2.9) < 0.12,
+			"wag": [1, 0, -1, 0][int(t * (14.0 if m.act == "curious" or stage == "bonded" else 6.0)) % 4],
+			"sniff": m.act == "sniff", "twitch": (int(t * 12.0) % 2) if m.act == "sniff" else 0,
+			"sit": m.act == "sit", "ears_up": m.act in ["curious", "pounce"] or stage == "bonded",
+			"crouch": (2 if m.act_t < 0.8 else 0) if m.act == "pounce" else 0,
+		}
+		var wiggle := (1.0 if int(t * 16.0) % 2 == 0 else -1.0) if m.act == "pounce" and m.act_t > 0.4 and m.act_t < 0.8 else 0.0
+		Figures.creature(ci, m.pos + Vector2(-1 + wiggle, 4 + m.hop), m.right, pose, CUB_LOOK)
+		return
 	var face := m.face
-	var frame := int(m.step_t * 8.0) % 4 if walking else 0       # 0 left foot up, 1 pass, 2 right foot up, 3 pass
-	var blink := fmod(t + seed * 1.7, 3.3) < 0.12
-	if not walking and face == Vector2i.DOWN and fmod(t + seed, 6.0) > 5.2:
-		face = Vector2i.LEFT if int(t + seed) % 2 == 0 else Vector2i.RIGHT   # a glance around while standing
-	var bob := -1 if walking and (frame == 1 or frame == 3) else 0
-	var o := m.pos + Vector2(2, -5 + bob)
-	var side := face.x != 0
-	var swing := 1 if frame == 0 else (-1 if frame == 2 else 0)
-	var parts: Array = []                                           # [x, y, w, h, colour], outlined together
-	var shade: Color = (look.shirt as Color).darkened(0.25)
-	# legs (or a skirt), with the stepping foot lifted
-	if look.get("skirt", false):
-		parts.append([3, 13, 6, 3, look.legs]); parts.append([2, 16, 8, 2, look.legs])
-		parts.append([3 + (1 if frame == 0 else 0), 18, 2, 1, look.shoes]); parts.append([7 - (1 if frame == 2 else 0), 18, 2, 1, look.shoes])
-	elif side:
-		var fwd := 1 if face == Vector2i.RIGHT else -1
-		parts.append([5 + swing * fwd, 13, 2, 5 - (1 if frame == 0 else 0), look.legs]); parts.append([5 - swing * fwd, 13, 2, 5 - (1 if frame == 2 else 0), (look.legs as Color).darkened(0.2)])
-		parts.append([5 + swing * fwd + (1 if face == Vector2i.RIGHT else -1), 18 - (1 if frame == 0 else 0), 2, 1, look.shoes])
-	else:
-		var up_l := 1 if frame == 0 else 0
-		var up_r := 1 if frame == 2 else 0
-		parts.append([3, 13, 3, 5 - up_l, look.legs]); parts.append([6, 13, 3, 5 - up_r, (look.legs as Color).darkened(0.12)])
-		parts.append([3, 18 - up_l, 3, 1, look.shoes]); parts.append([6, 18 - up_r, 3, 1, look.shoes])
-	# body, apron and arms (arms swing against the legs)
-	parts.append([3, 7, 6, 6, look.shirt]); parts.append([7, 7, 2, 6, shade])
-	if look.has("apron") and face != Vector2i.UP:
-		parts.append([4 if not side else (5 if face == Vector2i.RIGHT else 3), 8, 4, 6, look.apron])
-	if side:
-		parts.append([5 - swing, 8, 2, 4, shade]); parts.append([5 - swing, 12, 2, 1, look.skin])
-	else:
-		parts.append([1, 7 + swing, 2, 4, look.shirt]); parts.append([1, 11 + swing, 2, 1, look.skin])
-		parts.append([9, 7 - swing, 2, 4, shade]); parts.append([9, 11 - swing, 2, 1, look.skin])
-	# head, hair and eyes
-	parts.append([5, 6, 2, 1, look.skin]); parts.append([3, 0, 6, 6, look.skin])
-	match look.get("style", "short"):
-		"cap":
-			parts.append([3, 0, 6, 2, look.hat])
-			if face == Vector2i.DOWN: parts.append([3, 2, 6, 1, look.hat])
-			elif side: parts.append([(8 if face == Vector2i.RIGHT else 1), 2, 3, 1, look.hat])
-			parts.append([(3 if face != Vector2i.LEFT else 7), 2, 2, 3 if face != Vector2i.UP else 4, look.hair])
-		"bun":
-			parts.append([3, 0, 6, 2, look.hair]); parts.append([5, -2, 2, 2, look.hair])
-			if not side: parts.append([3, 2, 1, 3, look.hair]); parts.append([8, 2, 1, 3, look.hair])
-			else: parts.append([(3 if face == Vector2i.RIGHT else 7), 1, 2, 4, look.hair]); parts.append([(2 if face == Vector2i.RIGHT else 8), 0, 2, 3, look.hair])   # the bun at the back of her head
-	if face == Vector2i.UP:
-		parts.append([3, 2, 6, 4, look.hair] if look.style == "cap" else [3, 1, 6, 5, look.hair])
-	var eye := Color("222222") if not blink else (look.skin as Color).darkened(0.3)
-	if face == Vector2i.DOWN:
-		parts.append([4, 3, 1, 1, eye]); parts.append([7, 3, 1, 1, eye])
-	elif side:
-		parts.append([7 if face == Vector2i.RIGHT else 4, 3, 1, 1, eye])
-	# outline first, then the parts on top
-	for p in parts:
-		draw_rect(Rect2(o + Vector2(p[0] - 1, p[1] - 1), Vector2(p[2] + 2, p[3] + 2)), OUTLINE)
-	for p in parts:
-		draw_rect(Rect2(o + Vector2(p[0], p[1]), Vector2(p[2], p[3])), p[4])
-## A person's look from the way they face: front (both eyes), back (all hair), side (one eye, flipped for left),
-## with the feet stepping in turn while they walk.
-func person_pose(rows: Array, face: Vector2i, walking: bool, frame: int) -> Array:
-	var out: Array = rows.duplicate()
-	var hair: String = rows[0].strip_edges(true, true).replace(".", "")[0]
-	if face == Vector2i.UP:
-		for y in range(2, 5):
-			out[y] = (out[y] as String).replace("E", hair).replace("S", hair)
-	elif face.x != 0:
-		var row: String = out[3]
-		out[3] = row.substr(0, 5).replace("E", "S") + row.substr(5)
-	if walking:
-		var w: int = (out[0] as String).length()
-		var last: String = out[out.size() - 1]
-		var keep := ""
-		for x in w:
-			var lifted := (x < w / 2) if frame == 0 else (x >= w / 2)
-			keep += "." if lifted else last[x]
-		out[out.size() - 1] = keep
-	return out
-
-## A creature's look: the tail wags, and the legs trot in pairs while it walks.
-func creature_pose(rows: Array, walking: bool, frame: int) -> Array:
-	var out: Array = rows.duplicate()
-	if int(t * 5.0) % 2 == 0:                  # tail up, then down
-		out[1] = "O" + (out[1] as String).substr(1)
-		out[2] = "." + (out[2] as String).substr(1)
-	if walking:
-		var legs: String = out[out.size() - 1]
-		var cols := [2, 7] if frame == 0 else [4, 9]
-		for c in cols:
-			legs = legs.substr(0, c) + "." + legs.substr(c + 1)
-		out[out.size() - 1] = legs
-	return out
-
-func _draw_sprite(rows: Array, at: Vector2, right: bool) -> void:
-	var w: int = rows[0].length()
-	for y in rows.size():
-		for x in w:
-			var ch: String = rows[y][x]
-			if ch == ".":
-				continue
-			var px := x if right else w - 1 - x
-			draw_rect(Rect2(at + Vector2(px, y), Vector2(1, 1)), PAL[ch])
+	if not walking and face == Vector2i.DOWN and fmod(t + i, 6.0) > 5.2:
+		face = Vector2i.LEFT if int(t + i) % 2 == 0 else Vector2i.RIGHT   # a glance around while standing
+	var look: Dictionary = my_look if m == me else LOOKS.maren
+	Figures.person(ci, m.pos + Vector2(2, -5), face, walking, int(m.step_t * 8.0) % 4, fmod(t + i * 1.7, 3.3) < 0.12, look)
 
 func _draw_tile(x: int, y: int, ch: String) -> void:
 	var o := Vector2(x, y) * TILE
-	var grass := Color("6a9a48")
-	var n := (x * 7 + y * 13) % 5
 	match ch:
-		"T":
-			draw_rect(Rect2(o, Vector2(16, 16)), Color("2c4a2a"))
-			draw_rect(Rect2(o + Vector2(2, 1), Vector2(12, 10)), Color("3d6b3a"))
-			draw_rect(Rect2(o + Vector2(4, 2), Vector2(6, 4)), Color("4f8a4a"))
-			draw_rect(Rect2(o + Vector2(7, 11), Vector2(2, 5)), Color("5a3a22"))
-		"r":
-			draw_rect(Rect2(o, Vector2(16, 16)), Color("c8553d"))
-			for i in 4:
-				draw_rect(Rect2(o + Vector2(0, i * 4 + 3), Vector2(16, 1)), Color("a3402e"))
-		"#":
-			draw_rect(Rect2(o, Vector2(16, 16)), Color("eadfc4"))
-			draw_rect(Rect2(o + Vector2(0, 15), Vector2(16, 1)), Color("b8a888"))
-			if n % 2 == 0:
-				draw_rect(Rect2(o + Vector2(4, 4), Vector2(8, 6)), Color("6aa0c8"))
-				draw_rect(Rect2(o + Vector2(4, 4), Vector2(8, 2)), Color("a8d0ea"))
-		"D":
-			draw_rect(Rect2(o, Vector2(16, 16)), Color("eadfc4"))
-			draw_rect(Rect2(o + Vector2(3, 2), Vector2(10, 14)), Color("6a4224"))
-			draw_rect(Rect2(o + Vector2(10, 9), Vector2(2, 2)), Color("f2d24a"))
-		".", "N":
-			draw_rect(Rect2(o, Vector2(16, 16)), Color("c8a874"))
-			draw_rect(Rect2(o + Vector2(3 + n, 5 + n), Vector2(2, 1)), Color("a88a5a"))
 		"=":
 			# fences join their neighbours: rails run across, down, or both at a corner, with a post in the middle
 			var rail := Color("a0703a")
@@ -409,20 +436,13 @@ func _draw_tile(x: int, y: int, ch: String) -> void:
 			draw_rect(Rect2(o + Vector2(6, 4), Vector2(4, 1)), Color("b8885a"))
 		"P":
 			# the ground underneath comes from the tileset (_draw_ground); the sign gets an outline so it reads on any ground
-			draw_rect(Rect2(o + Vector2(6, 7), Vector2(4, 9)), OUTLINE)
+			draw_rect(Rect2(o + Vector2(6, 7), Vector2(4, 9)), Figures.OUTLINE)
 			draw_rect(Rect2(o + Vector2(7, 7), Vector2(2, 8)), Color("6b4a2a"))
-			draw_rect(Rect2(o + Vector2(1, 1), Vector2(14, 9)), OUTLINE)
+			draw_rect(Rect2(o + Vector2(1, 1), Vector2(14, 9)), Figures.OUTLINE)
 			draw_rect(Rect2(o + Vector2(2, 2), Vector2(12, 7)), Color("d8a868"))
 			draw_rect(Rect2(o + Vector2(2, 5), Vector2(12, 1)), Color("a0703a"))
 			draw_rect(Rect2(o + Vector2(4, 3), Vector2(6, 1)), Color("6b4a2a"))
 			draw_rect(Rect2(o + Vector2(4, 7), Vector2(8, 1)), Color("6b4a2a"))
-		_:
-			draw_rect(Rect2(o, Vector2(16, 16)), grass)
-			draw_rect(Rect2(o + Vector2(2 + n * 2, 3 + n), Vector2(1, 2)), Color("7cae52"))
-			draw_rect(Rect2(o + Vector2(11 - n, 10), Vector2(1, 2)), Color("7cae52"))
-			if ch == "f":
-				for i in 3:
-					draw_rect(Rect2(o + Vector2(3 + i * 4, 5 + (i % 2) * 5), Vector2(2, 2)), [Color("f2d24a"), Color("e86a8a"), Color("ffffff")][i])
 
 # ---------------------------------------------------------------- the speech bubble, captions and the faded world
 func _update_ui() -> void:
@@ -436,7 +456,7 @@ func _update_ui() -> void:
 		bubble.size = Vector2(w, 0)
 		bubble.reset_size()
 		if who:
-			var p := to_screen * (who.pos + Vector2(8, 0))
+			var p := to_screen * (Vector2(who.pos.x, min(who.pos.y, me.pos.y)) + Vector2(8, -6))   # above the speaker, never over you
 			bubble.position = Vector2(clamp(p.x - w / 2, 4, 384 - w - 4), max(4, p.y - bubble.size.y - 6))
 		else:
 			bubble.position = Vector2((384 - w) / 2, 216 - bubble.size.y - 8)   # narration sits low, like a book's caption
@@ -486,10 +506,10 @@ func _draw_structures() -> void:
 			var ch: String = MAP[y][x]
 			if ch == "T":
 				_tex(NATURE, Vector2i(1, 10), Vector2i.ONE, Vector2(x, y) * TILE)        # a hedge bush under the treeline
-			elif ch in "r#" and not doors.any(func(d): return abs(x - d.x) <= 1 and y >= d.y - 2 and y <= d.y):
+			elif ch in "r#" and not doors.any(func(d): return x - d.x >= -1 and x - d.x <= 2 and y >= d.y - 2 and y <= d.y):
 				_tex(NATURE, Vector2i(0, 10), Vector2i.ONE, Vector2(x, y) * TILE)        # garden bushes beside each cottage
 	for d in doors:
-		_tex(HOUSE, Vector2i(0, 0), Vector2i(3, 3), Vector2(d.x - 1, d.y - 2) * TILE)  # the cottage, door on our door
+		_tex(HOUSE, Vector2i(0, 0), Vector2i(4, 3), Vector2(d.x - 1, d.y - 2) * TILE)  # the whole cottage (4 tiles wide), its door on our door
 	for y in MAP.size():                                                                # big trees, back to front
 		for x in MAP[0].length():
 			if MAP[y][x] == "T" and (x + y) % 2 == 0:       # staggered, half a tile off the grid, so the edge reads as woods
