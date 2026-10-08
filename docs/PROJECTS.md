@@ -44,6 +44,8 @@ and the arcade's homepage shows them off. Any assistant may push these forward w
 
 | T8-R | **Realmbound guide and lore page** (T8, Lane A3) | M | Design | — | ready for review: Codex, 2026-10-07, PR #44 | docs/ROADMAP.md T8; Wildbond waits for its redesign. A8 opening audit ready in PR #44: docs/realmbound-first-ten-minutes.md (documentation only; L4/V1 implementation remains open) |
 
+| RE-G | **Godot research assessment and animation/migration research prompt** | S | Design | — | claimed: Codex, 2026-10-07, codex/realmbound-guide (documentation only, requested by Evan) | Separate research files; no Godot or shared plan edits |
+
 ## Graphics: light, fog and atmosphere (S6)
 
 Evan (2026-10-09): *"paying attention to the details of the lighting and the shadows greatly affects the overall
