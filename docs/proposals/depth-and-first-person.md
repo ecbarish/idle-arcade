@@ -5,7 +5,7 @@ in relation to the environment so physics and objects operate like the real thin
 to 3d. I would love for this game to have a first person mode, maybe further down the road the way pokemon got the
 voxel mod ... we have the unique opportunity to get ahead of it and prepare for it."*
 
-Status: **proposal**. Parts 1 and 3 are building rules we can follow now at no cost; part 2 is lore for Evan to approve.
+Status: **approved by Evan, 2026-10-08** ("perfect"). Parts 1 and 3 are building rules followed from now on; part 2 is canon (docs/lore/wildbond.md, thread 1 in docs/lore/wildbond-threads.md).
 
 ## 1. A world that knows where things are (now)
 The Godot trial already keeps the world and the picture apart: every person and creature has a tile, a facing and a

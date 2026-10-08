@@ -37,6 +37,9 @@ For each: what players can see, the candidate explanations, the decided truth (i
   valley that feeds on the land's memory; **(b)** a guardian that turned, or was turned; **(c)** people: an older order
   that took too much from the land (a mirror of the Unbound's fear, aimed the other way); **(d)** the bond itself went
   too far in winning (the Unbound would be half right). Clues should fit at least two of these until late.
+- **Decided (Evan, 2026-10-08):** it took depth too; the valley is flat as well as grey. Fair early clues to plant: guardians
+  describe "how deep the valley used to be"; old paintings in the inn look strangely "thick"; a creature that won't walk
+  where a cliff "should" be. Depth returning late is a payoff, so seed it lightly from the first area.
 - **Clues placed:** Isolde: "bonds help the world remember." Toren: warm stones beyond the high pass; a watcher older
   than the Wardens.
 
