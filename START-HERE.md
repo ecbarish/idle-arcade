@@ -99,7 +99,16 @@ rain sounds; walkable Realmbound towns.
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
-1. **Baby forms (W9):** read `docs/proposals/creature-growth.md` and answer its five questions. Default if no
+1. **Browser or a standalone game?** (Evan, 2026-10-07: "the more I see we can do the more I feel it needs to be its
+   own game.") Options: (a) keep the browser games and wrap them as a desktop app for Steam later (cheap, same code);
+   (b) build Wildbond's next version in the free **Godot** engine (Windows, Mac, Linux, phones and still the web;
+   proper 2D with pixel-perfect scaling, and 3D for the "one day first person" goal), carrying over all the story,
+   creatures, maps and balance as data; (c) Unity or Unreal (more powerful 3D, but heavy, and harder for AI
+   assistants to edit). Claude recommends **(b), starting with a small trial**: the Wildbond opening rebuilt in Godot
+   to see how it plays and how well the assistants work in it, before committing. Needs Evan to install Godot (free,
+   no account). **Default until he answers:** keep building content and design; hold the big screen rebuild
+   (Wildbond phases 1, 3, 4) so it is built once.
+2. **Baby forms (W9):** read `docs/proposals/creature-growth.md` and answer its five questions. Default if no
    answer: the recommendations in it (life stages, babies stay on the ranch, elders, 3 ranch days, return-or-adopt).
 
 **Decided 2026-10-08 (Evan: "go with your recommendations, and yes to the shared universe where
@@ -116,6 +125,7 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-07 Claude: saved Gemini's research (docs/research/creature-games-ux.md) and mapped its lessons onto  docs/wildbond-plan.md phases. Evan is considering a standalone game: options and a recommendation (Godot, small  trial first) are Question 1 in Questions for Evan; the screen rebuild waits for his answer.
 - 2026-10-07 Claude: rewrote the plans from Evan's play notes: docs/wildbond-plan.md (one plan, principles + phases  1-7), queue lanes A and B rewritten, CLAUDE.md "Where we are" rewritten, T33 creature variants ticket for ChatGPT.
 - 2026-10-07 Claude: merged ChatGPT's launch balance (Wildbond L7a: Stillreed 46+, later Wardens within caps; Realmbound  L7b: late-zone xpMult .6 from level 40). Wildbond v1.5.2: DAY_SECONDS 3600, AUTOPILOT=false (Auto-explore off).  Recorded Evan's notes: characters present in the intro (B3b), W13 character creator, W14 creature variants, V10 big  worlds/first person. Wildbond 1225, Realmbound 4173 checks.
 - 2026-10-07 Claude: Wildbond v1.5.1 (results wait for Continue, visible tamer, close view, softer fade, ranch/breeding/  pennants appear with the story: `ranchOpen`, `breedOn`). Evan wants Wildbond to be all game world: plan in  docs/wildbond-immersive.md, queued as B3a (Claude, top priority). 1214 checks.

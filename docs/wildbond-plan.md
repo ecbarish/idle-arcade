@@ -63,6 +63,34 @@ larger roster (W11).
 **Phase 7: a bigger world** (Claude, after Launch). Larger connected regions loaded in pieces, real height (cliffs,
 stairs, bridges), a closer 3D camera, then the Modern 3D era (W6) and, one day, first person (VISION §10).
 
+## Lessons from the research (docs/research/creature-games-ux.md, 2026-10-07)
+Adopted, by phase:
+- **Phase 2 (opening):** the opening is an *event*, not a menu (Ruby's dropped bag, Scarlet's cliff); you **paint
+  yourself into** the faded world in the character creator; your partner **follows you from the first moment**; the
+  first bond is guided and **bursts colour into the tiles around it**, teaching the core loop without words; tall
+  grass is introduced by Maren stopping you at its edge.
+- **Phase 3 (battles):** classic geometry, the command box in a corner leaving the centre for animation, a **visible
+  turn-order queue** (our battles are speed-based already; show who acts next), a grey-fog transition with no
+  flashing, a results screen that shows growth. Later, worth trying: **element chemistry** (fire on a tide creature
+  makes steam) and **stamina** instead of cooldowns (polls first).
+- **Phase 4 (menus):** the Wilddex as a sketchbook (a charcoal sketch on first sight, watercolour on bonding); the
+  **map inks itself in** as you explore; the bag as pouches; a tamer's licence with your portrait and pinned badges.
+- **Phase 5 (ranch):** the ranch becomes a **Sanctuary** that starts grey and blooms as creatures live there (water
+  creatures restore the fountain, plant creatures wake the trees); you pet, feed and play by walking up to them;
+  creatures work stations that suit their element (with W5, ranch jobs).
+- **Phase 6 (variety):** variants glow into the faded world so you spot them from afar; a later pigment-mixing
+  craft raises the odds for a while. Whether variants are only cosmetic or a little stronger is a **poll**.
+- **Phase 7 (bigger world):** **overworld abilities** from creatures (push, swim, glide, cut vines) that open paths
+  you saw hours earlier; that, more than map size, makes a world feel big.
+- **Every phase:** one pixel scale for everything (sprites, UI and text on the same grid) and whole-number scaling
+  only, so the art stays crisp on every screen. This weighs on the platform question below.
+
+## Open question for Evan: browser or a standalone game?
+Evan (2026-10-07): "the more I see we can do the more I feel it needs to be its own game rather than browser."
+Options and a recommendation are in the session notes and START-HERE's Questions for Evan; until he decides, phases
+that are mostly design and content (the opening's story, the Sanctuary's design, the data) go ahead, and the big
+screen rebuild (phases 1, 3, 4) waits so it's built once.
+
 ## How we'll know it works
 Evan replays the first hour after each phase. A new player should be able to say, within ten minutes: who Maren and
 Wren are, why the world is faded, how to bond with a creature, what the Wilddex is for, and where to go next, without
