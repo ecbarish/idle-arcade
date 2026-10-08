@@ -11,6 +11,7 @@ this means now:
   them once, in Godot, unless a game is staying in the browser. Small fixes and content continue in the browser.
 - **The walk-in arcade (PROJECTS V11) is the natural next Godot project after Wildbond**, run on the website through
   the web export.
+- **Only the games being fleshed out move** (Evan): Wildbond, Realmbound, and Diamond Career and Otherworld if they keep growing. Lighter games (Primordial, and Starfall Guild unless it grows) stay in the browser with little further work.
 - Order of moves and timing are still open; Wildbond's trial decides how well it works first.
 ## Decided (Evan, 2026-10-08): Diamond Career and Otherworld start now, in the browser
 
