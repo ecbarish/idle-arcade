@@ -1,0 +1,9119 @@
+[
+  {
+    "cls": "warrior",
+    "pace": "breezy",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 0.37666666666666754,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 3,
+        "minutes": 0.9866666666666762,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 4,
+        "minutes": 1.246666666666667,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 5,
+        "minutes": 2.8683333333332417,
+        "deaths": 0,
+        "quests": 2
+      },
+      {
+        "level": 6,
+        "minutes": 5.045000000000005,
+        "deaths": 0,
+        "quests": 3
+      },
+      {
+        "level": 7,
+        "minutes": 7.128333333333813,
+        "deaths": 0,
+        "quests": 5
+      },
+      {
+        "level": 8,
+        "minutes": 9.828333333334426,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 15.990000000002492,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 18.501666666668097,
+        "deaths": 0,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 21.268333333332247,
+        "deaths": 0,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 26.908333333327118,
+        "deaths": 0,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 32.688333333321864,
+        "deaths": 0,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 38.926666666649524,
+        "deaths": 0,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 45.948333333309805,
+        "deaths": 0,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 52.86499999997018,
+        "deaths": 0,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 60.39999999996333,
+        "deaths": 0,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 68.65666666662425,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 81.4333333333374,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 84.70500000001597,
+        "deaths": 0,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 89.98000000003516,
+        "deaths": 0,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 100.65666666674066,
+        "deaths": 0,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 110.87500000011117,
+        "deaths": 0,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 121.49833333348315,
+        "deaths": 0,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 133.29166666685938,
+        "deaths": 0,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 144.94333333356843,
+        "deaths": 0,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 157.93166666694904,
+        "deaths": 0,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 171.5983333336654,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 192.4833333337414,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 198.41000000042962,
+        "deaths": 0,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 205.2383333337878,
+        "deaths": 0,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 219.31666666717234,
+        "deaths": 0,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 233.47500000055717,
+        "deaths": 0,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 247.6600000006088,
+        "deaths": 0,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 263.37666666733264,
+        "deaths": 0,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 278.3416666672911,
+        "deaths": 0,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 293.66333333373484,
+        "deaths": 0,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 310.5716666668221,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 336.509999999778,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 346.6749999996301,
+        "deaths": 0,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 351.73499999955646,
+        "deaths": 0,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 374.57833333255735,
+        "deaths": 0,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 401.953333332159,
+        "deaths": 0,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 437.56166666497415,
+        "deaths": 0,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 454.3033333313972,
+        "deaths": 0,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 466.3866666645547,
+        "deaths": 0,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 503.3549999973501,
+        "deaths": 0,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 541.7899999967908,
+        "deaths": 0,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 569.3149999963903,
+        "deaths": 0,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 608.6266666624849,
+        "deaths": 0,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 649.804999995219,
+        "deaths": 0,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 671.7299999948999,
+        "deaths": 0,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 683.9166666613893,
+        "deaths": 0,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 726.0366666607764,
+        "deaths": 0,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 758.0699999936436,
+        "deaths": 0,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 800.0666666596991,
+        "deaths": 0,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 845.3516666590401,
+        "deaths": 0,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 893.5833333250049,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 950.6383333241746,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 954.1499999907902,
+        "deaths": 0,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "companions": 1.2533333333333334,
+      "talents": 18.508333333334757,
+      "riding": 19.131666666667524,
+      "guild": 347.05833333295783
+    },
+    "lastLevel": 60,
+    "nextPolicy": 57480.89999944405,
+    "end": "complete",
+    "level60Minutes": 954.1499999907902,
+    "hours": 15.9668333331789,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 12986,
+      "deaths": 0,
+      "loots": 60,
+      "junkSold": 40,
+      "quests": 76,
+      "equips": 12,
+      "manual": 10622,
+      "uses": 10622,
+      "play": 57480.59999944404,
+      "money": 877217,
+      "feeds": 0,
+      "tamed": 0
+    },
+    "money": 6988065,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t4": true,
+      "t5": true,
+      "t3": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f2": true,
+      "f1": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "cruelty": 5,
+      "impstrike": 3,
+      "wmastery": 5,
+      "tactical": 2,
+      "toughness": 5,
+      "mortal": 1,
+      "deepwounds": 4,
+      "bladestorm": 1,
+      "defiance": 5,
+      "shieldspec": 5,
+      "anticipation": 5,
+      "toughened": 5,
+      "shieldslam": 1,
+      "impbulwark": 4
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 774.2000000000266
+      },
+      {
+        "cls": "priest",
+        "aff": 373.5999999999972
+      },
+      {
+        "cls": "mage",
+        "aff": 234
+      },
+      {
+        "cls": "priest",
+        "aff": 2708.199999999824
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 58,
+        "rar": 3,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 53,
+        "rar": 3,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 53,
+        "rar": 3,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "gearcmp": true,
+        "autoloot": true,
+        "sweep": true,
+        "questhelper": true,
+        "macro": true,
+        "lfg": true
+      },
+      "on": {
+        "gearcmp": true,
+        "autoloot": true,
+        "sweep": true,
+        "questhelper": true,
+        "macro": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 2,
+      "kit": 16,
+      "herb": 2,
+      "potion": 24,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 2,
+      "xp": 1160,
+      "members": 15
+    },
+    "pets": [],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  },
+  {
+    "cls": "priest",
+    "pace": "breezy",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 0.40833333333333466,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 3,
+        "minutes": 1.083333333333343,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 4,
+        "minutes": 1.4116666666666577,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 5,
+        "minutes": 2.6616666666665867,
+        "deaths": 0,
+        "quests": 2
+      },
+      {
+        "level": 6,
+        "minutes": 4.993333333333327,
+        "deaths": 0,
+        "quests": 3
+      },
+      {
+        "level": 7,
+        "minutes": 6.528333333333676,
+        "deaths": 0,
+        "quests": 5
+      },
+      {
+        "level": 8,
+        "minutes": 8.478333333334119,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 14.42333333333547,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 17.126666666669347,
+        "deaths": 0,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 19.96166666666677,
+        "deaths": 0,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 25.531666666661703,
+        "deaths": 0,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 31.491666666656283,
+        "deaths": 0,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 37.898333333317126,
+        "deaths": 0,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 44.98166666664402,
+        "deaths": 0,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 52.15833333330416,
+        "deaths": 0,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 59.45999999996418,
+        "deaths": 0,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 67.75166666662331,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 80.81666666666848,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 84.01500000001346,
+        "deaths": 0,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 89.2683333333659,
+        "deaths": 0,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 99.77000000007077,
+        "deaths": 0,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 110.64666666677701,
+        "deaths": 0,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 121.13833333348184,
+        "deaths": 0,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 132.59666666685686,
+        "deaths": 0,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 144.28166666689938,
+        "deaths": 0,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 156.53833333361064,
+        "deaths": 0,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 169.3016666669904,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 190.63500000040133,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 198.7233333337641,
+        "deaths": 0,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 207.63000000046316,
+        "deaths": 0,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 227.13333333386745,
+        "deaths": 0,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 245.7283333339351,
+        "deaths": 0,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 264.2650000006692,
+        "deaths": 0,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 284.9616666671948,
+        "deaths": 0,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 304.4233333335782,
+        "deaths": 0,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 324.7966666666151,
+        "deaths": 0,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 346.0283333329728,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 378.9049999991611,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 392.19499999896766,
+        "deaths": 0,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 398.74166666553907,
+        "deaths": 0,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 428.8199999984347,
+        "deaths": 0,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 463.60499999792853,
+        "deaths": 0,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 509.4766666639277,
+        "deaths": 0,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 531.7933333302695,
+        "deaths": 0,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 545.7616666633996,
+        "deaths": 0,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 592.9066666627136,
+        "deaths": 0,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 640.6333333286858,
+        "deaths": 0,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 676.8183333281593,
+        "deaths": 0,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 727.5549999940876,
+        "deaths": 0,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 778.6199999933445,
+        "deaths": 0,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 802.8466666596586,
+        "deaths": 0,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 816.8116666594555,
+        "deaths": 0,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 867.5216666587174,
+        "deaths": 0,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 905.9099999914922,
+        "deaths": 0,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 955.4083333241052,
+        "deaths": 0,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 1008.4099999900006,
+        "deaths": 0,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 1064.166666655856,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 1135.4033333246246,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 1139.989999991558,
+        "deaths": 0,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "companions": 1.0883333333333427,
+      "talents": 17.133333333336008,
+      "riding": 17.683333333335508,
+      "guild": 392.5983333322951
+    },
+    "lastLevel": 60,
+    "nextPolicy": 68633.29999950704,
+    "end": "complete",
+    "level60Minutes": 1139.989999991558,
+    "hours": 19.0647222220853,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 12957,
+      "deaths": 0,
+      "loots": 60,
+      "junkSold": 40,
+      "quests": 76,
+      "equips": 12,
+      "manual": 19871,
+      "uses": 19871,
+      "play": 68632.99999950708,
+      "money": 882513,
+      "feeds": 0,
+      "tamed": 0
+    },
+    "money": 7122913,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t4": true,
+      "t5": true,
+      "t3": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f2": true,
+      "f1": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "tap": 5,
+      "improt": 5,
+      "sfocus": 5,
+      "hfocus": 5,
+      "inner": 3,
+      "voidlash": 1,
+      "meditation": 1,
+      "shadowform": 1,
+      "holyspec": 5,
+      "agility": 5,
+      "grace": 5,
+      "impward": 4,
+      "renew": 1,
+      "recovery": 5
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 1894.6000000002236
+      },
+      {
+        "cls": "priest",
+        "aff": 2216.000000000174
+      },
+      {
+        "cls": "rogue",
+        "aff": 1012.4000000000467
+      },
+      {
+        "cls": "hunter",
+        "aff": 155
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 66,
+        "rar": 4,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "questhelper": true,
+        "macro": true,
+        "lfg": true
+      },
+      "on": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "questhelper": true,
+        "macro": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 3,
+      "kit": 19,
+      "herb": 1,
+      "potion": 29,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 2,
+      "xp": 1280,
+      "members": 16
+    },
+    "pets": [],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  },
+  {
+    "cls": "mage",
+    "pace": "breezy",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 0.4850000000000024,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 3,
+        "minutes": 1.071666666666677,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 4,
+        "minutes": 2.1883333333332806,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 5,
+        "minutes": 4.004999999999844,
+        "deaths": 0,
+        "quests": 3
+      },
+      {
+        "level": 6,
+        "minutes": 5.145000000000028,
+        "deaths": 0,
+        "quests": 4
+      },
+      {
+        "level": 7,
+        "minutes": 6.821666666667076,
+        "deaths": 0,
+        "quests": 5
+      },
+      {
+        "level": 8,
+        "minutes": 8.336666666667421,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 16.073333333335846,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 18.323333333334926,
+        "deaths": 0,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 21.048333333332447,
+        "deaths": 0,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 26.981666666660384,
+        "deaths": 0,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 33.53499999998776,
+        "deaths": 0,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 40.4916666666481,
+        "deaths": 0,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 48.53166666664079,
+        "deaths": 0,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 56.13499999996721,
+        "deaths": 0,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 64.79499999995933,
+        "deaths": 0,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 73.33333333330793,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 87.2333333333585,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 90.2400000000361,
+        "deaths": 0,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 96.47166666672544,
+        "deaths": 0,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 107.81000000010002,
+        "deaths": 0,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 120.18500000014504,
+        "deaths": 0,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 132.27000000018901,
+        "deaths": 0,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 146.32666666690682,
+        "deaths": 0,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 158.6666666669517,
+        "deaths": 0,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 173.6716666670063,
+        "deaths": 0,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 188.61000000039397,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 212.61666666714797,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 219.130000000505,
+        "deaths": 0,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 227.5400000005356,
+        "deaths": 0,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 243.38333333392657,
+        "deaths": 0,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 258.56166666731514,
+        "deaths": 0,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 274.25666666735054,
+        "deaths": 0,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 291.81333333376176,
+        "deaths": 0,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 309.07333333351056,
+        "deaths": 0,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 326.591666666589,
+        "deaths": 0,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 345.2599999996507,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 374.486666665892,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 385.72333333239516,
+        "deaths": 0,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 391.66499999897536,
+        "deaths": 0,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 416.90166666527483,
+        "deaths": 0,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 446.2866666648472,
+        "deaths": 0,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 486.59333333092735,
+        "deaths": 0,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 507.4899999972899,
+        "deaths": 0,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 519.6399999971131,
+        "deaths": 0,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 561.2233333298414,
+        "deaths": 0,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 606.0049999958563,
+        "deaths": 0,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 638.8066666620457,
+        "deaths": 0,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 685.0699999947059,
+        "deaths": 0,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 732.3683333273509,
+        "deaths": 0,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 758.4249999936384,
+        "deaths": 0,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 773.919999993413,
+        "deaths": 0,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 828.111666659291,
+        "deaths": 0,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 871.1533333253313,
+        "deaths": 0,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 926.031666657866,
+        "deaths": 0,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 983.5899999903618,
+        "deaths": 0,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 1045.126666656133,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 1109.6199999897904,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 1113.3399999900068,
+        "deaths": 0,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "companions": 0.3700000000000008,
+      "talents": 18.32500000000159,
+      "riding": 18.76500000000119,
+      "guild": 386.1449999990557
+    },
+    "lastLevel": 60,
+    "nextPolicy": 67030.29999941374,
+    "end": "complete",
+    "level60Minutes": 1113.3399999900068,
+    "hours": 18.619472222059382,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 12965,
+      "deaths": 0,
+      "loots": 60,
+      "junkSold": 41,
+      "quests": 76,
+      "equips": 12,
+      "manual": 19882,
+      "uses": 19882,
+      "play": 67030.09999941378,
+      "money": 886634,
+      "feeds": 0,
+      "tamed": 0
+    },
+    "money": 7034110,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t4": true,
+      "t5": true,
+      "t3": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f1": true,
+      "f2": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "burning": 5,
+      "ignite": 5,
+      "impbolt": 5,
+      "mind": 5,
+      "clarity": 3,
+      "cinder": 1,
+      "pyromaniac": 1,
+      "combustion": 1,
+      "iceshards": 5,
+      "permafrost": 5,
+      "frostward": 5,
+      "winterschill": 5,
+      "deepfreeze": 1,
+      "icefloes": 4
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 2989.799999999608
+      },
+      {
+        "cls": "priest",
+        "aff": 2741.599999999783
+      },
+      {
+        "cls": "mage",
+        "aff": 259
+      },
+      {
+        "cls": "hunter",
+        "aff": 152
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 54,
+        "rar": 3,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "questhelper": true,
+        "macro": true,
+        "lfg": true
+      },
+      "on": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "questhelper": true,
+        "macro": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 0,
+      "kit": 19,
+      "herb": 2,
+      "potion": 28,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 2,
+      "xp": 1256,
+      "members": 15
+    },
+    "pets": [],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  },
+  {
+    "cls": "rogue",
+    "pace": "breezy",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 0.4166666666666681,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 3,
+        "minutes": 0.9216666666666753,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 4,
+        "minutes": 1.9249999999999619,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 5,
+        "minutes": 3.3966666666665453,
+        "deaths": 0,
+        "quests": 2
+      },
+      {
+        "level": 6,
+        "minutes": 4.544999999999892,
+        "deaths": 0,
+        "quests": 4
+      },
+      {
+        "level": 7,
+        "minutes": 6.880000000000423,
+        "deaths": 0,
+        "quests": 5
+      },
+      {
+        "level": 8,
+        "minutes": 8.133333333334042,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 15.330000000002343,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 17.48333333333569,
+        "deaths": 0,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 19.888333333333502,
+        "deaths": 0,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 25.0966666666621,
+        "deaths": 0,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 30.713333333323657,
+        "deaths": 0,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 37.13999999998448,
+        "deaths": 0,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 43.46833333331206,
+        "deaths": 0,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 50.07499999997272,
+        "deaths": 0,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 56.716666666633344,
+        "deaths": 0,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 64.43833333329299,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 77.61833333332352,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 80.65833333333458,
+        "deaths": 0,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 85.55833333335241,
+        "deaths": 0,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 95.251666666721,
+        "deaths": 0,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 104.6333333334218,
+        "deaths": 0,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 114.85000000012563,
+        "deaths": 0,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 125.90333333349918,
+        "deaths": 0,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 136.96000000020607,
+        "deaths": 0,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 148.26833333358053,
+        "deaths": 0,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 160.4500000002915,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 179.75666666702844,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 185.92833333371755,
+        "deaths": 0,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 193.26666666707757,
+        "deaths": 0,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 207.81000000046382,
+        "deaths": 0,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 222.77500000051825,
+        "deaths": 0,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 236.74666666723576,
+        "deaths": 0,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 251.19000000062164,
+        "deaths": 0,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 265.29000000067293,
+        "deaths": 0,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 280.6916666672569,
+        "deaths": 0,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 296.5683333336926,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 321.7316666666597,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 332.09166666650896,
+        "deaths": 0,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 336.6649999997757,
+        "deaths": 0,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 359.62999999944157,
+        "deaths": 0,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 385.15666666573674,
+        "deaths": 0,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 419.2316666652409,
+        "deaths": 0,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 437.89499999830264,
+        "deaths": 0,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 449.73833333146365,
+        "deaths": 0,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 490.46166666420436,
+        "deaths": 0,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 531.1349999969458,
+        "deaths": 0,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 561.9916666631635,
+        "deaths": 0,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 603.1799999958974,
+        "deaths": 0,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 647.4633333285864,
+        "deaths": 0,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 668.816666661609,
+        "deaths": 0,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 681.5499999947571,
+        "deaths": 0,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 727.2149999940925,
+        "deaths": 0,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 760.678333326939,
+        "deaths": 0,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 804.7383333262977,
+        "deaths": 0,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 849.8533333256413,
+        "deaths": 0,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 897.213333324952,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 954.6049999907835,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 957.9266666574019,
+        "deaths": 0,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "companions": 0.7033333333333388,
+      "talents": 17.50000000000234,
+      "riding": 17.903333333335308,
+      "guild": 332.4099999998377
+    },
+    "lastLevel": 60,
+    "nextPolicy": 57672.29999944127,
+    "end": "complete",
+    "level60Minutes": 957.9266666574019,
+    "hours": 16.019999999844792,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 12980,
+      "deaths": 0,
+      "loots": 60,
+      "junkSold": 42,
+      "quests": 76,
+      "equips": 12,
+      "manual": 18466,
+      "uses": 18466,
+      "play": 57671.99999944126,
+      "money": 868508,
+      "feeds": 0,
+      "tamed": 0
+    },
+    "money": 7071589,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t4": true,
+      "t5": true,
+      "t3": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f1": true,
+      "f2": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "malice": 5,
+      "lethality": 5,
+      "vigor": 3,
+      "opportunity": 5,
+      "reflexes": 5,
+      "vendetta": 1,
+      "precision": 1,
+      "coldblood": 1,
+      "precstrikes": 5,
+      "dwmastery": 5,
+      "cendurance": 5,
+      "impquicken": 4,
+      "flurry": 1,
+      "cexpertise": 5
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 2396.000000000049
+      },
+      {
+        "cls": "priest",
+        "aff": 1827.4000000002272
+      },
+      {
+        "cls": "mage",
+        "aff": 471.5999999999907
+      },
+      {
+        "cls": "hunter",
+        "aff": 158
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 56,
+        "rar": 4,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 66,
+        "rar": 4,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 64,
+        "rar": 4,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "questhelper": true,
+        "macro": true,
+        "lfg": true
+      },
+      "on": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "questhelper": true,
+        "macro": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 2,
+      "kit": 16,
+      "herb": 2,
+      "potion": 24,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 2,
+      "xp": 1172,
+      "members": 16
+    },
+    "pets": [],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  },
+  {
+    "cls": "hunter",
+    "pace": "breezy",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 0.4200000000000015,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 3,
+        "minutes": 0.7716666666666732,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 4,
+        "minutes": 1.9449999999999608,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 5,
+        "minutes": 3.1066666666665617,
+        "deaths": 0,
+        "quests": 3
+      },
+      {
+        "level": 6,
+        "minutes": 4.1883333333331665,
+        "deaths": 0,
+        "quests": 4
+      },
+      {
+        "level": 7,
+        "minutes": 6.205000000000269,
+        "deaths": 0,
+        "quests": 5
+      },
+      {
+        "level": 8,
+        "minutes": 7.743333333333952,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 15.500000000002382,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 18.251666666668324,
+        "deaths": 0,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 20.718333333332748,
+        "deaths": 0,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 25.693333333328223,
+        "deaths": 0,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 31.23833333332318,
+        "deaths": 0,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 37.35833333331762,
+        "deaths": 0,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 43.73333333331182,
+        "deaths": 0,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 50.78166666663874,
+        "deaths": 0,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 58.613333333298286,
+        "deaths": 0,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 66.85999999995745,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 79.48166666666363,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 82.13333333333995,
+        "deaths": 0,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 87.39666666669243,
+        "deaths": 0,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 96.3450000000583,
+        "deaths": 0,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 105.54166666675843,
+        "deaths": 0,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 116.04666666679665,
+        "deaths": 0,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 127.0200000001699,
+        "deaths": 0,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 137.75666666687565,
+        "deaths": 0,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 149.15333333358376,
+        "deaths": 0,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 161.26333333362783,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 179.72333333369497,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 186.27500000038546,
+        "deaths": 0,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 193.7166666670792,
+        "deaths": 0,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 209.66000000047055,
+        "deaths": 0,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 225.4983333338615,
+        "deaths": 0,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 241.89833333392116,
+        "deaths": 0,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 259.9683333339869,
+        "deaths": 0,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 277.2650000006401,
+        "deaths": 0,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 296.3816666670286,
+        "deaths": 0,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 315.18666666675495,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 343.12499999968173,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 354.9183333328435,
+        "deaths": 0,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 361.0116666660881,
+        "deaths": 0,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 388.02499999902835,
+        "deaths": 0,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 418.881666665246,
+        "deaths": 0,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 459.95666666464825,
+        "deaths": 0,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 477.6149999977246,
+        "deaths": 0,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 488.3716666642348,
+        "deaths": 0,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 525.6833333303586,
+        "deaths": 0,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 563.4216666631427,
+        "deaths": 0,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 590.9083333294094,
+        "deaths": 0,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 631.6666666621496,
+        "deaths": 0,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 671.7066666615669,
+        "deaths": 0,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 692.6449999945957,
+        "deaths": 0,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 704.5266666610894,
+        "deaths": 0,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 747.221666660468,
+        "deaths": 0,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 780.7766666599798,
+        "deaths": 0,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 823.2549999926949,
+        "deaths": 0,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 868.581666658702,
+        "deaths": 0,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 915.7383333246825,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 970.0899999905582,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 973.5099999905085,
+        "deaths": 0,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "pet": 0.14166666666666644,
+      "companions": 0.33666666666666695,
+      "talents": 18.251666666668324,
+      "riding": 18.82000000000114,
+      "guild": 355.3083333328378
+    },
+    "lastLevel": 60,
+    "nextPolicy": 58613.899999427565,
+    "end": "complete",
+    "level60Minutes": 973.5099999905085,
+    "hours": 16.281444444285434,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 12951,
+      "deaths": 0,
+      "loots": 60,
+      "junkSold": 40,
+      "quests": 76,
+      "equips": 12,
+      "manual": 22250,
+      "uses": 22250,
+      "play": 58613.19999942756,
+      "money": 871803,
+      "feeds": 20,
+      "tamed": 1
+    },
+    "money": 7060402,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t4": true,
+      "t5": true,
+      "t3": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f2": true,
+      "f1": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "endurance": 5,
+      "ferocity": 5,
+      "lethal": 5,
+      "bestial": 3,
+      "unleashed": 5,
+      "packfury": 1,
+      "intimidation": 1,
+      "wrath": 1,
+      "mortalshots": 5,
+      "impsteady": 5,
+      "efficiency": 5,
+      "hawkeye": 5,
+      "aimed": 1,
+      "rws": 4
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 1311.0000000001362
+      },
+      {
+        "cls": "priest",
+        "aff": 204
+      },
+      {
+        "cls": "mage",
+        "aff": 1496.6000000001402
+      },
+      {
+        "cls": "priest",
+        "aff": 2492.3999999999623
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 58,
+        "rar": 3,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "autoloot": true,
+        "gearcmp": true,
+        "sweep": true,
+        "macro": true,
+        "questhelper": true,
+        "petcare": true,
+        "lfg": true
+      },
+      "on": {
+        "autoloot": true,
+        "gearcmp": true,
+        "sweep": true,
+        "macro": true,
+        "questhelper": true,
+        "petcare": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 4,
+      "kit": 16,
+      "herb": 0,
+      "potion": 25,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 2,
+      "xp": 1172,
+      "members": 16
+    },
+    "pets": [
+      {
+        "lvl": 58,
+        "bond": 20020.50000000066,
+        "happy": 86.40399999972577
+      }
+    ],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  },
+  {
+    "cls": "warrior",
+    "pace": "classic",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 0.5083333333333361,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 3,
+        "minutes": 1.1266666666666738,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 4,
+        "minutes": 2.996666666666568,
+        "deaths": 0,
+        "quests": 2
+      },
+      {
+        "level": 5,
+        "minutes": 5.206666666666709,
+        "deaths": 0,
+        "quests": 3
+      },
+      {
+        "level": 6,
+        "minutes": 7.083333333333802,
+        "deaths": 0,
+        "quests": 5
+      },
+      {
+        "level": 7,
+        "minutes": 10.545000000001256,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 8,
+        "minutes": 20.08166666666666,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 32.35333333332217,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 40.65666666664795,
+        "deaths": 0,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 47.048333333308804,
+        "deaths": 0,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 56.774999999966624,
+        "deaths": 0,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 68.06499999995636,
+        "deaths": 0,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 80.10999999999925,
+        "deaths": 0,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 91.88666666670876,
+        "deaths": 0,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 103.83500000008556,
+        "deaths": 0,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 117.42666666680167,
+        "deaths": 0,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 131.5066666668529,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 151.25833333359142,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 162.08000000029745,
+        "deaths": 0,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 174.15000000034135,
+        "deaths": 0,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 191.1500000004032,
+        "deaths": 0,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 209.02833333380158,
+        "deaths": 0,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 227.01666666720035,
+        "deaths": 0,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 247.0666666672733,
+        "deaths": 0,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 265.93666666734197,
+        "deaths": 0,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 288.27333333381324,
+        "deaths": 0,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 309.96000000016437,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 340.25333333305684,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 357.97166666613236,
+        "deaths": 0,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 375.7483333325403,
+        "deaths": 0,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 400.8416666655085,
+        "deaths": 0,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 427.0716666651268,
+        "deaths": 0,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 452.4833333314237,
+        "deaths": 0,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 480.30333333101885,
+        "deaths": 0,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 506.776666663967,
+        "deaths": 0,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 535.0649999968887,
+        "deaths": 0,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 564.9249999964542,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 603.6216666625577,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 630.8316666621618,
+        "deaths": 0,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 657.2299999951109,
+        "deaths": 0,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 705.4249999944096,
+        "deaths": 0,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 756.1133333270053,
+        "deaths": 0,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 815.8849999928022,
+        "deaths": 0,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 861.2883333254748,
+        "deaths": 0,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 901.1699999915612,
+        "deaths": 0,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 968.1266666572535,
+        "deaths": 0,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 1037.0616666562503,
+        "deaths": 0,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 1093.9849999888802,
+        "deaths": 0,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 1161.55166665948,
+        "deaths": 0,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 1231.3199999968742,
+        "deaths": 0,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 1283.8249999999305,
+        "deaths": 0,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 1327.1783333357873,
+        "deaths": 0,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 1403.558333340233,
+        "deaths": 0,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 1467.5366666772904,
+        "deaths": 0,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 1540.4800000148696,
+        "deaths": 0,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 1616.341666685952,
+        "deaths": 0,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 1698.6966666907458,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 1788.0816666959486,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 1825.5033333647937,
+        "deaths": 0,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "companions": 1.2166666666666688,
+      "talents": 40.6733333333146,
+      "riding": 41.2233333333141,
+      "guild": 630.9499999954934
+    },
+    "lastLevel": 60,
+    "nextPolicy": 109755.30000190066,
+    "end": "complete",
+    "level60Minutes": 1825.5033333647937,
+    "hours": 30.487361111639075,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 25626,
+      "deaths": 0,
+      "loots": 60,
+      "junkSold": 41,
+      "quests": 76,
+      "equips": 12,
+      "manual": 20289,
+      "uses": 20289,
+      "play": 109754.50000190067,
+      "money": 1637719,
+      "feeds": 0,
+      "tamed": 0
+    },
+    "money": 13317405,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t4": true,
+      "t3": true,
+      "t5": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f1": true,
+      "f2": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "cruelty": 5,
+      "impstrike": 3,
+      "wmastery": 5,
+      "tactical": 2,
+      "toughness": 5,
+      "mortal": 1,
+      "deepwounds": 4,
+      "bladestorm": 1,
+      "defiance": 5,
+      "shieldspec": 5,
+      "anticipation": 5,
+      "toughened": 5,
+      "shieldslam": 1,
+      "impbulwark": 4
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 2049.8000000002658
+      },
+      {
+        "cls": "priest",
+        "aff": 3105.1999999995605
+      },
+      {
+        "cls": "mage",
+        "aff": 2428.39999999998
+      },
+      {
+        "cls": "mage",
+        "aff": 3093.1999999995714
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "questhelper": true,
+        "macro": true,
+        "lfg": true
+      },
+      "on": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "questhelper": true,
+        "macro": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 1,
+      "kit": 31,
+      "herb": 3,
+      "potion": 46,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 2,
+      "xp": 1628,
+      "members": 16
+    },
+    "pets": [],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  },
+  {
+    "cls": "priest",
+    "pace": "classic",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 0.5500000000000033,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 3,
+        "minutes": 1.0050000000000099,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 4,
+        "minutes": 3.381666666666546,
+        "deaths": 0,
+        "quests": 2
+      },
+      {
+        "level": 5,
+        "minutes": 5.195000000000039,
+        "deaths": 0,
+        "quests": 4
+      },
+      {
+        "level": 6,
+        "minutes": 7.680000000000605,
+        "deaths": 0,
+        "quests": 5
+      },
+      {
+        "level": 7,
+        "minutes": 11.545000000001483,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 8,
+        "minutes": 23.40499999999697,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 36.69666666665155,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 46.52999999997594,
+        "deaths": 0,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 54.52499999996867,
+        "deaths": 0,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 66.94166666662404,
+        "deaths": 0,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 79.90333333333183,
+        "deaths": 0,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 94.61833333338537,
+        "deaths": 0,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 110.19833333344204,
+        "deaths": 0,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 125.81166666683218,
+        "deaths": 0,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 143.12500000022848,
+        "deaths": 0,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 160.49666666695836,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 184.316666667045,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 196.0216666670876,
+        "deaths": 0,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 208.87500000046768,
+        "deaths": 0,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 227.78500000053648,
+        "deaths": 0,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 246.36166666727073,
+        "deaths": 0,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 265.88166666734173,
+        "deaths": 0,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 287.19166666716234,
+        "deaths": 0,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 308.4433333335198,
+        "deaths": 0,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 331.54499999985023,
+        "deaths": 0,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 357.30333333280873,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 390.13499999899767,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 410.6099999986997,
+        "deaths": 0,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 432.4949999983812,
+        "deaths": 0,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 463.4549999979307,
+        "deaths": 0,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 495.0616666641374,
+        "deaths": 0,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 524.9566666637024,
+        "deaths": 0,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 557.1549999965672,
+        "deaths": 0,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 587.9166666627863,
+        "deaths": 0,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 623.5333333289346,
+        "deaths": 0,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 659.1133333284168,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 706.704999994391,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 737.9633333272694,
+        "deaths": 0,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 768.8666666601531,
+        "deaths": 0,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 826.7449999926442,
+        "deaths": 0,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 884.736666658467,
+        "deaths": 0,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 954.9349999907788,
+        "deaths": 0,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 1013.1516666565983,
+        "deaths": 0,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 1062.7283333225434,
+        "deaths": 0,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 1146.2716666585904,
+        "deaths": 0,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 1231.3316666635415,
+        "deaths": 0,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 1301.2250000009433,
+        "deaths": 0,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 1387.5616666726353,
+        "deaths": 0,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 1474.430000011025,
+        "deaths": 0,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 1533.9733333478243,
+        "deaths": 0,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 1583.6633333507166,
+        "deaths": 0,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 1665.4566666888109,
+        "deaths": 0,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 1738.886666693085,
+        "deaths": 0,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 1820.2966666978239,
+        "deaths": 0,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 1905.7250000361298,
+        "deaths": 0,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 1998.7583333748782,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 2114.945000048308,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 2164.2433333845106,
+        "deaths": 0,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "companions": 0.9200000000000086,
+      "talents": 46.53999999997593,
+      "riding": 47.8233333333081,
+      "guild": 738.3466666605972
+    },
+    "lastLevel": 60,
+    "nextPolicy": 130116.30000308582,
+    "end": "complete",
+    "level60Minutes": 2164.2433333845106,
+    "hours": 36.14341666752386,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 25590,
+      "deaths": 0,
+      "loots": 60,
+      "junkSold": 41,
+      "quests": 76,
+      "equips": 12,
+      "manual": 36989,
+      "uses": 36989,
+      "play": 130116.30000308588,
+      "money": 1618096,
+      "feeds": 0,
+      "tamed": 0
+    },
+    "money": 13293415,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t4": true,
+      "t3": true,
+      "t5": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f2": true,
+      "f1": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "tap": 5,
+      "improt": 5,
+      "sfocus": 5,
+      "hfocus": 5,
+      "inner": 3,
+      "voidlash": 1,
+      "meditation": 1,
+      "shadowform": 1,
+      "holyspec": 5,
+      "agility": 5,
+      "grace": 5,
+      "impward": 4,
+      "renew": 1,
+      "recovery": 5
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 1256.600000000067
+      },
+      {
+        "cls": "priest",
+        "aff": 5250.79999999787
+      },
+      {
+        "cls": "rogue",
+        "aff": 483.4
+      },
+      {
+        "cls": "mage",
+        "aff": 772.0000000000298
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 54,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 58,
+        "rar": 3,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "autoloot": true,
+        "sweep": true,
+        "macro": true,
+        "gearcmp": true,
+        "questhelper": true,
+        "lfg": true
+      },
+      "on": {
+        "autoloot": true,
+        "sweep": true,
+        "macro": true,
+        "gearcmp": true,
+        "questhelper": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 0,
+      "kit": 37,
+      "herb": 2,
+      "potion": 55,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 3,
+      "xp": 1820,
+      "members": 16
+    },
+    "pets": [],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  },
+  {
+    "cls": "mage",
+    "pace": "classic",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 0.9916666666666762,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 3,
+        "minutes": 1.255,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 4,
+        "minutes": 3.344999999999881,
+        "deaths": 0,
+        "quests": 2
+      },
+      {
+        "level": 5,
+        "minutes": 6.745000000000392,
+        "deaths": 0,
+        "quests": 4
+      },
+      {
+        "level": 6,
+        "minutes": 9.033333333334244,
+        "deaths": 0,
+        "quests": 5
+      },
+      {
+        "level": 7,
+        "minutes": 12.311666666668323,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 8,
+        "minutes": 22.529999999997766,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 35.361666666652766,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 44.8149999999775,
+        "deaths": 0,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 51.73333333330454,
+        "deaths": 0,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 61.761666666628756,
+        "deaths": 0,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 72.7483333333058,
+        "deaths": 0,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 84.87666666668325,
+        "deaths": 0,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 98.14666666673153,
+        "deaths": 0,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 111.12166666677874,
+        "deaths": 0,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 125.46500000016425,
+        "deaths": 0,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 140.65333333355284,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 161.42000000029506,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 173.52666666700577,
+        "deaths": 0,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 186.57666666705325,
+        "deaths": 0,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 205.96166666712375,
+        "deaths": 0,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 226.14833333386386,
+        "deaths": 0,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 245.8433333339355,
+        "deaths": 0,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 267.61666666734806,
+        "deaths": 0,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 288.83166666713845,
+        "deaths": 0,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 312.9883333334536,
+        "deaths": 0,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 337.1699999997684,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 369.82833333262647,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 390.3033333323285,
+        "deaths": 0,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 411.5333333320196,
+        "deaths": 0,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 441.61666666491516,
+        "deaths": 0,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 472.1083333311381,
+        "deaths": 0,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 502.2083333307001,
+        "deaths": 0,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 534.5866666635623,
+        "deaths": 0,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 564.6849999964577,
+        "deaths": 0,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 598.3716666626341,
+        "deaths": 0,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 633.4933333287897,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 679.9916666614464,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 709.7466666610134,
+        "deaths": 0,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 741.6866666605487,
+        "deaths": 0,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 798.5166666597216,
+        "deaths": 0,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 857.5466666588626,
+        "deaths": 0,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 928.2299999911673,
+        "deaths": 0,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 975.5283333238125,
+        "deaths": 0,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 1015.968333323224,
+        "deaths": 0,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 1085.2833333222154,
+        "deaths": 0,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 1155.7499999924755,
+        "deaths": 0,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 1213.2816666624908,
+        "deaths": 0,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 1284.031666666609,
+        "deaths": 0,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 1356.8200000041793,
+        "deaths": 0,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 1415.8816666742837,
+        "deaths": 0,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 1465.241666677157,
+        "deaths": 0,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 1550.513333348787,
+        "deaths": 0,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 1623.386666686362,
+        "deaths": 0,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 1705.1950000244574,
+        "deaths": 0,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 1794.440000029652,
+        "deaths": 0,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 1886.138333368323,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 1982.955000040625,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 2024.1400000430224,
+        "deaths": 0,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "companions": 0.3700000000000008,
+      "talents": 44.81666666664417,
+      "riding": 45.82499999997658,
+      "guild": 710.0766666610086
+    },
+    "lastLevel": 60,
+    "nextPolicy": 121688.30000259525,
+    "end": "complete",
+    "level60Minutes": 2024.1400000430224,
+    "hours": 33.80230555627647,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 25627,
+      "deaths": 0,
+      "loots": 60,
+      "junkSold": 43,
+      "quests": 76,
+      "equips": 12,
+      "manual": 33881,
+      "uses": 33881,
+      "play": 121688.30000259531,
+      "money": 1613891,
+      "feeds": 0,
+      "tamed": 0
+    },
+    "money": 13245197,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t4": true,
+      "t3": true,
+      "t5": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f2": true,
+      "f1": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "burning": 5,
+      "ignite": 5,
+      "impbolt": 5,
+      "mind": 5,
+      "clarity": 3,
+      "cinder": 1,
+      "pyromaniac": 1,
+      "combustion": 1,
+      "iceshards": 5,
+      "permafrost": 5,
+      "frostward": 5,
+      "winterschill": 5,
+      "deepfreeze": 1,
+      "icefloes": 4
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 3371.799999999257
+      },
+      {
+        "cls": "priest",
+        "aff": 3062.199999999535
+      },
+      {
+        "cls": "warrior",
+        "aff": 5680.799999997517
+      },
+      {
+        "cls": "mage",
+        "aff": 412
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "macro": true,
+        "questhelper": true,
+        "lfg": true
+      },
+      "on": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "macro": true,
+        "questhelper": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 4,
+      "kit": 34,
+      "herb": 0,
+      "potion": 52,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 2,
+      "xp": 1724,
+      "members": 16
+    },
+    "pets": [],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  },
+  {
+    "cls": "rogue",
+    "pace": "classic",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 0.5233333333333363,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 3,
+        "minutes": 0.9216666666666753,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 4,
+        "minutes": 2.4266666666666,
+        "deaths": 0,
+        "quests": 2
+      },
+      {
+        "level": 5,
+        "minutes": 4.151666666666502,
+        "deaths": 0,
+        "quests": 4
+      },
+      {
+        "level": 6,
+        "minutes": 6.445000000000324,
+        "deaths": 0,
+        "quests": 6
+      },
+      {
+        "level": 7,
+        "minutes": 10.938333333334677,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 8,
+        "minutes": 21.12666666666571,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 33.36666666665458,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 41.67833333331369,
+        "deaths": 0,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 48.13666666664115,
+        "deaths": 0,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 58.46499999996509,
+        "deaths": 0,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 69.08666666662582,
+        "deaths": 0,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 80.84833333333526,
+        "deaths": 0,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 93.21166666671358,
+        "deaths": 0,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 105.2933333334242,
+        "deaths": 0,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 119.17000000014134,
+        "deaths": 0,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 132.5683333335234,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 152.71833333359672,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 163.75500000030354,
+        "deaths": 0,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 176.6966666670173,
+        "deaths": 0,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 195.46166666708555,
+        "deaths": 0,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 214.79166666715588,
+        "deaths": 0,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 234.21666666722655,
+        "deaths": 0,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 255.0733333339691,
+        "deaths": 0,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 276.14000000065647,
+        "deaths": 0,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 299.1400000003218,
+        "deaths": 0,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 322.9016666666427,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 356.29833333282335,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 375.0249999992175,
+        "deaths": 0,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 393.5283333322816,
+        "deaths": 0,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 419.5099999985702,
+        "deaths": 0,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 445.8783333315198,
+        "deaths": 0,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 471.68499999781096,
+        "deaths": 0,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 500.4399999973925,
+        "deaths": 0,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 528.4083333303189,
+        "deaths": 0,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 558.2683333298844,
+        "deaths": 0,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 588.8049999961066,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 629.3433333288501,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 657.4249999951081,
+        "deaths": 0,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 685.7433333280294,
+        "deaths": 0,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 735.2499999939756,
+        "deaths": 0,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 785.5583333265769,
+        "deaths": 0,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 846.0033333256973,
+        "deaths": 0,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 893.326666658342,
+        "deaths": 0,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 934.0566666577492,
+        "deaths": 0,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 1002.8233333234152,
+        "deaths": 0,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 1074.038333322379,
+        "deaths": 0,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 1134.079999991214,
+        "deaths": 0,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 1204.5549999953162,
+        "deaths": 0,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 1274.25166666604,
+        "deaths": 0,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 1327.2100000024557,
+        "deaths": 0,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 1369.6100000049237,
+        "deaths": 0,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 1440.9116666757407,
+        "deaths": 0,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 1505.158333346147,
+        "deaths": 0,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 1575.3683333502338,
+        "deaths": 0,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 1649.6416666878904,
+        "deaths": 0,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 1728.1550000257937,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 1816.133333364248,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 1852.9183333663893,
+        "deaths": 0,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "companions": 0.7033333333333388,
+      "talents": 41.68166666664702,
+      "riding": 42.26833333331315,
+      "guild": 657.8999999951012
+    },
+    "lastLevel": 60,
+    "nextPolicy": 111387.30000199565,
+    "end": "complete",
+    "level60Minutes": 1852.9183333663893,
+    "hours": 30.940805556109915,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 25663,
+      "deaths": 0,
+      "loots": 60,
+      "junkSold": 42,
+      "quests": 76,
+      "equips": 12,
+      "manual": 35714,
+      "uses": 35714,
+      "play": 111386.90000199569,
+      "money": 1621646,
+      "feeds": 0,
+      "tamed": 0
+    },
+    "money": 13292936,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t4": true,
+      "t3": true,
+      "t5": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f2": true,
+      "f1": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "malice": 5,
+      "lethality": 5,
+      "vigor": 3,
+      "opportunity": 5,
+      "reflexes": 5,
+      "vendetta": 1,
+      "precision": 1,
+      "coldblood": 1,
+      "precstrikes": 5,
+      "dwmastery": 5,
+      "cendurance": 5,
+      "impquicken": 4,
+      "flurry": 1,
+      "cexpertise": 5
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 4463.199999998376
+      },
+      {
+        "cls": "priest",
+        "aff": 2707.79999999989
+      },
+      {
+        "cls": "priest",
+        "aff": 2141.4000000002343
+      },
+      {
+        "cls": "mage",
+        "aff": 395
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 53,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "autoloot": true,
+        "gearcmp": true,
+        "sweep": true,
+        "macro": true,
+        "questhelper": true,
+        "lfg": true
+      },
+      "on": {
+        "autoloot": true,
+        "gearcmp": true,
+        "sweep": true,
+        "macro": true,
+        "questhelper": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 4,
+      "kit": 31,
+      "herb": 2,
+      "potion": 47,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 2,
+      "xp": 1628,
+      "members": 16
+    },
+    "pets": [],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  },
+  {
+    "cls": "hunter",
+    "pace": "classic",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 0.6816666666666719,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 3,
+        "minutes": 0.9800000000000094,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 4,
+        "minutes": 2.7383333333332494,
+        "deaths": 0,
+        "quests": 2
+      },
+      {
+        "level": 5,
+        "minutes": 4.511666666666551,
+        "deaths": 0,
+        "quests": 4
+      },
+      {
+        "level": 6,
+        "minutes": 6.761666666667063,
+        "deaths": 0,
+        "quests": 6
+      },
+      {
+        "level": 7,
+        "minutes": 11.46666666666813,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 8,
+        "minutes": 21.434999999998762,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 33.77833333332087,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 42.57833333331287,
+        "deaths": 0,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 50.19833333330594,
+        "deaths": 0,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 60.75666666662967,
+        "deaths": 0,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 71.794999999969,
+        "deaths": 0,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 85.05833333335059,
+        "deaths": 0,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 98.27833333339868,
+        "deaths": 0,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 112.8900000001185,
+        "deaths": 0,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 128.8233333335098,
+        "deaths": 0,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 145.84833333357173,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 167.92833333365206,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 178.83666666702507,
+        "deaths": 0,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 190.97500000040256,
+        "deaths": 0,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 208.1100000004649,
+        "deaths": 0,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 225.77666666719585,
+        "deaths": 0,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 244.69500000059801,
+        "deaths": 0,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 265.2966666673396,
+        "deaths": 0,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 285.48500000052053,
+        "deaths": 0,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 307.9216666668607,
+        "deaths": 0,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 330.11166666653776,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 359.6483333327746,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 378.49999999916696,
+        "deaths": 0,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 397.56999999888944,
+        "deaths": 0,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 423.6366666651768,
+        "deaths": 0,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 449.9733333314602,
+        "deaths": 0,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 476.9816666644005,
+        "deaths": 0,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 506.4816666639712,
+        "deaths": 0,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 534.1833333302349,
+        "deaths": 0,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 564.9033333297879,
+        "deaths": 0,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 595.3299999960117,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 636.7249999954093,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 664.0666666616781,
+        "deaths": 0,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 692.2633333279344,
+        "deaths": 0,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 741.2166666605555,
+        "deaths": 0,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 792.101666659815,
+        "deaths": 0,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 852.45499999227,
+        "deaths": 0,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 900.0016666582449,
+        "deaths": 0,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 939.4866666576703,
+        "deaths": 0,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 1006.1399999900336,
+        "deaths": 0,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 1077.1899999889997,
+        "deaths": 0,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 1134.714999991251,
+        "deaths": 0,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 1208.583333328884,
+        "deaths": 0,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 1279.1516666663251,
+        "deaths": 0,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 1332.5616666694339,
+        "deaths": 0,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 1376.4650000053227,
+        "deaths": 0,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 1450.0366666762718,
+        "deaths": 0,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 1514.1283333466693,
+        "deaths": 0,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 1589.4266666843855,
+        "deaths": 0,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 1666.2283333555226,
+        "deaths": 0,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 1747.4433333602499,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 1836.8000000321179,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 1874.4200000343076,
+        "deaths": 0,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "pet": 0.14166666666666644,
+      "companions": 0.33666666666666695,
+      "talents": 42.579999999979535,
+      "riding": 43.44166666664542,
+      "guild": 664.3899999950067
+    },
+    "lastLevel": 60,
+    "nextPolicy": 112656.30000206952,
+    "end": "complete",
+    "level60Minutes": 1874.4200000343076,
+    "hours": 31.293333333908212,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 25729,
+      "deaths": 0,
+      "loots": 60,
+      "junkSold": 44,
+      "quests": 76,
+      "equips": 12,
+      "manual": 42699,
+      "uses": 42699,
+      "play": 112656.00000206956,
+      "money": 1619806,
+      "feeds": 20,
+      "tamed": 1
+    },
+    "money": 13285486,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t4": true,
+      "t3": true,
+      "t5": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f2": true,
+      "f1": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "endurance": 5,
+      "ferocity": 5,
+      "lethal": 5,
+      "bestial": 3,
+      "unleashed": 5,
+      "packfury": 1,
+      "intimidation": 1,
+      "wrath": 1,
+      "mortalshots": 5,
+      "impsteady": 5,
+      "efficiency": 5,
+      "hawkeye": 5,
+      "aimed": 1,
+      "rws": 4
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 1912.2000000002151
+      },
+      {
+        "cls": "priest",
+        "aff": 3562.39999999908
+      },
+      {
+        "cls": "warrior",
+        "aff": 3162.3999999994185
+      },
+      {
+        "cls": "mage",
+        "aff": 2155.8000000002194
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 57,
+        "rar": 3,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 55,
+        "rar": 3,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 58,
+        "rar": 3,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "macro": true,
+        "questhelper": true,
+        "petcare": true,
+        "lfg": true
+      },
+      "on": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "macro": true,
+        "questhelper": true,
+        "petcare": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 0,
+      "kit": 32,
+      "herb": 0,
+      "potion": 48,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 2,
+      "xp": 1640,
+      "members": 16
+    },
+    "pets": [
+      {
+        "lvl": 59,
+        "bond": 34361.40000000125,
+        "happy": 78.63199999947616
+      }
+    ],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  },
+  {
+    "cls": "warrior",
+    "pace": "long",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 0.8550000000000076,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 3,
+        "minutes": 2.699999999999918,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 4,
+        "minutes": 5.018333333333333,
+        "deaths": 0,
+        "quests": 3
+      },
+      {
+        "level": 5,
+        "minutes": 8.323333333334084,
+        "deaths": 0,
+        "quests": 5
+      },
+      {
+        "level": 6,
+        "minutes": 16.39833333333592,
+        "deaths": 0,
+        "quests": 6
+      },
+      {
+        "level": 7,
+        "minutes": 26.801666666660548,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 8,
+        "minutes": 43.49833333331203,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 64.08499999995998,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 81.79833333333872,
+        "deaths": 0,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 96.67333333339283,
+        "deaths": 0,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 113.73000000012156,
+        "deaths": 0,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 133.27000000019265,
+        "deaths": 0,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 154.52000000026996,
+        "deaths": 0,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 177.69666666702093,
+        "deaths": 0,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 200.59166666710422,
+        "deaths": 0,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 225.70333333386225,
+        "deaths": 0,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 252.53333333395986,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 286.91666666716634,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 312.42666666679514,
+        "deaths": 0,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 338.70499999974606,
+        "deaths": 0,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 373.0483333325796,
+        "deaths": 0,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 406.53333333209235,
+        "deaths": 0,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 439.45833333161323,
+        "deaths": 0,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 478.1433333310503,
+        "deaths": 0,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 515.9066666638341,
+        "deaths": 0,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 556.9466666632369,
+        "deaths": 0,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 597.6616666626445,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 647.6399999952505,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 689.4566666613086,
+        "deaths": 0,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 729.1149999940649,
+        "deaths": 0,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 777.2666666600309,
+        "deaths": 0,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 823.6099999926898,
+        "deaths": 0,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 869.6433333253533,
+        "deaths": 0,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 920.6049999912783,
+        "deaths": 0,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 970.0499999905588,
+        "deaths": 0,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 1023.0566666564541,
+        "deaths": 0,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 1077.8933333223229,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 1142.3949999916981,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 1196.9383333282062,
+        "deaths": 0,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 1266.971666665616,
+        "deaths": 0,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 1359.1733333376496,
+        "deaths": 0,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 1453.301666676462,
+        "deaths": 0,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 1555.4333333490733,
+        "deaths": 0,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 1643.4150000208613,
+        "deaths": 0,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 1727.448333359086,
+        "deaths": 0,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 1838.5883333655552,
+        "deaths": 0,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 1951.1900000387761,
+        "deaths": 0,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 2053.2400000447165,
+        "deaths": 0,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 2170.498333384875,
+        "deaths": 0,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 2292.8400000586626,
+        "deaths": 0,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 2405.761666731902,
+        "deaths": 0,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 2505.006666737679,
+        "deaths": 0,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 2635.0033334119125,
+        "deaths": 0,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 2755.3350000855835,
+        "deaths": 0,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 2886.0816667598606,
+        "deaths": 0,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 3020.683333434362,
+        "deaths": 0,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 3157.7183334423385,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 3313.281666784727,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 3413.9183334572513,
+        "deaths": 0,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "companions": 0.6533333333333381,
+      "talents": 81.79833333333872,
+      "riding": 81.98166666667272,
+      "guild": 1197.2883333282266
+    },
+    "lastLevel": 60,
+    "nextPolicy": 205029.30000744632,
+    "end": "complete",
+    "level60Minutes": 3413.9183334572513,
+    "hours": 56.952527779846214,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 47999,
+      "deaths": 0,
+      "loots": 60,
+      "junkSold": 43,
+      "quests": 76,
+      "equips": 12,
+      "manual": 39894,
+      "uses": 39894,
+      "play": 205029.10000744637,
+      "money": 2956714,
+      "feeds": 0,
+      "tamed": 0
+    },
+    "money": 25029001,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t4": true,
+      "t3": true,
+      "t5": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f2": true,
+      "f1": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "cruelty": 5,
+      "impstrike": 3,
+      "wmastery": 5,
+      "tactical": 2,
+      "toughness": 5,
+      "mortal": 1,
+      "deepwounds": 4,
+      "bladestorm": 1,
+      "defiance": 5,
+      "shieldspec": 5,
+      "anticipation": 5,
+      "toughened": 5,
+      "shieldslam": 1,
+      "impbulwark": 4
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 6572.799999996814
+      },
+      {
+        "cls": "priest",
+        "aff": 3112.399999999515
+      },
+      {
+        "cls": "rogue",
+        "aff": 5276.799999997948
+      },
+      {
+        "cls": "hunter",
+        "aff": 952
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "autoloot": true,
+        "gearcmp": true,
+        "sweep": true,
+        "macro": true,
+        "questhelper": true,
+        "lfg": true
+      },
+      "on": {
+        "autoloot": true,
+        "gearcmp": true,
+        "sweep": true,
+        "macro": true,
+        "questhelper": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 2,
+      "kit": 58,
+      "herb": 2,
+      "potion": 87,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 3,
+      "xp": 2444,
+      "members": 16
+    },
+    "pets": [],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  },
+  {
+    "cls": "priest",
+    "pace": "long",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 1.1483333333333394,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 3,
+        "minutes": 2.336666666666605,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 4,
+        "minutes": 6.66166666666704,
+        "deaths": 0,
+        "quests": 3
+      },
+      {
+        "level": 5,
+        "minutes": 9.345000000000983,
+        "deaths": 0,
+        "quests": 5
+      },
+      {
+        "level": 6,
+        "minutes": 19.62833333333374,
+        "deaths": 0,
+        "quests": 6
+      },
+      {
+        "level": 7,
+        "minutes": 31.984999999989167,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 8,
+        "minutes": 49.13666666664024,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 70.04999999996265,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 89.22666666669907,
+        "deaths": 0,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 105.61333333342536,
+        "deaths": 0,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 126.05666666683307,
+        "deaths": 0,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 148.59166666691505,
+        "deaths": 0,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 171.70500000033246,
+        "deaths": 0,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 197.10000000042484,
+        "deaths": 0,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 223.66333333385484,
+        "deaths": 0,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 253.58000000063032,
+        "deaths": 0,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 283.76000000054563,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 322.5799999999807,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 349.9733333329154,
+        "deaths": 0,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 378.34999999916914,
+        "deaths": 0,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 412.63999999867013,
+        "deaths": 0,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 447.4699999981633,
+        "deaths": 0,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 483.97666666429876,
+        "deaths": 0,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 523.658333330388,
+        "deaths": 0,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 563.0183333298153,
+        "deaths": 0,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 604.6566666625426,
+        "deaths": 0,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 649.1516666618952,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 704.458333327757,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 749.6249999937664,
+        "deaths": 0,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 794.2749999931167,
+        "deaths": 0,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 849.3449999923154,
+        "deaths": 0,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 905.309999991501,
+        "deaths": 0,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 960.1816666573691,
+        "deaths": 0,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 1018.2349999898577,
+        "deaths": 0,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 1077.0783333223346,
+        "deaths": 0,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 1138.1483333247843,
+        "deaths": 0,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 1198.8899999949865,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 1272.6949999992826,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 1336.0750000029718,
+        "deaths": 0,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 1415.5066666742619,
+        "deaths": 0,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 1523.3066666805366,
+        "deaths": 0,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 1633.2466666869361,
+        "deaths": 0,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 1752.873333360566,
+        "deaths": 0,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 1854.2450000331332,
+        "deaths": 0,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 1946.7166667051824,
+        "deaths": 0,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 2071.275000045766,
+        "deaths": 0,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 2196.2416667197062,
+        "deaths": 0,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 2314.081666726566,
+        "deaths": 0,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 2448.0666667343644,
+        "deaths": 0,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 2586.815000075774,
+        "deaths": 0,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 2711.8683334163866,
+        "deaths": 0,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 2823.4450000895476,
+        "deaths": 0,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 2970.911666764798,
+        "deaths": 0,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 3107.9566667727754,
+        "deaths": 0,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 3249.670000114357,
+        "deaths": 0,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 3396.88833345626,
+        "deaths": 0,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 3551.5733334652637,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 3722.2766668085333,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 3835.26666681511,
+        "deaths": 0,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "companions": 2.6283333333332553,
+      "talents": 89.2316666666991,
+      "riding": 90.1483333333691,
+      "guild": 1336.4050000029908
+    },
+    "lastLevel": 60,
+    "nextPolicy": 230389.30000892247,
+    "end": "complete",
+    "level60Minutes": 3835.26666681511,
+    "hours": 63.99702778025625,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 47946,
+      "deaths": 0,
+      "loots": 60,
+      "junkSold": 41,
+      "quests": 76,
+      "equips": 12,
+      "manual": 63057,
+      "uses": 63057,
+      "play": 230389.30000892252,
+      "money": 2962266,
+      "feeds": 0,
+      "tamed": 0
+    },
+    "money": 24742179,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t4": true,
+      "t3": true,
+      "t5": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f2": true,
+      "f1": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "tap": 5,
+      "improt": 5,
+      "sfocus": 5,
+      "hfocus": 5,
+      "inner": 3,
+      "voidlash": 1,
+      "meditation": 1,
+      "shadowform": 1,
+      "holyspec": 5,
+      "agility": 5,
+      "grace": 5,
+      "impward": 4,
+      "renew": 1,
+      "recovery": 5
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 7056.399999996565
+      },
+      {
+        "cls": "priest",
+        "aff": 9364.39999999899
+      },
+      {
+        "cls": "mage",
+        "aff": 7801.99999999597
+      },
+      {
+        "cls": "rogue",
+        "aff": 778
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 64,
+        "rar": 4,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "autoloot": true,
+        "sweep": true,
+        "macro": true,
+        "gearcmp": true,
+        "questhelper": true,
+        "lfg": true
+      },
+      "on": {
+        "autoloot": true,
+        "sweep": true,
+        "macro": true,
+        "gearcmp": true,
+        "questhelper": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 3,
+      "kit": 65,
+      "herb": 1,
+      "potion": 98,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 3,
+      "xp": 2672,
+      "members": 16
+    },
+    "pets": [],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  },
+  {
+    "cls": "mage",
+    "pace": "long",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 1.2733333333333323,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 3,
+        "minutes": 3.638333333333198,
+        "deaths": 0,
+        "quests": 2
+      },
+      {
+        "level": 4,
+        "minutes": 5.950000000000212,
+        "deaths": 0,
+        "quests": 3
+      },
+      {
+        "level": 5,
+        "minutes": 10.411666666667891,
+        "deaths": 0,
+        "quests": 5
+      },
+      {
+        "level": 6,
+        "minutes": 20.02666666666671,
+        "deaths": 0,
+        "quests": 6
+      },
+      {
+        "level": 7,
+        "minutes": 32.33666666665552,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 8,
+        "minutes": 48.449999999974196,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 69.05999999995905,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 87.31833333335881,
+        "deaths": 0,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 102.3716666667469,
+        "deaths": 0,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 121.91500000015134,
+        "deaths": 0,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 143.42666666689627,
+        "deaths": 0,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 165.89333333364465,
+        "deaths": 0,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 190.5333333337343,
+        "deaths": 0,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 215.67333333382575,
+        "deaths": 0,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 243.6683333339276,
+        "deaths": 0,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 273.69500000069206,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 311.96500000013515,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 340.0033333330605,
+        "deaths": 0,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 368.2983333326487,
+        "deaths": 0,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 403.45333333213716,
+        "deaths": 0,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 437.366666664977,
+        "deaths": 0,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 471.7949999978093,
+        "deaths": 0,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 509.3066666639301,
+        "deaths": 0,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 546.6999999967194,
+        "deaths": 0,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 586.9033333294677,
+        "deaths": 0,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 628.7766666621917,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 681.9099999947518,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 725.6416666607821,
+        "deaths": 0,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 766.2999999935238,
+        "deaths": 0,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 816.4816666594602,
+        "deaths": 0,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 866.8816666587268,
+        "deaths": 0,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 916.6183333246697,
+        "deaths": 0,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 969.8666666572282,
+        "deaths": 0,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 1022.2316666564661,
+        "deaths": 0,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 1078.8349999889758,
+        "deaths": 0,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 1135.4183333246253,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 1205.4066666620324,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 1263.9016666654375,
+        "deaths": 0,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 1336.3716666696557,
+        "deaths": 0,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 1432.1183333418955,
+        "deaths": 0,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 1531.8750000143689,
+        "deaths": 0,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 1642.7733333541573,
+        "deaths": 0,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 1739.9716666931483,
+        "deaths": 0,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 1829.8000000317104,
+        "deaths": 0,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 1949.0450000386513,
+        "deaths": 0,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 2071.7283333791256,
+        "deaths": 0,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 2181.450000052179,
+        "deaths": 0,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 2306.3116667261133,
+        "deaths": 0,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 2436.2900000670124,
+        "deaths": 0,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 2553.9833334071964,
+        "deaths": 0,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 2656.1050000798073,
+        "deaths": 0,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 2790.9216667543214,
+        "deaths": 0,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 2918.0700000950555,
+        "deaths": 0,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 3050.785000102781,
+        "deaths": 0,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 3190.2916667775676,
+        "deaths": 0,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 3334.4216667859573,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 3488.486666794925,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 3592.8616668010004,
+        "deaths": 0,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "companions": 0.3700000000000008,
+      "talents": 87.33166666669219,
+      "riding": 88.198333333362,
+      "guild": 1264.0049999987766
+    },
+    "lastLevel": 60,
+    "nextPolicy": 215783.30000807228,
+    "end": "complete",
+    "level60Minutes": 3592.8616668010004,
+    "hours": 59.939638891131196,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 48043,
+      "deaths": 0,
+      "loots": 60,
+      "junkSold": 43,
+      "quests": 76,
+      "equips": 12,
+      "manual": 54795,
+      "uses": 54795,
+      "play": 215782.7000080723,
+      "money": 2945510,
+      "feeds": 0,
+      "tamed": 0
+    },
+    "money": 24330690,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t3": true,
+      "t4": true,
+      "t5": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f2": true,
+      "f1": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "burning": 5,
+      "ignite": 5,
+      "impbolt": 5,
+      "mind": 5,
+      "clarity": 3,
+      "cinder": 1,
+      "pyromaniac": 1,
+      "combustion": 1,
+      "iceshards": 5,
+      "permafrost": 5,
+      "frostward": 5,
+      "winterschill": 5,
+      "deepfreeze": 1,
+      "icefloes": 4
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 10039.20000000107
+      },
+      {
+        "cls": "priest",
+        "aff": 10325.000000001972
+      },
+      {
+        "cls": "mage",
+        "aff": 7661.3999999959915
+      },
+      {
+        "cls": "hunter",
+        "aff": 3947.1999999988434
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "macro": true,
+        "questhelper": true,
+        "lfg": true
+      },
+      "on": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "macro": true,
+        "questhelper": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 2,
+      "kit": 61,
+      "herb": 0,
+      "potion": 92,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 3,
+      "xp": 2540,
+      "members": 16
+    },
+    "pets": [],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  },
+  {
+    "cls": "rogue",
+    "pace": "long",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 0.9066666666666751,
+        "deaths": 0,
+        "quests": 0
+      },
+      {
+        "level": 3,
+        "minutes": 2.2399999999999443,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 4,
+        "minutes": 6.7116666666670515,
+        "deaths": 1,
+        "quests": 3
+      },
+      {
+        "level": 5,
+        "minutes": 10.145000000001165,
+        "deaths": 1,
+        "quests": 4
+      },
+      {
+        "level": 6,
+        "minutes": 16.028333333335834,
+        "deaths": 1,
+        "quests": 6
+      },
+      {
+        "level": 7,
+        "minutes": 28.03833333332609,
+        "deaths": 4,
+        "quests": 7
+      },
+      {
+        "level": 8,
+        "minutes": 44.69833333331094,
+        "deaths": 4,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 64.86166666662594,
+        "deaths": 4,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 82.79333333334235,
+        "deaths": 4,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 96.91333333339371,
+        "deaths": 4,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 115.08666666679316,
+        "deaths": 4,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 135.01666666686566,
+        "deaths": 4,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 154.82166666693772,
+        "deaths": 4,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 178.65333333369108,
+        "deaths": 4,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 202.65000000044503,
+        "deaths": 4,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 229.10166666720795,
+        "deaths": 4,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 257.0333333339762,
+        "deaths": 4,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 293.33166666707297,
+        "deaths": 4,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 318.7366666667033,
+        "deaths": 4,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 344.70499999965875,
+        "deaths": 4,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 377.0366666658549,
+        "deaths": 4,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 409.14166666538773,
+        "deaths": 4,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 442.1049999982414,
+        "deaths": 4,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 477.79166666438874,
+        "deaths": 4,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 514.0866666638606,
+        "deaths": 4,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 554.5849999966047,
+        "deaths": 4,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 594.5999999960223,
+        "deaths": 4,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 646.0633333286067,
+        "deaths": 4,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 687.1249999946759,
+        "deaths": 4,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 726.8883333274306,
+        "deaths": 4,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 776.2649999933788,
+        "deaths": 4,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 825.5966666593275,
+        "deaths": 4,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 874.9033333252768,
+        "deaths": 4,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 928.3066666578329,
+        "deaths": 4,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 980.0566666570799,
+        "deaths": 4,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 1033.9483333229623,
+        "deaths": 4,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 1090.491666655473,
+        "deaths": 4,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 1158.0833333259445,
+        "deaths": 4,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 1216.8466666626985,
+        "deaths": 4,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 1285.9633333333882,
+        "deaths": 4,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 1378.4416666721045,
+        "deaths": 4,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 1472.4350000109089,
+        "deaths": 4,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 1573.9400000168173,
+        "deaths": 4,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 1664.6433333554303,
+        "deaths": 4,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 1747.0733333602284,
+        "deaths": 4,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 1855.6833333665502,
+        "deaths": 4,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 1967.743333373073,
+        "deaths": 4,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 2069.3900000456565,
+        "deaths": 4,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 2182.0183333855452,
+        "deaths": 4,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 2301.2550000591523,
+        "deaths": 4,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 2409.090000065429,
+        "deaths": 4,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 2505.528333404376,
+        "deaths": 4,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 2631.605000078381,
+        "deaths": 4,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 2749.5500000852467,
+        "deaths": 4,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 2869.5700000922325,
+        "deaths": 4,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 2997.0016667663167,
+        "deaths": 4,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 3131.476666774144,
+        "deaths": 4,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 3282.4383334495983,
+        "deaths": 4,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 3382.0166667887274,
+        "deaths": 4,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "companions": 24.081666666663022,
+      "talents": 82.79833333334236,
+      "riding": 83.23166666667727,
+      "guild": 1217.1716666627174
+    },
+    "lastLevel": 60,
+    "nextPolicy": 203106.3000073344,
+    "end": "complete",
+    "level60Minutes": 3382.0166667887274,
+    "hours": 56.41825000203733,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 48049,
+      "deaths": 4,
+      "loots": 60,
+      "junkSold": 41,
+      "quests": 76,
+      "equips": 12,
+      "manual": 64990,
+      "uses": 64990,
+      "play": 203105.7000073344,
+      "money": 2943531,
+      "feeds": 0,
+      "tamed": 0
+    },
+    "money": 24648574,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t4": true,
+      "t3": true,
+      "t5": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f2": true,
+      "f1": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "malice": 5,
+      "lethality": 5,
+      "vigor": 3,
+      "opportunity": 5,
+      "reflexes": 5,
+      "vendetta": 1,
+      "precision": 1,
+      "coldblood": 1,
+      "precstrikes": 5,
+      "dwmastery": 5,
+      "cendurance": 5,
+      "impquicken": 4,
+      "flurry": 1,
+      "cexpertise": 5
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 9979.600000000952
+      },
+      {
+        "cls": "priest",
+        "aff": 9114.599999998041
+      },
+      {
+        "cls": "mage",
+        "aff": 9088.599999997943
+      },
+      {
+        "cls": "rogue",
+        "aff": 5797.599999997452
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 56,
+        "rar": 3,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "autoloot": true,
+        "gearcmp": true,
+        "sweep": true,
+        "macro": true,
+        "questhelper": true,
+        "lfg": true
+      },
+      "on": {
+        "autoloot": true,
+        "gearcmp": true,
+        "sweep": true,
+        "macro": true,
+        "questhelper": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 5,
+      "kit": 57,
+      "herb": 3,
+      "potion": 86,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 3,
+      "xp": 2408,
+      "members": 16
+    },
+    "pets": [],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  },
+  {
+    "cls": "hunter",
+    "pace": "long",
+    "levels": [
+      {
+        "level": 1,
+        "minutes": 0
+      },
+      {
+        "level": 2,
+        "minutes": 0.78833333333334,
+        "deaths": 0,
+        "quests": 1
+      },
+      {
+        "level": 3,
+        "minutes": 1.8783333333332979,
+        "deaths": 0,
+        "quests": 2
+      },
+      {
+        "level": 4,
+        "minutes": 3.821666666666521,
+        "deaths": 0,
+        "quests": 4
+      },
+      {
+        "level": 5,
+        "minutes": 8.591666666667477,
+        "deaths": 0,
+        "quests": 5
+      },
+      {
+        "level": 6,
+        "minutes": 17.630000000002223,
+        "deaths": 0,
+        "quests": 6
+      },
+      {
+        "level": 7,
+        "minutes": 29.489999999991436,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 8,
+        "minutes": 47.164999999975365,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 9,
+        "minutes": 67.66999999995672,
+        "deaths": 0,
+        "quests": 7
+      },
+      {
+        "level": 10,
+        "minutes": 86.7933333333569,
+        "deaths": 0,
+        "quests": 8
+      },
+      {
+        "level": 11,
+        "minutes": 102.6100000000811,
+        "deaths": 0,
+        "quests": 10
+      },
+      {
+        "level": 12,
+        "minutes": 120.6266666668133,
+        "deaths": 0,
+        "quests": 11
+      },
+      {
+        "level": 13,
+        "minutes": 140.97666666688735,
+        "deaths": 0,
+        "quests": 12
+      },
+      {
+        "level": 14,
+        "minutes": 161.7533333336296,
+        "deaths": 0,
+        "quests": 13
+      },
+      {
+        "level": 15,
+        "minutes": 185.1066666670479,
+        "deaths": 0,
+        "quests": 14
+      },
+      {
+        "level": 16,
+        "minutes": 209.03833333380163,
+        "deaths": 0,
+        "quests": 15
+      },
+      {
+        "level": 17,
+        "minutes": 237.45000000057163,
+        "deaths": 0,
+        "quests": 16
+      },
+      {
+        "level": 18,
+        "minutes": 266.25500000067643,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 19,
+        "minutes": 302.12500000027836,
+        "deaths": 0,
+        "quests": 17
+      },
+      {
+        "level": 20,
+        "minutes": 329.09833333321916,
+        "deaths": 0,
+        "quests": 18
+      },
+      {
+        "level": 21,
+        "minutes": 355.90833333282905,
+        "deaths": 0,
+        "quests": 20
+      },
+      {
+        "level": 22,
+        "minutes": 388.4933333323549,
+        "deaths": 0,
+        "quests": 21
+      },
+      {
+        "level": 23,
+        "minutes": 421.9199999985351,
+        "deaths": 0,
+        "quests": 22
+      },
+      {
+        "level": 24,
+        "minutes": 456.378333331367,
+        "deaths": 0,
+        "quests": 23
+      },
+      {
+        "level": 25,
+        "minutes": 493.6999999974906,
+        "deaths": 0,
+        "quests": 24
+      },
+      {
+        "level": 26,
+        "minutes": 530.281666663625,
+        "deaths": 0,
+        "quests": 25
+      },
+      {
+        "level": 27,
+        "minutes": 570.8083333297019,
+        "deaths": 0,
+        "quests": 26
+      },
+      {
+        "level": 28,
+        "minutes": 612.2599999957654,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 29,
+        "minutes": 662.9849999950272,
+        "deaths": 0,
+        "quests": 27
+      },
+      {
+        "level": 30,
+        "minutes": 704.7116666610867,
+        "deaths": 0,
+        "quests": 28
+      },
+      {
+        "level": 31,
+        "minutes": 745.7216666604899,
+        "deaths": 0,
+        "quests": 30
+      },
+      {
+        "level": 32,
+        "minutes": 794.2416666597838,
+        "deaths": 0,
+        "quests": 31
+      },
+      {
+        "level": 33,
+        "minutes": 842.4833333257485,
+        "deaths": 0,
+        "quests": 32
+      },
+      {
+        "level": 34,
+        "minutes": 891.8566666583633,
+        "deaths": 0,
+        "quests": 33
+      },
+      {
+        "level": 35,
+        "minutes": 947.4799999908872,
+        "deaths": 0,
+        "quests": 34
+      },
+      {
+        "level": 36,
+        "minutes": 1000.8066666567779,
+        "deaths": 0,
+        "quests": 35
+      },
+      {
+        "level": 37,
+        "minutes": 1058.7466666559349,
+        "deaths": 0,
+        "quests": 36
+      },
+      {
+        "level": 38,
+        "minutes": 1114.59499999008,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 39,
+        "minutes": 1181.283333327295,
+        "deaths": 0,
+        "quests": 37
+      },
+      {
+        "level": 40,
+        "minutes": 1236.4183333305043,
+        "deaths": 0,
+        "quests": 38
+      },
+      {
+        "level": 41,
+        "minutes": 1305.5266666678604,
+        "deaths": 0,
+        "quests": 43
+      },
+      {
+        "level": 42,
+        "minutes": 1398.9283333399637,
+        "deaths": 0,
+        "quests": 45
+      },
+      {
+        "level": 43,
+        "minutes": 1496.4866666789756,
+        "deaths": 0,
+        "quests": 47
+      },
+      {
+        "level": 44,
+        "minutes": 1606.5566666853824,
+        "deaths": 0,
+        "quests": 48
+      },
+      {
+        "level": 45,
+        "minutes": 1703.125000024337,
+        "deaths": 0,
+        "quests": 50
+      },
+      {
+        "level": 46,
+        "minutes": 1787.7633333625968,
+        "deaths": 0,
+        "quests": 54
+      },
+      {
+        "level": 47,
+        "minutes": 1899.5266667024357,
+        "deaths": 0,
+        "quests": 55
+      },
+      {
+        "level": 48,
+        "minutes": 2015.7383333758667,
+        "deaths": 0,
+        "quests": 56
+      },
+      {
+        "level": 49,
+        "minutes": 2122.6183333820877,
+        "deaths": 0,
+        "quests": 58
+      },
+      {
+        "level": 50,
+        "minutes": 2248.1400000560607,
+        "deaths": 0,
+        "quests": 59
+      },
+      {
+        "level": 51,
+        "minutes": 2373.193333396673,
+        "deaths": 0,
+        "quests": 60
+      },
+      {
+        "level": 52,
+        "minutes": 2481.330000069634,
+        "deaths": 0,
+        "quests": 62
+      },
+      {
+        "level": 53,
+        "minutes": 2578.986666741985,
+        "deaths": 0,
+        "quests": 66
+      },
+      {
+        "level": 54,
+        "minutes": 2707.993333416161,
+        "deaths": 0,
+        "quests": 67
+      },
+      {
+        "level": 55,
+        "minutes": 2829.6450000899085,
+        "deaths": 0,
+        "quests": 69
+      },
+      {
+        "level": 56,
+        "minutes": 2960.9516667642183,
+        "deaths": 0,
+        "quests": 70
+      },
+      {
+        "level": 57,
+        "minutes": 3091.8266667718362,
+        "deaths": 0,
+        "quests": 71
+      },
+      {
+        "level": 58,
+        "minutes": 3230.7133334465875,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 59,
+        "minutes": 3371.540000121451,
+        "deaths": 0,
+        "quests": 72
+      },
+      {
+        "level": 60,
+        "minutes": 3470.7750001272275,
+        "deaths": 0,
+        "quests": 76
+      }
+    ],
+    "systems": {
+      "pet": 0.14166666666666644,
+      "companions": 0.33666666666666695,
+      "talents": 86.79833333335691,
+      "riding": 87.69833333336018,
+      "guild": 1236.954999997202
+    },
+    "lastLevel": 60,
+    "nextPolicy": 208459.30000764597,
+    "end": "complete",
+    "level60Minutes": 3470.7750001272275,
+    "hours": 57.905138891012776,
+    "level": 60,
+    "zone": "crownheart",
+    "stats": {
+      "kills": 48024,
+      "deaths": 0,
+      "loots": 60,
+      "junkSold": 40,
+      "quests": 76,
+      "equips": 12,
+      "manual": 79435,
+      "uses": 79435,
+      "play": 208458.50000764598,
+      "money": 2949957,
+      "feeds": 20,
+      "tamed": 1
+    },
+    "money": 24982343,
+    "quests": {
+      "t1": true,
+      "t2": true,
+      "t3": true,
+      "t4": true,
+      "t5": true,
+      "t6": true,
+      "t7": true,
+      "t8": true,
+      "f1": true,
+      "f2": true,
+      "f3": true,
+      "f4": true,
+      "f5": true,
+      "f6": true,
+      "f7": true,
+      "f8": true,
+      "f9": true,
+      "f10": true,
+      "a1": true,
+      "a2": true,
+      "a3": true,
+      "a4": true,
+      "a5": true,
+      "a6": true,
+      "a7": true,
+      "a8": true,
+      "a9": true,
+      "a10": true,
+      "fm1": true,
+      "fm2": true,
+      "fm3": true,
+      "fm4": true,
+      "fm5": true,
+      "fm6": true,
+      "fm7": true,
+      "fm8": true,
+      "fm9": true,
+      "fm10": true,
+      "bf1": true,
+      "bf3": true,
+      "bf2": true,
+      "bf4": true,
+      "bf5": true,
+      "bf6": true,
+      "bf7": true,
+      "bf8": true,
+      "bf9": true,
+      "bf10": true,
+      "bf11": true,
+      "bf12": true,
+      "hc1": true,
+      "hc2": true,
+      "hc3": true,
+      "hc4": true,
+      "hc5": true,
+      "hc6": true,
+      "hc7": true,
+      "hc8": true,
+      "hc9": true,
+      "hc10": true,
+      "hc11": true,
+      "hc12": true,
+      "ch1": true,
+      "ch2": true,
+      "ch3": true,
+      "ch4": true,
+      "ch5": true,
+      "ch6": true,
+      "ch7": true,
+      "ch8": true,
+      "ch9": true,
+      "ch10": true,
+      "ch11": true,
+      "ch12": true,
+      "ch13": true,
+      "ch14": true
+    },
+    "active": [],
+    "talents": {
+      "endurance": 5,
+      "ferocity": 5,
+      "lethal": 5,
+      "bestial": 3,
+      "unleashed": 5,
+      "packfury": 1,
+      "intimidation": 1,
+      "wrath": 1,
+      "mortalshots": 5,
+      "impsteady": 5,
+      "efficiency": 5,
+      "hawkeye": 5,
+      "aimed": 1,
+      "rws": 4
+    },
+    "party": [
+      {
+        "cls": "warrior",
+        "aff": 7521.199999996021
+      },
+      {
+        "cls": "priest",
+        "aff": 10121.200000001334
+      },
+      {
+        "cls": "rogue",
+        "aff": 7074.599999996199
+      },
+      {
+        "cls": "priest",
+        "aff": 613
+      }
+    ],
+    "gear": {
+      "weapon": {
+        "ilvl": 59,
+        "rar": 3,
+        "dur": 100
+      },
+      "chest": {
+        "ilvl": 60,
+        "rar": 3,
+        "dur": 100
+      },
+      "feet": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      },
+      "hands": {
+        "ilvl": 63,
+        "rar": 3,
+        "dur": 100
+      },
+      "head": {
+        "ilvl": 66,
+        "rar": 4,
+        "dur": 100
+      },
+      "legs": {
+        "ilvl": 61,
+        "rar": 3,
+        "dur": 100
+      },
+      "offhand": {
+        "ilvl": 66,
+        "rar": 4,
+        "dur": 100
+      },
+      "trinket": {
+        "ilvl": 62,
+        "rar": 3,
+        "dur": 100
+      }
+    },
+    "addons": {
+      "unl": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "macro": true,
+        "questhelper": true,
+        "petcare": true,
+        "lfg": true
+      },
+      "on": {
+        "autoloot": true,
+        "sweep": true,
+        "gearcmp": true,
+        "macro": true,
+        "questhelper": true,
+        "petcare": true,
+        "lfg": true
+      }
+    },
+    "bank": {
+      "ore": 2,
+      "kit": 59,
+      "herb": 0,
+      "potion": 89,
+      "autoPot": true
+    },
+    "guild": {
+      "level": 3,
+      "xp": 2468,
+      "members": 16
+    },
+    "pets": [
+      {
+        "lvl": 59,
+        "bond": 62150.400000002686,
+        "happy": 63.163999999056216
+      }
+    ],
+    "riding": 2,
+    "dungeons": {
+      "sanctum": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "foundry": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "barrows": {
+        "clears": 1,
+        "best": 0,
+        "runs": 1
+      },
+      "rootrot": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      },
+      "heartwood": {
+        "clears": 2,
+        "best": 1,
+        "runs": 4
+      }
+    }
+  }
+]

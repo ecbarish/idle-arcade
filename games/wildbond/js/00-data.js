@@ -341,7 +341,7 @@ const BIOMES = {
     wild: [['slaglet', 24], ['ashskip', 20], ['cragskein', 16], ['ventwhisk', 16], ['thermwing', 14], ['screegrin', 10], ['glowmote', 3]] },
   cloudglass: { name: 'Cloudglass Pass', lv: [32, 42], req: 'ember', sky: ['#aebdcc', '#eef2f4'], hill: '#8d97a3', ground: '#a3ae98',
     wild: [['mistfinch', 22], ['shalecat', 20], ['cirrusmane', 18], ['pallweaver', 16], ['gritbeak', 14], ['fogtail', 12], ['lanternwisp', 3]] },
-  stillreed: { name: 'Stillreed Basin', lv: [52, 60], req: 'beacon', sky: ['#81988b', '#d6d8b2'], hill: '#65834c', ground: '#a49661',
+  stillreed: { name: 'Stillreed Basin', lv: [46, 60], req: 'beacon', sky: ['#81988b', '#d6d8b2'], hill: '#65834c', ground: '#a49661',
     wild: [['reedlet', 24], ['siltjaw', 18], ['rillwhisk', 18], ['orchardroot', 18], ['gustreed', 16], ['duskcord', 14], ['glassbill', 3]] },
   hollowecho: { name: 'Hollowecho Hills', lv: [58, 64], req: 'reed', sky: ['#7c9190', '#c5cfb9'], hill: '#657c60', ground: '#8c8c80',
     wild: [['hushpup',24],['umbrelace',18],['flintroot',18],['ledgewhisk',18],['bellmote',16],['dripdart',14],['chimespark',3]] },
@@ -532,14 +532,14 @@ const STORY = [
       ['wren', 'Right. Dry ground, both teams rested, nobody tangled. A fair restart! I am still planning to win, {name}.']],
     win: [['wren', 'You won the restart. The first three seconds do not count. That is a very official ferry rule I have just invented.'],
       ['wren', 'Thanks for holding the rope. Turns out asking for a hand leaves both of mine free to battle. We should do that more.']],
-    team: [['gustreed', 52], ['duskcord', 54], ['$rival', 55]] },
+    team: [['gustreed', 46], ['duskcord', 48], ['$rival', 50]] },
   { biome: 'stillreed', at: 14, id: 'stillwake', title: 'The quiet crossing', text: 'Stillwake, guardian of Stillreed Basin, sheltered a crossing through the flooded reeds.',
     lines: [['', 'Rain swells the channel until the low bank disappears. Small creatures wait on a reed island with nowhere dry to step.'],
       ['', 'A great croc rises beside them: Stillwake, guardian of the basin. Its broad back shelters the crossing, and its wake smooths the water as the little ones follow.'],
       ['@stillwake', 'It waits until the last creature reaches the bank, then turns toward your team. The quiet water leaves room for an invitation.']],
     win: [['@stillwake', 'Stillwake lowers its broad head beside your partner. The channel behind it stays calm.'],
       ['', 'When your team walks on, the guardian follows at a patient distance, leaving the landing clear for the next crossing.']],
-    wild: ['stillwake', 57, 4] },
+    wild: ['stillwake', 50, 4] },
   { biome: 'stillreed', at: 24, id: 'warden5', gate: 'reed', title: 'The Stillreed Warden', text: 'Warden Olan tested restraint beside the ferry landing, where a careless victory could upset another crossing.',
     lines: [['', 'Beside the landing, a ferryman coils a dry rope while his three partners leave space for a Rillwhisk to pass.'],
       ['olan', 'Welcome, {name}. I am Olan. If you came to make a splash, the rain has already booked every available slot.'],
@@ -548,7 +548,7 @@ const STORY = [
     win: [['olan', "You left them room. Your team kept its footing without taking everyone else's. That is the kind of strength this basin can live beside."],
       ['olan', 'Take the Reed Badge. Your partners can grow to level sixty now. Please celebrate on the dry boards; I have only just mopped them.'],
       ['olan', 'Stillwake keeps a quiet crossing, and now you know why we keep the landing open. Carry that care wherever your team goes next.']],
-    trainer: 'Warden Olan', team: [['orchardroot', 54], ['ferrycrest', 55], ['siltjaw', 57]] },
+    trainer: 'Warden Olan', team: [['orchardroot', 53], ['ferrycrest', 54], ['siltjaw', 55]] },
   /* Hollowecho Hills: listen before choosing the passage. */
   {
   biome: 'hollowecho',
@@ -649,7 +649,7 @@ const STORY = [
     ]
   ],
   trainer: 'Warden Senna',
-  team: [ [ 'flintroot', 60 ], [ 'bellmote', 61 ], [ 'hushmane', 63 ] ]
+  team: [ [ 'flintroot', 58 ], [ 'bellmote', 59 ], [ 'hushmane', 60 ] ]
 },
   /* Sunthread: the regional gathering before the final stretch. */
   { biome: "sunthread", at: 6, id: "rival8", title: "A place in the gathering", text: "Wren helped a nervous young tamer and their partner find a useful role before a gathering rematch.",
@@ -675,7 +675,7 @@ const STORY = [
     win: [["halen","You made room for the quiet work as well as the bright opening. Your partners could trust one another to do different things."],
       ["halen","Take the Loom Badge. Your team can grow to level seventy now. A good gathering leaves nobody wondering whether they belong."],
       ["halen","There is still a road ahead. Remember the names of the teams beside you, and leave them a place to rest."]],
-    trainer: "Warden Halen", team: [["tilthtusk",65],["hemglow",66],["bloomcourser",68]] },
+    trainer: "Warden Halen", team: [["tilthtusk",63],["hemglow",64],["bloomcourser",65]] },
   /* Farwatch: the eighth badge, before the league (W2). */
   { biome: "farwatch", at: 6, id: "rival9", title: "The notes we share", text: "Wren shared her corrected coastal notes before the last route rematch, with the league ahead.",
     lines: [
@@ -712,7 +712,7 @@ const STORY = [
       ["rysa","Take the Horizon Badge, your eighth. Your partners can grow to level seventy-five. You have carried their trust from Larkhaven all the way to this shore."],
       ["rysa","The league is the next chapter, not a reason to forget these roads. Rest here, correct your notes, and remember who helped you reach the horizon."]
     ],
-    trainer: "Warden Rysa", team: [["keeljaw",69],["moorweft",70],["soundhowl",72]] },
+    trainer: "Warden Rysa", team: [["keeljaw",68],["moorweft",69],["soundhowl",70]] },
   /* T30: scripted league encounters; these do not trigger through wild explores. */
   { biome: "league", at: 0, id: "leagueWren", league: "wren", title: "The last gate battle", text: "Wren shared the last gate battle before the league.",
     lines: [

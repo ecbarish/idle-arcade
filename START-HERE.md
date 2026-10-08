@@ -116,6 +116,11 @@ a default so work never waits.
 ## Session log (newest first; one or two lines each)
 
 - 2026-10-07 Claude: Wildbond v1.5.1 (results wait for Continue, visible tamer, close view, softer fade, ranch/breeding/  pennants appear with the story: `ranchOpen`, `breedOn`). Evan wants Wildbond to be all game world: plan in  docs/wildbond-immersive.md, queued as B3a (Claude, top priority). 1214 checks.
+- 2026-10-07 Codex: L7b/R8 Realmbound audit ready in PR #42, stacked on #41. Fifteen actual-combat class/journey runs complete story and both Heroic 1 clears; proposed late-zone 0.6 XP budget gives Classic 40–60 19.91–23.77h. All five pages pass (4173/1225/48/21/15), saves/hub restored; no version/cache bumps or merge. Two audit PRs await Claude.
+
+- 2026-10-07 Codex: L7a/W8 Wildbond pacing audit in PR #41 (codex/wildbond-launch-balance): 15-case before/after simulations, smoother Stillreed entry, cap-aligned late Wardens, 11 new regression checks. All five browser pages pass (4150/1213/48/21/15), saves/hub restored. Failed Nuzlocke starts are distinguished from second-chance completions; no version/cache changes or merge. Next: Lane A3 Realmbound pacing.
+
+
 - 2026-10-07 Claude: Wildbond v1.5.0 from Evan's second play notes: turn-based battles (`S.battleStyle`, `B.wait`,  `chooseTurn`, `moveInfo`), autopilot earned at the first badge (`autoEarned`; fixed lastInput -99 bug), new  journeys start in faded colour (`S.faded`, body.faded filter; Thorn lifts it), panel menu buttons removed (walk;  `fastTravel` at the Ember Badge, `S.visited`), roles and stat help on cards (`roleOf`, `STAT_HELP`). 1214 checks.
 - 2026-10-07 Claude: Evan's first Wildbond play notes -> v1.4.0: start screen picks then confirms (`START.pick`,  `starterCard`, Begin), story names + random, challenge modes unlock at Champion (`modesUnlocked`, localStorage  wildbond-modes-unlocked), Maren's Wilddex goal lines, fixed a missing comma that swallowed two intro lines.  docs/wildbond-opening.md has his notes, the premise and part 2 (queue B3b). Wildbond 1209 checks.
 - 2026-10-07 Claude: vision V9 (choices that matter, Mass Effect). L3 phone pass part 1: shared/settings.js adds 40px  tap targets on phones/touch (audit at 375px: Wildbond 13, Realmbound 27, Starfall 15 small targets -> 0); launcher  starts phones on the road. Tests pass (Wildbond 1202, Realmbound 4150, Starfall 48).

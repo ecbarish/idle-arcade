@@ -44,6 +44,11 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
   softer; the Ranch only appears once a creature has bonded with you, breeding after the first badge, and challenge
   pennants only on a challenge journey. The bigger redesign Evan asked for (all game world) is planned in
   docs/wildbond-immersive.md.
+- **Realmbound (2026-10-07):** launch pacing audit across five classes and three journeys; late-zone XP aligned with the 40–60 budget, reproducible browser simulations and 23 save/bonus regressions. Details: [audit](docs/realmbound-launch-balance.md).
+
+- Wildbond (2026-10-07): smoother Stillreed entry and late Wardens within incoming badge caps; a reproducible full-run pacing audit across three journeys and four challenges, with failed challenge attempts recorded separately. [Measurements](docs/wildbond-launch-balance.md).
+
+
 - **Wildbond v1.5.0 (2026-10-07)** — From Evan's second play: **turn-based battles** for new journeys (the battle
   pauses on your creature's turn and you pick its move, each described in plain words; the real-time style is in
   Settings), **no autopilot until your first badge** (it used to take over from the first second), a new journey

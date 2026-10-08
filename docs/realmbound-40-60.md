@@ -322,3 +322,9 @@ guild hero's run is remembered after saving and reloading. No extra save fields 
 ## Heroic loot review (R9, 2026-10-07)
 
 Rootrot Hollow and The Heartwood Vault already use the shared earned Heroic ladder and the same seven-item boss reward budget as Sanctum and Foundry. Normal and high-tier rewards, scaling and save continuity are checked without changing balance. See [the measured tier table and review](realmbound-heroic-review.md).
+
+### Measured: launch audit, fresh 1–60 (L7b/R8, 2026-10-07)
+
+All five classes and all three journeys completed ch14, five normal dungeons and Rootrot/Heartwood Heroic 1 using earned gear, companions, talents, jobs, guild and addons. Classic 40–60 measured 9.53–10.93 hours before tuning; a late-zone 0.6 XP budget brings it to 19.91–23.77 hours. Levels below 40 and earlier zones retain their XP. The global curve is unchanged.
+
+Full class/journey and endpoint tables, raw records, the reproducible browser runner, strategy and limitations: [launch pacing audit](realmbound-launch-balance.md). Continuous ideal Focus play with helpers is not a solo/Auto or human-time forecast; the post-cap raid was unlocked, not cleared. Quest bursts still make individual levels uneven.

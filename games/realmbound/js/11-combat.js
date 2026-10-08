@@ -153,10 +153,12 @@ const PACE={breezy:{name:'Breezy',xp:1.6,desc:'A quicker climb: 60% more experie
   long:{name:'Long Road',xp:.6,desc:'For the grind: 40% less experience. Every level is earned.'}};
 const GROUP_BONUS=[1,1,1,1.166,1.3,1.4];
 function paceMult(){return (PACE[H().pace]||PACE.classic).xp;}
+// L7b/R8: the late zones have their own pace budget; earlier zones retain their XP.
+function zoneXPMult(){return H().lvl >= 40 ? (ZONES[H().zone].xpMult || 1) : 1;}
 function groupXP(x){const n=1+(C&&C.party?C.party.length:0);return n<2?x:Math.max(1,Math.round(x*GROUP_BONUS[Math.min(5,n)]/n));}
 function gainXP(x,kill){
   const h=H();if(h.lvl>=LEVEL_CAP){return;}
-  x=Math.round(x*paceMult()*guildXPMult());let bonus=0;if(kill&&h.rested>0){bonus=Math.min(x,h.rested);h.rested-=bonus;}
+  x=Math.round(x*paceMult()*guildXPMult()*zoneXPMult());let bonus=0;if(kill&&h.rested>0){bonus=Math.min(x,h.rested);h.rested-=bonus;}
   h.xp+=x+bonus;line(`You gain ${x} experience${bonus?` (+${Math.round(bonus)} rested)`:''}.`,'l-xp');
   while(h.lvl<LEVEL_CAP&&h.xp>=xpNeed(h.lvl)){h.xp-=xpNeed(h.lvl);h.lvl++;onLevel();}
   if(h.lvl>=LEVEL_CAP){h.xp=0;h.rested=0;}

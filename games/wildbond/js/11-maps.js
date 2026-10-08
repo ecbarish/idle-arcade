@@ -241,12 +241,12 @@ const MAPS = {
     items: [{ id: 'sr1', at: [4, 3], give: { fish: 6 } }, { id: 'sr2', at: [24, 6], give: { lures: 6 } }, { id: 'sr3', at: [27, 11], give: { berries: 8 } }],
     npcs: [
       { who: 'evren', at: [8, 5], dir: 'right',
-        trainer: { sight: 3, team: [['orchardroot', 52], ['gustreed', 53]],
+        trainer: { sight: 3, team: [['orchardroot', 48], ['gustreed', 49]],
           win: [['evren', 'Lovely footing. Not one fallen apple squashed! Both teams have earned a rest.']],
           after: [['evren', 'Orchardroot turns the fallen fruit into good soil. We leave some for the herd before we fill our baskets.']] },
         lines: [['evren', 'Welcome to the orchard path. A friendly battle while the ferry comes back? We can keep the landing clear.']] },
       { who: 'tavil', at: [21, 10], dir: 'up',
-        trainer: { sight: 2, team: [['rillwhisk', 54], ['duskcord', 55], ['ferrycrest', 56]],
+        trainer: { sight: 2, team: [['rillwhisk', 52], ['duskcord', 53], ['ferrycrest', 54]],
           win: [['tavil', 'Well held. Your partners gave each other room, like a good knot that still opens.']],
           after: [['tavil', 'Wren and a new tamer freed a ferry rope today. The passengers thanked them; the rope had no comment.']] },
         lines: [['tavil', 'The boards are dry enough for a battle. Shall we? I promise the losing team still gets a ferry ride.']] }
