@@ -5,6 +5,20 @@ ChatGPT set it up on Evan's PC on 2026-10-08 (`C:\Users\evanb\Local-AI\`, its RE
 repo whose push is disabled, so nothing it does reaches GitHub without review. No tokens, no cloud, no cost beyond
 electricity.
 
+## Runner update (Codex, 2026-10-08, PR #66)
+
+D0 is implemented and installed: Run Queued Tasks now calls OpenCode, attaches Claude's `primer.md` and
+`lessons.md`, and reads the model name from `tools.json`. It derives the context limit from the selected model's
+Ollama `num_ctx` (optional `tools.json.contextLength` override); it no longer forces a 16K server setting.
+Reviewable runner source and parser regressions are in `tools/local-ai/`. The runner stops on process/tool errors,
+truncated answers, missing final reports, invalid task modes and changes awaiting review. Final reports exclude
+progress/compaction text. Normal queued tasks still cannot execute shell commands; Claude/Codex run game checks.
+
+The installed runner completed a bounded Otherworld guide lookup with both context files attached, returning the
+correct title and the three gift names. Source locations were independently checked; the helper clone stayed clean.
+Nine parser/syntax regressions pass. This verifies transport and completion handling, not broad reasoning quality.
+The earlier incorrect guide audit remains unapproved. Claude's original observations below are preserved.
+
 ## What Claude measured
 - **Speed:** Evan's RTX 4090 runs it at about 200 tokens a second once loaded (about 10 seconds to load). Fast.
 - **The queue runner doesn't work yet:** `Run Queued Tasks` drives the model through the Codex tool, and the model
