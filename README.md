@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Wildbond (2026-10-08): four later-road witnesses, fair clues in signs and Warden lines, and small mysteries answered after each badge. Heritage recognition is ready as exported data for the Godot areas.
+
 - Otherworld (2026-10-08): Hearthmere opens: the Reedlight Inn, Puddle, three gifts with real costs, a winter that answers your choices, four endings and memories shared with Asterhold.
 
 - Realmbound (2026-10-08): the world fills the window, with a Quest Journal and Satchel opened over it, a folded road map and all existing pages in the Field Kit. Reading pauses the world; portrait scenes remain in place. Four sizes checked, no save or balance changes.

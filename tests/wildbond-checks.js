@@ -204,7 +204,7 @@ function wildbondChecks() {
     return m.items.every(it=>seen.has(it.at.join(',')))&&seen.has('0,8')&&seen.has('23,8')&&m.rows.some(r=>r.includes('~')&&r.includes('"'));
   });
   check('Stillreed has two signs, three unique items and two route trainers at 48-54', () => {
-    const m=MAPS.stillreed;return Object.keys(m.signs).length===2&&m.items.length===3&&new Set(Object.values(MAPS).flatMap(m=>(m.items||[]).map(it=>it.id))).size===Object.values(MAPS).flatMap(m=>m.items||[]).length&&m.npcs.filter(n=>n.trainer).length===2&&m.npcs.every(n=>n.trainer.team.every(([id,l])=>SPECIES[id]&&l>=48&&l<=54));
+    const m=MAPS.stillreed;return Object.keys(m.signs).length===2&&m.items.length===3&&new Set(Object.values(MAPS).flatMap(m=>(m.items||[]).map(it=>it.id))).size===Object.values(MAPS).flatMap(m=>m.items||[]).length&&m.npcs.filter(n=>n.trainer).length===2&&m.npcs.filter(n=>n.trainer).every(n=>n.trainer.team.every(([id,l])=>SPECIES[id]&&l>=48&&l<=54));
   });
   check('Stillreed landing is reachable on dry boards while the moored skiff stays solid', () => {
     ready();S.badges=badges.slice();wb.placeAt('stillreed',11,9,'up');const explored=S.explored;
@@ -246,7 +246,7 @@ function wildbondChecks() {
     ready();S.badges=badges.slice();S.day=4;S.ranchT=0;wb.placeAt('stillreed');return weatherNow()==='clear'&&!isNight()&&musicKey()==='stillreed';
   });
   const basinBeats=STORY.filter(b=>b.biome==='stillreed');
-  check('Stillreed story has exactly the required thresholds and team bands', () => basinBeats.length===3&&basinBeats.map(b=>b.at).join(',')==='6,14,24'&&basinBeats[0].team.every(([,l])=>l>=46&&l<=50)&&JSON.stringify(basinBeats[0].team.at(-1))==='["$rival",50]'&&JSON.stringify(basinBeats[1].wild)==='["stillwake",50,4]'&&basinBeats[2].team.map(([,l])=>l).join(',')==='53,54,55'&&basinBeats[2].gate==='reed'&&basinBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
+  check('Stillreed story has exactly the required thresholds and team bands', () => basinBeats.length===3&&basinBeats.map(b=>b.at).join(',')==='6,14,24'&&basinBeats[0].team.every(([,l])=>l>=46&&l<=50)&&JSON.stringify(basinBeats[0].team.at(-1))==='["$rival",50]'&&JSON.stringify(basinBeats[1].wild)==='["stillwake",50,4]'&&basinBeats[2].team.map(([,l])=>l).join(',')==='53,54,55'&&basinBeats[2].gate==='reed'&&basinBeats.every(b=>b.lines.length>=3&&b.lines.length<=5&&b.win.length>=2&&b.win.length<=3));
   check('Wren ferry rematch triggers at six local explores and a real victory completes it', () => {
     ready();S.badges=badges.slice();wb.placeAt('stillreed');S.explored=100;S.exploredIn={stillreed:5};wb.explore();
     if(!TALK||!TALK.lines.some(([,t])=>t.includes('rope')))return false;skipTalk();return B&&B.story==='rival6'&&B.kind==='trainer'&&B.foes.at(-1).c.lvl===50&&finishFight()==='won'&&S.story.rival6;
@@ -296,7 +296,7 @@ function wildbondChecks() {
     return m.items.every(it=>seen.has(it.at.join(',')))&&seen.has('0,9')&&seen.has('23,5')&&m.rows.some(r=>r.includes('R')&&r.includes('"'));
   });
   check('Hollowecho has a sign, three unique items and two route trainers at 58-62', () => {
-    const m=MAPS.hollowecho;return Object.keys(m.signs).length===1&&m.items.length===3&&new Set(Object.values(MAPS).flatMap(m=>(m.items||[]).map(it=>it.id))).size===Object.values(MAPS).flatMap(m=>m.items||[]).length&&m.npcs.filter(n=>n.trainer).length===2&&m.npcs.every(n=>n.trainer.team.every(([id,l])=>SPECIES[id]&&l>=58&&l<=62));
+    const m=MAPS.hollowecho;return Object.keys(m.signs).length===1&&m.items.length===3&&new Set(Object.values(MAPS).flatMap(m=>(m.items||[]).map(it=>it.id))).size===Object.values(MAPS).flatMap(m=>m.items||[]).length&&m.npcs.filter(n=>n.trainer).length===2&&m.npcs.filter(n=>n.trainer).every(n=>n.trainer.team.every(([id,l])=>SPECIES[id]&&l>=58&&l<=62));
   });
   check('Hollowecho wild table excludes its guardian and keeps Chimespark rare', () => {
     const w=BIOMES.hollowecho.wild;return w.every(([id,n])=>hillSpecies.includes(id)&&n>0&&!SPECIES[id].unique)&&w.find(([id])=>id==='chimespark')[1]===3&&w.filter(([id])=>id!=='chimespark').every(([,n])=>n>3)&&SPECIES.undertone.fam==='hyena'&&SPECIES.undertone.el==='Shade'&&SPECIES.undertone.big===1&&SPECIES.undertone.unique===1;
@@ -311,7 +311,7 @@ function wildbondChecks() {
     ready();S.badges=[...badges,'reed'];S.day=1;S.ranchT=0;wb.placeAt('hollowecho');return weatherNow()==='clear'&&!isNight()&&musicKey()==='hollowecho';
   });
   const hillBeats=STORY.filter(b=>b.biome==='hollowecho');
-  check('Hollowecho story has exactly the required thresholds and team bands', () => hillBeats.length===3&&hillBeats.map(b=>b.at).join(',')==='6,14,24'&&hillBeats[0].team.every(([,l])=>l>=58&&l<=61)&&JSON.stringify(hillBeats[0].team.at(-1))==='["$rival",61]'&&JSON.stringify(hillBeats[1].wild)==='["undertone",63,4]'&&hillBeats[2].team.map(([,l])=>l).join(',')==='58,59,60'&&hillBeats[2].gate==='echo'&&hillBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
+  check('Hollowecho story has exactly the required thresholds and team bands', () => hillBeats.length===3&&hillBeats.map(b=>b.at).join(',')==='6,14,24'&&hillBeats[0].team.every(([,l])=>l>=58&&l<=61)&&JSON.stringify(hillBeats[0].team.at(-1))==='["$rival",61]'&&JSON.stringify(hillBeats[1].wild)==='["undertone",63,4]'&&hillBeats[2].team.map(([,l])=>l).join(',')==='58,59,60'&&hillBeats[2].gate==='echo'&&hillBeats.every(b=>b.lines.length>=3&&b.lines.length<=5&&b.win.length>=2&&b.win.length<=3));
   check('Wren wrong-passage rematch triggers at six local explores and a real victory completes it', () => {
     ready();S.badges=[...badges,'reed'];wb.placeAt('hollowecho');S.explored=100;S.exploredIn={hollowecho:5};wb.explore();
     if(!TALK||!TALK.lines.some(([,t])=>t.includes('echo')))return false;skipTalk();return B&&B.story==='rival7'&&B.kind==='trainer'&&B.foes.at(-1).c.lvl===61&&finishFight()==='won'&&S.story.rival7;
@@ -376,7 +376,7 @@ function wildbondChecks() {
     ready();S.badges=[...badges,'reed','echo'];S.day=1;S.ranchT=0;wb.placeAt('sunthread');return weatherNow()==='clear'&&!isNight()&&musicKey()==='sunthread';
   });
   const commonsBeats=STORY.filter(b=>b.biome==='sunthread');
-  check('Sunthread story has exactly the required thresholds and team bands', () => commonsBeats.length===3&&commonsBeats.map(b=>b.at).join(',')==='6,14,24'&&commonsBeats[0].team.every(([,l])=>l>=64&&l<=67)&&JSON.stringify(commonsBeats[0].team.at(-1))==='["$rival",67]'&&JSON.stringify(commonsBeats[1].wild)==='["meadowmantle",67,4]'&&commonsBeats[2].team.map(([,l])=>l).join(',')==='63,64,65'&&commonsBeats[2].gate==='loom'&&commonsBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
+  check('Sunthread story has exactly the required thresholds and team bands', () => commonsBeats.length===3&&commonsBeats.map(b=>b.at).join(',')==='6,14,24'&&commonsBeats[0].team.every(([,l])=>l>=64&&l<=67)&&JSON.stringify(commonsBeats[0].team.at(-1))==='["$rival",67]'&&JSON.stringify(commonsBeats[1].wild)==='["meadowmantle",67,4]'&&commonsBeats[2].team.map(([,l])=>l).join(',')==='63,64,65'&&commonsBeats[2].gate==='loom'&&commonsBeats.every(b=>b.lines.length>=3&&b.lines.length<=5&&b.win.length>=2&&b.win.length<=3));
   check('Wren gathering rematch triggers at six local explores and a real victory completes it', () => {
     ready();S.badges=[...badges,'reed','echo'];wb.placeAt('sunthread');S.explored=100;S.exploredIn={sunthread:5};wb.explore();
     if(!TALK||!TALK.lines.some(([,t])=>t.includes('little partner')))return false;skipTalk();return B&&B.story==='rival8'&&B.kind==='trainer'&&B.foes.at(-1).c.lvl===67&&finishFight()==='won'&&S.story.rival8;
@@ -449,7 +449,7 @@ function wildbondChecks() {
     ready();S.badges=[...badges,'reed','echo','loom'];S.day=1;S.ranchT=0;wb.placeAt('farwatch');return weatherNow()==='mist'&&musicKey()==='farwatch'&&WEATHER_FX.mist.Gale===1.5&&WEATHER_FX.mist.Shade===1.5;
   });
   const reachBeats=STORY.filter(b=>b.biome==='farwatch');
-  check('Farwatch story has exactly the required thresholds and team bands', () => reachBeats.length===3&&reachBeats.map(b=>b.at).join(',')==='6,14,24'&&reachBeats[0].team.every(([,l])=>l>=68&&l<=70)&&JSON.stringify(reachBeats[0].team.at(-1))==='["$rival",70]'&&JSON.stringify(reachBeats[1].wild)==='["watchlight",71,4]'&&reachBeats[2].team.map(([,l])=>l).join(',')==='68,69,70'&&reachBeats[2].gate==='horizon'&&reachBeats.every(b=>b.lines.length>=3&&b.lines.length<=4&&b.win.length>=2&&b.win.length<=3));
+  check('Farwatch story has exactly the required thresholds and team bands', () => reachBeats.length===3&&reachBeats.map(b=>b.at).join(',')==='6,14,24'&&reachBeats[0].team.every(([,l])=>l>=68&&l<=70)&&JSON.stringify(reachBeats[0].team.at(-1))==='["$rival",70]'&&JSON.stringify(reachBeats[1].wild)==='["watchlight",71,4]'&&reachBeats[2].team.map(([,l])=>l).join(',')==='68,69,70'&&reachBeats[2].gate==='horizon'&&reachBeats.every(b=>b.lines.length>=3&&b.lines.length<=5&&b.win.length>=2&&b.win.length<=3));
   check('Wren shared-notes rematch triggers at six local explores and a real victory completes it', () => {
     ready();S.badges=[...badges,'reed','echo','loom'];wb.placeAt('farwatch');S.explored=100;S.exploredIn={farwatch:5};wb.explore();
     if(!TALK||!TALK.lines.some(([,t])=>t.includes('league')))return false;skipTalk();return B&&B.story==='rival9'&&B.kind==='trainer'&&B.foes.at(-1).c.lvl===70&&finishFight()==='won'&&S.story.rival9;
@@ -1117,6 +1117,27 @@ function wildbondChecks() {
   check('Catalogue and handoff contain no cycles or invalid evolution targets',()=>{for(const start of Object.keys(SPECIES)){const walk=(id,path)=>{if(path.includes(id))return false;const s=SPECIES[id];if(!s)return false;return [...(s.evo?[s.evo]:[]),...(s.catalogueEvos||[])].every(e=>walk(e.to,[...path,id]));};if(!walk(start,[]))return false;}return true;});
   check('A newly caught catalogue adult round-trips alongside an old partner without changing progress',()=>{ready();const old=newCreature('cindercub',11,{rar:1});old.name='Old friend';old.bond=53;S.team=[old,newCreature('fogsail',34,{rar:0})];S.coins=271;S.badges=['thorn','tide'];S.story={thornwarden:true};const before=JSON.stringify(S.team);save();load();return JSON.stringify(S.team)===before&&S.coins===271&&S.badges.join(',')==='thorn,tide'&&S.story.thornwarden;});
 
+
+  // T40: data-only witnesses, reachable at both sides of the existing badge milestone.
+  for(const [area,who,badge]of[['stillreed','sivet','reed'],['hollowecho','orri','echo'],['sunthread','nesla','loom'],['farwatch','ceryn','horizon']]){
+    const m=MAPS[area],n=m.npcs.find(n=>n.who===who);
+    check(area+': thread witness has valid plain portrait lines and a small badge payoff',()=>n&&n.lines.length>=3&&n.lines.every(([w,t])=>w===who&&typeof t==='string')&&n.byBadge[badge].length>=2&&n.byBadge[badge].every(([w,t])=>w===who&&typeof t==='string'));
+    check(area+': heritage handoff is lossless plain JSON for all four existing Godot IDs',()=>{
+      const plain=JSON.parse(JSON.stringify(n));return ['farm','coast','highland','wander'].every(k=>plain.byHeritage[k]?.length&&plain.byHeritage[k].every(([w,t])=>w===who&&typeof t==='string'));
+    });
+    check(area+': witness never occupies a trainer, Warden, sign, exit or item spot',()=>{
+      const at=n.at.join(',');return m.npcs.filter(p=>p.at.join(',')===at).length===1&&m.warden.join(',')!==at&&!m.signs[at]&&!(m.items||[]).some(it=>it.at.join(',')===at)&&!TILES[tile(m,...n.at)].exit;
+    });
+    check(area+': witness can be approached without crossing a person or a solid tile',()=>{
+      const todo=[m.start.slice(0,2)],seen=new Set(todo.map(p=>p.join(',')));
+      while(todo.length){const[x,y]=todo.shift();for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const p=[x+dx,y+dy],key=p.join(',');if(!seen.has(key)&&walkable(m,...p)&&!npcAt(m,...p)){seen.add(key);todo.push(p);}}}
+      return [[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>seen.has([n.at[0]+dx,n.at[1]+dy].join(',')));
+    });
+    check(area+': browser conversation changes after the badge and does not change the save',()=>{
+      const old=S,oldTalk=TALK;try{S=fresh();S.name='Reader';S.badges=[];wb.placeAt(area);const before=JSON.stringify(S);talkTo(n);const early=JSON.stringify(TALK.lines);TALK=null;S.badges=[badge];const beforeBadge=JSON.stringify(S);talkTo(n);return early===JSON.stringify(n.lines)&&JSON.stringify(TALK.lines)===JSON.stringify(n.byBadge[badge])&&JSON.stringify(S)===beforeBadge&&before.includes('Reader');}finally{S=old;TALK=oldTalk;}
+    });
+  }
+  check('T40 signs retain road guidance and make no definitive accusation about the fading',()=>MAPS.stillreed.signs['12,7'].includes('LOW WATER')&&MAPS.hollowecho.signs['7,5'].includes('wall is flat')&&MAPS.sunthread.signs['27,4'].includes('one knot')&&MAPS.farwatch.signs['14,5'].includes('missing lines have not been guessed'));
   return checks;
 }
 
