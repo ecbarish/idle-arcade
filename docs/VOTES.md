@@ -10,6 +10,12 @@ player's device and, once the form below exists, sent anonymously to a Google Fo
 |---|---|---|---|---|
 | `launcher-style-1` | Hub, under the launcher | Which homepage do you like better? | The living world (`scene`), the arcade hall (`hall`), keep both (`both`) | 2026-10-07 |
 
+**Evan's first impressions (2026-10-07, before playtesting):** the hall feels more scalable and he likes its "coming soon"
+cabinets; the living world is full at four places; he likes the idea of a controllable character interacting. Next
+step (L8 part 2): **the road**, a side-scrolling living world you walk along with your character, where each game is
+a place further down the road and games in design are building sites with a "coming soon" signpost. It joins the
+poll as a third choice (`launcher-style-2`).
+
 When a poll is decided, write the result and the decision here (and in docs/research/decisions.md), then remove its
 card or replace it with the next question. Give a changed question a new id (`-2`) so old answers don't mix in.
 
