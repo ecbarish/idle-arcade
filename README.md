@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Wildbond (2026-10-08):** twelve new roster definitions fill ten family/element gaps; eleven available through early-road encounters/evolution, including single-form Hearthlaugh. Veilmote reserved for a future encounter. Proposed shared-catalogue habitats; 1354 Wildbond checks pass.
+
 - Realmbound v1.1.0, onboarding (2026-10-08): a skippable arrival ends on the existing first questgiver, followed by optional contextual guidance for Focus, loot, reward choice, town services and actual companions. Returning saves stay quiet; all seven test pages pass. No version or cache bump; see docs/realmbound-onboarding.md.
 
 - Diamond Career v0.2.0, first month (2026-10-08): a second contract with explicit pay/opportunity tradeoffs, 18 possible professional games across 30 calendar days, Iona's recorded coaching notes and a personal month recap. Old payment IDs and possessions persist; all seven test pages pass (83 Diamond checks). No version/cache bump; docs/diamond-career-first-month.md.
