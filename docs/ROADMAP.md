@@ -180,6 +180,7 @@ Evan, 2026-10-08: every game happens in the game window (CLAUDE.md); Realmbound 
   eight test pages pass; README entry; before/after screenshots at four widths.
 
 ### T39: Otherworld, Hearthmere (the second world)
+- [x] Ready PR #63 (Codex, 2026-10-08): four endings, gifts with costs, winter scenes, cross-world memories; all eight pages pass; docs/otherworld-hearthmere.md.
 docs/otherworld-design.md (the Hearthmere row and "Order" step 3), with what T35 built: visible locked choices with
 reasons, gift costs that bite, a town that changes with your choices, the Archivist answering memories. Branch
 `codex/otherworld-hearthmere`.
