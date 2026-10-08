@@ -67,6 +67,7 @@ index.html or style.css until those phases are merged.
 | A6b | **Guides and wiki** | ready for review: Codex, 2026-10-08, PR #52 | Evan, 2026-10-08: a guide per game with pictures, tips and tricks, later short videos. Extend guides/realmbound.html with screenshots and a tips page; start a Diamond Career and an Otherworld page. Wildbond's waits for the Godot version |
 | A7 | **R6** Realmbound hub variety | done, merged 2026-10-08 by Claude (Realmbound v1.4.0) | A layout per zone, inn and smithy interiors |
 | A7b | **R5** crafted gear from 55 | done, merged 2026-10-08 by Claude (Realmbound v1.5.0) | Separate PR after R6 |
+| A8a | **Otherworld browser runner save safety** | done, merged 2026-10-08 by Claude (PR #56; tests only) | Restore recovery backups too, including failed/thrown checks |
 | A8 | While you wait | always | Lore and dex text polish, more checks, bugs from GitHub issues |
 | — | Done | — | A2 L7a Wildbond balance, A3 L7b Realmbound balance, R9 heroic loot review (all merged 2026-10-07) |
 

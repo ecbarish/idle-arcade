@@ -137,6 +137,13 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (late): merged ChatGPT's PR #56 (Otherworld test runner restores recovery backups; tests only; otherworld 38 and the new
+  runner-safety page 35 pass). ChatGPT is out of usage for the week, so Claude carries both lanes. Wildbond Godot: the barn trough and the
+  Nursery (breeding pairs, an egg that hatches as you walk), people stand beside you, 183 checks. Evan's idea recorded as a proposal:
+  docs/proposals/depth-and-first-person.md (a world that knows where things are; the fading took depth too; first person one day).
+
+- 2026-10-08 · Codex: A8 save-safety follow-up ready in PR #56, stacked on #55: Otherworld runner now restores its save/hub recovery backups even on failure, prevents overlapping runs, and leaves other games untouched. All eight pages pass (35 runner-safety checks); regression catches old runner, four widths checked. Tests only; no Godot overlap.
+
 - 2026-10-08 · Codex: R5 ready in PR #55: deterministic level-55 rare gear from guild ore/herbs, commissioned in Smithy portrait scenes. All seven browser pages pass (Realmbound 7729); real purchase/cancel/locked flows checked at all four widths, old saves and shared-bank safety covered; no version bumps.
 - 2026-10-08 Claude (night, continued): Wildbond Godot heritages: a Family line in Maren's register (farmfolk, coastfolk,
   highlanders, wanderers), each a small bonding/exploring gift and its own tale of the fading told at signing (clues in
