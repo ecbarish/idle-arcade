@@ -65,6 +65,9 @@ the very end, so running out of usage never strands work.
 - **One light shared universe** (decided 2026-10-08): recurring characters and a few deliberate links between games,
   every game playable alone. Canon: `docs/lore/multiverse.md`. Big decisions and their research:
   `docs/research/decisions.md`.
+- **Stories are woven, not marched** (Evan, 2026-10-08): threads everywhere that only become a tapestry at the end; fair
+  clues, several possible truths kept alive until late, misdirection only through characters (never the game's own
+  text), small threads paid off early. Wildbond's ledger: docs/lore/wildbond-threads.md; check it before writing story.
 - Guides per game come later, once games are near-finished. Record lore in docs as it's written
   (`docs/lore/`, design docs).
 - Evan isn't a programmer: explain in plain words, show results, give clear next steps.

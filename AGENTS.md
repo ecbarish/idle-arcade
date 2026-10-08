@@ -23,3 +23,5 @@ Branch prefixes: `codex/<topic>`, `grok/<topic>`, `<ai>/<topic>`.
 rebuilds its screens (phases 1-5), keep Wildbond work to data, drawing and new files.
 
 **In the game window, for every game** (Evan, 2026-10-08): the lessons from Wildbond apply to all games. The screen is the world: no game in a small window with panels of information beside it. Guidance, menus, stats and story happen inside the game (people who speak, things you hold and open, a thin overlay), not in boxes off to the side. A separate panel is the exception and needs a reason (for example a save tool or settings). New features in any game follow this; existing dashboard layouts (Realmbound, Starfall, Diamond Career) are queued to move into the game window.
+
+**Story writing** (Evan, 2026-10-08): stories are woven threads, not a straight line. Before writing any Wildbond story line, sign, dex entry or NPC chatter, read docs/lore/wildbond-threads.md and record any clue you place there.
