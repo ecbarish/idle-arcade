@@ -39,17 +39,17 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
-- Otherworld (2026-10-08): the Ashen Throne opens: Kael, a fallen house, three costly gifts, five final outcomes plus a death route, Return's remembered dawns and cross-world knowledge. The guide now covers all three worlds.
+- Otherworld v0.3.0 (2026-10-08): the Ashen Throne opens: Kael, a fallen house, three costly gifts, five final outcomes plus a death route, Return's remembered dawns and cross-world knowledge. The guide now covers all three worlds.
 
-- Wildbond (2026-10-08): four later-road witnesses, fair clues in signs and Warden lines, and small mysteries answered after each badge. Heritage recognition is ready as exported data for the Godot areas.
+- Wildbond v1.8.0 (2026-10-08): four later-road witnesses, fair clues in signs and Warden lines, and small mysteries answered after each badge. Heritage recognition is ready as exported data for the Godot areas.
 
-- Otherworld (2026-10-08): Hearthmere opens: the Reedlight Inn, Puddle, three gifts with real costs, a winter that answers your choices, four endings and memories shared with Asterhold.
+- Otherworld v0.3.0 (2026-10-08): Hearthmere opens: the Reedlight Inn, Puddle, three gifts with real costs, a winter that answers your choices, four endings and memories shared with Asterhold.
 
-- Realmbound (2026-10-08): the world fills the window, with a Quest Journal and Satchel opened over it, a folded road map and all existing pages in the Field Kit. Reading pauses the world; portrait scenes remain in place. Four sizes checked, no save or balance changes.
+- Realmbound v1.6.0 (2026-10-08): the world fills the window, with a Quest Journal and Satchel opened over it, a folded road map and all existing pages in the Field Kit. Reading pauses the world; portrait scenes remain in place. Four sizes checked, no save or balance changes.
 
-- Wildbond catalogue (2026-10-08): fourteen creatures across eight empty family/element pairs, three long growth lines, three never-evolvers and a conditional Saillet branch authored for Godot. Reach lore maps all 31 zone beasts without changing Realmbound. Browser roster: 107; 1,485 checks.
+- Wildbond v1.8.0 (2026-10-08): fourteen new creatures across eight empty family/element pairs, three long growth lines, three never-evolvers and a conditional Saillet branch authored for Godot. Reach lore maps all 31 zone beasts without changing Realmbound. Browser roster: 107; 1,485 checks.
 
-- Diamond Career (2026-10-08): the scene fills the window; locker, calendar, notebook and pay envelope replace the side panel. A deliberate second-month road term visits three parks with bus preparations, local people and calendar salary; 122 checks.
+- Diamond Career v0.4.0 (2026-10-08): the scene fills the window; locker, calendar, notebook and pay envelope replace the side panel. A deliberate second-month road term visits three parks with bus preparations, local people and calendar salary; 122 checks.
 
 - Previews and a trailer (2026-10-08): the new Wildbond and Starfall play in the browser (play/wildbond/, play/starfall/), and a one-minute trailer opens the Come Play page.
 

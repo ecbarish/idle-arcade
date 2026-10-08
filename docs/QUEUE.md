@@ -70,21 +70,25 @@ index.html or style.css until those phases are merged.
 | A4 | **L4 + V1** Realmbound onboarding: the first quest, told by people | done, merged 2026-10-08 by Claude (Realmbound v1.1.0) | docs/realmbound-onboarding.md: arrival scene on the first questgiver, optional road guidance; legacy heroes stay quiet |
 | A4b | **Diamond Career part 2** | done, merged 2026-10-08 by Claude | docs/diamond-career-first-month.md: second contract, a 30-day first month, Iona's notebook |
 | A5 | **R4** Guild members' personal stories | done, merged 2026-10-08 by Claude (Realmbound v1.2.0); follow-up: give some stories an outcome that can go either way (VISION §9) | 3-4 beats per adventurer, unlocked by mood and time together; one outcome that can go either way (VISION §9) |
-| A5c | **R4 follow-up: choices with consequences** | ready for review: Codex, 2026-10-08, PR #53 (stacked on #52) | Evan: about a third of stories can hurt trust; plain, recoverable outcomes in portrait conversations |
+| A5c | **R4 follow-up: choices with consequences** | done, merged 2026-10-08 (Realmbound v1.3.0, PR #53) | Evan: about a third of stories can hurt trust; plain, recoverable outcomes in portrait conversations |
 | A5b | **D1c** Diamond Career: swings you understand | done, merged 2026-10-08 by Claude (Diamond Career v0.3.0) | From docs/research/diamond-first-contract-review.md: Timing mode shows Contact / Power (no hidden carried-over stance); results say when a pitch was off the plate and separate good-contact-caught from weak contact; one visible effect of Eye growth noted by Iona. Checks for each; old saves load |
 | A6 | **W11** A larger Wildbond roster, batch 1 | done, merged 2026-10-08 by Claude (Wildbond browser v1.7.0; 93 species) | 10-12 species filling empty family/element pairs (T6 rules); data only. Now part of the shared catalogue plan (docs/proposals/creature-catalogue-and-evolution.md): include at least one creature that never evolves and is strong for it, and write lore so the species can also live in Realmbound's zones |
-| A6b | **Guides and wiki** | ready for review: Codex, 2026-10-08, PR #52 | Evan, 2026-10-08: a guide per game with pictures, tips and tricks, later short videos. Extend guides/realmbound.html with screenshots and a tips page; start a Diamond Career and an Otherworld page. Wildbond's waits for the Godot version |
+| A6b | **Guides and wiki** | done, merged 2026-10-08 (PR #52) | Evan, 2026-10-08: a guide per game with pictures, tips and tricks, later short videos. Extend guides/realmbound.html with screenshots and a tips page; start a Diamond Career and an Otherworld page. Wildbond's waits for the Godot version |
 | A7 | **R6** Realmbound hub variety | done, merged 2026-10-08 by Claude (Realmbound v1.4.0) | A layout per zone, inn and smithy interiors |
 | A7b | **R5** crafted gear from 55 | done, merged 2026-10-08 by Claude (Realmbound v1.5.0) | Separate PR after R6 |
 | A8a | **Otherworld browser runner save safety** | done, merged 2026-10-08 by Claude (PR #56; tests only) | Restore recovery backups too, including failed/thrown checks |
 | A8b | **Realmbound guide: rooms and commissions** | done, merged 2026-10-08 (PR #57) | Current hub/service instructions, actual pictures and generated costs |
 | A9 | **T35** Otherworld O1, a living Lanthorn | done, merged 2026-10-08 by Claude (Otherworld v0.2.0, PR #58; 831 checks) | docs/ROADMAP.md T35; moved from Claude's B0b |
-| A10 | **T36** Diamond Career in the game window, and a road trip | ready for review: Codex, 2026-10-08, PR #59 | docs/ROADMAP.md T36 |
-| A11 | **T37** The shared creature catalogue, batch 2 | open (2026-10-08) | docs/ROADMAP.md T37; data and lore only |
-| A12 | **T38** Realmbound in the game window: the plan, then part 1 | open (2026-10-08) | docs/ROADMAP.md T38 |
-| A13 | **T39** Otherworld: Hearthmere, the second world | open (2026-10-08) | docs/ROADMAP.md T39 |
-| A14 | **T40** Wildbond areas 5-8: woven clues, signs and chatter (data; flows into the Godot version) | open (2026-10-08) | docs/ROADMAP.md T40 |
-| A15 | **OW0c** Otherworld: the Ashen Throne, complete third life | ready: PR #65 (Codex, 2026-10-08), stacked on #64 | docs/otherworld-design.md: Kael, three gifts with costs, endings and cross-world memories; Evan authorized further development |
+| A10 | **T36** Diamond Career in the game window, and a road trip | done, merged 2026-10-08 (Diamond Career v0.4.0, PR #59) | docs/ROADMAP.md T36 |
+| A11 | **T37** The shared creature catalogue, batch 2 | done, merged 2026-10-08 (Wildbond v1.8.0, PR #60) | docs/ROADMAP.md T37; data and lore only |
+| A12 | **T38** Realmbound in the game window: the plan, then part 1 | done, merged 2026-10-08 (Realmbound v1.6.0, PR #62) | docs/ROADMAP.md T38 |
+| A13 | **T39** Otherworld: Hearthmere, the second world | done, merged 2026-10-08 (Otherworld v0.3.0, PR #63) | docs/ROADMAP.md T39 |
+| A14 | **T40** Wildbond areas 5-8: woven clues, signs and chatter (data; flows into the Godot version) | done, merged 2026-10-08 (Wildbond v1.8.0, PR #64) | docs/ROADMAP.md T40 |
+| A15 | **OW0c** Otherworld: the Ashen Throne, complete third life | done, merged 2026-10-08 (Otherworld v0.3.0, PR #65) | docs/otherworld-design.md: Kael, three gifts with costs, endings and cross-world memories; Evan authorized further development |
+| A16 | **T41** Realmbound in the game window, part 2: pages become places | open (2026-10-08) | docs/ROADMAP.md T41 |
+| A17 | **T42** Otherworld: memories that matter across lives, toward a systemic world | open (2026-10-08) | docs/ROADMAP.md T42 |
+| A18 | **T43** The creature catalogue reaches Realmbound | open (2026-10-08) | docs/ROADMAP.md T43 |
+| A19 | **T44** Accessibility pass on the browser games (L10) | open (2026-10-08) | docs/ROADMAP.md T44 |
 | A8 | While you wait | always | Lore and dex text polish, more checks, bugs from GitHub issues |
 | — | Done | — | A2 L7a Wildbond balance, A3 L7b Realmbound balance, R9 heroic loot review (all merged 2026-10-07) |
 
@@ -108,6 +112,19 @@ index.html or style.css until those phases are merged.
 | B7 | **V3** Game boxes on the launcher | open | docs/VISION.md §3 |
 | B8 | **G2** Realmbound dungeon lighting; **W3 part 2** roaming legendaries; **W10** baby forms | open | After Launch is fine |
 | — | Done | — | L2 save safety, L1 settings, L8 launcher (living world, road, hall, vote), L3 phone part 1, Wildbond v1.4-1.5.2 fixes from Evan's play |
+
+## Lane D: the local helper (Ollama on Evan's PC; small, checkable jobs only)
+
+docs/research/local-ai-helper.md says what it is good for (drafts, mechanical edits gated by a check, searches and
+lists) and what not (reviews, design, story, balance). It works in its own clone with push disabled; nothing it makes
+is merged without review. Queue tasks in `C:\Users\evanb\Local-AI\queue\` (one JSON file each, read-only first).
+
+| # | Task | Status | Notes |
+|---|---|---|---|
+| D0 | **Make the queue runner work**: switch Run-LocalAgent.ps1 from Codex to OpenCode (`opencode run`, OPENCODE_CONFIG) | open, for ChatGPT (it built the runner) | The model can't drive Codex's tools; OpenCode works |
+| D1 | List every player-facing string in games/otherworld/js/ that breaks docs/CREATIVE.md "Writing for players" (lowercase names, rule words in story text) | open (read-only) | Claude or ChatGPT checks the list |
+| D2 | Draft ten dex lines for the newest catalogue creatures in the house style, for review | open (read-only; output in its log) | A person picks and edits |
+| D3 | Check every link and image in guides/ and playtest.html points to a file that exists | open (read-only) | |
 
 ## Lane C: parked (a third assistant, if one joins): the Studio
 

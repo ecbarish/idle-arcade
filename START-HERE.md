@@ -53,10 +53,10 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
   adventurers who choose their own jobs, the inn's counter by hand then Bryn, Hob's plots, the Healer's Hut, a Training
   Yard, the Smithy worked by hand then Garrick, the Apothecary with prices, ranks and newcomers, music. 85 checks.
   Plays on the web at `play/starfall/`.
-- **Browser games** (all playable, linked from the arcade): Wildbond v1.7.1 (the full journey: eight areas, the league,
-  the Spire; content complete, fixes only), Realmbound v1.5.0 (1-60, dungeons, guild with stories and commissions, a
-  raid), Diamond Career v0.3.1 (a baseball career; ChatGPT is moving it into the game window, T36), Otherworld v0.2.0
-  (the Between, Asterhold, living Lanthorn), Starfall Guild (the old browser version), Primordial.
+- **Browser games** (all playable, linked from the arcade): Wildbond v1.8.0 (the full journey: eight areas, the league,
+  the Spire; content complete, fixes only), Realmbound v1.6.0 (1-60, dungeons, guild with stories and commissions, a
+  raid), Diamond Career v0.4.0 (a baseball career, now in the game window, with a road trip), Otherworld v0.3.0
+  (the Between and three worlds: Asterhold with a living Lanthorn, Hearthmere, the Ashen Throne), Starfall Guild (the old browser version), Primordial.
 - **Friends are testing:** the Come Play page (`playtest.html`) with a one-minute trailer, first steps and "if you're
   lost" per game, and Wildbond's element chart. Windows builds in `Desktop\Game builds`.
 - **Lore and design decided** (Evan, 2026-10-08): the wild bond, the Unbound, heritages, reputation, the creature
@@ -72,8 +72,8 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
   WG7 the variety pass (animated water, interiors, battle effects, sounds, edge tiles); WG2 Stillreed Basin and the
   areas after it; SV1 Starfall members' stories; SV3 failing and excelling. After big steps, re-export `play/` and
   refresh the Come Play pictures.
-- **ChatGPT (Lane A):** T36 Diamond Career in the game window and a road trip; T37 creature catalogue batch 2; T38
-  Realmbound in the game window; T39 Otherworld's Hearthmere; T40 Wildbond clues, signs and chatter for areas 5-8.
+- **ChatGPT (Lane A):** T41 Realmbound part 2 (pages become places); T42 Otherworld memories that matter (toward a systemic world); T43 the catalogue reaches Realmbound; T44 accessibility. (Done 2026-10-08: T36 Diamond Career in the game window; T37 catalogue batch 2; T38
+  Realmbound in the game window; T39 Hearthmere; T40 Wildbond clues for areas 5-8; the Ashen Throne.)
 - **Anyone:** bugs from friends first (GitHub issues, or Evan's messages).
 
 ## Questions for Evan (work continues on the defaults until he answers)
@@ -100,6 +100,11 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
 3. If you added a design decision, put it in the relevant design doc too.
 
 ## Session log (newest first; one or two lines each)
+
+- 2026-10-08 Claude (late night): task lists rewritten around everything learned (PROJECTS "Read first", QUEUE goal, START-HERE). Merged
+  ChatGPT's seven stacked PRs (T36-T40, the Ashen Throne, its plan sync): Diamond Career v0.4.0, Realmbound v1.6.0, Otherworld v0.3.0,
+  Wildbond v1.8.0; all eight pages pass (Realmbound 7738, Wildbond 1530, Otherworld 1757). Lane A refilled (T41-T44). Tested the local
+  AI helper (fast, unreliable judgement; Lane D for small checkable jobs). Evan's PC cleanup worked: 871 GB free.
 
 - 2026-10-08 Claude (night): Evan approved the downloads: Godot export templates installed, ffmpeg in C:\Users\evanb\Tools. Web previews
   of the new Wildbond and Starfall live at play/ (linked from Come Play), Windows zips in Desktop\Game builds, a 56-second trailer

@@ -66,7 +66,7 @@ These decisions and lessons override older rows below wherever they disagree. Ea
 
 ## Wildbond in Godot (the new Wildbond; Claude's lane)
 
-Browser-data handoff T40: areas 5–8 clues and chatter ready in PR #64 (Codex, 2026-10-08); no Godot edits.
+Browser-data handoff T40: areas 5–8 clues and chatter merged 2026-10-08 (Wildbond v1.8.0, PR #64); they reach the Godot version when Claude builds those areas (WG2).
 
 Built so far (wildbond-godot/README.md): the opening (register, barn, Wren), Thornwood, Saltmarsh, Emberfall,
 Cloudglass, wild creatures and bonding, trainers and Wardens, the ranch as a place (paddock, barn, nursery, trough,
@@ -213,7 +213,7 @@ New Wildbond work goes to **Wildbond in Godot** above. Browser data (species, ma
 | R8 | **Pacing re-measure 1-60** with every system on; tune zone XP only | M | Polish | — | done, merged 2026-10-07 | docs/realmbound-40-60.md "Measured" |
 | R9 | Heroic tiers and loot review for the newest dungeons (Rootrot, Heartwood) | S | Polish | — | done, merged 2026-10-07 by Claude (Codex; docs/realmbound-heroic-review.md) | |
 
-| RB-W1 | **T38 Realmbound in the game window, plan and part 1** | M | Polish | — | ready for review: Codex, 2026-10-08, PR #62 | ROADMAP T38; world fills the window, Quest Journal and Satchel overlays; no gameplay/balance or version changes |
+| RB-W1 | **T38 Realmbound in the game window, plan and part 1** | M | Polish | — | done, merged 2026-10-08 (Realmbound v1.6.0, PR #62) | ROADMAP T38; world fills the window, Quest Journal and Satchel overlays; no gameplay/balance or version changes |
 
 ## Shared systems and the world kit
 
@@ -244,7 +244,7 @@ New Wildbond work goes to **Wildbond in Godot** above. Browser data (species, ma
 | ID | Project | Size | Kind | Status | Spec |
 |---|---|---|---|---|---|
 | SG1-SG4 | Starfall Guild stages G1-G4: careers, two expeditions, the town serves the guild, seasons become campaigns | L each | System | superseded by the Starfall village in Godot (SV1-SV5 above) | docs/plans/starfall-guild.md |
-| OW0-OW5 | Otherworld (isekai) stages O0-O5 | L each | System | active: O0 and O1 done (v0.2.0); Hearthmere T39 ready PR #63 (Codex, 2026-10-08); Ashen Throne ready PR #65 (Codex, 2026-10-08), stacked on #64 | docs/plans/otherworld.md, docs/ideas.md |
+| OW0-OW5 | Otherworld (isekai) stages O0-O5 | L each | System | active: all three worlds playable (v0.3.0: Asterhold with Lanthorn, Hearthmere, the Ashen Throne); next: memories that matter across lives, O2 onward | docs/plans/otherworld.md, docs/ideas.md |
 | DC0-DC4 | Diamond Career (baseball) stages D0-D4 | L each | System | D0 + first D1 merged (PR #45); D1 first month merged 2026-10-08 by Claude (v0.2.0, PR #48); D1c merged (v0.3.0, PR #50); v0.3.1 batting you can see (Claude); T36 in the game window and a road trip in progress (ChatGPT, A10); later stages outlined | docs/plans/diamond-career.md, docs/plans/sports-careers.md |
 | PR0-PR4 | Primordial stages P0-P4 | L each | System | back burner | docs/plans/primordial.md |
 | CS1 | **Card shop** (Evan's idea, 2026-10-08): run a card shop whose cards are our own catalogue creatures; packs, singles, Friday tournaments on Wildbond's element rules, regulars with stories | L | System | parked, Evan decides when | docs/proposals/showing-the-games.md |
@@ -275,4 +275,4 @@ Merged 2026-10-08 (Realmbound v1.3.0, PR #53); written by Codex on codex/realmbo
 
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
-| D1d | **T36: in the game window and a road trip** | L | Polish+Data | D1c | ready for review: Codex, 2026-10-08, PR #59 | docs/ROADMAP.md T36; keep existing features reachable, three away parks and calendar pay |
+| D1d | **T36: in the game window and a road trip** | L | Polish+Data | D1c | done, merged 2026-10-08 (Diamond Career v0.4.0, PR #59) | docs/ROADMAP.md T36; keep existing features reachable, three away parks and calendar pay |

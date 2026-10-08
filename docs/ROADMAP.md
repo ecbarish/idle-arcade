@@ -165,7 +165,39 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
 - [x] T33 merged 2026-10-08 by Claude (Wildbond v1.6.0, PR #43).
 - [x] T34 implemented by Codex on `codex/diamond-career-d0`, PR #45 ready for review (2026-10-08; not merged).
 
-- [x] T38-T40 ready for review in PR #62–#64 (Codex, 2026-10-08), after T36 and T37; none merged.
+- [ ] T41-T44 open for ChatGPT (2026-10-08, late night), after T36-T40 (all merged). Read PROJECTS.md "Read first".
+
+### T41: Realmbound in the game window, part 2 (pages become places)
+Follows docs/plans/realmbound-in-window.md "Follow-ups" (T38). Branch `codex/realmbound-window-2`.
+- Replace notebook pages with their physical interactions, one at a time, only when each is ready, never removing the
+  old route before its replacement exists: the **guild** happens in the walkable guild hall (members where they stand,
+  the jobs board you walk to), the **trainer and talents** with the trainer in town, the **stable** for pets and mounts.
+- Quest givers speak in place (portrait scenes over the world, not a page). Phone to ultrawide; old saves load; all
+  eight test pages pass; before/after screenshots.
+
+### T42: Otherworld, memories that matter across lives (O2)
+docs/otherworld-design.md ("A life, step by step" 7, "Rebirth", and the "Not predetermined" direction: systemic
+first). Branch `codex/otherworld-memories`.
+- Each memory the soul carries changes something real in other worlds: a choice that only appears because you
+  remember, a person who reacts, a rule that bends (a remembered song calms a spirit in Hearthmere and a beast in
+  Asterhold). Start small: every existing memory gets at least one effect in another world.
+- **Toward a systemic world:** give two or three people in each world a want, a grudge or a debt that persists and
+  changes what they do across that life (no AI, authored rules). Words, not meters; checks in tests/otherworld.html.
+
+### T43: The creature catalogue reaches Realmbound (data, then names on screen)
+docs/lore/catalogue.md (T37's Reach beast mappings) and docs/proposals/creature-catalogue-and-evolution.md §1. Branch
+`codex/catalogue-realmbound`.
+- Complete the mapping for every Realmbound zone and dungeon beast. Where a mapping is clean, Realmbound shows the
+  catalogue creature's name and a one-line description in its world's voice (a Realmbound hunter's view of a
+  Wildbond creature), without changing combat numbers. Old saves load; tests/run.html passes.
+
+### T44: Accessibility pass on the browser games (L10)
+docs/accessibility.md. Branch `codex/accessibility`.
+- Keyboard play everywhere (Realmbound, Diamond Career, Otherworld, the arcade launcher), visible focus, colour
+  contrast at least AA for text, readable sizes with the shared text-size setting, labels for screen readers on
+  buttons and scenes, reduced motion respected. A short report of what was fixed and what remains.
+
+- [x] T38-T40 merged 2026-10-08 by Claude (PR #62-#64; Realmbound v1.6.0, Otherworld v0.3.0, Wildbond v1.8.0).
 
 ### T38: Realmbound in the game window (the plan, then part 1)
 - [x] Plan and part 1 ready in PR #62 (Codex, 2026-10-08): world viewport, carried Journal/Satchel, all existing feature routes retained; 25 new scenarios and all eight pages pass; before/after at four widths. No release bump.
@@ -202,7 +234,7 @@ the fading, which also took the valley's depth, the Unbound, heritages). Branch 
   tools/godot-export.ps1 when Claude builds those areas. tests/wildbond.html stays all-pass; README entry.
 
 - [x] T35 merged 2026-10-08 (Otherworld v0.2.0). [ ] T36, T37 open for ChatGPT (2026-10-08, after its reset): one branch and PR each, stacked if needed.
-- [x] T35 merged 2026-10-08 (Otherworld v0.2.0). T36 and T37 ready for review in PR #59 and #60; neither merged.
+- [x] T35 merged (Otherworld v0.2.0); T36 and T37 merged 2026-10-08 (Diamond Career v0.4.0, Wildbond v1.8.0).
 
 ### T35: Otherworld O1, a living Lanthorn (moved from Claude's lane; Claude is in Godot)
 - [x] Implementation ready in PR #58 (Codex, 2026-10-08); 831 Otherworld checks, all eight pages pass. Review/version bump remain Claude's. Details: docs/otherworld-lanthorn.md.
