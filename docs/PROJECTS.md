@@ -134,6 +134,7 @@ assistant commits for everyone. Build in this order; each step is useful alone.
 | V6 | **Friends**: no-server sharing first (trade and battle codes, ghost teams, shared seeds), then a free hosted database (leaderboards, async trades), real-time co-op last | XL | System | — | open | Evan creates any service accounts himself |
 | V7 | **Nodes** in Realmbound: camps grow into villages and towns from what the guild and the bots do there; neglect fades them | L | System | V5 | open | The Ashes of Creation idea, single-player |
 | V8 | **Automation as earned QoL and delegation** (not skipping play): review each game's Auto against docs/VISION.md §8 | M | Design+Polish | — | open | Answers "when does full Auto unlock" |
+| V9 | **Choices that matter** (Mass Effect, Fable): a remembered world state per save, story choices with lasting consequences, companions with loyalty and personal arcs who can be lost in rare warned moments, bonds and tasteful romance between adult characters, reputation | L | Design+System | R4 | open | Start with a few Realmbound story choices and the guild stories; Design doc first (CREATIVE.md "Ask Evan first" for permanent loss) |
 
 ## Parked games (side lane: structure and polish only, until Evan says go)
 
