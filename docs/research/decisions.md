@@ -4,8 +4,10 @@
 
 - **A village/town builder and manager** (Kairosoft's Dungeon Village, "our own spin"): earn money, hire workers,
   automate what used to be tedious. Starfall Guild's plan already follows Dungeon Village (docs/plans/starfall-guild.md
-  G3, "the town serves the guild"). **Open for Evan:** grow Starfall into the village builder (Claude's recommendation),
-  or keep Starfall light and make a separate game.
+  G3, "the town serves the guild"). **Decided (Evan, 2026-10-08): Starfall grows into the village**, with a little of the
+  business side folded in (you run the town's own places), without becoming a game within a game. Fallen adventurers
+  recover with care (anime-style); you can fail and you can excel; no windfalls. Plan: docs/plans/starfall-village.md.
+  Starfall is now a fleshed-out game, so it moves to Godot (after Wildbond).
 - **A business manager** (working name "Main Street"): own one business, then several in town; hire staff and managers
   who automate; earn vehicles and conveniences; upgrades and progression. Like the tycoon genre, without ads or paid
   speed-ups. A new game; parked until research (Gemini prompt given to Evan 2026-10-08) and until the current games
@@ -36,7 +38,7 @@ this means now:
   them once, in Godot, unless a game is staying in the browser. Small fixes and content continue in the browser.
 - **The walk-in arcade (PROJECTS V11) is the natural next Godot project after Wildbond**, run on the website through
   the web export.
-- **Only the games being fleshed out move** (Evan): Wildbond, Realmbound, and Diamond Career and Otherworld if they keep growing. Lighter games (Primordial, and Starfall Guild unless it grows) stay in the browser with little further work.
+- **Only the games being fleshed out move** (Evan): Wildbond, Realmbound, and Diamond Career and Otherworld if they keep growing. Lighter games (Primordial) stay in the browser with little further work; Starfall Guild grows (see "New game ideas").
 - Order of moves and timing are still open; Wildbond's trial decides how well it works first.
 ## Decided (Evan, 2026-10-08): Diamond Career and Otherworld start now, in the browser
 
