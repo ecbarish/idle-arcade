@@ -125,6 +125,7 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude: Evan played the Godot trial: "this feels much better". Fixed his notes (Maren off the gate,  fences join vertically, four-way facing with walk frames and idle breathing, cub tail wag and trot). His animation  bar ("better than the first Pokémon") needs real sprite art: docs/wildbond-plan.md "Art and animation".
 - 2026-10-07 Claude: Evan installed Godot 4.7.2 (unzipped to C:UsersevanbGodot). Built the trial in wildbond-godot/  (README there): faded Larkhaven on the real map at 384x216 with integer scaling, Maren walks up and speaks in  bubbles, the first bond floods colour back (fade.gdshader), the partner follows. Verified headless and with recorded  frames. Waiting for Evan to play it (Play Wildbond trial.bat) before deciding browser vs standalone.
 - 2026-10-07 Claude: saved Gemini's research (docs/research/creature-games-ux.md) and mapped its lessons onto  docs/wildbond-plan.md phases. Evan is considering a standalone game: options and a recommendation (Godot, small  trial first) are Question 1 in Questions for Evan; the screen rebuild waits for his answer.
 - 2026-10-07 Claude: rewrote the plans from Evan's play notes: docs/wildbond-plan.md (one plan, principles + phases  1-7), queue lanes A and B rewritten, CLAUDE.md "Where we are" rewritten, T33 creature variants ticket for ChatGPT.

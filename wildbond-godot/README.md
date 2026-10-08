@@ -25,6 +25,12 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   itself) and look at the frames.
 - The `.godot/` folder is Godot's cache and isn't saved in git.
 
+## Evan's verdict (2026-10-08)
+"This feels much better." Fixed after his first play: Maren no longer blocks the paddock gate, fences join up and
+down, people face the way they walk (front, back, side) with stepping feet and a breath when standing, and the cub
+wags and trots. His bar for animation is "better than the first Pokémon": see docs/wildbond-plan.md "Art and
+animation" (real sprite art is the next step).
+
 ## Next, if Evan likes it
 The character creator ("paint yourself in"), choosing your partner in Maren's barn, a battle on the field, the
 Wilddex sketchbook, and the rest of docs/wildbond-plan.md, carrying over all creatures, maps and story as data.

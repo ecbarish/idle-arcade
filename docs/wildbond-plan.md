@@ -91,6 +91,16 @@ Options and a recommendation are in the session notes and START-HERE's Questions
 that are mostly design and content (the opening's story, the Sanctuary's design, the data) go ahead, and the big
 screen rebuild (phases 1, 3, 4) waits so it's built once.
 
+## Art and animation (Evan, 2026-10-08, after the Godot trial)
+"It feels like Pitfall or some very old game; even the first Pokémon felt more advanced." The trial's figures are drawn
+pixel by pixel in code, which caps how alive they can look. The bar: **better than the classic handhelds**: four-way
+walking with at least four frames, idle animations (breathing, looking around, creatures sniffing and playing),
+battle animations, and lively scenery (grass that sways when you walk through it, smoke, water, birds). That needs
+**real sprite art**: either drawn sprite sheets (by an artist, or AI-generated and then cleaned up), or licensed
+packs that fit our look (CC0 or CC-BY; recorded in CREDITS.md). Godot plays sprite-sheet animations natively. First
+step: choose an art direction and a base sprite size (likely 16x16 tiles with 16x24 characters, or 32x32), then make
+one character and one creature properly as the template.
+
 ## How we'll know it works
 Evan replays the first hour after each phase. A new player should be able to say, within ten minutes: who Maren and
 Wren are, why the world is faded, how to bond with a creature, what the Wilddex is for, and where to go next, without
