@@ -57,7 +57,13 @@ For each: what players can see, the candidate explanations, the decided truth (i
 - **Open:** candidates: the thing the wild bond fought, sleeping; the creature from the old wild bond; a guardian who
   failed to stop the fading and has kept watch in shame ever since.
 
-### 5. Small threads to tie off early
+### 5. The heritages' tales
+- **Seen:** each heritage tells the fading differently (proposals/wildbond-heritage.md): tired land, something from the
+  sea, the watcher who failed, a bond that burned too bright. Each matches one candidate for thread 1.
+- **Decided (Evan, 2026-10-08):** all four descend from one older people who each witnessed a different part of the same
+  event. Each tale is partly true. Some clues are only noticed with a given heritage.
+
+### 6. Small threads to tie off early
 - Veilmote, the reserved sprite that "folds deep shade around abandoned nests, keeping their last warmth": whose nests,
   and why does it guard what's left? (Could tie to thread 2 or 4.)
 - Tobin's "Seen the tide go out further than it should, once. Didn't much like what walked out of it." (Breakwatermane,
