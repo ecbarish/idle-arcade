@@ -115,7 +115,7 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
-- 2026-10-07 Codex: L7b/R8 Realmbound audit ready in PR #42, stacked on #41. Fifteen actual-combat class/journey runs complete story and both Heroic 1 clears; proposed late-zone 0.6 XP budget gives Classic 40–60 19.91–23.77h. All five pages pass (4173/1213/48/21/15), saves/hub restored; no version/cache bumps or merge. Two audit PRs await Claude.
+- 2026-10-07 Codex: L7b/R8 Realmbound audit ready in PR #42, stacked on #41. Fifteen actual-combat class/journey runs complete story and both Heroic 1 clears; proposed late-zone 0.6 XP budget gives Classic 40–60 19.91–23.77h. All five pages pass (4173/1225/48/21/15), saves/hub restored; no version/cache bumps or merge. Two audit PRs await Claude.
 
 - 2026-10-07 Codex: L7a/W8 Wildbond pacing audit in PR #41 (codex/wildbond-launch-balance): 15-case before/after simulations, smoother Stillreed entry, cap-aligned late Wardens, 11 new regression checks. All five browser pages pass (4150/1213/48/21/15), saves/hub restored. Failed Nuzlocke starts are distinguished from second-chance completions; no version/cache changes or merge. Next: Lane A3 Realmbound pacing.
 
