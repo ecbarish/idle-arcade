@@ -160,7 +160,7 @@ function guildHTML() {
       <div class="aff" title="Mood ${mood}"><i style="width:${mood}%;background:${mood >= 70 ? '#7cf08a' : mood >= 30 ? '#f2c14e' : '#e0483e'}"></i></div></div>
       <div class="r"><button class="btn sm alt" data-act="guilddismiss" data-arg="${k}" ${memberRaiding(k) ? 'disabled title="Return from the raid before dismissing this member"' : ''}>Dismiss</button></div></div>`; }).join('') : '<p class="meta">No adventurers yet. Invite companions who are your Friends.</p>';
   if (cand.length) o += `<p class="meta" style="margin-top:6px">Could join: ${cand.map(n => `<button class="btn sm" data-act="guildinvite" data-arg="${n.id}">Invite ${n.name}</button>`).join(' ')}</p>`;
-  return o + memberRequestsHTML() + memberStoriesHTML();
+  return o + memberRequestsHTML() + '<p class="meta">Meet your adventurers by the hearth, or open their book over the world. <button class="btn sm alt" data-act="memberstorybook">Open the hearth book</button></p>';
 }
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-act]'); if (!el || !H()) return; const a = el.dataset.act, arg = el.dataset.arg;

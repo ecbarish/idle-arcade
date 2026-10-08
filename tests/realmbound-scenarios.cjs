@@ -843,6 +843,11 @@ module.exports = function scenarios() {
       const repaired=normalizeMemberStories({bad:{done:3},[localKey]:{seconds:Infinity,done:3,choice:null},[remoteKey]:{seconds:-1,done:99,choice:1}});
       check(!repaired.bad&&repaired[localKey].seconds===0&&repaired[localKey].done===1&&repaired[remoteKey].seconds===0&&repaired[remoteKey].done===3,'R4: malformed optional story records clamp safely without inventing an outcome');
       rb.S.tab='supplies';const cacheBefore=TABS.supplies.key();rb.S.guild.stories[localKey]={seconds:1800,done:0,choice:null};check(TABS.supplies.key()!==cacheBefore,'R4: story readiness and choices invalidate the Guild tab cache');
+      check(guildHTML().includes('memberstorybook')&&!guildHTML().includes('rowl member-story'),'R4: Guild tab keeps only a book shortcut, not story rows beside the world');
+      check(openMemberStoryBook()&&modalKind==='memberstories'&&document.querySelector('#sheet').textContent.includes('The hearth book'),'R4: story index is a book opened over the world');
+      const bookRun=rb.C.run;rb.step(.1);check(rb.C.run===bookRun,'R4: reading the book pauses the world');
+      check(playMemberStory(localKey,false)&&!modalKind,'R4: listening closes the book so it cannot hide the portrait');SCN.skip();SCN.choose(1);check(modalKind==='memberstories'&&!RTALK,'R4: deferring returns to the book without choosing');closeModal();
+      townTalk({id:'registrar',lines:()=>[['Registrar Mott','Welcome to the hearth.']]});SCN.skip();SCN.choose(0);check(modalKind==='memberstories','R4: the walkable registrar lends the book');closeModal();
       rb.S.guild.members[localKey].mood=80;memberTalk(localKey);check(RTALK&&RTALK.memberStory,'R4: walkable hall member opens a ready personal story');SCN.skip();SCN.choose(1);
       }
       rb.save();return checks;

@@ -108,7 +108,8 @@ function playMemberStory(key, replay) {
   const w = workerOf(key), story = memberStoryData(key), state = memberStoryState(key);
   if (!w || !story || (replay ? !state.done : memberStoryProblem(key))) return false;
   if (replay && memberStoryMeetingProblem(key)) return false;
-  const hero = H(), account = S, member = w.m, expected = state.done;
+  const hero = H(), account = S, member = w.m, expected = state.done, book = modalKind === 'memberstories';
+  if (book) closeModal();
   const voice = MEMBER_STORY_VOICE[w.n.pers] || MEMBER_STORY_VOICE.cheerful;
   const lines = replay ? [[w.name, story[1]]].concat(state.done >= 2 ? [[w.name, story[2]], [hero.name, story[3 + state.choice]]] : [], state.done >= 3 ? [[w.name + ':happy', story[5 + state.choice]]] : [])
     : [[w.name, voice[expected]], [w.name, expected === 0 ? story[1] : expected === 1 ? story[2] : story[5 + state.choice]]];
@@ -118,10 +119,16 @@ function playMemberStory(key, replay) {
   SCN.play(lines, choice => {
     if (MEMBER_STORY_FACE === face) { MEMBER_STORY_FACE = null; SCN.el.classList.remove('member-story-dialogue'); }
     // Hero/account changes, dismissal and stale callbacks cannot spend another hero's response.
-    if (replay || S !== account || H() !== hero || G().members[key] !== member) return;
-    if (finishMemberStory(key, expected, choice)) renderTab(true);
+    if (S !== account || H() !== hero || G().members[key] !== member) return;
+    if (!replay && finishMemberStory(key, expected, choice)) renderTab(true);
+    if (book) openMemberStoryBook();
   }, { choices });
   C.lastInput = C.run; TOWN.auto = null; RTALK.memberStory = true; RTALK.memberStoryKey = key; SCN.el.classList.add('member-story-dialogue'); SCN.el.scrollIntoView({ block: 'center' }); return true;
+}
+function openMemberStoryBook() {
+  if (!H() || !guildOn() || RTALK) return false;
+  C.lastInput = C.run; TOWN.auto = null;
+  openModal('memberstories', '<h3>The hearth book · ' + G().name + '</h3>' + memberStoriesHTML()); return true;
 }
 function clearMemberStory(key) {
   if (RTALK && RTALK.memberStory && (key === undefined || RTALK.memberStoryKey === key)) { RTALK = null; SCN.el.hidden = true; MEMBER_STORY_FACE = null; SCN.el.classList.remove('member-story-dialogue'); }
@@ -143,6 +150,7 @@ function memberStoriesHTML() {
 }
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-act]'); if (!el) return;
-  if (el.dataset.act === 'memberstory') playMemberStory(el.dataset.arg, false);
+  if (el.dataset.act === 'memberstorybook') openMemberStoryBook();
+  else if (el.dataset.act === 'memberstory') playMemberStory(el.dataset.arg, false);
   else if (el.dataset.act === 'membermemory') playMemberStory(el.dataset.arg, true);
 });

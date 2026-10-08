@@ -129,6 +129,7 @@ function townTalk(n) {
   if (n.isMule) { SCN.play([['Pell', 'That\'s Brisket. He doesn\'t talk, which makes him the best listener in three worlds.']], null); return; }
   const h = H();
   if (n.id === 'member') { memberTalk(n.key); return; }
+  if (n.id === 'registrar') { const hero = H(); SCN.play(n.lines(), choice => { if (choice === 0 && H() === hero) openMemberStoryBook(); }, { choices: ['Open the hearth book', 'Another time'] }); return; }
   if (n.id === 'giver') { const q = (QUESTS[h.zone] || []).find(q => qState(q) === 'avail');
     if (q && h.quests.active.length < 3) { questOffer(q.id); return; }
     SCN.play([[n.name, q ? 'Your pack looks full already. Finish what you carry first, then come and see me.' : 'Nothing new on the board for you today. The road is quieter for your work.']], null); return; }
