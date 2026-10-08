@@ -8,7 +8,7 @@ and how much creative freedom you have are in [CREATIVE.md](CREATIVE.md).
 
 ## The loop (every assistant)
 
-1. `git fetch`; start from the latest `origin/main`.
+1. `git fetch`; start from the latest `origin/main`. Read [COMMS.md](COMMS.md), the message board between assistants.
 2. Take the **first task in your lane** whose status is `open`. Claim it: set its status here to
    `claimed: <you>, <date>, <branch>` as your branch's first commit, push, and open the pull request early (a draft is
    fine), so the claim is visible. (Claude, who works on main, pushes the claim to main.)

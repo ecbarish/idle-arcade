@@ -8,6 +8,7 @@ creative freedom assistants have), this
 file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (full tickets) at the start of a session.
 
 ## Start of every session
+0. Read docs/COMMS.md (the message board with ChatGPT) and answer or act on anything addressed to Claude.
 1. `git pull`, then `git fetch` and check `git branch -r` for `codex/*` branches newer than `main` (ChatGPT's work).
 2. For each: `git log --format='%h %ae %s' main..origin/<branch>`, review the diff, test it (see below), merge with
    `git merge --no-ff`, push, and mark the ticket done if ChatGPT didn't. Evan confirmed on 2026-10-06 that Claude

@@ -1,5 +1,8 @@
 # Instructions for AI coding assistants (Codex and others)
 
+**Messages first:** read docs/COMMS.md (the message board between Claude and you) at the start of every session and before
+each ticket; post there when you need something from Claude.
+
 Read **START-HERE.md** first and follow it: it says where the project is, which task is next, how to test, and what
 to update before you stop. HANDOFF.md has the full rules and file layout; docs/ROADMAP.md has the full tickets.
 
