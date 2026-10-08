@@ -331,7 +331,37 @@ func _run() -> void:
 		check(main.level_cap() == 25, "one badge raises the level cap to 25 (CAP_TABLE)")
 		check(main.npcs.any(func(n): return n.id == "nerys" and n.where == "saltmarsh" and main.npc_info.nerys.warden), "Warden Nerys waits on the coast")
 		check(main.npcs.filter(func(n): return n.where == "saltmarsh").size() >= 4, "the coast's people: Tobin, Cato, Marit and Nerys")
-		check(walk_to(Vector2i(13, 13)) or main.map_name == "thornwood", "back to the coast road south")
+		# ---- the cliff road east to the Emberfall Highlands: roped off until Nerys gives you the Tide Badge
+		main.npc_info.cato.beaten = true                # (walk past the beach trainers for this check)
+		main.npc_info.marit.beaten = true
+		check(walk_to(Vector2i(28, 8)), "you can walk along the beach to the cliff road")
+		main._step(Vector2i.RIGHT)
+		tick(1.0)
+		check(main.map_name == "saltmarsh" and not main.lines.is_empty() and "Tide Badge" in main.lines[0].text, "the cliff road is roped off without the Tide Badge, and the sign says so")
+		talk_through()
+		tick(0.5)
+		main.npc_info.nerys.beaten = true
+		main.badges.append("tide")
+		check(walk_to(Vector2i(28, 8)), "back at the foot of the cliff road")
+		main._step(Vector2i.RIGHT)
+		tick(1.0)
+		check(main.map_name == "emberfall" and main.me.tile == Vector2i(1, 8), "with the Tide Badge: up to the Emberfall Highlands, arriving where the map says")
+		check(main.level_cap() == 35 and main.battle.area == "emberfall", "two badges raise the cap to 35, and battles here happen in the highlands")
+		check(main.npcs.any(func(n): return n.id == "toren" and n.where == "emberfall" and main.npc_info.toren.warden), "Warden Toren waits above the springs")
+		check(main.npcs.any(func(n): return n.id == "orsk") and main.npcs.any(func(n): return n.id == "sela"), "Orsk the ridge hiker and Sela the spring keeper")
+		check(main.solid("o") and main.solid("R") and main.route(Vector2i(1, 8), Vector2i(8, 5)).is_empty(), "the hot springs and the cliffs block the way")
+		main.explored_in["emberfall"] = 6
+		check(main._beat_here("emberfall").get("id", "") == "rival4", "Wren waits on Warmstep Rise after a few explorations")
+		main.explored_in["emberfall"] = 0
+		check(not main._gate_open("emberfall"), "the high path north into the cloud stays roped until Toren is beaten")
+		main._step(Vector2i.LEFT)
+		tick(1.0)
+		check(main.map_name == "saltmarsh" and main.me.tile == Vector2i(28, 8), "and back down to the coast")
+		talk_through()
+		main.badges.erase("tide")                       # back to one badge, as the checks below expect
+		main.npc_info.nerys.beaten = false
+		walk_to(Vector2i(14, 8))                        # along the beach path, out of the tall grass
+		check(walk_to(Vector2i(13, 13)) or main.map_name == "thornwood", "back to the coast road south (at %s, battle %s)" % [main.me.tile, main.battle.visible])
 		main._step(Vector2i.DOWN)
 		tick(1.0)
 		check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 1), "and back into Thornwood by the gate")

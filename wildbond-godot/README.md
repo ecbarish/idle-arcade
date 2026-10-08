@@ -42,8 +42,13 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   explorations, and Elderhorn, the guardian stag, steps out of the old trees at 20 (befriend it, or it slips away to
   return later). On the coast: Wren again, and Breakwatermane walking out of the surf at low tide.
 - **Saltmarsh Coast:** through the hawthorn gate. Beach, reeds, rocks and the open sea; Tobin the old fisher, Cato and
-  Marit, and Warden Nerys with the Tide Badge (the cliff road to the Emberfall Highlands opens with it, and is next to
-  build). Badges raise the level cap (15, then 25, ...: CAP_TABLE).
+  Marit, and Warden Nerys with the Tide Badge (the cliff road east to the Emberfall Highlands opens with it). Badges
+  raise the level cap (15, then 25, ...: CAP_TABLE).
+- **Emberfall Highlands:** up the cliff road with the Tide Badge. A mountain of layered rock with sunlit rims and shaded
+  cliff faces (rock out in the meadow stands as boulders), warm dry turf, amber hot springs that bubble and steam, and
+  sparks drifting up from the vents. Orsk the ridge hiker, Sela the spring keeper, and Warden Toren above the springs
+  (the Ember Badge); Wren at Warmstep Rise and Hearthcrown, the guardian stag, as you explore. Battles here have the
+  highland sky and ridges. The high path north to Cloudglass Pass is next to build.
 - **Larkhaven's shop and inn:** walk into the cottage door by the paddock for the shop counter (5 lures for 50 coins,
   berries for a tired team; you start with 120 coins, like the browser) and into the inn door for a night's rest that heals
   your team. Pip lives in town too, and notices the colour after your first badge. (The browser's shop stands where
@@ -68,7 +73,7 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   See it: add `--write-movie <folder>/f.png --fixed-fps 10 --quit-after 200 -- --demo` (the demo plays the opening by
   itself) and look at the frames.
 - **Checks:** `Godot_v4.7.2-stable_win64_console.exe --headless --path wildbond-godot --script res://tests/run_tests.gd`
-  plays the opening, the first battle, Thornwood, a catch, the Warden and a save by itself; must stay all-pass (122 checks on 2026-10-08). `tests/battle_odds.gd` measures how winnable a battle is; run the game with `-- --skip-opening` to start in Thornwood (add `--at=saltmarsh` for the coast).
+  plays the opening, the first battle, Thornwood, a catch, the Warden and a save by itself; must stay all-pass (133 checks on 2026-10-08). `tests/battle_odds.gd` measures how winnable a battle is; run the game with `-- --skip-opening` to start in Thornwood (add `--at=saltmarsh` for the coast, `--at=emberfall` for the highlands).
 - **Builds for sharing:** `tools/godot-build.ps1` (web: play/wildbond/, Windows: export/Wildbond-trial-windows.zip),
   once Godot's export templates are installed (Editor > Manage Export Templates > Download and Install).
 - Click or tap anywhere to walk there; tap a creature in the barn to walk up and meet it.

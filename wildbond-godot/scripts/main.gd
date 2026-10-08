@@ -112,7 +112,7 @@ var npc_info := {}                           # id -> { data from the map, beaten
 var badges: Array = []
 var spotter: Mover = null                    # a trainer who has seen you and is walking over
 var spot_t := 0.0
-const BUILT := ["larkhaven", "thornwood", "saltmarsh"]    # the maps the Godot version has so far
+const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall"]    # the maps the Godot version has so far
 var starters: Array[Mover] = []
 var partner: Mover = null
 var map_name := "larkhaven"
@@ -232,6 +232,8 @@ func _set_map(n: String) -> void:
 	cam.limit_bottom = m.size() * TILE
 	place.text = "Maren's barn" if n == "barn" else str(DATA.MAPS[n].name)
 	place.modulate.a = 1.0
+	if battle:
+		battle.area = "" if n == "barn" else str(DATA.MAPS[n].get("biome", ""))   # battles take place in the area you're in
 
 # ---------------------------------------------------------------- dialogue
 func say(who: String, text: String) -> void:
@@ -820,6 +822,9 @@ func _draw() -> void:
 		draw_rect(Rect2(m.pos + Vector2(3, 14), Vector2(10, 2)), Color(0, 0, 0, 0.25))   # a soft shadow
 		if not _is_painted(m):
 			_draw_actor(self, m, i)
+	if map_name == "emberfall":
+		_draw_steam()
+		_draw_embers()
 	if spotter and spot_t < 0.9:
 		# the "!" over a trainer who has just seen you
 		var ex := spotter.pos + Vector2(4, -18 - minf(spot_t * 20.0, 4.0))
@@ -1115,6 +1120,16 @@ func _draw_ground(x: int, y: int, ch: String) -> void:
 	var o := Vector2(x, y) * TILE
 	var n := (x * 7 + y * 13) % 9
 	_tex(FLOOR, Vector2i(11 + (n if n < 5 else 0), 12), Vector2i.ONE, o)          # grass, with a few tufts
+	if map_name == "emberfall":
+		draw_rect(Rect2(o, Vector2(16, 16)), Color(0.65, 0.54, 0.41, 0.32))       # highland turf, dry and warm (the area's ground colour)
+		if ch == "R":
+			if _mountain().has(Vector2i(x, y)):
+				_draw_cliff(x, y, o, n)
+				return
+			_draw_rock(o, n)                                                     # a boulder out in the meadow
+			return
+		if ch == "o":
+			_draw_spring(x, y, o)
 	if ch == "_" or (ch == "R" and "_" in [tile_at(Vector2i(x - 1, y)), tile_at(Vector2i(x + 1, y)), tile_at(Vector2i(x, y - 1))]):
 		_draw_sand(x, y, o, n)                                                     # the beach
 	if ch == "R":
@@ -1354,8 +1369,8 @@ func _skip_opening() -> void:
 			start = a.substr(5)                          # e.g. -- --skip-opening --at=saltmarsh
 	var st: Array = DATA.MAPS[start].get("start", [13, 14, "up"])
 	if start != "thornwood":
-		badges = ["thorn"]
-		team[0].lvl = 14
+		badges = ["thorn"] if start == "saltmarsh" else ["thorn", "tide"]
+		team[0].lvl = 14 if start == "saltmarsh" else 24
 		team[0].hp = R.stats(team[0]).hp
 	_go(start, Vector2i(int(st[0]), int(st[1])), DIRS.get(st[2], Vector2i.UP))
 	trans_t = 0.29
@@ -1718,6 +1733,112 @@ func _draw_sand(x: int, y: int, o: Vector2, n: int) -> void:
 		draw_rect(Rect2(o + Vector2(6, 8), Vector2(1, 1)), Color("f0e0c8"))
 	elif n == 6:
 		draw_rect(Rect2(o + Vector2(10, 4), Vector2(3, 1)), Color("d8b888"))         # ripples left by the wind
+
+## Emberfall's mountain: rock that fills the edge of the map, with layered strata, a sunlit rim where the rock meets
+## open ground above it, and a dark cliff face where it drops to the ground below.
+const CLIFF := Color("8a7464")
+var _mountains := {}                         # map -> the rock tiles joined to the map's edge (the rest are boulders)
+func _mountain() -> Dictionary:
+	if _mountains.has(map_name):
+		return _mountains[map_name]
+	var rows: Array = cur_map()
+	var h := rows.size()
+	var w: int = int(rows[0].length())
+	var found := {}
+	var queue: Array[Vector2i] = []
+	for y in h:
+		for x in w:
+			if (x == 0 or y == 0 or x == w - 1 or y == h - 1) and rows[y][x] == "R":
+				found[Vector2i(x, y)] = true
+				queue.append(Vector2i(x, y))
+	while not queue.is_empty():
+		var c: Vector2i = queue.pop_back()
+		for d in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
+			var p: Vector2i = c + d
+			if p.x >= 0 and p.y >= 0 and p.x < w and p.y < h and not found.has(p) and rows[p.y][p.x] == "R":
+				found[p] = true
+				queue.append(p)
+	_mountains[map_name] = found
+	return found
+
+func _draw_cliff(x: int, y: int, o: Vector2, n: int) -> void:
+	var open_above := tile_at(Vector2i(x, y - 1)) != "R" and y > 0
+	var open_below := tile_at(Vector2i(x, y + 1)) != "R" and y < cur_map().size() - 1
+	var open_left := tile_at(Vector2i(x - 1, y)) != "R" and x > 0
+	var open_right: bool = tile_at(Vector2i(x + 1, y)) != "R" and x < int(cur_map()[0].length()) - 1
+	draw_rect(Rect2(o, Vector2(16, 16)), CLIFF)
+	for i in 3:                                                                   # strata: uneven bands of darker stone
+		var sy := 3 + i * 5 + (n + i) % 2
+		draw_rect(Rect2(o + Vector2((n * 3 + i * 5) % 6, sy), Vector2(9 + (n + i) % 5, 1)), CLIFF.darkened(0.18))
+	if n % 3 == 0:
+		draw_rect(Rect2(o + Vector2(4 + n % 5, 6), Vector2(2, 2)), CLIFF.lightened(0.2))   # a pale pebble of quartz
+	if open_below:
+		draw_rect(Rect2(o + Vector2(0, 9), Vector2(16, 7)), CLIFF.darkened(0.32))         # the cliff face, in shade
+		for k in 4:
+			draw_rect(Rect2(o + Vector2(1 + k * 4 + n % 2, 10), Vector2(1, 5 - (k + n) % 3)), CLIFF.darkened(0.5))
+		draw_rect(Rect2(o + Vector2(0, 15), Vector2(16, 1)), Figures.OUTLINE)
+	if open_above:
+		draw_rect(Rect2(o, Vector2(16, 2)), CLIFF.lightened(0.28))                   # the sunlit rim
+		draw_rect(Rect2(o + Vector2(0, 2), Vector2(16, 1)), CLIFF.lightened(0.12))
+	if (x * 5 + y * 3) % 4 == 0:
+		draw_rect(Rect2(o + Vector2(10, 3 + n % 4), Vector2(1, 4)), CLIFF.darkened(0.4))   # a crack in the rock
+		draw_rect(Rect2(o + Vector2(11, 6 + n % 4), Vector2(1, 2)), CLIFF.darkened(0.4))
+	if open_left:
+		draw_rect(Rect2(o, Vector2(1, 16)), Figures.OUTLINE)
+		draw_rect(Rect2(o + Vector2(1, 0), Vector2(1, 16)), CLIFF.lightened(0.15))   # light from the left
+	if open_right:
+		draw_rect(Rect2(o + Vector2(15, 0), Vector2(1, 16)), Figures.OUTLINE)
+		draw_rect(Rect2(o + Vector2(14, 0), Vector2(1, 16)), CLIFF.darkened(0.2))
+	# rounded outer corners, so the mountain's edge reads as rock rather than blocks
+	for k in 3:
+		var wk := 3 - k                                                            # 3, 2, 1 pixels: a little staircase
+		if open_above and open_left: _turf(o, Rect2(0, k, wk, 1), n)
+		if open_above and open_right: _turf(o, Rect2(16 - wk, k, wk, 1), n)
+		if open_below and open_left: _turf(o, Rect2(0, 15 - k, wk, 1), n)
+		if open_below and open_right: _turf(o, Rect2(16 - wk, 15 - k, wk, 1), n)
+
+## A few pixels of the highland turf (the grass tile and its warm tint), to round off a rock's corner.
+func _turf(o: Vector2, r: Rect2, n: int) -> void:
+	var cell := Vector2(11 + (n if n < 5 else 0), 12) * 16.0
+	draw_texture_rect_region(FLOOR, Rect2(o + r.position, r.size), Rect2(cell + r.position, r.size))
+	draw_rect(Rect2(o + r.position, r.size), Color(0.65, 0.54, 0.41, 0.32))
+
+## A hot spring: a pool of warm mineral water (amber, like the browser's) in a rim of dark stone, with bubbles that rise
+## and pop. The steam is drawn over everything (_draw_steam).
+func _draw_spring(x: int, y: int, o: Vector2) -> void:
+	var rim := Color("5a4a3e")
+	draw_rect(Rect2(o, Vector2(16, 16)), Color("e09858"))
+	draw_rect(Rect2(o + Vector2(3, 3), Vector2(10, 10)), Color("f0b878"))           # paler where the water is deep and hot
+	for side in [[Vector2i.UP, Rect2(0, 0, 16, 2)], [Vector2i.DOWN, Rect2(0, 14, 16, 2)], [Vector2i.LEFT, Rect2(0, 0, 2, 16)], [Vector2i.RIGHT, Rect2(14, 0, 2, 16)]]:
+		if tile_at(Vector2i(x, y) + side[0]) != "o":
+			var r: Rect2 = side[1]
+			draw_rect(Rect2(o + r.position, r.size), rim)
+	for k in 2:                                                                     # bubbles
+		var ph := fmod(t * 0.8 + x * 0.31 + y * 0.53 + k * 0.5, 1.0)
+		var bp := o + Vector2(4 + (x * 5 + k * 7) % 8, 11 - ph * 7)
+		draw_rect(Rect2(bp, Vector2(1, 1) if ph < 0.85 else Vector2(2, 1)), Color(1, 0.97, 0.9, 0.8 - ph * 0.5))
+
+func _draw_steam() -> void:
+	# soft puffs that rise off each spring, drift with a little wind, grow and fade
+	var rows: Array = cur_map()
+	for y in rows.size():
+		for x in rows[0].length():
+			if rows[y][x] != "o":
+				continue
+			for k in 3:
+				var ph := fmod(t * 0.22 + x * 0.37 + y * 0.61 + k / 3.0, 1.0)
+				var p := Vector2(x * TILE + 8 + sin(t * 0.9 + k * 2.0 + x) * 3.0 + ph * 6.0, y * TILE + 8 - ph * 34.0)
+				draw_circle(p, 2.0 + ph * 5.0, Color(1, 1, 1, 0.3 * (1.0 - ph) * minf(1.0, ph * 5.0)))
+
+func _draw_embers() -> void:
+	# a few sparks from the vents drift up across the highlands, flickering as they cool
+	var w: int = int(cur_map()[0].length()) * TILE
+	var h := cur_map().size() * TILE
+	for i in 26:
+		var rise := fmod(t * (7.0 + i % 5) + i * 53.1, float(h + 40))
+		var p := Vector2(fmod(i * 97.3 + sin(t * 0.6 + i) * 10.0 + rise * 0.15, float(w)), h + 20 - rise)
+		var glow := 0.5 + 0.5 * sin(t * 6.0 + i * 1.7)
+		draw_rect(Rect2(p, Vector2(1, 1)), Color(1.0, 0.62 + 0.2 * glow, 0.3, 0.45 + 0.4 * glow))
 
 func _draw_rock(o: Vector2, n: int) -> void:
 	# a rounded boulder built from rows, each a little different, so no two rocks look stamped
