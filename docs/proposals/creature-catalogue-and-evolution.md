@@ -56,11 +56,46 @@ The tamer already gives orders in battle (Guard, Rally). Grow that into the tame
 - **In the world:** creatures you trust help you (a strong creature moves a boulder, a water creature carries you across
   a stream), earned through bond rather than taught by a machine.
 
+## 5. The wild bond: fusing with a creature (Evan's idea, 2026-10-08)
+
+Evan: an ultimate power for a creature you've maxed your bond with: you fuse and become an ultimate form for the
+toughest battles (Digimon, Power Rangers). Not usable every fight with no reason not to (Pokémon's Mega Evolution),
+not reserved for a scripted story moment; it happens when you're backed against a wall and push beyond the limit, and
+it is **discovered**, not taught: only mentioned here and there as a legend.
+
+**The legend gives the game its name.** Nothing in the story says yet why the game is called Wildbond. Old people,
+signs and ruins speak of "the wild bond": in the oldest days a tamer and a creature who trusted each other completely
+could, at the edge of defeat, become one. Nobody alive has seen it; most think it's a story for children. Hints are
+scattered and vague (Tobin's grandmother's tale, a carving at a ruin, a line from Toren about the watcher in the
+mountain, a faded page in an old Wilddex). Never a tutorial, never a menu entry before it has happened.
+
+**When it can happen** (all must be true; none of it is ever shown as a checklist):
+- That creature's trust is at the highest level (Kindred).
+- The battle matters: a Warden, a guardian, a rival, a league battle, or a foe clearly stronger than your team. Never
+  against an ordinary weaker wild creature, so it can't be farmed.
+- You are backed against the wall: that creature is your last one standing, badly hurt, and you didn't run.
+- It hasn't happened yet that day.
+
+**How it happens:** the creature looks back at you. For a moment the screen holds; one new choice appears in the
+battle orders with no explanation, just its words ("Stand with it."). You hold the button rather than tap it (digging
+your heels in). Colour floods the whole battlefield, the tamer and creature become one form (the tamer's figure
+wearing the creature's shape like living armour, drawn from both sets of parts), and a short, earned moment plays.
+
+**Why it isn't used every fight:** it lasts a few turns; it can turn a lost battle but doesn't guarantee a win; after
+it ends both of you are spent (the creature rests until you next rest, and your own tamer abilities are used up).
+
+**After the first time:** the field book gains a page about the wild bond, people react when they hear of it, and it can
+happen again under the same conditions. Each family has its own fused form; branching evolutions give different ones.
+Challenge modes can turn it off.
+
+**Lore:** this ties to the colour returning with trust (the fullest trust there is floods everything with colour) and to
+the old watchers older than the Wardens. Keep it in docs/lore/wildbond.md when it is built.
 ## Order
 
 1. Evolution shapes and conditions in the Godot rules, with the first branching line and the first three-stage line
    (Claude, with checks), then convert the existing ten.
 2. The catalogue file and W11 batches (ChatGPT: data and lore; Claude: bodies and checks).
 3. Creature gear at the ranch (after the ranch becomes a place).
-4. Tamer abilities with heritages.
+4. Tamer abilities with heritages; then the wild bond (it builds on trust, tamer abilities and fused bodies), with
+   its scattered hints written into the areas as they are built.
 5. Realmbound's beasts from the catalogue (when Realmbound moves to Godot, or sooner for the data).
