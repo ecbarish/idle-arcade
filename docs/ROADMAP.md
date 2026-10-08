@@ -55,9 +55,9 @@ See [docs/plans/README.md](plans/README.md) for comparable-game research, staged
   every story beat (09-dialogue.js, CAST/SCENES/`lines`/`win` in 00-data.js), battle animation (slide-in, lunge,
   flinch, element sparks, crit shake, faint, victory hop), chiptune sound effects and per-area music made live with
   Web Audio (10-sound.js, off by default). Done 2026-10-08.
-- [ ] **T8: Game guides** (ChatGPT) — **parked** until games are closer to finished, so guides don't need constant
+- [ ] **T8: Game guides** (ChatGPT) — **unparked 2026-10-07** (Wildbond and Realmbound first; docs/QUEUE.md A4). Was parked so guides wouldn't need constant
   rewrites. Spec kept below. Meanwhile, keep lore written down in each game's design doc as it's added.
-- [ ] **T9: Wildbond guide** (ChatGPT) — parked with T8.
+- [ ] **T9: Wildbond guide** (ChatGPT) — unparked with T8 (docs/QUEUE.md A4).
 - [x] **T11: Wildbond pacing overhaul** (Claude): levels 1-100, journey length (Breezy/Classic/Long Road),
   badge level caps (soft/hard/off), XP share toggle, Saltmarsh Warden + Tide Badge, Saltmarsh/Emberfall rescaled.
   Done 2026-10-06. See "Pacing, level caps and journey settings" in docs/creature-game-design.md.
