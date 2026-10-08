@@ -15,15 +15,17 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
 
 - **Commit email:** only `206636510+ecbarish@users.noreply.github.com` (set it as the repo's `user.email`). Never a
   personal email.
-- **Plain HTML/JS, no build step, no installs.** Run `powershell -ExecutionPolicy Bypass -File serve.ps1` (or
-  `python -m http.server 8765`) in the repo folder and open http://localhost:8765/.
-- **Tests must stay all-pass:** http://localhost:8765/tests/run.html (Realmbound) and
-  http://localhost:8765/tests/wildbond.html (Wildbond). Click **Run checks**. Add checks for what you build.
+- **Browser games: plain HTML/JS, no build step.** Run `powershell -ExecutionPolicy Bypass -File serve.ps1` (or
+  `python -m http.server 8765`) in the repo folder and open http://localhost:8765/. **Godot games** (`wildbond-godot/`,
+  `starfall-godot/`, Claude's): Godot 4.7.2 in `C:\Users\evanb\Godot`; their web previews live in `play/` (see play/README.md).
+- **Tests must stay all-pass:** the eight browser pages in `tests/` (run, wildbond, starfall, sound, offline, diamond,
+  otherworld, runner-safety; click **Run checks**) and, for the Godot games, `tests/run_tests.gd` in each project. Add
+  checks for what you build. After merging, `git grep -n "^<<<<<<< "` must find nothing.
 - **Old saves must keep loading.** New save fields need defaults (Wildbond `fresh()`/`load()`, Realmbound `migrate()`).
 - **Small playable steps,** each with a line in README.md's changelog.
 - **Save your work to GitHub at the end of every step** (commit and push). Never leave finished work only on one
   computer or only in one assistant's sandbox.
-- **What Evan wants:** real games with deep lore, not dashboards; automation is earned, never sold; active play is
+- **What Evan wants** (more in docs/PROJECTS.md "Read first"): real games with deep lore, everything in the game window, not dashboards; automation is earned, never sold; active play is
   always worth at least as much as Auto; the player picks the pace; explain things in plain words.
 
 ## How work moves
@@ -37,95 +39,57 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
   Session log so Claude can double-check later. Design calls normally made by Claude (marked *design* below) can be
   made by Codex using the defaults written here; record any decision in the Session log.
 
-## Where we are (2026-10-09)
-**Wildbond in Godot (2026-10-08, the newest work):** `wildbond-godot/` plays the whole opening: faded Larkhaven (Ninja
-Adventure CC0 tiles, our own parts-built people and creatures in `scripts/figures.gd`), Maren's ranch register (the
-character creator; signing paints you in colour), her barn with Cindercub, Ripplet and Mosshog (each with its own body
-and habits, Wilddex pages), the bond flooding colour out of the barn, Wren running in, and the first battle on the field
-(`scripts/battle.gd`, rules in `scripts/rules.gd` checked number-for-number against the browser). **Thornwood is playable:**
-tall grass with wild creatures, catching with Bond (lure + calm meter; each catch brings colour back), Bram and Lise,
-Warden Isolde and the Thorn Badge, items, signs, healing with Maren, all 81 creatures with bodies (ten family plans),
-and saving with a Continue page. **Saltmarsh Coast and the Emberfall Highlands are playable too** (cliffs, hot springs,
-Orsk, Sela, Warden Toren; battles with the highland skyline). Content comes from the
-browser game via `tools/godot-export.ps1`; checks: `tests/run_tests.gd` (133); sharing: `tools/godot-build.ps1` once
-Evan installs Godot's export templates. The plan for the move: `docs/godot-port-plan.md`.
+## Where we are (rewritten 2026-10-08, night)
 
-**Current (2026-10-07):** the goal is Launch (docs/QUEUE.md). Wildbond follows **docs/wildbond-plan.md** (Evan'splay notes turned into principles and phases); Realmbound is balanced and gets its guide and onboarding next. Theolder detail below is history; CLAUDE.md "Where we are" has the short current summary.
+**Read `docs/PROJECTS.md` "Read first" before anything else:** it lists every decision and lesson since 2026-10-07
+(Godot, the game window, depth, woven stories, player text, variety, friends' testing, the process). In short:
 
-**Wildbond** (creature game): eight areas, each with a Warden and badge: Thornwood (2-12), Saltmarsh Coast (12-22),
-Emberfall Highlands (22-32), Cloudglass Pass (32-42), Stillreed Basin (52-60), Hollowecho Hills (58-64), Sunthread Commons (62-68),
-Farwatch Reach (66-72; W1 merged); caps follow `CAP_TABLE` (75 with all eight badges). A walkable world with towns, trainers, items and riding; art eras Pocket (the
-faded start, explained in the intro) → Pixel/16-bit → HD-2D (on the shared world kit) → Diorama (3D); day/night,
-weather with a Journal forecast, thunderstorms, living ambience and regional battle backdrops; visible wild
-creatures; ranch and breeding; challenge modes with ranch pennants, rematches, area mastery; music, effects and rain
-sounds. T30 adds the Returning Light League, Wren's gate battle, four courts and Champion Avenne, with a
-Champion title and the colour-restoration ending (v1.2.0; merged). T31/W3 part 1 adds the Lighthouse Spire and daily league rematches (v1.3.0, merged); Stillreed has a walkable ferry landing (W7). Plans: `docs/creature-game-design.md`; lore: `docs/lore/wildbond.md`.
-
-**Realmbound** (classic-MMO idle, flagship): levels 1-60 across eight zones, five classes with three talent trees
-each, five 5-person dungeons, the 10-person raid **The Hollow Throne** (opened by the Hollow Key; guild adventurers
-from any hero can join), pets, mounts, companions, earned addons, quest givers in portrait scenes, music, effects and
-rain per zone, living backdrops with weather and a day/night cycle, **walkable towns** (inn, smithy, trainer, stable,
-guild hall, Pell and Brisket), the **Guild** (founding, members with mood and favors, guild levels, a jobs board with
-Mining, Herbalism, Questing and Guard duty, the supply bank with repair kits and potions). Plans:
-`docs/realmbound-40-60.md`; lore: `docs/lore/realmbound.md`.
-
-**Starfall Guild:** small files with checks, its own music, living torches and a night window with falling stars;
-parked for new features. **Hub and promo pages:** `index.html`, `promo.html`, `promo-wildbond.html`.
-
-**Shared systems** (`shared/`): engine, creatures, dialogue (S1), sound with rain (S2), roster/jobs (S3), world kit
-(S4: walker + HD-2D renderer), ambience (S5). Test pages: `tests/run.html`, `tests/wildbond.html`,
-`tests/starfall.html`, `tests/sound.html`.
-
-**Parked:** Diamond Career (baseball), Otherworld (side lane: structural and polish tasks only), Primordial (back
-burner). Plans in `docs/plans/`.
-
-**Merged:** G2's Frostmere lighting pass (Realmbound v1.0.1): low snow haze, cool reflected light and blue mountain layers. Other G2 zones remain open.
+- **The new Wildbond, in Godot** (`wildbond-godot/`, Claude): the opening (Maren's register with heritages, the barn,
+  the bond that brings back colour, Wren), Thornwood, Saltmarsh, Emberfall and Cloudglass with wild creatures,
+  bonding, trainers and Wardens; the ranch as a place (paddock, barn, nursery and eggs, trough, Maren's workbench and
+  creature gear you can see); evolution with branches and conditions; music per place; saving. 198 checks
+  (`tests/run_tests.gd`). Plays on the web at `play/wildbond/`.
+- **The Starfall village, in Godot** (`starfall-godot/`, Claude): a frontier guild town: the guild board,
+  adventurers who choose their own jobs, the inn's counter by hand then Bryn, Hob's plots, the Healer's Hut, a Training
+  Yard, the Smithy worked by hand then Garrick, the Apothecary with prices, ranks and newcomers, music. 85 checks.
+  Plays on the web at `play/starfall/`.
+- **Browser games** (all playable, linked from the arcade): Wildbond v1.7.1 (the full journey: eight areas, the league,
+  the Spire; content complete, fixes only), Realmbound v1.5.0 (1-60, dungeons, guild with stories and commissions, a
+  raid), Diamond Career v0.3.1 (a baseball career; ChatGPT is moving it into the game window, T36), Otherworld v0.2.0
+  (the Between, Asterhold, living Lanthorn), Starfall Guild (the old browser version), Primordial.
+- **Friends are testing:** the Come Play page (`playtest.html`) with a one-minute trailer, first steps and "if you're
+  lost" per game, and Wildbond's element chart. Windows builds in `Desktop\Game builds`.
+- **Lore and design decided** (Evan, 2026-10-08): the wild bond, the Unbound, heritages, reputation, the creature
+  catalogue and evolution, depth and first person one day (the fading took depth as well as colour). Ledger:
+  `docs/lore/wildbond-threads.md`.
 
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
-**Autopilot (2026-10-07):** every assistant now works its own lane in [docs/QUEUE.md](docs/QUEUE.md), top to bottom,
-without waiting for Evan: Codex/ChatGPT has Lane A, Claude Lane B (reviews first), a third AI (Grok) Lane C. The list
-below is background; QUEUE.md is what to do next.
+**The lanes in [docs/QUEUE.md](docs/QUEUE.md) are what to do next** (its "current goal" was rewritten 2026-10-08):
 
-**The master list is `docs/PROJECTS.md`** (every outlined project, sizes, dependencies, claims, the launch track);
-**ground rules and creative freedom: `docs/CREATIVE.md`**. Below are only the next few items in flight.
-
-**Done so far** (details in `docs/ROADMAP.md`, the design docs and git history): T20-T28 content tickets; T1, T1-A,
-T1-B, T1-C (talents and pacing); R1 + the guild (with member favors and guild raiders); R2 (the raid); D1-D7
-decisions; S1-S5 shared systems (S4 part 1); Wildbond weather forecast, battle backdrops, challenge pennants; shared
-rain sounds; walkable Realmbound towns.
-
-1. ~~**Hollowecho ambience**~~ — done by Claude 2026-10-09 (dust, mist colour, bats at dusk, battle scenery).
-2. **S4 part 2: the world kit** (Claude) — mostly done 2026-10-09: Wildbond walks on `World.walker`; Wildclan camps and Thornvale's Abbey; the walkable guild hall. **Left:** a walkable guild hall for Starfall Guild; more hub variety (a layout per zone). Originally: move Wildbond's walking (12-walk.js) onto `World.walker` (its 769 checks
-   guard it); a layout per Realmbound hub (Wildclan camps, Thornvale's abbey); the guild hall as an interior you
-   walk into; then a walkable guild hall for Starfall Guild.
-3. ~~**T29: Wildbond area 7, Sunthread Commons**~~ (Codex; data) — done by ChatGPT, merged by Claude 2026-10-10 (branch `codex/wildbond-sunthread`): levels 62-68; ticket in
-   `docs/ROADMAP.md`, "T29".
-4. **Wildbond's ending:** W1 and T30/W2 are merged. T31/W3 part 1, the Lighthouse Spire and daily league rematches, is merged (v1.3.0). Next: roaming legendaries (W3 part 2), contests and races, and the Modern 3D era.
-5. **Realmbound next:** members' personal stories in the guild; battlegrounds (faction rivalry, the raid's closing
-   hook); a second raid tier later.
-   **G2:** Frostmere is merged; Saltmarsh is merged; the other Wildbond areas are T32 (ChatGPT); Realmbound zones remain.
-6. **Later (Evan, 2026-10-09): an immersive homepage** that shows off the arcade's engines (a living scene on the
-   ambience kit, shared sound, dialogue and creature art, a taste of each game). Build it once the games are further
-   along.
+- **Claude (Lane B):** review and merge ChatGPT's PRs first. Then, in order: WG1 tamer abilities with heritages; WG6
+  depth step 1 (ground heights, footprints, and the fix for the colour layer drawing you over people in front of you);
+  WG7 the variety pass (animated water, interiors, battle effects, sounds, edge tiles); WG2 Stillreed Basin and the
+  areas after it; SV1 Starfall members' stories; SV3 failing and excelling. After big steps, re-export `play/` and
+  refresh the Come Play pictures.
+- **ChatGPT (Lane A):** T36 Diamond Career in the game window and a road trip; T37 creature catalogue batch 2; T38
+  Realmbound in the game window; T39 Otherworld's Hearthmere; T40 Wildbond clues, signs and chatter for areas 5-8.
+- **Anyone:** bugs from friends first (GitHub issues, or Evan's messages).
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
-1. **Browser or a standalone game?** (Evan, 2026-10-07: "the more I see we can do the more I feel it needs to be its
-   own game.") Options: (a) keep the browser games and wrap them as a desktop app for Steam later (cheap, same code);
-   (b) build Wildbond's next version in the free **Godot** engine (Windows, Mac, Linux, phones and still the web;
-   proper 2D with pixel-perfect scaling, and 3D for the "one day first person" goal), carrying over all the story,
-   creatures, maps and balance as data; (c) Unity or Unreal (more powerful 3D, but heavy, and harder for AI
-   assistants to edit). Claude recommends **(b), starting with a small trial**: the Wildbond opening rebuilt in Godot
-   to see how it plays and how well the assistants work in it, before committing. Needs Evan to install Godot (free,
-   no account). **Default until he answers:** keep building content and design; hold the big screen rebuild
-   (Wildbond phases 1, 3, 4) so it is built once.
-2. **Baby forms (W9):** read `docs/proposals/creature-growth.md` and answer its five questions. Default if no
-   answer: the recommendations in it (life stages, babies stay on the ranch, elders, 3 ranch days, return-or-adopt).
+1. **What does "launch" (version 2.0) mean now?** The new Wildbond in Godot replaces the browser screens. Options: (a)
+   launch when the Godot Wildbond reaches the full journey (all eight areas and the league), with the browser version
+   kept as "Wildbond Classic"; (b) launch the browser games as they are now, and the Godot version later as a sequel.
+   **Default:** (a), and keep friends testing the previews meanwhile.
+2. **Realmbound: stay in the browser, or move to Godot later?** **Default:** stay in the browser, move into the game
+   window there (T38), and decide after the Godot Wildbond is further along.
+3. **Baby forms (W9):** read `docs/proposals/creature-growth.md` and answer its five questions. **Default:** its
+   recommendations.
+4. **The card shop (CS1) and Main Street (MS1):** parked until you say when.
 
-**Decided 2026-10-08 (Evan: "go with your recommendations, and yes to the shared universe where
-it makes sense"):** see the "Decided" section at the top of `docs/research/decisions.md`. New questions go here, each with
-a default so work never waits.
+**Answered:** browser or standalone (Godot, 2026-10-08); heritages, the Unbound, the wild bond, reputation, depth
+(all approved 2026-10-08); see the "Decided" section at the top of `docs/research/decisions.md`.
 
 ## Before you stop (every session, even a short one)
 
@@ -137,14 +101,15 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 · Codex: recovered Claude's four uncommitted planning files read-only into PR #61; preserved his new Godot/browser direction and T38-T40 tickets, reconciled T36/T37 ready status. Claude's checkout remains untouched.
 - 2026-10-08 · Codex: T37 ready in PR #60 (stacked on #59): fourteen species, three growth lines, Saillet conditional handoff and all 31 Reach beasts mapped. All eight pages pass; Wildbond 1,485; actual Wilddex at four widths. Claude must export and merge Saillet options into Godot; no screen/Godot/version changes. Lane A has no further open build ticket.
-
 - 2026-10-08 · Codex: T36 ready in PR #59: Diamond Career fills the window with objects for career records and a second month at three away parks; deliberate bus choices, no signing windfall, exact calendar pay. All eight pages pass (Diamond 122), real UI and reload at all four widths; no Godot or version overlap.
+- 2026-10-08 · Codex: T35 ready in PR #58: Lanthorn's food/fear shown through the square and its people; visible locked choices, all gift costs, recoverable relief-flour choice and Archivist memory responses. All eight pages pass (Otherworld 831); actual Mira ending, reload and controls checked at all four widths. No Godot or version overlap.
 
-- 2026-10-08 Claude (night): Evan approved the downloads: Godot export templates installed, ffmpeg in C:SERSEVANBTOOLS. WEB PREVIEWS
-  OF THE NEW WILDBOND AND STARFALL LIVE AT PLAY/ (LINKED FROM COME PLAY), WINDOWS ZIPS IN DESKTOPGAME BUILDS, A 56-SECOND TRAILER
-  (IMAGES/PLAY/TRAILER.MP4, ON THE COME PLAY PAGE; TOOLS/TRAILER). MERGED CHATGPT PR #57 AND #58 (OTHERWORLD V0.2.0).
-- 2026-10-08 CLAUDE (EVENING): Come Play page for friends (playtest.html), stat-bar yardstick (Wildbond v1.7.1 and Godot), Starfall detail
+- 2026-10-08 Claude (night): Evan approved the downloads: Godot export templates installed, ffmpeg in C:\Users\evanb\Tools. Web previews
+  of the new Wildbond and Starfall live at play/ (linked from Come Play), Windows zips in Desktop\Game builds, a 56-second trailer
+  (images/play/trailer.mp4, on the Come Play page; tools/trailer). Merged ChatGPT PR #57 and #58 (Otherworld v0.2.0).
+- 2026-10-08 Claude (evening): Come Play page for friends (playtest.html), stat-bar yardstick (Wildbond v1.7.1 and Godot), Starfall detail
   (finished buildings settle in), Godot Wildbond music per place, partner stands beside you. Plan: docs/proposals/showing-the-games.md
   (Godot demos need export templates: waiting on Evan). Card shop idea parked (CS1).
 - 2026-10-08 Claude (later, 2): Wildbond Godot creature gear: Maren's workbench, seven pieces that each do one thing and show on the
@@ -445,10 +410,7 @@ a default so work never waits.
 - 2026-10-08 Claude (night): Evan accepted all research recommendations and a light shared universe. Built D1
   (Wildbond cap table), D2+D3 (Realmbound group XP split, journey length; groups now ~1.3× solo) and D7
   (`docs/lore/multiverse.md`). Next open: S1 shared dialogue, S2 shared sound, T22 Hollow Crown.
-- 2026-10-08 Claude (night): Evan approved the downloads: Godot export templates installed, ffmpeg in C:SERSEVANBTOOLS. WEB PREVIEWS
-  OF THE NEW WILDBOND AND STARFALL LIVE AT PLAY/ (LINKED FROM COME PLAY), WINDOWS ZIPS IN DESKTOPGAME BUILDS, A 56-SECOND TRAILER
-  (IMAGES/PLAY/TRAILER.MP4, ON THE COME PLAY PAGE; TOOLS/TRAILER). MERGED CHATGPT PR #57 AND #58 (OTHERWORLD V0.2.0).
-- 2026-10-08 CLAUDE (EVENING): research brief `docs/research/decisions.md` (level caps, group XP, pace, roster size,
+- 2026-10-08 Claude (evening): research brief `docs/research/decisions.md` (level caps, group XP, pace, roster size,
   raids, shared systems and a shared universe). Sent T25 (split Starfall Guild) to ChatGPT; Primordial to the back
   burner at Evan's request.
 - 2026-10-08 Claude (later): merged T21 (item names, ChatGPT); built T1-B (Grave Chill; pacing 40-45 measured, no XP

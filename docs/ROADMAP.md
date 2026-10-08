@@ -165,7 +165,40 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
 - [x] T33 merged 2026-10-08 by Claude (Wildbond v1.6.0, PR #43).
 - [x] T34 implemented by Codex on `codex/diamond-career-d0`, PR #45 ready for review (2026-10-08; not merged).
 
-- [ ] T35-T37 open for ChatGPT (2026-10-08, after its reset): one branch and PR each, stacked if needed.
+- [ ] T38-T40 open for ChatGPT (2026-10-08, night), after T36 and T37. Read PROJECTS.md "Read first" before starting.
+
+### T38: Realmbound in the game window (the plan, then part 1)
+Evan, 2026-10-08: every game happens in the game window (CLAUDE.md); Realmbound stays in the browser for now. Branch
+`codex/realmbound-window`.
+- **First a plan** in `docs/plans/realmbound-in-window.md`: every panel Realmbound shows today (quests, bags,
+  character, guild, the Road guide, the jobs board, settings) and where each goes in the world: people who speak in
+  place, things you open over the scene (a quest journal, a satchel), a thin overlay for health and resources. Keep
+  every feature reachable; phone (375 wide) to 3440 ultrawide. Use Wildbond Godot's field book and Starfall's board
+  as the reference for "things you hold" (screenshots in images/play/).
+- **Then part 1:** the world scene fills the window, and the quest log and bags open over it. Old saves load; all
+  eight test pages pass; README entry; before/after screenshots at four widths.
+
+### T39: Otherworld, Hearthmere (the second world)
+docs/otherworld-design.md (the Hearthmere row and "Order" step 3), with what T35 built: visible locked choices with
+reasons, gift costs that bite, a town that changes with your choices, the Archivist answering memories. Branch
+`codex/otherworld-hearthmere`.
+- A complete life in Hearthmere: the shuttered lakeside inn, Puddle the shy water-spirit in the well, the long winter
+  that will close the passes; the three gifts (Hearth Cooking, Spirit Speech, Green Thumb), each with a cost that bites
+  once. Cosy, slow, with real stakes (the winter). At least four endings, memories that carry into other worlds.
+- Scenes drawn in code in Hearthmere's own style (soft greens, lantern light). Words, not meters. Checks in
+  tests/otherworld.html; old saves load.
+
+### T40: Wildbond areas 5-8, woven clues, signs and chatter (data and lore)
+Read docs/lore/wildbond-threads.md (the ledger) and docs/lore/wildbond.md ("Decided for future writing": the wild bond,
+the fading, which also took the valley's depth, the Unbound, heritages). Branch `codex/wildbond-threads-5-8`.
+- For Stillreed Basin, Hollowecho Hills, Sunthread Commons and Farwatch Reach, write into the browser game's data:
+  signs, townsfolk chatter and a few NPC lines that place fair clues for threads 1 to 5 (keep at least two candidate
+  truths alive), a small thread paid off in each area, the first hints of the Unbound (people who free creatures,
+  misreading the old fight), and lines that react to the player's heritage where it fits.
+- Record every clue in the ledger. Data only (no screen changes); this flows into the new Wildbond through
+  tools/godot-export.ps1 when Claude builds those areas. tests/wildbond.html stays all-pass; README entry.
+
+- [x] T35 merged 2026-10-08 (Otherworld v0.2.0). T36 and T37 ready for review in PR #59 and #60; neither merged.
 
 ### T35: Otherworld O1, a living Lanthorn (moved from Claude's lane; Claude is in Godot)
 - [x] Implementation ready in PR #58 (Codex, 2026-10-08); 831 Otherworld checks, all eight pages pass. Review/version bump remain Claude's. Details: docs/otherworld-lanthorn.md.
