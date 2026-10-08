@@ -80,7 +80,7 @@ const ZONES={
       {id:'driftcat',name:'Driftstalker Cat',lv:[37,39],kind:'beast',fam:'cat',col:'#d1dce2',drop:'Driftstalker Pelt'},
       {id:'hushfang',name:'Hushfang, the White Vigil',lv:[40,40],kind:'beast',fam:'wolf',col:'#e4edf1',elite:true,rare:true},
     ]},
-  barrowfield:{name:"The Barrowfields",lv:[40,45],faction:null,hub:{"concord":"Lanternrest Lodge","wild":"Whitebough Hearth"},sky:["#657c91","#c5d3de"],hill:"#3e4b59",ground:"#a9bbc8",
+  barrowfield:{xpMult:.6,name:"The Barrowfields",lv:[40,45],faction:null,hub:{"concord":"Lanternrest Lodge","wild":"Whitebough Hearth"},sky:["#657c91","#c5d3de"],hill:"#3e4b59",ground:"#a9bbc8",
     lore:"Beyond the winter road, grey-blue snow lies between dark barrow stones. Lanternrest Lodge and Whitebough Hearth keep forward camps where grave-cold creeps toward their lamps. The recovered carvings name the Wayfolk, keepers of the Reach's crossings before the Sundering: they buried road-stones with their dead, believing a road remembers whoever walked it. The ice trolls reused those stones for crossings of their own; now restless wardens bar the living from the Silent Barrows.",
     mobs:[
       {"id":"gravewolf","name":"Gravebreath Wolf","lv":[40,41],"kind":"beast","fam":"wolf","col":"#8295ad","drop":"Gravebreath Pelt"},
@@ -90,7 +90,7 @@ const ZONES={
       {"id":"barrowguard","name":"Wayfolk Threshold Keeper","lv":[43,45],"kind":"humanoid","col":"#627789","drop":"Threshold Inscription"},
       {"id":"paleweft","name":"Paleweft, the Lamp-Eater","lv":[45,45],"kind":"beast","fam":"spider","col":"#c7d6e2","elite":true,"rare":true},
     ]},
-  hollowcrown:{name:'The Hollow Crown',lv:[45,52],faction:null,hub:{concord:'Thornmantle Camp',wild:'Thornmantle Camp'},sky:['#626b37','#c7bc68'],hill:'#43532e',ground:'#302e23',
+  hollowcrown:{xpMult:.6,name:'The Hollow Crown',lv:[45,52],faction:null,hub:{concord:'Thornmantle Camp',wild:'Thornmantle Camp'},sky:['#626b37','#c7bc68'],hill:'#43532e',ground:'#302e23',
     lore:"The barrows road runs east into a forest grown around an empty throne. The Wayfolk crowned no one after the Sundering; the absence festered, and now the wood tries to fill the seat with anything it can bind. Sick green-gold leaves cover dark roots, while the Ashwing, a lineage of lesser drakes, nest in the canopy and claim the throne as their hoard. Concord and Wildclan travelers share Thornmantle Camp at the outer edge. Rootrot Hollow opens beneath the tangled approaches; the Crown's heart still lies beyond.",
     mobs:[
       {id:'rotgnaw',name:'Rotgnaw Wolf',lv:[45,47],kind:'beast',fam:'wolf',col:'#737b45',drop:'Rotgnaw Pelt'},
@@ -100,7 +100,7 @@ const ZONES={
       {id:'ashwing',name:'Ashwing Canopy Drake',lv:[50,52],kind:'beast',fam:'lizard',col:'#93834b',drop:'Ashwing Hoard Scale'},
       {id:'veskareth',name:'Veskareth, the Bough Sentinel',lv:[52,52],kind:'beast',fam:'lizard',col:'#c6b87a',elite:true,rare:true},
     ]},
-  crownheart:{name:"The Crown's Heart",lv:[52,60],faction:null,hub:{concord:'Heartwatch Camp',wild:'Heartwatch Camp'},sky:['#263323','#b49a52'],hill:'#243023',ground:'#29271c',
+  crownheart:{xpMult:.6,name:"The Crown's Heart",lv:[52,60],faction:null,hub:{concord:'Heartwatch Camp',wild:'Heartwatch Camp'},sky:['#263323','#b49a52'],hill:'#243023',ground:'#29271c',
     lore:"Thornmantle's watch has moved inward to Heartwatch Camp, where older trunks shut out the sky and gold light falls on the Hollow Throne. Rootbound choirs pull beast and branch toward the seat: the forest's hunger has not ended because Seraveth, the Ashwing matriarch, now sits upon it. Her voice carries from beyond the Heartwood Vault, but the road has not yet reached her. Travelers who have cleared the Silent Barrows and Rootrot Hollow can prepare the Hollow Key, opening a return path to the throne without claiming its crown.",
     mobs:[
       {id:'crownfang',name:'Crownfang Wolf',lv:[52,54],kind:'beast',fam:'wolf',col:'#79794e',drop:'Crownfang Pelt'},

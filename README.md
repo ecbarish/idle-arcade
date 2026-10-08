@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **Realmbound (2026-10-07):** launch pacing audit across five classes and three journeys; late-zone XP aligned with the 40–60 budget, reproducible browser simulations and 23 save/bonus regressions. Details: [audit](docs/realmbound-launch-balance.md).
+
 - Wildbond (2026-10-07): smoother Stillreed entry and late Wardens within incoming badge caps; a reproducible full-run pacing audit across three journeys and four challenges, with failed challenge attempts recorded separately. [Measurements](docs/wildbond-launch-balance.md).
 
 

@@ -97,7 +97,7 @@ module.exports = function scenarios() {
         const resumed=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1')));
         const old=resumed.chars.find(c=>c.id===b.id);rb.S.chars=resumed.chars;rb.S.cur=old.id;rb.boot();
         check(old.lvl===40&&old.quests.done.fm10&&rb.dungeonStats('foundry').clears===1&&rb.dungeonStats('sanctum').best===1,'level-40 save preserves chapter and dungeon progress: '+faction);
-        rb.gainXP(rb.xpNeed(40),false);
+        rb.gainXP(Math.ceil(rb.xpNeed(40)/.6),false);
         check(old.lvl===41,'old level-40 save earns XP to 41: '+faction);
         old.lvl=45;rb.boot();
         for(const q of rb.QUESTS.barrowfield){
@@ -176,7 +176,7 @@ module.exports = function scenarios() {
           rb.boot();rb.save();const resumed=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1')));
           const old=resumed.chars.find(h=>h.id===c.id);rb.S.chars=resumed.chars;rb.S.cur=old.id;rb.boot();
           check(old.lvl===45&&old.zone==='barrowfield'&&old.quests.done.bf12&&rb.dungeonStats('barrows').clears===1&&rb.dungeonStats('sanctum').best===1,'level-45 save preserves chapter, zone and separate dungeon records: '+faction);
-          rb.gainXP(rb.xpNeed(45),false);check(old.lvl===46,'old level-45 save earns XP to 46: '+faction);
+          rb.gainXP(Math.ceil(rb.xpNeed(45)/.6),false);check(old.lvl===46,'old level-45 save earns XP to 46: '+faction);
           travel();rb.boot();
           for(const q of chain){
             old.bags=[];old.grind=null;
@@ -246,7 +246,7 @@ module.exports = function scenarios() {
           c.zone='hollowcrown';c.quests.done.hc12=true;c.drecords={barrows:{clears:1,best:0,runs:1},rootrot:{clears:1,best:1,runs:2}};rb.boot();rb.save();
           const resumed=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1'))),old=resumed.chars.find(h=>h.id===c.id);rb.S.chars=resumed.chars;rb.S.cur=old.id;rb.boot();
           check(old.lvl===52&&old.zone==='hollowcrown'&&old.quests.done.hc12&&rb.dungeonStats('rootrot').best===1&&rb.dungeonStats('barrows').clears===1,'old level-52 save retains quests and dungeon records: '+faction);
-          rb.gainXP(rb.xpNeed(52),false);check(old.lvl===53,'old level-52 save resumes XP to 53: '+faction);travel();rb.boot();check(musicKey()==='crownheart','new zone selects its tune: '+faction);
+          rb.gainXP(Math.ceil(rb.xpNeed(52)/.6),false);check(old.lvl===53,'old level-52 save resumes XP to 53: '+faction);travel();rb.boot();check(musicKey()==='crownheart','new zone selects its tune: '+faction);
           for(const q of qs){
             old.bags=[];old.grind=null;
             check(q.type!=='collect'||z.mobs.find(m=>m.id===q.mob).drop,'collection target has an item: '+q.id+' '+faction);
@@ -706,5 +706,32 @@ module.exports = function scenarios() {
       review.bags=[genItem(61,3,'chest',{cls:'warrior'}),genItem(64,4,'weapon',{cls:'warrior'})];
       rb.save();const restored=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1'))).chars.find(c=>c.id===review.id);
       check(JSON.stringify(restored.drecords)===JSON.stringify(review.drecords)&&JSON.stringify(restored.bags)===JSON.stringify(review.bags),'R9: old-format save retains independent Heroic records and earned high-level loot');
+      // L7b: award composition, early-entry boundaries and old-save continuity.
+      const xpHero=rb.newHero('Pacing Reviewer','concord','human','warrior');
+      rb.S.chars=[xpHero];rb.S.cur=xpHero.id;rb.boot();
+      const keepGuild=rb.S.guild,keepParty=rb.C.party;
+      try{
+        rb.S.guild={jobs:{}};rb.C.party=[];xpHero.pace='classic';
+        for(const zone of Object.keys(rb.ZONES))for(const level of [38,40]){
+          xpHero.zone=zone;xpHero.lvl=level;xpHero.xp=0;xpHero.rested=0;
+          rb.gainXP(1000,false);
+          const late=['barrowfield','hollowcrown','crownheart'].includes(zone)&&level>=40;
+          check(xpHero.xp===(late?600:1000),zone+' level '+level+': late budget leaves earlier zones and early entry unchanged');
+        }
+        xpHero.zone='crownheart';xpHero.lvl=52;
+        rb.S.guild={founded:1,level:5,jobs:{},members:{},xp:0};
+        rb.C.party=[{},{},{},{}];
+        for(const [pace,mult] of [['breezy',1.6],['classic',1],['long',.6]]){
+          xpHero.pace=pace;xpHero.xp=0;xpHero.rested=100;
+          rb.gainXP(groupXP(1000),true);
+          const earned=Math.round(280*mult*1.1*.6);
+          check(xpHero.xp===earned+100&&xpHero.rested===0,pace+': party split, guild and zone budget compose before consuming rested XP');
+          xpHero.xp=0;xpHero.rested=100;rb.gainXP(1000,false);
+          check(xpHero.xp===Math.round(1000*mult*1.1*.6)&&xpHero.rested===100,pace+': quest award stays whole and does not consume rested XP');
+        }
+        xpHero.xp=12345;xpHero.rested=6789;rb.save();
+        const old=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1'))).chars.find(c=>c.id===xpHero.id);
+        check(old.xp===12345&&old.rested===6789&&old.lvl===52,'late-zone tuning does not rewrite earned XP, rested XP or saved levels');
+      }finally{rb.S.guild=keepGuild;rb.C.party=keepParty;}
       rb.save();return checks;
     };
