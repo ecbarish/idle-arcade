@@ -7,3 +7,5 @@ Four PNGs in guides/images are real Chrome captures from the running browser gam
 Validation: all links, section anchors and images resolve; keyboard skip links work; spoilers begin closed; no horizontal overflow at 375×812, 1366×768, 1920×1080 and 3440×1440; reading leaves seeded saves unchanged. Realmbound's generated tables pass scripts/update-realmbound-guide.cjs --check. All seven browser runners pass: Realmbound 6683, Wildbond 1354, Diamond 102, Starfall 48, sound 21, offline 15, Otherworld 38, with zero page errors. The pre-existing Otherworld runner retains automatic test backups, while restoring its primary save and hub progress.
 
 Before/after phone and current phone/ultrawide captures: docs/screenshots/game-guides/. No gameplay, engine, cache or version changes.
+
+Review polish (2026-10-08): rebased onto main 24f346b. The table checker now accepts LF and CRLF checkouts while still detecting stale data; regeneration preserves the checkout’s line endings. The existing hall-location assertions accept Claude’s capitalized Guild Hall text. Real game pictures were recaptured from the updated source. No gameplay behavior changed.

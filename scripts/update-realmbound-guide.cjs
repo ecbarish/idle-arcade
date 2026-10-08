@@ -22,7 +22,9 @@ const blocks = {
   dungeons: table(['Dungeon','Entry level / region','Bosses'],Object.values(data.DUNGEONS).map(d=>[d.name,d.minLvl+' · '+data.ZONES[d.zone].name,d.enc.filter(e=>e.boss).map(e=>e.name).join(' → ')])),
   addons: table(['Addon','Earn it by','What it does'],data.ADDONS.map(a=>[a.name,a.req,a.desc]))
 };
-const target = path.join(root,'guides/realmbound.html'), before = fs.readFileSync(target,'utf8');
+const target = path.join(root,'guides/realmbound.html'), source = fs.readFileSync(target,'utf8');
+// Git's Windows checkout can use CRLF; line endings alone do not make data stale.
+const before = source.replace(/\r\n/g, '\n');
 let after = before;
 for (const [id,html] of Object.entries(blocks)) {
   const start=`<!-- GENERATED:${id}:start -->`,end=`<!-- GENERATED:${id}:end -->`,from=after.indexOf(start),to=after.indexOf(end);
@@ -32,4 +34,4 @@ for (const [id,html] of Object.entries(blocks)) {
 if (process.argv.includes('--check')) {
   if (after !== before) { console.error('Realmbound guide tables are stale. Run node scripts/update-realmbound-guide.cjs'); process.exitCode=1; }
   else console.log('PASS: Realmbound guide tables match current game data.');
-} else { fs.writeFileSync(target,after);console.log('Updated Realmbound guide tables.'); }
+} else { fs.writeFileSync(target,source.includes('\r\n') ? after.replace(/\n/g, '\r\n') : after);console.log('Updated Realmbound guide tables.'); }
