@@ -63,6 +63,9 @@ structure in a big way, monetisation, anything that would surprise Evan if he fo
 
 ## Bring a perspective
 
+**Undecided between two good options?** (Evan, 2026-10-07) Build both if it's cheap enough, let the player switch, and add a
+poll (`shared/votes.js`, list it in docs/VOTES.md) so playtesters decide. Polls inform Evan; they don't replace "Ask Evan".
+
 Every PR may end with an **"An idea"** section: one thing you would do next or differently, from your own point of
 view. Good ideas get added to `docs/PROJECTS.md` (or `docs/ideas.md` if they're further out), credited to whoever
 had them. Disagreement is welcome when it's specific: "this would be better because...".
