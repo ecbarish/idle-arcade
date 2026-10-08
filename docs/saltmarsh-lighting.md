@@ -23,9 +23,9 @@ The optional settings live in `AREA_AIR` in `games/wildbond/js/06-scene.js`. All
 
 ## Validation
 
-18 new browser checks inspect actual fog, grade, shaft and ambience calls, verify clock/save state is not changed by drawing, preserve early-era mist, compare every other area's bounce model and check representative fog fallbacks. All four pages pass: Wildbond 1141, Realmbound 1519, Starfall 48, sound 21; each runner restores saves and hub storage, with no page errors.
+18 new browser checks inspect actual fog, grade, shaft and ambience calls, verify clock/save state is not changed by drawing, preserve early-era mist, compare every other area's bounce model and check representative fog fallbacks. All four pages pass: Wildbond 1194, Realmbound 1534, Starfall 48, sound 21, plus offline 15; each runner restores saves and hub storage, with no page errors.
 
-Visual checks used a frozen ranch clock and seeded creature generation for consistent comparisons against `origin/main` (d5c7274). Clear, mist and night scenes were rendered at 375x844, 1366x768, 1920x1080 and 3440x1440, with both Low/High graphics and reduced motion on/off. No horizontal overflow. All five art eras render, including actual three.js Diorama. A real save made through the main renderer reloads with its creatures, ranch, badges, story, position, coins, titles and clock intact. The isolated clone is served using `serve.ps1` on port 8766 to avoid Claude's server; the browser check URLs on 8765 are intercepted and fulfilled only from 8766. No requests reach Claude's server.
+Visual checks used a frozen ranch clock and seeded creature generation for consistent comparisons against `origin/main` (3e7a078). Clear, mist and night scenes were rendered at 375x844, 1366x768, 1920x1080 and 3440x1440, with both Low/High graphics and reduced motion on/off. No horizontal overflow. All five art eras render, including actual three.js Diorama. A real save made through the main renderer reloads with its creatures, ranch, badges, story, position, coins, titles and clock intact. The isolated clone is served using `serve.ps1` on port 8766 to avoid Claude's server; the browser check URLs on 8765 are intercepted and fulfilled only from 8766. No requests reach Claude's server.
 
 | Scene | Before | After |
 |---|---|---|
@@ -37,4 +37,4 @@ Visual checks used a frozen ranch clock and seeded creature generation for consi
 
 ## Review coordination
 
-Shipped as Wildbond 1.3.1 (merged on top of the post-game's 1.3.0 by Claude, 2026-10-07).
+Shipped as Wildbond 1.3.1, merged by Claude in PR #38 while Codex was verifying the integration. This branch also contains main b9d526b and preserves the T32 ticket. The worker, offline adapter, offline documentation and release instructions match main exactly: online-first fetches, immediate takeover, no cache-version bump. Updated validation notes, refreshed screenshots and a v1.3.1 tester route are in the follow-up PR.
