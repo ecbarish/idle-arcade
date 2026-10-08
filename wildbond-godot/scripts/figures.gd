@@ -110,25 +110,47 @@ static func person(ci: CanvasItem, o: Vector2, face: Vector2i, walking: bool, fr
 	paint(ci, o, P)
 
 ## A four-legged creature seen from the side, about 18x14 pixels (feet on y = 12 from the origin), facing right or
-## mirrored left. pose keys: frame (0-3 trot: 1 and 3 lift a diagonal pair), walking, blink, wag (-1 down, 0, 1 up),
-## crouch (0-2, for a pounce), sit, sniff (head down), twitch (the nose, -1..1), ears_up.
-## look keys: body, belly, dark. Later creatures add their own parts (horns, fins, wings) to the same plan.
+## mirrored left. Each body plan ("kind") is its own list of parts on the same frame, so new creatures are new plans.
+## pose keys: frame (0-3 trot: 1 and 3 lift a diagonal pair), walking, blink, wag (-1 down, 0, 1 up), crouch (0-2,
+## for a pounce), sit, sniff (head down), twitch (the nose, -1..1), ears_up, bird (a little bird rides a Mosshog).
+## look keys: kind ("wolf" | "lizard" | "boar"), body, belly, dark, accent (fins, moss), snout.
 static func creature(ci: CanvasItem, o: Vector2, right: bool, pose: Dictionary, look: Dictionary) -> void:
+	var P: Array
+	match look.get("kind", "wolf"):
+		"lizard": P = _lizard(pose, look)
+		"boar": P = _boar(pose, look)
+		_: P = _wolf(pose, look)
+	if not right:
+		for p in P:
+			p[0] = 17 - p[0] - p[2]
+	paint(ci, o, P)
+
+static func _frame(pose: Dictionary) -> int:
+	return pose.get("frame", 0) if pose.get("walking", false) else 0
+
+static func _lift(frame: int, pair: int) -> int:
+	# pair 0 (back-near and front-far) lifts on frame 1, pair 1 (back-far and front-near) on frame 3
+	return 1 if (frame == 1 and pair == 0) or (frame == 3 and pair == 1) else 0
+
+static func _eye(pose: Dictionary, c: Color) -> Color:
+	return Color("222222") if not pose.get("blink", false) else c.darkened(0.3)
+
+## Cindercub's plan: a wolf pup with a brush of a tail, pricked ears and a pale muzzle.
+static func _wolf(pose: Dictionary, look: Dictionary) -> Array:
 	var c: Color = look.body
 	var belly: Color = look.belly
 	var dark: Color = look.dark
 	var cr: int = pose.get("crouch", 0)
 	var sit: bool = pose.get("sit", false)
-	var frame: int = pose.get("frame", 0) if pose.get("walking", false) else 0
+	var f := _frame(pose)
 	var wag: int = pose.get("wag", 0)
 	var by := 4 + cr                                                            # the top of the back
 	var P: Array = []
 	var legh := 3 - cr
-	var lift := func(pair: int) -> int: return 1 if (frame == 1 and pair == 0) or (frame == 3 and pair == 1) else 0
-	# far legs (pair 1 = back-far and front-near trot together, pair 0 = back-near and front-far)
+	# far legs
 	if not sit:
-		P.append([5 + lift.call(1), by + 5, 1, legh - lift.call(1), c.darkened(0.25)])
-	P.append([12 + lift.call(0), by + 5, 1, legh - lift.call(0), c.darkened(0.25)])
+		P.append([5 + _lift(f, 1), by + 5, 1, legh - _lift(f, 1), c.darkened(0.25)])
+	P.append([12 + _lift(f, 0), by + 5, 1, legh - _lift(f, 0), c.darkened(0.25)])
 	# the tail, wagging
 	if sit:
 		P.append([1, 10, 6, 2, c]); P.append([1, 10, 2, 2, belly])
@@ -143,8 +165,8 @@ static func creature(ci: CanvasItem, o: Vector2, right: bool, pose: Dictionary, 
 	P.append([5, by + 3 + (1 if sit else 0), 5, 2, belly]); P.append([4, by + (1 if sit else 0), 6, 1, c.lightened(0.15)])
 	# near legs
 	if not sit:
-		P.append([4 + lift.call(0), by + 5, 1, legh - lift.call(0), c]); P.append([4 + lift.call(0), by + 4 + legh - lift.call(0), 1, 1, dark])
-	P.append([11 + lift.call(1), by + 5, 1, legh - lift.call(1), c]); P.append([11 + lift.call(1), by + 4 + legh - lift.call(1), 1, 1, dark])
+		P.append([4 + _lift(f, 0), by + 5, 1, legh - _lift(f, 0), c]); P.append([4 + _lift(f, 0), by + 4 + legh - _lift(f, 0), 1, 1, dark])
+	P.append([11 + _lift(f, 1), by + 5, 1, legh - _lift(f, 1), c]); P.append([11 + _lift(f, 1), by + 4 + legh - _lift(f, 1), 1, 1, dark])
 	# the head: ears, cheek, snout and an eye
 	var hx := 10
 	var hy := by - 4 + (2 if pose.get("sniff", false) else 0) + (1 if sit else 0)
@@ -155,8 +177,76 @@ static func creature(ci: CanvasItem, o: Vector2, right: bool, pose: Dictionary, 
 		P.append([hx - 1, hy - 1, 2, 2, c]); P.append([hx + 3, hy - 2, 2, 2, c])
 	P.append([hx, hy, 5, 5, c]); P.append([hx + 1, hy + 3, 3, 2, belly])
 	P.append([hx + 5 + tw, hy + 2, 2, 2, belly]); P.append([hx + 6 + tw, hy + 2, 1, 1, dark])
-	P.append([hx + 3, hy + 1, 1, 1, Color("222222") if not pose.get("blink", false) else c.darkened(0.3)])
-	if not right:
-		for p in P:
-			p[0] = 17 - p[0] - p[2]
-	paint(ci, o, P)
+	P.append([hx + 3, hy + 1, 1, 1, _eye(pose, c)])
+	return P
+
+## Ripplet's plan: a low river lizard with a long tapering tail, a fin down its back and a big, curious eye.
+static func _lizard(pose: Dictionary, look: Dictionary) -> Array:
+	var c: Color = look.body
+	var belly: Color = look.belly
+	var fin: Color = look.get("accent", c.lightened(0.3))
+	var cr: int = pose.get("crouch", 0)
+	var lie: bool = pose.get("sit", false)                                       # a lizard rests flat on its belly
+	var f := _frame(pose)
+	var wag: int = pose.get("wag", 0)
+	var by := 6 + cr + (1 if lie else 0)                                        # the top of the back (it sits low)
+	var P: Array = []
+	var legh := (12 - (by + 4)) if not lie else 0
+	# far legs, splayed
+	if legh > 0:
+		P.append([6 + _lift(f, 1), by + 4, 1, legh - _lift(f, 1), c.darkened(0.25)])
+		P.append([12 + _lift(f, 0), by + 4, 1, legh - _lift(f, 0), c.darkened(0.25)])
+	# the tail: long and tapering, the tip flicking
+	P.append([0, by + 2 - wag, 2, 1, c]); P.append([1, by + 2, 3, 2, c]); P.append([3, by + 1, 2, 3, c])
+	# the body, with a fin of spines down the back
+	P.append([4, by, 8, 4, c]); P.append([5, by + 3, 6, 1, belly])
+	for i in 3:
+		P.append([5 + i * 2, by - 1, 1, 1, fin])
+	# near legs
+	if legh > 0:
+		P.append([5 + _lift(f, 0), by + 4, 2, legh - _lift(f, 0), c]); P.append([11 + _lift(f, 1), by + 4, 2, legh - _lift(f, 1), c])
+	# the head: flat, a frill behind it, a wide mouth line and one big eye
+	var hy := by - 1 + (1 if pose.get("sniff", false) else 0)
+	P.append([11, hy - 1, 2, 2, fin]); P.append([12, hy, 5, 4, c]); P.append([13, hy + 3, 4, 1, belly])
+	P.append([14, hy + 2, 3, 1, c.darkened(0.3)])
+	P.append([14, hy, 2, 2, Color("f4f4f4")]); P.append([15, hy + (0 if pose.get("ears_up", false) else 1), 1, 1, _eye(pose, c)])
+	return P
+
+## Mosshog's plan: a stocky boar, moss and a few flowers growing on its back, a round snout and small tusks;
+## sometimes a little bird rides on the moss ("Birds nest in it, and it lets them").
+static func _boar(pose: Dictionary, look: Dictionary) -> Array:
+	var c: Color = look.body
+	var belly: Color = look.belly
+	var dark: Color = look.dark
+	var moss: Color = look.get("accent", Color("5d9a3e"))
+	var snout: Color = look.get("snout", Color("b07a5a"))
+	var cr: int = pose.get("crouch", 0)
+	var sit: bool = pose.get("sit", false)
+	var f := _frame(pose)
+	var wag: int = pose.get("wag", 0)
+	var by := 5 + cr + (1 if sit else 0)
+	var P: Array = []
+	var legh := 12 - (by + 5)
+	# far legs, short and sturdy
+	if legh > 0:
+		P.append([4 + _lift(f, 1), by + 5, 2, legh - _lift(f, 1), c.darkened(0.25)]); P.append([10 + _lift(f, 0), by + 5, 2, legh - _lift(f, 0), c.darkened(0.25)])
+	# a curly little tail
+	P.append([1, by + wag, 1, 2, c]); P.append([1, by - 1 + wag, 1, 1, dark])
+	# the body and the garden on its back
+	P.append([2, by - 1, 9, 6, c]); P.append([4, by + 3, 6, 2, belly])
+	P.append([3, by - 2, 7, 2, moss]); P.append([4, by - 3, 4, 1, moss.lightened(0.15)])
+	P.append([5, by - 3, 1, 1, Color("f0a0c0")]); P.append([8, by - 2, 1, 1, Color("f2e8a0")])
+	if pose.get("bird", false):
+		P.append([6, by - 6, 2, 2, Color("8a6a4a")]); P.append([8, by - 5, 1, 1, Color("f2b04a")]); P.append([7, by - 6, 1, 1, Color("222222")])
+	# near legs
+	if legh > 0:
+		P.append([3 + _lift(f, 0), by + 5, 2, legh - _lift(f, 0), c]); P.append([9 + _lift(f, 1), by + 5, 2, legh - _lift(f, 1), c])
+	# the head: ears, a round snout with a nostril, little tusks and an eye
+	var hy := by + (2 if pose.get("sniff", false) else 0)
+	var tw: int = pose.get("twitch", 0)
+	P.append([10, hy - 2, 2, 2, c]); P.append([13, hy - 2 - (1 if pose.get("ears_up", false) else 0), 2, 2, c])
+	P.append([10, hy, 5, 5, c])
+	P.append([15, hy + 2 + tw, 2, 3, snout]); P.append([16, hy + 3 + tw, 1, 1, dark])
+	P.append([15, hy + 5, 1, 1, Color("f4f0e0")])
+	P.append([13, hy + 1, 1, 1, _eye(pose, c)])
+	return P

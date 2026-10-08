@@ -1,16 +1,19 @@
 extends Node2D
 ## Wildbond in Godot: the trial slice (2026-10-07; see README.md and docs/wildbond-plan.md).
 ## Faded Larkhaven, walkable on the real map. Maren walks up and speaks in bubbles over her head; you sign her ranch
-## register (the character creator, register.gd) and the ink paints you into the faded world in colour; you walk to a
-## young creature in the paddock and bond with it, and colour bursts back into the world around it. People and
-## creatures are built from parts (figures.gd); the ground, trees and houses are Ninja Adventure tiles (CC0).
+## register (the character creator, register.gd) and the ink paints you into the faded world in colour; you follow
+## her into her barn, meet three young creatures in their stalls (their pages: card.gd) and choose your partner by
+## walking up to one. Colour bursts out of the barn around it, and it follows you from then on.
+## People and creatures are built from parts (figures.gd); the ground, trees and buildings are Ninja Adventure tiles
+## (CC0); creatures, moves and story data come from the browser game (data/wildbond.json, tools/godot-export.ps1).
 ## Everything draws on a 384x216 pixel canvas scaled by whole numbers, so it stays crisp on any screen.
 
 const Figures := preload("res://scripts/figures.gd")
 const Register := preload("res://scripts/register.gd")
+const Card := preload("res://scripts/card.gd")
 const TILE := 16
-const SOLID := "Tr#=P"                       # trees, roofs, walls, fences and signs block you
-const MAP := [                               # Larkhaven, from games/wildbond/js/11-maps.js
+const SOLID := "Tr#=PXWh|tb"                 # trees, roofs, walls, fences, signs, barn walls, hay, stall boards, trough
+const TOWN := [                              # Larkhaven, from games/wildbond/js/11-maps.js
 	"TTTTTTTTTTNNTTTTTTTTTTTT",
 	"T,,,,,,,,,..P,,,,,,,,,,T",
 	"T,rrrrr,,,..,,,,rrrrr,,T",
@@ -26,16 +29,48 @@ const MAP := [                               # Larkhaven, from games/wildbond/js
 	"T,,,,,,..........,,,,,,T",
 	"TTTTTTTTTTTTTTTTTTTTTTTT",
 ]
-const PADDOCK := Rect2i(14, 9, 5, 2)        # the open ground inside the ranch fence
+const BARN := [                              # inside Maren's barn: three stalls, hay, feed sacks, a trough, the door at the bottom
+	"XXXXXXXXXXXXXXXXXXXXXXXX",
+	"XWWWWWWWWWWWWWWWWWWWWWWX",
+	"XWWWWWWWWWWWWWWWWWWWWWWX",
+	"Xhh,,,|,,,|,,,|,,,|,,hhX",
+	"X,,,,,|,,,|,,,|,,,|,,,,X",
+	"X,,,,,,,,,,,,,,,,,,,,,,X",
+	"X,,,,,,,,,,,,,,,,,,,,,,X",
+	"Xb,,,,,,,,,,,,,,,,,,,,tX",
+	"Xb,,,,,,,,,,,,,,,,,,,,tX",
+	"X,,,,,,,,,,,,,,,,,,,,,,X",
+	"Xhh,,,,,,,,,,,,,,,,,,hhX",
+	"X,,,,,,,,,,,,,,,,,,,,,,X",
+	"XWWWWWWWWWWdWWWWWWWWWWWX",
+	"XXXXXXXXXXXXXXXXXXXXXXXX",
+]
+const BARN_DOOR := Vector2i(18, 4)           # Maren's barn in town (the big wooden one, top right)
+const BARN_EXIT := Vector2i(11, 12)          # its door, from the inside
+const PADDOCK := Rect2i(14, 9, 5, 2)         # the open ground inside the ranch fence
 ## People's looks (figures.gd explains the keys). The tamer's is replaced by what you sign in the register.
 const LOOKS := {
 	"tamer": { "skin": Color("f1c9a0"), "hair": Color("6b4423"), "hat": Color("2a3f6b"), "shirt": Color("d8453a"), "legs": Color("3a4a6a"), "style": "cap" },
 	"maren": { "skin": Color("e8c4a0"), "hair": Color("c9c3b8"), "shirt": Color("7a5236"), "apron": Color("4f8a5a"), "legs": Color("7a5236"), "style": "bun", "outfit": "skirt" },
 }
-const CUB_LOOK := { "body": Color("d8642e"), "belly": Color("f4e4c8"), "dark": Color("5a2a14") }
+## Creatures' looks: a body plan and colours (figures.gd). The starters' other facts come from data/wildbond.json.
+const CREATURE_LOOKS := {
+	"cindercub": { "kind": "wolf", "body": Color("d8642e"), "belly": Color("f4e4c8"), "dark": Color("5a2a14") },
+	"ripplet": { "kind": "lizard", "body": Color("3a8fd8"), "belly": Color("cfe8f4"), "dark": Color("1a3a6a"), "accent": Color("8ad0f0") },
+	"mosshog": { "kind": "boar", "body": Color("8a6a48"), "belly": Color("c8a882"), "dark": Color("3a2a1a"), "accent": Color("5d9a3e"), "snout": Color("c0907a") },
+	"pup": { "kind": "wolf", "body": Color("b08a5a"), "belly": Color("efe0c4"), "dark": Color("4a3020") },
+}
+## What Maren says about each of the three (shown on its page).
+const MAREN_ON := {
+	"cindercub": "That one's a spark. Fast and bold, and it'll bite off more than it can chew. Sleeps curled round the warm stones.",
+	"ripplet": "Ripplet's the thinker. It watches before it moves, and blows bubbles when it's pleased with itself.",
+	"mosshog": "Slow to start and impossible to stop. The finches won't nest anywhere but its back.",
+}
 
-# the people and creatures on the map: tile, smooth draw position, walking queue, and what they're up to
+# the people and creatures: where they are, a smooth draw position, a walking queue, and what they're up to
 class Mover:
+	var id := ""
+	var where := "town"                      # which map they're on: "town" or "barn"
 	var tile := Vector2i.ZERO
 	var pos := Vector2.ZERO
 	var path: Array[Vector2i] = []
@@ -43,33 +78,48 @@ class Mover:
 	var right := true
 	var step_t := 0.0
 	var face := Vector2i.DOWN                # which way they look: front, back or side
+	var look: Dictionary = {}                # creatures only: body plan and colours
+	var home := Rect2i()                     # creatures only: where they potter about (empty: they follow you)
 	var act := "idle"                        # creatures: idle, sniff, sit, pounce, curious
 	var act_t := 0.0
 	var act_len := 1.0
 	var hop := 0.0                           # height off the ground (a pounce, a hop for joy)
 	var target := Vector2i.ZERO
-	func _init(t: Vector2i) -> void:
+	func _init(i: String, w: String, t: Vector2i) -> void:
+		id = i
+		where = w
 		tile = t
 		pos = Vector2(t) * 16.0
+	func is_creature() -> bool:
+		return not look.is_empty()
 
-var me := Mover.new(Vector2i(11, 7))
-var maren := Mover.new(Vector2i(7, 11))
-var cub := Mover.new(Vector2i(16, 9))
-var cub_bonded := false
+var DATA: Dictionary = {}                    # the browser game's content: SPECIES, MOVES, COUNTER, ...
+var me := Mover.new("me", "town", Vector2i(11, 7))
+var maren := Mover.new("maren", "town", Vector2i(7, 11))
+var pup := Mover.new("pup", "town", Vector2i(16, 9))
+var starters: Array[Mover] = []
+var partner: Mover = null
+var map_name := "town"
 var my_look: Dictionary = LOOKS.tamer
 var painted := false                         # signed the register: you keep your colour in the faded world
 var paint_t := -1.0
-var restore: Array = []                      # [{at: Vector2 world px, r: float, goal: float}]
+var spilled := false                         # the colour has spilled out of the barn into town
+var restore: Array = []                      # [{where, at: Vector2 world px, r: float, goal: float}]
 var lines: Array = []                        # dialogue queue: [{who: "maren" | "" (narration), text}]
 var stage := "intro"
 var t := 0.0
 var fade_in := 0.0
+var trans_t := -1.0                          # walking through a door: fade out, switch, fade in
+var trans_to := ""
 var demo := false
 var demo_t := 0.0
-var fly := Vector2.ZERO                      # a butterfly over the paddock, for the cub to chase
+var fly := Vector2.ZERO                      # a butterfly (a moth in the barn) for young creatures to chase
 var fly_scare := 0.0
+var bubbles: Array = []                      # Ripplet's bubbles: [{p: Vector2, t: float}]
+var bubble_cd := 0.0
 var rng := RandomNumberGenerator.new()
 var register: Control
+var card: Control
 
 @onready var cam: Camera2D = $Camera
 @onready var fade_rect: ColorRect = $FadeLayer/Fade
@@ -82,16 +132,38 @@ var register: Control
 func _ready() -> void:
 	demo = "--demo" in OS.get_cmdline_user_args()
 	rng.seed = 7 if demo else Time.get_ticks_usec()
-	cam.limit_right = MAP[0].length() * TILE
-	cam.limit_bottom = MAP.size() * TILE
+	var j: JSON = load("res://data/wildbond.json")
+	DATA = j.data
+	pup.look = CREATURE_LOOKS.pup
+	pup.home = PADDOCK
+	var x := 8
+	for id in DATA.STARTERS:
+		var m := Mover.new(id, "barn", Vector2i(x, 4))
+		m.look = CREATURE_LOOKS[id]
+		m.home = Rect2i(x - 1, 3, 3, 2)
+		m.right = x < 12
+		starters.append(m)
+		x += 4
+	_set_map("town")
 	cam.position = me.pos + Vector2(8, 8)
 	colour_layer.draw.connect(_draw_painted)
 	register = Register.new()
 	register.keep = not demo
 	$UI.add_child(register)
 	register.signed.connect(_on_signed)
+	card = Card.new()
+	$UI.add_child(card)
+	card.chosen.connect(_on_chosen)
 	say("", "The supply cart stops at the edge of the trees. Larkhaven: a handful of roofs and a ranch fence that runs right up to the forest.")
 	say("", "Everything here looks faded, like an old picture left in the sun. You too.")
+
+func _set_map(n: String) -> void:
+	map_name = n
+	var m: Array = TOWN if n == "town" else BARN
+	cam.limit_right = m[0].length() * TILE
+	cam.limit_bottom = m.size() * TILE
+	place.text = "Larkhaven" if n == "town" else "Maren's barn"
+	place.modulate.a = 1.0
 
 # ---------------------------------------------------------------- dialogue
 func say(who: String, text: String) -> void:
@@ -105,19 +177,26 @@ func advance() -> void:
 		_after_talk()
 
 func _after_talk() -> void:
-	if stage == "intro":
-		stage = "maren_walks"
-		maren.path = route(maren.tile, Vector2i(11, 8))
-	elif stage == "maren_talks":
-		stage = "register"
-		register.open()
-	elif stage == "signed":
-		stage = "to_paddock"
-		maren.path = route(maren.tile, Vector2i(18, 12))   # beside the gate, not in front of it
-		caption.text = "Walk to the little one in the paddock (arrow keys or WASD). Press Enter beside it."
-	elif stage == "bonded":
-		stage = "free"
-		caption.text = "End of the trial. Walk around Larkhaven; your partner follows you."
+	match stage:
+		"intro":
+			stage = "maren_walks"
+			maren.path = route(maren.tile, Vector2i(11, 8))
+		"maren_talks":
+			stage = "register"
+			register.open()
+		"signed":
+			stage = "to_barn"
+			maren.path = route(maren.tile, BARN_DOOR + Vector2i(1, 1))   # beside the barn door, not in front of it
+			caption.text = "Follow Maren to her barn, the big wooden one at the top right, and walk in through its door."
+		"barn_meet":
+			stage = "barn_choose"
+			caption.text = "Walk up to one of the three and press Enter to meet it properly."
+		"bonded":
+			stage = "free"
+			caption.text = "End of the trial. Walk out into Larkhaven; %s follows you." % _partner_name()
+		"spill":
+			stage = "free"
+			caption.text = "End of the trial. Walk around Larkhaven with %s." % _partner_name()
 
 func _on_signed(look: Dictionary) -> void:
 	# the ink dries and colour runs into you: you are the one bright thing in the faded valley
@@ -128,18 +207,35 @@ func _on_signed(look: Dictionary) -> void:
 	say("", "As the ink dries, colour runs into you: your hands, your clothes, your hair. You're the only bright thing on the road.")
 	say("maren", "%s. Good name. And look at you, bright as a new penny!" % look.name)
 	say("maren", "Don't mind the rest of it. The whole valley faded long ago. Like an old photo, isn't it?")
-	say("maren", "Folk say it comes back, a little, every time someone earns a creature's trust. Come and see.")
+	say("maren", "Folk say it comes back, a little, every time someone earns a creature's trust. Come to the barn. Someone's been waiting for you.")
+
+func _partner_name() -> String:
+	return DATA.SPECIES[partner.id].name if partner else "your partner"
 
 # ---------------------------------------------------------------- the map
+func cur_map() -> Array:
+	return TOWN if map_name == "town" else BARN
+
 func tile_at(p: Vector2i) -> String:
-	if p.y < 0 or p.y >= MAP.size() or p.x < 0 or p.x >= MAP[0].length():
-		return "T"
-	return MAP[p.y][p.x]
+	var m := cur_map()
+	if p.y < 0 or p.y >= m.size() or p.x < 0 or p.x >= m[0].length():
+		return "X" if map_name == "barn" else "T"
+	return m[p.y][p.x]
+
+func actors() -> Array:
+	var out: Array = []
+	for m in [me, maren, pup] + starters:
+		if m.where == map_name:
+			out.append(m)
+	return out
 
 func walkable(p: Vector2i) -> bool:
-	if tile_at(p) in SOLID:
+	var ch := tile_at(p)
+	if ch in SOLID:
 		return false
-	for m in [me, maren, cub]:
+	if ch == "D" and not (p == BARN_DOOR and stage not in ["intro", "maren_walks", "maren_talks", "register", "signed"]):
+		return false                           # other people's houses stay shut in the trial
+	for m in actors():
 		if p == m.tile or (not m.path.is_empty() and p == m.path[0]):
 			return false
 	return true
@@ -154,7 +250,7 @@ func route(from: Vector2i, to: Vector2i) -> Array[Vector2i]:
 			break
 		for d in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
 			var n: Vector2i = c + d
-			if prev.has(n) or tile_at(n) in SOLID:
+			if prev.has(n) or tile_at(n) in SOLID or (tile_at(n) == "D" and n != to):
 				continue
 			prev[n] = c
 			queue.append(n)
@@ -167,48 +263,116 @@ func route(from: Vector2i, to: Vector2i) -> Array[Vector2i]:
 		c2 = prev[c2]
 	return out
 
+# ---------------------------------------------------------------- doors: into the barn and out again
+func _check_doors() -> void:
+	if trans_t >= 0.0 or not me.path.is_empty():
+		return
+	if map_name == "town" and me.tile == BARN_DOOR:
+		_go("barn")
+	elif map_name == "barn" and me.tile == BARN_EXIT:
+		_go("town")
+
+func _go(to: String) -> void:
+	trans_t = 0.0
+	trans_to = to
+
+func _switch() -> void:
+	_set_map(trans_to)
+	if trans_to == "barn":
+		me.tile = BARN_EXIT + Vector2i.UP
+		me.face = Vector2i.UP
+		if stage == "to_barn":
+			maren.where = "barn"
+			maren.tile = Vector2i(15, 8)
+			maren.pos = Vector2(maren.tile) * TILE
+			maren.path.clear()
+			maren.face = Vector2i.LEFT
+	else:
+		me.tile = BARN_DOOR + Vector2i.DOWN
+		me.face = Vector2i.DOWN
+	me.where = trans_to
+	me.pos = Vector2(me.tile) * TILE
+	me.path.clear()
+	if partner:
+		partner.where = trans_to
+		partner.tile = BARN_EXIT if trans_to == "barn" else BARN_DOOR
+		partner.pos = Vector2(partner.tile) * TILE
+		partner.path.clear()
+		_stop(partner)
+	cam.position = me.pos + Vector2(8, 8)
+	cam.reset_smoothing()
+	if trans_to == "barn" and stage == "to_barn":
+		stage = "barn_meet"
+		caption.text = ""
+		say("maren", "Here they are. Three young ones, born this spring, and every one of them hoping for a tamer.")
+		say("maren", "Go and say hello. Take your time, love; this is the big one. They'll be choosing you as much as you choose them.")
+	elif trans_to == "town" and partner and not spilled:
+		spilled = true
+		stage = "spill"
+		caption.text = ""
+		restore.append({ "where": "town", "at": Vector2(BARN_DOOR) * TILE + Vector2(8, 8), "r": 0.0, "goal": 110.0 })
+		say("", "Outside, the colour has spilled out through the barn door: across the path, up the walls, into the grass.")
+		say("", "%s sniffs the bright grass, sneezes, and looks up at you as if to say: where next?" % _partner_name())
+
 # ---------------------------------------------------------------- the loop
 func _process(dt: float) -> void:
 	t += dt
 	fade_in = min(1.0, fade_in + dt * 0.7)
-	fade_rect.color.a = 1.0 - fade_in
+	var door_dark := 0.0
+	if trans_t >= 0.0:
+		var before := trans_t
+		trans_t += dt
+		if before < 0.3 and trans_t >= 0.3:
+			_switch()
+		door_dark = 1.0 - absf(trans_t - 0.3) / 0.3
+		if trans_t >= 0.6:
+			trans_t = -1.0
+	fade_rect.color.a = maxf(1.0 - fade_in, clampf(door_dark, 0.0, 1.0))
 	if paint_t >= 0.0:
 		paint_t += dt
 	if demo:
 		_demo(dt)
 	_butterfly(dt)
-	_cub_think(dt)
-	_walk(maren, dt)
-	_walk(cub, dt)
-	_walk(me, dt)
+	_bubbles(dt)
+	for m in actors():
+		if m.is_creature():
+			_think(m, dt)
+	for m in actors():
+		_walk(m, dt)
 	if stage == "maren_walks" and maren.path.is_empty() and maren.pos.distance_to(Vector2(maren.tile) * TILE) < 0.5:
 		stage = "maren_talks"
 		say("maren", "There you are! You must be the new tamer. I'm Maren. I keep the ranch.")
 		say("maren", "Before anything else: the ranch register. Every tamer in the valley signs it. Write yourself in, love.")
-	if lines.is_empty() and stage in ["to_paddock", "free"] and me.path.is_empty() and me.pos.distance_to(Vector2(me.tile) * TILE) < 0.5:
+	var free_to_walk: bool = stage in ["to_barn", "barn_choose", "free"] and not card.visible and trans_t < 0.0
+	if lines.is_empty() and free_to_walk and me.path.is_empty() and me.pos.distance_to(Vector2(me.tile) * TILE) < 0.5:
 		var d := Vector2i.ZERO
 		if Input.is_action_pressed("ui_up") or Input.is_physical_key_pressed(KEY_W): d = Vector2i.UP
 		elif Input.is_action_pressed("ui_down") or Input.is_physical_key_pressed(KEY_S): d = Vector2i.DOWN
 		elif Input.is_action_pressed("ui_left") or Input.is_physical_key_pressed(KEY_A): d = Vector2i.LEFT
 		elif Input.is_action_pressed("ui_right") or Input.is_physical_key_pressed(KEY_D): d = Vector2i.RIGHT
 		if d != Vector2i.ZERO:
-			me.face = d
-			me.right = d.x > 0 if d.x != 0 else me.right
-			var was := me.tile
-			if cub_bonded and me.tile + d == cub.tile:
-				cub.tile = was                       # your partner steps aside, swapping places with you
-				cub.pos = Vector2(was) * TILE
-			if walkable(me.tile + d):
-				me.path = [me.tile + d]
-				if cub_bonded and cub.tile != was:
-					_cub_stop()
-					cub.path = [was]
+			_step(d)
+	_check_doors()
 	for r in restore:
 		r.r = move_toward(r.r, r.goal, dt * 70.0)
 	cam.position = cam.position.lerp(me.pos + Vector2(8, 8), min(1.0, dt * 8.0))
 	_update_ui()
 	queue_redraw()
 	colour_layer.queue_redraw()
+
+func _step(d: Vector2i) -> void:
+	me.face = d
+	me.right = d.x > 0 if d.x != 0 else me.right
+	var was := me.tile
+	if partner and partner.where == map_name and me.tile + d == partner.tile:
+		partner.tile = was                       # your partner steps aside, swapping places with you
+		partner.pos = Vector2(was) * TILE
+		partner.path.clear()
+	if walkable(me.tile + d):
+		me.path = [me.tile + d]
+		if partner and partner.where == map_name and partner.tile != was:
+			_stop(partner)
+			partner.path = [was]
 
 func _walk(m: Mover, dt: float) -> void:
 	if m.path.is_empty():
@@ -231,98 +395,162 @@ func _unhandled_input(e: InputEvent) -> void:
 		return
 	if not lines.is_empty():
 		advance()
-	elif stage == "to_paddock" and not cub_bonded and (me.tile - cub.tile).length() <= 1.01:
-		bond()
+	elif stage == "barn_choose" and not card.visible:
+		var s := _starter_beside_me()
+		if s:
+			_meet(s)
 
-func bond() -> void:
-	# the first bond: the little one chooses you, and colour bursts back into the world around it
-	cub_bonded = true
+func _starter_beside_me() -> Mover:
+	for s in starters:
+		if s.where == map_name and (me.tile - s.tile).length() <= 1.01:
+			return s
+	return null
+
+# ---------------------------------------------------------------- meeting and choosing your partner
+func _meet(s: Mover) -> void:
+	me.face = s.tile - me.tile
+	s.right = me.pos.x > s.pos.x
+	card.open(s.id, card_info(s.id))
+
+## A starter's page, from the browser game's data: the same names, stats, moves and matchups in both versions.
+func card_info(id: String) -> Dictionary:
+	var s: Dictionary = DATA.SPECIES[id]
+	var moves: Array = []
+	for l in s.learn:
+		if l[0] <= 5:
+			moves.append(DATA.MOVES[l[1]].name)
+	var weak: String = DATA.COUNTER[id]
+	var strong := ""
+	for k in DATA.COUNTER:
+		if DATA.COUNTER[k] == id:
+			strong = k
+	return {
+		"name": s.name, "el": s.el, "dex": s.dex, "base": s.base, "moves": moves, "look": CREATURE_LOOKS[id],
+		"strong": "%s (%s)" % [DATA.SPECIES[strong].el, DATA.SPECIES[strong].name],
+		"weak": "%s (%s)" % [DATA.SPECIES[weak].el, DATA.SPECIES[weak].name],
+		"role": role_of(s.base), "maren": MAREN_ON.get(id, ""),
+	}
+
+## The same role words as the browser game (games/wildbond/js/05-ui.js roleOf).
+func role_of(b: Dictionary) -> String:
+	var tough: float = (b.hp + b.grd + b.spi) / 3.0
+	var hit: float = maxf(b.pow, b.wit)
+	var phys: bool = b.pow >= b.wit
+	var r: Array
+	if tough > hit + 8: r = ["Tank", "tough and hard to wear down"]
+	elif b.spd >= hit and b.spd > tough: r = ["Skirmisher", "quick, gets more turns"]
+	elif hit > tough + 8: r = ["Bruiser", "hits hard up close"] if phys else ["Caster", "strong elemental moves"]
+	else: r = ["All-rounder", "balanced"]
+	return "%s: %s. Attacks mostly with %s." % [r[0], r[1], "physical moves (Power)" if phys else "special, elemental moves (Wits)"]
+
+func _on_chosen(id: String) -> void:
+	# the bond: you kneel, it chooses you back, and colour bursts out of it across the barn
+	for s in starters:
+		if s.id == id:
+			partner = s
+	partner.home = Rect2i()
 	stage = "bonded"
-	_cub_stop()
-	restore.append({ "at": cub.pos + Vector2(8, 8), "r": 0.0, "goal": 120.0 })
 	caption.text = ""
-	say("", "The little one sniffs your hand, then presses its head against it.")
-	say("", "Colour floods outward from where it stands: green grass, red roofs, a blue sky over the paddock.")
-	say("maren", "...Did you see that? It chose you. And the world remembered a little.")
-	say("maren", "That's a bond, love. Nobody owns a creature; they choose. Off you go, then. Look after each other.")
+	_stop(partner)
+	restore.append({ "where": "barn", "at": partner.pos + Vector2(8, 8), "r": 0.0, "goal": 170.0 })
+	var n: String = DATA.SPECIES[id].name
+	say("", "You kneel in the straw. %s looks at you for a long moment, then steps forward and presses its head into your hand." % n)
+	say("", "Colour floods out from it: gold straw, red beams, a blue sky in the high window.")
+	say("maren", "...There. It chose you right back. And the world remembered a little.")
+	say("maren", "Nobody owns a creature, love; they choose. The other two will find their tamers. Wren's due by later, and that one never could wait.")
+	say("maren", "Off you go, then. Show %s the valley." % n)
 
-# ---------------------------------------------------------------- the cub: a young creature with a mind of its own
-## Before the bond it potters about the paddock: wanders, sniffs the grass, sits, and stalks the butterfly. When you
-## come near it stops and watches you, ears up and tail going. After the bond it follows you and does the same things
-## whenever you stand still.
-func _cub_stop() -> void:
-	cub.act = "idle"
-	cub.act_t = 0.0
-	cub.act_len = 1.0
-	cub.hop = 0.0
+# ---------------------------------------------------------------- young creatures: each with a mind of its own
+## They potter about their home ground (the paddock, a stall): wander, sniff, sit, and stalk the butterfly. When you
+## come near they stop and watch you, ears up and tails going. Your partner follows you and does the same things
+## whenever you stand still. Ripplet blows bubbles instead of sniffing; Mosshog sometimes has a finch on its back.
+func _stop(m: Mover) -> void:
+	m.act = "idle"
+	m.act_t = 0.0
+	m.act_len = 1.0
+	m.hop = 0.0
+	m.speed = 4.0
 
-func _cub_think(dt: float) -> void:
-	cub.act_t += dt
-	if stage == "bonded":
-		cub.hop = -abs(sin(t * 6.0)) * 3.0         # it hops for joy
+func _think(m: Mover, dt: float) -> void:
+	m.act_t += dt
+	if m == partner and stage == "bonded":
+		m.hop = -abs(sin(t * 6.0)) * 3.0           # it hops for joy
 		return
-	if cub.act != "pounce":
-		cub.hop = 0.0
-	if cub.act == "pounce":
-		# crouch and wiggle, then leap one tile at the butterfly (or straight up, once it's following you)
-		if cub.act_t >= 0.8 and cub.path.is_empty() and cub.target != cub.tile and walkable(cub.target):
-			cub.speed = 3.0
-			cub.path = [cub.target]
-			cub.target = cub.tile
+	if m.act != "pounce":
+		m.hop = 0.0
+	if m.act == "pounce":
+		# crouch and wiggle, then leap one tile at the butterfly (or on the spot)
+		if m.act_t >= 0.8 and m.path.is_empty() and m.target != m.tile and walkable(m.target):
+			m.speed = 3.0
+			m.path = [m.target]
+			m.target = m.tile
 			fly_scare = 2.0
-		var k := clampf((cub.act_t - 0.8) / 0.4, 0.0, 1.0)
-		cub.hop = -sin(k * PI) * 6.0
-		if cub.act_t > 1.5:
-			cub.speed = 4.0
-			_cub_stop()
+		var k := clampf((m.act_t - 0.8) / 0.4, 0.0, 1.0)
+		m.hop = -sin(k * PI) * 6.0
+		if m.act_t > 1.5:
+			_stop(m)
 		return
-	if not cub.path.is_empty():
+	if not m.path.is_empty():
 		return
-	var near := (Vector2(me.tile) - Vector2(cub.tile)).length() <= 3.0
-	if not cub_bonded and stage in ["to_paddock", "signed", "maren_talks", "register"] and near:
-		cub.act = "curious"                        # it has seen you: it stops and watches
-		cub.right = me.pos.x > cub.pos.x
+	var near := (Vector2(me.tile) - Vector2(m.tile)).length() <= (2.0 if map_name == "barn" else 3.0)
+	if m != partner and near and stage not in ["intro", "maren_walks"]:
+		m.act = "curious"                          # it has seen you: it stops and watches
+		m.right = me.pos.x > m.pos.x
 		return
-	if cub.act == "curious":
-		_cub_stop()
-	if cub.act_t < cub.act_len:
+	if m.act == "curious":
+		_stop(m)
+	if m.act_t < m.act_len:
 		return
 	var r := rng.randf()
-	cub.act_t = 0.0
+	m.act_t = 0.0
 	var fly_tile := Vector2i((fly / TILE).floor())
-	if r < 0.3 and not cub_bonded:
+	if r < 0.3 and m.home.has_area():
 		var dirs := [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
-		var to: Vector2i = cub.tile + dirs[rng.randi() % 4]
-		cub.act = "idle"
-		cub.act_len = rng.randf_range(0.6, 1.6)
-		if PADDOCK.has_point(to) and walkable(to):
-			cub.path = [to]
+		var to: Vector2i = m.tile + dirs[rng.randi() % 4]
+		m.act = "idle"
+		m.act_len = rng.randf_range(0.6, 1.6)
+		if m.home.has_point(to) and walkable(to):
+			m.path = [to]
 	elif r < 0.5:
-		cub.act = "sniff"
-		cub.act_len = rng.randf_range(1.5, 3.0)
+		m.act = "sniff"
+		m.act_len = rng.randf_range(1.5, 3.0)
 	elif r < 0.65:
-		cub.act = "sit"
-		cub.act_len = rng.randf_range(2.5, 4.5)
-	elif r < 0.9 and (Vector2(fly_tile) - Vector2(cub.tile)).length() <= 3.0:
-		cub.act = "pounce"
-		cub.act_len = 1.5
-		cub.right = fly.x > cub.pos.x + 8
-		var step := Vector2i(signi(fly_tile.x - cub.tile.x), 0)
-		cub.target = cub.tile + step
-		if cub_bonded or not PADDOCK.has_point(cub.target):
-			cub.target = cub.tile                  # following you: it pounces on the spot
+		m.act = "sit"
+		m.act_len = rng.randf_range(2.5, 4.5)
+	elif r < 0.9 and m.look.kind == "wolf" and (Vector2(fly_tile) - Vector2(m.tile)).length() <= 3.0:
+		m.act = "pounce"
+		m.act_len = 1.5
+		m.right = fly.x > m.pos.x + 8
+		m.target = m.tile + Vector2i(signi(fly_tile.x - m.tile.x), 0)
+		if not m.home.has_area() or not m.home.has_point(m.target):
+			m.target = m.tile                      # it pounces on the spot
 	else:
-		cub.act = "idle"
-		cub.act_len = rng.randf_range(1.0, 2.5)
+		m.act = "idle"
+		m.act_len = rng.randf_range(1.0, 2.5)
 
 func _butterfly(dt: float) -> void:
-	# it drifts over the paddock and flutters up and away whenever the cub leaps at it
+	# a butterfly over the paddock (a moth by the barn window), fluttering up and away whenever someone leaps at it
 	fly_scare = max(0.0, fly_scare - dt)
 	var home := Vector2(PADDOCK.position) * TILE + Vector2(PADDOCK.size) * TILE * 0.5
-	if cub_bonded:
+	if map_name == "barn":
+		home = Vector2(8.5, 3.2) * TILE
+	if partner and partner.where == map_name and map_name == "town":
 		home = me.pos + Vector2(8, -10)
 	var goal := home + Vector2(sin(t * 0.7) * 30.0, cos(t * 1.1) * 8.0 - 4.0 - fly_scare * 10.0)
+	if map_name == "barn":
+		goal = home + Vector2(sin(t * 1.3) * 14.0, cos(t * 1.7) * 6.0 - fly_scare * 8.0)
 	fly = goal if fly == Vector2.ZERO else fly.lerp(goal, min(1.0, dt * 1.5))
+
+func _bubbles(dt: float) -> void:
+	bubble_cd -= dt
+	for m in actors():
+		if m.is_creature() and m.look.kind == "lizard" and (m.act == "sniff" or (m == partner and stage == "bonded")) and bubble_cd <= 0.0:
+			bubbles.append({ "p": m.pos + Vector2(15.0 if m.right else 0.0, 7.0 + m.hop), "t": 0.0, "where": map_name })
+			bubble_cd = 0.35
+	for b in bubbles:
+		b.t += dt
+		b.p += Vector2(sin(b.t * 6.0) * 0.3, -dt * 9.0)
+	bubbles = bubbles.filter(func(b): return b.t < 1.6)
 
 # ---------------------------------------------------------------- the demo (for screenshots: run with -- --demo)
 func _demo(dt: float) -> void:
@@ -332,57 +560,77 @@ func _demo(dt: float) -> void:
 	demo_t = 0.0
 	if stage == "register":
 		register.demo_step()
+	elif card.visible:
+		if card.sel != 0:
+			card.sel = 0                           # look at the page for a moment, move to "Choose", then choose
+		else:
+			card._close(true)
 	elif not lines.is_empty():
 		advance()
-	elif stage == "to_paddock" and not cub_bonded and me.path.is_empty():
-		if (me.tile - cub.tile).length() <= 1.01:
-			bond()
+	elif stage == "to_barn" and me.path.is_empty() and trans_t < 0.0:
+		me.path = route(me.tile, BARN_DOOR)
+	elif stage == "barn_choose" and me.path.is_empty():
+		var goal := Vector2i(12, 5)                # in front of Ripplet's stall
+		if me.tile == goal:
+			me.face = Vector2i.UP
+			_meet(_starter_beside_me())
 		else:
-			for d in [Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP]:
-				var to: Vector2i = cub.tile + d
-				if walkable(to) and not route(me.tile, to).is_empty():
-					me.path = route(me.tile, to)
-					break
+			me.path = route(me.tile, goal)
+	elif stage == "free" and map_name == "barn" and me.path.is_empty():
+		me.path = route(me.tile, BARN_EXIT)
 
 # ---------------------------------------------------------------- drawing
 func _draw() -> void:
-	# 1. the ground (Ninja Adventure tiles, CC0): grass everywhere, dirt on paths, flowers here and there
-	for y in MAP.size():
-		for x in MAP[0].length():
-			_draw_ground(x, y, MAP[y][x])
-	# 2. fences and the signpost (drawn in code; they already looked right)
-	for y in MAP.size():
-		for x in MAP[0].length():
-			if MAP[y][x] in "=P":
-				_draw_tile(x, y, MAP[y][x])
-	# 3. houses and trees: standing objects with a footprint (so a 3D renderer can stand them up later)
-	_draw_structures()
-	# 4. people and creatures, back to front; you (once signed) and your partner are drawn in colour on their own layer
-	var actors := [me, maren, cub]
-	actors.sort_custom(func(a, b): return a.pos.y < b.pos.y)
-	for i in actors.size():
-		var m: Mover = actors[i]
+	if map_name == "town":
+		_draw_town()
+	else:
+		_draw_barn()
+	# people and creatures, back to front; you (once signed) and your partner are drawn in colour on their own layer
+	var list := actors()
+	list.sort_custom(func(a, b): return a.pos.y < b.pos.y)
+	for i in list.size():
+		var m: Mover = list[i]
 		draw_rect(Rect2(m.pos + Vector2(3, 14), Vector2(10, 2)), Color(0, 0, 0, 0.25))   # a soft shadow
 		if not _is_painted(m):
 			_draw_actor(self, m, i)
-	# 5. the butterfly
+	if map_name == "barn":
+		_draw_barn_light()
+	# the butterfly (or moth) and Ripplet's bubbles
 	var flap := int(t * 12.0) % 2 == 0
 	var wing := Vector2(3, 3) if flap else Vector2(1, 3)
+	var wcol := Color("f2d24a") if map_name == "town" else Color("e8dcc0")
 	draw_rect(Rect2(fly + Vector2(-wing.x - 1, -1), wing + Vector2(2, 2)), Figures.OUTLINE)
 	draw_rect(Rect2(fly + Vector2(0, -1), wing + Vector2(2, 2)), Figures.OUTLINE)
-	draw_rect(Rect2(fly + Vector2(-wing.x, 0), wing), Color("f2d24a"))
-	draw_rect(Rect2(fly + Vector2(1, 0), wing), Color("f2d24a"))
+	draw_rect(Rect2(fly + Vector2(-wing.x, 0), wing), wcol)
+	draw_rect(Rect2(fly + Vector2(1, 0), wing), wcol)
 	draw_rect(Rect2(fly + Vector2(0, -1), Vector2(1, 4)), Color("3a2a1a"))
+	for b in bubbles:
+		if b.where == map_name:
+			var a: float = 1.0 - b.t / 1.6
+			draw_arc(b.p, 1.5 + b.t, 0, TAU, 10, Color(0.85, 0.95, 1.0, a), 1.0)
+
+func _draw_town() -> void:
+	# 1. the ground (Ninja Adventure tiles, CC0): grass everywhere, dirt on paths, flowers here and there
+	for y in TOWN.size():
+		for x in TOWN[0].length():
+			_draw_ground(x, y, TOWN[y][x])
+	# 2. fences and the signpost (drawn in code; they already looked right)
+	for y in TOWN.size():
+		for x in TOWN[0].length():
+			if TOWN[y][x] in "=P":
+				_draw_tile(x, y, TOWN[y][x])
+	# 3. houses, the barn and trees: standing objects with a footprint (so a 3D renderer can stand them up later)
+	_draw_structures()
 
 func _is_painted(m: Mover) -> bool:
-	return (m == me and painted) or (m == cub and cub_bonded)
+	return (m == me and painted) or (m == partner)
 
 func _draw_painted() -> void:
 	# the colour layer sits above the faded world, so whatever is drawn here keeps its colour everywhere
-	var actors := [me, cub].filter(func(m): return _is_painted(m))
-	actors.sort_custom(func(a, b): return a.pos.y < b.pos.y)
-	for m in actors:
-		_draw_actor(colour_layer, m, 0 if m == me else 2)
+	var list := actors().filter(func(m): return _is_painted(m))
+	list.sort_custom(func(a, b): return a.pos.y < b.pos.y)
+	for m in list:
+		_draw_actor(colour_layer, m, 0)
 	if paint_t >= 0.0 and paint_t < 1.4:
 		# the ink sparkles outward as you're painted in
 		var cols := [my_look.shirt, my_look.hair, my_look.legs, Color("f2d24a")]
@@ -395,22 +643,158 @@ func _draw_painted() -> void:
 
 func _draw_actor(ci: CanvasItem, m: Mover, i: int) -> void:
 	var walking := not m.path.is_empty()
-	if m == cub:
+	if m.is_creature():
+		var happy: bool = m.act == "curious" or (m == partner and stage == "bonded")
 		var pose := {
-			"walking": walking, "frame": int(m.step_t * 10.0) % 4, "blink": fmod(t + 1.3, 2.9) < 0.12,
-			"wag": [1, 0, -1, 0][int(t * (14.0 if m.act == "curious" or stage == "bonded" else 6.0)) % 4],
-			"sniff": m.act == "sniff", "twitch": (int(t * 12.0) % 2) if m.act == "sniff" else 0,
-			"sit": m.act == "sit", "ears_up": m.act in ["curious", "pounce"] or stage == "bonded",
+			"walking": walking, "frame": int(m.step_t * 10.0) % 4, "blink": fmod(t + m.pos.x * 0.01, 2.9) < 0.12,
+			"wag": [1, 0, -1, 0][int(t * (14.0 if happy else 6.0)) % 4],
+			"sniff": m.act == "sniff" and m.look.kind != "lizard", "twitch": (int(t * 12.0) % 2) if m.act == "sniff" else 0,
+			"sit": m.act == "sit", "ears_up": m.act in ["curious", "pounce"] or happy,
 			"crouch": (2 if m.act_t < 0.8 else 0) if m.act == "pounce" else 0,
+			"bird": m.look.kind == "boar" and not walking and fmod(t + 3.0, 16.0) < 10.0,
 		}
 		var wiggle := (1.0 if int(t * 16.0) % 2 == 0 else -1.0) if m.act == "pounce" and m.act_t > 0.4 and m.act_t < 0.8 else 0.0
-		Figures.creature(ci, m.pos + Vector2(-1 + wiggle, 4 + m.hop), m.right, pose, CUB_LOOK)
+		Figures.creature(ci, m.pos + Vector2(-1 + wiggle, 4 + m.hop), m.right, pose, m.look)
 		return
 	var face := m.face
 	if not walking and face == Vector2i.DOWN and fmod(t + i, 6.0) > 5.2:
 		face = Vector2i.LEFT if int(t + i) % 2 == 0 else Vector2i.RIGHT   # a glance around while standing
 	var look: Dictionary = my_look if m == me else LOOKS.maren
 	Figures.person(ci, m.pos + Vector2(2, -5), face, walking, int(m.step_t * 8.0) % 4, fmod(t + i * 1.7, 3.3) < 0.12, look)
+
+# ---------------------------------------------------------------- inside the barn (drawn in code: warm wood and straw)
+const WOOD := Color("7a5236")
+const WOOD_DARK := Color("4e3220")
+const WOOD_LIGHT := Color("a07048")
+const STRAW := Color("e0c068")
+
+func _draw_barn() -> void:
+	var w := BARN[0].length()
+	draw_rect(Rect2(0, 0, w * TILE, BARN.size() * TILE), Color("16100c"))
+	for y in BARN.size():
+		for x in w:
+			var ch: String = BARN[y][x]
+			var o := Vector2(x, y) * TILE
+			var n := (x * 7 + y * 13) % 11
+			if ch in ",h|tbd":
+				_boards(o, x, y)
+				if y <= 4 and ch == "," and x > 6 and x < 18:      # straw bedding in the stalls
+					draw_rect(Rect2(o + Vector2(0, 1 if y == 3 else 0), Vector2(16, 15 if y == 3 else 12)), STRAW.darkened(0.35))
+					for k in 9:
+						draw_rect(Rect2(o + Vector2((n * 3 + k * 5) % 13, (k * 7 + n) % 14), Vector2(3, 1)), STRAW.darkened(0.12 * (k % 2)))
+				elif n == 3:
+					draw_rect(Rect2(o + Vector2(4, 9), Vector2(3, 1)), STRAW)          # a stray wisp
+			if ch == "W":
+				draw_rect(Rect2(o, Vector2(16, 16)), WOOD)
+				for k in 4:
+					draw_rect(Rect2(o + Vector2(k * 4, 0), Vector2(1, 16)), WOOD_DARK)   # boards
+				if y == 2:
+					draw_rect(Rect2(o + Vector2(0, 13), Vector2(16, 3)), WOOD_DARK)   # the skirting beam
+				if y == 1:
+					draw_rect(Rect2(o + Vector2(0, 2), Vector2(16, 3)), WOOD_LIGHT)    # the cross beam
+				if y == BARN.size() - 2:
+					draw_rect(Rect2(o, Vector2(16, 3)), WOOD_LIGHT)                  # the front wall's top edge
+			match ch:
+				"h": _bale(o)
+				"|": _stall_board(o, x, y)
+				"t": _trough(o)
+				"b": _sacks(o)
+				"d":
+					draw_rect(Rect2(o + Vector2(1, 0), Vector2(14, 16)), Color("2a1c12"))
+					draw_rect(Rect2(o + Vector2(1, 9), Vector2(14, 7)), Color("6a9a48").darkened(0.2))   # grass outside
+	# the side walls: posts that hold the roof up
+	for x in [0, w - 1]:
+		draw_rect(Rect2(Vector2(x * TILE + (10 if x == 0 else 0), TILE), Vector2(6, (BARN.size() - 2) * TILE)), WOOD_DARK)
+		draw_rect(Rect2(Vector2(x * TILE + (12 if x == 0 else 1), TILE), Vector2(2, (BARN.size() - 2) * TILE)), WOOD)
+	# the windows high on the back wall, a ladder to the loft, tools on their pegs
+	for wx in BARN_WINDOWS:
+		var o := Vector2(wx, 1) * TILE + Vector2(2, 6)
+		draw_rect(Rect2(o - Vector2(1, 1), Vector2(14, 12)), WOOD_DARK)
+		draw_rect(Rect2(o, Vector2(12, 10)), Color("a8d0ea"))
+		draw_rect(Rect2(o + Vector2(0, 7), Vector2(12, 3)), Color("8ab86a"))      # the hills outside
+		draw_rect(Rect2(o + Vector2(5, 0), Vector2(1, 10)), WOOD_DARK)
+	var lad := Vector2(4, 1) * TILE + Vector2(3, 0)
+	draw_rect(Rect2(lad, Vector2(2, 32)), WOOD_LIGHT)
+	draw_rect(Rect2(lad + Vector2(8, 0), Vector2(2, 32)), WOOD_LIGHT)
+	for k in 6:
+		draw_rect(Rect2(lad + Vector2(0, 3 + k * 5), Vector2(10, 1)), WOOD_LIGHT.darkened(0.15))
+	var pegs := Vector2(20, 1) * TILE + Vector2(2, 8)
+	draw_rect(Rect2(pegs, Vector2(1, 20)), Color("8a8a8a"))                      # a pitchfork
+	draw_rect(Rect2(pegs + Vector2(-2, 0), Vector2(5, 1)), Color("8a8a8a"))
+	draw_rect(Rect2(pegs + Vector2(-2, -4), Vector2(1, 4)), Color("8a8a8a")); draw_rect(Rect2(pegs + Vector2(2, -4), Vector2(1, 4)), Color("8a8a8a"))
+	draw_rect(Rect2(pegs + Vector2(7, 2), Vector2(8, 7)), Color("6a4a2a"))      # a coil of rope
+	draw_rect(Rect2(pegs + Vector2(9, 4), Vector2(4, 3)), WOOD_DARK)
+	# the name boards over the stalls, chalked with each name
+	for i in starters.size():
+		var s: Mover = starters[i]
+		var o := Vector2(7 + i * 4, 2) * TILE + Vector2(9, 4)          # over its stall, even after it leaves with you
+		draw_rect(Rect2(o - Vector2(1, 1), Vector2(32, 10)), Figures.OUTLINE)
+		draw_rect(Rect2(o, Vector2(30, 8)), Color("2e3a32"))
+		var nm: String = DATA.SPECIES[s.id].name
+		draw_string(ThemeDB.fallback_font, o + Vector2(0, 7), nm, HORIZONTAL_ALIGNMENT_CENTER, 30, 6, Color("e8e4d8"))
+	# a lantern on the post by the door
+	var lo := Vector2(13, 11) * TILE + Vector2(4, 2)
+	draw_rect(Rect2(lo - Vector2(1, 1), Vector2(6, 8)), Figures.OUTLINE)
+	draw_rect(Rect2(lo, Vector2(4, 6)), Color("f2c050"))
+	draw_rect(Rect2(lo + Vector2(1, -4), Vector2(2, 3)), Color("3a3a3a"))
+
+const BARN_WINDOWS := [6, 16]
+
+func _draw_barn_light() -> void:
+	# light falling from the high windows, and the lantern's glow (drawn over everything, soft)
+	for wx in BARN_WINDOWS:
+		var a := Vector2(wx, 1) * TILE + Vector2(2, 16)
+		var poly := PackedVector2Array([a, a + Vector2(12, 0), a + Vector2(30, 70), a + Vector2(8, 70)])
+		draw_colored_polygon(poly, Color(1.0, 0.95, 0.75, 0.10))
+		for k in 3:                                                                # dust in the light
+			var dp := a + Vector2(10 + k * 6 + sin(t * 0.7 + k) * 4.0, fmod(t * 4.0 + k * 23.0, 64.0))
+			draw_rect(Rect2(dp, Vector2(1, 1)), Color(1, 1, 0.9, 0.35))
+	var lo := Vector2(13, 11) * TILE + Vector2(6, 5)
+	for k in 3:
+		draw_circle(lo, 10.0 + k * 9.0 + sin(t * 3.0) * 1.5, Color(1.0, 0.8, 0.4, 0.05))
+
+## Floorboards: three boards to a tile, with seams, a lighter top edge, joints staggered from row to row, and nails.
+func _boards(o: Vector2, x: int, y: int) -> void:
+	var base := Color("8a6440")
+	draw_rect(Rect2(o, Vector2(16, 16)), base)
+	for k in 3:
+		var by := k * 5 + 1
+		var shade := base.darkened(0.04 * ((k + y) % 3))
+		draw_rect(Rect2(o + Vector2(0, by), Vector2(16, 4)), shade)
+		draw_rect(Rect2(o + Vector2(0, by), Vector2(16, 1)), shade.lightened(0.1))
+		draw_rect(Rect2(o + Vector2(0, by + 4), Vector2(16, 1)), base.darkened(0.35))
+		var jx := (k * 29 + y * 53 + 7) % 48                    # where this board ends and the next begins
+		if jx >= (x % 3) * 16 and jx < (x % 3) * 16 + 16:
+			draw_rect(Rect2(o + Vector2(jx % 16, by), Vector2(1, 4)), base.darkened(0.35))
+			draw_rect(Rect2(o + Vector2(jx % 16 + 2, by + 2), Vector2(1, 1)), Color("4a3a2a"))
+
+func _sacks(o: Vector2) -> void:
+	for k in 2:
+		var s := o + Vector2(1 + k * 7, 3 - k * 2)
+		draw_rect(Rect2(s, Vector2(8, 12)), Figures.OUTLINE)
+		draw_rect(Rect2(s + Vector2(1, 1), Vector2(6, 10)), Color("d8c8a0"))
+		draw_rect(Rect2(s + Vector2(2, 1), Vector2(4, 1)), Color("a89870"))
+		draw_rect(Rect2(s + Vector2(2, 5), Vector2(4, 2)), Color("7a8a4a"))      # a stencilled leaf
+
+func _bale(o: Vector2) -> void:
+	draw_rect(Rect2(o + Vector2(0, 2), Vector2(16, 13)), Figures.OUTLINE)
+	draw_rect(Rect2(o + Vector2(1, 3), Vector2(14, 11)), STRAW)
+	draw_rect(Rect2(o + Vector2(1, 3), Vector2(14, 2)), STRAW.lightened(0.2))
+	draw_rect(Rect2(o + Vector2(4, 3), Vector2(1, 11)), Color("a07838"))
+	draw_rect(Rect2(o + Vector2(11, 3), Vector2(1, 11)), Color("a07838"))
+
+func _stall_board(o: Vector2, x: int, y: int) -> void:
+	var top: bool = BARN[y - 1][x] != "|"
+	draw_rect(Rect2(o + Vector2(5, -6 if top else 0), Vector2(6, 22 if top else 16)), Figures.OUTLINE)
+	draw_rect(Rect2(o + Vector2(6, -5 if top else 0), Vector2(4, 21 if top else 16)), WOOD_LIGHT)
+	draw_rect(Rect2(o + Vector2(6, 4), Vector2(4, 1)), WOOD_DARK)
+	draw_rect(Rect2(o + Vector2(6, 11), Vector2(4, 1)), WOOD_DARK)
+
+func _trough(o: Vector2) -> void:
+	draw_rect(Rect2(o + Vector2(0, 4), Vector2(16, 11)), Figures.OUTLINE)
+	draw_rect(Rect2(o + Vector2(1, 5), Vector2(14, 9)), WOOD)
+	draw_rect(Rect2(o + Vector2(2, 6), Vector2(12, 3)), Color("5a9ad0"))
+	draw_rect(Rect2(o + Vector2(3, 6), Vector2(4, 1)), Color("a8d8f0"))
 
 func _draw_tile(x: int, y: int, ch: String) -> void:
 	var o := Vector2(x, y) * TILE
@@ -448,10 +832,10 @@ func _draw_tile(x: int, y: int, ch: String) -> void:
 func _update_ui() -> void:
 	var to_screen := get_viewport().get_canvas_transform()
 	var line: Dictionary = lines[0] if not lines.is_empty() else {}
-	bubble.visible = not line.is_empty()
+	bubble.visible = not line.is_empty() and trans_t < 0.0
 	if bubble.visible:
 		bubble_text.text = line.text + "   ▸"
-		var who: Mover = maren if line.who == "maren" else null
+		var who: Mover = maren if line.who == "maren" and maren.where == map_name else null
 		var w := 240.0
 		bubble.size = Vector2(w, 0)
 		bubble.reset_size()
@@ -460,25 +844,28 @@ func _update_ui() -> void:
 			bubble.position = Vector2(clamp(p.x - w / 2, 4, 384 - w - 4), max(4, p.y - bubble.size.y - 6))
 		else:
 			bubble.position = Vector2((384 - w) / 2, 216 - bubble.size.y - 8)   # narration sits low, like a book's caption
-	place.modulate.a = clamp(3.5 - t, 0.0, 1.0) if t > 1.0 else t
-	# the faded world: pass each restored circle to the shader in real screen pixels
+	place.modulate.a = move_toward(place.modulate.a, 0.0, get_process_delta_time() * 0.4) if t > 2.0 else minf(1.0, t)
+	# the faded world: pass each restored circle on this map to the shader, in real screen pixels
 	var final := get_viewport().get_final_transform()
 	var pts := PackedVector4Array()
 	for r in restore:
-		var sp: Vector2 = final * (to_screen * r.at)
-		pts.append(Vector4(sp.x, sp.y, r.r * final.get_scale().x, 0))
+		if r.where == map_name and pts.size() < 8:
+			var sp: Vector2 = final * (to_screen * r.at)
+			pts.append(Vector4(sp.x, sp.y, r.r * final.get_scale().x, 0))
+	var count := pts.size()
 	while pts.size() < 8:
 		pts.append(Vector4.ZERO)
 	var mat: ShaderMaterial = $FadeWorld/Shade.material
 	mat.set_shader_parameter("points", pts)
-	mat.set_shader_parameter("count", restore.size())
+	mat.set_shader_parameter("count", count)
 
 # ---------------------------------------------------------------- the environment (Ninja Adventure tilesets, CC0)
-# Evan (2026-10-08) liked the pack's structures and nature. Figures stay our own (draw_person). Each tile or object
+# Evan (2026-10-08) liked the pack's structures and nature. Figures stay our own (figures.gd). Each tile or object
 # is picked by its cell in a 16x16 grid: floor.png (ground), nature.png (trees, bushes, flowers), house.png (houses).
 const FLOOR := preload("res://assets/env/floor.png")
 const NATURE := preload("res://assets/env/nature.png")
 const HOUSE := preload("res://assets/env/house.png")
+const BARN_SPRITE := Rect2(400, 224, 64, 80)  # Maren's barn in house.png: measured pixel by pixel (4x5 tiles, door in the 2nd column)
 func _tex(tex: Texture2D, cell: Vector2i, size: Vector2i, at: Vector2) -> void:
 	draw_texture_rect_region(tex, Rect2(at, Vector2(size) * 16.0), Rect2(Vector2(cell) * 16.0, Vector2(size) * 16.0))
 func _is_path(x: int, y: int) -> bool:
@@ -498,19 +885,22 @@ func _draw_ground(x: int, y: int, ch: String) -> void:
 		_tex(NATURE, [Vector2i(0, 11), Vector2i(3, 11), Vector2i(6, 11)][n % 3], Vector2i.ONE, o)
 func _draw_structures() -> void:
 	var doors: Array[Vector2i] = []
-	for y in MAP.size():
-		for x in MAP[0].length():
-			if MAP[y][x] == "D": doors.append(Vector2i(x, y))
-	for y in MAP.size():
-		for x in MAP[0].length():
-			var ch: String = MAP[y][x]
+	for y in TOWN.size():
+		for x in TOWN[0].length():
+			if TOWN[y][x] == "D": doors.append(Vector2i(x, y))
+	for y in TOWN.size():
+		for x in TOWN[0].length():
+			var ch: String = TOWN[y][x]
 			if ch == "T":
 				_tex(NATURE, Vector2i(1, 10), Vector2i.ONE, Vector2(x, y) * TILE)        # a hedge bush under the treeline
 			elif ch in "r#" and not doors.any(func(d): return x - d.x >= -1 and x - d.x <= 2 and y >= d.y - 2 and y <= d.y):
 				_tex(NATURE, Vector2i(0, 10), Vector2i.ONE, Vector2(x, y) * TILE)        # garden bushes beside each cottage
 	for d in doors:
-		_tex(HOUSE, Vector2i(0, 0), Vector2i(4, 3), Vector2(d.x - 1, d.y - 2) * TILE)  # the whole cottage (4 tiles wide), its door on our door
-	for y in MAP.size():                                                                # big trees, back to front
-		for x in MAP[0].length():
-			if MAP[y][x] == "T" and (x + y) % 2 == 0:       # staggered, half a tile off the grid, so the edge reads as woods
+		if d != BARN_DOOR:
+			_tex(HOUSE, Vector2i(0, 0), Vector2i(4, 3), Vector2(d.x - 1, d.y - 2) * TILE)  # the whole cottage (4 tiles wide), its door on our door
+	for y in TOWN.size():                                                               # big trees, back to front
+		for x in TOWN[0].length():
+			if TOWN[y][x] == "T" and (x + y) % 2 == 0:       # staggered, half a tile off the grid, so the edge reads as woods
 				_tex(NATURE, Vector2i(0 if (x * 3 + y) % 4 < 2 else 2, 0), Vector2i(2, 2), Vector2(x - 0.5, y - (1.5 if tile_at(Vector2i(x, y - 1)) == "T" else 0.25)) * TILE)   # edge rows sit low so they never hide the town
+	# Maren's barn stands taller than the cottages and in front of the trees behind it
+	draw_texture_rect_region(HOUSE, Rect2(Vector2(BARN_DOOR.x - 1, BARN_DOOR.y - 4) * TILE, BARN_SPRITE.size), BARN_SPRITE)
