@@ -137,6 +137,12 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (evening, with Evan on his phone): Gemini reports for Diamond Career, Otherworld and the walk-in arcade saved and
+  reviewed against the code (docs/research/*-review.md; queued D1c, O1, V11 later). Evan's direction: everything in the game window for
+  every game; fleshed-out games likely move to Godot; budget not a guardrail; AI tools allowed; guides and wiki. Approved: Wildbond
+  heritages. Planned: one creature catalogue, evolution shapes and conditions, creature gear, tamer abilities and the wild bond
+  (docs/proposals/creature-catalogue-and-evolution.md). Tonight: Evan installs Godot export templates; then the first shareable build.
+
 - 2026-10-08 Claude (PC session, later): Godot trial: the Emberfall Highlands (cliff road from the coast with the Tide Badge; layered
   cliffs, meadow boulders, amber hot springs with steam, drifting sparks; Orsk, Sela, Warden Toren; battles with a highland skyline).
   Fixed a battle crash when a foe chose a support move (no power value). 133 Godot checks. Next (B2b): the ranch as a place, then
