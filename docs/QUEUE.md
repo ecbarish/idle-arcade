@@ -65,7 +65,7 @@ index.html or style.css until those phases are merged.
 | A5b | **D1c** Diamond Career: swings you understand | done, merged 2026-10-08 by Claude (Diamond Career v0.3.0) | From docs/research/diamond-first-contract-review.md: Timing mode shows Contact / Power (no hidden carried-over stance); results say when a pitch was off the plate and separate good-contact-caught from weak contact; one visible effect of Eye growth noted by Iona. Checks for each; old saves load |
 | A6 | **W11** A larger Wildbond roster, batch 1 | done, merged 2026-10-08 by Claude (Wildbond browser v1.7.0; 93 species) | 10-12 species filling empty family/element pairs (T6 rules); data only. Now part of the shared catalogue plan (docs/proposals/creature-catalogue-and-evolution.md): include at least one creature that never evolves and is strong for it, and write lore so the species can also live in Realmbound's zones |
 | A6b | **Guides and wiki** | ready for review: Codex, 2026-10-08, PR #52 | Evan, 2026-10-08: a guide per game with pictures, tips and tricks, later short videos. Extend guides/realmbound.html with screenshots and a tips page; start a Diamond Career and an Otherworld page. Wildbond's waits for the Godot version |
-| A7 | **R6** Realmbound hub variety | ready for review: Codex, 2026-10-08, PR #54 | A layout per zone, inn and smithy interiors |
+| A7 | **R6** Realmbound hub variety | done, merged 2026-10-08 by Claude (Realmbound v1.4.0) | A layout per zone, inn and smithy interiors |
 | A7b | **R5** crafted gear from 55 | open | Separate PR after R6 |
 | A8 | While you wait | always | Lore and dex text polish, more checks, bugs from GitHub issues |
 | — | Done | — | A2 L7a Wildbond balance, A3 L7b Realmbound balance, R9 heroic loot review (all merged 2026-10-07) |
