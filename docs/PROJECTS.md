@@ -180,3 +180,9 @@ Ready for review in PR #53 by Codex on codex/realmbound-story-choices: ten guild
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
 | OW1 | **T35: a living Lanthorn** | M | Data+Polish | OW0 | ready for review: Codex, 2026-10-08, PR #58 | docs/ROADMAP.md T35: visible locked choices, gift costs, food/fear over three days and Archivist memories |
+
+## Diamond Career follow-up
+
+| ID | Project | Size | Kind | Depends | Status | Spec / notes |
+|---|---|---|---|---|---|---|
+| D1d | **T36: in the game window and a road trip** | L | Polish+Data | D1c | claimed: Codex, 2026-10-08, codex/diamond-career-window | docs/ROADMAP.md T36; keep existing features reachable, three away parks and calendar pay |
