@@ -894,3 +894,20 @@ const ERAS = [
   { id: 'diorama', name: 'Diorama', unlock: 'Earn the Ember Badge' },
   { id: '3d', name: '3D', unlock: 'Become Champion', soon: true }
 ];
+
+/* T40: later-road witnesses. Their accounts are clues, not answers to the old fight. */
+Object.assign(CAST, {
+  sivet: {name:'Sivet',title:'Ferry Rope Keeper',skin:'#c49b78',hair:'bun',hairCol:'#b5b6a2',shirt:'#678c7b',bg:'#c9d4bd'},
+  orri: {name:'Orri',title:'Bell Mender',skin:'#e0b490',hair:'short',hairCol:'#5b5550',shirt:'#727b86',bg:'#c7cebe'},
+  nesla: {name:'Nesla',title:'Gathering Weaver',skin:'#ba8866',hair:'braid',hairCol:'#3e3b35',shirt:'#ae8663',bg:'#e2dbb4'},
+  ceryn: {name:'Ceryn',title:'Harbor Note Keeper',skin:'#ddb491',hair:'short',hairCol:'#8b7771',shirt:'#69868b',bg:'#d5e0dc'}
+});
+/* These additions change no encounters, counters, rewards or milestones. */
+STORY.find(b=>b.id==='warden5').lines.splice(2,0,
+ ['olan','The old ferry tally has two sets of prints that end at the same mark. A pair standing together, or one carrying the other? I cannot ask the stone.']);
+STORY.find(b=>b.id==='warden6').lines.splice(2,0,
+ ['senna','The oldest survey draws a ledge across that flat wall. My partner still steps wide of it. Perhaps it remembers a fall; perhaps the map does.']);
+STORY.find(b=>b.id==='warden7').lines.splice(2,0,
+ ['halen','Someone calling themselves Unbound opened a travel pen this morning. Two creatures went home; one frightened youngster stayed by its tamer. Freedom needs room for that answer too.']);
+STORY.find(b=>b.id==='warden8').lines.splice(2,0,
+ ['rysa','An old witness wrote that two figures became one before the colour went. The page ends there. It says nothing about what they were facing. Leave that blank until we know.']);

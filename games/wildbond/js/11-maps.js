@@ -780,7 +780,7 @@ const MAPS = {
       "league": 4
     }
   ]
-},
+},
   spire: {
   "name": "The Lighthouse Spire",
   "tower": true,
@@ -825,3 +825,66 @@ const MAPS = {
   "npcs": []
 }
 };
+
+/* T40: plain content, exported with MAPS. byHeritage is a Godot handoff, keyed to its existing
+   farm/coast/highland/wander IDs. Classic has no heritage selector; all base clues work without it. */
+MAPS.stillreed.signs['12,7'] += ' An older tally cut into the post reads: LOW WATER / KEEP BOTH SIDE BY SIDE. Two worn prints meet beneath it.';
+MAPS.hollowecho.signs['7,5'] += ' Below the present route, an older carving shows steps rising where the wall is flat. Nobody has scratched them out.';
+MAPS.sunthread.signs['27,4'] += ' Four old shelter ties share one knot, although their loose ends are braided differently. Please mend around it, not through it.';
+MAPS.farwatch.signs['14,5'] += ' The oldest copied account stops after: TWO FIGURES / ONE SHADOW. The space below is left empty; its missing lines have not been guessed.';
+MAPS.stillreed.npcs.push({who:'sivet',at:[10,6],dir:'up',
+ lines:[
+  ['sivet','Someone keeps taking the short blue rope from my post. Nothing else goes missing. An Unbound visitor said I should stop tying creatures to boats. I do not.'],
+  ['sivet','My grandmother said the old pair came up from the low water. My grandfather said they ran down to it. Same night, different ends of the landing.'],
+  ['sivet','Olan keeps the old tally because nobody knows what it counted. A crossing? A rescue? I would like an answer, not a prettier guess.']],
+ byBadge:{reed:[
+  ['sivet','Found the blue rope. A Rillwhisk had lined its nest with it, well above the flood. I put spare lengths beside the post. The nest can stay.'],
+  ['sivet','That explains my missing rope, not the old prints. Whatever came over this landing, Stillwake keeps room for the young ones now.']]},
+ byHeritage:{
+  farm:[['sivet','Farmfolk, are you? Your harvest knot holds like ours. Gran called hers a shore knot. Perhaps we borrowed the same hands.']],
+  coast:[['sivet','Coastfolk! You will know the low-water verse. Mine says stand beside, not bind tight. I wonder when those words parted.']],
+  highland:[['sivet','A Highlander taught Granddad to loop this rope twice. He said a mountain watcher needed two hands. Granddad only needed a ferry.']],
+  wander:[['sivet','A Wanderer never knots the loose end beyond untying. I like that. So does the Rillwhisk, though it has not returned my rope.']]}
+});
+MAPS.hollowecho.npcs.push({who:'orri',at:[5,5],dir:'right',
+ lines:[
+  ['orri','We ring twice. Something rings a third time behind that wall. People call it the watcher. I mend bells, not stories.'],
+  ['orri','There is a rubbing in my tool roll: two hands around one small paw. It has the same split-loop border as Sivet\'s ferry tally.'],
+  ['orri','Senna found warmth in a cold stone pocket. She would not call it a footprint, and neither will I. Something sleeping and something keeping watch could leave the same warmth.']],
+ byBadge:{echo:[
+  ['orri','The third ring was a loose bell tongue in a runoff crack. A Dripdart tapped it when the water rose. I fixed it; the youngster found a quieter pool.'],
+  ['orri','The warm pocket is farther in. A bell mended is not a mountain explained.']]},
+ byHeritage:{
+  farm:[['orri','You call that border a harvest loop? My family used it on a warning bell. Perhaps a warning and a welcome once hung from the same cord.']],
+  coast:[['orri','You know a paw between two hands from your shore songs? Here the verse says stone instead of sea. Bring your words; I will keep both copies.']],
+  highland:[['orri','A Highlander will know why I will not call the watcher cruel. My grandmother sang that it stayed. Yours may have sung that it slept.']],
+  wander:[['orri','A Wanderer once said the rubbing shows a single creature, not two people. Could be. The stone has room for either reading.']]}
+});
+MAPS.sunthread.npcs.push({who:'nesla',at:[22,5],dir:'left',
+ lines:[
+  ['nesla','The green ribbons vanished from the nursery this morning. Someone blamed the Unbound. Somebody always knows the culprit before finding the ribbon.'],
+  ['nesla','An Unbound visitor left this copy: When two became one, the land went pale. So let every creature go. Those are their words. A short account makes a long command.'],
+  ['nesla','Our four old ties have different braids but the same knot. The coast says a wave took the colour; my aunt says hungry fields. Both families kept this cloth.']],
+ byBadge:{loom:[
+  ['nesla','Ribbonstride had gathered the green ribbons under the nursery bench, out of the gusts. I marked a basket for loose ties. No villain, just a helper with no instructions.'],
+  ['nesla','The Unbound visitor helped move a shelter, then left before the badges came out. I can thank those hands without agreeing with that copied page.']]},
+ byHeritage:{
+  farm:[['nesla','Farmfolk know the hungry-fields verse. Your last line says the land will remember. Mine says the hands will remember. I have kept both.']],
+  coast:[['nesla','Coastfolk call this braid a wave edge. We call it a furrow. Fold the cloth and they meet in the middle.']],
+  highland:[['nesla','The Highland tie faces the mountain. It was not cut away when someone blamed the watcher. A gathering keeps a place even for a disputed tale.']],
+  wander:[['nesla','A Wanderer might hear care in that Unbound page. I do too. But leave room for the youngster that chose to stay; it knows something the page cannot.']]}
+});
+MAPS.farwatch.npcs.push({who:'ceryn',at:[18,3],dir:'down',
+ lines:[
+  ['ceryn','A light circles the empty west mooring every dusk. Some say Watchlight is waiting for the lost pair. I have started counting boats before telling that story.'],
+  ['ceryn','The copied account says one shadow and then nothing. The witness stood behind it. A flash could hide a rescue as easily as a blow.'],
+  ['ceryn','The inn has an old painted inlet with a lower shore beneath this one. The paint is unbroken. The coast may have changed; or something more than colour went missing.']],
+ byBadge:{horizon:[
+  ['ceryn','Counted the circling light. Watchlight was guiding a Keeljaw with a torn mooring cloth caught on its back. We freed the cloth. The empty mooring is quiet again.'],
+  ['ceryn','A small waiting answered. The lost pair is still a question. I filed both notes, on different pages.']]},
+ byHeritage:{
+  farm:[['ceryn','Your harvest tale names the morning after. The shore account ends at the flash. Perhaps both families wrote only what their own window showed.']],
+  coast:[['ceryn','Coastfolk will notice the old inlet verse uses the same split-loop mark as the ferry tally. It might mark the reader, rather than the sea.']],
+  highland:[['ceryn','Your mountain verse begins while our shore verse ends. Do not throw either away because the clocks disagree; the witnesses may have been looking in different directions.']],
+  wander:[['ceryn','A Wanderer gave me a copy of the one-shadow account and asked me to leave its last page blank. Another wrote a conclusion there. I kept the blank one too.']]}
+});

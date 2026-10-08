@@ -375,3 +375,14 @@ Not yet in the game; recorded so every writer keeps it consistent (details in do
 - **The Unbound:** a faction founded on an eyewitness account of that fight, which misread it as proof that bonding drains the land. They free creatures and oppose the Wardens. Partly right about some things, wrong about the cause. The player can oppose, join or infiltrate them.
 - **Depth (Evan, 2026-10-08):** the drain took the valley's depth as well as its colour: it was flattened into a grey picture of itself. Restoration comes in steps: colour first (bonds, restored areas), then depth late in the journey (long shadows, light falling through things, the land gaining height). The first wild bond is the moment the player sees the valley through their creature's eyes, in first person; after the story it stays as a way to explore. Building rules and plan: docs/proposals/depth-and-first-person.md.
 - Open: what the wild bond fought, and its tie to Toren's watcher older than the Wardens.
+
+## Later-road witnesses (T40)
+Sivet keeps the ferry rope in Stillreed, Orri mends Hollowecho's bells, Nesla weaves at the Sunthread gathering,
+and Ceryn records returns in Farwatch. Each has an ordinary question answered after the area's badge and clues
+that remain open about the old pair, the fading, the watcher and the Unbound's interpretation. The new accounts
+are attributed to people and incomplete records. They do not identify the old opponent or change the existing
+colour-restoring finale. The full placement and candidate ledger is [Wildbond's threads](wildbond-threads.md).
+
+Additional heritage recognition is plain data for the Godot handoff. All essential clues already appear in the
+shared browser conversations; its current engine does not dispatch heritage reactions. No faction choice,
+fusion, restored-depth mechanic or Godot area is claimed as implemented by this writing step.

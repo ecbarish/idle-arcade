@@ -165,7 +165,7 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
 - [x] T33 merged 2026-10-08 by Claude (Wildbond v1.6.0, PR #43).
 - [x] T34 implemented by Codex on `codex/diamond-career-d0`, PR #45 ready for review (2026-10-08; not merged).
 
-- [ ] T38-T40 open for ChatGPT (2026-10-08, night), after T36 and T37. Read PROJECTS.md "Read first" before starting.
+- [x] T38-T40 ready for review in PR #62–#64 (Codex, 2026-10-08), after T36 and T37; none merged.
 
 ### T38: Realmbound in the game window (the plan, then part 1)
 - [x] Plan and part 1 ready in PR #62 (Codex, 2026-10-08): world viewport, carried Journal/Satchel, all existing feature routes retained; 25 new scenarios and all eight pages pass; before/after at four widths. No release bump.
@@ -191,6 +191,7 @@ reasons, gift costs that bite, a town that changes with your choices, the Archiv
   tests/otherworld.html; old saves load.
 
 ### T40: Wildbond areas 5-8, woven clues, signs and chatter (data and lore)
+- [x] Ready PR #64 (Codex, 2026-10-08): four witnesses, signs and Warden clues, four small badge payoffs and 16 exportable heritage reactions. Every clue in the ledger; all eight suites pass. Godot dispatch remains Claude's.
 Read docs/lore/wildbond-threads.md (the ledger) and docs/lore/wildbond.md ("Decided for future writing": the wild bond,
 the fading, which also took the valley's depth, the Unbound, heritages). Branch `codex/wildbond-threads-5-8`.
 - For Stillreed Basin, Hollowecho Hills, Sunthread Commons and Farwatch Reach, write into the browser game's data:

@@ -66,6 +66,8 @@ These decisions and lessons override older rows below wherever they disagree. Ea
 
 ## Wildbond in Godot (the new Wildbond; Claude's lane)
 
+Browser-data handoff T40: areas 5–8 clues and chatter ready in PR #64 (Codex, 2026-10-08); no Godot edits.
+
 Built so far (wildbond-godot/README.md): the opening (register, barn, Wren), Thornwood, Saltmarsh, Emberfall,
 Cloudglass, wild creatures and bonding, trainers and Wardens, the ranch as a place (paddock, barn, nursery, trough,
 workbench and gear), evolution shapes and conditions, heritages, music, saving. Checks: `tests/run_tests.gd`.

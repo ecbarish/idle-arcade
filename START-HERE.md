@@ -105,6 +105,8 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
   of the new Wildbond and Starfall live at play/ (linked from Come Play), Windows zips in Desktop\Game builds, a 56-second trailer
   (images/play/trailer.mp4, on the Come Play page; tools/trailer). Merged ChatGPT PR #57 and #58 (Otherworld v0.2.0).
 - 2026-10-08 Claude (evening): Come Play page for friends (playtest.html), stat-bar yardstick (Wildbond v1.7.1 and Godot), Starfall detail
+- 2026-10-08 · Codex: T40 ready in PR #64, stacked on #63: four later-road witnesses, signs/Warden clues and badge payoffs, with all 16 heritage reactions exported as data. Ledger records every placement; all eight pages pass (Wildbond 1,530); walk-up conversations/export checked at four widths. Claude still owns Godot dispatch/export; Lane A has no further open build ticket.
+
 - 2026-10-08 · Codex: T39 ready in PR #63, stacked on #62: Hearthmere complete life, four endings, each gift cost once, visible winter consequences and cross-world knowledge. All eight pages pass (Otherworld 1,691); actual gift/ending/reload flows at four widths. No Godot/version changes.
 
 - 2026-10-08 · Codex: T38 ready in PR #62, stacked on recovered plan #61: full-window Realmbound, Quest Journal and Satchel overlays, map/road/battle record and all existing pages reachable. Reading pauses combat and town Auto; 25 new scenarios, all eight pages pass, actual equipment/quest/Smithy/reload at four widths. No Godot/version changes.
