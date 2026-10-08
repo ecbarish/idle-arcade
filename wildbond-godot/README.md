@@ -27,8 +27,22 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   `tools/godot-export.ps1`), so both versions always agree.
 - **The paddock pup** (Maren's ranch pup) wanders the paddock, sniffs the grass, sits with its tail curled, and stalks
   and pounces at a butterfly; when you come near it stops and watches you, ears up and tail going.
-- The first bond: the young creature chooses you and **colour floods back** into the world around it
-  (shaders/fade.gdshader), then it follows you.
+- **Wren and the first battle:** Wren runs in after you leave the barn (lines from the browser game) and takes the
+  partner that beats yours. The battle is on the field: classic layout, who acts next, Fight (moves with descriptions),
+  Guard and Rally (orders that refill), Bond, Bag, Run, a soft grey fog in and out, and a results page that waits.
+  The rules (`scripts/rules.gd`) give the browser game's exact numbers (checked).
+- **Thornwood, the first route:** walk north out of Larkhaven. Tall grass, a pond, items in pouches, signs. Every
+  8-16 steps in the grass you find something (like the browser): a wild creature at a level near yours, coins, a lure,
+  or a moment in the woods. **Bond** throws a lure and starts a calm meter: press when the marker is in the green
+  (weaker, calmer creatures are easier). **Each creature that trusts you brings colour back** where you are. Your team
+  holds three; the rest go to Maren's ranch. **Bram and Lise** spot you and walk over to battle; **Warden Isolde**
+  waits at the hawthorn gate with her scene and three creatures, and the **Thorn Badge** opens the gate (the coast is
+  next to build). Lose a battle and you hurry home to Maren; talk to her any time to heal your team.
+- **Every creature has a body:** ten family body plans (wolf, cat, hyena, lizard, croc, boar, horse, bird, spider,
+  sprite) in each species' own colour, so all 81 creatures look like themselves (`tests/gallery.gd` draws them all).
+- **Your journey saves** (team, ranch, satchel, badges, Wilddex, items, beaten trainers, restored colour, where you
+  stand) at calm moments and when you close the window; a start page offers Continue or a new journey.
+- Click or tap anywhere to walk there; tap a creature in the barn to walk up and meet it.
 
 ## How it's built (for assistants)
 - `scripts/figures.gd`: people and creatures built from parts, drawn by any node (the world, the register, later
@@ -41,7 +55,7 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   See it: add `--write-movie <folder>/f.png --fixed-fps 10 --quit-after 200 -- --demo` (the demo plays the opening by
   itself) and look at the frames.
 - **Checks:** `Godot_v4.7.2-stable_win64_console.exe --headless --path wildbond-godot --script res://tests/run_tests.gd`
-  plays the opening by itself and must stay all-pass (38 checks on 2026-10-08).
+  plays the opening, the first battle, Thornwood, a catch, the Warden and a save by itself; must stay all-pass (98 checks on 2026-10-08). `tests/battle_odds.gd` measures how winnable a battle is; run the game with `-- --skip-opening` to start in Thornwood.
 - **Builds for sharing:** `tools/godot-build.ps1` (web: play/wildbond/, Windows: export/Wildbond-trial-windows.zip),
   once Godot's export templates are installed (Editor > Manage Export Templates > Download and Install).
 - Click or tap anywhere to walk there; tap a creature in the barn to walk up and meet it.

@@ -42,8 +42,11 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
 Adventure CC0 tiles, our own parts-built people and creatures in `scripts/figures.gd`), Maren's ranch register (the
 character creator; signing paints you in colour), her barn with Cindercub, Ripplet and Mosshog (each with its own body
 and habits, Wilddex pages), the bond flooding colour out of the barn, Wren running in, and the first battle on the field
-(`scripts/battle.gd`, rules in `scripts/rules.gd` checked number-for-number against the browser). Content comes from the
-browser game via `tools/godot-export.ps1`; checks: `tests/run_tests.gd` (64); sharing: `tools/godot-build.ps1` once
+(`scripts/battle.gd`, rules in `scripts/rules.gd` checked number-for-number against the browser). **Thornwood is playable:**
+tall grass with wild creatures, catching with Bond (lure + calm meter; each catch brings colour back), Bram and Lise,
+Warden Isolde and the Thorn Badge, items, signs, healing with Maren, all 81 creatures with bodies (ten family plans),
+and saving with a Continue page. Content comes from the
+browser game via `tools/godot-export.ps1`; checks: `tests/run_tests.gd` (98); sharing: `tools/godot-build.ps1` once
 Evan installs Godot's export templates. The plan for the move: `docs/godot-port-plan.md`.
 
 **Current (2026-10-07):** the goal is Launch (docs/QUEUE.md). Wildbond follows **docs/wildbond-plan.md** (Evan'splay notes turned into principles and phases); Realmbound is balanced and gets its guide and onboarding next. Theolder detail below is history; CLAUDE.md "Where we are" has the short current summary.
@@ -133,6 +136,12 @@ a default so work never waits.
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Claude (overnight, continued): Godot trial, Thornwood playable from the exported data: roads between maps,
+  tall grass + water + items, exploring like the browser (62% wild creature), Bond (lure + calm meter, browser catch
+  formula), Bag berries, catches restore colour, team of three + ranch, Bram/Lise spot and battle, Warden Isolde and the
+  Thorn Badge open the gate, signs, Maren heals, body plans for all ten families (81 creatures), save/load with a
+  Continue page, --skip-opening for testing; 98 Godot checks. Next (B2b): Larkhaven's shop and inn as places (lures for
+  coins), the Wilddex book, then Saltmarsh Coast from the data.
 - 2026-10-08 Claude (overnight, Evan asleep): Godot trial: the partner choice in Maren's barn (full-screen barn, three
   starters with their own bodies and habits, Wilddex pages, Choose / Not yet, colour floods out of the barn), Wren and
   the first battle (classic layout, turn order, orders, results); rules.gd translated and checked against the browser;
