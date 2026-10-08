@@ -12,7 +12,7 @@ and the hub page shows where you left off in every one.
 | [Primordial](games/primordial/) | Playable | Evolution idle game: cell to Leviathan, mutation drafts, niche fights, extinction resets |
 | [Starfall Guild](games/starfall-guild/) | Prototype | Kairosoft-style adventurer guild: recruit, class combos, dungeon autobattle, town, staff, seasons |
 | [Realmbound](games/realmbound/) | Prototype | Classic-MMO-inspired adventure: two factions, 5 classes including a pet-taming Hunter, levels 1–40, quests, loot, Focus/Auto play, addons as automation ([design](docs/realmbound-design.md)) |
-| [Diamond Career](games/diamond-career/) | Prototype | Six-game batter career, timing/tactical batting, transparent call-up, contracts, calendar salary and permanent home/garage purchases |
+| [Diamond Career](games/diamond-career/) | Prototype | Batter career from first call-up through a 30-day paid month, timing/tactical batting, two contract terms, calendar salary and permanent home/garage purchases |
 | Otherworld | Idea | Anime isekai: status window, evolving skills, story arcs, guild ranks F to S, reincarnation |
 
 Design plans live in [docs/](docs/): [Realmbound](docs/realmbound-design.md), [idea backlog](docs/ideas.md).
@@ -40,6 +40,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 ## Changelog
 
 - Realmbound onboarding (2026-10-08): a skippable arrival ends on the existing first questgiver, followed by optional contextual guidance for Focus, loot, reward choice, town services and actual companions. Returning saves stay quiet; all seven test pages pass. No version or cache bump; see docs/realmbound-onboarding.md.
+
+- Diamond Career first month (2026-10-08): a second contract with explicit pay/opportunity tradeoffs, 18 possible professional games across 30 calendar days, Iona's recorded coaching notes and a personal month recap. Old payment IDs and possessions persist; all seven test pages pass (83 Diamond checks). No version/cache bump; docs/diamond-career-first-month.md.
 
 - Diamond Career (2026-10-08): a new first-payday prototype with an original evening ballpark, two batting styles, six development games, visible call-up targets, two contracts, calendar salary and lasting home/garage purchases. Shared saves, settings, sound, feedback and launcher integration; tests/diamond.html and all six existing test pages pass. See docs/diamond-career-first-payday.md.
 - Research (2026-10-08): preserved Gemini's Starfall report with a review against the current rules; archived answered Wildbond/Godot/Realmbound/Starfall prompts. docs/research/gemini-prompts.md now lists only unanswered Diamond Career, Otherworld, arcade and optional Primordial briefs, revised for current owner decisions and neutral playtests. No gameplay changes.

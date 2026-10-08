@@ -2,7 +2,7 @@
 function freshCareer(seed=Date.now()) {
   return {game:'diamond-career',schema:1,seed:seed>>>0,player:null,mode:'timing',sound:0,phase:'creator',day:1,
     series:0,played:0,stats:{contact:58,power:50,discipline:55},fatigue:0,record:lineStats(),season:lineStats(),
-    history:[],contract:null,ledger:[],cash:0,owned:{apartment:false,car:false},active:null,message:'',stance:'contact',guess:'fastball',prepared:false};
+    history:[],contract:null,ledger:[],cash:0,owned:{apartment:false,car:false},active:null,message:'',stance:'contact',guess:'fastball',prepared:false,month:null,contracts:[],notes:[]};
 }
 function validCareer(o) {
   const num=n=>typeof n==='number'&&Number.isFinite(n)&&n>=0, line=s=>!!s&&Object.keys(lineStats()).every(k=>num(s[k]));
@@ -10,6 +10,10 @@ function validCareer(o) {
     !o.stats||!['contact','power','discipline'].every(k=>num(o.stats[k]))||!line(o.record)||!line(o.season)||
     !o.owned||!['apartment','car'].every(k=>typeof o.owned[k]==='boolean')||!Array.isArray(o.ledger)||!Array.isArray(o.history)||
     !o.ledger.every(e=>e&&typeof e.id==='string'&&Number.isFinite(e.amount)&&Number.isInteger(e.day)&&e.day>=1))return false;
+  if(o.contract&&o.contract.generation!==undefined&&![0,1].includes(o.contract.generation))return false;
+  if(o.month!==undefined&&o.month!==null&&(!Number.isInteger(o.month.start)||o.month.start<1||o.month.end!==o.month.start+30||!Number.isInteger(o.month.games)||o.month.games<0||!Number.isInteger(o.month.wins)||o.month.wins<0||o.month.wins>o.month.games||!line(o.month.record)||typeof o.month.closed!=='boolean'))return false;
+  if(o.contracts!==undefined&&(!Array.isArray(o.contracts)||o.contracts.length>1||!o.contracts.every(c=>c&&DC.offers[c.offer]&&Number.isInteger(c.start)&&c.start>=1&&c.generation===0)))return false;
+  if(o.notes!==undefined&&(!Array.isArray(o.notes)||o.notes.length>6||!o.notes.every(n=>n&&Number.isInteger(n.day)&&n.day>=1&&typeof n.kind==='string'&&typeof n.text==='string')))return false;
   if(o.player&&(typeof o.player.name!=='string'||!['left','right'].includes(o.player.bats)||!Number.isInteger(o.player.look)||o.player.look<0||o.player.look>3))return false;
   if(o.contract&&(!DC.offers[o.contract.offer]||!Number.isInteger(o.contract.start)||o.contract.start<1))return false;
   if(o.active){const g=o.active.g;
@@ -36,8 +40,9 @@ function migrateCareer(o) {
   if(n.player&&n.player.look===undefined)n.player.look=0;
   if(!validCareer(n))return freshCareer(1234);
   if(!n.player){n.phase='creator';n.active=null;}
-  else if(!['clubhouse','pitch','result','summary','offers','home'].includes(n.phase)){n.phase='clubhouse';n.active=null;}
+  else if(!['clubhouse','pitch','result','summary','offers','home','month'].includes(n.phase)){n.phase='clubhouse';n.active=null;}
   if(['pitch','result','summary'].includes(n.phase)&&!n.active){n.phase=n.contract?'home':'clubhouse';}
+  normalizeCalendar(n,o);
   return n;
 }
 function effectiveStats(s) { return {...s.stats,contact:Math.max(25,s.stats.contact-s.fatigue*.15)}; }
@@ -51,13 +56,13 @@ function startCareer(s,name,bats,look) {
   s.phase='clubhouse';s.message='Iona Vale: “Six games. Find your eye, then find your swing. A walk counts as getting there.”';return true;
 }
 function startMatch(s) {
-  if(!['clubhouse','home'].includes(s.phase)||s.played>=6)return false;
+  if(!['clubhouse','home'].includes(s.phase)||s.played>=6||(s.contract&&contractDue(s))||(s.month&&s.day>=s.month.end))return false;
   const p=DC.pitchers[s.played%3],g=newGame((random(s)*4294967296)>>>0);
-  const club=s.contract?DC.offers[s.contract.offer].name:DC.club;
+  const club=s.contract?contractOffer(s.contract).name:DC.club;
   const opponents=[DC.club,...DC.opponents].filter(name=>name!==club);
   s.active={g,pitcher:p,opponent:opponents[s.played%3],pitch:null,last:null,accounted:false};
   s.prepared=false;
-  simulateToMoment(g,effectiveStats(s),p,s.contract?DC.offers[s.contract.offer].moments:2);
+  simulateToMoment(g,effectiveStats(s),p,s.contract?contractOffer(s.contract).moments:2);
   s.phase=g.finished?'summary':'pitch';if(s.phase==='summary')accountMatch(s);else nextPitch(s);return true;
 }
 function nextPitch(s) { if(!s.active||s.active.g.finished)return; s.active.pitch=makePitch(s.active.g,s.active.pitcher);s.phase='pitch'; }
@@ -65,12 +70,15 @@ function playPitch(s,action) {
   if(s.phase!=='pitch'||!s.active.pitch)return false;
   const a=s.active, r=resolvePitch(a.g,effectiveStats(s),a.pitch,action), board=applyPlay(a.g,r.play);
   a.last={...r,...board,take:!!action.take};a.pitch=null;s.phase='result';
-  if(board.ended)a.g.manual++;return a.last;
+  if(board.ended)a.g.manual++;
+  if(board.ended&&board.kind==='walk'&&action.take)rememberDecision(s,'walk','Waited out an out-of-zone pitch and earned a walk.');
+  if(!action.take&&r.play==='strike'&&action.mode==='timing'&&action.timing<.8)rememberDecision(s,'early','Swung early before the ball reached the plate.');
+  return a.last;
 }
 function continueMatch(s) {
   if(s.phase!=='result')return false;
   const a=s.active;
-  if(a.last.ended)simulateToMoment(a.g,effectiveStats(s),a.pitcher,s.contract?DC.offers[s.contract.offer].moments:2);
+  if(a.last.ended)simulateToMoment(a.g,effectiveStats(s),a.pitcher,s.contract?contractOffer(s.contract).moments:2);
   if(a.g.finished){s.phase='summary';accountMatch(s);}else nextPitch(s);return true;
 }
 function accountMatch(s) {
@@ -79,17 +87,18 @@ function accountMatch(s) {
   for(const k of Object.keys(lineStats())){s.record[k]+=a.g.hero[k];s.season[k]+=a.g.hero[k];}
   s.history.push({series:s.series,day:s.day,opponent:a.opponent,score:copy(a.g.score),hero:copy(a.g.hero),manual:a.g.manual,innings:a.g.inning});
   if(s.history.length>60)s.history.shift();
+  if(s.month&&s.contract&&!s.month.closed){s.month.games++;if(a.g.score[1]>a.g.score[0])s.month.wins++;for(const k of Object.keys(lineStats()))s.month.record[k]+=a.g.hero[k];}
 }
 function afterMatch(s) {
   if(s.phase!=='summary')return false;
-  advanceDays(s,1);s.active=null;
-  s.phase=!s.contract&&s.played===6?'offers':s.contract?'home':'clubhouse';
+  const a=s.active;advanceDays(s,s.contract&&s.contract.generation===1?2:1);s.active=null;
   if(s.contract&&s.played===6&&evaluation(s).earned)s.contract.tier='Senior club';
-  s.message=s.phase==='offers'?'Iona: “Numbers tell part of your story. Now choose where you will grow.”':s.played===6?'Iona: “'+evaluation(s).text+' '+(evaluation(s).earned?'You earned your senior place.':'Keep growing. Another series is another chance.')+'”':'Iona: “Take a breath. A better tomorrow starts tonight.”';return true;
+  s.phase=careerPhase(s);
+  s.message=s.phase==='offers'?'Iona: “Numbers tell part of your story. Now choose where you will grow.”':coachGame(s,a);return true;
 }
 function training(s,choice) {
   if(!['home','clubhouse'].includes(s.phase)||s.prepared)return false;
-  if(choice==='rest'){s.fatigue=0;s.message='A quiet evening. Your legs feel fresh again.';}
+  if(choice==='rest'){if(s.fatigue>0)rememberDecision(s,'rest','Rested tired legs before returning to the field.');s.fatigue=0;s.message='A quiet evening. Your legs feel fresh again.';}
   else if(['contact','power','discipline'].includes(choice)){s.stats[choice]=Math.min(80,s.stats[choice]+2);s.fatigue=Math.max(0,s.fatigue-4);s.message='A focused session: '+choice+' +2. Coach writes it in your notebook.';}
   else return false;
   // One useful preparation per game; choosing again is not an infinite stat button.
@@ -100,16 +109,19 @@ function credit(s,id,amount,label,day) {
   s.cash+=amount;s.ledger.push({id,day,amount,label});return true;
 }
 function signContract(s,offer) {
-  if(s.phase!=='offers'||s.contract||!DC.offers[offer])return false;
-  const e=evaluation(s),o=DC.offers[offer];
-  s.contract={offer,start:s.day,tier:e.earned?'Senior club':'Development club'};
-  credit(s,'signing',o.bonus,'Signing bonus · '+o.name,s.day);
+  if(s.phase!=='offers'||!DC.offers[offer]||(s.contract&&(!contractDue(s)||s.contract.generation===1))||(s.month&&s.day>=s.month.end))return false;
+  const renewal=!!s.contract,e=evaluation(s),o=(renewal?DC.renewals:DC.offers)[offer];
+  if(renewal){advanceDays(s,0);s.contracts.push(copy(s.contract));}
+  const tier=renewal?s.contract.tier:(e.earned?'Senior club':'Development club');
+  s.contract={offer,start:s.day,tier,generation:renewal?1:0};
+  if(!s.month)s.month={start:s.day,end:s.day+30,games:0,wins:0,record:lineStats(),closed:false};
+  credit(s,renewal?'contract-1-signing':'signing',o.bonus,(renewal?'Second contract bonus':'Signing bonus')+' · '+o.name,s.day);
   s.series++;s.played=0;s.season=lineStats();s.prepared=false;s.phase='home';
-  s.message=e.earned?'Your first call-up. A key, a shirt with your name, and a place to belong.':'A paid development contract. Your call-up target stays in the notebook; there is time to grow.';return true;
+  s.message=renewal?'Iona: “A new shirt or the same locker. The next contract is your choice. The month is still yours to play.”':e.earned?'Your first call-up. A key, a shirt with your name, and a place to belong.':'A paid development contract. Your call-up target stays in the notebook; there is time to grow.';return true;
 }
 function advanceDays(s,n) {
-  n=clamp(Math.floor(n),0,30);const to=s.day+n;
-  if(s.contract){const o=DC.offers[s.contract.offer];o.days.forEach((offset,i)=>{const day=s.contract.start+offset;if(day<=to)credit(s,'salary-'+i,o.wage,'Salary '+(i+1)+' of 3 · '+o.role,day);});}
+  n=Number.isFinite(n)?clamp(Math.floor(n),0,30):0;const to=s.month?Math.max(s.day,Math.min(s.month.end,s.day+n)):s.day+n;
+  if(s.contract){const o=contractOffer(s.contract);o.days.forEach((offset,i)=>{const day=s.contract.start+offset;if(day<=to)credit(s,salaryId(s.contract,i),o.wage,'Salary '+(i+1)+' of '+o.days.length+' · '+o.role,day);});}
   s.day=to;return s.day;
 }
 function purchase(s,id) {

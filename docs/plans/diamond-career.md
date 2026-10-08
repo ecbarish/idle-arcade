@@ -6,13 +6,13 @@ come from a statistics model (batter vs pitcher, weighted rolls); the player act
 a tactical read); animation only shows the result. The rest of each game simulates. This is T34's approach.
 part 1 (docs/ROADMAP.md T34).
 
-Status: planned concept only; no playable game directory. Implementation remains parked until explicitly authorized. See [the expanded sports-career plan](sports-careers.md) for the owner's multi-sport, player-to-management and salary/lifestyle direction. Baseball is the first module, not the limit of the project. [Research](RESEARCH.md#diamond-career-understandable-advancement-short-playable-moments); [portfolio plan](README.md).
+Status: browser prototype in games/diamond-career/; D0 and the first D1 payday are merged (PR #45). The second contract and first full season month are ready in PR #48; later D2–D4 remain proposals. See [the expanded sports-career plan](sports-careers.md) for the owner's multi-sport, player-to-management and salary/lifestyle direction. Baseball is the first module, not the limit of the project. [Research](RESEARCH.md#diamond-career-understandable-advancement-short-playable-moments); [portfolio plan](README.md).
 
 ## The experience to protect
 
 Live a player's career: earn a place, make decisions in consequential at-bats, train for a role, receive a contract and decide what to do with its money. Most of a season can simulate; the player steps into meaningful moments. Club management is a later career destination, not the opening screen.
 
-The backlog specifies creating a player, earning/spending a contract and eventually managing the club. We have no agreed baseball simulation, progression model or roster data yet. Start with original fictional clubs and players. Nothing requires licensed teams, real player likenesses or an MLB-sized calendar.
+The backlog specifies creating a player, earning/spending a contract and eventually managing the club. The first prototype now has a shared pitch model, visible call-up thresholds and original club data. Start with original fictional clubs and players. Nothing requires licensed teams, real player likenesses or an MLB-sized calendar.
 
 ## Staged development
 
@@ -48,8 +48,8 @@ Later technical upgrades could add more direct batting/fielding control, but req
 
 ## Owner decisions
 
-Batter first or pitcher first? Should batting primarily test timing, tactical choices, or offer both? How stylized versus simulation-heavy should results feel? Does Evan want a short career he can replay, or one player he develops over many weeks? These are the decisions needed to turn D0/D1 into an approved spec; code remains parked until then.
+Batter first or pitcher first? Should batting primarily test timing, tactical choices, or offer both? How stylized versus simulation-heavy should results feel? Does Evan want a short career he can replay, or one player he develops over many weeks? Evan answered these opening decisions on 2026-10-08: batter first, both styles switchable, browser prototype, stats outcomes without a physics engine. Later roles and career scope remain proposals.
 
 ## Control range and device target
 
-Evan confirmed fully manual through fully automated modes for every game. This initial at-bat prototype is a limited manual slice; later pitching, fielding, baserunning and full-match control are explicit milestones. Career decisions and manager responsibilities need separate delegation switches, not a single “simulate match” toggle. Desktop keyboard/mouse and phone touch are required; VR is deferred. Follow [the common control contract](README.md#manual-through-fully-automated-play).
+Evan's current direction favors played careers with earned quality of life for tedium (docs/wildbond-plan.md and docs/research/owner-direction-2026-10-07.md). The at-bat prototype is a manual slice with simulated other turns; later pitching, fielding, baserunning and full-match control are explicit milestones. Career decisions and manager responsibilities need separate delegation switches, not a single “simulate match” toggle. Desktop keyboard/mouse and phone touch are required; VR is deferred. Follow [the common control contract](README.md#manual-through-fully-automated-play).

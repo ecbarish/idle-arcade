@@ -11,6 +11,10 @@ const DC = {
     wage: {name:'Copperbank Rivets',role:'Rotation batter',bonus:320,wage:240,moments:1,days:[2,4,6]},
     starts: {name:'Alder Quay Terns',role:'Everyday batter',bonus:180,wage:170,moments:3,days:[2,4,6]}
   },
+  renewals: {
+    wage: {name:'Copperbank Rivets',role:'Rotation batter',bonus:400,wage:260,moments:1,days:[6,12,18,24]},
+    starts: {name:'Alder Quay Terns',role:'Everyday batter',bonus:240,wage:190,moments:3,days:[6,12,18,24]}
+  },
   purchases: {apartment:{name:'A sunlit apartment',price:300},car:{name:'A little teal runabout',price:420}},
   threshold:{hits:5,obp:.300}
 };

@@ -103,7 +103,7 @@ function animateWorld(now){
   const w=Math.max(180,Math.ceil(world.clientWidth/2)),h=Math.max(130,Math.ceil(world.clientHeight/2));
   if(world.width!==w||world.height!==h){world.width=w;world.height=h;ctx.imageSmoothingEnabled=false;}
   const t=reduced?0:now/1000;
-  if(S.contract&&S.phase==='home')drawHome(t,w,h);else if(['clubhouse','offers'].includes(S.phase))drawClubhouse(t,w,h);else drawBallpark(t,w,h);
+  if(S.contract&&['home','month'].includes(S.phase))drawHome(t,w,h);else if(['clubhouse','offers'].includes(S.phase))drawClubhouse(t,w,h);else drawBallpark(t,w,h);
   const bar=document.querySelector('#timing-bar span');bar.style.width=(S.active?.pitch?clamp(pitchClock.elapsed/S.active.pitch.duration*100,0,100):0)+'%';
   requestAnimationFrame(animateWorld);
 }
