@@ -18,8 +18,8 @@ and how much creative freedom you have are in [CREATIVE.md](CREATIVE.md).
    before/after screenshots for anything visual, and an "An idea" section if you have one.
 5. **Go straight to the next task in your lane.** Don't wait for the review.
    - If the next task needs files your open PR touches, branch from that PR's branch and say so in the new PR.
-   - **At most two open PRs per assistant.** With two waiting, stop building and do a "while you wait" task (end of
-     your lane), or stop and tell Evan "two PRs are waiting for Claude".
+   - **No limit on open PRs** (Evan, 2026-10-08: "remove the 2 PR limit in case it gets ahead"). Keep going down
+     your lane; Claude reviews them in order. Keep each PR to one task so reviews stay easy.
 6. If a task is unclear or turns out to need Evan (CREATIVE.md "Ask Evan first"), write `docs/proposals/<topic>.md`,
    mark the task `blocked: <why>`, and move to the next one.
 

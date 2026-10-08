@@ -153,7 +153,7 @@ function memberStoryResult(name, state) {
   return state.repaired ? stakes.after : state.reaction === 'hurt' ? stakes.hurtLine : stakes.trustLine;
 }
 function memberStoryConsequence(state) {
-  return state.reaction === 'hurt' ? state.repaired ? 'Trust repaired. The original choice remains in the record.' : 'Trust hurt: mood −8 at the decision; no friendship reward. Make amends at the hearth, with no extra mood or time gate.' : state.reaction === 'trusted' ? 'Trust kept: +2 friendship and +2 mood at the decision.' : '';
+  return state.reaction === 'hurt' ? state.repaired ? 'You made amends. Neither of you has forgotten, but the hurt has eased.' : 'Things are still raw between you. You could make amends here by the hearth.' : state.reaction === 'trusted' ? 'Your choice brought you closer.' : '';
 }
 function repairMemberStory(key) {
   const w = workerOf(key), state = memberStoryState(key);
@@ -165,7 +165,7 @@ function playMemberStoryRepair(key, returnToBook) {
   const w = workerOf(key), state = memberStoryState(key);
   if (RTALK || !w || !memberStoryHurt(state) || state.done < 2 || memberStoryMeetingProblem(key)) return false;
   const stakes = MEMBER_STORY_STAKES[w.name]; if (!stakes) return false;
-  return memberStoryScene(key, [['', 'Making amends restores 8 mood once. Your choice stays remembered. No payment or waiting is required.'], [w.name + ':sad', stakes.hurtLine], [H().name, stakes.repair], [w.name, 'Will you stand by that? I can forgive you. I cannot pretend the first choice never happened.']], ['Make amends', 'Another time'], choice => {
+  return memberStoryScene(key, [['', 'You sit down beside them by the hearth.'], [w.name + ':sad', stakes.hurtLine], [H().name, stakes.repair], [w.name, 'Will you stand by that? I can forgive you. I cannot pretend the first choice never happened.']], ['Make amends', 'Another time'], choice => {
     if (choice === 0 && repairMemberStory(key)) { renderTab(true); playMemberStory(key, true, returnToBook); }
     else if (returnToBook) openMemberStoryBook();
   });
@@ -226,17 +226,17 @@ function memberStoryTick(dt) {
 function memberStoryProblem(key) {
   const w = workerOf(key), story = memberStoryData(key), state = memberStoryState(key);
   if (!guildOn() || !w || !story) return 'No personal story for this member.';
-  if (state.done >= 3) return 'Story complete. The hall remembers your choice.';
+  if (state.done >= 3) return 'Their story is told. The hall remembers what you chose.';
   const gate = MEMBER_STORY_GATES[state.done];
-  if (affLvl(w.n) < 2) return 'Become Friends before they share their story.';
-  if (w.m.mood < gate.mood) return 'Needs mood ' + gate.mood + ' (now ' + Math.round(w.m.mood) + '). Company, work and favors help.';
-  if (state.seconds + 1e-7 < gate.seconds) return 'Share ' + Math.ceil((gate.seconds - state.seconds) / 60) + ' more minute(s) adventuring in a present party.';
+  if (affLvl(w.n) < 2) return 'They\'ll share this once they count you among their Friends.';
+  if (w.m.mood < gate.mood) return 'They\'re not in the mood to talk about it yet. Time together, good work and favours help.';
+  if (state.seconds + 1e-7 < gate.seconds) return 'Spend a little more time on the road together first.';
   return memberStoryMeetingProblem(key);
 }
 function memberStoryMeetingProblem(key) {
   if (!H() || !inTown() || !TOWN.inside || H().dun) return 'Meet by the hearth in the Guild Hall.';
-  if (ROSTER.jobOf(key) || memberRaiding(key)) return 'Return this member from their job or raid first.';
-  if (H().mode === 'auto') return 'Switch to Focus to choose this story yourself.';
+  if (ROSTER.jobOf(key) || memberRaiding(key)) return 'They\'re away on a job or a raid. Call them back first.';
+  if (H().mode === 'auto') return 'Switch to Focus: this is a choice you make yourself.';
   return '';
 }
 function finishMemberStory(key, expected, choice) {
@@ -263,7 +263,7 @@ function playMemberStory(key, replay, returnToBook) {
   const result = memberStoryResult(w.name, state), hurt = memberStoryHurt(state);
   const lines = replay ? [[w.name, story[1]]].concat(state.done >= 2 ? [[w.name, story[2]], [H().name, story[3 + state.choice]]] : [], result ? [['', memberStoryConsequence(state)], [w.name + (hurt ? ':sad' : ':happy'), result]] : state.done >= 3 ? [[w.name + ':happy', story[5 + state.choice]]] : [])
     : [[w.name + (hurt ? ':sad' : ''), hurt && expected === 2 ? 'I have something harder to remember with you.' : voice[expected]], [w.name + (hurt ? ':sad' : ''), expected === 0 ? story[1] : expected === 1 ? story[2] : result || story[5 + state.choice]]];
-  if (!replay && expected === 1 && MEMBER_STORY_STAKES[w.name]) lines.splice(1, 0, ['', 'A hurtful choice costs 8 mood and gives no friendship reward. You can make amends in this hall immediately; your member stays, and the choice remains recorded.']);
+  if (!replay && expected === 1 && MEMBER_STORY_STAKES[w.name]) lines.splice(1, 0, ['', 'This one matters to them. Whatever you say, they will remember it.']);
   const choices = replay ? hurt ? ['Talk it through', 'Back to the hall'] : ['Back to the hall'] : expected === 1 ? [story[3], story[4], 'Another time'] : ['Remember this', 'Another time'];
   return memberStoryScene(key, lines, choices, choice => {
     if (replay && hurt && choice === 0) { playMemberStoryRepair(key, book); return; }
@@ -301,11 +301,11 @@ function memberStoriesHTML() {
   if (!guildOn()) return '';
   const members = Object.keys(G().members).map(key => ({ key, w: workerOf(key), story: memberStoryData(key) })).filter(x => x.story);
   if (!members.length) return '';
-  return '<h4>By the hearth · personal stories</h4><p class="sub">Three moments per adventurer, after 5 / 15 / 30 minutes together and mood 40 / 55 / 70. Present party time on the road counts; jobs and time away do not. Ordinary moments give +2 friendship and +2 mood, once. Ten decisions can hurt trust: their warning is spoken before you choose. Your choice stays with the guild, even if a member leaves. Hurt decisions cost 8 mood instead of granting a reward. Make amends at this hearth without a mood, friendship or time gate; restore 8 mood once. Your companion stays, and the record remembers.</p>' + members.map(({ key, w, story }) => {
+  return '<h4>By the hearth · personal stories</h4><p class="sub">Each adventurer has three moments to share with you, as you spend time on the road together and their spirits are good. Some choices can hurt; you can always make amends here by the hearth. Whatever you choose, the guild remembers.</p>' + members.map(({ key, w, story }) => {
     const state = memberStoryState(key), why = memberStoryProblem(key), meeting = memberStoryMeetingProblem(key);
     const script = memberStoryScript(w.name, state);
     const remembered = memberStoryResult(w.name, state) || (state.done >= 3 ? script[5 + state.choice] : state.done >= 2 ? 'Your choice: ' + script[3 + state.choice] + '.' : state.done ? 'First confidence remembered.' : 'They have a story to share.');
-    return '<div class="rowl member-story"><div class="l"><b>' + w.name + ' · ' + story[0] + '</b><div class="meta">' + state.done + '/3 moments · ' + Math.floor(state.seconds / 60) + ' minutes together · mood ' + Math.round(w.m.mood) + '</div><div class="meta">' + remembered + '</div><div class="meta">' + memberStoryConsequence(state) + '</div><div class="meta">' + (why || 'Ready to talk. No cost or deadline.') + '</div></div><div class="r">' + (state.done < 3 ? '<button class="btn sm" data-act="memberstory" data-arg="' + key + '" ' + (why ? 'disabled' : '') + '>Listen</button>' : '') + (memberStoryHurt(state) ? '<button class="btn sm" data-act="memberrepair" data-arg="' + key + '" ' + (meeting ? 'disabled title="' + meeting + '"' : '') + '>Make amends</button>' : '') + (state.done ? '<button class="btn sm alt" data-act="membermemory" data-arg="' + key + '" ' + (meeting ? 'disabled title="' + meeting + '"' : '') + '>Remember</button>' : '') + '</div></div>';
+    return '<div class="rowl member-story"><div class="l"><b>' + w.name + ' · ' + story[0] + '</b><div class="meta">' + state.done + '/3 moments shared</div><div class="meta">' + remembered + '</div><div class="meta">' + memberStoryConsequence(state) + '</div><div class="meta">' + (why || 'Ready to talk whenever you are.') + '</div></div><div class="r">' + (state.done < 3 ? '<button class="btn sm" data-act="memberstory" data-arg="' + key + '" ' + (why ? 'disabled' : '') + '>Listen</button>' : '') + (memberStoryHurt(state) ? '<button class="btn sm" data-act="memberrepair" data-arg="' + key + '" ' + (meeting ? 'disabled title="' + meeting + '"' : '') + '>Make amends</button>' : '') + (state.done ? '<button class="btn sm alt" data-act="membermemory" data-arg="' + key + '" ' + (meeting ? 'disabled title="' + meeting + '"' : '') + '>Remember</button>' : '') + '</div></div>';
   }).join('');
 }
 document.addEventListener('click', e => {

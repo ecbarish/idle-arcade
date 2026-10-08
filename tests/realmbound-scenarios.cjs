@@ -793,7 +793,7 @@ module.exports = function scenarios() {
           rb.S.guild.stories[key]={seconds:0,done:0,choice:null};w.m.mood=80;n.aff=30;
           for(let beat=0;beat<3;beat++){
             const state=memberStoryState(key),gate=MEMBER_STORY_GATES[beat];state.seconds=gate.seconds-.1;w.m.mood=80;
-            check(/minute/.test(memberStoryProblem(key))&&!finishMemberStory(key,beat,0),n.name+'/'+branch+'/'+beat+': shared time gates completion');
+            check(/time on the road/.test(memberStoryProblem(key))&&!finishMemberStory(key,beat,0),n.name+'/'+branch+'/'+beat+': shared time gates completion');
             state.seconds=gate.seconds;w.m.mood=gate.mood-.1;
             check(/mood/.test(memberStoryProblem(key))&&!finishMemberStory(key,beat,0),n.name+'/'+branch+'/'+beat+': mood gates completion');
             w.m.mood=gate.mood;n.aff=29;check(/Friends/.test(memberStoryProblem(key)),n.name+'/'+branch+'/'+beat+': friendship remains required');n.aff=30+2*beat;
@@ -830,7 +830,7 @@ module.exports = function scenarios() {
       storyHero.mode='auto';check(/Focus/.test(memberStoryProblem(localKey))&&!playMemberStory(localKey,false),'R4: Auto cannot open or choose a new story');storyHero.mode='focus';
       rb.S.guild.jobs[localKey]={job:'mine',since:Date.now(),paid:0};check(/job/.test(memberStoryProblem(localKey)),'R4: working member must return before meeting');delete rb.S.guild.jobs[localKey];
       memberStoryState(remoteKey).seconds=1800;rb.S.guild.members[remoteKey].mood=80;remote.aff=40;storyAlt.party=[remote.id];storyAlt.dun={raid:true};check(/raid/.test(memberStoryProblem(remoteKey)),'R4: saved raid reservation never silently releases a member');storyAlt.party=[];storyAlt.dun=null;
-      rb.C.phase='seek';check(/guild hall/.test(memberStoryProblem(localKey)),'R4: meet in the actual guild hall, not mid-fight');rb.C.phase='intown';TOWN.inside=false;check(/guild hall/.test(memberStoryProblem(localKey))&&!playMemberStory(localKey,false)&&!openMemberStoryBook(),'R4: outside-town menus cannot start a personal conversation');TOWN.inside=true;
+      rb.C.phase='seek';check(/guild hall/i.test(memberStoryProblem(localKey)),'R4: meet in the actual guild hall, not mid-fight');rb.C.phase='intown';TOWN.inside=false;check(/guild hall/i.test(memberStoryProblem(localKey))&&!playMemberStory(localKey,false)&&!openMemberStoryBook(),'R4: outside-town menus cannot start a personal conversation');TOWN.inside=true;
       playMemberStory(localKey,false);const callback=RTALK.done;rb.S.cur=storyAlt.id;SCN.skip();SCN.choose(0);check(memberStoryState(localKey).done===0,'R4: switching heroes during a scene prevents a stale response');rb.S.cur=storyHero.id;
       playMemberStory(localKey,false);const departed=RTALK.done;dismissMember(localKey);check(!RTALK,'R4: leaving the guild closes a pending story');departed(0);check(memberStoryState(localKey).done===0,'R4: dismissed member cannot finish a pending scene');addMember(local,storyHero,true);rb.S.guild.members[localKey].mood=80;
       check(finishMemberStory(localKey,0,0),'R4: returning member can continue their pending arc');
@@ -862,11 +862,11 @@ module.exports = function scenarios() {
         check(!normalized.reaction&&!normalized.repaired&&memberStoryScript(name,normalized)[5+legacyChoice]===MEMBER_STORIES[name][5+legacyChoice],name+': completed legacy story keeps its original kind ending');
         const earlier=normalizeMemberStories({[key]:{seconds:900,done:2,choice:legacyChoice}})[key];
         check(!earlier.reaction&&memberStoryScript(name,earlier)[2]===MEMBER_STORIES[name][2],name+': legacy decision awaiting aftermath is not rewritten or punished');
-        check(playMemberStory(key,false)&&RTALK.lines.some(l=>l[1]===stakes.dilemma)&&RTALK.lines.some(l=>/costs 8 mood/.test(l[1])),name+': portrait states personal and numeric stakes before the decision');
+        check(playMemberStory(key,false)&&RTALK.lines.some(l=>l[1]===stakes.dilemma)&&RTALK.lines.some(l=>/This one matters to them/.test(l[1])),name+': the portrait warns in plain words that this choice matters');
         const accountBefore=JSON.stringify({bank:rb.S.bank,money:storyHero.money,xp:storyHero.xp,guildxp:rb.S.guild.xp});
         SCN.skip();SCN.choose(stakes.hurt);const state=memberStoryState(key);
         check(state.reaction==='hurt'&&!state.repaired&&w.m.mood===62&&n.aff===40&&G().members[key]===w.m,name+': hurt costs eight mood, no friendship reward, no departure');
-        check(RTALK.memberStory&&RTALK.lines.some(l=>l[1]===stakes.hurtLine)&&RTALK.lines.some(l=>/Make amends/.test(l[1])),name+': immediate world response explains the harm and way back');
+        check(RTALK.memberStory&&RTALK.lines.some(l=>l[1]===stakes.hurtLine)&&RTALK.lines.some(l=>/make amends/i.test(l[1])),name+': immediate world response explains the harm and way back');
         const choiceCache=memberStoriesKey();rb.save();const reload=rb.migrate(JSON.parse(localStorage.getItem('realmbound-save-v1'))).guild.stories[key];
         check(reload.reaction==='hurt'&&reload.choice===stakes.hurt&&!reload.repaired,name+': reload retains unresolved consequence and chosen branch');
         SCN.skip();SCN.choose(1);check(!RTALK&&!state.repaired,name+': closing the response never makes amends automatically');
