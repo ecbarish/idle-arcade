@@ -100,5 +100,7 @@ Grok), bumping game versions on merge, keeping START-HERE current and refilling 
 ## Working style (Evan, 2026-10-09)
 Evan wants **larger chunks per prompt**: when he says "proceed", finish several queue items in one go (review and merge
 ChatGPT's branches, write ChatGPT a sizeable ticket, then build more than one item yourself), committing after each.
+**Token efficiency** (Evan, 2026-10-09): Claude's usage is the scarcest resource. Batch reviews, no status-only
+replies, short plans, big builds to the helpers' Heavy lifting list. Rules: docs/QUEUE.md "Saving Claude's usage".
 
 **Player-facing text** (Evan, 2026-10-08): capitalised names and titles, correct spelling, the world's words instead of the rules' words (no "mood -8" or "gate" in story text), and look at the real screen as a first-time player before shipping. Full rules: docs/CREATIVE.md "Writing for players".

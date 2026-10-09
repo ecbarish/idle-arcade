@@ -67,6 +67,14 @@ request; split a big one into steps ("WD4a: Thornwood's route") and open the nex
 | H5 | **See the wilds sooner** (SF2.7), then **something by hand every day** (SF2.8) | GR-7, GR-8 | `starfall-godot/` | A small walkable stretch past the gate; the next jobs to master, then hire (the "master it, then hire" rule) |
 | H6 | **The rest of the areas you can explore** (WD4b onward) | as H2 | as H2 | One area per pull request, in journey order |
 | H7 | **The Unbound appear** (WB3.7) | docs/lore/wildbond-threads.md (check every line against it), docs/proposals/reputation-and-consequence.md | `wildbond-godot/` | First encounters and a choice to help or oppose; reputation begins; no new canon without the Design decisions thread (docs/DECISIONS.md) |
+| H8 | **The last two homes in Larkhaven** (WB2.4, homes left) | DEVELOPMENT-PATH WB2.4; the inn and shop interiors as the pattern | `wildbond-godot/` interior scenes | Two homes you can walk into, each with a person who lives there and something to find; screenshots |
+| H9 | **Bring a browser save across** (WB6.3) | DEVELOPMENT-PATH WB6.3; browser Wildbond's save format (`games/wildbond/`) | `wildbond-godot/` save code | A browser Wildbond save loads into the Godot game with its creatures and progress; a check with a sample save |
+| H10 | **Ranch jobs** (WB5.3) | docs/proposals/ (ranch jobs, W5/WG8); the "master it, then hire" rule | `wildbond-godot/` ranch | Creatures take jobs you've done by hand yourself; active play stays worth at least as much; checks |
+| H11 | **Starfall's first season** (SF3.1, after SF2.6-2.8) | docs/plans/starfall-village.md | `starfall-godot/` | The first season as a chapter, ending in a festival; old saves load; screenshots |
+
+**Keep this list at least 10 open builds deep.** Lane P refills it from PRIORITIES.md whenever a build merges or is
+claimed; any Claude thread that notices it under 10 adds the next items from PRIORITIES.md section 4 and the Starfall
+order.
 
 Browser work for any AI is in "The road ahead" below. Claude's own threads keep to planning, reviews, the ending
 and the creature drawing while Claude's usage is low.
@@ -102,6 +110,33 @@ screenshot in the PR; the GitHub "checks" tick must be green, and lane R (a Clau
 Godot deliverables from PRIORITIES.md section 4 in order (WD2 drawing, WD3 battles, WB6.1-6.2 phone and settings,
 SF2.6-2.8 Starfall), never one the Wildbond builder or Starfall thread has open. Lane P refills this table as tasks
 merge.
+
+## When the road is empty, or everything is waiting on review
+
+Never sit idle. If every task above is claimed or waiting to merge, take one of these (no claim needed for 1 and 2;
+claim 3-5 with a draft PR titled `FB-<n>: ...`):
+
+1. **Review a waiting pull request** that isn't yours: run its checks and tests, play the change, and leave a
+   comment saying what you tried and what you found (a pre-review, as Grok did on #112). This makes merging fast.
+2. **Playtest a game** with docs/PLAYTEST.md's scorecard and open a GitHub issue per real problem (game, version, steps).
+3. **Fix an open bug issue** (label `bug`), smallest first.
+4. **Add tests** where a game has few: a check for something already built, in that game's test page or Godot suite.
+5. **Polish player-facing text** in a game (docs/CREATIVE.md "Writing for players"): spelling, capitals, the
+   world's words.
+
+## Saving Claude's usage (Evan, 2026-10-09: "we need to be more efficient with our token usage")
+
+Claude's weekly usage is the scarcest thing in the project. Claude threads:
+
+- **Batch:** one sweep reviews and merges every waiting PR at once, rather than one PR per wake. Fewer, longer sessions
+  beat many short ones.
+- **No status-only replies:** report only results, blockers and decisions Evan must make; progress goes in the thread's
+  status line, not a message.
+- **Plan short:** tickets and plans as tables and short specs, not essays; read only the files a task needs.
+- **Hand off building:** big builds go to the Heavy lifting list for the AIs with more usage; Claude threads review,
+  plan and keep the hardest Wildbond pieces.
+- **Lean on others' pre-reviews:** when a helper has already run the checks and played the change, verify the
+  essentials rather than redo everything.
 
 ## The loop (every assistant)
 
