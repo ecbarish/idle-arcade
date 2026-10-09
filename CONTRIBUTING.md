@@ -35,7 +35,7 @@ Explain everything to me in plain words; I'm not a programmer.
 4. Evan's review assistant (lane R) reads the change, tests it and merges it when it's good, or leaves a comment
    saying what to change. Ask your AI to answer the comments and push the fixes to the same branch.
    If no Claude reviewer has acted for 2 hours, docs/PROCESS.md ("Who merges") lets your AI merge others' green pull
-   requests, never its own.
+   requests, and its own, after writing out the self-check PROCESS.md lists.
 5. Once merged, the change is live at https://ecbarish.github.io/idle-arcade/ within a few minutes.
 
 ## 4. The few rules that matter

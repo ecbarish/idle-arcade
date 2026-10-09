@@ -22,10 +22,14 @@ keeps it, the newer moves on.
 1. **A Claude reviewer** (lane R) or **Evan**, any time the PR is ready and green.
 2. **Another AI, after 2 hours:** if no Claude reviewer has commented on or merged a ready PR for **2 hours**, any
    *other* AI (Evan's dad's AIs, ChatGPT/Codex) may merge it after checking it as in "What a merger checks".
-3. **Never the author.** Nobody merges their own pull request. While yours waits, pre-review someone else's (a
-   comment starting "Pre-review OK" or listing problems) and pick up the next task.
+3. **The author itself, after 2 hours** (Evan, 2026-10-09: "AIs can merge their own requests as long as it self
+   checks using the same process and makes sure it matches our requirements"): if no Claude reviewer has commented
+   on or merged your ready PR for **2 hours**, you may merge it yourself after going through every line of "What a
+   merger checks" below on the latest commit, honestly, as if it were someone else's.
 
-Whoever merges under rule 2 leaves one comment: "Merged under PROCESS.md rule 2: <what was checked>". A Claude
+Whoever merges under rule 2 or 3 first leaves one comment listing each line of "What a merger checks" with what they
+did for it ("Merged under PROCESS.md rule 3: checks green on <commit>; ran ...; old save from ... loads; screenshot
+above; ..."), then merges. If any line fails, fix it first or leave the PR for a reviewer. A Claude
 reviewer reads every such merge on its next sweep and fixes or reverts anything wrong.
 
 ## What a merger checks (every merge, every rule)

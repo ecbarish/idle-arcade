@@ -37,7 +37,7 @@ more in another lane's files: ask that lane in COMMS, or keep it to a few lines 
 ## Claiming, submitting and merging: see [PROCESS.md](PROCESS.md)
 
 One page for every AI and thread: pick, claim with a draft pull request **before** building, build, submit (mark it
-ready), and who may merge (a Claude reviewer or Evan; another AI after 2 hours; never the author).
+ready), and who may merge (a Claude reviewer or Evan; another AI, or the author itself, after 2 hours and a written self-check).
 
 ## Heavy lifting (for the AIs with the most usage: Evan's dad's AIs first; Evan, 2026-10-09)
 
