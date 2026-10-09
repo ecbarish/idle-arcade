@@ -109,6 +109,7 @@ var place_t := 0.0                           # seconds since you arrived somewhe
 var title: Control
 var touch: Control                               # the phone pad (touch_pad.gd)
 var howto: Control                               # the How to play page (howto.gd)
+var turn_card: Control                             # covers the game while a phone is held upright
 var show_howto := true                           # it opens before a new journey (the checks turn it off)
 var howto_then_title := false                    # opened from the title page: go back to it after
 var settings := Settings.new()                   # sound, text size, battle pace, phone buttons (settings.gd, WB6.2)
@@ -249,6 +250,11 @@ func _ready() -> void:
 	add_child(thumbs)
 	touch = TouchPad.new()
 	thumbs.add_child(touch)
+	var tip := CanvasLayer.new()                   # and "turn your phone sideways" above even that
+	tip.layer = 6
+	add_child(tip)
+	turn_card = preload("res://scripts/turn_card.gd").new()
+	tip.add_child(turn_card)
 	title = Title.new()
 	$UI.add_child(title)
 	title.chosen.connect(_on_title)
@@ -1490,14 +1496,15 @@ func _update_ui() -> void:
 	cmat.set_shader_parameter("points", pts)
 	cmat.set_shader_parameter("count", count)
 
-# ---------------------------------------------------------------- the environment (Ninja Adventure tilesets, CC0)
-# Evan (2026-10-08) liked the pack's structures and nature. Figures stay our own (figures.gd). Each tile or object
-# is picked by its cell in a 16x16 grid: floor.png (ground), nature.png (trees, bushes, flowers), house.png (houses).
-const FLOOR := preload("res://assets/env/floor.png")
-const NATURE := preload("res://assets/env/nature.png")
-const HOUSE := preload("res://assets/env/house.png")
+# ---------------------------------------------------------------- the environment: Wildbond's own tiles
+# Evan chose "Our own tiles" (2026-10-09) so Wildbond has a look of its own, apart from Starfall's pack, and an art
+# direction that can grow (docs/art/wildbond-art-direction.md). tools/paint_tiles.gd paints assets/env/wild/: ground,
+# trees, bushes, flowers, the cottage, Maren's barn and water, each picked by its cell in a 16x16 grid.
+const FLOOR := preload("res://assets/env/wild/floor.png")
+const NATURE := preload("res://assets/env/wild/nature.png")
+const HOUSE := preload("res://assets/env/wild/house.png")
 const NOTICE := preload("res://assets/emote/notice.png")   # the "!" over a trainer who has seen you (Ninja Adventure, CC0)
-const WATER := preload("res://assets/env/water.png")
+const WATER := preload("res://assets/env/wild/water.png")
 const BARN_SPRITE := Rect2(400, 224, 64, 80)  # Maren's barn in house.png: measured pixel by pixel (4x5 tiles, door in the 2nd column)
 func _tex(tex: Texture2D, cell: Vector2i, size: Vector2i, at: Vector2, mod := Color.WHITE) -> void:
 	draw_texture_rect_region(tex, Rect2(at, Vector2(size) * 16.0), Rect2(Vector2(cell) * 16.0, Vector2(size) * 16.0), mod)
@@ -2371,8 +2378,8 @@ func _draw_water(x: int, y: int, o: Vector2, n: int) -> void:
 		_tex(WATER, Vector2i(11, 3), Vector2i.ONE, o)                              # a lily pad on the pond
 	elif n == 7 and int(t * 1.5 + x) % 3 == 0:
 		_tex(WATER, Vector2i(11, 2), Vector2i.ONE, o)                              # a glint of light
-	var shore := Color("d8c088")
-	var edge := Color("4a6a8a")
+	var shore := Color("e0c896")                    # the art direction's sand and deep water (docs/art)
+	var edge := Color("2f5f7e")
 	if tile_at(Vector2i(x, y - 1)) not in ["~", "j", "q", "b"]:
 		draw_rect(Rect2(o, Vector2(16, 3)), shore); draw_rect(Rect2(o + Vector2(0, 3), Vector2(16, 1)), edge)
 	if tile_at(Vector2i(x, y + 1)) not in ["~", "j", "q", "b"]:
