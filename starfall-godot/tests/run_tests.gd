@@ -391,6 +391,8 @@ func _run() -> void:
 	check(main.herbs > herbs0, "jobs by the creek and the woods bring herbs home")
 	# ---- members' stories: a word when they're ready, a choice that stays with them
 	check(main.stories.has("Aki") and main.stories.has("Ren") and main.stories.has("Yuna"), "every first adventurer has a story")
+	check(["Aki", "Ren", "Yuna", "Kaito", "Hana", "Sora"].all(func(n): return main.stories.get(n, []).size() == 3), "all six members have a three-part story (Kaito, Hana and Sora too, from ChatGPT's writing)")
+	check(main.stories.values().all(func(arc): return not (arc is Array) or arc.all(func(b): return b.options.size() == 2 and b.options.all(func(o): return int(o.get("morale", 0)) == float(o.get("morale", 0))))), "every beat offers two replies")
 	var sh: Variant = hero("Ren")
 	sh.where = "town"
 	sh.a.state = "town"

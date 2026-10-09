@@ -263,6 +263,37 @@ func _run() -> void:
 	var yr2 = Cal.new()
 	yr2.from_dict(yr.to_dict())
 	check(yr2.mode == "autumn" and yr2.south, "the calendar saves and loads")
+	# ---- seasons and festivals in the world (WS3, WS5), from ChatGPT's data
+	var fest_played: float = main.cal.played
+	var fest_map: String = main.map_name
+	var fest_tile: Vector2i = main.me.tile
+	main.map_name = "thornwood"
+	main.cal.played = Cal.DAY_SECONDS * Cal.DAYS * 1 + 10.0
+	check(main._wild_table() == main.DATA.MAPS.thornwood.seasonal.summer.wild and main._wild_table().any(func(w): return w[0] == "sunspark" and int(w[1]) == 6), "in summer, Thornwood's wild table favours Sunspark")
+	main.cal.played = 10.0
+	check(main._wild_table().any(func(w): return w[0] == "sunspark" and int(w[1]) == 2), "and Sunspark is rare in spring, but still there")
+	main.map_name = "larkhaven"
+	main.lines.clear()
+	main._season_word(main._maren_data())
+	check(main.lines.size() == 1 and "shoots" in str(main.lines[0]), "Maren says something about the spring")
+	main.lines.clear()
+	main.cal.played = Cal.DAY_SECONDS * 10.0 + 1.0                       # day 11 of spring: Planting Day
+	main.fest_done = {}
+	main._festival_invite()
+	check(main.fest_task == "planting" and main.lines.size() >= 3, "on Planting Day, Maren asks you to plant a flower and says how")
+	main.lines.clear()
+	main.me.tile = main.PADDOCK.position
+	check(main._festival_here() and main.flowers.has([main.PADDOCK.position.x, main.PADDOCK.position.y]) and main.keepsakes.has("planting_ribbon"), "a flower in the paddock, and the Seed Basket Ribbon to keep")
+	main.lines.clear()
+	main._festival_invite()
+	check(main.fest_task == "" and main.lines.is_empty(), "once a year: she doesn't ask again today")
+	main.flowers.clear()
+	main.keepsakes.clear()
+	main.fest_done = {}
+	main.lines.clear()
+	main.cal.played = fest_played
+	main.map_name = fest_map
+	main.me.tile = fest_tile
 	var keep_mode: String = main.cal.mode
 	main.cal.mode = "winter"
 	check(main._leaf_tint() != Color.WHITE and main.cal.season() == "winter", "winter turns the leaves")

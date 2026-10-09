@@ -91,14 +91,14 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
   "hold one season". Saved.
 - [x] WS2 [Claude] (done 2026-10-09: leaves tinted through the year, blossom and snow caps on crowns, snow on roofs, snow and frozen ponds, fallen leaves on paths, petals, leaves and snow in the air; the faded world washes it all out until colour returns; --season= picture flag) Four looks for every area: spring blossom, summer as now, autumn leaves, winter snow (tints and a
   few drawn extras over the same maps); faded places show the season faintly until colour returns.
-- [ ] WS3 [ChatGPT] (claimed: Codex, T50, codex/wildbond-seasonal-data) Seasonal data in the browser game, exported to Godot: wild-encounter weight shifts and a few
+- [x] WS3 [ChatGPT] (T50, merged 2026-10-09; in Godot: seasonal wild tables and one seasonal remark per person) Seasonal data in the browser game, exported to Godot: wild-encounter weight shifts and a few
   seasonal species (each also rare out of season), a seasonal line for each townsperson; check the faded-seasons
   idea against the thread ledger before it becomes canon.
 - [ ] WS4 [Claude] Winter weather (snow, frozen pond edges, breath) and spring rain, building on G6.
-- [ ] WS5 [Claude] (decorations done 2026-10-09: ribbons, flower boxes and a seed table for Planting Day; lanterns over the street for the Long Light; carved lanterns and a supper table for the Harvest Lanterns; garlands with lights on every house and the big tree with gifts for the Midwinter Hearth; --festival= picture flag. Left: festival lines, the small activity and keepsakes, after WS6) The four festivals in Larkhaven: Planting Day, the Long Light, the Harvest Lanterns and the
+- [x] WS5 [Claude] (done 2026-10-09: Maren invites you once a festival a year; plant a flower in the paddock (it stays), run a lap to the north edge and back to Pip, fill the trough, or make a gift at the bench and give it to someone; a keepsake each, shown on the Team page; festival lines from townsfolk. Decorations: ribbons, flower boxes and a seed table for Planting Day; lanterns over the street for the Long Light; carved lanterns and a supper table for the Harvest Lanterns; garlands with lights on every house and the big tree with gifts for the Midwinter Hearth; --festival= picture flag.) The four festivals in Larkhaven: Planting Day, the Long Light, the Harvest Lanterns and the
   Midwinter Hearth (garlands, lights on the houses, a big tree in the square, gifts). Decorations, festival lines,
   one small activity and a cosmetic keepsake each.
-- [ ] WS6 [ChatGPT] (ready: T51, PR #78; Claude integration in WS5) Festival writing: lines, keepsake names, a short tradition for each festival in docs/lore/.
+- [x] WS6 [ChatGPT] (T51, merged 2026-10-09; placed in Godot by WS5) Festival writing: lines, keepsake names, a short tradition for each festival in docs/lore/.
 **WB-M4: the ending.**
 - [ ] WB4.1 [Claude] The league: Wren at the gate, four courts, Champion Avenne.
 - [ ] WB4.2 [Claude] The wild bond's
@@ -134,7 +134,7 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
 - [x] SF2.1 [Claude] Members' stories (SV1): done 2026-10-08 (two beats each for Aki, Ren and Yuna; data/stories.json).
 - [x] SF2.2 [Claude] Failing and excelling, visible (SV3). *Done 2026-10-09: each evening judges the day (good: two jobs done, none gone badly, nobody left hungry; hard: more failed than done, or two left hungry). Someone at rock bottom packs up and leaves, and comes back on a good run; two good days hang bunting and add a notice to the board, two hard days take one away; three good days bring rarer travellers (Mirelle, a mage; Tobin, a thief). Still open from SV3: a place that closes when run badly (comes with SF2.3, the tavern).*
 - [ ] SF2.3 [Claude] The tavern you serve at, and placement that matters a little (SV4).
-- [ ] SF2.4 [ChatGPT] (writing handoff ready: T52, PR #79; separate JSON preserves Evan's no-Godot-edit rule; Claude integration still pending) Story text for SF2.1 (the system is built; extend `starfall-godot/data/stories.json`: arcs for Kaito, Hana and Sora, and a third beat for Aki, Ren and Yuna; keep its format and the four traits): three short arcs per adventurer (choices that can go either way), in a
+- [x] SF2.4 [ChatGPT] (T52 merged and applied to starfall-godot/data/stories.json 2026-10-09: six members, three beats each; was: writing handoff, integration pending) Story text for SF2.1 (the system is built; extend `starfall-godot/data/stories.json`: arcs for Kaito, Hana and Sora, and a third beat for Aki, Ren and Yuna; keep its format and the four traits): three short arcs per adventurer (choices that can go either way), in a
   data file Claude wires in (`starfall-godot/data/stories.json`; ChatGPT may write that one data file).
 - [ ] SF2.5 [Claude] Hire the apothecary's apprentice once you've brewed enough (the same "master it, then hire" rule).
 

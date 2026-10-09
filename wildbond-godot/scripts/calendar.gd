@@ -81,6 +81,12 @@ func festival() -> String:
 			return id
 	return ""
 
+## Which year it is (festivals are done once a year): the world's own count, or the real year.
+func year() -> int:
+	if mode == "real":
+		return int(today.get("year", Time.get_date_dict_from_system().year))
+	return int(played / (DAY_SECONDS * DAYS * 4))
+
 func next_mode() -> void:
 	mode = MODES[(MODES.find(mode) + 1) % MODES.size()]
 
