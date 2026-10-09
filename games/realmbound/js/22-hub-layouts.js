@@ -37,6 +37,8 @@ function makeHubMap(zone, kind) {
   return {rows:grid.map(r=>r.join('')),doors,buildings,people:spots,start:[13,14,'up'],theme:profile.theme};
 }
 const SERVICE_ROOMS = {
+  trainer: {rows:['################','#______HH______#','#_QQ________QQ_#','#______________#','#_BB________BB_#','#______rr______#','#______rr______#','#______________#','#______rr______#','#######GG#######'],doors:{},start:[7,8,'up']},
+  stable: {rows:['################','#______________#','#_EE________EE_#','#______________#','#_==________==_#','#______________#','#_BB________BB_#','#______________#','#______________#','#######GG#######'],doors:{},start:[7,8,'up']},
   inn: {rows:['################','#______HH______#','#_EE________EE_#','#_EE________EE_#','#__BBBB__BBBB__#','#______rr______#','#______rr______#','#______________#','#______rr______#','#######GG#######'],doors:{},start:[7,8,'up']},
   smith: {rows:['################','#______HH______#','#_QQ________QQ_#','#______________#','#__AA______AA__#','#______________#','#_BB________BB_#','#______________#','#______________#','#######GG#######'],doors:{},start:[7,8,'up']}
 };
@@ -44,4 +46,4 @@ function inGuildHall(){return TOWN.inside===true||TOWN.inside==='guild';}
 function townOutsideMap(){const h=H();return h&&TOWN_HUBS[h.zone]?TOWN_HUBS[h.zone][townKind()]:TOWN_MAPS[townKind()];}
 function townBuildings(){return townOutsideMap().buildings||TOWN_BUILDINGS;}
 const HUB_KEEPERS={thornvale:['Brother Cedran','Smith Daven'],redsand:['Keeper Orva','Smith Korrin'],fens:['Keeper Sella','Smith Vask'],ashen:['Keeper Tannel','Smith Breska'],frostmere:['Keeper Heddra','Smith Rulven'],barrowfield:['Keeper Maelin','Smith Issar'],hollowcrown:['Keeper Vedra','Smith Ferran'],crownheart:['Keeper Aster','Smith Nolven']};
-function serviceRoomPeople(){const h=H(),inn=TOWN.inside==='inn';return [{id:'keeper',name:(HUB_KEEPERS[h.zone]||HUB_KEEPERS.thornvale)[inn?0:1],at:[7,3],dir:'down',look:{race:FACTIONS[h.faction].races[0],cls:inn?'priest':'warrior',hair:inn?'#b87a4a':'#787878'}}];}
+function serviceRoomPeople(){const h=H(),inn=TOWN.inside==='inn';return [{id:'keeper',name:TOWN.inside==='trainer'?'Trainer Saren':TOWN.inside==='stable'?'Stable Keeper Vella':(HUB_KEEPERS[h.zone]||HUB_KEEPERS.thornvale)[inn?0:1],at:[7,3],dir:'down',look:{race:FACTIONS[h.faction].races[0],cls:inn?'priest':'warrior',hair:inn?'#b87a4a':'#787878'}}];}

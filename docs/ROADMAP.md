@@ -178,6 +178,7 @@ in 00-data.js don't touch `ERAS`, `JOURNEY` or the cap constants.
 
 ### T41: Realmbound in the game window, part 2 (pages become places)
 Follows docs/plans/realmbound-in-window.md "Follow-ups" (T38). Branch `codex/realmbound-window-2`.
+- [x] Built by Codex, 2026-10-08; PR #67 submitted for review, not merged. See the plan for checks and screenshots.
 - Replace notebook pages with their physical interactions, one at a time, only when each is ready, never removing the
   old route before its replacement exists: the **guild** happens in the walkable guild hall (members where they stand,
   the jobs board you walk to), the **trainer and talents** with the trainer in town, the **stable** for pets and mounts.

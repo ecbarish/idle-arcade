@@ -539,9 +539,9 @@ module.exports = function scenarios() {
         rb.C.hp=1;townDoor(TOWN_BUILDINGS.find(b=>b.kind==='inn'));check(rb.C.hp===rb.ST.hpMax,'the inn heals you');
         tw.bags.push(genJunk(20,'beast'));tw.gear.weapon.dur=10;const m0=tw.money;townDoor(TOWN_BUILDINGS.find(b=>b.kind==='smith'));check(!tw.bags.some(i=>i.junk)&&tw.gear.weapon.dur===100&&tw.money!==m0,'the smithy buys junk and repairs');
         townDoor(TOWN_BUILDINGS.find(b=>b.kind==='guild'));check(rb.S.tab==='supplies','the guild hall door opens the Guild tab');
-        while(RTALK)SCN.skip();const g=townPeople().find(n=>n.id==='giver');townTalk(g);check(!!RTALK&&RTALK.choices&&RTALK.choices.length===2,'the quest giver offers a quest in a scene');SCN.choose(1);
+        const questWidth=PW;PW=1000;while(RTALK)SCN.skip();const g=townPeople().find(n=>n.id==='giver');townTalk(g);check(!!RTALK&&RTALK.choices&&RTALK.choices.some(s=>s.includes('Hear the request')),'the quest giver offers available requests in a scene');SCN.choose(RTALK.choices.length-1);
         const keepP=window.pellHere;pellHere=()=>true;const pell=townPeople().find(n=>n.id==='pell');check(!!pell,'Pell visits the town now and then');
-        tw.money=1000;const pots=bank().potion;while(RTALK)SCN.skip();townTalk(pell);SCN.choose(0);check(bank().potion===pots+1&&tw.money===800,'Pell sells a healing potion for 2 silver');pellHere=keepP;
+        tw.money=1000;const pots=bank().potion;while(RTALK)SCN.skip();townTalk(pell);SCN.choose(0);check(bank().potion===pots+1&&tw.money===800,'Pell sells a healing potion for 2 silver');pellHere=keepP;PW=questWidth;
         TOWN_WALK.place(13,14,'down');TOWN_WALK.step('down');check(rb.C.phase==='seek','the town gate takes you back on the road');
         tw.mode='auto';rb.C.phase='intown';townEnter();tw.bags.push(genJunk(20,'beast'));for(let i=0;i<2000&&rb.C.phase==='intown';i++){TOWN_WALK.tick(.05);townAutoTick();}
         check(rb.C.phase==='seek'&&!tw.bags.some(i=>i.junk),'on Auto your hero visits the smithy, then walks out of the gate');
@@ -580,8 +580,8 @@ module.exports = function scenarios() {
         rb.S.bank.kit=0;check(!fulfillMemberRequest(key)&&rb.S.bank.kit===0&&rb.S.guild.xp===0,'missing supplies leave progress unchanged');
         rb.S.bank.kit=2;check(ROSTER.assign(key,'mine'),'request member can still take a normal job');check(!fulfillMemberRequest(key)&&/Return/.test(requestProblem(key))&&rb.S.bank.kit===2,'a working member must return before a handoff');ROSTER.stop(key);
         npc.pers='shy';const mood=rb.S.guild.members[key].mood,aff=npc.aff;
-        rb.S.tab='supplies';renderTab(true);const button=document.querySelector('[data-act="guildrequest"][data-arg="'+key+'"]');check(button&&!button.disabled,'ready request appears as an enabled Help button');button.click();
-        check(rb.S.bank.kit===1&&rb.S.guild.xp===15&&rb.S.guild.members[key].mood===mood+10&&npc.aff===aff+3,'actual Help click consumes one kit and awards exactly the displayed rewards');
+        rb.S.tab='supplies';renderTab(true);check(!document.querySelector('[data-act="guildrequest"][data-arg="'+key+'"]'),'guild records no longer complete favors remotely');const requestWidth=PW;PW=1000;TOWN.inside='guild';memberTalk(key);check(RTALK&&RTALK.choices[0].includes('Give'),'member offers a favor in a portrait scene');SCN.skip();SCN.choose(0);TOWN.inside=false;PW=requestWidth;
+        check(rb.S.bank.kit===1&&rb.S.guild.xp===15&&rb.S.guild.members[key].mood===mood+10&&npc.aff===aff+3,'actual portrait choice consumes one kit and awards exactly the displayed rewards');
         check(npc.notes.some(n=>n.includes('shield worth lending'))&&lead.log.some(n=>n.includes('Helped '+npc.name)),'favor is recorded in companion memory and hero journal');
         check(!memberRequest(key)&&!fulfillMemberRequest(key)&&rb.S.bank.kit===1&&rb.S.guild.xp===15,'a double click cannot consume supplies or award rewards again');
         check(/Helped: A shield worth lending/.test(guildHTML()),'completed favor stays visible in the hall');
@@ -849,7 +849,7 @@ module.exports = function scenarios() {
       TOWN.inside=true;check(openMemberStoryBook()&&modalKind==='memberstories'&&document.querySelector('#sheet').textContent.includes('The Hearth Book'),'R4: story index is a book opened over the world');
       const bookRun=rb.C.run;rb.step(.1);check(rb.C.run===bookRun,'R4: reading the book pauses the world');
       check(playMemberStory(localKey,false)&&!modalKind,'R4: listening closes the book so it cannot hide the portrait');SCN.skip();SCN.choose(1);check(modalKind==='memberstories'&&!RTALK,'R4: deferring returns to the book without choosing');closeModal();
-      townTalk({id:'registrar',lines:()=>[['Registrar Mott','Welcome to the hearth.']]});SCN.skip();SCN.choose(0);check(modalKind==='memberstories','R4: the walkable registrar lends the book');closeModal();
+      const registrarWidth=PW;PW=1000;townTalk({id:'registrar',name:'Registrar Mott',lines:()=>[['Registrar Mott','Welcome to the hearth.']]});SCN.skip();SCN.choose(1);check(modalKind==='memberstories','R4: the walkable registrar lends the book');closeModal();PW=registrarWidth;
       rb.S.guild.members[localKey].mood=80;memberTalk(localKey);check(RTALK&&RTALK.memberStory,'R4: walkable hall member opens a ready personal story');SCN.skip();SCN.choose(1);
 
       // R4 follow-up: stakes, old decisions and an immediate, one-time repair in the world.
@@ -986,5 +986,45 @@ module.exports = function scenarios() {
         closeRealmNotebook(false);
       }
 
+      // T41: physical rooms, transaction ownership, journal routes and transient state.
+      {const keep=S,keepWidth=PW;S=emptyS();PW=1000;
+       const hero=newHero('Place Walker','concord','human','hunter'),alt=newHero('Resting Friend','wild','grishar','warrior');
+       hero.onboarding={arrival:true,hints:{}};alt.onboarding={arrival:true,hints:{}};hero.lvl=40;hero.mode='focus';hero.money=1000000;S.chars=[hero,alt];S.cur=hero.id;boot();C.phase='intown';townEnter();
+       const ready=()=>{closeRealmNotebook(false);clearTownService();closeModal();hero.mode='focus';C.phase='intown';C.lastInput=C.run;townEnter();TOWN.on=true;};
+       const choose=i=>{SCN.skip();SCN.choose(i);};
+       const click=selector=>{const b=document.querySelector('[data-field-page="place"] '+selector);check(!!b&&!b.disabled,'T41: available '+selector);b.click();};
+       try{
+        for(const faction of ['concord','wild'])for(const zone of Object.keys(HUB_LAYOUTS)){
+         hero.faction=faction;hero.zone=zone;ready();const people=townPeople();
+         check([...new Set(QUESTS[zone].map(giver))].every(name=>people.some(n=>n.id==='giver'&&n.name===name)),'T41: every '+zone+'/'+faction+' giver exists in town');
+         check(new Set(people.map(n=>n.at.join(','))).size===people.length,'T41: '+zone+'/'+faction+' people keep separate footprints');
+         for(const room of ['trainer','stable']){const b=townBuildings().find(b=>b.kind===room);TOWN_WALK.place(...TOWN.map.start);check(TOWN_WALK.walkTo(b.door,b.y+b.h-1),'T41: reachable '+zone+'/'+faction+'/'+room);townDoor(b);check(TOWN.inside===room&&townPeople()[0].id==='keeper','T41: entering '+room+' opens a walkable room');check(TOWN_WALK.walkTo(...townPeople()[0].at),'T41: '+room+' Keeper has an approach');TOWN_WALK.place(7,4,'up');check(TOWN_WALK.interact()&&RTALK?.lines[0][0]===(room==='trainer'?'Trainer Saren':'Stable Keeper Vella'),'T41: real walk-up dispatch reaches '+room+' Keeper');choose(RTALK.choices.length-1);townExit();check(TOWN.pos.x===b.door&&TOWN.pos.y===b.y+b.h,'T41: '+room+' exits at the right regional door');}
+        }
+        hero.faction='concord';hero.zone='thornvale';ready();const trainer=townBuildings().find(b=>b.kind==='trainer');townDoor(trainer);const n=townPeople()[0],ledger=JSON.stringify([hero.money,hero.talents]);
+        townTalk(n);choose(1);check(JSON.stringify([hero.money,hero.talents])===ledger&&!PLACE_BOOK,'T41: declining Trainer changes nothing');
+        townTalk(n);choose(0);check(PLACE_BOOK?.room==='trainer'&&FIELD_BOOK==='place'&&$('.menu .tabs').hidden,'T41: Trainer lends a place-bound Lesson Book');
+        const clocks=JSON.stringify([C.run,C.t,C.hp]);step(1);check(clocks===JSON.stringify([C.run,C.t,C.hp]),'T41: lesson book pauses world clocks');
+        const talent=TALENT_LIST[hero.cls].find(t=>!t.req),points=talentPoints();click('[data-act="talent"][data-arg="'+talent.id+'"]');check(hero.talents[talent.id]===1&&talentPoints()===points-1,'T41: actual Learn click spends one real point');
+        closeRealmNotebook(false);townTalk(n);const stale=RTALK.done;boot();stale(0);check(!PLACE_BOOK&&!RTALK,'T41: boot cancels a pending Trainer callback');
+        ready();townDoor(trainer);townTalk(townPeople()[0]);const switched=RTALK.done;S.cur=alt.id;switched(0);check(!PLACE_BOOK,'T41: a stale Trainer callback cannot affect another hero');S.cur=hero.id;clearTownService();
+        ready();townDoor(townBuildings().find(b=>b.kind==='stable'));const stable=townPeople()[0];townTalk(stable);choose(0);let cash=hero.money;click('[data-act="buyriding"]');check(hero.riding===1&&hero.money===cash-RIDING[1].cost,'T41: riding lesson debits exactly the old price');
+        const offer=MOUNT_SHOP[hero.faction].find(m=>m.lvl<=hero.lvl);cash=hero.money;click('[data-act="buymount"][data-arg="'+offer.key+'"]');check(hero.mounts.some(m=>m.key===offer.key)&&hero.money===cash-offer.cost,'T41: Stable sells one mount for its existing price');
+        const p={id:uid(),name:'Hearth Boar',species:'Boar',family:'boar',rar:0,col:'#937455',lvl:10,xp:0,bond:0,happy:60,traits:[],hp:1,tamedIn:'Thornvale',tamedAt:10};hero.pets=[p];hero.activePet=p.id;
+        closeRealmNotebook(false);townTalk(stable);choose(1);check(PLACE_BOOK?.room==='stable'&&$('#petName'),'T41: Hunters meet their companions at the Stable');
+        click('[data-act="petrelease"]');check(hero.pets.length===1,'T41: first release click only asks for confirmation');click('[data-act="petrelease"]');check(!hero.pets.length&&!hero.activePet,'T41: second deliberate release uses existing handler');
+        closeRealmNotebook(false);ready();S.guild={jobs:{}};townDoor(townBuildings().find(b=>b.kind==='guild'));check(inGuildHall()&&townPeople().some(n=>n.id==='registrar'),'T41: unclaimed hall remains walkable before level-40 founding');
+        TOWN_WALK.place(13,2,'right');TOWN_WALK.interact();check(PLACE_BOOK?.room==='guild'&&$('#fieldBookTitle').textContent.includes('Jobs Board'),'T41: walking to board opens only jobs');click('[data-act="job"][data-arg="'+alt.id+'|mine"]');check(ROSTER.jobOf(alt.id)==='mine','T41: real board delegates to the resting hero');click('[data-act="jobstop"]');check(!ROSTER.jobOf(alt.id),'T41: board can call the worker back');
+        closeRealmNotebook(false);S.bank={ore:6,herb:4,kit:0,potion:0};townSign(2,2);click('[data-act="craftkit"]');click('[data-act="craftpot"]');check(S.bank.ore===0&&S.bank.herb===0&&S.bank.kit===1&&S.bank.potion===1,'T41: chest crafting spends only the existing supply quantities');
+        closeRealmNotebook(false);hero.npcs.slice(0,4).forEach(n=>{n.met=true;n.aff=AFFINITY[2].at;});const charterCash=hero.money;
+        talkPlaceRegistrar(hallPeople()[0]);choose(0);check(PLACE_BOOK?.room==='guild'&&$('#guildName'),'T41: Registrar presents the charter inside the Hall');$('#guildName').value='The Roadmates';click('[data-act="guildfound"]');check(guildOn()&&G().name==='The Roadmates'&&hero.money===charterCash-GUILD_COST,'T41: physical charter preserves chosen name, signatures and exact fee');
+        closeRealmNotebook(false);const member=hallPeople().find(n=>n.id==='member');check(!!member,'T41: signing members stand separately by the hearth');talkPlaceMember(member.key);choose(1);check(TOWN_WALK.path.length>0&&!PLACE_BOOK,'T41: member directs work to the physical board');TOWN_WALK.place(13,2,'right');TOWN_WALK.interact();click('[data-act="job"][data-arg="'+member.key+'|mine"]');closeRealmNotebook(false);check(!hallPeople().some(n=>n.key===member.key),'T41: a working member is absent rather than standing on the player');TOWN_WALK.place(13,2,'right');TOWN_WALK.interact();click('[data-act="jobstop"][data-arg="'+member.key+'"]');closeRealmNotebook(false);check(hallPeople().some(n=>n.key===member.key),'T41: calling a member back restores their own hearth spot');
+        ready();const q=QUESTS[hero.zone][0];hero.quests.active=[];hero.quests.done={};const giverNpc=townPeople().find(n=>n.name===giver(q));townTalk(giverNpc);choose(0);choose(0);check(hero.quests.active.includes(q.id),'T41: actual giver portrait accepts a request');
+        hero.quests.prog[q.id]=q.n;hero.bags=[];cash=hero.money;finishPlaceQuest(q);const rewardCallback=RTALK.done;choose(0);check(hero.quests.done[q.id]&&hero.bags.length===1&&hero.money===cash+qMoney(q),'T41: giver completion pays one old reward');const paid=hero.money;rewardCallback(0);check(hero.money===paid&&hero.bags.length===1,'T41: repeated completion callback cannot pay twice');SCN.skip();
+        openRealmNotebook('talents');check(!$('#tabbody [data-act="talent"]')&&$('#tabbody [data-place-record]'),'T41: carried Lesson Notes are records rather than a remote Trainer');closeRealmNotebook(false);
+        ready();openRealmNotebook('char');document.querySelector('[data-act="tab"][data-arg="talents"]').click();check(!realmNotebookOpen()&&TOWN_WALK.path.length>0,'T41: Field Kit shortcut walks toward the Trainer instead of opening remote lessons');
+        ready();townDoor(trainer);openTrainerLessons(townPeople()[0]);C.phase='seek';renderPlaceBook(false);check(!PLACE_BOOK&&!realmNotebookOpen(),'T41: leaving a place invalidates its open services');
+        const legacy=JSON.parse(JSON.stringify(S));check(!Object.keys(legacy).some(k=>/place|field/i.test(k)),'T41: place/room interfaces add no persistent fields');S=migrate(legacy);boot();check(!PLACE_BOOK&&!realmNotebookOpen()&&H().riding===1&&H().mounts.length===1&&H().quests.done[q.id],'T41: legacy save/reload keeps earned riding, mount and quest rewards');
+       }finally{closeRealmNotebook(false);clearTownService();S=keep;PW=keepWidth;TOWN.inside=false;TOWN.on=false;if(H())boot();}
+      }
 return checks;
 };

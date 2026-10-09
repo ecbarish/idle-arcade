@@ -219,6 +219,7 @@ New Wildbond work goes to **Wildbond in Godot** above. Browser data (species, ma
 | R4 | **Guild members' personal stories**: short arcs per adventurer, unlocked by mood and time together | M | Data+System | — | done, merged 2026-10-08 (Realmbound v1.2.0, PR #49); choices with consequences merged (v1.3.0, PR #53) | docs/realmbound-40-60.md "The guild as built" |
 | R5 | **Crafted gear from 55** from the guild economy (the plan's gear route) | M | System | — | done, merged 2026-10-08 (Realmbound v1.5.0, PR #55) | docs/realmbound-40-60.md "Loot from 40 to 60" |
 | R6 | **Hub variety**: a layout per zone (Fenwatch Post, Lanternrest Lodge...), interiors for the inn and smithy | M | Art | — | done, merged 2026-10-08 (Realmbound v1.4.0, PR #54) | js/22-town.js |
+| R6b | **T41: Pages become places**: Guild Hall, Trainer, Stable and quest givers | M | System+Polish | R6, T38 | claimed: Codex, 2026-10-08, `codex/realmbound-window-2` | docs/ROADMAP.md T41 |
 | R7 | **Second raid tier** after The Hollow Throne | L | Data+System | — | open | docs/realmbound-40-60.md "Raids" |
 | R8 | **Pacing re-measure 1-60** with every system on; tune zone XP only | M | Polish | — | done, merged 2026-10-07 | docs/realmbound-40-60.md "Measured" |
 | R9 | Heroic tiers and loot review for the newest dungeons (Rootrot, Heartwood) | S | Polish | — | done, merged 2026-10-07 by Claude (Codex; docs/realmbound-heroic-review.md) | |

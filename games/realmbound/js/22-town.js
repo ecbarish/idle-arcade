@@ -99,7 +99,7 @@ const TOWN_WALK = World.walker({
   map: () => TOWN.map, tiles: TOWN_TILES, pos: () => TOWN.pos,
   people: () => { const ps = townPeople(); return ps.concat(ps.filter(p => p.mule).map(p => ({ at: p.mule, isMule: 1, id: 'brisket' }))); },
   busy: () => !!RTALK || !!modalKind || (typeof realmNotebookOpen==='function' && realmNotebookOpen()), speed: () => 4.5,
-  on: { person: townTalk, door: (x, y) => townDoor(TOWN.map.doors[x + ',' + y]), exit: townExit, sign: townSign }
+  on: { person: n => townTalk(n), door: (x, y) => townDoor(TOWN.map.doors[x + ',' + y]), exit: townExit, sign: (x,y) => townSign(x,y) }
 });
 function townActive() { const h = H(); return !!(h && C && !h.dun && C.phase === 'intown' && PW > 0); }
 function townEnter() {
@@ -272,6 +272,7 @@ function drawTown(t) {
   const z = ZONES[h.zone], night = realmNight(), wk = zoneWeather(h.zone), W = AMB_WEATHER[wk] || {}, p = TOWN_WALK, people = townPeople(), inside = TOWN.inside;
   const things = people.map(n => ({ x: n.at[0], y: n.at[1], draw(c, left, base, s) { const pp = s / 11; drawPerson(left + s * .14, base - 13 * pp, pp, { race: n.look.race, cls: n.look.cls, hair: n.look.hair }, t + n.at[0], c); } }));
   for (const n of people) if (n.mule) things.push({ x: n.mule[0], y: n.mule[1], draw(c, left, base, s) { const pp = s / 16; drawBeast(c, left + s * .3, base - 14 * pp, pp, '#7a5a3a', 'horse', true, t * .5); } });
+  if(inside==='stable'){const mount=activeMount();things.push({x:3,y:3,draw(c,left,base,s){drawBeast(c,left+s*.15,base-s,s/16,mount?mount.col:'#937455',mount?mount.kind:'horse',true,t);}});}
   things.push({ x: p.fx, y: p.fy, draw(c, left, base, s) { const pp = s / 11; drawHero(left + s * .14, base - 13 * pp, pp, t, c); } });
   const view = { rows: TOWN.map.rows, px: p.fx, py: p.fy, flat: townFlat, under: inside ? '_' : ',', stand: townStand, things,
     stands: { T: 1, '#': 1, D: 1, L: 1, P: 1, O: 1, '=': 1, F: 1, Y: 1, H: 1, B: 1, C: 1, J: 1, K: 1, E: 1, A: 1, Q: 1 }, noShadow: { '#': 1, D: 1, H: 1 } };
@@ -300,11 +301,11 @@ function drawTown(t) {
   LT.bloom(cx, cv, PW, PH, sun);
   if(typeof renderRealmFieldLocation==='function')return; // The viewport HUD owns labels and walking hints.
   // where you are, top left
-  const fs = Math.max(12, Math.round(PH / 17)); cx.font = `700 ${fs}px Alegreya Sans, sans-serif`; const text = inside ? inGuildHall() ? `${G().name} · Guild Hall` : buildingName(townBuildings().find(b=>b.kind===TOWN.inside)) : hubName(), lw = cx.measureText(text).width + 16;
+  const fs = Math.max(12, Math.round(PH / 17)); cx.font = `700 ${fs}px Alegreya Sans, sans-serif`; const text = inside ? inGuildHall() ? `${guildOn()?G().name:'The Unclaimed Hall'} · Guild Hall` : buildingName(townBuildings().find(b=>b.kind===TOWN.inside)) : hubName(), lw = cx.measureText(text).width + 16;
   cx.fillStyle = 'rgba(20,16,12,.72)'; cx.fillRect(8, 8, lw, fs * 1.6); cx.fillStyle = '#f2c14e'; cx.textBaseline = 'middle'; cx.fillText(text, 16, 8 + fs * .82); cx.textBaseline = 'alphabetic';
   if(RTALK)return;
   const hint = Math.max(10, Math.round(PH / 22)); cx.font = `600 ${hint}px Alegreya Sans, sans-serif`; cx.fillStyle = 'rgba(255,240,210,.75)'; cx.textAlign = 'right';
-  cx.fillText(aiOn() ? 'Auto: off to the smithy, then the road' : inside ? (inGuildHall()?'Talk to your guild':TOWN.inside==='inn'?'Talk to the Keeper':'Talk to the Smith')+' · Door: back to town' : PW<500?'Arrows / WASD · Tap to walk · Enter to talk':'Walk: arrows / WASD or tap · Enter: talk · Gate: back to the road', PW - 10, PH - 10); cx.textAlign = 'left';
+  cx.fillText(aiOn() ? 'Auto: off to the smithy, then the road' : inside ? (inGuildHall()?'Talk to your guild':TOWN.inside==='inn'?'Talk to the Keeper':TOWN.inside==='trainer'?'Talk to the Trainer':TOWN.inside==='stable'?'Talk to the Stable Keeper':'Talk to the Smith')+' · Door: back to town' : PW<500?'Arrows / WASD · Tap to walk · Enter to talk':'Walk: arrows / WASD or tap · Enter: talk · Gate: back to the road', PW - 10, PH - 10); cx.textAlign = 'left';
 }
 /* input while you're walking the town */
 document.addEventListener('keydown', e => {
