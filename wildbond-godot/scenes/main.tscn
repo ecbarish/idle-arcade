@@ -55,15 +55,17 @@ follow_viewport_enabled = true
 layer = 3
 
 [node name="Place" type="Label" parent="UI"]
-offset_left = 6.0
-offset_top = 4.0
-offset_right = 200.0
-offset_bottom = 20.0
+offset_left = 40.0
+offset_top = 14.0
+offset_right = 344.0
+offset_bottom = 40.0
+mouse_filter = 2
 text = "Larkhaven"
-theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0.1, 0.12, 0.14, 1)
-theme_override_constants/outline_size = 4
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.97, 0.88, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.07, 1)
+theme_override_constants/outline_size = 6
 
 [node name="Caption" type="Label" parent="UI"]
 anchors_preset = 12

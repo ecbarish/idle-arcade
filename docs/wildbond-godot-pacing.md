@@ -76,6 +76,8 @@ The scale deserves human review: Classic's 0.13 XP multiplier and its level-powe
 
 ## Reproducible cooldown finding for Claude
 
+**Fixed 2026-10-09 (Claude, PR #91):** when an ally's turn comes with every move resting, it no longer opens the menu. It says it "catches its breath", holds its turn while battle time runs (so cooldowns tick), and the menu opens as soon as one move is ready. A permanent Godot check covers it ("every move resting"). Rerun the diagnostic with the new battle.gd hash before balancing.
+
 The results record 18 cooldown stalls, all on Deeptide. Its last four moves are Bubble Jet, Mist Veil, Tide Pulse and Harden. In one Halen case at level 65 their cooldowns are 0.5, 8.25, 3 and 10.75 seconds respectively. Every move is unavailable when the player's turn pauses time. Ten additional seconds of actual battle._process leave cooldowns unchanged.
 
 In battle.gd, cooldowns advance only in _tick; choose/moves do not call it. Fight rejects every cooling move, Guard/Orders consume orders without consuming the creature's turn, and a trainer blocks Run. A stocked Bag may consume the turn and escape the state, so this is **not proof of an unconditional lock for every inventory**. It is a reproducible no-berry route failure; ordinary waiting does not solve it. The existing early-battle checks do not cover this late evolved move set.

@@ -279,6 +279,10 @@ Judged ideas and the scorecard for new ones: docs/proposals/new-game-ideas.md (2
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, WD1 and the Deeptide stall (Claude, Wildbond builder, PR #91):** a menu that pauses time can trap a
+  player when every choice in it depends on time passing (cooldowns only tick while the battle runs). Fix the rule, not
+  the symptom: a creature with nothing ready never opens the menu; it waits while time runs. A numbers line can always
+  become a thing you carry: the satchel icon opens the book's new Satchel page. Screenshots: docs/screenshots/wildbond-wd1/.
 - **2026-10-09, art and sound (Claude, docs/learning/assets.md):** neither Godot game made a sound when you did
   something, against CREATIVE.md's "every action answers with sound": both now have sound effects from the Ninja
   Adventure pack already on Evan's PC (no new download), named by meaning so originals can replace them file by file,

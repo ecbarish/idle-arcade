@@ -102,7 +102,8 @@ var bonded := {}
 var got_items := {}                          # items already picked up, by id
 var grass_n := 10                            # tall-grass steps until the next find (8-16, like the browser)
 var battle_story := ""                       # "rival1" for Wren's battle; empty for wild ones
-var satchel: Label
+var satchel: Control                         # the satchel you carry, top right: tap it (or Tab/J) for the field book
+var place_t := 0.0                           # seconds since you arrived somewhere (the place name holds, then fades)
 var title: Control
 var shop: Control
 var book: Control
@@ -211,14 +212,11 @@ func _ready() -> void:
 	$UI.add_child(battle)
 	battle.finished.connect(_on_battle)
 	battle.bag = bag
-	satchel = Label.new()
-	satchel.position = Vector2(96, 4)
-	satchel.size = Vector2(284, 14)
-	satchel.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	satchel.add_theme_font_size_override("font_size", 7)
-	satchel.add_theme_color_override("font_color", Color.WHITE)
-	satchel.add_theme_color_override("font_outline_color", Color(0.1, 0.12, 0.14))
-	satchel.add_theme_constant_override("outline_size", 3)
+	satchel = Control.new()                        # no numbers on the screen (WD1): just the bag, with your badges pinned to its strap
+	satchel.position = Vector2(356, 4)
+	satchel.size = Vector2(24, 22)
+	satchel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	satchel.draw.connect(_draw_satchel)
 	$UI.add_child(satchel)
 	shop = Shop.new()
 	shop.bag = bag
@@ -259,6 +257,7 @@ func _set_map(n: String) -> void:
 	cam.limit_bottom = m.size() * TILE
 	place.text = "Maren's barn" if n == "barn" else (str(INTERIORS[n].name) if INTERIORS.has(n) else str(DATA.MAPS[n].name))
 	place.modulate.a = 1.0
+	place_t = 0.0
 	if battle:
 		battle.area = "" if n == "barn" or INTERIORS.has(n) else str(DATA.MAPS[n].get("biome", ""))   # battles take place in the area you're in
 	if MOUNTAINS.has(n):
@@ -617,6 +616,7 @@ func _switch() -> void:
 # ---------------------------------------------------------------- the loop
 func _process(dt: float) -> void:
 	t += dt
+	place_t += dt
 	cal.advance(dt)
 	_music_tick(dt)
 	_ambience_tick(dt)
@@ -749,7 +749,7 @@ func _unhandled_input(e: InputEvent) -> void:
 		sfx.on = not sfx.on                      # N: sound effects on or off
 		get_viewport().set_input_as_handled()
 		return
-	var want_book: bool = (e is InputEventKey and e.pressed and not e.echo and e.keycode in [KEY_TAB, KEY_J]) or (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT and satchel.text != "" and satchel.get_global_rect().has_point(satchel.get_global_mouse_position()))
+	var want_book: bool = (e is InputEventKey and e.pressed and not e.echo and e.keycode in [KEY_TAB, KEY_J]) or (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT and satchel.visible and satchel.get_global_rect().has_point(satchel.get_global_mouse_position()))
 	if want_book and stage == "free" and lines.is_empty() and not battle.visible and not shop.visible and not book.visible:
 		_open_book()
 		get_viewport().set_input_as_handled()
@@ -1428,8 +1428,10 @@ func _update_ui() -> void:
 			bubble.position = Vector2(clamp(p.x - w / 2, 4, 384 - w - 4), max(4, p.y - bubble.size.y - 6))
 		else:
 			bubble.position = Vector2((384 - w) / 2, 216 - bubble.size.y - 8)   # narration sits low, like a book's caption
-	satchel.text = _satchel_text()
-	place.modulate.a = move_toward(place.modulate.a, 0.0, get_process_delta_time() * 0.4) if t > 2.0 else minf(1.0, t)
+	satchel.visible = _satchel_shown()
+	satchel.queue_redraw()
+	# the place's name, large on arrival: it holds for a few seconds, then fades (hidden while you talk or fight)
+	place.modulate.a = 0.0 if battle.visible or book.visible else clampf(3.5 - place_t, 0.0, 1.0)
 	# the faded world: pass each restored circle on this map to the shader, in real screen pixels
 	var final := get_viewport().get_final_transform()
 	var pts := PackedVector4Array()
@@ -2414,13 +2416,30 @@ func _maren_heals() -> void:
 	_season_word(_maren_data())
 	_festival_invite()
 
-func _satchel_text() -> String:
-	if stage != "free" or battle.visible:
-		return ""
-	var dex := 0
-	for k in seen:
-		dex += 1
-	return "Badges %d  Lures %d  Berries %d  Coins %d  Wilddex %d/%d  (J: book)" % [badges.size(), bag.lures, bag.berries, bag.coins, dex, DATA.SPECIES.size()]
+func _satchel_shown() -> bool:
+	return stage == "free" and not battle.visible and not book.visible and not shop.visible
+
+## Each badge's colour, pinned to the satchel strap and shown in the field book (the element of its Warden's town).
+const BADGE_COL := { "thorn": Color("5d9a3e"), "tide": Color("3a8fd8"), "ember": Color("e0602a"), "beacon": Color("e8c84a"),
+	"reed": Color("7ab89a"), "echo": Color("6a5a8a"), "loom": Color("9a8a74"), "horizon": Color("8ac8e0") }
+
+## The satchel, drawn small in the corner: a leather bag with its flap, and a pin on the strap for each badge you hold.
+func _draw_satchel() -> void:
+	var c := satchel
+	var ink := Color(0.1, 0.12, 0.14)
+	for r in [Rect2(4, 0, 16, 3), Rect2(4, 0, 3, 7), Rect2(17, 0, 3, 7)]:   # the strap, an arch over the bag
+		c.draw_rect(r, ink)
+	for r in [Rect2(5, 1, 14, 1), Rect2(5, 1, 1, 6), Rect2(18, 1, 1, 6)]:
+		c.draw_rect(r, Color("6b4a2a"))
+	c.draw_rect(Rect2(0, 6, 24, 16), ink)                                  # the bag
+	c.draw_rect(Rect2(1, 7, 22, 14), Color("a0703a"))
+	c.draw_rect(Rect2(1, 7, 22, 6), Color("8a5a2a"))                       # the flap
+	c.draw_rect(Rect2(10, 11, 4, 4), Color("e8c84a"))                      # the clasp
+	c.draw_rect(Rect2(11, 12, 2, 2), Color("a0803a"))
+	for i in badges.size():                                                 # badges along the bottom, two rows of four
+		var at := Vector2(2 + (i % 4) * 5, 15 + (i / 4) * 3)
+		c.draw_rect(Rect2(at, Vector2(4, 3)), ink)
+		c.draw_rect(Rect2(at + Vector2(1, 0), Vector2(2, 2)), BADGE_COL.get(badges[i], Color.WHITE))
 
 ## For testing and recordings (run with -- --skip-opening): start in Thornwood with Ripplet, as if the opening were done.
 func _skip_opening() -> void:
@@ -2893,6 +2912,8 @@ func _open_book() -> void:
 	book.where = where_next()
 	book.cal = cal
 	book.keepsakes = keepsakes.values()
+	book.bag = bag
+	book.badges = badges.map(func(b): return { "name": str(DATA.BADGES[b].name), "col": BADGE_COL.get(b, Color.WHITE) })
 	book.open()
 
 # ---------------------------------------------------------------- story moments while you explore (the browser's STORY)

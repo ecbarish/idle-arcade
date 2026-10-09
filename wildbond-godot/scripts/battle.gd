@@ -197,6 +197,14 @@ func _tick(h: float) -> void:
 		if u.atb >= R.ACT_AT:
 			if u.side == "a":
 				u.atb = R.ACT_AT
+				if not has_ready_move(u):
+					# every move still resting (a late team with long cooldowns, T56): it waits, ready, while time runs on,
+					# and you choose as soon as one move is ready, instead of a menu where nothing can be picked
+					if not u.get("breath", false):
+						u.breath = true
+						say("%s catches its breath." % u.c.name)
+					continue
+				u.breath = false
 				wait_u = u
 				menu_i = 0
 				_go_to("choose")
@@ -429,6 +437,10 @@ func use_order(id: String) -> bool:
 			say("You speak low and slow, the way Toren showed you. Your team steadies.")
 	orders -= float(o.cost)
 	return true
+
+## Whether this creature has a move it can use right now (no move still resting).
+func has_ready_move(u: Dictionary) -> bool:
+	return R.moves_of(u.c).any(func(m): return u.cds.get(m, 0.0) <= 0)
 
 func _use_move(m: String) -> void:
 	if wait_u.cds.get(m, 0.0) > 0:

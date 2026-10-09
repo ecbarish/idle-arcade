@@ -649,7 +649,15 @@ func _run() -> void:
 	evj.keycode = KEY_J
 	main._unhandled_input(evj)
 	check(main.book.visible and main.book.seen.size() >= 3 and main.book.team == main.team, "J opens the field book: your Wilddex and team")
+	check(main.book.bag == main.bag and main.book.badges.size() == main.badges.size(), "the book's Satchel page holds your coins, lures, berries and badges (WD1: the numbers live here)")
 	main.book.close()
+	tick(0.05)
+	check(main.satchel.visible and not ("text" in main.satchel), "on the screen, only the satchel itself: no line of numbers")
+	main._set_map(main.map_name)
+	tick(0.5)
+	var place_on: float = main.place.modulate.a
+	tick(4.0)
+	check(place_on > 0.9 and main.place.modulate.a < 0.05, "a place's name shows large on arrival, then fades")
 	check(not main.book.visible, "and closes it")
 	# ---- Maren's ranch: creatures you aren't carrying live in the paddock and the barn, where you can visit them
 	talk_through()
@@ -800,6 +808,24 @@ func _run() -> void:
 	ob.heritage = "wander"
 	ob.allies[1].atb = 0.0
 	check(ob.use_order("opening") and ob.allies[1].atb >= main.R.ACT_AT, "Find an Opening: another of your creatures acts at once")
+	# ---- every move resting (T56's Deeptide at Halen): no stuck menu; it catches its breath, and you choose once one is ready
+	var keep_bag: Dictionary = ob.bag
+	ob.bag = { "lures": 0, "berries": 0 }
+	var deep_sp: String = "deeptide" if main.DATA.SPECIES.has("deeptide") else "tidewyrm"
+	ob.open("trainer", [main.R.make(deep_sp, 65, { "rar": 1 }, main.rng)], [main.R.make("mosshog", 5, { "rar": 1 }, main.rng)], "Halen")
+	var deep: Dictionary = ob.allies[0]
+	for m in main.R.moves_of(deep.c):
+		deep.cds[m] = 3.0 + 2.0 * main.R.moves_of(deep.c).find(m)
+	deep.atb = main.R.ACT_AT
+	ob.foes[0].atb = -1000.0
+	ob._go_to("run")
+	ob._process(0.1)
+	check(ob.state == "run" and ob.wait_u != deep and ob.log_lines[-1].ends_with("catches its breath."), "every move resting: no menu with nothing to pick; %s catches its breath" % deep.c.name)
+	for i in 200:
+		ob._process(0.1)
+		if ob.state == "choose": break
+	check(ob.state == "choose" and ob.wait_u == deep and ob.has_ready_move(deep), "time runs on, and you choose as soon as a move is ready")
+	ob.bag = keep_bag
 	ob.visible = false
 	ob.state = "off"
 	main.battle.heritage = main.heritage()
