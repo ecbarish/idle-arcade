@@ -62,7 +62,7 @@ function turnIn(id,choice,auto){const h=H(),q=ALLQ[id];if(qState(q)!=='ready')re
   toast(`Quest complete: ${q.name}`);slog(`Completed ${q.name}.`);
   if(q.id==='f10'){toast('The Drowned Sanctum awaits. Find a group in the Friends tab.');slog('Defeated the Drowned Prophet. The Drowned Sanctum awaits.');}
 }
-function questHelper(){const h=H();
+function questHelper(){if(RTALK)return;const h=H();
   for(const id of [...h.quests.active]){const q=ALLQ[id];if(qState(q)==='ready'){const rw=qReward(q);const c=score(rw[0])>=score(rw[1])?0:1;turnIn(id,c,true);}}
   if(h.quests.active.length<3){for(const z of ZONE_ORDER[h.faction]){for(const q of QUESTS[z]){if(h.quests.active.length>=3)break;if(z!==h.zone)continue;if(qState(q)==='avail'&&q.lvl<=h.lvl+1&&!(q.elite&&q.lvl>h.lvl))accept(q.id);}}}
 }

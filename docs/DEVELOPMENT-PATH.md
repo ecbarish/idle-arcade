@@ -181,7 +181,7 @@ creatures as monsters. Built as first-person grid delves (docs/proposals/new-gam
 - [x] RB1.3 [ChatGPT] (done, merged 2026-10-09; T48) Part 3: the road between towns as a walkable stretch at key points (an inn on the road, a
   camp), keeping auto-combat where it already lives.
 - [ ] RB1.4 [ChatGPT] Phone pass for the new layout (L3 part 2).
-- [ ] RB1.5 [ChatGPT] (claimed: Codex, 2026-10-09, codex/realmbound-opening-polish) Wait for the player (GR-10, a bug): autopilot must not take over during the first dialogue
+- [x] RB1.5 [ChatGPT] (built: Codex, 2026-10-09, PR #98; awaiting review) Wait for the player (GR-10, a bug): autopilot must not take over during the first dialogue
   (games/realmbound/js/13-world-ui.js:95); fix the stray blocks in the sky. Do first.
 
 **RB-M2: what the raid set up.**
@@ -322,5 +322,6 @@ line or two, with the page that holds the detail.
   on every push and PR. Web packs committed on every rebuild had grown the history to 284 MB: rebuild at milestones
   only, and AR2.7 proposes building them on GitHub. Wildbond's main.gd (3,600 lines), raw key reads and missing sound
   buses: rules to grow out of them gradually, tied to WB6.1, WB6.2 and AR2.8.
+- **2026-10-09, RB1.5:** use one fallback predicate for combat and HUD; dialogue pauses must also cover QuestHelper and background hunting. Existing victory counts can protect the first fight without adding save fields.
 - **2026-10-07 to 10-09, earlier lessons:** recorded in docs/PROJECTS.md "Read first" (the game window, depth, woven
   stories, player text, variety, friends' testing, the process).

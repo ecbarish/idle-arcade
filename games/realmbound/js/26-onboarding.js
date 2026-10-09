@@ -49,7 +49,7 @@ function roadHint() {
   if (state === 'done') { const hint = show('home', 'A moment at home', 'Your first request is finished. Between fights, use Town to head home. There is a free rest at the inn or longhouse, and a smith for junk and repairs. You can also choose your next request in Quests.'); if (hint) return hint; }
   const n = C.enc && npcOf(C.enc.id) || (C.party[0] && C.party[0].n);
   if (n) return show('companion', n.name + ', a fellow traveler', n.name + ' is a ' + ROLE_NAME[roleOf(n)].toLowerCase() + '. ' + ({tank:'They can draw attacks away from others.',heal:'They can mend the party when someone is hurt.',dps:'They help bring enemies down.'}[roleOf(n)] || 'They fight alongside you.') + ' Wave or help when offered; Invite to group asks them to join. Strangers may decline or leave later. Friendship grows by sharing the road; you still give your own orders.', 'friends');
-  if (C.phase === 'fight' && !h.stats.manual) return show('fight', 'Your first deliberate action', roadAction() + ' Basic attacks stay automatic. In Focus, pressing an ability takes over; after 15 seconds without input, fallback covers at reduced strength. Active Focus kills within 10 seconds of input earn 10% extra XP.');
+  if (C.phase === 'fight' && !h.stats.manual) return show('fight', 'Your first deliberate action', roadAction() + ' Basic attacks stay automatic. In Focus, pressing an ability takes over; after your first victory, 15 seconds without input lets fallback cover at reduced strength. Active Focus kills within 10 seconds of input earn 10% extra XP.');
   return null;
 }
 function renderRoadGuide() {
