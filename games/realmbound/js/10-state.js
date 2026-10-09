@@ -38,7 +38,7 @@ function save(){S.last=Date.now();const h=H();
 function offline(sec,hunt){
   const h=H();if(!h||sec<60)return null;sec=Math.min(sec,86400);if(hunt===undefined)hunt=true;
   const restedGain=h.lvl<LEVEL_CAP?Math.max(0,Math.min(xpNeed(h.lvl)*1.5-h.rested,sec/3600*xpNeed(h.lvl)*.15)):0;h.rested+=restedGain;
-  const kills=hunt?Math.floor(sec*.5/Math.max(8,h.avg.cycle)):0;const lvl0=h.lvl;let xp=0;const money=Math.round(kills*h.avg.money);
+  const kills=hunt&&!RTALK&&(h.mode==='auto'||h.stats.kills>0)?Math.floor(sec*.5/Math.max(8,h.avg.cycle)):0;const lvl0=h.lvl;let xp=0;const money=Math.round(kills*h.avg.money);
   if(kills>0&&h.lvl<LEVEL_CAP){xp=Math.round(kills*h.avg.xp);gainXP(xp,false);}h.money+=money;h.stats.kills+=kills;
   return {sec,kills,xp,money,levels:h.lvl-lvl0,rested:restedGain};
 }

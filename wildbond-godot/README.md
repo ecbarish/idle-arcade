@@ -6,7 +6,8 @@ deciding (START-HERE.md "Questions for Evan" 1; docs/wildbond-plan.md).
 
 ## Play it
 Double-click **Play Wildbond trial.bat** (Godot is unzipped in `C:\Users\evanb\Godot`). Arrow keys or WASD to walk;
-Enter, Space, E or a click to continue a conversation and to bond. To edit it, run the Godot program, choose
+Enter, Space, E or a click to continue a conversation and to bond. A gamepad works, and on a phone a walking pad and a
+button appear (every control is a named action in `scripts/controls.gd`; the pad is `scripts/touch_pad.gd`). To edit it, run the Godot program, choose
 **Import**, and pick this folder's `project.godot`.
 
 ## What's in the trial
@@ -105,7 +106,8 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   Maren's barn is here: the tall barn only fits top right, so the shop moved to the cottage by the paddock.)
 - **The field book** (Tab or J, or tap the satchel line): the Wilddex, every creature in the game (seen ones in colour,
   the rest dark shapes, a mark for those that chose you; each with its page: element, description, where it lives),
-  and your Team (level, health, XP, moves; who rests at the ranch).
+  and your Team (level, health, XP, moves; who rests at the ranch), the Satchel, and Settings (volume for music, the
+  sounds of each place and effects, text size, battle pace, phone buttons; `scripts/settings.gd`, kept per device).
 - **Every creature has a body:** ten family body plans (wolf, cat, hyena, lizard, croc, boar, horse, bird, spider,
   sprite) in each species' own colour, so all 81 creatures look like themselves (`tests/gallery.gd` draws them all).
 - **Your journey saves** (team, ranch, satchel, badges, Wilddex, items, beaten trainers, restored colour, where you

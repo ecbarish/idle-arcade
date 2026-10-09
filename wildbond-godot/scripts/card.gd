@@ -57,12 +57,12 @@ func _close(choose: bool) -> void:
 func _input(e: InputEvent) -> void:
 	if not visible:
 		return
-	if e is InputEventKey and e.pressed and not e.echo:
-		match e.keycode:
-			KEY_LEFT, KEY_A: sel = (sel + _count() - 1) % _count()
-			KEY_RIGHT, KEY_D, KEY_TAB: sel = (sel + 1) % _count()
-			KEY_ENTER, KEY_KP_ENTER, KEY_SPACE, KEY_E: _pick(sel)
-			KEY_ESCAPE, KEY_BACKSPACE: _pick(_count() - 1)
+	var d := Controls.dir(e)                    # named actions (controls.gd): keys, a gamepad
+	if d != Vector2i.ZERO or Controls.pressed(e, "interact") or Controls.pressed(e, "back") or (e is InputEventKey and e.pressed):
+		if d.x != 0 or d.y != 0: sel = (sel + d.x + d.y + _count()) % _count()
+		elif e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_TAB: sel = (sel + 1) % _count()
+		elif Controls.pressed(e, "interact"): _pick(sel)
+		elif Controls.pressed(e, "back"): _pick(_count() - 1)
 		get_viewport().set_input_as_handled()
 	elif e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
 		var p := get_local_mouse_position()

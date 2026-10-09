@@ -106,6 +106,17 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude (Wildbond builder thread, lane W): Evan's playtest notes, part 1: How to play page (howto.gd: title button, before a new journey, book Settings), no walking on roofs (main.gd buildings()/_under_roof); 310 checks. Wildbond's own look is a question to Evan (decision card in the Wildbond builder thread).
+- 2026-10-09 Claude (Wildbond builder thread, lane W): WB6.1-6.2: named controls (controls.gd), phone pad (touch_pad.gd), sound buses and a Settings page in the book (settings.gd); 305 checks; web preview pack rebuilt. Next in lane W: WB4.3 part 2 (place ChatGPT's T58 reveal once PR #101 merges), then WB5.1 (the Spire).
+- 2026-10-09 Claude (ideas thread): docs/proposals/games-for-everyone.md for Evan's daughter (almost 3) and his dad (Atari era): Little Ranch (a tap-and-play toy with Wildbond's baby creatures) and the Arcade Cabinets (original single-screen games, 1978-85 style), both 17/18; Evan said yes to both, each starting with a one-PR test. No builds yet.
+- 2026-10-09 Claude (Wildbond builder thread, lane W): WD2 part 1: serpent, turtle, moth and tree-folk shapes for twelve species (figures.gd SHAPE_FOR). Next in lane W: phone controls and settings (WB6.1-6.2) while ChatGPT writes T58 and the WD2 look features.
+- 2026-10-09 Codex (Adam / abarish-dev, guest lane X): X2 audit in PR #102; all 112 local guide/Come Play references, HTML anchors and referenced images pass; no page fixes needed. X1 unclaimed because this cloud browser lacks WebGL2; no game defect inferred.
+- 2026-10-09 Codex: RB1.5 opening polish, PR #98; conversations pause the world, Focus fallback waits for the first victory, sky details clear the HUD. Four screen sizes checked; no Godot, version or save-schema edits.
+
+- 2026-10-09 Codex: T58 reveal writing ready, PR #101; 53 lines, approved three shared observations, warm-pocket conversation, depth moment and eight Warden responses. 159 portrait previews and all ten suites pass; Claude places it, no Godot/preview/version changes.
+
+- 2026-10-09 Grok (lane C): C2/E5 Studio creature and quest viewers (studio/viewers.js, rules from the game checks; current data clean), 34 Studio checks; PR #106, stacked on #99.
+- 2026-10-09 Grok (lane C): C1/E4 the Studio text browser (studio.html + studio/text-browser.js): search all player text in the eight games with file, line and data path; tests/studio.html (26 checks) added to run-all-checks; PR #99. Adam's Grok helper, working as a guest per CONTRIBUTING.md.
 - 2026-10-09 Codex (Adam / abarish-dev, guest lane X): X3 text cleanup in draft PR #104; syntax, 60,017 baseline story-state snapshots and 0/1/2/10 life summaries pass. Full browser/visual checks await CI/reviewer; local Chromium unavailable.
 
 - 2026-10-09 Claude (Design decisions thread, lane Q): docs/DECISIONS.md, the design-answer log and how to ask; DD-2 one day in Starfall (calendar counts service days), DD-3 Warden levels follow the data (lore paragraphs fixed).
