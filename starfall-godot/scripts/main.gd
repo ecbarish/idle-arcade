@@ -178,6 +178,10 @@ var shelf_open := false
 var brewing := 0.0                          # seconds of stirring left at the pot
 var tamsin := Mover.new("tamsin", Vector2i(-5, -5))   # a barkeep who wants the tavern, once you've shown it's worth running
 var tamsin_hired := false
+var fen := Mover.new("fen", Vector2i(-5, -5))   # the apothecary's apprentice (SF2.5), once you've brewed enough yourself
+var fen_hired := false
+var batches := 0                            # batches you've brewed by hand, all time
+var fen_t := 0.0                            # Fen's stirring on the batch in the pot
 var pours := 0                              # drinks you've poured by hand, all time
 var pour := {}                              # while you're at the tap: { fill: 0..1, on: pouring }
 var tavern_shut := false                    # left unserved two evenings running, the tavern closes until you open it
@@ -198,6 +202,7 @@ var board_view: Control
 const LOOKS := {
 	"me": { "skin": "e8b48a", "hair": "3a2a22", "shirt": "2f5e78", "legs": "3a3040", "style": "short" },
 	"bryn": { "skin": "f1c9a0", "hair": "b8642e", "shirt": "e8e0d0", "apron": "7a5236", "legs": "5a4636", "style": "ponytail", "body": "narrow" },
+	"fen": { "skin": "e8c0a0", "hair": "59c38a", "shirt": "5a7a4a", "apron": "c8b890", "legs": "4a3a2a", "style": "short", "body": "narrow" },
 	"tamsin": { "skin": "c8946a", "hair": "2b2b3a", "shirt": "8a3a3a", "apron": "e8e0d0", "legs": "3a3040", "style": "short" },
 }
 
@@ -208,6 +213,7 @@ func _ready() -> void:
 	ama.look = { "skin": "c88a64", "hair": "f2f0ec", "shirt": "5d9a3e", "apron": "f4f0e8", "legs": "3e5a34", "style": "bun", "body": "narrow" }
 	garrick.where = "gone"
 	tamsin.where = "gone"
+	fen.where = "gone"
 	garrick.look = { "skin": "b87a54", "hair": "3a2a22", "shirt": "8a3a2a", "apron": "4a3a30", "legs": "3a3040", "style": "short" }
 	if "--no-save" in OS.get_cmdline_user_args():
 		no_save = true                           # recordings and tries never touch the real town (-- --no-save)
@@ -316,7 +322,7 @@ func walkable(p: Vector2i, who: Mover = null) -> bool:
 	return true
 
 func people() -> Array[Mover]:
-	var out: Array[Mover] = [me, bryn, ama, garrick, tamsin]
+	var out: Array[Mover] = [me, bryn, ama, garrick, tamsin, fen]
 	out.append_array(heroes)
 	return out
 
@@ -368,6 +374,7 @@ func _process(dt: float) -> void:
 	_counter(dt)
 	_forge_tick(dt)
 	_pour_tick(dt)
+	_fen_tick(dt)
 	_brew(dt)
 	_construction(dt)
 	for m in people():
@@ -455,6 +462,9 @@ func _arrived() -> void:
 
 ## Enter, Space or E: talk to whoever is beside you, read the board, or serve at the counter.
 func use() -> bool:
+	if fen.where == "town" and not fen_hired and (me.tile - fen.tile).length() <= 1.01:
+		talk_fen()
+		return true
 	if tamsin.where == "town" and not tamsin_hired and (me.tile - tamsin.tile).length() <= 1.01:
 		talk_tamsin()
 		return true
@@ -1138,6 +1148,7 @@ func shelf_pick(i: int) -> void:
 			else:
 				herbs -= 2
 				brewing = 3.0
+				batches += 1
 				shelf_open = false
 				shelf_note = ""
 				caption.text = "You tip the herbs into the pot and stir. The steam smells of mint and wet stones."
@@ -1158,6 +1169,12 @@ func _brew(dt: float) -> void:
 		stock = mini(TONIC_MAX, stock + 3)
 		caption.text = "Three tonics, corked and on the shelf. Adventurers help themselves and leave the coins in the jar."
 		caption_t = 5.0
+		if batches >= BREW_AFTER and fen.where == "gone":
+			fen.where = "town"                       # word gets round: someone who wants to learn walks in
+			fen.tile = GATE + Vector2i.LEFT
+			fen.pos = Vector2(fen.tile) * TILE
+			bark(fen, "Is this where the tonics come from? I've walked two days to ask something.")
+			send(fen, _pot_at() + Vector2i.RIGHT)
 
 func _shelf_rect(i: int) -> Rect2:
 	return [Rect2(52, 120, 132, 34), Rect2(200, 120, 132, 34), Rect2(158, 186, 68, 16)][i]
@@ -1247,6 +1264,13 @@ func _day(dt: float) -> void:
 		report += " Tonics sold: %d." % int(today.tonics)
 	report += " The guild earned %d coins." % today.earned
 	report += _tavern_evening()
+	if fen_hired:
+		if coins >= FEN_WAGE:
+			coins -= FEN_WAGE
+			report += " Fen paid."
+		else:
+			fen_hired = false
+			report += " You couldn't pay Fen; the pot waits for you again."
 	if smith_hired:
 		if coins >= SMITH_WAGE:
 			coins -= SMITH_WAGE
@@ -1348,6 +1372,41 @@ func _bunting_draw() -> void:
 		if k % 2 == 0 and k < 24:
 			var flap := sin(t * 3.0 + k) * 1.0
 			draw_colored_polygon(PackedVector2Array([p, p + Vector2(5, 0), p + Vector2(2.5 + flap, 6)]), cols[(k / 2) % cols.size()])
+# ---------------------------------------------------------------- the apothecary's apprentice (SF2.5): master it, then hire
+const BREW_AFTER := 4                       # batches you brew yourself before Fen asks to learn
+const FEN_WAGE := 6
+
+func _pot_at() -> Vector2i:
+	return _step_of(finished("apothecary")) + Vector2i.RIGHT
+
+func talk_fen() -> void:
+	fen.face = me.tile - fen.tile
+	say("fen", "I'm Fen. Back home they say Starfall's tonics come out right every time, and I want to learn how. I'd work for very little.")
+	say("fen", "Six coins a day. I'll keep the pot going whenever there are herbs, and I'll never stir a batch faster than it wants.")
+	then_do = func():
+		fen_hired = true
+		send(fen, _pot_at())
+		say("", "Fen takes the long spoon. From now on the pot is kept going whenever herbs come home, for six coins at the end of each day.")
+
+## Fen at the pot: a batch whenever there are two herbs and room on the shelf (a little slower than you; never wasted).
+func _fen_tick(dt: float) -> void:
+	if fen.where != "town" or not fen.path.is_empty():
+		return
+	var home := _pot_at() if fen_hired else _pot_at() + Vector2i.RIGHT
+	if fen.tile != home:
+		if int(t * 10) % 10 == 0:
+			send(fen, home)
+		return
+	fen.face = Vector2i.UP if fen_hired else Vector2i.DOWN
+	if not fen_hired or brewing > 0.0 or herbs < 2 or stock >= TONIC_MAX:
+		fen_t = 0.0
+		return
+	fen_t += dt
+	if fen_t >= 4.0:
+		fen_t = 0.0
+		herbs -= 2
+		stock = mini(TONIC_MAX, stock + 3)
+		bark(fen, ["Three more, corked.", "Mint first, then the stones. Right.", "Slow and steady. There."][rng.randi() % 3])
 # ---------------------------------------------------------------- the tavern (SF2.3): pour by hand, then hire Tamsin
 const DRINK := 5                            # what a drink costs an adventurer, from their own savings
 const POUR_AFTER := 6                       # drinks you pour yourself before Tamsin asks for the tap
@@ -1985,7 +2044,7 @@ func save_game() -> void:
 	var d := { "v": 1, "coins": coins, "day": day, "day_t": day_t, "meals": meals, "hired": hired, "offered": bryn_offered,
 		"notices": notices, "posted": posted, "today": today, "me": [me.tile.x, me.tile.y],
 		"built": built, "jobs": total_jobs, "rank": rank, "herbs": herbs, "stock": stock, "price": price_i,
-		"pieces": pieces, "smith": smith_hired, "tavern": { "pours": pours, "hired": tamsin_hired, "here": tamsin.where == "town", "shut": tavern_shut, "quiet": tavern_quiet }, "garrick": garrick.where == "town", "good": good_days, "bad": bad_days, "visitors": visitors,
+		"pieces": pieces, "smith": smith_hired, "apprentice": { "batches": batches, "hired": fen_hired, "here": fen.where == "town" }, "tavern": { "pours": pours, "hired": tamsin_hired, "here": tamsin.where == "town", "shut": tavern_shut, "quiet": tavern_quiet }, "garrick": garrick.where == "town", "good": good_days, "bad": bad_days, "visitors": visitors,
 		"heroes": heroes.map(func(h): return h.a) }
 	SafeSave.write(save_path, d)                 # a spare file first, the last good save kept as a backup
 
@@ -2011,6 +2070,13 @@ func _load() -> bool:
 	stock = int(d.get("stock", 0))
 	price_i = int(d.get("price", 1))
 	pieces = int(d.get("pieces", 0))
+	var ap: Dictionary = d.get("apprentice", {})
+	batches = int(ap.get("batches", 0))
+	fen_hired = bool(ap.get("hired", false))
+	if ap.get("here", false) and finished("apothecary") != "":
+		fen.where = "town"
+		fen.tile = _pot_at() + (Vector2i.ZERO if fen_hired else Vector2i.RIGHT)
+		fen.pos = Vector2(fen.tile) * TILE
 	var tv: Dictionary = d.get("tavern", {})
 	pours = int(tv.get("pours", 0))
 	tamsin_hired = bool(tv.get("hired", false))
