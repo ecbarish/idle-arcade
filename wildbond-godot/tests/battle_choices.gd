@@ -6,7 +6,7 @@ static func run(main: Node, check: Callable) -> void:
 	rng.seed = 104125
 	check.call(R.DATA.MOVES.size() == 60, "WD3: sixty moves")
 	for id in R.DATA.SPECIES:
-		var c := R.make(id, 40, {}, rng)
+		var c := R.make(id, 100, {}, rng)
 		var known := R.learned_moves(c)
 		check.call(known.size() >= 6 and known.size() <= 8, "WD3: %s remembers six to eight moves" % id)
 		check.call(R.moves_of(c).any(func(m): return R.DATA.MOVES[m].kind in ["hit", "aoe"]), "WD3: %s always arrives with an attack" % id)
@@ -19,10 +19,10 @@ static func run(main: Node, check: Callable) -> void:
 		check.call(R.keep_moves(c, known.slice(0, 4)), "WD3: %s can practice a valid loadout" % id)
 		var loaded: Dictionary = JSON.parse_string(JSON.stringify(c))
 		check.call(R.moves_of(main._fix_creature(loaded)) == R.moves_of(c), "WD3: %s loadout survives JSON save" % id)
-	var a := R.make("cinderkit", 30, {}, rng)
+	var a := R.make("cindercub", 30, {}, rng)
 	var b := R.make("ripplet", 30, {}, rng)
 	var u: Dictionary = main.battle.unit(a, "a")
-	var v: Dictionary = main.battle.unit(b, "b")
+	var v: Dictionary = main.battle.unit(b, "f")
 	for status in E.BAD:
 		E.cleanse(v)
 		v.wake_grace = 0.0
@@ -62,7 +62,7 @@ static func run(main: Node, check: Callable) -> void:
 	v.buff.guard = 3.0
 	E.after_hit(v, R.DATA.MOVES.skyDive)
 	check.call(v.buff.guard == 3.0, "WD3: bird dive leaves guard for partners to break")
-	check.call(not R.keep_moves(a, ["emberMantle"]) and not R.keep_moves(a, ["missing"]), "WD3: practice rejects harmless or unknown loadouts")
+	check.call(not R.keep_moves(a, ["howl"]) and not R.keep_moves(a, ["missing"]), "WD3: practice rejects harmless or unknown loadouts")
 	for level in range(1, 100):
 		check.call(is_equal_approx(R.win_xp(1, level, level, false, 0.13) * 12.0, float(R.xp_need(level))), "WD3: twelve even wins at level %d" % level)
 	check.call(main.TEACHERS.size() == 8, "WD3: every Warden teaches an order")

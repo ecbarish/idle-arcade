@@ -43,10 +43,16 @@ Object.assign(MOVES, {
 });
 const FAMILY_SIGNATURE={wolf:'packHunt',lizard:'shedSkin',boar:'rootCharge',bird:'skyDive',cat:'stonePounce',spider:'silkLull',hyena:'laughFeint',croc:'deepDrag',sprite:'brightCare',horse:'herdRush'};
 const ELEMENT_LESSONS={Ember:['coalFlick','steamBurst','emberMantle'],Tide:['rainTap','undertowPull','rinse'],Grove:['seedGrip','bramblePress','groveShelter'],Stone:['faultLine','gravelFan','standingStone'],Gale:['airCut','crosswind','windLift'],Shade:['duskLull','shadeThread','dreamBreak'],Radiant:['gleamTrail','dawnRay','clearLight']};
+const BATTLE_LESSONS={family:FAMILY_SIGNATURE,element:ELEMENT_LESSONS};
+const PRACTICE_MOVES=["steadyStrike","helpingPaw","guardBreak","feintStep","soothingTouch","secondWind","sweepHit"];
+let practiceIndex=0;
 for(const s of Object.values(SPECIES)){
   s.legacyLearn=s.learn.map(l=>l.slice());
   const extra=[[8,FAMILY_SIGNATURE[s.fam]],[15,ELEMENT_LESSONS[s.el][0]],[22,ELEMENT_LESSONS[s.el][1]],[30,ELEMENT_LESSONS[s.el][2]]];
-  s.learn=s.learn.concat(extra).sort((a,b)=>a[0]-b[0]);
+  const room=8-new Set(s.legacyLearn.map(l=>l[1])).size;
+  const added=extra.slice(0,room);
+  if(practiceIndex<PRACTICE_MOVES.length && room>=3){s.practiceMove=PRACTICE_MOVES[practiceIndex++];added[added.length-1]=[30,s.practiceMove];}
+  s.learn=s.learn.concat(added).sort((a,b)=>a[0]-b[0]);
 }
 
 function defaultMoves(c){const known=learnedMoves(c),chosen=known.slice(-4);if(!chosen.some(m=>['hit','aoe'].includes(MOVES[m].kind))){const attacks=known.filter(m=>['hit','aoe'].includes(MOVES[m].kind));if(attacks.length)chosen[0]=attacks.at(-1);}return chosen;}
@@ -63,3 +69,22 @@ const BattleEffects={
  modifier(a,t,m){return(this.active(a,'scorched')&&!m.spec?.75:1)*(this.active(t,'marked')?1.25:1)*(m.combo&&this.active(t,m.combo)?m.bonus||1.4:1);},
  after(t,m){this.wake(t);if(t.status){delete t.status.marked;if(m.combo)delete t.status[m.combo];}if(m.breakGuard){t.buff.guard=0;t.buff.guardCmd=0;}if(m.status)this.apply(t,m.status,m.duration||5);}
 };
+
+// Classic uses the same remembered moves. Practice is available on ranch creature cards.
+const beforePracticeCard = cardHTML;
+cardHTML = function(c, i, inTeam) {
+  const html = beforePracticeCard(c, i, inTeam);
+  if (S.tab !== 'ranch') return html;
+  const kept=movesOf(c),known=learnedMoves(c);
+  return html + `<fieldset class="cmoves" data-practice="${c.uid}"><legend>Maren's workbench · bring up to four moves</legend>${[0,1,2,3].map(slot=>`<label>Place ${slot+1} <select data-wdmove="${slot}" ${B||challengeLocked()?'disabled':''}><option value="">Rest this place</option>${known.map(m=>`<option value="${m}" ${kept[slot]===m?'selected':''}>${MOVES[m].name}</option>`).join('')}</select></label>`).join('')}<p class="meta">Keep one attack. Every learned move stays remembered.</p></fieldset>`;
+};
+document.addEventListener('change', e => {
+  const field=e.target.closest('[data-practice]');
+  if(!field || !e.target.hasAttribute('data-wdmove')) return;
+  const c=everyone().find(c=>String(c.uid)===field.dataset.practice);
+  if(!c || B || challengeLocked()) return;
+  const moves=[...field.querySelectorAll('[data-wdmove]')].map(el=>el.value).filter(Boolean);
+  if(!keepMoves(c,moves)) toast('Choose different moves and keep at least one attack.');
+  else {save();toast('Ready for the next battle.');}
+  tabKey='';renderAll();
+});

@@ -29,6 +29,25 @@ const ACT_AT := 2.2                           # a creature acts when its turn me
 
 static var DATA: Dictionary = {}
 
+## Godot adds evolution forms after importing the shared catalogue. Give those forms the same lessons.
+static func prepare_move_choices() -> void:
+	var lessons: Dictionary = DATA.BATTLE_LESSONS
+	for id in DATA.SPECIES:
+		var species: Dictionary = DATA.SPECIES[id]
+		if species.has("legacyLearn"): continue
+		species["legacyLearn"] = species.learn.duplicate(true)
+		var element: Array = lessons.element[species.el]
+		var extra: Array = [[8, lessons.family[species.fam]], [15, element[0]], [22, element[1]], [30, element[2]]]
+		var known: Array = []
+		for old in species.learn:
+			if not old[1] in known: known.append(old[1])
+		for new_lesson in extra:
+			if known.size() >= 8: break
+			if not new_lesson[1] in known:
+				species.learn.append(new_lesson)
+				known.append(new_lesson[1])
+		species.learn.sort_custom(func(a, b): return a[0] < b[0])
+
 static func sp(c: Dictionary) -> Dictionary:
 	return DATA.SPECIES[c.sp]
 

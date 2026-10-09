@@ -430,7 +430,7 @@ func use_order(id: String) -> bool:
 		"tailwind":
 			for a in team: a.buff.haste = maxf(a.buff.get("haste", 0.0), 5.0)
 		"rain", "snare", "expose":
-			var enemies := living("b")
+			var enemies := living("f")
 			if enemies.is_empty(): return false
 			Effects.apply(enemies[0], {"rain": "soaked", "snare": "rooted", "expose": "marked"}[id], 5.0)
 		"mend":

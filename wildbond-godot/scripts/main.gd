@@ -184,6 +184,7 @@ func _ready() -> void:
 		DATA.SPECIES[k] = ej.data.species[k]
 	DATA["EVOS"] = ej.data.evos
 	R.DATA = DATA
+	R.prepare_move_choices()
 	pup.look = CREATURE_LOOKS.pup
 	pup.home = PADDOCK
 	_make_npcs()

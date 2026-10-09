@@ -12,7 +12,7 @@ func capture() -> void:
 	DirAccess.make_dir_recursive_absolute("res://frames/wd3")
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 125
-	var a := R.make("cinderkit", 30, {}, rng)
+	var a := R.make("cindercub", 30, {}, rng)
 	var b := R.make("ripplet", 30, {}, rng)
 	main.register.visible = false
 	main.card.visible = false

@@ -40,7 +40,7 @@ function chooseTurn(m) {
 function moveInfo(m) {
   const mv = MOVES[m], extra=mv.breakGuard?'; breaks guard':mv.pierce?'; ignores guard':mv.status?'; leaves the foe '+BattleEffects.label[mv.status].toLowerCase():mv.combo?'; stronger on '+BattleEffects.label[mv.combo].toLowerCase()+' foes':'', el = mv.el ? mv.el + ' ' : '', how = mv.spec ? 'special (uses Wits)' : 'physical (uses Power)';
   return { hit: `${el}${how} attack, power ${mv.pow}${extra}`, aoe: `${el}hits every foe, power ${mv.pow}`, dot: `${el}poisons a foe over time`, buff: 'your team hits harder for a while',
-    haste: 'your team acts faster for a while', guard: 'your team braces against damage', slow: 'slows a foe down', heal: 'heals your most hurt ally' }[mv.kind] || '';
+    haste: 'your team acts faster for a while', guard: 'your team braces against damage', slow: 'slows a foe down', heal: 'heals your most hurt ally'+(mv.cleanse?'; clears harmful effects':'') }[mv.kind] || '';
 }
 
 function advantage(el, target) {
@@ -96,7 +96,7 @@ function act(u, forced, mult) {
 }
 function resolve(u, m, mv, foes, allies, target, mult) {
   switch (mv.kind) {
-    case 'hit': { const t = target(), r = damage(u, t, mv, mult); hurt(t, r.d, r.crit, mv.el); BattleEffects.after(t,mv);
+    case 'hit': { const t = target(), r = damage(u, t, mv, mult); hurt(t, r.d, r.crit, mv.el); BattleEffects.after(t,mv);if(mv.status&&BattleEffects.active(t,mv.status))bline(`${t.c.name} is ${BattleEffects.label[mv.status].toLowerCase()}.`,'sys');
       bline(`${u.c.name} used ${mv.name}${r.crit ? ', a critical hit' : ''} on ${t.c.name} for ${r.d}${r.adv > 1 ? '. It hits hard!' : r.adv < 1 ? '. Not very effective.' : '.'}`, u.side === 'a' ? 'ally' : 'foe'); break; }
     case 'aoe': for (const t of foes) { const r = damage(u, t, mv, (mult || 1) * 0.75); hurt(t, r.d, r.crit, mv.el); BattleEffects.after(t,mv); } bline(`${u.c.name} used ${mv.name} on everyone!`, u.side === 'a' ? 'ally' : 'foe'); break;
     case 'dot': { const t = target(); t.dots.push({ per: Math.max(1, Math.round(damage(u, t, mv, mult).d / 2)), left: 4, tick: 1 }); bline(`${u.c.name} used ${mv.name}. ${t.c.name} is poisoned.`, u.side === 'a' ? 'ally' : 'foe'); break; }

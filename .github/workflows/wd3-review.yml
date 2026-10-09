@@ -18,8 +18,8 @@ jobs:
           sudo apt-get install -y xvfb libgl1-mesa-dri
       - name: Import and render the actual screens
         run: |
-          "$GODOT" --headless --path wildbond-godot --editor --import --quit
-          xvfb-run -a "$GODOT" --path wildbond-godot --rendering-method gl_compatibility --script res://tests/battle_choices_screens.gd
+          timeout 120 "$GODOT" --headless --path wildbond-godot --editor --import --quit
+          timeout 120 xvfb-run -a "$GODOT" --path wildbond-godot --rendering-method gl_compatibility --script res://tests/battle_choices_screens.gd
       - uses: actions/upload-artifact@v4
         with:
           name: wd3-screens
