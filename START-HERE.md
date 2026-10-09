@@ -106,7 +106,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
-- 2026-10-09 Claude (Priorities and direction): after the review pile-up, QUEUE.md now keeps Heavy lifting 10+ builds deep (H8-H11 added), has a "When the road is empty" fallback list so helpers never sit idle, and "Saving Claude's usage" rules (also in CLAUDE.md). Evan said yes to backup merging: his dad's AIs may merge others' green PRs after 6 hours without a Claude reviewer (QUEUE.md "Backup merging").
+- 2026-10-09 Claude (Priorities and direction): after the review pile-up, QUEUE.md now keeps Heavy lifting 10+ builds deep (H8-H11 added), has a "When the road is empty" fallback list so helpers never sit idle, and "Saving Claude's usage" rules (also in CLAUDE.md). Evan said yes to backup merging: his dad's AIs may merge others' green PRs after 2 hours without a Claude reviewer (QUEUE.md "Backup merging").
 - 2026-10-09 Codex (Adam / abarish-dev): RB1.4 phone pass in PR #116, full CI and before/after pictures pass; updated with latest main, fresh CI pending. Guest branch, own noreply, no merge or version bump.
 - 2026-10-09, Codex for Adam / abarish-dev: AC1 Storm Front built on guest/storm-front, PR #119. Fresh browser checks and cabinet captures run in GitHub; no merge or version bump. #104 and #116 updated to main, green and ready.
 

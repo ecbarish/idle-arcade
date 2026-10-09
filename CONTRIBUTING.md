@@ -35,7 +35,7 @@ Explain everything to me in plain words; I'm not a programmer.
 3. GitHub runs the automatic checks (a green tick means they passed).
 4. Evan's review assistant (lane R) reads the change, tests it and merges it when it's good, or leaves a comment
    saying what to change. Ask your AI to answer the comments and push the fixes to the same branch.
-   If no Claude reviewer has acted for 6 hours, your AI may merge **someone else's** green pull request under
+   If no Claude reviewer has acted for 2 hours, your AI may merge **someone else's** green pull request under
    "Backup merging" in docs/QUEUE.md; never its own.
 5. Once merged, the change is live at https://ecbarish.github.io/idle-arcade/ within a few minutes.
 
