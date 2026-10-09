@@ -194,6 +194,7 @@ docs/lore/catalogue.md (T37's Reach beast mappings) and docs/proposals/creature-
   Wildbond creature), without changing combat numbers. Old saves load; tests/run.html passes.
 
 ### T44: Accessibility pass on the browser games (L10)
+- [x] Built by Codex, 2026-10-08; PR #71 for review, not merged. Verified fixes and remaining limitations: docs/accessibility.md.
 docs/accessibility.md. Branch `codex/accessibility`.
 - Keyboard play everywhere (Realmbound, Diamond Career, Otherworld, the arcade launcher), visible focus, colour
   contrast at least AA for text, readable sizes with the shared text-size setting, labels for screen readers on

@@ -30,6 +30,9 @@
     'background:var(--dlg-bg);border:3px solid var(--dlg-line);border-radius:var(--dlg-radius);padding:10px 14px 10px 10px;',
     'box-shadow:0 4px 0 var(--dlg-shadow);cursor:pointer;min-height:84px;color:var(--dlg-ink)}',
     '.dlg[hidden]{display:none}',
+    '.dlg .dlg-reader{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}',
+    '.dlg .dlg-continue{font:inherit;font-size:calc(14px * var(--arc-text,1));margin-top:6px;padding:5px 14px;min-height:40px;border:2px solid var(--dlg-line);border-radius:8px;background:var(--dlg-btn);color:var(--dlg-btn-ink)}',
+    '.dlg .dlg-continue[hidden]{display:none}',
     '.dlg .dlg-face{position:static;inset:auto;width:64px;height:64px;flex:none;border-radius:calc(var(--dlg-radius) - 4px);',
     'border:2px solid var(--dlg-line);image-rendering:pixelated;background:#eee}',
     '.dlg.right{flex-direction:row-reverse;padding:10px 10px 10px 14px}.dlg.right .dlg-body{text-align:right}',
@@ -128,38 +131,44 @@
   function create(o) {
     addStyle();
     var el = document.createElement('div');
-    el.className = 'dlg dlg-' + (o.theme || 'wildbond'); el.hidden = true; el.setAttribute('role', 'dialog'); el.setAttribute('aria-live', 'polite');
+    el.className = 'dlg dlg-' + (o.theme || 'wildbond'); el.hidden = true; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Conversation'); el.tabIndex = -1;
     el.innerHTML = '<canvas class="dlg-face" width="64" height="64" aria-hidden="true"></canvas><div class="dlg-body"><b class="dlg-who"></b>' +
-      '<span class="dlg-role"></span><p class="dlg-say"></p><div class="dlg-choices"></div></div><span class="dlg-more" aria-hidden="true">▼</span>';
+      '<span class="dlg-role"></span><p class="dlg-say" aria-hidden="true"></p><p class="dlg-reader" role="status" aria-live="polite" aria-atomic="true"></p><div class="dlg-choices"></div><button type="button" class="dlg-continue">Continue</button></div><span class="dlg-more" aria-hidden="true">▼</span>';
     o.host.appendChild(el);
     var face = el.querySelector('.dlg-face'), say = el.querySelector('.dlg-say'), choiceBox = el.querySelector('.dlg-choices');
     var get = o.get, set = o.set, reduce = false;
     try { reduce = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
-    var api = {};
+    var api = {}, previousFocus = null;
+    var nextButton = el.querySelector('.dlg-continue');
+    nextButton.addEventListener('click', function (e) { e.stopPropagation(); api.advance(); });
+    el.addEventListener('keydown', function (e) { if (window.Settings) Settings.trapTab(e, el); });
     function split(who) { var i = who.indexOf(':'); return i > 0 && who[0] !== '@' ? [who.slice(0, i), who.slice(i + 1)] : [who, '']; }
     function paint(who, open) {
       var p = split(who), key = p[0], mood = p[1], c = face.getContext('2d'); if (o.ctx) c = o.ctx(c);
       c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, 64, 64); c.imageSmoothingEnabled = false;
       face.hidden = !key; if (!key) return;
       if (key[0] === '@') { if (o.creature) o.creature(c, key.slice(1)); return; }
-      var look = o.cast(key); if (look) drawPortrait(c, look, { mood: mood, open: open, blink: !!(get() && get().blink > 0) });
+      var look = o.cast(key); if (look) drawPortrait(c, look, { mood: mood, open: open, blink: !reduce && !!(get() && get().blink > 0) });
     }
     function showLine() {
       var T = get(), who = T.lines[T.i][0], key = split(who)[0], look = key && key[0] !== '@' ? o.cast(key) : null;
       el.classList.toggle('narr', !key); el.classList.toggle('right', T.i % 2 === 1 && T.alternate);
       el.querySelector('.dlg-who').textContent = look ? look.name : key && key[0] === '@' && o.creatureName ? o.creatureName(key.slice(1)) : '';
       el.querySelector('.dlg-role').textContent = look ? look.title || '' : '';
+      el.querySelector('.dlg-reader').textContent = (look ? look.name + ': ' : '') + T.lines[T.i][1];
+      nextButton.hidden = false; choiceBox.innerHTML = '';
       T.shown = reduce ? 1e9 : 0; T.wait = 0; el.classList.remove('asking'); paint(who, false);
     }
     function last() { var T = get(); return T && T.i >= T.lines.length - 1; }
     function finish(choice) {
       var T = get(); if (!T) return; var done = T.done; set(null); el.hidden = true; el.classList.remove('asking');
+      if (previousFocus && previousFocus.isConnected) previousFocus.focus();
       if (o.onEnd) o.onEnd(); if (done) done(choice === undefined ? 0 : choice);
     }
     function ask() {
-      var T = get(); el.classList.add('asking'); choiceBox.innerHTML = '';
+      var T = get(); el.classList.add('asking'); nextButton.hidden = true; if (document.activeElement === nextButton) el.focus(); choiceBox.innerHTML = '';
       T.choices.forEach(function (label, i) {
-        var b = document.createElement('button'); b.type = 'button'; b.innerHTML = label + '<kbd>' + (i + 1) + '</kbd>';
+        var b = document.createElement('button'); b.type = 'button'; b.innerHTML = label + '<kbd aria-hidden="true">' + (i + 1) + '</kbd>';
         b.addEventListener('click', function (e) { e.stopPropagation(); api.choose(i); }); choiceBox.appendChild(b);
       });
     }
@@ -167,9 +176,10 @@
     api.play = function (lines, done, opts) {
       opts = opts || {};
       if (!lines || !lines.length) { if (done) done(0); return; }
+      if (!get()) previousFocus = document.activeElement;
       set({ lines: lines.map(function (l) { return [l[0], o.fill ? o.fill(l[1]) : l[1]]; }), i: 0, shown: 0, wait: 0, done: done,
         choices: opts.choices || null, alternate: !!opts.alternate, blink: 0, blinkT: 2 + Math.random() * 2 });
-      el.hidden = false; showLine(); if (o.onStart) o.onStart();
+      el.hidden = false; showLine(); el.focus(); if (o.onStart) o.onStart();
     };
     api.advance = function () {
       var T = get(); if (!T) return; var len = T.lines[T.i][1].length;
@@ -197,7 +207,8 @@
     }, 45);
     el.addEventListener('click', function (e) { e.stopPropagation(); if (!el.classList.contains('asking')) api.advance(); });
     if (o.keys !== false) document.addEventListener('keydown', function (e) {
-      if (!get() || (e.target.matches && e.target.matches('input,textarea'))) return;
+      if (!get() || e.target.closest('.arc-set-bg,dialog[open]') || (e.target.matches && e.target.matches('input,textarea'))) return;
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('button,a,summary,select')) return;
       var asking = el.classList.contains('asking'), n = Number(e.key);
       if (asking && n >= 1 && n <= 9) api.choose(n - 1);
       else if (e.key === ' ' || e.key === 'Enter') { if (asking) api.choose(0); else api.advance(); }

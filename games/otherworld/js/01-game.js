@@ -83,7 +83,7 @@ function toBetween(ending, learned) {
   D.play(lines, () => chooseWorld());
 }
 const panel = () => document.getElementById('choose');
-function overlay(html) { const p = panel(); p.innerHTML = html; p.hidden = false; p.querySelector('button:not([disabled])')?.focus(); }
+function overlay(html) { const p = panel(); p.innerHTML = html; p.hidden = false; p.setAttribute('role','dialog'); p.setAttribute('aria-label',p.querySelector('h2')?.textContent || 'Choose your life'); p.querySelector('button:not([disabled])')?.focus(); }
 function chooseWorld() {
   overlay(`<h2>Choose a world</h2><p class="sub">The Archivist spreads three lives across the table, each a different kind of story.</p><div class="cards">` +
     Object.entries(WORLDS).map(([id, w]) => `<button class="card" data-world="${id}" ${w.start ? '' : 'disabled'} style="--c:${w.col}">
@@ -131,9 +131,9 @@ function showStatus() {
     <div class="st-row"><span>Guild rank</span><b>F</b></div><div class="st-row"><span>Gift</span><b>${g.name}</b></div>
     <div class="st-note">${g.good}<br><i>${g.cost}</i></div>${l.silver ? `<div class="st-row"><span>Silver</span><b>${l.silver}</b></div>` : ''}
     ${Object.keys(S.mem).length ? `<div class="st-note">Soul memories: ${Object.keys(S.mem).length}</div>` : ''}<button class="st-close" data-close>Close</button>`;
-  el.hidden = false;
+  el.hidden = false; el.querySelector('button')?.focus();
 }
-document.addEventListener('click', e => { if (e.target.closest('#status [data-close]')) document.getElementById('status').hidden = true; if (e.target.closest('#statusBtn')) showStatus(); });
+document.addEventListener('click', e => { if (e.target.closest('#status [data-close]')) { document.getElementById('status').hidden = true; if (sceneState) D.el.focus(); else document.getElementById('statusBtn').focus(); } if (e.target.closest('#statusBtn')) showStatus(); });
 
 /* ---------------------------------------------------------------- the corner of the screen */
 function renderHUD() {

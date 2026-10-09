@@ -1,0 +1,11 @@
+/* T44: focus is visible against both light paper and dark worlds. */
+:focus-visible{outline:3px solid #fff!important;outline-offset:3px;box-shadow:0 0 0 6px #162027!important}
+:root.arc-reduce *, :root.arc-reduce *::before, :root.arc-reduce *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+.dlg.dlg .dlg-say{font-size:calc(16px * var(--arc-text,1));line-height:1.5}
+.dlg.dlg .dlg-role{font-size:calc(13px * var(--arc-text,1))}
+.dlg.dlg .dlg-who{font-size:calc(19px * var(--arc-text,1))}
+.dlg.dlg .dlg-choices button{font-size:calc(15px * var(--arc-text,1));line-height:1.4;min-height:44px}
+.dlg.dlg{background:var(--dlg-bg-solid);max-height:calc(100dvh - 150px);overflow:auto}
+@media(min-width:1700px){.dlg.dlg .dlg-say{font-size:calc(20px * var(--arc-text,1))}.dlg.dlg .dlg-choices button{font-size:calc(18px * var(--arc-text,1))}}
+
+[hidden]{display:none!important}

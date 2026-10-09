@@ -30,11 +30,12 @@ for (const method of ['skip', 'advance']) {
 }
 new MutationObserver(paintChoiceLocks).observe(D.el.querySelector('.dlg-choices'), { childList: true });
 document.addEventListener('keydown', e => {
+  if (e.target.closest('.arc-set-bg,button:not(.dlg-choices button):not(.dlg-continue)')) return;
   if (!sceneState || e.target.matches?.('input,textarea,select') || !panel().hidden || !document.getElementById('status').hidden) return;
   const asking = D.el.classList.contains('asking');
   if (asking && /^[1-9]$/.test(e.key)) { e.preventDefault(); D.choose(Number(e.key) - 1); }
   else if (e.key === ' ' || e.key === 'Enter') {
-    if (asking && e.target.closest?.('.dlg-choices button')) return; // native focused button wins
+    if (e.target.closest?.('.dlg button')) return; // native focused button wins
     e.preventDefault();
     if (asking) { const i = choicesOf(NODES[S.life.at]).findIndex(c => choiceReady(c)); if (i >= 0) D.choose(i); }
     else D.advance();

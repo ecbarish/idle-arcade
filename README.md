@@ -39,6 +39,9 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+### 2026-10-08: browser reading and keyboard accessibility (T44; pending review)
+- Shared dialogue and Settings respect focused controls; complete scene lines are available to screen readers. Realmbound has named walking destinations inside its world. Larger text, visible focus and opaque reading surfaces improve the launcher, Realmbound, Diamond Career and Otherworld. [Verification and remaining gaps](docs/accessibility.md). No release version change.
+
 - Realmbound (2026-10-08): shared creature species and short hunter observations appear beneath beast targets, covering all 31 zone beasts and 17 dungeon encounters. Local names, palettes, pets and combat stay the same; the normalized catalogue exports from Wildbond data.
 
 - Realmbound (2026-10-08): walk into the Trainer and Stable, arrange guild work at the board and supplies at the chest, and meet quest givers in town. Carried pages keep records; service choices happen over the world. Old saves and existing prices are preserved.

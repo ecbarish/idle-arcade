@@ -8,10 +8,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../../shared/accessibility.css">
 </head>
 <body>
 <main class="stage" id="stage" aria-label="Otherworld">
-  <canvas id="scene" aria-hidden="true"></canvas>
+  <canvas id="scene" role="img" aria-label="The world around your current conversation" aria-describedby="where"></canvas>
   <header class="hud">
     <div class="hud-left"><a class="home" href="../../index.html">← Arcade</a><span id="where" class="where">The Between</span></div>
     <div class="hud-right" id="hudRight"><button id="statusBtn" class="hbtn" hidden>Status</button><span class="version-label">v0.3.0</span>
@@ -31,6 +32,7 @@
 <script src="js/03-lanthorn.js"></script>
 <script src="js/04-hearthmere.js"></script>
 <script src="js/05-ashen.js"></script>
+<script src="js/07-accessibility.js"></script>
 <script src="js/99-boot.js"></script>
 </body>
 </html>

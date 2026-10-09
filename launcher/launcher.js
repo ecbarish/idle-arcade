@@ -295,7 +295,7 @@
     if (mode !== 'road' || e.target.closest('[data-id]')) return; const r = cv.getBoundingClientRect(); ROAD.target = ROAD.cam + (e.clientX - r.left); ROAD.go = null;
   });
   addEventListener('keydown', e => {
-    if (mode === 'scene' || (!root.contains(document.activeElement) && document.activeElement !== document.body)) return;
+    if (e.target.closest('button,input,select,textarea,.arc-set-bg') || mode === 'scene' || (!root.contains(document.activeElement) && document.activeElement !== document.body)) return;
     const w = walkerOf(), k = e.key; if (k === 'ArrowLeft' || k === 'a') { w.keys.left = true; e.preventDefault(); } if (k === 'ArrowRight' || k === 'd') { w.keys.right = true; e.preventDefault(); }
     if ((k === 'Enter' || k === ' ') && hover && document.activeElement === document.body) { const g = byId(hover); if (g && g.href) location.href = g.href; }
   });

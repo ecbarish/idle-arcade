@@ -29,11 +29,11 @@
   apply();
   var css = '.arc-reduce *,.arc-reduce *::before,.arc-reduce *::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition:none!important;scroll-behavior:auto!important}' +
     '.arc-set-bg{position:fixed;inset:0;z-index:9990;background:rgba(8,10,18,.55);display:flex;align-items:center;justify-content:center;padding:16px}.arc-set-bg[hidden]{display:none}' +
-    '.arc-set{width:min(460px,100%);max-height:88vh;overflow:auto;background:#1a1f2c;color:#eef1f7;border:1px solid #3a4560;border-radius:14px;padding:16px 18px;font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 12px 40px rgba(0,0,0,.5)}' +
-    '.arc-set h2{margin:0 0 10px;font-size:19px}.arc-set-row{margin:12px 0}.arc-set-row>div:first-child{font-weight:600;margin-bottom:6px}' +
-    '.arc-set-opts{display:flex;flex-wrap:wrap;gap:6px}.arc-set-opts button{font:inherit;font-size:14px;min-height:40px;padding:6px 12px;border-radius:8px;border:1px solid #47526d;background:#232a3a;color:#eef1f7;cursor:pointer}' +
+    '.arc-set{width:min(460px,100%);max-height:88vh;overflow:auto;background:#1a1f2c;color:#eef1f7;border:1px solid #3a4560;border-radius:14px;padding:16px 18px;font:calc(15px * var(--arc-text,1))/1.45 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 12px 40px rgba(0,0,0,.5)}' +
+    '.arc-set h2{margin:0 0 10px;font-size:calc(19px * var(--arc-text,1))}.arc-set-row{margin:12px 0}.arc-set-row>div:first-child{font-weight:600;margin-bottom:6px}' +
+    '.arc-set-opts{display:flex;flex-wrap:wrap;gap:6px}.arc-set-opts button{font:inherit;font-size:inherit;min-height:40px;padding:6px 12px;border-radius:8px;border:1px solid #47526d;background:#232a3a;color:#eef1f7;cursor:pointer}' +
     '.arc-set-opts button[aria-pressed="true"]{background:#f2c14e;color:#1a1020;border-color:#f2c14e;font-weight:700}.arc-set-opts button:focus-visible,.arc-set-x:focus-visible{outline:2px solid #8be0d6;outline-offset:2px}' +
-    '.arc-set-note{font-size:13px;opacity:.8;margin:4px 0 0}.arc-set-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px}' +
+    '.arc-set-note{font-size:calc(13px * var(--arc-text,1));opacity:1;margin:4px 0 0}.arc-set-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px}' +
     '.arc-set-x{font:inherit;min-height:40px;padding:6px 14px;border-radius:8px;border:0;background:#f2c14e;color:#1a1020;font-weight:700;cursor:pointer}';
   /* Phones and touch screens (L3, 2026-10-07): every button, menu and tab at least 40px tall so a thumb hits it;
      desktop layouts are unchanged. Every game loads this file, so one rule covers the arcade. */
@@ -50,7 +50,7 @@
         set: function (v) { prefs.motion = v; store(); }, note: 'Reduced turns off flashes, falling particles and sweeping movement. For every game; applies when the game reloads.', reload: true }
     ]);
     var btn = document.createElement('button'); btn.type = 'button'; btn.className = (o.btnClass || '') + ' arc-set-btn'; btn.textContent = '⚙ Settings';
-    btn.setAttribute('aria-haspopup', 'dialog');
+    btn.setAttribute('aria-haspopup', 'dialog'); btn.setAttribute('aria-expanded', 'false');
     var bg = document.createElement('div'); bg.className = 'arc-set-bg'; bg.hidden = true;
     var box = document.createElement('div'); box.className = 'arc-set'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', 'Settings');
     bg.appendChild(box);
@@ -66,9 +66,9 @@
       h += '<div class="arc-set-foot">' + (needReload ? '<button type="button" class="arc-set-x" data-reload>Reload now</button>' : '<span></span>') + '<button type="button" class="arc-set-x" data-close>Done</button></div>';
       box.innerHTML = h;
     }
-    var lastFocus = null;
-    function open() { lastFocus = document.activeElement; render(); bg.hidden = false; var b = box.querySelector('[aria-pressed="true"]') || box.querySelector('button'); if (b) b.focus(); }
-    function close() { bg.hidden = true; if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+    var lastFocus = null, inertBefore = [];
+    function open() { if (!bg.hidden) return; btn.setAttribute('aria-expanded', 'true'); lastFocus = document.activeElement; render(); bg.hidden = false; inertBefore = Array.from(document.body.children).filter(function (el) { return el !== bg; }).map(function (el) { var prior = el.inert; el.inert = true; return [el, prior]; }); var b = box.querySelector('[aria-pressed="true"]') || box.querySelector('button'); if (b) b.focus(); }
+    function close() { bg.hidden = true; btn.setAttribute('aria-expanded', 'false'); inertBefore.forEach(function (entry) { entry[0].inert = entry[1]; }); inertBefore = []; if (lastFocus && lastFocus.focus) lastFocus.focus(); }
     btn.addEventListener('click', open);
     bg.addEventListener('click', function (e) {
       if (e.target === bg || e.target.closest('[data-close]')) { close(); return; }
@@ -78,7 +78,7 @@
       r.set(v); if (r.reload) needReload = (prefs.motion === 'on' || (prefs.motion === 'auto' && deviceReduce())) !== bootReduce; // offer a reload only if it changes something
       render(); var again = box.querySelector('[data-r="' + b.dataset.r + '"][data-o="' + b.dataset.o + '"]'); if (again) again.focus();
     });
-    box.addEventListener('keydown', function (e) { e.stopPropagation(); if (e.key === 'Escape') close(); }); // keys never reach the game
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); trapTab(e, box); if (e.key === 'Escape') close(); }); // keys never reach the game
     bg.addEventListener('keyup', function (e) { e.stopPropagation(); });
     document.addEventListener('keydown', function (e) { if (!bg.hidden && e.key === 'Escape') close(); });
     function mount() {
@@ -89,5 +89,12 @@
     if (document.body) mount(); else document.addEventListener('DOMContentLoaded', mount);
     return { open: open, close: close, button: btn, refresh: function () { if (!bg.hidden) render(); } };
   }
-  window.Settings = { create: create, prefs: prefs, reduced: function () { return bootReduce; } };
+  function trapTab(e, box) {
+    if (e.key !== 'Tab') return;
+    var targets = Array.from(box.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),summary,[tabindex="0"]')).filter(function (el) { return !el.closest('[inert]') && el.getClientRects().length; });
+    if (!targets.length) { e.preventDefault(); box.tabIndex = -1; box.focus(); return; }
+    var first = targets[0], last = targets[targets.length - 1];
+    if (targets.indexOf(document.activeElement) < 0 || (e.shiftKey && document.activeElement === first) || (!e.shiftKey && document.activeElement === last)) { e.preventDefault(); (e.shiftKey ? last : first).focus(); }
+  }
+  window.Settings = { create: create, trapTab: trapTab, prefs: prefs, reduced: function () { return bootReduce; } };
 })();
