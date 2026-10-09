@@ -44,4 +44,5 @@ jobs:
           name: wd3-screens
           path: |
             wildbond-godot/frames/wd3/*.png
+            wildbond-godot/frames/wd4a/*.png
             wd3-godot.log
