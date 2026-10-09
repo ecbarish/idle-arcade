@@ -51,7 +51,8 @@ Feels like a game (docs/wildbond-plan.md principles); everything in the game win
 no windfalls; earned automation; old saves load; all test pages pass (eight browser pages, plus the Godot checks for
 Claude: `node tools/run-all-checks.cjs` runs all ten, and GitHub runs it on every pull request, so never merge a red
 cross); one README changelog line; Claude bumps versions on merge. The craft rules (saving, sound formats, Godot
-structure, when to rebuild `play/`) are in docs/learning/.
+structure, when to rebuild `play/`) are in docs/learning/. **Playable by a newcomer:** before friends see a new game or a
+big step, someone who didn't build it scores it with docs/PLAYTEST.md's six questions (no 1s, 13 or more).
 
 ### Owners
 - **Claude:** reviews and merges; the Godot games (`wildbond-godot/`, `starfall-godot/`) and their web previews
@@ -197,22 +198,24 @@ asking for help; rules only).
 - [ ] RB3.3 [any]
 Realmbound's Godot question answered by Evan, then a plan (START-HERE question 2).
 
-### Diamond Career (browser)
-**DC-M1: the first season (D1, done through v0.4.0).**
-- [x] At-bats, contracts, payday, home, the first month, the
-game window, the road trip.
-**DC-M2: a professional career (D2).**
-- [ ] DC2.1 [ChatGPT] A full season with standings, roles that change with
-form, and an end-of-season review.
-- [ ] DC2.2 [ChatGPT] Relationships: a few teammates and a rival with their own
-arcs.
-- [ ] DC2.3 [ChatGPT] Awards and big-moment at-bats (playoffs).
-- [ ] DC2.4 [ChatGPT] Purchases with small,
-honest effects (needs Evan: START-HERE; default: comfort only, no stat boosts).
-**DC-M3: beyond playing (D3).**
-- [ ] DC3.1 [ChatGPT] Retirement and a coaching or front-office path on the same
-league history. **DC-M4:**
-- [ ] DC4.1 blocked: needs Evan (the second sport).
+### Diamond Manager (browser; the baseball game, reworked 2026-10-09)
+Evan, 2026-10-09: the batting game was too hard to read and to hit; make it one you manage (ratings, trades,
+contracts, hiring, stadium upgrades, watching games) and plan a Retro Bowl-style football game. Full plan and the
+deliverables with their details: [plans/sports-management.md](plans/sports-management.md). The old DC2-DC4 career
+deliverables are retired; the batting prototype stays in games/diamond-career/ off the shelf.
+- [x] DM1 [Claude] The first playable season (v0.1.0, PR #110).
+- [ ] DM2 [any] Playability pass: two seasons as a first-timer, desktop and phone, fix the top three problems.
+- [ ] DM3 [any] Hiring coaches. - [ ] DM4 [any] Player morale and stories. - [ ] DM5 [any] The ballpark you see grow.
+- [ ] DM6 [any] A draft and a farm club. - [ ] DM7 [any] Records and history. - [ ] DM8 [later] Step into the big moment.
+
+### Lantern Bowl (browser; American football in the Retro Bowl spirit, our own code and art)
+Evan said yes 2026-10-09. Plan: [plans/sports-management.md](plans/sports-management.md) "Game 2".
+- [ ] LB0 [any] One-page pitch with three mock screens. - [ ] LB1 [any] shared/sports-office.js from Diamond Manager.
+- [ ] LB2 [any] One drive, playable. - [ ] LB3 [any] One full game. - [ ] LB4 [any] Season and office. - [ ] LB5 [any] Playability pass.
+
+### Lantern Ice (hockey, after football; Evan 2026-10-09: baseball, football and hockey are his favourites, all sports eventually)
+Plan: [plans/sports-management.md](plans/sports-management.md) "Game 3". Reuses shared/sports-office.js (LB1).
+- [ ] HK0 [any] Pitch. - [ ] HK1 [any] Hockey simulation. - [ ] HK2 [any] Shootout moment. - [ ] HK3 [any] Season, lines, office. - [ ] HK4 [any] Playability pass.
 
 ### Otherworld (browser)
 **OW-M1: three lives (done through v0.3.0).**
@@ -253,7 +256,7 @@ browser (E4). (claimed: Grok, 2026-10-09, grok/studio-text-browser; Lane C task 
   first, then festivals, interiors, the ranch; one system per commit, checks passing.
 - [ ] AR2.11 [any] Hearing from players (GR-9): a "Tell us" in every game's settings that opens a prefilled GitHub
   issue; a 10-minute playtest script on Come Play.
-- [ ] AR2.12 [any] The front door (GR-12): the hub leads with the Godot games, Starfall Guild and Primordial move to
+- [x] AR2.12 [any] The front door (done 2026-10-09, Claude, PR #109: the hall only, sections by kind, how to play on every card) (GR-12): the hub leads with the Godot games, Starfall Guild and Primordial move to
   Classic, the old homepage vote closes; START-HERE versions corrected (Claude).
 **AR-M3: the walk-in arcade and friends.**
 - [ ] AR3.1 [Claude] Walk-in arcade steps 1-2 (V11).
@@ -306,6 +309,12 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 - **2026-10-09, WD2 data (Codex, PR #113):** the roster has 104 base species and three hybrids added by the ranch module. Validate the full exporter, not just 00-data.js; all 107 preserve their original gameplay fields. Drawing hints stay out of creature saves; the appearance contract is in docs/lore/wildbond-looks.md.
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, AR2.12 the front door (Claude, website thread):** three homepage styles split the effort and the
+  living world could only fit four or five games, so a style that holds every game wins: the arcade hall is now the
+  only one (Evan's call). Players could not tell what a game was or how to control it, so every card now says what you
+  do and the controls, and the games sit in sections by kind (games.js `ArcadeKinds`); a new game needs a `kind`,
+  `goal` and `controls` (tools/launcher-checks.cjs counts them). Canvas text inherits `textAlign` from earlier draws:
+  set it in every label helper.
 - **2026-10-09, Evan's playtest (Claude, Wildbond builder):** "see-through roofs": the barn's picture is taller than
   its footprint in the map data, so the row behind it was walkable and you walked across the roof. Now every
   building's picture is listed (`buildings()`) and its roof rows are closed, with a check. "Controls not clear": a How
@@ -316,6 +325,15 @@ line or two, with the page that holds the detail.
   button, a key or a gamepad all mean Talk, and the phone button names what it will do. The pad hides whenever a menu
   is open, because menus are better tapped directly. Settings live on the device, not in the journey save.
   godot-practices.md rules 2 and 3 are now done.
+- **2026-10-09, DM1 (Claude, sports thread):** Evan couldn't work out how to hit in Diamond Career: a game can pass
+  every rules check and still not be playable. So every sports deliverable now ends with a playability pass (DM2,
+  LB5) by someone playing as a first-timer, and the manager game's first screen says what to press and why. A
+  ratings-only simulation needed tuning against real baseball numbers (runs a game, batting average); the checks pin
+  those ranges so a later change can't drift.
+- **2026-10-09, playtest pass 1 (Claude, Playtester thread):** our tests prove the code works, not that a newcomer can
+  play. Diamond Career passed its tests and still failed a first-time player (the game hid behind "Talk to Iona",
+  the scale was off, two at-bats a game). Actioned: docs/PLAYTEST.md's bar is now part of the quality bar, and its
+  fixes went to lanes W, S and A and the website and sports threads.
 - **2026-10-09, WD2 part 1 (Claude, Wildbond builder):** new shapes are cheapest where a description already asks for
   one (a "wyrm", roots, a shell, dusk drifting), and a Godot-side table (figures.gd `SHAPE_FOR`) lets them land without
   touching the browser's shared families. A pixel shape needs a look at 2x before shipping: the first moth read as a box.

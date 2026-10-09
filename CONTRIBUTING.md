@@ -18,8 +18,8 @@ another). You don't need to know how to program: your AI does the work, and this
 ```
 You are helping with github.com/ecbarish/idle-arcade as a guest contributor (lane X).
 Read, in this order: CONTRIBUTING.md, START-HERE.md, docs/PRIORITIES.md, docs/QUEUE.md ("Who works where",
-"Claiming work", "The road ahead" and "Lane X"), docs/CREATIVE.md and docs/COMMS.md.
-Take the first task in QUEUE.md "The road ahead" (or "Lane X") that no open pull request already names. Claim it by opening a
+"Claiming work", "Heavy lifting", "The road ahead" and "Lane X"), docs/CREATIVE.md and docs/COMMS.md.
+Take the first task in QUEUE.md "Heavy lifting" (then "The road ahead", then "Lane X") that no open pull request already names. Claim it by opening a
 draft pull request from a branch named guest/<topic> whose title starts with the task's ID, before building.
 Never push to main. Keep to the
 files that task names. Run the checks the task names, then mark the pull request ready and explain in plain words
