@@ -594,6 +594,9 @@ func _check_doors() -> void:
 			if not solid(tile_at(back)):
 				me.path = [back]                       # step back from the edge
 			return
+		if map_name == "spire" and ex.to == "league":
+			spire_active = false
+			spire_floor = 0
 		_go(ex.to, Vector2i(int(ex.x), int(ex.y)), DIRS.get(ex.get("dir", "down"), Vector2i.DOWN))
 
 func _team_has_element(element: String) -> bool:
@@ -2822,7 +2825,7 @@ func _spire_fight() -> void:
 	var data := _spire_floor_data(floor)
 	var foes: Array = []
 	for id in data.team:
-		foes.append(R.make(id, int(data.level), { "rar": mini(3, 1 + floor / 10) }, rng))
+		foes.append(R.make(id, int(data.level), { "rar": mini(3, 1 + int(floor / 10)) }, rng))
 		seen[id] = true
 	battle_story = "spire:" + str(floor)
 	battle.max_level = 100
@@ -2850,6 +2853,9 @@ func _after_spire(floor: int, result: String) -> void:
 		say("orla", "Talk to me when your partners are ready for the next floor.")
 
 func _start_warden_rematch(n: Mover) -> void:
+	if team.filter(func(c): return c.hp > 0).is_empty():
+		say(n.id, "Your partners need rest before we ask anything more of them.")
+		return
 	var d: Dictionary = npc_info[n.id].data
 	var tier := int(rematch_wins.get(n.id, 0)) + 1
 	var team_data: Array = d.get("team", [])
