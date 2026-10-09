@@ -100,6 +100,13 @@ Branch: codex/wildbond-final-truth-audit, from latest main.
 - Preserve the decided account and future hooks; identify any residual ambiguity explicitly rather than secretly deciding identity/fate. No runtime/Godot/exporter/save/version changes. All eight pages pass; source addresses verified, normal claim/README/Session/COMMS notes. Claude reviews this before part 2.
 - [x] T55 audit ready in PR #82: all ledger groups, two chronology risks, one identity ambiguity and exactly three shared observation proposals. 56 source/reference checks and eight browser suites pass; no reveal dialogue or Godot edits.
 
+### T56: Wildbond areas 5-8 and league pacing (WB3.6)
+Why: Claude requests expected team levels for Halen, Rysa, the courts and Avenne, using current Godot rules.
+Branch: codex/wildbond-late-pacing, stacked after T55 from current main.
+- Add a reproducible diagnostic outside wildbond-godot: copy the current unmodified battle/rules/figures and exported data to a disposable project, drive actual battles and XP, never use player saves or write into Godot/play.
+- Record current teams/caps and compare ordinary entry-level teams, several seeded potential/trait rolls and a lower-powered team. Model the two route trainers, current staged story fights and wild training in areas 5-8; record before/after levels, defeats and wild wins needed, not invented human completion hours. League uses actual full rests between courts and resets on loss.
+- Include a no-extra-training route to expose deficits, and a bounded train-to-ace policy to measure the grind needed. Label synthetic starting fixtures, command policy, evolution, missing systems and differences from Classic. Verify browser/export/Godot data and numeric rules; report drift instead of silently assuming parity.
+- Write docs/wildbond-godot-pacing.md plus machine-readable results under docs/measurements; tests/tools may be new or changed. No gameplay tuning, engine/preview/save/version edits. All eight browser pages pass. Normal README/Session/COMMS/project/queue/path notes; open PR, never merge.
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a

@@ -46,6 +46,7 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 
 | ID | Project | Size | Status | Notes |
 |---|---|---|---|
+| WB3.6-pacing | Final-four-area and league pacing (T56) | S | claimed: Codex, 2026-10-09, codex/wildbond-late-pacing | Diagnostic copies of current Godot rules/battles; report before tuning |
 | WB4.4b-audit | Clue fit and three late observations (T55) | S | ready: PR #82, Codex, 2026-10-09 | Writer doc first; no reveal text before Claude review |
 
 ## How to use this list
