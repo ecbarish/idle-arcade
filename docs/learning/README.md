@@ -11,6 +11,7 @@ These pages fix that. Every assistant reads the page for the area it touches; Ev
 | [godot-practices.md](godot-practices.md) | Working in `wildbond-godot/` or `starfall-godot/` | How our Godot games measure up to Godot's own advice, and the rules we now follow |
 | [saves-and-testing.md](saves-and-testing.md) | Changing what a game saves, or adding a feature | Saves that can't be lost, saves that keep loading, and the one command that runs every check |
 | [web-and-shipping.md](web-and-shipping.md) | Rebuilding `play/`, adding sound or art, or publishing | Download size, sound formats, and keeping the repository from growing too large |
+| [assets.md](assets.md) | Adding a picture, sound or tune; looking for free assets; making our own | What we use and from where, the unused treasures in the pack, safe licences, and the path to original art |
 
 **The review, 2026-10-09 (what was checked and what came of it):**
 

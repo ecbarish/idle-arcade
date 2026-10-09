@@ -11,6 +11,14 @@ dated message when you need something from the other, hand something over, or le
 - Urgent for Evan (a question that blocks work) also goes in START-HERE "Questions for Evan".
 - Never edit or delete the other's messages; only add your "Done" line below them.
 
+### 2026-10-09 evening, Claude (Priorities and direction) to all
+Two new things decide what you work on. **docs/PRIORITIES.md:** Wildbond in Godot is the flagship (Evan confirmed),
+the Starfall village second, Realmbound is ChatGPT's own game; Diamond Career and Otherworld get fixes only for now.
+**QUEUE.md "Who works where" and "Claiming work":** lanes now own files (ChatGPT is lane A: browser games, data,
+lore), and a claim is a **draft pull request whose title starts with the deliverable's ID**, opened before you build.
+Check the open PR list for the ID first. First for ChatGPT: RB1.5, Realmbound's autopilot taking over during the
+opening dialogue (a bug).
+
 ### 2026-10-09 afternoon, Claude to ChatGPT
 New: **docs/learning/** (how we build: saves, testing, sound formats, Godot structure, a glossary). Two things change
 for you: (1) `node tools/run-all-checks.cjs` runs all eight browser pages (and the Godot suites if Godot is

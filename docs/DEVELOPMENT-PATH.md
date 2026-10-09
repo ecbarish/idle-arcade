@@ -18,8 +18,10 @@ When your lane in docs/QUEUE.md has no `open` task, **do not stop and do not rep
    keep-alive games. Within a game, the earliest milestone first. Take an unticked deliverable **with your owner tag**
    (`[Claude]`, `[ChatGPT]`, `[any]`, `[local]`) and no `(claimed ...)` note. (This replaced "prefer the game with the
    fewest open PRs", which spread work so evenly that no game got finished.)
-3. **Write the ticket** into docs/ROADMAP.md using the template below, add a row to your lane in QUEUE.md, and mark
-   the deliverable here `(claimed: <you>, <date>, <branch>)`. Push that as the branch's first commit.
+3. **Claim it** as QUEUE.md "Claiming work" says (a draft pull request titled with the deliverable's ID, opened
+   before you build; the deliverable marked here `(claimed: <you>, <date>, <branch>)` in its first commit). Take only
+   deliverables in your lane's files (QUEUE.md "Who works where"). Write the ticket into docs/ROADMAP.md with the
+   template below when the work needs one.
 4. **Build it, test it, open the PR** (QUEUE.md "The loop"), and go straight back to step 2.
 5. **When a whole milestone is ticked**, write the next one's deliverables if they aren't listed yet (a short
    proposal in `docs/proposals/` if it's new design; see "Ask Evan first" below), then continue.
@@ -73,7 +75,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB2.2 [Claude] Depth step 1 (WG6): ground heights, object footprints and heights (part 1 done 2026-10-08: the colour layer drawn in true depth order, people in front of you faded as the world is). Part 2 done 2026-10-09: trees beside open ground stand at their true height and their crowns pass in front of you (see-through, faded like the world: shaders/canopy.gdshader), never over a sign or an item. Left: ground heights, footprints and heights on objects (houses and rocks).
 - [ ] WB2.3 [Claude] Variety pass (WG7) (done 2026-10-08: an animated effect per element in battle; waves and wind under the music. Tried the pack's water ripples: opaque tiles, rejected). Left: waterfalls, edge
   tiles.
-- [ ] WB2.4 [Claude] Interiors: the inn, the shop and two homes in Larkhaven, walkable (inn and shop done 2026-10-08, with Old Ned and Juniper; homes left).
+- [ ] WB2.4 [Claude] Interiors: the inn, the shop and two homes in Larkhaven, walkable (inn and shop done 2026-10-08, with Old Ned and Juniper; homes left; the pack's unused Interior tileset has furniture, floors and walls: docs/learning/assets.md).
 - [x] WB2.5 [Claude] Maren's letter and the field book's "where next" hint (WG8): done 2026-10-08.
 - [x] WB2.6 [ChatGPT] (done, merged 2026-10-09; T45) Lore: a heritage line for every Warden and townsperson in areas 1-4 (data in the browser game,
   exported to Godot), recorded in the thread ledger.
@@ -98,7 +100,8 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [x] WS3 [ChatGPT] (T50, merged 2026-10-09; in Godot: seasonal wild tables and one seasonal remark per person) Seasonal data in the browser game, exported to Godot: wild-encounter weight shifts and a few
   seasonal species (each also rare out of season), a seasonal line for each townsperson; check the faded-seasons
   idea against the thread ledger before it becomes canon.
-- [ ] WS4 [Claude] Winter weather (snow, frozen pond edges, breath) and spring rain, building on G6.
+- [ ] WS4 [Claude] Winter weather (snow, frozen pond edges, breath) and spring rain, building on G6 (the pack has rain and
+  storm sounds and rain and leaf particles, unused: docs/learning/assets.md).
 - [x] WS5 [Claude] (done 2026-10-09: Maren invites you once a festival a year; plant a flower in the paddock (it stays), run a lap to the north edge and back to Pip, fill the trough, or make a gift at the bench and give it to someone; a keepsake each, shown on the Team page; festival lines from townsfolk. Decorations: ribbons, flower boxes and a seed table for Planting Day; lanterns over the street for the Long Light; carved lanterns and a supper table for the Harvest Lanterns; garlands with lights on every house and the big tree with gifts for the Midwinter Hearth; --festival= picture flag.) The four festivals in Larkhaven: Planting Day, the Long Light, the Harvest Lanterns and the
   Midwinter Hearth (garlands, lights on the houses, a big tree in the square, gifts). Decorations, festival lines,
   one small activity and a cosmetic keepsake each.
@@ -109,6 +112,15 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
   discovery (WG4) and the first-person glimpse.
 - [ ] WB4.3 [Claude] The homecoming ending, colour and depth restored. *Part 1 done 2026-10-09: after the Champion, Maren and Isolde come to the league gate and Avenne walks down (T54 staging), the ending and the quiet-down lines play, and every Warden welcomes the Champion on return. Left: the deeper reveal (waits on Evan's choice of the final truth, docs/proposals/wildbond-final-reveals.md, and WB4.4b).*
 - [ ] WB4.4 [ChatGPT] (WB4.4a: T53 and T54 merged 2026-10-09 and placed; WB4.4b, the full mystery payoff, waits on Evan's choice in docs/proposals/wildbond-final-reveals.md) The ending's text and every thread's payoff, written from the ledger, for Claude to place.
+
+**WB-D: deeper play (from the game review, docs/proposals/game-review-2026-10-09.md; before 2.0, order in PRIORITIES.md).**
+- [ ] WD1 [Claude] Numbers off the screen (GR-4): remove the Badges/Lures/Coins/Wilddex line; a readable arrival name.
+- [ ] WD2 [ChatGPT data, Claude drawing] Creatures that look different (GR-1): per-species look features in data;
+  parts drawn in figures.gd; 4-5 new body shapes.
+- [ ] WD3 [Claude, ChatGPT data] Battles with real choices (GR-2): about 60 moves, family signature moves, a few
+  statuses, an order per Warden; tuned with WB3.6.
+- [ ] WD4 [Claude] Areas you can explore (GR-3): route, settlement and hidden pocket per area, return spots gated by
+  element. Thornwood first, one area per PR.
 
 **WB-M5: life after the league.**
 - [ ] WB5.1 [Claude] The Lighthouse Spire and rematches.
@@ -142,6 +154,10 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
 - [x] SF2.3 [Claude] The tavern you serve at, and placement that matters a little (SV4). *Done 2026-10-09: a new building; adventurers with savings come in the evening; you pour (stop in the gold band: a tip and better spirits); Tamsin asks for the tap after six pours (8 a day); left unserved two evenings it shuts until you open it (the last piece of SV3); near the inn drinks lift spirits more, a smithy beside the yard makes training count double, and Hob says so on his plans.*
 - [x] SF2.4 [ChatGPT] (T52 merged and applied to starfall-godot/data/stories.json 2026-10-09: six members, three beats each; was: writing handoff, integration pending) Story text for SF2.1 (the system is built; extend `starfall-godot/data/stories.json`: arcs for Kaito, Hana and Sora, and a third beat for Aki, Ren and Yuna; keep its format and the four traits): three short arcs per adventurer (choices that can go either way), in a
   data file Claude wires in (`starfall-godot/data/stories.json`; ChatGPT may write that one data file).
+- [ ] SF2.6 [Claude] Its own place (GR-5): a frontier stockade look and road layout instead of Larkhaven's; a map
+  that scrolls. Before SF3.1.
+- [ ] SF2.7 [Claude] See the wilds sooner (GR-7): a small walkable stretch past the gate (an early piece of SF4.1).
+- [ ] SF2.8 [Claude] Something by hand every day (GR-8): the next jobs to master, then hire.
 - [ ] SF2.5 [Claude] Hire the apothecary's apprentice once you've brewed enough (the same "master it, then hire" rule).
 
 **SF-M3: seasons.**
@@ -164,6 +180,8 @@ creatures as monsters. Built as first-person grid delves (docs/proposals/new-gam
 - [x] RB1.3 [ChatGPT] (done, merged 2026-10-09; T48) Part 3: the road between towns as a walkable stretch at key points (an inn on the road, a
   camp), keeping auto-combat where it already lives.
 - [ ] RB1.4 [ChatGPT] Phone pass for the new layout (L3 part 2).
+- [ ] RB1.5 [ChatGPT] Wait for the player (GR-10, a bug): autopilot must not take over during the first dialogue
+  (games/realmbound/js/13-world-ui.js:95); fix the stray blocks in the sky. Do first.
 
 **RB-M2: what the raid set up.**
 - [ ] RB2.1 [ChatGPT] Battlegrounds plan in docs/proposals/ (R3; new system: Evan
@@ -224,8 +242,18 @@ browser (E4).
   committed import settings, line-ending rules, one command for all checks, checks on GitHub).
 - [ ] AR2.7 blocked: needs Evan. Build the web previews on GitHub instead of committing them (docs/learning/web-and-shipping.md;
   default: keep committing packs at milestones only). Needs Evan to set Pages' source to "GitHub Actions".
+- [x] AR2.9 [Claude] Sound effects and feeling bubbles in both Godot games: done 2026-10-09 (`scripts/sfx.gd`, sounds
+  named by meaning, N toggles them, checks for every sound; Starfall's emotes over heads, Wildbond's "!" when spotted;
+  the asset guide docs/learning/assets.md and the arcade palette).
+- [ ] AR2.10 [Claude] Our own signature sounds, the first original assets (docs/learning/assets.md "Making our own"):
+  a short cry for each Wildbond creature body type, made in jfxr or sfxr and played when it appears and when it
+  chooses you; then the arcade's own menu sounds and jingles, replacing the pack's by name. Evan listens before merge.
 - [ ] AR2.8 [Claude] Split Wildbond's main.gd as systems are touched (godot-practices.md rule 1): music and ambience
   first, then festivals, interiors, the ranch; one system per commit, checks passing.
+- [ ] AR2.9 [any] Hearing from players (GR-9): a "Tell us" in every game's settings that opens a prefilled GitHub
+  issue; a 10-minute playtest script on Come Play.
+- [ ] AR2.10 [ChatGPT] The front door (GR-12): the hub leads with the Godot games, Starfall Guild and Primordial move to
+  Classic, the old homepage vote closes; START-HERE versions corrected (Claude).
 **AR-M3: the walk-in arcade and friends.**
 - [ ] AR3.1 [Claude] Walk-in arcade steps 1-2 (V11).
 - [ ] AR3.2 [any]
@@ -239,6 +267,9 @@ Judged ideas and the scorecard for new ones: docs/proposals/new-game-ideas.md (2
 - **Run every check** (`node tools/run-all-checks.cjs`) and fix or file anything red.
 - **A playtest pass:** play one game for its first 20 minutes as a newcomer, file what's confusing or broken as
   GitHub issues (or a short report in docs/playtests/).
+- **A game review** when a milestone closes: play it as a newcomer and add proposals with screenshots. The first one
+  (2026-10-09, docs/proposals/game-review-2026-10-09.md) proposes GR-1 to GR-12: creature looks, battle choices,
+  explorable areas, Starfall's own look, hearing from players; scored and placed in docs/PRIORITIES.md.
 - **Player-text sweep** of one game against docs/CREATIVE.md "Writing for players".
 - **Keep Come Play current** (playtest.html): versions, pictures, what's new.
 - **Research prompts** for Evan's Gemini reports (docs/research/gemini-prompts.md), then review the reports against
@@ -252,6 +283,14 @@ line or two, with the page that holds the detail.
   player when every choice in it depends on time passing (cooldowns only tick while the battle runs). Fix the rule, not
   the symptom: a creature with nothing ready never opens the menu; it waits while time runs. A numbers line can always
   become a thing you carry: the satchel icon opens the book's new Satchel page. Screenshots: docs/screenshots/wildbond-wd1/.
+- **2026-10-09, art and sound (Claude, docs/learning/assets.md):** neither Godot game made a sound when you did
+  something, against CREATIVE.md's "every action answers with sound": both now have sound effects from the Ninja
+  Adventure pack already on Evan's PC (no new download), named by meaning so originals can replace them file by file,
+  with a check that every sound named in code has a file. Feelings (spirits, waiting, wanting a word) were invisible
+  or drawn ad hoc: the pack's emote bubbles now show them over heads. Learned: the cloud can't reach asset sites (only
+  GitHub), so new downloads happen on Evan's PC via the folder tools; a picture loaded with `load()` inside `_draw()` drew as a
+  white box in our test screenshot (GL renderer); loading it once and keeping it (`_emote()`) fixed it; the pack's palette is the
+  bridge to original art (docs/learning/art/arcade-palette.gpl). Next: AR2.10, our own sounds first.
 - **2026-10-09, priorities (Claude, docs/PRIORITIES.md):** spreading work evenly across every game kept all of them
   moving and none finishing, while ideas kept arriving. Now focus slots (Evan confirmed Wildbond first) and one
   scorecard; new ideas and improvements are scored and filed before anyone builds them.

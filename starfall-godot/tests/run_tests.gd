@@ -540,5 +540,50 @@ func _run() -> void:
 	main.SafeSave.remove(main.save_path)
 	check(not main.SafeSave.exists(main.save_path), "and a cleared save leaves nothing behind")
 	main.no_save = true
+	# ---- sound effects: every sound the town asks for has a file, and actions answer with one
+	var src := FileAccess.get_file_as_string("res://scripts/main.gd")
+	var missing: Array[String] = []
+	var rx := RegEx.create_from_string("sfx\\.play\\(\"([a-z]+)\"")
+	for m in rx.search_all(src):
+		if not Sfx.has(m.get_string(1)):
+			missing.append(m.get_string(1))
+	check(missing.is_empty(), "every sound effect the town plays has a file (missing: %s)" % ", ".join(missing))
+	var heard: int = main.sfx.count
+	main.lines.clear()
+	main.say("", "A test line.")
+	main.say("", "And another.")
+	main.advance()
+	check(main.sfx.count == heard + 1 and main.sfx.last == "talk", "talking makes a soft blip")
+	main.open_board()
+	check(main.sfx.last == "open", "opening the board makes a sound")
+	main.board_open = false
+	main.sfx.on = false
+	main.open_board()
+	main.board_open = false
+	check(main.sfx.on == false and main.sfx.last == "open", "sound effects can be turned off (N) without breaking anything")
+	main.sfx.on = true
+	main.lines.clear()
+	# ---- feelings in bubbles over heads (assets/emote)
+	var hf = main.heroes[0]
+	main.barks.clear()
+	main.feel(hf, "heart", 2.0)
+	check(main.feeling(hf) == "heart", "a moment's feeling shows over someone's head")
+	main.bark(hf, "Hello!")
+	check(main.feeling(hf) == "", "but not while they're speaking, so the two never overlap")
+	main.barks.clear()
+	tick(2.5)
+	main.feels.clear()
+	var keep_state: String = hf.a.state
+	var keep_wait: float = float(hf.a.get("waited", 0.0))
+	hf.a.state = "to_counter"
+	hf.a.waited = main.PATIENCE * 0.8
+	check(main.feeling(hf) == "waiting" or main.story_ready(hf), "someone kept waiting at the counter shows it")
+	hf.a.state = keep_state
+	hf.a.waited = keep_wait
+	var missing_feel: Array[String] = []
+	for id in ["notice", "sad", "happy", "waiting", "heart", "heartbreak", "pleased"]:
+		if not ResourceLoader.exists("res://assets/emote/%s.png" % id):
+			missing_feel.append(id)
+	check(missing_feel.is_empty(), "every feeling has its picture (missing: %s)" % ", ".join(missing_feel))
 	print("Starfall Godot checks: %d passed, %d failed" % [passed, failed])
 	quit(1 if failed > 0 else 0)
