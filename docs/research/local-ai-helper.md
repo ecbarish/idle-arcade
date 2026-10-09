@@ -66,3 +66,16 @@ brought into a normal `codex/` branch by ChatGPT or Claude after review.
 5. **Fix the runner** (Lane D0) so queued tasks actually run through OpenCode.
 6. **Real fine-tuning** (training it on our code) is possible on a 4090 with free tools, but needs hundreds of
    good examples and a lot of care for a modest gain. Not worth it yet; revisit if the helper becomes a daily tool.
+
+## Results (Claude, 2026-10-08 evening)
+- **Benchmark** (five real tasks with known answers, `Local-AI\benchmark-tasks`): `arcade-coder` (Qwen3-Coder 30B)
+  **80%** with the primer and lessons attached (60% before); `gpt-oss:20b` **40%**. Devstral and a 64K test were cut
+  short (below); run `Run-Benchmark.ps1 -Models @('arcade-coder-32k:latest','devstral:latest')` to finish them.
+- **The model is now `arcade-coder-32k`** (tools.json): twice the working memory, same speed (about 5,800 tokens a
+  second reading, 180 writing, entirely on the GPU). Settings kept: `OLLAMA_FLASH_ATTENTION=1`,
+  `OLLAMA_KV_CACHE_TYPE=q8_0` (they cost nothing in speed).
+- **64K does not fit** on a 24 GB card next to Windows: it spills into slow memory (under 20 tokens a second).
+- **Restarting Ollama safely:** stop `ollama serve` **and every `llama-server.exe`**; old runners left behind keep
+  their GPU memory and make the next model run half on the CPU (this is what made the first tests look slow).
+- **Lessons that mattered:** the config's permission order ("*": "deny" first, or the agent gets no tools and pretends);
+  the model still invents findings when it cannot read a file (lesson recorded). Keep it to checkable jobs.
