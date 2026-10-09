@@ -215,3 +215,29 @@ No new mystery clue, ancient rite, inherited verse, eyewitness account or identi
 care echoes the game's bond theme without deciding the old pair, watcher, fading cause, returning depth or
 Unbound motives. All base, badge, heritage and essential shared clues remain intact and available year-round.
 No revelation or campaign requirement is tied to a festival; unavailable activities must not be advertised.
+
+## League and homecoming handoff (WB4.4a / T53, Codex, 2026-10-09)
+
+The six existing league encounters and colour-restoring ending are gathered unchanged in wildbond-finale.json.
+Four optional Larkhaven homecoming lines for Maren and Wren echo rest, corrected notes and choosing the next road;
+one optional closing narration avoids advertising unbuilt Godot post-game features. No new clue or ancient
+account is placed. They do not resolve the opponent, old pair, Unbound leader, watcher or depth restoration.
+
+The payoff map in wildbond-finale-brief.md distinguishes every thread's shared evidence, usable journey payoff
+and pending revelation. wildbond-final-reveals.md holds writer decisions only: all candidates remain alive, and
+common ancestry remains decided but needs shared confirmation staged before its explicit reveal. Existing
+byBadge small answers, heritage perspectives, encounters and ending are unchanged. WB4.4's complete mystery
+resolution remains pending; this handoff is not a canon decision or implemented Godot finale.
+
+## Champion return observations (WB4.4 content / T54, Codex, 2026-10-09)
+
+Six gate lines and sixteen Warden lines add recognition after the completed league ending. Gate speakers are
+Avenne, Wren, Maren and Isolde: recognition, a cheer, water, observed colour and an open notebook. The Wardens
+echo their existing lessons and shared evidence: Nerys's witness directions, Toren's warmth without a name,
+Olan's rope/nest answer separate from the tally, Senna's repaired bell separate from the flat survey wall,
+Halen's youngster choosing to stay, Rysa's honest incomplete page, and Isolde/Vessa's freely chosen companionship.
+
+These are not new clues or testimony. No culprit, old pair, watcher or leader identity is assigned; no depth
+restoration or ancestry proof is asserted. All base/win/heritage and byBadge answers stay unchanged. Every heritage
+can hear the appendix, but no essential reveal or progress depends on hearing it. Contract/staging in
+wildbond-champion-returns.md; complete mystery payoff remains pending, not settled by a Champion title.

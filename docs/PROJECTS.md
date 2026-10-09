@@ -30,6 +30,18 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 |---|---|---|---|---|
 | SF2.4a | Member arcs, separate JSON handoff (T52) | M | ready: PR #79, Codex, 2026-10-09 | Twelve new beats; Godot files remain Claude's |
 
+## League writing handoff
+
+| ID | Project | Size | Status | Notes |
+|---|---|---|---|---|
+| WB4.4a | League script and payoff map (T53) | S | ready: PR #80, Codex, 2026-10-09 | Existing finale and optional homecoming; undecided mystery reveals held |
+
+## Champion return conversations
+
+| ID | Project | Size | Status | Notes |
+|---|---|---|---|
+| WB4.4b-content | Gate scene and Warden returns (T54) | S | ready: PR #81, Codex, 2026-10-09 | Append-only exported writing, not the pending deep reveal |
+
 ## How to use this list
 
 - **Pick** any project whose status is `open` and whose dependencies are done. Prefer the **Launch track** and the

@@ -103,6 +103,10 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09, Codex: T54 ready in PR #81, stacked after #80: leagueAfter and eight Warden byStory.leagueEnding arrays, 22 lines. 69 new checks, 101 source/export/staging/layout checks, 88 full-card previews and eight suites pass. Classic dispatch/Godot/versions untouched.
+
+- 2026-10-09, Codex: T53/WB4.4a ready in PR #80 against main, including Claude's seasonal/festival and Starfall integrations: league script, optional homecoming and payoff/decision map. 271 checks, actual export, 148 portrait previews and eight suites pass; no Godot/runtime/version edits.
+
 - 2026-10-09 Claude: Godot Wildbond WB4.1 the league built (Wren, four courts, Avenne, ending lines); the new Wildbond is playable start to finish; 269 checks; web preview rebuilt; card and Come Play updated. Next: WB4.2/4.3 ending staging (needs ChatGPT WB4.4 text), WB5.1 Spire, SF2.3 tavern.
 - 2026-10-09 Claude: applied T52 to starfall-godot/data/stories.json (Kaito, Hana, Sora arcs; third beats for Aki, Ren, Yuna); 106 Starfall checks; web preview rebuilt.
 - 2026-10-09 Claude: merged T50 (seasonal data), T51 (festival writing), T52 (Starfall arcs handoff). Godot Wildbond: seasonal wild tables, seasonal and festival lines, the four festival activities with keepsakes (WS3, WS5, WS6 done); 260 checks; browser Wildbond 2221; web preview rebuilt. Next: apply T52 to starfall-godot/data/stories.json, then WB4.1 the league.

@@ -76,6 +76,22 @@ Branch: codex/starfall-member-writing, stacked after #78 for shared claim/handof
 - Use the existing after_jobs/needs/lines/options/morale/coins/trait shape; only steady, bold, mapper and healer traits. No new effect handler, save key, class, building or asset. Short original voices and legible choices with plainly shown, bounded consequences; no positive coin windfall or permanent punishment.
 - Validate against actual member/building IDs, increasing thresholds, all choices, economy and recoverable morale. Read-only inspect the Godot dialogue/choice surfaces; record previews without claiming integration. All eight browser pages stay pass. Normal claim/README/Session/COMMS only.
 
+### T53: Wildbond league script and payoff map (WB4.4a)
+- [x] Handoff ready in PR #80: 271 checks, 148 portrait previews, actual export and eight browser pages pass. Full mystery resolution is WB4.4b, pending the ledger decisions.
+Why: Claude builds WB4.1 next and requested ending text from the ledger. Separate the usable league finale from the deeper revelations whose truths remain open.
+Branch: codex/wildbond-finale-handoff, stacked after #79 for handoff/tracking documents.
+- docs/lore/wildbond-finale.json copies six existing league encounters and the existing ending, plus a clearly optional short Larkhaven homecoming. docs/lore/wildbond-finale-brief.md maps staging, cast, battle order, callbacks, every thread's status and heritage fairness.
+- Use current canon only. Record optional care-themed lines in the ledger. Do not invent the fading opponent, old pair, watcher identity or Unbound leader motive, or award depth restoration through a league win. A separate writer decision map records the unresolved reveals for later approval.
+- Data/docs only; no engine/exporter/Godot/play/save/version changes. Check source equality, exact IDs/order/teams/map connectivity, real export and optional dialogue readability; all eight browser pages pass. Normal README/Session/COMMS handoff.
+
+### T54: Wildbond Champion return conversations (WB4.4 content)
+- [x] Ready in PR #81: 69 new browser checks, 101 source/export/staging/layout checks, 88 full-card previews and all eight suites pass.
+Why: Claude's latest COMMS request, after WB4.1 shipped, asks for additive leagueAfter and post-Champion Warden speech that he can place inside the world.
+Branch: codex/wildbond-champion-returns, stacked after #80 for shared ledger/handoff docs.
+- Add SCENES.leagueAfter and STORY Warden entries' byStory.leagueEnding arrays in games/wildbond/js/00-data.js (Wardens are story actors, not static MAPS.npcs). Eight distinct short conversations; preserve all base, victory, badge and heritage lines. Append-only export fields; Classic behavior unchanged.
+- Gate staging with clear standing positions in docs/lore/wildbond-champion-returns.md, using T53's payoff map. No new culprit, pair/watcher identity, leader motive or claimed depth restoration. Record every echo in the ledger.
+- Add content checks in tests/wildbond-checks.js; verify source preservation, actual 39-table export and real portrait previews at four sizes. All eight pages pass. No Godot/engine/exporter/save/version changes; normal claim/README/Session/COMMS only.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a
