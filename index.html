@@ -224,6 +224,7 @@ const covers={
     c.fillStyle='rgba(255,255,255,.8)';for(let i=0;i<10;i++){const x=(i*71+t*10)%w,y=(i*37)%(h*.6);c.fillRect(x,y,2,2);}},
 };
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+covers.storm=function(c,w,h,t){c.fillStyle='#081d30';c.fillRect(0,0,w,h);c.fillStyle='#123c4c';c.fillRect(0,h*.8,w,h*.2);for(let row=0;row<3;row++)for(let col=0;col<7;col++){let x=w*(.12+col*.12)+Math.sin(t)*w*.025,y=h*(.23+row*.15);c.fillStyle=['#c4bada','#a3c7d3','#729bad'][row];c.fillRect(x-9,y,18,7);c.fillRect(x-5,y-5,10,7);}c.fillStyle='#83aca2';for(let i=0;i<4;i++)c.fillRect(w*(.12+i*.22),h*.75,w*.12,7);c.fillStyle='#f6d275';c.fillRect(w*.5-3,h*.88,6,9);c.fillRect(w*.5-1,h*.61,2,9);};
 const items=[...document.querySelectorAll('canvas[data-cover]')].map(cv=>({cv,ctx:cv.getContext('2d'),fn:covers[cv.dataset.cover]}));
 function size(){items.forEach(o=>{const r=o.cv.getBoundingClientRect();o.w=r.width;o.h=r.height;const d=Math.min(2,devicePixelRatio||1);o.cv.width=Math.round(r.width*d);o.cv.height=Math.round(r.height*d);o.ctx.setTransform(d,0,0,d,0,0);});}
 size();addEventListener('resize',size);

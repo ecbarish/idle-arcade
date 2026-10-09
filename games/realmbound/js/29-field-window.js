@@ -26,3 +26,16 @@ function syncRealmNotebook(){if(!FIELD_BOOK)return;if(!H()||FIELD_HERO!==H().id|
  },true);
  const originalWorld=updateWorld;updateWorld=function(){originalWorld();renderRealmFieldLocation();syncRealmNotebook();};
 })();
+
+/* Runtime layout only: no hero/save fields. ResizeObserver also follows text-size changes. */
+(() => {
+ const app=$('#app'),dock=$('#fieldDock'),bar=$('.abar');
+ const measure=()=>{
+  const dockHeight=Math.ceil(dock.getBoundingClientRect().height);
+  const barHeight=Math.ceil(bar.getBoundingClientRect().height);
+  app.style.setProperty('--field-dock-height',dockHeight+'px');
+  app.style.setProperty('--field-controls-top',(dockHeight+19+barHeight)+'px');
+ };
+ const observer=new ResizeObserver(measure);observer.observe(dock);observer.observe(bar);
+ addEventListener('resize',measure);measure();
+})();

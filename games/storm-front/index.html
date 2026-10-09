@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Storm Front · Idle Arcade</title><link rel="stylesheet" href="style.css"></head><body>
+<main class="cabinet">
+<header><a class="home" href="../../index.html" aria-label="Back to the arcade">← Arcade</a><h1>Storm Front</h1><div id="settingsMount"><button id="sound" aria-label="Change sound setting">Sound off</button></div></header>
+<section class="screen" aria-label="Saltmarsh harbour arcade cabinet">
+<canvas id="sea" tabindex="0" role="img" aria-label="Storm clouds above Saltmarsh harbour. Move left or right and fire to clear them." aria-describedby="controlsHint"></canvas>
+<div class="hud" aria-live="off"><span><small id="playerLabel">PLAYER 1</small><b id="score">000000</b></span><span class="best"><small>HARBOUR BEST</small><b id="best">000000</b></span><span class="right"><small id="wave">WAVE 01</small><b id="lives" aria-label="Three lights remaining">◆ ◆ ◆</b></span></div>
+<div id="curtain" class="curtain"><section id="panel" class="panel" role="dialog" aria-labelledby="panelTitle"></section></div>
+<div class="notice" id="notice" role="status" aria-live="polite"></div>
+<button id="pause" class="pause" hidden aria-label="Pause game">Ⅱ Pause</button>
+</section>
+<footer><div class="touch-controls" role="group" aria-label="Touch controls"><button data-hold="left" aria-label="Move left">◀</button><button data-hold="right" aria-label="Move right">▶</button><button data-hold="fire" class="fire" aria-label="Fire lighthouse beam">Fire <span>✦</span></button></div><p id="controlsHint">← → / A D move · Space fires · P pauses<br><span>Touch buttons or gamepad work too.</span></p></footer>
+</main>
+<script src="../../shared/engine.js"></script><script src="../../shared/settings.js"></script><script src="../../shared/sound.js"></script><script src="model.js"></script><script src="game.js"></script></body></html>
