@@ -912,3 +912,10 @@ One guide page per game, written like a good fan wiki or strategy guide: lore fi
 
 ## Bugs and feedback
 Add one line per issue: what happened, where (zone or screen), and the character's level/class.
+
+### T60: Individual species appearance data (WD2 data)
+
+- [x] Give every current species an explicit renderer shape and four drawable feature hints, including ranch hybrids; preserve families, balance, moves, dex text and existing new-body assignments.
+- [x] Document the artist contract, token vocabulary and species contact sheet. Do not change Godot or browser screens; renderer adoption is separate.
+- [x] Check complete coverage, unique silhouettes/markings, JSON export and save independence; run all suites.
+- Files: games/wildbond/js/00-data.js, games/wildbond/js/07-ranch.js (attach hybrid data only), tests/wildbond-checks.js, docs/lore/wildbond-looks.md and coordination docs.

@@ -73,6 +73,23 @@ async function studioChecks() {
   await check('Viewers: the games\' current data has no problems (the same rules as the game checks)', () => { const f = Object.values(real).map(flagged).flat(); if (f.length) throw Error(f.slice(0, 5).join(' | ')); return true; });
   await check('No game save or setting was changed by the viewers', () => snapshot() === before);
 
+  // ---- lighting and music tuner (E7): reads the games' tables, keeps only real tweaks, in its own key
+  const TN = window.StudioTuner;
+  await check('Tuner: reads a table out of code, skipping strings and comments with braces in them', () => { const src = "const X = 1;\n// const ZL = { no }\nconst ZL = { a: { fog: .2, col: '#fff', n: '} {' }, /* } */ b: { grade: 1.1 } };\nconst Y = {};";
+    const v = TN.value(TN.literal(src, 'ZL')); return v.a.fog === .2 && v.a.n === '} {' && v.b.grade === 1.1 && Object.keys(v).length === 2; });
+  await check('Tuner: refuses a table with code in it', () => { try { TN.value("{ a: alert(1) }"); return false; } catch (e) { return /plain data/.test(e.message); } });
+  const zone = { key: 'g:z', base: { fog: .3, shadow: 1, grade: .9 } };
+  await check('Tuner: keeps only what differs from the game, inside the slider ranges', () => { const st = { light: {}, music: {} };
+    TN.set(st, 'light', zone, { fog: .3, shadow: 9, grade: .9 }); const a = JSON.stringify(st.light);
+    TN.set(st, 'light', zone, { fog: .3, shadow: 1, grade: .9 }); return a === '{"g:z":{"shadow":2}}' && !('g:z' in st.light); });
+  const tn = await TN.load('../');
+  const z = k => tn.zones.find(x => x.key === k);
+  await check(`Tuner: reads every zone's air and every tune (${tn.zones.length} zones, ${tn.tunes.length} tunes)`, () =>
+    tn.zones.filter(x => x.game === 'realmbound').length >= 8 && tn.zones.filter(x => x.game === 'wildbond').length >= 6 && TN.MUSIC.every(m => tn.tunes.some(t => t.game === m.game)) && tn.tunes.every(t => t.base.bpm > 0 && t.track.mel));
+  await check('Tuner: starts at what the game uses today (Fens fog .55 grade .8; Thornvale grade 1; Thornwood grade .9)', () =>
+    z('realmbound:fens').base.fog === .55 && z('realmbound:fens').base.grade === .8 && z('realmbound:thornvale').base.grade === 1 && z('wildbond:thornwood').base.grade === .9 && z('wildbond:thornwood').base.shadow === 1);
+  await check('No game save or setting was changed by reading the tuner tables', () => snapshot() === before);
+
   // ---- the Studio page itself
   const frame = document.createElement('iframe'); frame.src = '../studio.html'; document.querySelector('#frame').replaceChildren(frame);
   await new Promise(ok => frame.onload = ok);
@@ -86,6 +103,18 @@ async function studioChecks() {
   const kind = d.querySelector('#tbKind'); kind.value = 'Creature name'; kind.dispatchEvent(new w.Event('change'));
   await check('The kind filter narrows the list', () => [...d.querySelectorAll('#tbList .tb-kind')].every(x => x.textContent === 'Creature name') && d.querySelectorAll('#tbList .tb-item').length >= 1);
   await check('The Studio shows the creature and quest viewers with a row per creature', () => w.__studioViewers && d.querySelectorAll('#vwTable tr').length === w.__studioViewers.wildbond.species.length + 1 && /no problems|with problems/.test(d.querySelector('#vwStatus').textContent));
+  // the tuner on the page: a slider writes its own key and nothing else, the preview follows, reset clears it
+  for (let i = 0; i < 100 && !w.__studioTuner; i++) await new Promise(ok => setTimeout(ok, 100));
+  const keep = localStorage.getItem(TN.KEY), others = () => { const o = JSON.parse(snapshot()).filter(([k]) => k !== TN.KEY); return JSON.stringify(o); }, othersBefore = others();
+  await check('The Studio shows the tuner with every zone and tune, and a preview frame', () => w.__studioTuner && d.querySelectorAll('#tnZone option').length === tn.zones.length && d.querySelectorAll('#tnTune option').length === tn.tunes.length && d.querySelector('#tnPreview').contentWindow.show);
+  const zsel = d.querySelector('#tnZone'); zsel.value = 'realmbound:fens'; zsel.dispatchEvent(new w.Event('change'));
+  const fogIn = d.querySelector('#tn-fog'); fogIn.value = '0.9'; fogIn.dispatchEvent(new w.Event('input', { bubbles: true }));
+  await new Promise(ok => setTimeout(ok, 300));
+  await check('Moving a slider keeps the tweak in the tuner key only, and the preview draws it', () => { const st = JSON.parse(localStorage.getItem(TN.KEY));
+    const fw = d.querySelector('#tnPreview').contentWindow; return st.light['realmbound:fens'].fog === .9 && others() === othersBefore && fw.__frames > 0 && /realmbound:fens/.test(d.querySelector('#tnOut').value); });
+  d.querySelector('#tnReset').click();
+  await check('"Back to the game\'s values" clears the tweak', () => !(JSON.parse(localStorage.getItem(TN.KEY) || '{"light":{}}').light['realmbound:fens']) && d.querySelector('#tn-fog').value === '0.55');
+  if (keep === null) localStorage.removeItem(TN.KEY); else localStorage.setItem(TN.KEY, keep);
   frame.remove();
   await check('Player pages do not link to the Studio', async () => { for (const p of ['../index.html', '../playtest.html']) { const t = await (await fetch(p)).text(); if (/href=["'][^"']*studio(\.html|\/)/.test(t)) return false; } return true; });
   return checks;
