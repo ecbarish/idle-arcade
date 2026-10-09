@@ -1,8 +1,9 @@
 extends Control
 ## The field book you carry (docs/wildbond-plan.md phase 4, "menus you hold"): open it with Tab or J, or tap the satchel
-## line. Two pages: the Wilddex (every creature in the game: seen ones in colour, the rest dark shapes, a mark for the ones
-## that chose you; pick one for its page) and your Team (level, health, XP, moves; who rests at the ranch).
-## Arrow keys move, Q/E or 1/2 switch pages, Tab/J/Esc close. The mouse works too.
+## bag in the corner. Three pages: the Wilddex (every creature in the game: seen ones in colour, the rest dark shapes, a mark for the ones
+## that chose you; pick one for its page), your Team (level, health, XP, moves; who rests at the ranch) and the Satchel
+## (what you carry, your badges and keepsakes: the numbers live here, not on the screen, WD1).
+## Arrow keys move, Q/E or 1/2/3 switch pages, Tab/J/Esc close. The mouse works too.
 
 signal closed
 const Figures := preload("res://scripts/figures.gd")
@@ -21,9 +22,12 @@ var bonded: Dictionary = {}
 var team: Array = []
 var ranch: Array = []
 var where := ""
-var keepsakes: Array = []                      # festival keepsakes (names), shown on the Team page
+var keepsakes: Array = []                      # festival keepsakes (names), shown on the Satchel page
+var bag: Dictionary = {}                       # main.gd's satchel: coins, lures, berries
+var badges: Array = []                         # { name, col } for each badge you hold, in the order you earned them
 var cal: RefCounted = null                     # the calendar (calendar.gd): the date at the foot of the left page; C changes it                                # where to go next, in Maren's words (main.gd where_next)
-var tab := 0                                   # 0 Wilddex, 1 Team
+var tab := 0                                   # 0 Wilddex, 1 Team, 2 Satchel
+const TABS := [["Wilddex", 30, 58], ["Team", 90, 46], ["Satchel", 138, 50]]   # name, x, width
 var sel := 0
 var t := 0.0
 var font: Font
@@ -61,8 +65,11 @@ func _input(e: InputEvent) -> void:
 	if e is InputEventKey and e.pressed and not e.echo:
 		match e.keycode:
 			KEY_TAB, KEY_J, KEY_ESCAPE: close()
-			KEY_Q, KEY_1: tab = 0
-			KEY_E, KEY_2: tab = 1
+			KEY_Q: tab = (tab + 2) % 3
+			KEY_E: tab = (tab + 1) % 3
+			KEY_1: tab = 0
+			KEY_2: tab = 1
+			KEY_3: tab = 2
 			KEY_C: if cal: cal.next_mode()
 			KEY_LEFT, KEY_A: sel = maxi(0, sel - 1)
 			KEY_RIGHT, KEY_D: sel = mini(ids.size() - 1, sel + 1)
@@ -71,8 +78,10 @@ func _input(e: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
 		var p := get_local_mouse_position()
-		if Rect2(30, 14, 70, 14).has_point(p): tab = 0
-		elif Rect2(102, 14, 60, 14).has_point(p): tab = 1
+		var hit := -1
+		for i in TABS.size():
+			if Rect2(TABS[i][1], 14, TABS[i][2], 14).has_point(p): hit = i
+		if hit >= 0: tab = hit
 		elif not Rect2(22, 10, 340, 198).has_point(p): close()
 		elif tab == 0:
 			for i in range(_page_start(), mini(ids.size(), _page_start() + COLS * ROWS)):
@@ -101,15 +110,17 @@ func _draw() -> void:
 	draw_rect(Rect2(193, 16, 163, 186), Color("f4e9cd"))
 	draw_rect(Rect2(188, 16, 8, 186), Color("dccca4"))
 	# the two tabs, like ribbons
-	for i in 2:
-		var r := Rect2(30 + i * 72, 17, 66 if i == 0 else 56, 12)
+	for i in TABS.size():
+		var r := Rect2(TABS[i][1], 17, TABS[i][2], 12)
 		draw_rect(r, INK if tab == i else Color("e4d6b4"))
-		_text(["Wilddex", "Team"][i], r.position + Vector2(0, 9), 7, Color("f4e9cd") if tab == i else INK, r.size.x, HORIZONTAL_ALIGNMENT_CENTER)
-	_text(_date() + "   %d seen, %d bonded" % [seen.size(), bonded.size()], Vector2(193, 27), 6, FAINT, 160, HORIZONTAL_ALIGNMENT_CENTER)
+		_text(TABS[i][0], r.position + Vector2(0, 9), 7, Color("f4e9cd") if tab == i else INK, r.size.x, HORIZONTAL_ALIGNMENT_CENTER)
+	_text(_date() + "   %d seen of %d, %d bonded" % [seen.size(), R.DATA.SPECIES.size(), bonded.size()], Vector2(193, 27), 6, FAINT, 160, HORIZONTAL_ALIGNMENT_CENTER)
 	if tab == 0:
 		_draw_dex()
-	else:
+	elif tab == 1:
 		_draw_team()
+	else:
+		_draw_satchel()
 	_text("Tab or J to close   Q / E: pages   C: calendar", Vector2(193, 200), 6, FAINT, 163, HORIZONTAL_ALIGNMENT_CENTER)
 
 func _draw_dex() -> void:
@@ -182,11 +193,39 @@ func _draw_team() -> void:
 	for c in ranch:
 		_text("%s, level %d" % [c.name, c.lvl], Vector2(x, y2 + 12), 7, INK)
 		y2 += 12.0
-	if not keepsakes.is_empty():
-		draw_multiline_string(font, Vector2(202, 142), "Keepsakes: " + ", ".join(keepsakes) + ".", HORIZONTAL_ALIGNMENT_LEFT, 146, 6, 2, Color("6a5a3a"))
 	if where != "":
 		_text("Where next", Vector2(193, 158), 8, INK, 163, HORIZONTAL_ALIGNMENT_CENTER)
 		draw_multiline_string(font, Vector2(202, 170), "Maren: \"%s\"" % where, HORIZONTAL_ALIGNMENT_LEFT, 146, 6, 4, Color("6a5a3a"))
+
+## What you carry, in words: coins, lures and berries on the left page; your badges, one per Warden, and festival
+## keepsakes on the right.
+func _draw_satchel() -> void:
+	_text("In your satchel", Vector2(28, 44), 8, INK, 163, HORIZONTAL_ALIGNMENT_CENTER)
+	var rows := [
+		["coins", Color("e8c84a"), "%s coin%s" % [int(bag.get("coins", 0)), "" if int(bag.get("coins", 0)) == 1 else "s"], "Juniper sells lures and berries for these."],
+		["lures", Color("d86a8a"), "%s lure%s" % [int(bag.get("lures", 0)), "" if int(bag.get("lures", 0)) == 1 else "s"], "Offer one when a wild creature is tired, and it may choose you."],
+		["berries", Color("8a3ab0"), "%s berr%s" % [int(bag.get("berries", 0)), "y" if int(bag.get("berries", 0)) == 1 else "ies"], "A handful mends a tired team in battle."],
+	]
+	var y := 58.0
+	for r in rows:
+		draw_rect(Rect2(38, y - 1, 10, 10), INK)
+		draw_rect(Rect2(39, y, 8, 8), r[1])
+		_text(r[2], Vector2(54, y + 7), 8, INK)
+		draw_multiline_string(font, Vector2(54, y + 16), r[3], HORIZONTAL_ALIGNMENT_LEFT, 128, 6, 2, FAINT)
+		y += 38.0
+	_text("Badges", Vector2(193, 44), 8, INK, 163, HORIZONTAL_ALIGNMENT_CENTER)
+	for i in 8:
+		var at := Vector2(206 + (i % 4) * 36, 52 + (i / 4) * 34)
+		var won: bool = i < badges.size()
+		draw_circle(at + Vector2(10, 10), 10, INK)
+		draw_circle(at + Vector2(10, 10), 8.5, badges[i].col if won else Color("e4d6b4"))
+		if won:
+			draw_circle(at + Vector2(7, 7), 2.5, Color(1, 1, 1, 0.45))
+			_text(str(badges[i].name).trim_suffix(" Badge"), at + Vector2(-6, 28), 6, INK, 32, HORIZONTAL_ALIGNMENT_CENTER)
+	if badges.is_empty():
+		draw_multiline_string(font, Vector2(202, 130), "None yet. Each Warden gives one to a tamer who earns it.", HORIZONTAL_ALIGNMENT_LEFT, 146, 6, 2, FAINT)
+	if not keepsakes.is_empty():
+		draw_multiline_string(font, Vector2(202, 148), "Keepsakes: " + ", ".join(keepsakes) + ".", HORIZONTAL_ALIGNMENT_LEFT, 146, 6, 4, Color("6a5a3a"))
 
 ## The date, or the festival when there is one (the real calendar says so; C cycles the world's own, the real one and
 ## each season held).
