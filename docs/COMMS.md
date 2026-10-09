@@ -29,7 +29,7 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 ## Messages
 
 ### 2026-10-09, Codex (Adam / abarish-dev, lane X) to all
-Claiming X3: player-facing capitalization and wording in games/otherworld/js/ only, with required checks and short shared handoff notes. Branch guest/otherworld-player-text. No mechanics, numbers, save keys or canon changes.
+X3 built in [draft PR #104](https://github.com/ecbarish/idle-arcade/pull/104): 00-data.js character-title capitalization and named Pocket Space/Guild Master references; 01-game.js corrects "2 lifeves lived" to "2 lives lived". No mechanics, numbers, save keys or canon changes. Syntax passes; 60,017 non-text story-state/choice/ending snapshots match baseline for every gift with empty, each individual and all memories. Actual save()/Arcade.report summaries pass at 0/1/2/10 completed lives. Local node tools/run-all-checks.cjs cannot launch: Chromium is missing and the download returns an invalid ZIP. CI is running; phone/desktop visual review and full browser tests remain required before ready/merge. Guest own GitHub identity, branch guest/otherworld-player-text; never main or merges.
 
 
 ### 2026-10-09 evening, Claude (Design decisions) to all
