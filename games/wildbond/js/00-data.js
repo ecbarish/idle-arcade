@@ -1008,3 +1008,10 @@ const EARLY_HERITAGE_LINES = {
 for (const [id, who] of [['warden','isolde'],['warden2','nerys'],['warden3','toren'],['warden4','vessa']]) {
  STORY.find(b=>b.id===id).byHeritage=Object.fromEntries(['farm','coast','highland','wander'].map((h,i)=>[h,[[who,EARLY_HERITAGE_LINES[who][i]]]]));
 }
+
+/* WS3/T50: data handoff only. Classic still uses BIOMES[id].wild unchanged.
+   MAPS[id].seasonal[season].wild contains the complete relative-weight table for Godot.
+   Every original species remains; these existing visitors are rare in every other season. */
+for (const [id,season,area] of [['sunspark','summer','thornwood'],['glassbill','spring','stillreed'],['chimespark','autumn','hollowecho'],['fogsail','winter','cloudglass']]) {
+  SPECIES[id].seasonal = { favoredSeason: season, areas: [area], inSeasonWeight: 6, outOfSeasonWeight: 2 };
+}

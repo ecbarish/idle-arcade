@@ -192,3 +192,15 @@ export page on the Codex server (8766): 39 tables, 15 speakers, all 60 reactions
 A second isolated export substituted origin/main's two data sources; after removing heritage additions the entire
 export matched exactly (existing maps, base lines, stats, battles, rewards and story). No Godot file, export tool,
 screen, save or version was changed. Godot dispatch and the final in-engine copy review remain with Claude.
+
+## Seasonal observations (WS3 / T50, Codex, 2026-10-09)
+
+96 new `bySeason` observations for the 24 ordinary map residents describe current nesting, shade, windfall,
+shelter, knitting, dry records and careful returns. They are not inherited accounts or mystery clues. Pip's tiny
+tracks are made now, not a footprint attributed to the old pair or watcher. Every base clue, badge replacement
+and heritage reaction remains unchanged and shared. Seasonal dialogue is an appendix, never a replacement.
+
+Faded seasonal details are compatible as muted **surface presentation** with the decided loss of colour and
+depth. No stopped calendar, new culprit, seasonal cause, depth restoration or bond-driven plant regrowth is
+asserted. All candidate causes, pair identities, watcher identities and Unbound motives above remain open.
+The complete schema and integration boundaries: [The turning year](wildbond-seasons.md).

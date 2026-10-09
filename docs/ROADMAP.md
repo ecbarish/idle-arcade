@@ -50,6 +50,7 @@ Branch: codex/wildbond-final-area-briefs, from latest main.
 - Verify against read-only live browser inventory and run all eight test pages. Note stale historical prose rather than silently retuning; README and one Session log line, message board handoff.
 
 ### T50: Wildbond seasonal data (WS3)
+- [x] Built by Codex, 2026-10-09; PR #77. 526 new checks, all eight pages and actual export pass; Classic unchanged.
 Why: Claude's calendar and seasonal looks need modest ecological changes and people noticing the season, without calendar-locked progress.
 Read first: docs/COMMS.md, seasons-and-holidays proposal, wildbond thread ledger, canon and CREATIVE.
 Branch: codex/wildbond-seasonal-data, from latest main.

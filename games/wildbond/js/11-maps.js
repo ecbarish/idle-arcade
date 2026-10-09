@@ -893,3 +893,177 @@ MAPS.farwatch.npcs.push({who:'ceryn',at:[18,3],dir:'down',
 for (const area of ['larkhaven','thornwood','saltmarsh','emberfall','cloudglass']) {
  for (const npc of MAPS[area].npcs) npc.byHeritage=Object.fromEntries(['farm','coast','highland','wander'].map((h,i)=>[h,[[npc.who,EARLY_HERITAGE_LINES[npc.who][i]]]]));
 }
+
+/* WS3/T50: plain seasonal content for the existing Godot export; no Classic dispatcher.
+   Small signed shifts between common neighbors, then four favored visitors (always available).
+   Each table is copied, so no BIOMES wild entry, prerequisite, level or reward is mutated. */
+const SEASONAL_SHIFTS = {
+ thornwood: {spring:{glimmerwing:2,emberling:-2},summer:{emberling:2,duskweaver:-2},autumn:{gnawhound:2,glimmerwing:-2},winter:{duskweaver:2,bogsnap:-2}},
+ saltmarsh: {spring:{reedtusk:2,dunepounce:-2},summer:{kiteskirl:2,wrackjaw:-2},autumn:{wrackjaw:2,kiteskirl:-2},winter:{brineskit:2,reedtusk:-2}},
+ emberfall: {spring:{ashskip:2,slaglet:-2},summer:{thermwing:2,cragskein:-2},autumn:{cragskein:2,ashskip:-2},winter:{ventwhisk:2,thermwing:-2}},
+ cloudglass: {spring:{mistfinch:2,shalecat:-2},summer:{cirrusmane:2,pallweaver:-2},autumn:{gritbeak:2,mistfinch:-2},winter:{fogtail:2,cirrusmane:-2}},
+ stillreed: {spring:{reedlet:2,duskcord:-2},summer:{gustreed:2,siltjaw:-2},autumn:{orchardroot:2,gustreed:-2},winter:{rillwhisk:2,reedlet:-2}},
+ hollowecho: {spring:{dripdart:2,flintroot:-2},summer:{ledgewhisk:2,hushpup:-2},autumn:{flintroot:2,dripdart:-2},winter:{umbrelace:2,ledgewhisk:-2}},
+ sunthread: {spring:{clovercolt:2,hearthrunner:-2},summer:{pennantlark:2,hemglow:-2},autumn:{tilthtusk:2,pennantlark:-2},winter:{hearthrunner:2,ribbonstride:-2}},
+ farwatch: {spring:{shoalpup:2,moorweft:-2},summer:{chartwing:2,inkwhisk:-2},autumn:{moorweft:2,chartwing:-2},winter:{buoyglint:2,shoalpup:-2}}
+};
+for (const [area,shifts] of Object.entries(SEASONAL_SHIFTS)) {
+ MAPS[area].seasonal = {};
+ for (const [season,delta] of Object.entries(shifts)) MAPS[area].seasonal[season] = {
+  wild: BIOMES[area].wild.map(([id,weight]) => {
+   const visitor = SPECIES[id].seasonal;
+   return [id,visitor && visitor.areas.includes(area) ? (visitor.favoredSeason === season ? visitor.inSeasonWeight : visitor.outOfSeasonWeight) : weight + (delta[id] || 0)];
+  })
+ };
+}
+/* Shared dialogue first; append one selected seasonal observation. Seasonal lines are never clue replacements. */
+const SEASONAL_VOICES = {
+ maren: [
+  'The new shoots are easy to tread on. Walk beside your partner and leave the little ones a clear patch.',
+  'There is shade beside the barn. Let your partner choose a cool place before you set off again.',
+  'I keep a dry basket by the door for fallen leaves. Someone small has decided it is a bed.',
+  'I am knitting a cover for the smallest partner. Leave room for its ears; that is the important bit.'
+ ],
+ pip: [
+  'My partner spotted the first flower before I did. I still get to be Champion, though.',
+  'I made a shade tent! Mum says it is a towel over two chairs. My partner likes it.',
+  'I picked the biggest leaf for my partner. It picked the smallest one for me. Fair trade.',
+  'I made tiny tracks beside the big tracks. Now everyone knows we came together.'
+ ],
+ bram: [
+  'New mushrooms hide under old leaves. My partner finds them; I remember where not to step.',
+  'The mushrooms keep to the shade. So do I, until a friendly battle warms us up.',
+  'A whole basket of leaves, and one mushroom. My partner insists that is a successful morning.',
+  'Leave the old log alone. Something little has tucked itself beneath it for the cold.'
+ ],
+ lise: [
+  'Hear the nestlings? Wait for their parents to come back before walking past that branch.',
+  'The birds take their baths where the leaves drip. It is a much better idea than my dusty path.',
+  'A bare branch makes a fine perch. It makes a poor hiding place for a birdwatcher.',
+  'I leave the sheltered branches undisturbed. The birds know where the wind cannot reach.'
+ ],
+ tobin: [
+  'Little fish in the shallows. Mind where you put your boots; this is their coast too.',
+  'Best shade on the coast is under my hat. No, you cannot all borrow it at once.',
+  'Reed seeds stick to the boat. I brush them off at the bank, where they can do some good.',
+  'Cold hands, warm flask. Give your partner the dry seat; you can stand for a minute.'
+ ],
+ cato: [
+  'New reeds mean more little hiding places. I let my partner look before I follow.',
+  'Warm sand, clear sky. We practice above the tideline and cool our paws afterward.',
+  'Loose reeds mark where the tide reached. Leave them there for the next team to see.',
+  'The sheltered beach is calmer. No victory is worth sending a tired partner into cold spray.'
+ ],
+ marit: [
+  'I run around the fresh reed beds, not through them. My partner keeps me honest.',
+  'An early run, then shade. Being quick does not mean ignoring a thirsty partner.',
+  'The wind keeps beating my best time. I have decided we are not racing it.',
+  'Shorter runs today. We come home together, even if my partner wants to stop every few steps.'
+ ],
+ orsk: [
+  'New growth beside warm stone. Even a ridge has room for something small.',
+  'We practice before the rocks grow hot. A sensible start saves a sore paw.',
+  'Loose grit gathers beneath the ledges. We check the footing before challenging anyone.',
+  'The windward side is cold. Come round beside the warm stones before we talk.'
+ ],
+ sela: [
+  'The spring path is damp. Shake your boots off before your partner settles for a rest.',
+  'A warm spring is lovely, but shade and a drink come first after a long climb.',
+  'I clear the leaves from the spring steps. A small kindness is worth doing twice.',
+  'Steam hides the edge of the water. I stay close enough for my partner to find me.'
+ ],
+ ilka: [
+  'Wet rope stretches. I check the knots before my partner takes the narrow way.',
+  'Dry the rope in the sun, then put it in the shade. My partner thinks this is a very slow game.',
+  'A bright ribbon marks the loose end. It saves us searching through the fallen leaves.',
+  'Cold fingers make clumsy knots. We stop and warm them before trying again.'
+ ],
+ teodor: [
+  'Rain leaves little pools on the stone. My partner studies the clouds in every one.',
+  'A clear day stretches the view. I still ask my partner which way it would like to go.',
+  'The clouds move faster than my drawing. I have left some room for corrections.',
+  'I draw with gloves on. My partner has politely declined to judge the result.'
+ ],
+ evren: [
+  'The orchard buds are opening. We walk around the roots and let them have their space.',
+  'A cool bench beneath the orchard is worth more than another hurried lap.',
+  'Windfall goes in the shared basket. Leave the sound fruit on the branch a little longer.',
+  'The orchard is resting. We mend the baskets while the roots do their quiet work.'
+ ],
+ tavil: [
+  'Spring rain leaves the boards slick. Let your partner choose its footing before you hurry.',
+  'We leave a dry cloth at the landing. Everyone gets a place to sit after crossing.',
+  'A leaf on the boards can hide a loose edge. I sweep first, then invite a battle.',
+  'Cold hands need a longer rest between crossings. The next team can wait a little.'
+ ],
+ sivet: [
+  'I hang the damp rope where the breeze can reach it. A tidy landing leaves room for everyone.',
+  'The rope dries quickly today. I keep the spare coil in the shade beside the post.',
+  'I shake the leaves out of the spare coil. They belong in the orchard, not in a knot.',
+  'We cross with warm hands and steady partners. I will hold the boat while you settle.'
+ ],
+ veslin: [
+  'A nest has appeared beneath the eaves. We ring gently until everyone has settled.',
+  'The bell carries across the warm hills. Someone always waves before answering.',
+  'The leaves are loud underfoot. I listen for the returning team before ringing supper in.',
+  'We keep a warm place near the bell house. A late arrival should never find it empty.'
+ ],
+ narro: [
+  'Rain changes the loose ground. I check my marks with my partner before using yesterday\'s route.',
+  'Shade is welcome on the survey path. A good map leaves room for a rest.',
+  'The cord catches fallen leaves. My partner finds this much funnier than I do.',
+  'I keep the chalk dry inside my coat. The next team should still be able to read our marks.'
+ ],
+ orri: [
+  'I leave a gap beside the bell rope for the nest builders. Repairs can wait until they pass.',
+  'A cool tool roll and a dry bench. That is most of a good working day.',
+  'Leaves in the tool roll again. I have given them their own pocket until I can sweep.',
+  'Metal is cold on the fingers. Warm your hands first; the bell will still need mending afterward.'
+ ],
+ mirel: [
+  'New shelter ties need loose ends for mending. Clovercolt holds them while I check the cloth.',
+  'Hemglow can rest under the cloth too. A helper should get to enjoy the shade it makes.',
+  'We fold the dry cloth before the wind returns. Everyone takes a corner they can manage.',
+  'The shelter stays open on the calm side. A little partner needs a place out of the wind.'
+ ],
+ aldren: [
+  'I carry the welcome list around the nursery beds. There is no hurry worth trampling a shoot.',
+  'A message can wait while its runner drinks. I am learning to follow my own advice.',
+  'I have a pocket full of leaves and one important note. The leaves are winning.',
+  'I bring the last team in before putting the benches away. Nobody rests on a cold doorstep.'
+ ],
+ pell: [
+  'Brisket found the first flower. I found the first puddle. We each have our talents.',
+  'Finest shade in the Commons! Brisket discovered it, but I am happy to take the credit.',
+  'A leaf fell into my hat. Brisket says it improves the arrangement. Difficult customer.',
+  'I offered Brisket a blanket. He selected two. That mule has a fine head for business.'
+ ],
+ nesla: [
+  'I mend around the new nursery shoots. A useful stitch leaves room for something to grow.',
+  'A broad cloth makes shade for many small backs. It need not belong to the strongest one.',
+  'We dry the gathering cloth before folding it. Next time, every team should find a clean corner.',
+  'I sew the loose edge before the wind gets in. Someone small is waiting under the bench.'
+ ],
+ delka: [
+  'Rain changes the approach. I check it again before copying a note for another team.',
+  'Clear air is useful, but Chartwing still waits for the shore answer before returning.',
+  'Wind-blown grit covers the old marks. We brush them clear before opening the lookout book.',
+  'I keep the ledger beneath a dry cover. A wet page is a poor promise to the next traveler.'
+ ],
+ sivren: [
+  'The harbor bench dries between showers. There is room for one more tired team.',
+  'Keep a drink in the shade and a lantern ready. A bright day can still end in fog.',
+  'We collect the loose planks before the wind rises. Smaller paws need the dry way home.',
+  'A warm cloth waits on the harbor bench. Count everyone ashore before wrapping up yourself.'
+ ],
+ ceryn: [
+  'I dry the lookout pages one at a time. The next reader deserves a clear record.',
+  'The ledger stays beneath the shade cloth. Salt and strong sunlight are hard on old ink.',
+  'I brush the leaves away before closing the book. A folded leaf is not a bookmark forever.',
+  'Cold fingers write untidily. I leave more room between the lines and check them in the warm.'
+ ]
+};
+for (const map of Object.values(MAPS)) for (const npc of map.npcs || []) if (SEASONAL_VOICES[npc.who] && npc.lines) {
+ npc.bySeason = {};
+ for (const [i,season] of ['spring','summer','autumn','winter'].entries()) npc.bySeason[season] = [[npc.who,SEASONAL_VOICES[npc.who][i]]];
+}
