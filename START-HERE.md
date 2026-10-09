@@ -104,6 +104,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 ## Session log (newest first; one or two lines each)
 
 - 2026-10-09, ChatGPT: T47 Hollowecho area brief ready on codex/wildbond-hollowecho-brief: source coordinates, encounters, all T40 clues/payoffs and staging checklist. Live inventory and all eight pages pass; flagged Senna lore/data discrepancy, no new canon or Godot edits.
+- 2026-10-09, ChatGPT: T46 launcher previews, PR #73, now against main after #71 merged. Real screenshots, separate Classic journeys, focus-safe road; 174 launcher and 164 accessibility checks plus all eight pages pass. No Godot, exports, worker or version edits.
 
 - 2026-10-09 Claude: Godot Wildbond: Stillreed Basin opened (WB3.1: footbridges, moored skiff and readable mooring sign, trainers, Warden, river ambience, Boat music); web preview rebuilt; 225 checks. Also its own touches (current, cattails, orchard windfall, rope coil, dragonflies). Next: WB3.2 Hollow Echo, WB2.2-2.4 depth items, SF2.2.
 - 2026-10-08 Codex: T45 ready in PR #72: 60 early-road heritage reactions for 11 people and four Wardens, every clue recorded. Eight pages pass (Wildbond 1,606); actual 39-table export carries all reactions and retains existing content exactly. No Godot, screen, save or version changes. T44 is ready separately in #71.

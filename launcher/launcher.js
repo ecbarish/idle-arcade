@@ -18,7 +18,7 @@
   let mode = (() => { try { const m = localStorage.getItem(MODE_KEY); return m === 'hall' || m === 'road' || m === 'scene' ? m : firstMode(); } catch (e) { return firstMode(); } })();
   let W = 0, H = 0, hover = null, lastT = 0;
   const playable = A.GAMES.filter(g => g.href), byId = id => A.GAMES.find(g => g.id === id);
-  const prog = id => { const p = A.idx[id]; return p ? p.summary : 'Not started yet'; };
+  const prog = id => { if (byId(id).preview) return 'Early preview · Classic saves stay separate'; const p = A.idx[id]; return p ? p.summary : 'Not started yet'; };
   function size() {
     const r = cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1);
     W = r.width; H = r.height; cv.width = Math.max(1, Math.round(W * d)); cv.height = Math.max(1, Math.round(H * d)); cx.setTransform(d, 0, 0, d, 0, 0);
@@ -36,9 +36,9 @@
   /* ===================== the living world ===================== */
   const PLACES = [ // x: centre as a fraction of the width; w: hit width fraction
     { id: 'primordial', x: .075, w: .13, name: 'The tide pool', col: '#5fd0c8' },
-    { id: 'wildbond', x: .3, w: .3, name: 'Larkhaven', col: '#7fe0a0' },
+    { id: 'wildbond-preview', x: .3, w: .3, name: 'Larkhaven', col: '#7fe0a0' },
     { id: 'realmbound', x: .645, w: .3, name: 'Thornvale', col: '#ffd27a' },
-    { id: 'starfall-guild', x: .855, w: .16, name: 'The Starfall gate', col: '#b48aff' },
+    { id: 'starfall-preview', x: .855, w: .16, name: 'The Starfall gate', col: '#b48aff' },
     { id: 'baseball', x: .97, w: .06, name: 'Lamplight Field', col: '#ffd281' }
   ];
   const nightOf = st => st.day ? Math.max(0, 1 - st.elev * 4) * .6 * (st.golden > .6 ? 1 : 0) : 1;
@@ -146,7 +146,7 @@
   /* Evan liked a character he controls and a world that can grow: the living world as a road you walk along.
      Each game is a stop; games still in design are building sites with a "coming soon" sign. A new game is one more
      stop at the end of the road. */
-  const DRAW = { primordial: drawTidePool, wildbond: drawLarkhaven, realmbound: drawThornvale, 'starfall-guild': drawGate, baseball: drawBallpark, otherworld: drawPortal };
+  const DRAW = { primordial: drawTidePool, wildbond: drawLarkhaven, 'wildbond-preview': drawLarkhaven, realmbound: drawThornvale, 'starfall-guild': drawGate, 'starfall-preview': drawGate, baseball: drawBallpark, otherworld: drawPortal };
   // every game is a stop: the four places, then later games (a portal or a ballpark once playable, a building site until then)
   const STOPS = PLACES.map(pl => Object.assign({}, pl)).concat(A.GAMES.filter(g => !PLACES.some(p => p.id === g.id)).map(g => ({ id: g.id, name: g.title, col: g.href ? '#bfe9ff' : '#d8d0c0', site: !(g.href && DRAW[g.id]) })));
   const ROAD = { x: 0, target: null, go: null, dir: 1, keys: {}, cam: 0 };
@@ -224,6 +224,9 @@
     if (g) { const i = STOPS.findIndex(s => s.id === hover); label(stopX(i) - cam, gy - H * .5, g.title, g.href ? prog(g.id) : 'Coming soon', STOPS[i].col); }
     // keep each place's link over the place as the road scrolls
     hits.querySelectorAll('[data-id]').forEach(h => { const i = STOPS.findIndex(s => s.id === h.dataset.id); h.style.left = ((stopX(i) - cam) / W - .14) * 100 + '%'; });
+    // Focus may scroll an overflow-hidden ancestor toward the link's old position.
+    // The camera owns road scrolling; keep the canvas and its links together.
+    cv.parentElement.scrollLeft = 0;
   }
 
   /* ===================== the arcade hall ===================== */
@@ -242,13 +245,13 @@
     const lights = [{ x: W / 2, y: H * .1, r: H * .3, col: '#ff6fa8' }];
     for (let i = 0; i < 5; i++) { const lx = W * (.1 + i * .2); R(lx - p * 3, 0, p * 6, p * 2, '#5a4a70'); lights.push({ x: lx, y: p * 3, r: H * .35, col: '#ffe8c0' }); }
     CABS.forEach((gm, i) => {
-      const x = cabX(i), cw = Math.min(W * .12, H * .36), ch = H * .52, top = floor - ch, on = hover === gm.id, col = { primordial: '#1e5a60', 'starfall-guild': '#3a4a8a', realmbound: '#4a2a6a', wildbond: '#2f7a52', baseball: '#5a5a5a', otherworld: '#4a3a7a' }[gm.id] || '#444';
+      const x = cabX(i), cw = Math.min(W * .12, H * .36, W * .8 / Math.max(1,CABS.length-1) * .82), ch = H * .52, top = floor - ch, on = hover === gm.id, col = { primordial: '#1e5a60', 'starfall-guild': '#3a4a8a', realmbound: '#4a2a6a', wildbond: '#2f7a52', baseball: '#5a5a5a', otherworld: '#4a3a7a' }[gm.id] || '#444';
       R(x - cw / 2, top, cw, ch, col); R(x - cw / 2 - p, top, p, ch, '#00000055'); R(x - cw / 2, top, cw, p * 6, '#0a0a12');
       cx.save(); cx.font = `${Math.max(9, Math.round(cw / 9))}px Bungee, Impact, sans-serif`; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.fillStyle = gm.href ? '#ffcf4d' : '#8a8aa0';
       cx.fillText(gm.title.toUpperCase().slice(0, 14), x, top + p * 3); cx.restore();
       const sw = cw * .8, sh = ch * .38, sx = x - sw / 2, sy = top + p * 9;
       let s = screens[gm.id]; if (!s) { s = screens[gm.id] = document.createElement('canvas'); s.width = 160; s.height = 90; }
-      const sc = s.getContext('2d'); if (gm.href && A.covers[gm.cover]) A.covers[gm.cover](sc, 160, 90, reduce ? 0 : t); else { sc.fillStyle = '#111'; sc.fillRect(0, 0, 160, 90); for (let k = 0; k < 160; k++) { sc.fillStyle = `rgba(255,255,255,${Math.random() * .25})`; sc.fillRect(Math.random() * 160, Math.random() * 90, 2, 1); }
+      const sc = s.getContext('2d'), photo = document.querySelector('[data-game="'+gm.id+'"] .cover img'); if (photo && photo.complete && photo.naturalWidth) sc.drawImage(photo,0,0,160,90); else if (gm.href && A.covers[gm.cover]) A.covers[gm.cover](sc, 160, 90, reduce ? 0 : t); else { sc.fillStyle = '#111'; sc.fillRect(0, 0, 160, 90); for (let k = 0; k < 160; k++) { sc.fillStyle = `rgba(255,255,255,${Math.random() * .25})`; sc.fillRect(Math.random() * 160, Math.random() * 90, 2, 1); }
         sc.fillStyle = '#ccc'; sc.font = '14px Bungee, Impact, sans-serif'; sc.textAlign = 'center'; sc.fillText('COMING SOON', 80, 50); }
       R(sx - p, sy - p, sw + p * 2, sh + p * 2, '#0a0a12'); cx.drawImage(s, sx, sy, sw, sh);
       R(x - cw * .4, sy + sh + p * 3, cw * .8, p * 4, '#1a1a24'); R(x - cw * .2, sy + sh + p * 2, p * 2, p * 3, '#e0483e'); R(x + cw * .1, sy + sh + p * 3, p * 2, p * 2, '#3a8ae0'); R(x + cw * .2, sy + sh + p * 3, p * 2, p * 2, '#ffcf4d');
@@ -277,7 +280,7 @@
       : `<span class="launch-hit soon" data-id="${g.id}" style="left:${(x - w / 2) * 100}%;width:${w * 100}%" aria-label="${g.title}: coming soon" role="img"></span>`;
     hits.innerHTML = mode === 'scene' ? PLACES.map(pl => link(byId(pl.id), pl.x, pl.w, pl.name)).join('')
       : mode === 'road' ? STOPS.map((s, i) => link(byId(s.id), (stopX(i) - ROAD.cam) / Math.max(1, W), .28, s.name)).join('')
-      : CABS.map((g, i) => link(g, cabX(i) / Math.max(1, W), Math.min(.12, H * .36 / Math.max(1, W)) + .02)).join('');
+      : CABS.map((g, i) => link(g, cabX(i) / Math.max(1, W), Math.min(.12, H * .36 / Math.max(1, W), .8 / Math.max(1,CABS.length-1) * .82) + .01)).join('');
   }
   const walkerOf = () => mode === 'hall' ? HALL : ROAD;
   const xOf = id => mode === 'hall' ? cabX(CABS.findIndex(g => g.id === id)) : stopX(STOPS.findIndex(s => s.id === id));

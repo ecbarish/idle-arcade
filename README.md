@@ -40,7 +40,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 ## Changelog
 
 - Wildbond build handoff (2026-10-09): [Hollowecho area brief](docs/lore/wildbond-hollowecho-brief.md) gathers the existing route, people, teams, creatures and woven clues for the Godot build. It separates proposed staging from canon and flags Senna's stale documented team levels; gameplay is unchanged.
-
+- Arcade (2026-10-09): the current Wildbond and Starfall previews have screenshot cards and direct doors on the launcher. Classic games and progress remain separate; first-load and save guidance is explicit. Keyboard road panning keeps focused doors visible. [Checks and scope](docs/launcher-previews.md).
 - Godot Wildbond (2026-10-09): Stillreed Basin, the fifth area, is open: wooden footbridges over the river, its trainers and Warden, the sound of running water and its own tune, the ferry skiff moored at the landing with a sign you can read, the current running down the river, cattails, windfall under the orchard and dragonflies. 225 checks pass.
 - Local helper (2026-10-08): preserve the runtime tool-permission order in both task modes; 19 runner checks pass.
 - Otherworld v0.4.0 (2026-10-08): all eleven soul memories open practical uses across worlds; six people remember help, harm and repaired trust within a life. Promised cart journeys, shared winter reserves and witnesses happen in portrait conversations. Old saves and Return retain their rules.

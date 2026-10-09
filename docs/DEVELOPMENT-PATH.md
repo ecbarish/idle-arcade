@@ -80,7 +80,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB3.2 [Claude] Hollowecho Hills.
 - [ ] WB3.3 [Claude] Sunthread Commons.
 - [ ] WB3.4 [Claude] Farwatch Reach.
-- [ ] WB3.5 [ChatGPT] (Hollowecho brief claimed: Codex, 2026-10-09, codex/wildbond-hollowecho-brief; T47; Sunthread/Farwatch remain open) For each area before Claude builds it: a short "area brief" in docs/lore/ (places, people,
+- [ ] WB3.5 [ChatGPT] (Hollowecho brief done, merged 2026-10-09, T47; Sunthread/Farwatch remain open) For each area before Claude builds it: a short "area brief" in docs/lore/ (places, people,
   clues from T40, creatures, one memorable moment) so the Godot build has everything in one page.
 - [ ] WB3.6 [ChatGPT] Trainer teams and a pacing sim for areas 5-8 using the Godot rules (rules.gd matches the browser).
 - [ ] WB3.7 [Claude] The Unbound appear (WG5): first encounters, a choice to help or oppose; reputation begins.
@@ -191,7 +191,7 @@ rules; free local model first, as docs/otherworld-design.md says).
 - [x] Come Play, previews, trailer, Windows builds.
 **AR-M2: polish for everyone.**
 - [x] AR2.1 [ChatGPT] Accessibility (T44, L10). (merged 2026-10-09)
-- [ ] AR2.2 [ChatGPT] The
+- [x] AR2.2 [ChatGPT] (done, merged 2026-10-09; T46) The
 launcher shows the Godot previews as games (cards, covers, links).
 - [ ] AR2.3 [any] Game boxes (V3).
 - [ ] AR2.4 [local] Link and image check across guides and pages (Lane D3).
