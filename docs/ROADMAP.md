@@ -125,6 +125,23 @@ Branch: codex/realmbound-opening-polish, from latest main.
 - Move the sun/cloud details clear of the title and health frames, with finer sky pixels. Browser Realmbound only: combat, world UI, scenes, onboarding, quest helper, offline-state and ambience hooks; regression scenarios and four-size screenshots.
 - Run tools/run-all-checks.cjs; add normal changelog, Session, path and COMMS notes. No versions, Godot, preview or shared-engine changes; never merge.
 
+### T58: Wildbond, the three late observations and the reveal (WB4.4b part 2)
+Why: Claude accepted T55's three observations and settled its open calls (ledger, "Claude's review of T55"); the ending
+needs its words before Claude places them in Godot (WB4.3 part 2).
+Branch: codex/wildbond-reveal, from latest main. Claim with a draft PR titled "T58".
+- Write docs/lore/wildbond-reveal.json (with a short .md beside it): for each observation, the inspection text (what you
+  see, in the world's words, a few short lines), and optional lines for Orri, Ceryn and Sivet plus one each for Maren
+  and Wren when you tell them. Every heritage sees the same evidence.
+- The reveal conversation: after the league and the Champion returns, at the warm pocket in Hollowecho (default; propose
+  a better place if the clues want one), with Toren, Isolde and your partner. It connects coercion, memory loss, the
+  turned friend, the joining and common roots, and lands the irony (the old order and the modern Unbound both reject
+  the bond; the answer is friends who choose each other). Keep open: the old pair's fate, entity fragments, Veilmote's
+  nests, Tobin's sighting. The watcher was the turned friend, now asleep in the warm pocket (Evan decided, 2026-10-09).
+- The depth restoration moment (narration, three to five lines) and one line from each of the eight Wardens afterwards.
+- Follow CREATIVE.md "Writing for players" and "Stories are woven": no new names for the entity or the order, no
+  game-rule words. Docs/data only; no Godot, engine or save changes. All eight browser pages pass; normal README,
+  Session log, COMMS and queue notes.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a

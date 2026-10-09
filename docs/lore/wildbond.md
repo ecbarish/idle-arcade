@@ -181,7 +181,7 @@ she admits, while still expecting another chance to win. At fourteen, Undertone 
 through answering notes and waits for their reunion before inviting the player's team closer.
 
 At twenty-four, **Warden Senna**, a quiet, attentive surveyor, tests whether the player listens to a partner's warning
-even when it contradicts a good plan. Her Flintroot, Bellmote and Hushmane are levels 60, 61 and 63. Victory awards
+even when it contradicts a good plan. Her Flintroot, Bellmote and Hushmane are levels 58, 59 and 60. Victory awards
 the **Echo Badge** and raises the existing cap from 60 to 65. Senna asks teams to ring before dusk and answer others.
 These events do not explain the fading or Toren's warm stones, nor establish a new origin for Shade.
 
@@ -222,7 +222,7 @@ the player's team onto a clear patch of ground. Its companionship does not expla
 warm-stone clue or establish a new origin for Grove. Neighboring teams continue sheltering the nursery.
 
 At twenty-four, **Warden Halen**, a patient organizer who greets returning tamers by name, tests making room
-for partners with different strengths. His Tilthtusk, Hemglow and Bloomcourser are levels 65, 66 and 68.
+for partners with different strengths. His Tilthtusk, Hemglow and Bloomcourser are levels 63, 64 and 65.
 Victory awards the **Loom Badge**, raising the existing cap from 65 to 70. He encourages the player to remember
 those beside them and leave a place to rest, without declaring an unbuilt final route open.
 
@@ -268,7 +268,7 @@ inviting the player's team closer. The scene does not explain the fading or conn
 Toren's warm stones; those mysteries remain open.
 
 At twenty-four, **Warden Rysa**, a welcoming recorder, visibly corrects her own tide estimate. She judges
-responsibility for what a tamer learns and passes on. Her Keeljaw, Moorweft and Soundhowl are 69, 70 and 72.
+responsibility for what a tamer learns and passes on. Her Keeljaw, Moorweft and Soundhowl are 68, 69 and 70.
 Victory awards the eighth **Horizon Badge**: the existing cap table allows level 75 with all eight badges.
 She recognizes the trust carried from Larkhaven to this shore and asks the team to rest and correct its notes
 before the league. The league, Champion, post-game and Modern 3D remain future work (W2/W3/W6).

@@ -24,8 +24,10 @@ commit.
 | **T: tools and craft** | Claude: "Best practices" thread | `tools/`, `.github/`, `docs/learning/`, `.gitattributes` | AR2.x tooling, CI; changes to game code go to W or S as a ticket |
 | **R: reviews and merges** | Claude: "PR reviewer" and "Merge conflict fixer" threads | Merge commits, version numbers, README version lines | B0 below: review, test and merge every waiting PR; fix conflicts on others' PRs |
 | **P: planning** | Claude: "Priorities and direction" thread | `docs/PRIORITIES.md`, the order and owner tags in `docs/DEVELOPMENT-PATH.md`, this page's lanes, START-HERE "Where we are" and "Up next" | Scoring and placing ideas; refilling lanes |
+| **Q: design decisions** | Claude: "Design decisions" thread (started 2026-10-09) | `docs/DECISIONS.md` | Answers design questions from any lane (ask in COMMS "to Claude (Design decisions)"); turns answers into notes or tickets for the lane that builds |
 | **I: ideas and reviews** | Claude: "New game ideas" and "Improve existing games" threads | `docs/proposals/`, `docs/ideas.md`, `docs/research/` | Proposals only; lane P places them |
 | **D: local helper** | Ollama on Evan's PC | its own clone, read-only jobs | Lane D table below |
+| **X: guests** | Anyone outside the team with their own AI (first: Evan's dad, GitHub `abarish-dev`); start at [CONTRIBUTING.md](../CONTRIBUTING.md) | Only the files the task names | Lane X table below; lane P adds tasks no other lane is touching |
 
 **Files every lane touches, kept to one line each:** START-HERE's Session log (your dated line at the top), README's
 changelog (your entry at the top), COMMS (your message), and ticking your own deliverable in DEVELOPMENT-PATH. Anything
@@ -138,6 +140,7 @@ index.html or style.css until those phases are merged.
 | A18 | **T43** The creature catalogue reaches Realmbound | done, merged 2026-10-09 (Realmbound v1.7.0) | docs/ROADMAP.md T43 |
 | A19 | **T44** Accessibility pass on the browser games (L10) | done, merged 2026-10-09 | docs/ROADMAP.md T44 |
 | A20 | **T45** Early-road heritage dialogue (WB2.6) | done, merged 2026-10-09 (Wildbond v1.8.1) | Browser data and ledger; no Godot edits |
+| A33 | **T58** Wildbond late observations and the reveal (WB4.4b part 2) | open, for ChatGPT | docs/ROADMAP.md T58; text for Claude to place in Godot |
 | A32 | **T57** Starfall four seasonal chapter outlines (SF3.3) | ready: PR #84, Codex, 2026-10-09 | One threat/festival/newcomer each; current calendar, existing street loop; docs only |
 | A31 | **T56** Wildbond final-four-area and league pacing (WB3.6) | ready: PR #83, Codex, 2026-10-09 | Actual Godot battle/rules in a disposable diagnostic project; no Godot edits |
 | A30 | **T55** Final truth clue audit (WB4.4b part 1) | ready: PR #82, Codex, 2026-10-09 | Check all placed clues; propose three shared late observations; review before dialogue |
@@ -173,6 +176,19 @@ index.html or style.css until those phases are merged.
 | B7 | **V3** Game boxes on the launcher | open | docs/VISION.md §3 |
 | B8 | **G2** Realmbound dungeon lighting; **W3 part 2** roaming legendaries; **W10** baby forms | open | After Launch is fine |
 | — | Done | — | L2 save safety, L1 settings, L8 launcher (living world, road, hall, vote), L3 phone part 1, Wildbond v1.4-1.5.2 fixes from Evan's play |
+
+## Lane X: guests (a `guest/<topic>` branch and a pull request; CONTRIBUTING.md has the steps)
+
+Evan chose (2026-10-09) to add guests as collaborators: they push `guest/*` branches to this repo, never `main`.
+
+Self-contained tasks for someone new, each away from what the other lanes are building. Claim like everyone else (a
+draft pull request titled with the ID). Lane R reviews and merges; guests never merge. Lane P keeps this list stocked.
+
+| # | Task | Status | Notes |
+|---|---|---|---|
+| X1 | **Play a game's first 20 minutes as a newcomer** and file what's confusing or broken as GitHub issues (the Bug and Feedback forms), with screenshots | open | No code. Any game on the arcade; Wildbond and Starfall previews first. One issue per problem |
+| X2 | **Broken links and pictures** (AR2.4): check every link and image in `guides/` and `playtest.html`, fix the broken ones | open | Only those files. Say in the PR how you checked |
+| X3 | **Player-text sweep of Otherworld** (D1): fix names and wording in `games/otherworld/js/` that break docs/CREATIVE.md "Writing for players" | open | Text only, no rules or numbers; `tests/otherworld.html` must still pass (`node tools/run-all-checks.cjs`) |
 
 ## Lane D: the local helper (Ollama on Evan's PC; small, checkable jobs only)
 
