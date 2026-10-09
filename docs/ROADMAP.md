@@ -30,6 +30,14 @@ Branch: codex/wildbond-hollowecho-brief, from latest main.
 - Distinguish existing exported canon from proposed staging. Preserve names, levels, badge rewards and undecided mysteries. No engine, browser data, save or version changes.
 - Verify cited source IDs/coordinates/content using a read-only browser inventory; all eight pages pass. README and one Session log line.
 
+### T49: Wildbond, Sunthread and Farwatch build briefs (WB3.5 part 2)
+Why: Claude requested the final two area handoffs before their Godot builds; preserve existing exported canon and separate physical staging from new mechanics.
+Read first: docs/COMMS.md, docs/lore/wildbond.md, docs/lore/wildbond-threads.md, Hollowecho brief, browser data/maps/sound/scene, docs/CREATIVE.md and docs/wildbond-plan.md.
+Branch: codex/wildbond-final-area-briefs, from latest main.
+- Write docs/lore/wildbond-sunthread-brief.md and docs/lore/wildbond-farwatch-brief.md in the Hollowecho brief shape: map/coordinates, people, ecology/encounters, clues/payoffs, heritage perspective, memorable moment, light/weather/music and acceptance checks.
+- Gather existing canon only; mark recommendations as staging. No new clue, encounter, balance, engine/exporter, save or version changes. Preserve unresolved truths and all essential clues for every heritage.
+- Verify against read-only live browser inventory and run all eight test pages. Note stale historical prose rather than silently retuning; README and one Session log line, message board handoff.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a
