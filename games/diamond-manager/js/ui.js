@@ -4,7 +4,7 @@
 const VERSION='0.1.0';
 const $=s=>document.querySelector(s);
 Arcade.validators[DM.key]=validLeague;
-let L=migrateLeague(Arcade.load(DM.key)), view=null, tab='roster', trade={club:1,give:[],get:[],answer:''}, flash='';
+let L=migrateLeague(loadLeague(localStorage, Arcade.backups(DM.key))), view=null, tab='roster', trade={club:1,give:[],get:[],answer:''}, flash='';
 const SPEEDS=[[1,'Normal speed',900],[2,'Fast',300],[3,'Very fast',90]];
 
 function save(){ Arcade.save(DM.key,L); const y=L.clubs[DM.you];
@@ -209,4 +209,4 @@ let fieldSize=null;
 function frame(now){ stepWatch(now); const e=view?view.g.events[view.i]:null; fieldSize=drawField($('#field'),L,e); requestAnimationFrame(frame); }
 render(); requestAnimationFrame(frame);
 if(L.intro) introNote(); else showOffseasonOrNext();
-if(location.hostname==='localhost') window.__dm={get L(){return L;},set L(v){L=v;render();},DM,newLeague,playGame,playDay,playFinalGame,recordGame,standings,overall,askSalary,payroll,batters,pitchers,setLineup,autoLineup,makeSchedule,plateAppearance,gateMoney,endSeason,canStartSeason,startSeason,resign,release,signFree,buyUpgrade,worth,judgeTrade,doTrade,aiOffer,answerOffer,validLeague,migrateLeague,rosterOk,render};
+if(location.hostname==='localhost') window.__dm={get L(){return L;},set L(v){L=v;render();},DM,newLeague,playGame,playDay,playFinalGame,recordGame,standings,overall,askSalary,payroll,batters,pitchers,setLineup,autoLineup,makeSchedule,plateAppearance,gateMoney,endSeason,canStartSeason,startSeason,resign,release,signFree,buyUpgrade,worth,judgeTrade,doTrade,aiOffer,answerOffer,validLeague,loadLeague,migrateLeague,rosterOk,render};
