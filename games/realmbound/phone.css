@@ -1,4 +1,6 @@
 /* RB1.4: let wrapped controls determine the room left for field overlays. */
+/* Fixed HUD offsets are viewport pixels, including on ultrawide screens. */
+.xp{zoom:1!important}
 @media(max-width:700px){
  .app{min-height:0;--field-controls-top:190px}
  .top{flex-wrap:nowrap}.brand{gap:6px;min-width:0}.brand h1{font-size:18px}
@@ -7,7 +9,7 @@
  .field-options-list{position:fixed;top:58px;left:8px;right:8px;width:auto;max-height:calc(100dvh - 74px)}
  .field-options-list button,.menu button,#fieldDock button,#arrivalControls button,.realm-surroundings button,.road-surroundings button{min-height:44px}
  #fieldDock{min-height:59px;padding-bottom:max(7px,env(safe-area-inset-bottom));scroll-padding-inline:10px;overscroll-behavior-x:contain}
- .xp{zoom:1!important;bottom:var(--field-dock-height,59px)}
+ .xp{bottom:var(--field-dock-height,59px)}
  .abar{bottom:calc(var(--field-dock-height,59px) + 19px);padding:5px;max-height:40dvh;overflow-y:auto;overscroll-behavior:contain}
  .abar>.slots{flex-wrap:wrap;justify-content:center;min-width:0;max-width:100%;gap:4px}
  .ab{width:44px;height:44px;flex:none}.abar .seg button{min-height:44px;padding:6px 12px}
