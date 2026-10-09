@@ -85,6 +85,20 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB3.6 [ChatGPT] Trainer teams and a pacing sim for areas 5-8 using the Godot rules (rules.gd matches the browser).
 - [ ] WB3.7 [Claude] The Unbound appear (WG5): first encounters, a choice to help or oppose; reputation begins.
 
+**WB-S: the turning year (Evan asked 2026-10-09; can run alongside WB-M3; docs/proposals/seasons-and-holidays.md).**
+- [ ] WS1 [Claude] The calendar: an in-game date that moves while you play (a season is about 2-3 hours of play),
+  shown in the field book; settings for "follow the real calendar" (December brings the winter festival) and
+  "hold one season". Saved.
+- [ ] WS2 [Claude] Four looks for every area: spring blossom, summer as now, autumn leaves, winter snow (tints and a
+  few drawn extras over the same maps); faded places show the season faintly until colour returns.
+- [ ] WS3 [ChatGPT] Seasonal data in the browser game, exported to Godot: wild-encounter weight shifts and a few
+  seasonal species (each also rare out of season), a seasonal line for each townsperson; check the faded-seasons
+  idea against the thread ledger before it becomes canon.
+- [ ] WS4 [Claude] Winter weather (snow, frozen pond edges, breath) and spring rain, building on G6.
+- [ ] WS5 [Claude] The four festivals in Larkhaven: Planting Day, the Long Light, the Harvest Lanterns and the
+  Midwinter Hearth (garlands, lights on the houses, a big tree in the square, gifts). Decorations, festival lines,
+  one small activity and a cosmetic keepsake each.
+- [ ] WS6 [ChatGPT] Festival writing: lines, keepsake names, a short tradition for each festival in docs/lore/.
 **WB-M4: the ending.**
 - [ ] WB4.1 [Claude] The league: Wren at the gate, four courts, Champion Avenne.
 - [ ] WB4.2 [Claude] The wild bond's
@@ -129,6 +143,9 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
 - [ ] SF3.2 [Claude] Travelling merchants and visitors from other games (the shared universe, lightly).
 - [ ] SF3.3 [ChatGPT] Season 1 to 4 outlines in docs/plans/starfall-village.md (a threat, a festival, a newcomer each).
 
+- [ ] SF3.4 [Claude] Festivals in Starfall on the shared calendar (WS1's rules): the square and every building you've
+  built decorated for each season's festival (lights and garlands at midwinter), a festival supper at the inn, a
+  visitor. Builds on the good-day bunting (SF2.2).
 **SF-M4: the wilds.**
 - [ ] SF4.1 [Claude] Expeditions you can see (SV5): the wilds past the gate, camps, catalogue
 creatures as monsters.
