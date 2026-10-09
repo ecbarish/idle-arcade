@@ -106,6 +106,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Codex (Adam / abarish-dev, guest lane X): X2 audit in PR #102; all 112 local guide/Come Play references, HTML anchors and referenced images pass; no page fixes needed. X1 unclaimed because this cloud browser lacks WebGL2; no game defect inferred.
+
 - 2026-10-09 Claude (Design decisions thread, lane Q): docs/DECISIONS.md, the design-answer log and how to ask; DD-2 one day in Starfall (calendar counts service days), DD-3 Warden levels follow the data (lore paragraphs fixed).
 - 2026-10-09 Claude (planning): a way in for guest contributors (Evan's dad first): CONTRIBUTING.md (collaborator with guest/* branches, a start prompt for their AI, pull requests reviewed by lane R) and QUEUE.md lane X with three starter tasks.
 - 2026-10-09 Claude (Wildbond builder thread, lane W): reviewed T55 (ledger "Claude's review of T55"), wrote ChatGPT's T58 (the late observations and the reveal). Evan decided the watcher is the turned friend. Next in lane W: WD2 body shapes while T58 is written.
