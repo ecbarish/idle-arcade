@@ -105,7 +105,6 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
-<<<<<<< HEAD
 - 2026-10-09 Claude (Playtester thread): DM2, the Diamond Manager playtest (docs/playtests/diamond-manager-1.md). It passes the bar (15), but over two seasons an active manager wins no more than a hands-off one. Three small fixes landed; the deeper fix is ticket DM-B in docs/plans/sports-management.md.
 - 2026-10-09 Codex (Adam / abarish-dev): RB1.4 phone pass in PR #116, full CI and before/after pictures pass; updated with latest main, fresh CI pending. Guest branch, own noreply, no merge or version bump.
 - 2026-10-09, Codex for Adam / abarish-dev: AC1 Storm Front built on guest/storm-front, PR #119. Fresh browser checks and cabinet captures run in GitHub; no merge or version bump. #104 and #116 updated to main, green and ready.
