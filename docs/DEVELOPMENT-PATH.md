@@ -89,6 +89,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [x] WB3.5 [ChatGPT] (Hollowecho T47, Sunthread and Farwatch T49: all merged 2026-10-09) For each area before Claude builds it: a short "area brief" in docs/lore/ (places, people,
   clues from T40, creatures, one memorable moment) so the Godot build has everything in one page.
 - [x] WB3.6 [ChatGPT] T56, merged 2026-10-09 (PR #83): actual copied Godot battle/rules, final-area and league pacing, raw measurements and cooldown finding; no balance tuning or Godot edits. Report: docs/wildbond-godot-pacing.md.
+- [x] WB3.6b [Claude] Pacing fix from T56: a level costs about 12 even-level wins at every stage (rules.gd `win_xp`); cooldown stall fixed in PR #91.
 - [ ] WB3.7 [Claude] The Unbound appear (WG5): first encounters, a choice to help or oppose; reputation begins.
 
 **WB-S: the turning year (Evan asked 2026-10-09; can run alongside WB-M3; docs/proposals/seasons-and-holidays.md).**
@@ -279,6 +280,10 @@ Judged ideas and the scorecard for new ones: docs/proposals/new-game-ideas.md (2
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, WB3.6b pacing (Claude, Wildbond builder):** T56 showed the late areas needed thousands of wild wins.
+  Cause: reward grew with level, XP needed with level^2.2, so wins per level rose from 24 to about 400. A formula ported
+  from an idle game assumes idle speed; with hand-played battles, measure wins per level, not XP. Now a constant
+  `WINS_PER_LEVEL` (12, Evan's pick: training before each Warden matters) in rules.gd, with a check.
 - **2026-10-09, WD1 and the Deeptide stall (Claude, Wildbond builder, PR #91):** a menu that pauses time can trap a
   player when every choice in it depends on time passing (cooldowns only tick while the battle runs). Fix the rule, not
   the symptom: a creature with nothing ready never opens the menu; it waits while time runs. A numbers line can always

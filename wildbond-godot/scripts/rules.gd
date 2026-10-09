@@ -135,6 +135,17 @@ static func stats(c: Dictionary) -> Dictionary:
 static func xp_need(lvl: int) -> int:
 	return roundi(5.0 * pow(lvl, 2.2) + 15.0)
 
+## XP for a win (WB3.6b, after T56's pacing test). The browser's reward (foe levels x 12) grew with level while the XP
+## needed grew with level^2.2, so a level cost 24 even-level wins at level 5 and 390 by level 55: fine for an idle game,
+## a wall when every battle is played by hand. Now a win is worth a share of the level you're fighting at, so a level
+## costs about WINS_PER_LEVEL even-level wild wins all the way through (trainer battles count 1.6 times). The foe's level
+## counts up to 3 above yours (beating stronger creatures is worth more, but you can't leap); weaker foes are worth less
+## because the curve is steep. journey_xp is the journey's XP setting (Classic 0.13, Breezy 0.36, Long Road 0.08).
+const WINS_PER_LEVEL := 12.0                 # Evan chose 12 (2026-10-09): training before each Warden matters
+static func win_xp(foe_count: int, foe_avg_lvl: float, my_lvl: int, trainer: bool, journey_xp: float) -> float:
+	var at := clampi(roundi(foe_avg_lvl), 1, my_lvl + 3)
+	return foe_count * xp_need(at) / WINS_PER_LEVEL * (journey_xp / 0.13) * (1.6 if trainer else 1.0)
+
 ## The moves a creature knows: everything learned by its level, the last four (movesOf).
 static func moves_of(c: Dictionary) -> Array:
 	var out: Array = []
