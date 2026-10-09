@@ -468,11 +468,10 @@ func _end(r: String) -> void:
 		for c in caught: lv_sum += c.lvl
 		lv_sum = maxi(lv_sum, 3)
 		var journey: Dictionary = R.DATA.JOURNEY.get("classic", { "xp": 1.0 })
-		var base: float = lv_sum * 12.0 * (1.0 if kind == "wild" else 1.6) * float(journey.get("xp", 1.0))
-		var avg := float(lv_sum) / maxf(1.0, foes.size() + caught.size())
+		var count := maxi(1, foes.size() + caught.size())
+		var avg := float(lv_sum) / count
 		for u in allies:
-			var scale := minf(1.2, pow(maxf(1.0, avg) / u.c.lvl, 2.0))
-			var xp := roundi(base * (0.3 if u.c.hp <= 0 else 1.0) * scale)
+			var xp := roundi(R.win_xp(count, avg, u.c.lvl, kind != "wild", float(journey.get("xp", 0.13))) * (0.3 if u.c.hp <= 0 else 1.0))
 			results.append("%s gained %d XP." % [u.c.name, xp])
 			results.append_array(R.grow(u.c, xp, max_level))
 			var gain := 0.5 if kind == "wild" else 2.0
