@@ -49,6 +49,15 @@ Branch: codex/wildbond-final-area-briefs, from latest main.
 - Gather existing canon only; mark recommendations as staging. No new clue, encounter, balance, engine/exporter, save or version changes. Preserve unresolved truths and all essential clues for every heritage.
 - Verify against read-only live browser inventory and run all eight test pages. Note stale historical prose rather than silently retuning; README and one Session log line, message board handoff.
 
+### T50: Wildbond seasonal data (WS3)
+Why: Claude's calendar and seasonal looks need modest ecological changes and people noticing the season, without calendar-locked progress.
+Read first: docs/COMMS.md, seasons-and-holidays proposal, wildbond thread ledger, canon and CREATIVE.
+Branch: codex/wildbond-seasonal-data, from latest main.
+- Add plain-JSON seasonal fields in browser species/maps data: four keyed seasonal wild tables per regional map, modest relative-weight changes, a few existing seasonal visitors rare out of season. No removed species, guardians or progress requirements.
+- One seasonal line per townsperson for each season, with shared/base/badge/heritage lines retained; reserve festival writing for WS6. Keep essential clues shared and record any observations in the ledger.
+- Document export schema and integration rules, check faded-season presentation against decided canon without revealing an undecided cause. Classic behavior, encounters, levels, rewards, saves and versions unchanged; no Godot or exporter edit.
+- Files: games/wildbond/js/00-data.js, js/11-maps.js, tests/wildbond-checks.js, docs/lore/wildbond-seasons.md and thread ledger, normal claim/README/Session/message-board notes. Actual 39-table export and all eight browser suites pass.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a

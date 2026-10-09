@@ -17,6 +17,12 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 | WB3.5b | Sunthread and Farwatch briefs (T49) | S | claimed: Codex, 2026-10-09, codex/wildbond-final-area-briefs | Existing canon/data handoff for Claude; no Godot edits |
 | WB3.5a | Hollowecho brief (T47) | S | claimed: Codex, 2026-10-09, codex/wildbond-hollowecho-brief | Existing canon/data gathered for Claude; Stillreed already built, Sunthread/Farwatch later |
 
+## Seasonal content handoff
+
+| ID | Project | Size | Status | Notes |
+|---|---|---|---|---|
+| WS3 | Seasonal encounter and townsperson data (T50) | M | claimed: Codex, 2026-10-09, codex/wildbond-seasonal-data | Append-only export fields; Classic unchanged |
+
 ## How to use this list
 
 - **Pick** any project whose status is `open` and whose dependencies are done. Prefer the **Launch track** and the

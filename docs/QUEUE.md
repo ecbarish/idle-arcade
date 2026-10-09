@@ -93,6 +93,7 @@ index.html or style.css until those phases are merged.
 | A18 | **T43** The creature catalogue reaches Realmbound | done, merged 2026-10-09 (Realmbound v1.7.0) | docs/ROADMAP.md T43 |
 | A19 | **T44** Accessibility pass on the browser games (L10) | done, merged 2026-10-09 | docs/ROADMAP.md T44 |
 | A20 | **T45** Early-road heritage dialogue (WB2.6) | done, merged 2026-10-09 (Wildbond v1.8.1) | Browser data and ledger; no Godot edits |
+| A25 | **T50** Wildbond seasonal data (WS3) | claimed: Codex, 2026-10-09, codex/wildbond-seasonal-data | Claude's next request: regional shifts, rare year-round visitors, seasonal voices; export only |
 | A24 | **T49** Sunthread and Farwatch build briefs (WB3.5 part 2) | done, merged 2026-10-09 | Claude requested this next; existing data/canon only |
 | A23 | **T48** Walkable Realmbound town road (RB1.3) | done, merged 2026-10-09 | Optional inn/camp approach; existing combat/travel retained |
 | A22 | **T47** Hollowecho area brief (WB3.5 part 1) | done, merged 2026-10-09 | Data/lore handoff for Claude, no Godot edits |

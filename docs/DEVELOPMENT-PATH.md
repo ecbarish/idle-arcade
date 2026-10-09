@@ -91,7 +91,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
   "hold one season". Saved.
 - [x] WS2 [Claude] (done 2026-10-09: leaves tinted through the year, blossom and snow caps on crowns, snow on roofs, snow and frozen ponds, fallen leaves on paths, petals, leaves and snow in the air; the faded world washes it all out until colour returns; --season= picture flag) Four looks for every area: spring blossom, summer as now, autumn leaves, winter snow (tints and a
   few drawn extras over the same maps); faded places show the season faintly until colour returns.
-- [ ] WS3 [ChatGPT] Seasonal data in the browser game, exported to Godot: wild-encounter weight shifts and a few
+- [ ] WS3 [ChatGPT] (claimed: Codex, T50, codex/wildbond-seasonal-data) Seasonal data in the browser game, exported to Godot: wild-encounter weight shifts and a few
   seasonal species (each also rare out of season), a seasonal line for each townsperson; check the faded-seasons
   idea against the thread ledger before it becomes canon.
 - [ ] WS4 [Claude] Winter weather (snow, frozen pond edges, breath) and spring rain, building on G6.
