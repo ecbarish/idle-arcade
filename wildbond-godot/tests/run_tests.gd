@@ -502,6 +502,42 @@ func _run() -> void:
 		check(main.route(Vector2i(1, 9), Vector2i(27, 9)).size() > 0 and main.solid("~"), "you can walk out to the end of the pier, and the sea stays sea")
 		check(main.route(Vector2i(1, 9), Vector2i(20, 4)).size() > 0 and main._heritage_line("ceryn", main.npc_info.ceryn.data) != "", "a clear path up to Rysa's ledger, and Ceryn has a word for your family")
 		check(ResourceLoader.exists("res://assets/ambience/farwatch.wav"), "waves against the harbor")
+		# ---- the Returning Light League (WB4.1): Wren, four courts in order, the Champion
+		main.badges.append_array(["loom", "horizon"])
+		main._go("league", Vector2i(3, 16), Vector2i.UP)
+		tick(1.0)
+		check(main.map_name == "league" and ["wren", "nelva", "edrin", "maela", "corven", "liora", "avenne"].all(func(id): return main.npcs.any(func(n): return n.id == id and n.where == "league")), "the league: Wren at the gate, Nelva, four court challengers and the Champion")
+		main.me.tile = Vector2i(3, 13)
+		main.me.pos = Vector2(main.me.tile) * main.TILE
+		main.lines.clear()
+		check(main._talk_here() and main.lines.size() == 4 and main.then_do.is_valid(), "talk to Wren at the gate: her words before the battle")
+		main.lines.clear()
+		main.then_do.call()
+		main.then_do = Callable()
+		check(main.battle.visible and main.battle.foes.size() == 3 and main.battle_story == "league:leagueWren", "and the gate battle begins, three of her team")
+		main.battle.visible = false
+		main.battle_story = ""
+		check(main._league_next().id == "leagueWren", "Wren first")
+		main._after_league("leagueWren", "won")
+		check(main._league_next().id == "league1" and main.league_room == 0, "then Edrin's listening court")
+		main._after_league("league1", "won")
+		main._after_league("league2", "won")
+		check(main._league_next().id == "league3" and main.league_room == 2, "the courts go in order")
+		main._after_league("league3", "lost")
+		check(main.league_room == 0 and main._league_next().id == "league1" and main.story_done.has("leagueWren"), "lose a court and the courts begin again (Wren stays beaten)")
+		for id in ["league1", "league2", "league3", "league4"]:
+			main._after_league(id, "won")
+		check(main._league_next().id == "leagueChampion", "four courts won: Champion Avenne on the terrace")
+		main.lines.clear()
+		main._after_league("leagueChampion", "won")
+		check(main.story_done.has("leagueEnding") and main.lines.size() >= 9, "the Champion, and the homecoming at the gate")
+		for id in ["leagueWren", "league1", "league2", "league3", "league4", "leagueChampion", "leagueEnding"]:
+			main.story_done.erase(id)
+		main.league_room = 0
+		main.lines.clear()
+		main.badges.erase("horizon")
+		main._go("farwatch", Vector2i(1, 9), Vector2i.RIGHT)
+		tick(1.0)
 		main.badges.erase("loom")
 		main._go("sunthread", Vector2i(1, 9), Vector2i.RIGHT)
 		tick(1.0)

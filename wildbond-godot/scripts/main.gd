@@ -113,7 +113,7 @@ var npc_info := {}                           # id -> { data from the map, beaten
 var badges: Array = []
 var spotter: Mover = null                    # a trainer who has seen you and is walking over
 var spot_t := 0.0
-const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch"]    # the maps the Godot version has so far
+const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "league"]    # the maps the Godot version has so far
 var starters: Array[Mover] = []
 var partner: Mover = null
 var map_name := "larkhaven"
@@ -157,6 +157,7 @@ var fest_step := 0                            # how far along it is (the race: 1
 var fest_done := {}                           # "<festival>:<year>" -> true: each festival's activity once a year
 var keepsakes := {}                           # festival keepsakes you've been given: id -> name
 var flowers: Array = []                       # flowers planted at the ranch on Planting Day ([x, y]); they stay
+var league_room := 0                          # the league (WB4.1): the next court in this attempt (0-3, then 4 the Champion)
 
 func _ready() -> void:
 	demo = "--demo" in OS.get_cmdline_user_args()
@@ -522,7 +523,7 @@ func _check_doors() -> void:
 		var block := ""
 		if ex.is_empty():
 			block = "The road ends here for now."
-		elif ex.has("locked") and not _gate_open(map_name):
+		elif ex.has("locked") and (not _gate_open(map_name) or (ex.to == "league" and badges.size() < 8)):
 			block = ex.locked
 		elif ex.to not in BUILT:
 			block = "The road goes on to %s. That part of the valley is still being built in the Godot version." % DATA.MAPS[ex.to].name
@@ -1513,7 +1514,7 @@ func _draw_structures() -> void:
 			var ch: String = rows[y][x]
 			if ch == "T":
 				_tex(NATURE, Vector2i(1, 10), Vector2i.ONE, Vector2(x, y) * TILE, _leaf_tint())   # a hedge bush under the treeline
-			elif ch in "r#" and not map_name in ["hollowecho", "sunthread", "farwatch"] and not doors.any(func(d): return x - d.x >= -1 and x - d.x <= 2 and y >= d.y - 2 and y <= d.y):
+			elif ch in "r#" and not map_name in ["hollowecho", "sunthread", "farwatch", "league"] and not doors.any(func(d): return x - d.x >= -1 and x - d.x <= 2 and y >= d.y - 2 and y <= d.y):
 				_tex(NATURE, Vector2i(0, 10), Vector2i.ONE, Vector2(x, y) * TILE, _leaf_tint())   # garden bushes beside each cottage
 	for d in doors:
 		if not (map_name == "larkhaven" and d == BARN_DOOR):
@@ -1528,6 +1529,9 @@ func _draw_structures() -> void:
 		_draw_bell_house(Vector2i(2, 1))
 	if map_name == "sunthread":
 		_draw_meeting_hall(Vector2i(20, 1), 8)
+	if map_name == "league":
+		for k in 5:
+			_draw_court(Vector2i(5 + k * 7, 3), k)
 	if map_name == "farwatch":
 		_draw_lookout(Vector2i(7, 1))
 		_draw_boathouse(Vector2i(4, 10))
@@ -1554,6 +1558,11 @@ func _on_battle(result: String) -> void:
 		var sid := battle_story.substr(6)
 		battle_story = ""
 		_after_story(sid, result)
+		return
+	if battle_story.begins_with("league:"):
+		var lid := battle_story.substr(7)
+		battle_story = ""
+		_after_league(lid, result)
 		return
 	if battle_story.begins_with("trainer:"):
 		var who := battle_story.substr(8)
@@ -1622,7 +1631,7 @@ func _draw_dragonflies() -> void:
 ## Hollowecho's ground (WB3.2): worn flagstones in the hamlet, and cave mouths where the floor runs in under the rock,
 ## dark inside so you can see they go somewhere (no interior yet).
 func _draw_stone_floor(x: int, y: int, o: Vector2, n: int) -> void:
-	var warm := map_name == "sunthread"                                       # sandy flagstones in the sunny commons
+	var warm := map_name in ["sunthread", "league"]                                       # sandy flagstones in the sunny commons
 	draw_rect(Rect2(o, Vector2(16, 16)), Color("c4b48c") if warm else Color("8c8c80"))
 	for k in 2:
 		draw_rect(Rect2(o + Vector2(0, k * 8 + 7), Vector2(16, 1)), Color("9a8a64") if warm else Color("6e6e62"))
@@ -1857,7 +1866,7 @@ func _season_ground(rows: Array) -> void:
 	var sn := cal.season()
 	if sn == "summer":
 		return
-	var sea: bool = map_name in ["saltmarsh", "farwatch"]
+	var sea: bool = map_name in ["saltmarsh", "farwatch", "league"]
 	for y in rows.size():
 		for x in rows[0].length():
 			var ch: String = rows[y][x]
@@ -2018,6 +2027,115 @@ func _draw_flowers() -> void:
 		draw_rect(Rect2(o + Vector2(5, 5), Vector2(6, 4)), Figures.OUTLINE)
 		draw_rect(Rect2(o + Vector2(6, 5), Vector2(4, 3)), Color("f07a9a"))
 		draw_rect(Rect2(o + Vector2(7, 6), Vector2(2, 1)), Color("f2d24a"))
+# ---------------------------------------------------------------- the Returning Light League (WB4.1)
+const COURT_COLS := [Color("6d8268"), Color("698796"), Color("b18d66"), Color("b3a56d"), Color("8b7095")]
+
+## The league's next battle: Wren at the gate, then the four courts in order, then Champion Avenne on the terrace.
+func _league_next() -> Dictionary:
+	for b in DATA.STORY:
+		if str(b.get("biome", "")) != "league":
+			continue
+		if not story_done.has("leagueWren"):
+			if str(b.league) == "wren":
+				return b
+		elif not (b.league is String) and int(b.league) == league_room:
+			return b
+	return {}
+
+## Talking to someone at the league: Nelva explains and heals; the next challenger battles you; the others say
+## where to go. A battle here is the browser game's story fight, with its lines and team from the game data.
+func _league_talk(n: Mover, data: Dictionary) -> void:
+	var role = data.league
+	var nm := _npc_name(n.id)
+	if story_done.has("leagueChampion"):
+		if str(role) == "keeper":
+			say("nelva", "The courts are resting, Champion. Come back whenever you want a battle; they will be glad to see you.")
+		else:
+			say(n.id, _fill("You carried the whole journey up those steps, {name}. Come and battle again some day."))
+		return
+	if str(role) == "keeper":
+		for c in team:
+			c.hp = R.stats(c).hp
+		say("nelva", "Welcome to the Returning Light League. Wren waits at the gate; then the four courts, in order, and the Champion's terrace.")
+		say("nelva", "I'll see to your team between rooms. If a court beats you, rest, and the courts begin again from the first.")
+		return
+	var b := _league_next()
+	if b.is_empty():
+		return
+	if str(b.league) != str(role) and not (role is float and not (b.league is String) and int(role) == int(b.league)):
+		say(n.id, "Wren is waiting for you at the gate first." if not story_done.has("leagueWren") else "%s first. The courts go in order: %s." % [_npc_name(_court_who(b)), b.title])
+		return
+	for l in b.get("lines", []):
+		var w: String = l[0]
+		say("" if w.begins_with("@") else w, _fill(l[1]))
+	then_do = func():
+		battle_story = "league:" + b.id
+		battle.max_level = level_cap()
+		var foes: Array = []
+		for t2 in b.team:
+			var sp: String = rival_c.get("sp", "cindercub") if t2[0] == "$rival" else t2[0]
+			foes.append(R.make(sp, int(t2[1]), { "rar": 1 }, rng))
+			seen[sp] = true
+		battle.open("trainer", team, foes, str(b.get("trainer", DATA.CAST.wren.name)))
+
+func _court_who(b: Dictionary) -> String:
+	for n in DATA.MAPS.league.npcs:
+		if str(n.league) == str(b.league) or (not (n.league is String) and not (b.league is String) and int(n.league) == int(b.league)):
+			return n.who
+	return "nelva"
+
+## After a league battle. Win: the next room, with the team healed between rooms; the Champion brings the ending.
+## Lose: rest, and this attempt begins again at the first court (Wren stays beaten).
+func _after_league(id: String, result: String) -> void:
+	var b: Dictionary = {}
+	for s2 in DATA.STORY:
+		if s2.id == id:
+			b = s2
+	for c in team:
+		c.hp = R.stats(c).hp
+	if result != "won":
+		league_room = 0
+		me.tile = Vector2i(3, 15)
+		me.pos = Vector2(me.tile) * TILE
+		me.path.clear()
+		say("nelva", "Rest now. Everyone is healed. The courts begin again from the first whenever you are ready.")
+		return
+	story_done[id] = true
+	for l in b.get("win", []):
+		var w: String = l[0]
+		say("" if w.begins_with("@") else w, _fill(l[1]))
+	if id == "leagueChampion":
+		for l in DATA.SCENES.get("leagueEnding", []):
+			say(l[0], _fill(l[1]))
+		story_done["leagueEnding"] = true
+		return
+	if not (b.league is String):
+		league_room = int(b.league) + 1
+	var nxt := _league_next()
+	if not nxt.is_empty():
+		say("nelva", "A quiet rest between courts. Your team is healed. Next: %s." % nxt.title)
+
+## A court on the terrace: a white stone hall with a slate roof and its own coloured banner (the Champion's is violet).
+func _draw_court(at: Vector2i, k: int) -> void:
+	var o := Vector2(at) * TILE
+	var w := 5 * TILE
+	draw_rect(Rect2(o + Vector2(-1, 15), Vector2(w + 2, 18)), Figures.OUTLINE)
+	draw_rect(Rect2(o + Vector2(0, 16), Vector2(w, 16)), Color("e8e2d4"))
+	for j in 4:
+		draw_rect(Rect2(o + Vector2(8 + j * 20, 16), Vector2(4, 16)), Color("d0c8b4"))            # columns
+	draw_rect(Rect2(o + Vector2(w / 2 - 7, 20), Vector2(14, 12)), Color("3a3040"))               # the open archway
+	draw_rect(Rect2(o + Vector2(-4, -3), Vector2(w + 8, 20)), Figures.OUTLINE)
+	draw_rect(Rect2(o + Vector2(-3, -2), Vector2(w + 6, 18)), Color("5a6470"))
+	for j in 2:
+		draw_rect(Rect2(o + Vector2(-3, 4 + j * 6), Vector2(w + 6, 1)), Color("48505a"))
+	_snow_on(o + Vector2(-3, -2), w + 6)
+	var col: Color = COURT_COLS[k]
+	var bx := o + Vector2(w / 2 - 4, -16)
+	draw_rect(Rect2(bx + Vector2(3, 0), Vector2(1, 16)), Color("4e3220"))
+	var flap := sin(t * 2.5 + k) * 1.5
+	draw_colored_polygon(PackedVector2Array([bx + Vector2(4, 1), bx + Vector2(14 + flap, 4), bx + Vector2(4, 8)]), col)
+	if k < league_room or (k == 4 and story_done.has("leagueChampion")):
+		draw_rect(Rect2(o + Vector2(w / 2 - 2, 8), Vector2(4, 4)), Color("f2d24a"))               # a gold mark once you've won here
 # ---------------------------------------------------------------- festivals in Larkhaven (WS5, decorations first)
 const SQUARE := Vector2i(13, 4)              # the green between the main street and Maren's barn
 const LIGHTS := [Color("e0483e"), Color("f2d24a"), Color("5b8def"), Color("59c38a")]
@@ -2134,7 +2252,7 @@ func _draw_mist() -> void:
 		draw_rect(Rect2(Vector2(x + 20, y + 3), Vector2(100, 4)), Color(0.78, 0.74, 0.86, 0.08))
 func _draw_water(x: int, y: int, o: Vector2, n: int) -> void:
 	_tex(WATER, Vector2i(11, 0), Vector2i.ONE, o)
-	var sea: bool = map_name in ["saltmarsh", "farwatch"]
+	var sea: bool = map_name in ["saltmarsh", "farwatch", "league"]
 	if sea:
 		# the open sea: lines of swell that roll slowly toward the beach
 		var ph := fmod(t * 0.6 + x * 0.37 + y * 0.9, 3.0)
@@ -2304,10 +2422,10 @@ func _skip_opening() -> void:
 		_place_ranch()
 	var st: Array = DATA.MAPS[start].get("start", [16, 12, "up"] if start == "larkhaven" else [13, 14, "up"])
 	if start != "thornwood":
-		var order := ["thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch"]
+		var order := ["thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "league"]
 		var at := maxi(1, order.find(start))
-		badges = ["thorn", "tide", "ember", "beacon", "reed", "echo", "loom"].slice(0, at)
-		team[0].lvl = [5, 14, 24, 34, 46, 56, 62, 66][at]
+		badges = ["thorn", "tide", "ember", "beacon", "reed", "echo", "loom", "horizon"].slice(0, at)
+		team[0].lvl = [5, 14, 24, 34, 46, 56, 62, 66, 72][at]
 		team[0].hp = R.stats(team[0]).hp
 	for a in OS.get_cmdline_user_args():           # a festival day for a picture: -- --skip-opening --at=larkhaven --festival=midwinter
 		if a.begins_with("--festival=") and Calendar.FESTIVALS.has(a.substr(11)):
@@ -2336,7 +2454,7 @@ func _skip_opening() -> void:
 			maren.pos = Vector2(maren.tile) * TILE
 			maren.path.clear()).call_deferred()
 	if "--colour" in OS.get_cmdline_user_args():     # the area with its colour fully back (for pictures of the restored valley)
-		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "barn"]:
+		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "league", "barn"]:
 			restore.append({ "where": m, "at": Vector2(192, 108), "r": 5000.0, "goal": 5000.0 })
 	if "--bench" in OS.get_cmdline_user_args():      # at Maren's workbench, the partner trying on a harness (-- --skip-opening --bench)
 		for c in team: c["hold"] = 999
@@ -2544,6 +2662,9 @@ func _talk_here() -> bool:
 		if n.where == map_name and (me.tile - n.tile).length() <= 1.01:
 			var info: Dictionary = npc_info[n.id]
 			n.face = me.tile - n.tile
+			if info.data.has("league"):
+				_league_talk(n, info.data)
+				return true
 			var known := _heritage_line(n.id, info.data)
 			if known != "" and not story_done.has("her:" + n.id):
 				story_done["her:" + n.id] = true       # they recognise your family, once (T45 lines, from the game data)
@@ -2619,7 +2740,7 @@ func save_game() -> void:
 	var d := { "v": 1, "saved": Time.get_datetime_string_from_system(), "look": look, "team": team, "ranch": ranch, "bag": bag,
 		"badges": badges, "seen": seen, "bonded": bonded, "items": got_items, "beaten": beaten,
 		"restore": restore.map(func(r): return { "where": r.where, "x": r.at.x, "y": r.at.y, "goal": r.goal }),
-		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned, "taught": taught, "letter": [letter_steps, letters], "calendar": cal.to_dict(), "festival": { "done": fest_done, "keep": keepsakes, "flowers": flowers },
+		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned, "taught": taught, "letter": [letter_steps, letters], "calendar": cal.to_dict(), "festival": { "done": fest_done, "keep": keepsakes, "flowers": flowers }, "league": league_room,
 		"map": map_name, "x": me.tile.x, "y": me.tile.y, "partner": partner.id if partner else "" }
 	var f := FileAccess.open(save_path, FileAccess.WRITE)
 	if f:
@@ -2670,6 +2791,7 @@ func _load_game() -> bool:
 	story_retry = d.get("retry", {})
 	taught = Array(d.get("taught", []))
 	cal.from_dict(d.get("calendar", {}))
+	league_room = int(d.get("league", 0))
 	var fz: Dictionary = d.get("festival", {})
 	fest_done = fz.get("done", {})
 	keepsakes = fz.get("keep", {})
@@ -2810,7 +2932,7 @@ func _after_story(id: String, result: String) -> void:
 
 ## Sand (the floor tileset) and rocks (drawn in code: a boulder with a lit top and a dark base).
 func _draw_sand(x: int, y: int, o: Vector2, n: int) -> void:
-	if map_name in ["hollowecho", "sunthread"]:
+	if map_name in ["hollowecho", "sunthread", "league"]:
 		_draw_stone_floor(x, y, o, n)
 		return
 	_tex(FLOOR, Vector2i(1, 1), Vector2i.ONE, o)
@@ -2828,6 +2950,7 @@ const MOUNTAINS := {
 	"cloudglass": { "rock": Color("8d97a3"), "turf": Color(0.62, 0.68, 0.72, 0.34) },
 	"hollowecho": { "rock": Color("7d8576"), "turf": Color(0.40, 0.49, 0.38, 0.30) },
 	"farwatch": { "rock": Color("7a8a8c"), "turf": Color(0.45, 0.55, 0.54, 0.28) },
+	"league": { "rock": Color("a8a49a"), "turf": Color(0.55, 0.60, 0.58, 0.22) },
 }
 var CLIFF := Color("8a7464")
 var TURF := Color(0.65, 0.54, 0.41, 0.32)
