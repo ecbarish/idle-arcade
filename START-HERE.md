@@ -107,6 +107,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 ## Session log (newest first; one or two lines each)
 
 - 2026-10-09 Codex (Adam / abarish-dev): RB1.4 phone pass in PR #116, full CI and before/after pictures pass; updated with latest main, fresh CI pending. Guest branch, own noreply, no merge or version bump.
+- 2026-10-09, Codex for Adam / abarish-dev: AC1 Storm Front built on guest/storm-front, PR #119. Fresh browser checks and cabinet captures run in GitHub; no merge or version bump. #104 and #116 updated to main, green and ready.
 
 - 2026-10-09 Claude (website thread): AR2.12 the front door, arcade v1.5.0 (PR #109). The arcade hall is the only homepage style (living world and road removed, vote closed); games in sections by kind; every card says what you do and its controls. Wildbond's in-game controls/roofs stay with the Wildbond builder; Diamond Career's redesign with the sports thread.
 - 2026-10-09 Grok (lane C): C4/E7 Studio lighting and music tuner (studio/tuner.js, studio/tuner-preview.html; reads ZONE_LIGHT, AREA_AIR and TRACKS; preview-only, localStorage `studio-tuner-v1`); 43 Studio checks; no game or shared/ edits.

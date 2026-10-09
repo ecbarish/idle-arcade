@@ -40,6 +40,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 ## Changelog
 
 - Realmbound (2026-10-09, RB1.4): larger phone controls; notebook, dialogue and action bar fit portrait/landscape screens and larger text; XP bar clears ultrawide controls.
+- 2026-10-09 (AC1, guest PR #119): Storm Front harbour cabinet, original cloud and lighthouse art, crumbling walls, gull bonus, three-initial scores and two-player turns. Keyboard, touch and gamepad controls; shared sound and settings.
 
 - Arcade v1.5.0 (2026-10-09, AR2.12, the front door): one homepage style, the arcade hall (Evan: "make that one the ultimate one"); the living world and the road are gone and their vote is closed. Games sit in sections by kind (Adventures, Build and manage, Sports, Stories, Something different), each saying what its games are like, with buttons to jump to a section. Every game's card says what you do and its controls before you press Play. The hall's name labels no longer run off the left edge, and cabinet names fit on phones.
 - Studio (2026-10-09, C4/E7): a lighting and music tuner. Pick any Realmbound zone or Wildbond area and slide its fog, shadow strength and colour grade over a live preview drawn with the arcade's light engine; pick any Wildbond, Realmbound or Starfall Guild tune and play it with its tempo, pitch and lead instrument changed. Preview only: tweaks stay in this browser (studio-tuner-v1, never a save) and the games don't use them yet.

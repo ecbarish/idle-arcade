@@ -1,0 +1,26 @@
+name: Storm Front review
+on:
+  pull_request:
+    paths:
+      - 'games/storm-front/**'
+      - 'tests/storm-front*'
+      - '.github/workflows/storm-front.yml'
+  workflow_dispatch:
+jobs:
+  cabinet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-save --no-package-lock playwright@1.56.1
+      - run: npx playwright install --with-deps chromium
+      - run: node tools/storm-model-checks.cjs
+      - run: node tools/run-all-checks.cjs storm-front
+      - run: node tests/storm-front-capture.cjs storm-front-review
+      - uses: actions/upload-artifact@v4
+        with:
+          name: storm-front-review
+          path: storm-front-review/
