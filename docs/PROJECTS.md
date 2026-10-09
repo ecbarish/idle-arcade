@@ -8,6 +8,7 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 
 | ID | Project | Size | Status | Notes |
 |---|---|---|---|---|
+| WB3.5b | Sunthread and Farwatch briefs (T49) | S | claimed: Codex, 2026-10-09, codex/wildbond-final-area-briefs | Existing canon/data handoff for Claude; no Godot edits |
 | WB3.5a | Hollowecho brief (T47) | S | claimed: Codex, 2026-10-09, codex/wildbond-hollowecho-brief | Existing canon/data gathered for Claude; Stillreed already built, Sunthread/Farwatch later |
 
 ## How to use this list

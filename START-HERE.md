@@ -103,6 +103,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09, Codex: T49 Sunthread/Farwatch build briefs ready on codex/wildbond-final-area-briefs for Claude: complete current data, clues and staging; Halen/Rysa stale lore levels flagged. 73 live export/path checks and eight pages pass; no Godot/data/version edits.
+
 - 2026-10-09 Claude: Evan asked for four seasons and holiday decorations. Plan in docs/proposals/seasons-and-holidays.md (own calendar plus a real-calendar setting, four looks, seasonal creatures, a festival each season, Midwinter Hearth in December); path WB-S (WS1-WS6) and SF3.4.
 - 2026-10-09 Claude: Godot Wildbond WB2.2 part 2: tall trees with crowns in front of you (canopy layer and shader), never over signs or items; --stand=x,y picture flag; 234 checks; web preview rebuilt.
 - 2026-10-09 Claude: Godot Starfall SF2.2 failing and excelling (day judged at nightfall, people leave and return, bunting, board size, two travellers); 104 checks; web preview rebuilt. Fixed a 5%-flaky herbs check.
