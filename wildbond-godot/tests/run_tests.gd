@@ -147,7 +147,7 @@ func _run() -> void:
 	main.spilled = true
 	check(main._music_key() == "larkhaven", "once the colour spills into town, a warm village tune")
 	main.spilled = false
-	check(["faded", "larkhaven", "barn", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "wild", "trainer"].all(func(k): return ResourceLoader.exists(main.music_path(k))), "every tune is in the game")
+	check(["faded", "larkhaven", "barn", "thornwood_route", "thornwood", "thornwood_grove", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "wild", "trainer"].all(func(k): return ResourceLoader.exists(main.music_path(k))), "every tune is in the game, including both new Thornwood maps sharing Thornwood's theme")
 	check(["saltmarsh", "emberfall", "cloudglass"].all(func(k): return ResourceLoader.exists("res://assets/ambience/%s.ogg" % k)), "waves on the coast and wind in the highlands and the pass")
 	# ---- the map: closed doors, the barn opens with the story
 	check(not main.walkable(Vector2i(4, 4)), "cottage doors stay shut")
@@ -247,8 +247,10 @@ func _run() -> void:
 	check(walk_to(Vector2i(10, 1)), "you can walk up to the road north")
 	main._step(Vector2i.UP)
 	tick(1.0)
-	check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 14), "the north road leads to Thornwood, arriving where the map says")
-	check(main.partner.where == "thornwood", "your partner comes too")
+	check(main.map_name == "thornwood_route" and main.me.tile == Vector2i(13, 16), "the north road opens onto Thornwood Trail, arriving where the route says")
+	check(main.partner.where == "thornwood_route", "your partner comes onto the trail too")
+	check(main.DATA.MAPS.thornwood_route.exits.N.to == "thornwood" and main.DATA.MAPS.thornwood.exits.S.to == "thornwood_route", "WD4a: the trail and Thornwood settlement are separate connected maps")
+	check(main.DATA.MAPS.thornwood_route.exits.E.requiresElement == "Stone" and main.DATA.MAPS.has("thornwood_grove"), "WD4a: Old Root Grove is a return spot behind a Stone-partner gate")
 	# ---- a route trainer spots you, walks over and battles (Bram, from the game data)
 	# ---- the turning year (WS1, WS2)
 	var Cal := preload("res://scripts/calendar.gd")
@@ -307,7 +309,7 @@ func _run() -> void:
 	main.cal.mode = keep_mode
 	check(main._tree_at(8, 4).y == 3.0 * main.TILE and main._tree_at(12, 14).y > 13.5 * main.TILE, "trees beside open ground stand tall, but never over the first signpost")
 	check(main.canopy != null and main.canopy.material is ShaderMaterial, "tree tops that pass in front of you are washed out like the world around them")
-	check(main.npcs.filter(func(n): return n.where == "thornwood").size() == 3, "Thornwood has Bram, Lise and Warden Isolde")
+	check(main.npcs.filter(func(n): return n.where in ["thornwood_route", "thornwood"]).size() == 3 and main.npc_info.has("bram") and main.npc_info.has("lise") and main.npc_info.has("isolde"), "WD4a: Bram is on the trail; Lise and Warden Isolde are in the settlement")
 	main.npc_info.lise.beaten = true                # keep Lise out of the way for these checks
 	main.walk_to = main.route(main.me.tile, Vector2i(14, 10))
 	for i in 200:
@@ -334,7 +336,7 @@ func _run() -> void:
 	# ---- story moments while you explore: Wren's rematch on the trail, then the guardian of Thornwood
 	main.explored_in["thornwood"] = 11
 	main._explore()
-	check(main.wren.where == "thornwood" and not main.lines.is_empty() and main.lines.any(func(l): return l.who == "wren"), "after 12 explorations Wren catches you up on the trail")
+	check(main.wren.where == "thornwood_route" and not main.lines.is_empty() and main.lines.any(func(l): return l.who == "wren"), "after 12 explorations Wren catches you up on the expanded trail")
 	talk_through()
 	check(main.battle.visible and main.battle.foes.size() == 2 and main.battle.foes.any(func(u): return u.c.sp == main.rival_c.sp), "Wren's team: a Glimmerwing and the partner Wren chose")
 	for u in main.battle.foes: u.c.hp = 0
@@ -359,6 +361,30 @@ func _run() -> void:
 	check(not main.story_done.has("elder") and int(main.story_retry.get("elder", 0)) == 26, "knocked out, it slips away and can be met again after six more explorations")
 	talk_through()
 	for c in main.team: c.hp = main.R.stats(c).hp
+	# ---- WD4a: a place to return to with the right partner
+	check(walk_to(Vector2i(28, 10)), "WD4a: the east spur reaches the stone shelf above Old Root Grove")
+	main._step(Vector2i.RIGHT)
+	tick(0.8)
+	check(main.map_name == "thornwood_route" and not main.lines.is_empty() and "Stone partner" in str(main.lines[0].text), "without a Stone partner, the hidden grove stays out of reach")
+	talk_through()
+	var stone_helper: Dictionary = main.R.make("pebblepaw", 8, { "rar": 1 }, main.rng)
+	main.team.append(stone_helper)
+	check(main._team_has_element("Stone"), "a Stone creature in the team satisfies the return gate")
+	check(walk_to(Vector2i(28, 10)), "back to the stone shelf with Pebblepaw")
+	main._step(Vector2i.RIGHT)
+	tick(0.8)
+	check(main.map_name == "thornwood_grove" and main.me.tile == Vector2i(1, 8), "the Stone partner opens Old Root Grove")
+	check(main._wild_table().any(func(w): return w[0] == "sunspark" and int(w[1]) == 12), "the hidden pocket makes rare Sunspark substantially easier to find")
+	check(main.DATA.MAPS.thornwood_grove.signs["17,6"].contains("antler"), "the hidden pocket has a small Elderhorn clue already consistent with Thornwood's story")
+	main._go("thornwood_route", Vector2i(28, 10), Vector2i.LEFT)
+	tick(0.8)
+	main.team.erase(stone_helper)
+	check(main.map_name == "thornwood_route", "you can return from the hidden grove to the trail")
+	# the north end of the trail reaches Thornwood's settlement; old saves keep the original 'thornwood' map id
+	check(walk_to(Vector2i(13, 1)), "the trail continues north to the settlement")
+	main._step(Vector2i.UP)
+	tick(0.8)
+	check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 14), "WD4a: the original Thornwood map is now the settlement, preserving old-save map ids and coordinates")
 	var lures0: int = main.bag.lures
 	check(walk_to(Vector2i(27, 10)), "you can walk to the lures lying in the grass")
 	check(main.bag.lures == lures0 + 3 and main.got_items.has("tw2"), "picking up 3 lures (%d)" % main.bag.lures)
