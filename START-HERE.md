@@ -106,6 +106,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude (Playtester thread): DM2, the Diamond Manager playtest (docs/playtests/diamond-manager-1.md). It passes the bar (15), but over two seasons an active manager wins no more than a hands-off one. Three small fixes landed; the deeper fix is ticket DM-B in docs/plans/sports-management.md.
 - 2026-10-09 Claude (website thread): AR2.12 the front door, arcade v1.5.0 (PR #109). The arcade hall is the only homepage style (living world and road removed, vote closed); games in sections by kind; every card says what you do and its controls. Wildbond's in-game controls/roofs stay with the Wildbond builder; Diamond Career's redesign with the sports thread.
 - 2026-10-09 Grok (lane C): C4/E7 Studio lighting and music tuner (studio/tuner.js, studio/tuner-preview.html; reads ZONE_LIGHT, AREA_AIR and TRACKS; preview-only, localStorage `studio-tuner-v1`); 43 Studio checks; no game or shared/ edits.
 - 2026-10-09 Claude (Wildbond builder thread, lane W): Evan's playtest notes, part 1: How to play page (howto.gd: title button, before a new journey, book Settings), no walking on roofs (main.gd buildings()/_under_roof); 310 checks. Wildbond's own look is a question to Evan (decision card in the Wildbond builder thread).
