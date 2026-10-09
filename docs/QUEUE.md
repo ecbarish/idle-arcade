@@ -58,19 +58,19 @@ lane R (or Evan) merges. Each line names its spec; read it first.
 
 | # | Task (path ID) | Spec | Files | Done when |
 |---|---|---|---|---|
-| 2 | **Storm Front cabinet** (AC1) | docs/proposals/games-for-everyone.md | new folder only, plus one launcher link | Plays start to finish on desktop and phone, original name and art, high score saved; a small test page |
-| 3 | **Little Ranch, smallest test** (LR1) | docs/proposals/games-for-everyone.md | new folder only, plus one launcher link | One creature, feed, bubbles, peekaboo, bedtime; no reading needed, nothing to fail, no links out, grown-up lock |
-| 4 | **"Tell us" in every game** (AR2.11) | game review GR-9; docs/FEEDBACK.md | settings of each browser game, `playtest.html` | Opens a prefilled GitHub issue (game, version); a 10-minute playtest script on Come Play |
-| 5 | **The front door** (AR2.12) | game review GR-12 | `index.html`, `launcher/` | The hub leads with the Godot previews; Starfall Guild and Primordial under Classic; the old homepage vote closed (docs/VOTES.md) |
-| 6 | **Creature looks as data** (WD2, data half) | game review GR-1 | browser Wildbond data, exported with `tools/godot-export` | Every species has look features (ears, tail, pattern, horns...) in data; Claude draws them later |
-| 7 | **More moves** (WD3, data half) | game review GR-2 | browser Wildbond data | About 60 moves, a signature move per family, a few statuses, balanced with the pacing sim; Claude wires battles later |
-| 8 | **Lighthouse Watch cabinet** (AC2) | games-for-everyone.md | as AC1 | As AC1 |
-| 9 | **Brisket's Crossing, then Ember Bricks** (AC3) | games-for-everyone.md | as AC1 | As AC1, one PR each |
-| 10 | **Realmbound phone pass** (RB1.4) | PROJECTS.md L3 | `games/realmbound/` | Plays at 375 px wide with no sideways scroll; `tests/run.html` passes |
-| 11 | **Realmbound second raid tier** (RB2.2) | PROJECTS.md R7 | `games/realmbound/` | Data and encounters, balanced; checks |
-| 12 | **Diamond Career: a full season** (DC2.1) | docs/plans/diamond-career.md D2 | `games/diamond-career/` | Standings, roles that change with form, an end-of-season review; `tests/diamond.html` passes |
-| 13 | **Newcomer playtests** (X1) and **link check** (X2), **Otherworld text sweep** (X3) | Lane X below | see Lane X | see Lane X |
-| 14 | **A Wildbond guide** (WB6.4) | `guides/` style | `guides/` | First steps, the element chart, the ranch, with real screenshots from `play/wildbond/` |
+| 1 | **Storm Front cabinet** (AC1) | docs/proposals/games-for-everyone.md | new folder only, plus one launcher link | Plays start to finish on desktop and phone, original name and art, high score saved; a small test page |
+| 2 | **Little Ranch, smallest test** (LR1) | docs/proposals/games-for-everyone.md | new folder only, plus one launcher link | One creature, feed, bubbles, peekaboo, bedtime; no reading needed, nothing to fail, no links out, grown-up lock |
+| 3 | **"Tell us" in every game** (AR2.11) | game review GR-9; docs/FEEDBACK.md | settings of each browser game, `playtest.html` | Opens a prefilled GitHub issue (game, version); a 10-minute playtest script on Come Play |
+| 4 | **The front door** (AR2.12) | game review GR-12 | `index.html`, `launcher/` | The hub leads with the Godot previews; Starfall Guild and Primordial under Classic; the old homepage vote closed (docs/VOTES.md) |
+| 5 | **Creature looks as data** (WD2, data half) | game review GR-1 | browser Wildbond data, exported with `tools/godot-export` | Every species has look features (ears, tail, pattern, horns...) in data; Claude draws them later |
+| 6 | **More moves** (WD3, data half) | game review GR-2 | browser Wildbond data | About 60 moves, a signature move per family, a few statuses, balanced with the pacing sim; Claude wires battles later |
+| 7 | **Lighthouse Watch cabinet** (AC2) | games-for-everyone.md | as AC1 | As AC1 |
+| 8 | **Brisket's Crossing, then Ember Bricks** (AC3) | games-for-everyone.md | as AC1 | As AC1, one PR each |
+| 9 | **Realmbound phone pass** (RB1.4) | PROJECTS.md L3 | `games/realmbound/` | Plays at 375 px wide with no sideways scroll; `tests/run.html` passes |
+| 10 | **Realmbound second raid tier** (RB2.2) | PROJECTS.md R7 | `games/realmbound/` | Data and encounters, balanced; checks |
+| 11 | **Diamond Career: a full season** (DC2.1) | docs/plans/diamond-career.md D2 | `games/diamond-career/` | Standings, roles that change with form, an end-of-season review; `tests/diamond.html` passes |
+| 12 | **Newcomer playtests** (X1) and **link check** (X2), **Otherworld text sweep** (X3) | Lane X below | see Lane X | see Lane X |
+| 13 | **A Wildbond guide** (WB6.4) | `guides/` style | `guides/` | First steps, the element chart, the ranch, with real screenshots from `play/wildbond/` |
 
 **Godot work is open to any AI too** (Evan, 2026-10-09: "Yes, with checks"). Rules for it: claim the deliverable as
 above (the Wildbond builder and Starfall threads check the open PR list too); keep to the files the deliverable needs;
