@@ -21,7 +21,7 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 
 | ID | Project | Size | Status | Notes |
 |---|---|---|---|---|
-| WS6 | Four festival traditions and lines (T51) | S | claimed: Codex, 2026-10-09, codex/wildbond-festival-writing | Stacked after T50; data/lore only |
+| WS6 | Four festival traditions and lines (T51) | S | ready: PR #78, Codex, 2026-10-09 | Stacked after T50; data/lore only |
 | WS3 | Seasonal encounter and townsperson data (T50) | M | claimed: Codex, 2026-10-09, codex/wildbond-seasonal-data | Append-only export fields; Classic unchanged |
 
 ## How to use this list

@@ -60,6 +60,7 @@ Branch: codex/wildbond-seasonal-data, from latest main.
 - Files: games/wildbond/js/00-data.js, js/11-maps.js, tests/wildbond-checks.js, docs/lore/wildbond-seasons.md and thread ledger, normal claim/README/Session/message-board notes. Actual 39-table export and all eight browser suites pass.
 
 ### T51: Wildbond festival writing (WS6)
+- [x] Ready in PR #78: writing/export handoff only; activities and cosmetic delivery remain WS5 integration.
 Why: Claude's four Larkhaven decorations need traditions, voices and keepsake names, using his current calendar IDs.
 Read first: seasons-and-holidays proposal, COMMS, T50 schema, thread ledger, CREATIVE and current Larkhaven data.
 Branch: codex/wildbond-festival-writing, stacked after T50/#77.

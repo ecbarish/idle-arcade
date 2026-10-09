@@ -204,3 +204,14 @@ Faded seasonal details are compatible as muted **surface presentation** with the
 depth. No stopped calendar, new culprit, seasonal cause, depth restoration or bond-driven plant regrowth is
 asserted. All candidate causes, pair identities, watcher identities and Unbound motives above remain open.
 The complete schema and integration boundaries: [The turning year](wildbond-seasons.md).
+## Festival customs (WS6 / T51, Codex, 2026-10-09)
+
+Planting Day's shared flower, the Long Light's friendly race and rest, the Harvest Lanterns' shared trough and
+supper, and the Midwinter Hearth's handmade gifts expand the approved present-day traditions. Maren and Pip
+have eight optional observations; sixteen activity lines describe invitation and completion. Four keepsakes are
+cosmetic proposals. [Festival contract and integration boundaries](wildbond-festivals.md).
+
+No new mystery clue, ancient rite, inherited verse, eyewitness account or identity is introduced. Their ordinary
+care echoes the game's bond theme without deciding the old pair, watcher, fading cause, returning depth or
+Unbound motives. All base, badge, heritage and essential shared clues remain intact and available year-round.
+No revelation or campaign requirement is tied to a festival; unavailable activities must not be advertised.

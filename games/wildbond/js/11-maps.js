@@ -1066,4 +1066,56 @@ const SEASONAL_VOICES = {
 for (const map of Object.values(MAPS)) for (const npc of map.npcs || []) if (SEASONAL_VOICES[npc.who] && npc.lines) {
  npc.bySeason = {};
  for (const [i,season] of ['spring','summer','autumn','winter'].entries()) npc.bySeason[season] = [[npc.who,SEASONAL_VOICES[npc.who][i]]];
+}// WS6: exported festival writing; calendar dates and activity handling belong to Godot.
+MAPS.larkhaven.festivals = {
+ planting: {
+  name:'Planting Day', season:'spring',
+  tradition:'Neighbors swap seeds and tie bright scraps to their baskets. Each partner helps plant one flower at the ranch; its patch stays after the ribbons come down.',
+  keepsake:{id:'planting_ribbon',name:'Seed Basket Ribbon',description:'A green ribbon with a little flower stitched into the end. A reminder of the patch you planted together.'},
+  activity:{id:'plant_flower',name:'A Flower Together',
+   invite:[['maren','Choose a flower for your ranch. Leave a little space beside it; your partner may have a different idea about where to sit.'],['pip','I picked the smallest seed. That does not mean it will be the smallest flower.']],
+   complete:[['maren','There. A patch that belongs to both of you. When the ribbons come down, the flower stays.'],['pip','Here is a ribbon for your basket. Mine has soil on it already. That is how you know we helped.']]}
+ },
+ longlight: {
+  name:'The Long Light', season:'summer',
+  tradition:'Lanterns wait along the ranch path while the town shares the long evening. Partners run a friendly race, then everyone rests together; taking part matters more than finishing first.',
+  keepsake:{id:'longlight_pennant',name:'Long Light Pennant',description:'A small gold pennant with a crooked sun. It remembers an evening spent running, resting and cheering together.'},
+  activity:{id:'friendly_race',name:'One More Lap',
+   invite:[['pip','One lap with your partner! I will cheer at the bend. You can go slowly; I have enough cheers for everyone.'],['maren','We all meet in the shade afterward. Leave a bowl of water there before you set out.']],
+   complete:[['pip','You both came back! This pennant is for taking part. I painted the sun myself; it leans a little when it cheers.'],['maren','Sit with your partner a while. The good part of a long evening is having time to spend together.']]}
+ },
+ lanterns: {
+  name:'The Harvest Lanterns', season:'autumn',
+  tradition:'Carved lanterns light a shared supper. Tamers fill the ranch trough for every partner before serving themselves, then sit nearby instead of hurrying away.',
+  keepsake:{id:'harvest_lantern',name:'Supper Lantern',description:'A small carved lantern with a leaf-shaped window. It remembers making room at the supper for every partner.'},
+  activity:{id:'share_supper',name:'A Place for Everyone',
+   invite:[['maren','Fill the trough for every partner, then bring your own plate over. Supper is better when nobody has been forgotten.'],['pip','I carved a leaf in this lantern. It was meant to be a whole tree, but the leaf lets more light through.']],
+   complete:[['maren','Everyone has a place now. Stay for a moment and listen; a quiet supper can be good company.'],['pip','Take the leaf lantern home. You can put it by your next supper, even when the festival is over.']]}
+ },
+ midwinter: {
+  name:'The Midwinter Hearth', season:'winter',
+  tradition:'The town hangs garlands and lights around a big tree. Neighbors give something small and handmade, chosen for the person receiving it, with no gift expected in return.',
+  keepsake:{id:'hearth_star',name:'Handmade Hearth Star',description:'A folded paper star with one uneven point. Someone took the time to make it for you.'},
+  activity:{id:'give_gift',name:'Something for Someone',
+   invite:[['maren','Make something small for someone you know. Think of what they would enjoy; it need not be clever or expensive.'],['pip','A bookmark for a reader. A soft cloth for cold paws. I am still thinking about mine.']],
+   complete:[['maren','You thought about someone and followed through. That is enough; they do not owe you a gift back.'],['pip','I made you this star. One point came out shorter, but it will still catch the light.']]}
+ }
+};
+const FESTIVAL_VOICES = {
+ maren:{
+  planting:'I save the scraps from old sewing for the seed baskets. A little ribbon can make an ordinary morning feel special.',
+  longlight:'The lanterns can wait until dusk. For now, there is shade, water and a place beside your partner.',
+  lanterns:'Leave room at the trough for the shy ones. They may join us once the first hungry noses have settled.',
+  midwinter:'I have been sewing with the door shut. It is hard to keep a surprise when curious ears follow every sound.'
+ },
+ pip:{
+  planting:'We traded seeds this morning. I wrote down what mine was before I forgot; that was my best idea all day.',
+  longlight:'I am practicing cheering without spilling my drink. It is harder than running, but somebody has to do it.',
+  lanterns:'I kept the bits from carving my lantern. Maren says they can go in the supper, so nothing good gets wasted.',
+  midwinter:'My garland reaches almost all the way around the tree. The short bit is where we will stand for the picture.'
+ }
+};
+for (const npc of MAPS.larkhaven.npcs) if (FESTIVAL_VOICES[npc.who]) {
+ npc.byFestival = {};
+ for (const [id,text] of Object.entries(FESTIVAL_VOICES[npc.who])) npc.byFestival[id] = [[npc.who,text]];
 }

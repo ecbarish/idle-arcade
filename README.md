@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Wildbond festival writing (2026-10-09, T51): four traditions, Maren and Pip conversations, activity invitations/completions and cosmetic keepsake names. [Integration contract](docs/lore/wildbond-festivals.md). Exported writing only; the calendar and activities remain Claude's Godot work.
+
 - Wildbond content handoff (2026-10-09, T50): four seasonal encounter tables per region, four existing visitors rare year-round, and 96 seasonal observations for route residents. [Schema and canon boundaries](docs/lore/wildbond-seasons.md). Export-only; Classic's encounters and conversations stay unchanged, with no release bump.
 
 - Godot Wildbond (2026-10-09): festival decorations in Larkhaven. Planting Day ties ribbons on the fences and sets out a seed table; the Long Light strings lanterns over the street; the Harvest Lanterns puts carved lanterns by every door and a supper table on the green; the Midwinter Hearth hangs garlands of coloured lights on every house and raises a big tree with a star and gifts. On the real calendar, the Midwinter Hearth falls on 20 to 31 December.
