@@ -1,6 +1,6 @@
 class_name Sfx
 extends Node
-## Short sound effects. play("coin") plays res://assets/sfx/coin.wav or coin.ogg (docs/research/assets.md lists every
+## Short sound effects. play("coin") plays res://assets/sfx/coin.wav or coin.ogg (docs/learning/assets.md lists every
 ## name and where it came from). Very short sounds are WAV; anything near a second or longer is OGG. A name with no file
 ## stays silent, so a sound can be swapped, or replaced with our own, by dropping in a file of the same name, and
 ## removing one never breaks the game. N turns sound effects on or off.
