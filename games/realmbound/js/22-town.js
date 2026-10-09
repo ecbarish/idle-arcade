@@ -309,7 +309,7 @@ function drawTown(t) {
 }
 /* input while you're walking the town */
 document.addEventListener('keydown', e => {
-  if (!townActive() || RTALK || modalKind || (e.target.matches && e.target.matches('input,textarea,select'))) return;
+  if (!townActive() || RTALK || modalKind || (e.target.matches && e.target.closest('input,textarea,select,button,a,summary,[role="dialog"],.arc-set-bg'))) return;
   if (TOWN_WALK.keyDown(e)) { C.lastInput = C.run; TOWN.auto = null; e.preventDefault(); e.stopImmediatePropagation(); }
   else if ((e.key === 'Enter' || e.key === ' ') && TOWN_WALK.interact()) { e.preventDefault(); e.stopImmediatePropagation(); }
 }, true);

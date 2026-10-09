@@ -54,3 +54,8 @@
  .dlg.dlg-otherworld .dlg-choices button{font-size:18px}
  .dlg.dlg-otherworld .choice-why{font-size:14px}
 }
+/* T44: opaque reading surfaces keep contrast independent of the moving world. */
+.choose,.status{background:#121028}.status{max-height:calc(100dvh - 100px);overflow:auto}
+.choose,.status{font-size:calc(16px * var(--arc-text,1))}
+.card,.chip,.go,.st-row,.row input{font-size:inherit}.card em,.card .cost,.st-note,.lbl,.st-close{font-size:calc(14px * var(--arc-text,1));opacity:1}
+.card b{color:#ffd27a}.swatch.on::after{content:'✓';color:#fff;background:#121028;border-radius:50%;padding:2px}

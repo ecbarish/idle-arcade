@@ -14,7 +14,7 @@
 /* Layout: an arcade wall. Marquee sign on top, then a shelf of cabinets (cards) whose covers use each game's own art style. */
 :root{
   --bg:#14121c; --bg2:#1c1928; --card:#221e31; --line:#363049;
-  --fg:#efeaf7; --muted:#a79fbb; --dim:#6f6788;
+  --fg:#efeaf7; --muted:#a79fbb; --dim:#b7adc9;
   --marquee:#ffcf4d; --neon:#ff6fa8; --ok:#7fe0a0; --proto:#7ab8ff;
   --f-sign:'Bungee', 'Arial Black', Impact, sans-serif;
   --f-body:'Figtree', system-ui, 'Segoe UI', sans-serif;
@@ -97,7 +97,10 @@ a{color:inherit}
 @media (min-width:1700px){.wrap{max-width:min(2200px,92vw)}.shelf{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}}
 @media (min-width:2400px){.wrap{max-width:min(2900px,92vw)}.shelf{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}.tag{font-size:18px;max-width:80ch}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+body{font-size:calc(16px * var(--arc-text,1))}.launch-bar,.launch-modes button,.cab .desc,.cab .play,.header-tools a{font-size:calc(14px * var(--arc-text,1))}
 </style>
+<link rel="stylesheet" href="shared/accessibility.css">
 </head>
 <body>
 <div class="wrap">
@@ -124,6 +127,7 @@ a{color:inherit}
 </div>
 
 <script src="shared/offline.js" defer></script>
+<script src="shared/settings.js"></script>
 <script src="shared/engine.js"></script>
 <script src="shared/feedback.js"></script>
 <script src="shared/ambience.js"></script>
@@ -224,6 +228,7 @@ requestAnimationFrame(frame);
 window.ARCADE = { GAMES, covers, idx, VERSION }; // for the launcher (launcher/launcher.js)
 })();
 </script>
+<script>Settings.create({mount:".header-tools"});</script>
 <script src="launcher/launcher.js"></script>
 </body>
 </html>

@@ -80,7 +80,7 @@ document.addEventListener('click',e=>{
   if(H()&&C)updateWorld();
 });
 document.addEventListener('change',e=>{if(e.target.id==='grindSel'&&H()){H().grind=e.target.value||null;}});
-document.addEventListener('keydown',e=>{if(!H()||!C||arrivalPaused()||(e.target.matches&&e.target.matches('input,textarea,select')))return;
+document.addEventListener('keydown',e=>{if(!H()||!C||arrivalPaused()||(e.target.matches&&e.target.closest('input,textarea,select,button,a,summary,[role="dialog"],.arc-set-bg')))return;
   if(/^[1-9]$/.test(e.key)){press(Number(e.key)-1);updateWorld();e.preventDefault();}
   else if(e.key==='l'||e.key==='L'){lootAll();updateWorld();}
   else if(e.key==='c'||e.key==='C'){doCombo(true);updateWorld();}

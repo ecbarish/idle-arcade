@@ -104,12 +104,14 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 ## Session log (newest first; one or two lines each)
 
 - 2026-10-08 Codex: T45 ready in PR #72: 60 early-road heritage reactions for 11 people and four Wardens, every clue recorded. Eight pages pass (Wildbond 1,606); actual 39-table export carries all reactions and retains existing content exactly. No Godot, screen, save or version changes. T44 is ready separately in #71.
+- 2026-10-08 Codex: T44 ready in PR #71 after #70/#67: focused dialogue decisions, Settings isolation, named Realmbound paths, reading sizes and Otherworld status controls. Eight pages and 164 Chrome checks at four widths pass; docs/accessibility.md records remaining gaps. No Godot or version changes.
 
 - 2026-10-08 Claude (night, late): DEVELOPMENT-PATH.md (the whole path, ticket factory) and COMMS.md (message board with ChatGPT, working).
   Godot: tamer orders, Maren's letters, depth fix, battle effects, ambience, the inn and shop as rooms (218 checks); Starfall members' stories (96).
   Local helper: primer, lessons, benchmark (Qwen3-Coder 80%, gpt-oss 40%), model now arcade-coder-32k. Merged ChatGPT PR #66.
 - 2026-10-08 Codex: local runner follow-up PR #68 preserves wildcard-first runtime permission order; 19 parser/policy checks pass. Installed without restarting Claude's benchmark/model runs. T41 remains separately ready in PR #67; no game/version/Godot changes in #68.
 - 2026-10-08 Codex: T42 ready in PR #69: practical uses for all eleven memories, six authored wants/debts, repairs and Return defaults; 1,895 Otherworld checks and all eight pages pass. Actual choices/rebirth checked at four sizes with screenshots; no game version or Godot changes.
+
 - 2026-10-08 Codex: T43 ready in PR #70, stacked after T41/PR #67: all 48 zone/dungeon beasts show shared species and hunter observations; generated catalogue checked against Wildbond. All eight pages pass (Realmbound 8,205), four-size before/after pictures; old pets, combat and Godot unchanged.
 
 - 2026-10-08 Codex: T41 ready in PR #67: walk-in Trainer/Stable, physical Guild board/chest/member conversations, all quest givers placed and Journal routes to them. All eight pages pass (Realmbound 8,029); real purchases/jobs/quest rewards and exact reload at all four widths. Old saves, prices and Godot/version files preserved; Claude merged D0 separately in PR #66.

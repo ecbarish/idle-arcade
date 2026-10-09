@@ -54,3 +54,13 @@ html,body{height:100%;overflow:hidden}
 .catalogue-sighting[hidden]{display:none}
 @media(max-width:700px){.catalogue-sighting{top:158px;right:8px;max-width:46%;font-size:12px}.catalogue-sighting strong{font-size:14px}}
 @media(min-width:1700px){.catalogue-sighting{top:202px;max-width:380px;font-size:18px}.catalogue-sighting strong{font-size:20px}}
+
+/* T44: quiet labels are readable on opaque paper; gameplay hitboxes stay unchanged. */
+:root{--dim:#b9ab92;--muted:#c5b69c}
+.menu{background:#241e17}.menu .meta,.menu .sub,.menu .qlore,.menu .zlore,.menu .slotrow .sl{font-size:calc(14px * var(--arc-text,1))}
+#fieldDock .btn,.field-options-list button,.top button,.top summary{font-size:calc(13px * var(--arc-text,1))}
+.scene .dlg.dlg-realmbound{--dlg-muted:#c5b69c;--dlg-name:#f2c14e}
+
+.menu .btn{font-size:calc(14px * var(--arc-text,1))}.realm-surroundings{position:absolute;left:12px;top:205px;z-index:6;max-width:min(300px,90%);background:#241e17;color:#e9e1cf;border:1px solid #8a6a35;padding:7px 10px;font-size:calc(14px * var(--arc-text,1))}.realm-surroundings[hidden]{display:none}.realm-surroundings>div{display:flex;flex-direction:column;gap:6px;max-height:35dvh;overflow:auto;padding-top:8px}.realm-surroundings button{font:inherit;color:#e9e1cf;background:#352d22;border:1px solid #8a6a35;padding:7px;text-align:left}.realm-surroundings summary{cursor:pointer}
+
+.realm-surroundings{zoom:1!important}
