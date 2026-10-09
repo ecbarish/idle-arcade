@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Arcade (2026-10-09, playtest pass 1): [docs/PLAYTEST.md](docs/PLAYTEST.md) scores every game on six newcomer questions (what to do, controls, the core loop, readability, fun, phone) and sets the bar a game must pass before it ships; `tools/playtest/first-look.cjs` takes the screenshots.
 - Wildbond (2026-10-09, WD2 part 1): four new body shapes, so whole families stop sharing one outline. Tidewyrm, Deeptide and Rillwhisk are serpents that ripple along the ground; Bogbough, Cairnclasp and Siltjaw are turtles with plated shells; Veilmote, Fogsail and Dawntassel are moths drifting on slow wings; Orchardroot, Flintroot and Meadowmantle are tree-folk on root feet. Picture: docs/screenshots/wildbond-wd2/new-shapes.png.
 - Realmbound (2026-10-09, RB1.5): opened conversations wait for their reader; Focus fallback waits for the first victory, then gives the existing fifteen seconds. QuestHelper and background hunting respect dialogue. The sun and clouds sit below the title and health frames.
 - Wildbond writing handoff (2026-10-09, T58): three inspectable late observations, Toren and Isolde's final-truth conversation, four depth-return lines and eight Warden responses. [Placement contract](docs/lore/wildbond-reveal.md); no playable behavior changes.

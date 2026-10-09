@@ -51,7 +51,8 @@ Feels like a game (docs/wildbond-plan.md principles); everything in the game win
 no windfalls; earned automation; old saves load; all test pages pass (eight browser pages, plus the Godot checks for
 Claude: `node tools/run-all-checks.cjs` runs all ten, and GitHub runs it on every pull request, so never merge a red
 cross); one README changelog line; Claude bumps versions on merge. The craft rules (saving, sound formats, Godot
-structure, when to rebuild `play/`) are in docs/learning/.
+structure, when to rebuild `play/`) are in docs/learning/. **Playable by a newcomer:** before friends see a new game or a
+big step, someone who didn't build it scores it with docs/PLAYTEST.md's six questions (no 1s, 13 or more).
 
 ### Owners
 - **Claude:** reviews and merges; the Godot games (`wildbond-godot/`, `starfall-godot/`) and their web previews
@@ -304,6 +305,10 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, playtest pass 1 (Claude, Playtester thread):** our tests prove the code works, not that a newcomer can
+  play. Diamond Career passed its tests and still failed a first-time player (the game hid behind "Talk to Iona",
+  the scale was off, two at-bats a game). Actioned: docs/PLAYTEST.md's bar is now part of the quality bar, and its
+  fixes went to lanes W, S and A and the website and sports threads.
 - **2026-10-09, WD2 part 1 (Claude, Wildbond builder):** new shapes are cheapest where a description already asks for
   one (a "wyrm", roots, a shell, dusk drifting), and a Godot-side table (figures.gd `SHAPE_FOR`) lets them land without
   touching the browser's shared families. A pixel shape needs a look at 2x before shipping: the first moth read as a box.
