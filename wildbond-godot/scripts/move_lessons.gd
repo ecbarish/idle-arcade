@@ -24,7 +24,7 @@ func open(list: Array) -> void:
 	row = 0
 	slot = -1
 	selected = ""
-	message = "Pick a remembered move, then a place for it."
+	message = "Choose a move. Left/right changes partners."
 	visible = not team.is_empty()
 	queue_redraw()
 
@@ -37,7 +37,7 @@ func change_creature(direction: int) -> void:
 	row = 0
 	slot = -1
 	selected = ""
-	message = "Pick a remembered move, then a place for it."
+	message = "Choose a move. Left/right changes partners."
 	queue_redraw()
 
 func pick_move(i: int) -> void:

@@ -216,7 +216,9 @@ func _ready() -> void:
 	card.picked.connect(_on_card_pick)
 	lessons = preload("res://scripts/move_lessons.gd").new()
 	$UI.add_child(lessons)
-	lessons.closed.connect(_open_bench)
+	lessons.closed.connect(func():
+		save_game()
+		_open_bench())
 	sfx = Sfx.new()
 	add_child(sfx)
 	battle = Battle.new()
@@ -2489,7 +2491,7 @@ func _maren_heals() -> void:
 	_festival_invite()
 
 func _satchel_shown() -> bool:
-	return stage == "free" and not battle.visible and not book.visible and not shop.visible
+	return stage == "free" and not lessons.visible and not battle.visible and not book.visible and not shop.visible
 
 ## Each badge's colour, pinned to the satchel strap and shown in the field book (the element of its Warden's town).
 const BADGE_COL := { "thorn": Color("5d9a3e"), "tide": Color("3a8fd8"), "ember": Color("e0602a"), "beacon": Color("e8c84a"),
@@ -3527,7 +3529,7 @@ var evolving: Dictionary = {}
 var evolve_to := ""
 
 func _check_evolution() -> void:
-	if stage != "free" or not lines.is_empty() or battle.visible or card.visible or shop.visible or book.visible or trans_t >= 0.0:
+	if stage != "free" or not lines.is_empty() or lessons.visible or battle.visible or card.visible or shop.visible or book.visible or trans_t >= 0.0:
 		return
 	var ctx := { "place": str(DATA.MAPS.get(map_name, {}).get("biome", map_name)), "team": team.map(func(x): return x.sp) }
 	for c in team:
@@ -3575,7 +3577,7 @@ func _take_along(ri: int, ti: int) -> void:
 ## how things look (text size) or run (battle pace).
 func _thumbs_tick() -> void:
 	touch.mode = settings.buttons()
-	var menus := battle.visible or book.visible or shop.visible or card.visible or register.visible or title.visible or howto.visible
+	var menus := lessons.visible or battle.visible or book.visible or shop.visible or card.visible or register.visible or title.visible or howto.visible
 	touch.pad_on = not menus and lines.is_empty() and trans_t < 0.0 and stage in ["to_barn", "barn_choose", "walk_out", "free"]
 	touch.word = action_word()
 	touch.btn_on = not menus and trans_t < 0.0 and touch.word != ""

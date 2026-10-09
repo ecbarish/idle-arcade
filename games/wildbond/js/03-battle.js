@@ -78,10 +78,10 @@ function chooseMove(u) {
     if (k === 'slow' || k === 'dot') { if (Math.random() < 0.5) return m; } }
   if (u.side === 'f' && modeOn('hardcore')) { const m = hardcoreMove(u, moves); if (m) return m; }
   const dmg = moves.filter(m => ['hit', 'aoe'].includes(MOVES[m].kind)).sort((a, b) => MOVES[b].pow - MOVES[a].pow);
-  return dmg[0] || movesOf(u.c)[0];
+  return dmg[0] || moves[0];
 }
 function act(u, forced, mult) {
-  const m = forced || chooseMove(u), mv = MOVES[m], foes = living(u.side === 'a' ? 'f' : 'a'), allies = living(u.side);
+  const m = forced || chooseMove(u);if(!m)return;const mv = MOVES[m], foes = living(u.side === 'a' ? 'f' : 'a'), allies = living(u.side);
   if (!foes.length) return;
   u.cds[m] = mv.cd; u.anim = 0.25;
   const aim = u.focus && u.focus.c.hp > 0 ? u.focus : null; u.focus = null; // Hardcore foes go for your weakest

@@ -321,8 +321,10 @@ func _resolve(u: Dictionary, m: String, mult: float) -> void:
 			tg.buff.slow = float(mv.get("duration", 5.0))
 			say("%s used %s. %s slows down." % [u.c.name, mv.name, tg.c.name])
 		"heal":
-			var low: Dictionary = us[0]
-			for a in us:
+			var care: Array = us.filter(func(a): return not Effects.label(a).is_empty() or not a.dots.is_empty()) if mv.get("cleanse", false) else []
+			if care.is_empty(): care = us
+			var low: Dictionary = care[0]
+			for a in care:
 				if float(a.c.hp) / a.st.hp < float(low.c.hp) / low.st.hp:
 					low = a
 			var hp := roundi(low.st.hp * float(mv.get("heal", 0.25)))

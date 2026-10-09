@@ -55,10 +55,15 @@ for(const s of Object.values(SPECIES)){
   s.learn=s.learn.concat(added).sort((a,b)=>a[0]-b[0]);
 }
 
-function defaultMoves(c){const known=learnedMoves(c),chosen=known.slice(-4);if(!chosen.some(m=>['hit','aoe'].includes(MOVES[m].kind))){const attacks=known.filter(m=>['hit','aoe'].includes(MOVES[m].kind));if(attacks.length)chosen[0]=attacks.at(-1);}return chosen;}
+function defaultMoves(c){const known=learnedMoves(c),chosen=known.slice(-4);if(!chosen.some(m=>['hit','aoe','dot'].includes(MOVES[m].kind))){const attacks=known.filter(m=>['hit','aoe','dot'].includes(MOVES[m].kind));if(attacks.length)chosen[0]=attacks.at(-1);}return chosen;}
 function learnedMoves(c){return [...new Set(sp(c).learn.filter(l=>l[0]<=c.lvl).map(l=>l[1]))];}
-function keptMoves(c){const known=learnedMoves(c),chosen=Array.isArray(c.moves)?[...new Set(c.moves.filter(m=>known.includes(m)))].slice(0,4):[];if(chosen.length)return chosen;return [...new Set((sp(c).legacyLearn||sp(c).learn).filter(l=>l[0]<=c.lvl).map(l=>l[1]))].slice(-4);}
-function keepMoves(c,list){const known=learnedMoves(c);if(!Array.isArray(list)||!list.length||list.length>4||new Set(list).size!==list.length||list.some(m=>!known.includes(m))||!list.some(m=>['hit','aoe'].includes(MOVES[m].kind)))return false;c.moves=list.slice();return true;}
+function keptMoves(c){
+  const known=learnedMoves(c),chosen=Array.isArray(c.moves)?[...new Set(c.moves.filter(m=>known.includes(m)))].slice(0,4):[];
+  const kept=chosen.length?chosen:[...new Set((sp(c).legacyLearn||sp(c).learn).filter(l=>l[0]<=c.lvl).map(l=>l[1]))].slice(-4);
+  if(!kept.some(m=>['hit','aoe','dot'].includes(MOVES[m].kind))){const attacks=known.filter(m=>['hit','aoe','dot'].includes(MOVES[m].kind));if(attacks.length){if(kept.length<4)kept.push(attacks.at(-1));else kept[0]=attacks.at(-1);}}
+  return kept;
+}
+function keepMoves(c,list){const known=learnedMoves(c);if(!Array.isArray(list)||!list.length||list.length>4||new Set(list).size!==list.length||list.some(m=>!known.includes(m))||!list.some(m=>['hit','aoe','dot'].includes(MOVES[m].kind)))return false;c.moves=list.slice();return true;}
 const BattleEffects={
  bad:['soaked','scorched','rooted','sleep','marked'],label:{soaked:'Soaked',scorched:'Scorched',rooted:'Rooted',sleep:'Asleep',marked:'Exposed'},
  active:(u,id)=>!!(u.status&&u.status[id]>0),

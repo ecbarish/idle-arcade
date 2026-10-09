@@ -172,8 +172,8 @@ static func win_xp(foe_count: int, foe_avg_lvl: float, my_lvl: int, trainer: boo
 static func default_moves(c: Dictionary) -> Array:
 	var known := learned_moves(c)
 	var chosen := known.slice(-4)
-	if not chosen.any(func(m): return DATA.MOVES[m].kind in ["hit", "aoe"]):
-		var attacks := known.filter(func(m): return DATA.MOVES[m].kind in ["hit", "aoe"])
+	if not chosen.any(func(m): return DATA.MOVES[m].kind in ["hit", "aoe", "dot"]):
+		var attacks := known.filter(func(m): return DATA.MOVES[m].kind in ["hit", "aoe", "dot"])
 		if not attacks.is_empty(): chosen[0] = attacks[-1]
 	return chosen
 
@@ -199,7 +199,13 @@ static func moves_of(c: Dictionary) -> Array:
 		chosen = chosen.slice(-4)
 	if chosen.is_empty():
 		chosen = known.slice(-4)
-	return chosen.slice(0, 4)
+	chosen = chosen.slice(0, 4)
+	if not chosen.any(func(m): return DATA.MOVES[m].kind in ["hit", "aoe", "dot"]):
+		var attacks := known.filter(func(m): return DATA.MOVES[m].kind in ["hit", "aoe", "dot"])
+		if not attacks.is_empty():
+			if chosen.size() < 4: chosen.append(attacks[-1])
+			else: chosen[0] = attacks[-1]
+	return chosen
 
 static func keep_moves(c: Dictionary, list: Array) -> bool:
 	var known := learned_moves(c)
@@ -210,7 +216,7 @@ static func keep_moves(c: Dictionary, list: Array) -> bool:
 		if m not in known or m in clean:
 			return false
 		clean.append(m)
-	if not clean.any(func(m): return DATA.MOVES[m].kind in ["hit", "aoe"]):
+	if not clean.any(func(m): return DATA.MOVES[m].kind in ["hit", "aoe", "dot"]):
 		return false
 	c["moves"] = clean.duplicate()
 	return true
@@ -326,7 +332,7 @@ static func choose_move(u: Dictionary, allies: Array, rng: RandomNumberGenerator
 		if k == "haste" and not allies.any(func(x): return x.buff.get("haste", 0.0) > 0): return m
 		if k == "guard" and not allies.any(func(x): return x.buff.get("guard", 0.0) > 0) and rng.randf() < 0.6: return m
 		if (k == "slow" or k == "dot") and rng.randf() < 0.5: return m
-	var dmg: Array = moves.filter(func(m): return DATA.MOVES[m].kind in ["hit", "aoe"])
+	var dmg: Array = moves.filter(func(m): return DATA.MOVES[m].kind in ["hit", "aoe", "dot"])
 	dmg.sort_custom(func(a, b): return DATA.MOVES[a].pow > DATA.MOVES[b].pow)
 	return dmg[0] if not dmg.is_empty() else moves_of(u.c)[0]
 
@@ -339,9 +345,10 @@ static func move_value(u: Dictionary, m: String, allies: Array, enemies: Array, 
 	for a in allies:
 		low = minf(low, float(a.c.hp) / a.st.hp)
 	if mv.kind == "heal":
-		var sick: bool = allies.any(func(a): return not Effects.label(a).is_empty() or not a.dots.is_empty())
+		var sick: bool = allies.any(func(a): return not Effects.label(a).is_empty() or not a.get("dots", []).is_empty())
 		return 115.0 if mv.get("cleanse", false) and sick else (100.0 if low < 0.45 else 0.0)
 	if mv.kind in ["buff", "haste", "guard"]:
+		if mv.get("cleanse", false) and allies.any(func(a): return not Effects.label(a).is_empty() or not a.get("dots", []).is_empty()): return 110.0
 		var key: String = {"buff": "dmg", "haste": "haste", "guard": "guard"}[mv.kind]
 		var useful: bool = not allies.any(func(a): return a.buff.get(key, 0.0) > 0)
 		return (65.0 if plan in ["shelter", "patient"] else 38.0) if useful else 0.0

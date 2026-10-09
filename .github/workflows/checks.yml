@@ -38,7 +38,7 @@ jobs:
 
       - name: Import Godot projects and exit the editor
         run: |
-          for project in wildbond-godot realmbound-godot; do
+          for project in wildbond-godot starfall-godot; do
             timeout 120 "$GODOT" --headless --path "$project" --editor --import --quit
           done
 

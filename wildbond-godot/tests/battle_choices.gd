@@ -9,7 +9,7 @@ static func run(main: Node, check: Callable) -> void:
 		var c := R.make(id, 100, {}, rng)
 		var known := R.learned_moves(c)
 		check.call(known.size() >= 6 and known.size() <= 8, "WD3: %s remembers six to eight moves" % id)
-		check.call(R.moves_of(c).any(func(m): return R.DATA.MOVES[m].kind in ["hit", "aoe"]), "WD3: %s always arrives with an attack" % id)
+		check.call(R.moves_of(c).any(func(m): return R.DATA.MOVES[m].kind in ["hit", "aoe", "dot"]), "WD3: %s always arrives with an attack" % id)
 		check.call(R.moves_of(c).size() == 4, "WD3: %s brings four" % id)
 		c.erase("moves")
 		var legacy: Array = []

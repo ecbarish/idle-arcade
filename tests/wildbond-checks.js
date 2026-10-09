@@ -26,7 +26,7 @@ function wildbondChecks() {
   for(const id of Object.keys(SPECIES)) {
     check('WD3: ' + id + ' remembers six to eight and brings an attack', () => {
       const c=newCreature(id,100),known=learnedMoves(c);
-      return known.length>=6 && known.length<=8 && movesOf(c).length===4 && movesOf(c).some(m=>['hit','aoe'].includes(MOVES[m].kind));
+      return known.length>=6 && known.length<=8 && movesOf(c).length===4 && movesOf(c).some(m=>['hit','aoe','dot'].includes(MOVES[m].kind));
     });
     check('WD3: ' + id + ' old save keeps original moves', () => {
       const c=newCreature(id,100);delete c.moves;
