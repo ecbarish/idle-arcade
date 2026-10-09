@@ -216,6 +216,8 @@ func _ready() -> void:
 	cam.limit_bottom = MAP.size() * TILE
 	cam.position_smoothing_enabled = true
 	add_child(cam)
+	sfx = Sfx.new()
+	add_child(sfx)
 	_make_ui()
 	if not _load():
 		_new_town()
@@ -472,6 +474,7 @@ func use() -> bool:
 			if not built.has(k):
 				build_plot = k                       # the plan for this plot: what could stand here
 				board_sel = 0
+				sfx.play("open")
 				walk_to.clear()
 			elif float(built[k].left) > 0.0:
 				say("", "Hob's crew are hard at work. It'll be standing soon.")
@@ -482,6 +485,7 @@ func use() -> bool:
 			elif built[k].what == "apothecary":
 				shelf_open = true
 				board_sel = 0
+				sfx.play("open")
 				walk_to.clear()
 			elif built[k].what == "healer":
 				say("ama", ["Bring me the hurt ones. Bandages, broth and quiet: that's most of medicine.", "Aki tried to leave before I'd finished with him. He won't again.",
@@ -513,6 +517,10 @@ func _unhandled_input(e: InputEvent) -> void:
 		return
 	if e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_M:
 		music_on = not music_on                  # M: music on or off
+		get_viewport().set_input_as_handled()
+		return
+	if e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_N:
+		sfx.on = not sfx.on                      # N: sound effects on or off
 		get_viewport().set_input_as_handled()
 		return
 	if not pour.is_empty():
@@ -836,6 +844,7 @@ func serve(h: Mover, by_hand: bool) -> void:
 		meals += 1
 	h.a.morale = mini(10, int(h.a.morale) + 1)
 	if by_hand:
+		sfx.play("coin")
 		bark(h, ["That smells wonderful.", "Thank you, guildmaster!", "Just what I needed."][rng.randi() % 3])
 	else:
 		bark(bryn, ["Here you go. Mind, it's hot.", "One stew!", "Eat up."][rng.randi() % 3])
@@ -904,6 +913,7 @@ func build(id: String) -> bool:
 		return false
 	coins -= int(b.cost)
 	built[build_plot] = { "what": id, "left": float(b.time) }
+	sfx.play("build")
 	caption.text = "Hob and his crew arrive with timber and rope. %s will be standing soon." % b.name
 	caption_t = 6.0
 	build_plot = ""
@@ -1002,6 +1012,7 @@ func strike() -> void:
 	if good:
 		forge.hits = int(forge.hits) + 1
 	bark(me, "Clang!" if good else "Tink...")
+	sfx.play("clang" if good else "tink")
 	if int(forge.n) >= 3:
 		var hits := int(forge.hits)
 		forge = {}
@@ -1035,6 +1046,7 @@ func finish_piece(h: Mover, hits: int, by_hand: bool) -> void:
 	a.fine = hits >= 3
 	if by_hand:
 		pieces += 1
+		sfx.play("success" if hits >= 3 else "coin")
 	bark(h, ["It'll do. A bit lumpy, but it'll do.", "Good, solid work. Thank you!", "Look at that edge! The finest work I've seen."][clampi(hits - 1, 0, 2)])
 	smith_customer = null
 	a.state = "town"
@@ -1089,6 +1101,7 @@ func buy_tonic(h: Mover) -> void:
 	today.earned += PRICES[price_i]
 	today.tonics = int(today.get("tonics", 0)) + 1
 	bark(h, "One tonic, coins in the jar. Thank you!")
+	sfx.play("coin", -6.0)
 
 func _shelf_input(e: InputEvent) -> void:
 	var n := 3                                  # brew, the price, done
@@ -1120,6 +1133,7 @@ func shelf_pick(i: int) -> void:
 				shelf_open = false
 				shelf_note = ""
 				caption.text = "You tip the herbs into the pot and stir. The steam smells of mint and wet stones."
+				sfx.play("brew")
 				caption_t = 3.0
 		1:
 			price_i = (price_i + 1) % PRICES.size()
@@ -1152,6 +1166,7 @@ func _check_rank() -> void:
 	if built_n < int(nxt.built) or total_jobs < int(nxt.jobs):
 		return
 	rank += 1
+	sfx.play("levelup")
 	caption.text = "Word travels: Starfall is a %s now. Someone new is walking in through the gate." % RANKS[rank].name.to_lower()
 	for k in PLOTS:
 		if int(PLOT_RANK[k]) == rank:
@@ -1261,10 +1276,12 @@ func _judge_day() -> String:
 		good_days += 1
 		bad_days = 0
 		out += " A good day; people are talking about Starfall." if good_days < 2 else " Another good day. The town has hung out bunting."
+		sfx.play("success")
 	elif failed > done or unfed >= 2:
 		bad_days += 1
 		good_days = 0
 		out += " A hard day." if bad_days < 2 else " Another hard day. Fewer people bring work to the board."
+		sfx.play("sad", -4.0)
 	else:
 		good_days = maxi(0, good_days - 1)
 		bad_days = maxi(0, bad_days - 1)
@@ -1393,6 +1410,7 @@ func pour_press() -> void:
 		return
 	if not pour.on:
 		pour.on = true
+		sfx.play("pour")
 		return
 	_finish_pour(float(pour.fill))
 
@@ -1414,6 +1432,9 @@ func _finish_pour(fill: float) -> void:
 	var good: bool = fill >= FULL.x and fill <= FULL.y
 	if fill > 1.0:
 		bark(me, "Oops, all over the bar.")
+		sfx.play("warn")
+	elif good:
+		sfx.play("success")
 	drink(h, 2 if good else 1, true)
 
 ## A drink served: the adventurer pays from their savings and goes home in better spirits (more beside the inn).
@@ -1427,6 +1448,7 @@ func drink(h: Mover, quality: int, by_hand := false) -> void:
 	a.morale = mini(10, int(a.morale) + lift)
 	if quality >= 2 and by_hand:
 		coins += 2                                  # a tip for a good pour
+		sfx.play("coin", -3.0)
 		today.earned += 2
 	a.drank = day
 	a.state = "town"
@@ -1514,6 +1536,7 @@ func advance() -> void:
 	if lines.is_empty():
 		return
 	lines.pop_front()
+	sfx.play("talk", -8.0)
 	if lines.is_empty() and then_do.is_valid():
 		var f := then_do
 		then_do = Callable()
@@ -1538,6 +1561,7 @@ func speaker(who: String) -> Mover:
 # ---------------------------------------------------------------- the guild board
 func open_board() -> void:
 	board_open = true
+	sfx.play("open")
 	board_sel = 0
 	walk_to.clear()
 
@@ -1559,12 +1583,15 @@ func _board_input(e: InputEvent) -> void:
 func board_pick(i: int) -> void:
 	if i >= notices.size():
 		board_open = false
+		sfx.play("close", -4.0)
 		return
 	var id: String = notices[i]
 	if id in posted:
 		posted.erase(id)
+		sfx.play("close", -4.0)
 	elif posted.size() < MAX_POSTED:
 		posted.append(id)
+		sfx.play("pick")
 	board_sel = i
 
 func _note_rect(i: int) -> Rect2:
@@ -2163,6 +2190,7 @@ func _doorstep(k: String) -> void:
 ## A bright tune through the working day, a gentler one as evening comes (the last fifth of the day). M: off and on.
 const MUSIC_VOL := -14.0
 var music: AudioStreamPlayer
+var sfx: Sfx                                     # short sound effects (scripts/sfx.gd)
 var music_now := ""
 var music_on := true
 
@@ -2241,6 +2269,7 @@ func story_choose(i: int) -> void:
 		say(str(l[0]), str(l[1]))
 	a.beat = int(a.beat) + 1
 	a.asked = false
+	sfx.play("pick")
 
 func _story_input(e: InputEvent) -> void:
 	var n: int = story_pick.opts.size()

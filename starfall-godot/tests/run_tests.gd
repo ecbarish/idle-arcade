@@ -532,5 +532,28 @@ func _run() -> void:
 	check(main.good_days == 4 and main.visitors.size() == 2, "and how the town has been doing, and who has come")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(main.save_path))
 	main.no_save = true
+	# ---- sound effects: every sound the town asks for has a file, and actions answer with one
+	var src := FileAccess.get_file_as_string("res://scripts/main.gd")
+	var missing: Array[String] = []
+	var rx := RegEx.create_from_string("sfx\\.play\\(\"([a-z]+)\"")
+	for m in rx.search_all(src):
+		if not ResourceLoader.exists("res://assets/sfx/%s.wav" % m.get_string(1)):
+			missing.append(m.get_string(1))
+	check(missing.is_empty(), "every sound effect the town plays has a file (missing: %s)" % ", ".join(missing))
+	var heard: int = main.sfx.count
+	main.lines.clear()
+	main.say("", "A test line.")
+	main.say("", "And another.")
+	main.advance()
+	check(main.sfx.count == heard + 1 and main.sfx.last == "talk", "talking makes a soft blip")
+	main.open_board()
+	check(main.sfx.last == "open", "opening the board makes a sound")
+	main.board_open = false
+	main.sfx.on = false
+	main.open_board()
+	main.board_open = false
+	check(main.sfx.on == false and main.sfx.last == "open", "sound effects can be turned off (N) without breaking anything")
+	main.sfx.on = true
+	main.lines.clear()
 	print("Starfall Godot checks: %d passed, %d failed" % [passed, failed])
 	quit(1 if failed > 0 else 0)
