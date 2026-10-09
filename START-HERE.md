@@ -103,6 +103,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude: Godot Wildbond: Stillreed Basin opened (WB3.1 step 1: footbridges, trainers, Warden, river ambience, Boat music). 218 checks. Next: its ferry and furniture, then WB2.2-2.4 depth items.
 - 2026-10-08 Codex: T45 ready in PR #72: 60 early-road heritage reactions for 11 people and four Wardens, every clue recorded. Eight pages pass (Wildbond 1,606); actual 39-table export carries all reactions and retains existing content exactly. No Godot, screen, save or version changes. T44 is ready separately in #71.
 - 2026-10-08 Codex: T44 ready in PR #71 after #70/#67: focused dialogue decisions, Settings isolation, named Realmbound paths, reading sizes and Otherworld status controls. Eight pages and 164 Chrome checks at four widths pass; docs/accessibility.md records remaining gaps. No Godot or version changes.
 

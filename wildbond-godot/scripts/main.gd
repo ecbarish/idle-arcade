@@ -112,7 +112,7 @@ var npc_info := {}                           # id -> { data from the map, beaten
 var badges: Array = []
 var spotter: Mover = null                    # a trainer who has seen you and is walking over
 var spot_t := 0.0
-const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass"]    # the maps the Godot version has so far
+const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed"]    # the maps the Godot version has so far
 var starters: Array[Mover] = []
 var partner: Mover = null
 var map_name := "larkhaven"
@@ -1397,6 +1397,18 @@ func _draw_ground(x: int, y: int, ch: String) -> void:
 		_tex(NATURE, Vector2i(5 - n % 2, 10), Vector2i.ONE, o + Vector2(4 + sway, 2))
 	elif ch == "~":
 		_draw_water(x, y, o, n)
+	elif ch == "b":
+		# a wooden footbridge over the river: water underneath, boards across, a rail on each side
+		_tex(WATER, Vector2i(11, 0), Vector2i.ONE, o)
+		draw_rect(Rect2(o + Vector2(0, 2), Vector2(16, 12)), Color("6b4a2a"))
+		for k in 4:
+			draw_rect(Rect2(o + Vector2(k * 4, 3), Vector2(3, 10)), Color("a07048").darkened(0.08 * ((x + k) % 2)))
+		draw_rect(Rect2(o + Vector2(0, 1), Vector2(16, 2)), Color("4e3220"))          # the rails
+		draw_rect(Rect2(o + Vector2(0, 13), Vector2(16, 2)), Color("4e3220"))
+		if tile_at(Vector2i(x - 1, y)) != "b":
+			draw_rect(Rect2(o + Vector2(0, 0), Vector2(2, 16)), Color("4e3220"))     # posts where it meets the bank
+		if tile_at(Vector2i(x + 1, y)) != "b":
+			draw_rect(Rect2(o + Vector2(14, 0), Vector2(2, 16)), Color("4e3220"))
 func _draw_structures() -> void:
 	var rows: Array = cur_map()
 	var doors: Array[Vector2i] = []
@@ -1629,10 +1641,10 @@ func _skip_opening() -> void:
 		_place_ranch()
 	var st: Array = DATA.MAPS[start].get("start", [16, 12, "up"] if start == "larkhaven" else [13, 14, "up"])
 	if start != "thornwood":
-		var order := ["thornwood", "saltmarsh", "emberfall", "cloudglass"]
+		var order := ["thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed"]
 		var at := maxi(1, order.find(start))
-		badges = ["thorn", "tide", "ember"].slice(0, at)
-		team[0].lvl = [5, 14, 24, 34][at]
+		badges = ["thorn", "tide", "ember", "beacon"].slice(0, at)
+		team[0].lvl = [5, 14, 24, 34, 46][at]
 		team[0].hp = R.stats(team[0]).hp
 	if "--photo" in OS.get_cmdline_user_args():      # pictures of the world: nobody asks to evolve mid-shot
 		for c in team: c["hold"] = 999
@@ -1646,7 +1658,7 @@ func _skip_opening() -> void:
 			maren.pos = Vector2(maren.tile) * TILE
 			maren.path.clear()).call_deferred()
 	if "--colour" in OS.get_cmdline_user_args():     # the area with its colour fully back (for pictures of the restored valley)
-		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "barn"]:
+		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "barn"]:
 			restore.append({ "where": m, "at": Vector2(192, 108), "r": 5000.0, "goal": 5000.0 })
 	if "--bench" in OS.get_cmdline_user_args():      # at Maren's workbench, the partner trying on a harness (-- --skip-opening --bench)
 		for c in team: c["hold"] = 999

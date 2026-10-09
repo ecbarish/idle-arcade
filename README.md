@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Godot Wildbond (2026-10-09): Stillreed Basin, the fifth area, is open: wooden footbridges over the river, its trainers and Warden, the sound of running water and its own tune. 218 checks pass.
 - Local helper (2026-10-08): preserve the runtime tool-permission order in both task modes; 19 runner checks pass.
 - Otherworld v0.4.0 (2026-10-08): all eleven soul memories open practical uses across worlds; six people remember help, harm and repaired trust within a life. Promised cart journeys, shared winter reserves and witnesses happen in portrait conversations. Old saves and Return retain their rules.
 - Wildbond v1.8.1 (2026-10-08): early-road heritage recognition (T45): Eleven existing early-road people and all four Wardens have a distinct line for each origin, with clues recorded in the thread ledger. The existing Godot export carries all 60 reactions; Classic conversations and gameplay stay intact. Claude wires the data into Godot; no release bump.
