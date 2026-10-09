@@ -52,11 +52,32 @@ async function studioChecks() {
     return a.length && a.every(e => /elderhorn/i.test(e.text + e.places.map(p => p.path).join()) && /guardian/i.test(e.text)) && b.some(e => e.text === 'Cindercub') && c.length && c.every(e => e.games.includes('starfall-godot') && e.kinds.includes('In code'));
   });
 
+  // ---- creature and quest viewers (E5): the rules flag broken data, and the real data reads clean
+  const V = window.StudioViewers;
+  const good = { SPECIES: { a: { name: 'Alpha', fam: 'wolf', el: 'Ember', base: { hp: 1, pow: 1, grd: 1, spd: 1, wit: 1, spi: 1 }, learn: [[1, 'bite']], evo: { at: 5, to: 'b' }, dex: 'A pup.' },
+    b: { name: 'Beta', fam: 'wolf', el: 'Ember', base: { hp: 2, pow: 2, grd: 2, spd: 2, wit: 2, spi: 2 }, learn: [[1, 'bite']], dex: 'A wolf.' } },
+    MOVES: { bite: { name: 'Bite', el: null, pow: 40 } }, ELEMENTS: { Ember: {} }, BIOMES: { wood: { name: 'Wood', req: 'thorn', wild: [['a', 5]] } }, BADGES: { thorn: {} }, STORY: [{ gate: 'thorn' }] };
+  const flagged = r => Object.values(r).flat().filter(x => x.problems.length).map(x => x.id + ': ' + x.problems.join('; '));
+  await check('Viewers: good Wildbond data has no problems', () => flagged(V.wildbond(good)).length === 0);
+  const broken = JSON.parse(JSON.stringify(good)); Object.assign(broken.SPECIES.a, { fam: 'dragon', el: 'Lava', learn: [[0, 'zap']], evo: { at: 5, to: 'zzz' }, dex: '' }); broken.SPECIES.b.name = 'alpha';
+  broken.BIOMES.wood.wild.push(['ghost', 3]); broken.BIOMES.wood.req = 'moon'; broken.EVOS = { b: [{ to: 'a', at: 0, place: 'mars', with: 'nobody' }] };
+  const why = flagged(V.wildbond(broken)).join(' | ');
+  await check('Viewers: the Wildbond test rules flag families, elements, moves, evolutions, dex, names, wild tables and badges', () =>
+    ['unknown body family', 'unknown element "Lava"', "move that doesn't exist: zap", 'move zap at level 0', "evolves into a creature that doesn't exist: zzz", 'no Wilddex entry', 'same name as', "a creature that doesn't exist: ghost", 'no Warden gives', 'not an area', "raised with a creature that doesn't exist"].every(w => why.includes(w)) || (() => { throw Error(why); })());
+  const rbFlags = flagged(V.realmbound({ ZONES: { vale: { name: 'Vale', mobs: [{ id: 'wolf' }] } }, QUESTS: { vale: [{ id: 'q1', name: 'A', text: 'B', mob: 'wolf' }, { id: 'q2', name: 'C', text: 'D', mob: 'bear', req: 'q9' }, { id: 'q1', name: 'E', text: 'F' }] } })).join(' | ');
+  await check('Viewers: the Realmbound quest rules flag a missing target, a missing earlier quest and a repeated id', () => /"bear" doesn't live in Vale/.test(rbFlags) && /"q9", which doesn't exist/.test(rbFlags) && /used twice/.test(rbFlags) && !/^q1: .*bear/.test(rbFlags));
+  const real = await V.load('../');
+  await check(`Viewers: the real data loads (Wildbond ${real.wildbond.species.length} and ${real['wildbond-godot'].species.length} creatures, ${real.realmbound.quests.length} Realmbound quests)`, () =>
+    real.wildbond.species.length >= 100 && real['wildbond-godot'].species.length >= real.wildbond.species.length && real.wildbond.wild.length > 50 && real['wildbond-godot'].evolutions.length > real.wildbond.evolutions.length && real.realmbound.quests.length >= 60 && real.wildbond.moves.length >= 20);
+  await check('Viewers: the Godot evolutions include the new shapes (Pyremane in Emberfall, three Poolkit branches)', () => real['wildbond-godot'].evolutions.some(r => r.id === 'blazefang>pyremane' && /emberfall/.test(r.cells[3])) && real['wildbond-godot'].evolutions.filter(r => r.id.startsWith('poolkit>')).length === 3);
+  await check('Viewers: the games\' current data has no problems (the same rules as the game checks)', () => { const f = Object.values(real).map(flagged).flat(); if (f.length) throw Error(f.slice(0, 5).join(' | ')); return true; });
+  await check('No game save or setting was changed by the viewers', () => snapshot() === before);
+
   // ---- the Studio page itself
   const frame = document.createElement('iframe'); frame.src = '../studio.html'; document.querySelector('#frame').replaceChildren(frame);
   await new Promise(ok => frame.onload = ok);
   const w = frame.contentWindow, d = frame.contentDocument;
-  for (let i = 0; i < 600 && !w.__studioTextIndex; i++) await new Promise(ok => setTimeout(ok, 100));
+  for (let i = 0; i < 600 && !(w.__studioTextIndex && w.__studioViewers); i++) await new Promise(ok => setTimeout(ok, 100));
   await check('The Studio shows the text browser with a count for every game', () => w.__studioTextIndex && d.querySelectorAll('#tbStats span').length === T.SOURCES.length && /pieces of text/.test(d.querySelector('#tbStatus').textContent));
   const find = d.querySelector('#tbFind'); find.value = 'Elderhorn'; find.dispatchEvent(new w.Event('input'));
   await new Promise(ok => setTimeout(ok, 400));
@@ -64,6 +85,7 @@ async function studioChecks() {
     return items.length > 0 && items.every(x => /elderhorn/i.test(x.textContent)) && d.querySelector('#tbList mark') && /00-data\.js/.test(d.querySelector('#tbList').textContent) && d.querySelector('#tbMore').hidden; });
   const kind = d.querySelector('#tbKind'); kind.value = 'Creature name'; kind.dispatchEvent(new w.Event('change'));
   await check('The kind filter narrows the list', () => [...d.querySelectorAll('#tbList .tb-kind')].every(x => x.textContent === 'Creature name') && d.querySelectorAll('#tbList .tb-item').length >= 1);
+  await check('The Studio shows the creature and quest viewers with a row per creature', () => w.__studioViewers && d.querySelectorAll('#vwTable tr').length === w.__studioViewers.wildbond.species.length + 1 && /no problems|with problems/.test(d.querySelector('#vwStatus').textContent));
   frame.remove();
   await check('Player pages do not link to the Studio', async () => { for (const p of ['../index.html', '../playtest.html']) { const t = await (await fetch(p)).text(); if (/href=["'][^"']*studio(\.html|\/)/.test(t)) return false; } return true; });
   return checks;

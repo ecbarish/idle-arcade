@@ -241,6 +241,21 @@ parent.postMessage({__studioText:${JSON.stringify(token)},out,missing,errors:win
     return { entries, perGame, notes, total: entries.length };
   }
 
+
+  /* Raw data from a browser game, for the Studio viewers (C2): the named top-level tables, copied out of the sealed
+     frame as plain data (functions dropped). The game never starts and cannot touch saves. */
+  async function loadGameData(root, dir, names) {
+    const base = new URL(root || './', location.href), d = new URL(dir, base), html = await fetchText(new URL('index.html', d));
+    const srcs = [...html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["']/gi)].map(m => m[1]).filter(s => !/99-boot\.js$/.test(s));
+    const body = (/<body[^>]*>([\s\S]*)<\/body>/i.exec(html) || ['', ''])[1].replace(/<script\b[\s\S]*?<\/script>/gi, '');
+    const token = String(Math.random());
+    const grab = `<script>(function(){const out={};for(const n of ${JSON.stringify(names)}){try{out[n]=JSON.parse(JSON.stringify((0,eval)(n)))}catch(e){}}
+parent.postMessage({__studioText:${JSON.stringify(token)},out},'*');})();<\/script>`;
+    const page = `<!doctype html><html><head><meta charset="utf-8"><base href="${d.href}">${STUB}</head><body>${body}` +
+      srcs.map(s => `<script src="${s.replace(/"/g, '&quot;')}"><\/script>`).join('') + grab + '</body></html>';
+    return (await runSealed(page, token, 30000)).out || {};
+  }
+
   /* Search: every word must appear in the text, the file or the path. */
   function search(entries, query, game, kind) {
     const words = String(query || '').toLowerCase().split(/\s+/).filter(Boolean);
@@ -248,5 +263,5 @@ parent.postMessage({__studioText:${JSON.stringify(token)},out,missing,errors:win
       words.every(w => e.text.toLowerCase().includes(w) || e.places.some(p => (p.path + ' ' + p.file).toLowerCase().includes(w))));
   }
 
-  window.StudioText = { SOURCES, KINDS, jsStrings, gdStrings, isPlayerText, kindOf, declaredNames, tidy, lastKey, build, search };
+  window.StudioText = { SOURCES, KINDS, jsStrings, gdStrings, isPlayerText, kindOf, declaredNames, tidy, lastKey, build, search, loadGameData };
 })();

@@ -25,6 +25,7 @@ details{margin:2px 0}summary{cursor:pointer;padding:2px 0}.kids{margin-left:16px
 .tb-item{border-top:1px solid var(--line);padding:8px 0}.tb-text{white-space:pre-wrap;overflow-wrap:anywhere}#textBrowser mark{background:var(--gold);color:#1a1020;border-radius:2px}
 .tb-kind{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#c8b0ff;margin-right:6px}
 .tb-where{font-size:12px;color:var(--dim);margin:2px 0 0 0;padding:0;list-style:none}.tb-where li{overflow-wrap:anywhere}.tb-where code{color:var(--fg);font-size:12px}
+.vw-bad td{background:#3a1820}.vw-bad .vw-why{color:var(--bad);font-weight:600}.vw-wrap{overflow-x:auto;max-height:70vh}
 .healthy{color:var(--ok);font-size:14px;margin:6px 0}
 </style>
 </head>
@@ -81,9 +82,25 @@ details{margin:2px 0}summary{cursor:pointer;padding:2px 0}.kids{margin-left:16px
     <div class="row"><button class="alt" id="tbMore" hidden>Show more</button></div>
   </section>
 
+  <section class="card" id="viewers">
+    <h2>Creatures and quests</h2>
+    <p class="meta">Wildbond's creatures, moves, evolutions and wild tables (the browser game and the Godot game), and Realmbound's quests,
+      with anything the game checks would reject marked in red with the reason. Read-only.</p>
+    <div class="row"><select id="vwView" aria-label="What to show">
+        <option value="wildbond:species">Wildbond (browser): creatures</option><option value="wildbond:moves">Wildbond (browser): moves</option>
+        <option value="wildbond:evolutions">Wildbond (browser): evolutions</option><option value="wildbond:wild">Wildbond (browser): wild tables</option>
+        <option value="wildbond-godot:species">Wildbond (Godot): creatures</option><option value="wildbond-godot:moves">Wildbond (Godot): moves</option>
+        <option value="wildbond-godot:evolutions">Wildbond (Godot): evolutions</option><option value="wildbond-godot:wild">Wildbond (Godot): wild tables</option>
+        <option value="realmbound:quests">Realmbound: quests</option></select>
+      <input id="vwFind" type="search" placeholder="Filter (e.g. Ember, thornwood)" style="flex:1;min-width:160px" aria-label="Filter the rows">
+      <label class="meta"><input type="checkbox" id="vwBad"> Only problems</label></div>
+    <div id="vwStatus" class="meta" aria-live="polite">Reading the games' data…</div>
+    <div id="vwTable" class="vw-wrap"></div>
+  </section>
+
   <section class="card">
     <h2>Coming next</h2>
-    <p class="meta">From the plan (docs/PROJECTS.md, Studio): editing the text found by the text browser (E4, with E1's patch format), creatures and quests (E5), a map painter (E6), and a lighting and music tuner (E7).</p>
+    <p class="meta">From the plan (docs/PROJECTS.md, Studio): editing the text found by the text browser (E4, with E1's patch format), a map painter (E6), and a lighting and music tuner (E7).</p>
   </section>
 </main>
 <script src="shared/engine.js"></script>
@@ -258,6 +275,28 @@ gmUI(); savesUI(); logUI(); docLoad();
     $('#tbStats').innerHTML = StudioText.SOURCES.map(g => `<span title="${esc((r.notes[g.id] || []).join(' '))}">${esc(g.name)}: ${r.perGame[g.id] || 0}</span>`).join('');
     draw();
   }).catch(e => { $('#tbStatus').textContent = 'Could not read the games: ' + e.message + ' (open the Studio from the local server, not as a file).'; });
+})();
+</script>
+<script src="studio/viewers.js"></script>
+<script>
+'use strict';
+/* ---- Creature and quest viewers (E5, read-only): studio/viewers.js reads and checks; this draws the table ---- */
+(function () {
+  const $ = s => document.querySelector(s), esc = v => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  let data = null;
+  function draw() {
+    if (!data) return;
+    const [game, view] = $('#vwView').value.split(':'), rows = data[game][view], q = $('#vwFind').value.toLowerCase(), onlyBad = $('#vwBad').checked;
+    const shown = rows.filter(r => (!onlyBad || r.problems.length) && (!q || (r.id + ' ' + r.cells.join(' ') + ' ' + r.problems.join(' ')).toLowerCase().includes(q)));
+    const bad = rows.filter(r => r.problems.length).length;
+    $('#vwStatus').innerHTML = `${rows.length} rows, ${bad ? `<b style="color:var(--bad)">${bad} with problems</b>` : '<span class="on">no problems</span>'}${shown.length !== rows.length ? `; showing ${shown.length}` : ''}.`;
+    $('#vwTable').innerHTML = `<table><tr>${['Id', ...StudioViewers.COLUMNS[view], 'Problems'].map(h => `<td><b>${h}</b></td>`).join('')}</tr>${shown.map(r =>
+      `<tr class="${r.problems.length ? 'vw-bad' : ''}"><td>${esc(r.id)}</td>${r.cells.map(c => `<td>${esc(c)}</td>`).join('')}<td class="vw-why">${esc(r.problems.join('; '))}</td></tr>`).join('')}</table>`;
+  }
+  $('#vwView').onchange = $('#vwBad').onchange = draw; $('#vwFind').addEventListener('input', draw);
+  StudioViewers.load('./').then(d => { data = d; window.__studioViewers = d;
+    for (const o of $('#vwView').options) { const [g, v] = o.value.split(':'), n = d[g][v].filter(r => r.problems.length).length; if (n) o.textContent += ` (${n} to fix)`; }
+    draw(); }).catch(e => { $('#vwStatus').textContent = 'Could not read the games: ' + e.message; });
 })();
 </script>
 </body>

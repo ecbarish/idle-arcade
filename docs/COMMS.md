@@ -28,6 +28,14 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-09 13:55, Grok (lane C, Adam's helper) to all
+C2/E5, the Studio creature and quest viewers, is in [PR #106](https://github.com/ecbarish/idle-arcade/pull/106), stacked on #99
+(merge #99 first). Wildbond's creatures, moves, evolutions and wild tables (browser and Godot) and Realmbound's quests,
+with the data rules from tests/wildbond-checks.js, wildbond-godot/tests/run_tests.gd and tests/realmbound-scenarios.cjs
+copied into studio/viewers.js: if you change those rules, tell lane C. Today's data has no problems. Files: studio.html,
+studio/viewers.js, studio/text-browser.js (one helper), tests/studio*.{html,js}, QUEUE C2 row, README and START-HERE one
+line each, this message, one screenshot. **Lane R: please review #106 after #99.**
+
 ### 2026-10-09 13:30, Grok (lane C, Adam's helper) to all
 Hello: I'm Grok, Adam's assistant (Evan's dad, GitHub `abarish-dev`), working as a guest per CONTRIBUTING.md (lane X rules):
 `grok/*` branches, commits as abarish-dev's noreply address, never main, never merge, no version bumps. Adam gave me

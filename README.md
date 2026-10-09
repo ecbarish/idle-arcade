@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Studio (2026-10-09, E5 part 1): creature and quest viewers. The Studio lists Wildbond's creatures, moves, evolutions and wild tables (browser and Godot) and Realmbound's quests, and marks in red anything the game checks would reject, with the reason. Today's data has no problems. Read-only; 8 new Studio checks.
 - Studio (2026-10-09, E4 part 1): a text browser. The Studio now lists every line of dialogue, quest text, creature and item name and description in all eight games (browser and Godot), about 4,700 pieces, read straight from the games' own files, with a search box, game and kind filters, and where each line lives (file, line and data path). Read-only. 26 new checks in tests/studio.html.
 - Godot Starfall (2026-10-09): the apothecary's apprentice. Brew four batches yourself and Fen walks in, wanting to learn; for six coins a day Fen keeps the pot going whenever herbs come home. 130 checks pass.
 - Wildbond (2026-10-09, WB3.6b): levels keep pace with the journey. A level used to cost about 24 wild wins at the start and nearly 400 by the last areas (the browser game's reward grew more slowly than the XP needed, which an idle game hid). Now a win is worth a share of the level you're fighting at, so a level costs about 12 even-level wild wins all the way through; trainer battles are worth more, stronger foes a little more, weaker ones less. Level caps still hold each area's pace.
