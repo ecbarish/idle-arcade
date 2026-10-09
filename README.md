@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Starfall planning (2026-10-09, T57): [four seasonal village chapters](docs/plans/starfall-village.md#sf33--t57-four-chapters-in-the-same-village), each with a threat, festival and newcomer. Design handoff only; essential story never waits for a calendar date.
+
 - Wildbond pacing (2026-10-09, T56): [actual Godot late-area and league diagnostic](docs/wildbond-godot-pacing.md), reproducible without player saves. Reports progression deficits and late move cooldown stalls; no gameplay tuning.
 
 - Wildbond writing audit (2026-10-09, T55): [final-truth clue fit and three proposed late observations](docs/lore/wildbond-final-truth-audit.md) for Claude's review. No new playable dialogue or behavior.

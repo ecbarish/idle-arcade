@@ -114,6 +114,7 @@ Branch: codex/starfall-season-outlines, stacked after T56 because planning notes
 - Append four original chapter outlines to docs/plans/starfall-village.md: one threat, one named shared-calendar festival and one newcomer each. Include street staging, active guildmaster actions through existing places, a meaningful recoverable choice and a visible aftermath.
 - Preserve current cast, six member arcs, earned staffing, recovery and no-windfall economy. Distinguish new proposals from implemented systems, chapter readiness from calendar dates, and shared-calendar day length from Starfall's existing service/wage day. No new mandatory calendar waits or missable essential story in real/held modes.
 - Include a smallest-first build order and acceptance checks for Claude; no final dialogue arrays or engine/save/economy edits. Change only the plan plus normal ticket/project/queue/path/README/Session/COMMS notes. All eight browser test pages remain passing; no versions or Godot/play edits.
+- [x] T57 outlines ready in PR #84: four threats/festivals/newcomers, recoverable decisions, no mandatory calendar waits; shared timing and service-day distinction verified. All eight browser pages pass; docs only.
 
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.

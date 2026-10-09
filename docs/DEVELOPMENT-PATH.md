@@ -141,7 +141,7 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
 **SF-M3: seasons.**
 - [ ] SF3.1 [Claude] Seasons as chapters (SV2), the first one ending in a festival.
 - [ ] SF3.2 [Claude] Travelling merchants and visitors from other games (the shared universe, lightly).
-- [ ] SF3.3 [ChatGPT] Season 1 to 4 outlines in docs/plans/starfall-village.md (a threat, a festival, a newcomer each).
+- [x] SF3.3 [ChatGPT] T57 ready in PR #84: four seasonal chapters in docs/plans/starfall-village.md, each with threat/festival/newcomer, recoverable choices and shared-calendar boundaries; docs only, Claude implements.
 
 - [ ] SF3.4 [Claude] Festivals in Starfall on the shared calendar (WS1's rules): the square and every building you've
   built decorated for each season's festival (lights and garlands at midwinter), a festival supper at the inn, a

@@ -103,6 +103,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09, Codex: T57/SF3.3 ready in PR #84, stacked after #83: four seasonal village chapters, threats/festivals/newcomers, recoverable choices and date-independent story. Verified shared calendar versus service-day timing; eight browser suites pass. Docs only; Claude owns implementation.
+
 - 2026-10-09, Codex: T56 ready in PR #83, stacked after #82: actual copied Godot battle pacing, 24 entry benchmarks, six direct routes and four trained journeys. 79,732 diagnostic checks/eight pages pass; direct teams stall or lose, trained league can win at 70; Deeptide no-ready-turn finding for Claude. Godot unchanged.
 
 - 2026-10-09, Codex: T55 audit ready in PR #82: all clue groups fit checked against Evan's chosen account; Rysa/Classic chronology and watcher identity cautions, three shared late observation proposals. 56 reference checks and eight pages pass. Reveal waits for Claude review; no Godot edits.
