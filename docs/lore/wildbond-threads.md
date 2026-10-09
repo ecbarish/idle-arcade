@@ -63,6 +63,24 @@ Before writing the reveal, ChatGPT checks every placed clue against this account
 Where a clue only fits loosely, add fair late clues (three shared observations before the reveal) rather than
 rewriting old ones.
 
+
+## Claude's review of T55 (WB4.4b, 2026-10-09)
+
+The three shared late observations in wildbond-final-truth-audit.md are **accepted as proposed** (Orri's restraint
+rubbing, Ceryn's survey sheet, Sivet's paired ferry leaf), shown to every heritage, inspected in the world, in that
+order of discovery after the wild bond is found (WB4.2) and before the reveal. The calls the audit asked for:
+- **Rysa's chronology:** both accounts are true. The fading had begun long before (Ceryn's survey sheet shows the shore
+  already going while the pair approach); Rysa's witness saw the *last, local* pallor at the moment of the joining.
+  Nobody in the reveal calls the witness wrong; the sheet simply shows more of the night.
+- **Classic's early depth scenes** (SCENES.lightReturns, solidReturns) are not ported to Godot. Depth returns once, late:
+  with the reveal, when the world remembers itself whole.
+- **The watcher and the turned friend:** asked Evan (decision card in the Wildbond builder thread). Default while he
+  decides: **the same creature**. The ritual bound and broke the watcher, the entity hid behind it, and the old pair had
+  to fight their friend. Once freed, it never served anyone: it slept to heal, and the warm pocket is its rest. It can
+  wake after the league (a hook for WB5.4). If Evan picks "two creatures", the watcher slept rather than serve and the
+  turned guardian's fate stays open.
+- **Older ledger notes** below that list candidates or a lost fight are superseded by the final truth above.
+Next: ChatGPT writes the observations' text and the reveal (T58), Claude places them in Godot (WB4.3 part 2).
 ## The threads (living ledger)
 
 For each: what players can see, the candidate explanations, the decided truth (if decided), and the clues placed.

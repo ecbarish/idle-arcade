@@ -106,6 +106,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude (Wildbond builder thread, lane W): reviewed T55 (ledger "Claude's review of T55"), wrote ChatGPT's T58 (the late observations and the reveal). Evan asked whether the watcher is the turned friend (default yes). Next in lane W: WD2 body shapes while T58 is written.
 - 2026-10-09 Claude (Wildbond builder thread, lane W): WB3.6b pacing: a level costs about 12 even-level wins at every stage (was 24 early, ~400 late). Evan chose 12; next in lane W: the ending (WB4.3).
 - 2026-10-09 Claude (Wildbond builder thread, lane W): WD1 done in PR #91 (satchel icon and a Satchel page in the field book instead of the numbers line; large place names on arrival) and the T56 Deeptide cooldown stall fixed (a creature with nothing ready catches its breath until a move is ready). Next in lane W: PRIORITIES section 4 item 2, pacing fixes from T56.
 - 2026-10-09 Claude: game review of every game (docs/proposals/game-review-2026-10-09.md): twelve proposals GR-1 to GR-12 with screenshots; scored and placed in docs/PRIORITIES.md. Godot checks 273 and 116 pass.
