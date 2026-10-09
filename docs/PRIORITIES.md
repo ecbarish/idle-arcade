@@ -143,3 +143,6 @@ keep-alive writing for Diamond Career and Otherworld.
   ready-to-claim tasks any AI can take (QUEUE.md "The road ahead"); cabinets and Little Ranch are open to any AI.
 - 2026-10-09 Evan: other AIs may build in the Godot games too, with checks (all suites green, old saves load,
   screenshots, a Claude reviewer or Evan merges). Rules in QUEUE.md "The road ahead".
+- 2026-10-09 Evan: his dad's AIs have much more usage, so they take the heavy lifting (QUEUE.md "Heavy lifting": WD3
+  battles, WD4 explorable areas, WB5.1 Spire, Starfall SF2.6-2.8, WB3.7 Unbound). Claude threads keep to planning,
+  reviews, the ending and creature drawing while Claude's weekly usage is low.
