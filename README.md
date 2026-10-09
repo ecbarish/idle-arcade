@@ -39,6 +39,10 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Wildbond (2026-10-09, WD2 part 1): four new body shapes, so whole families stop sharing one outline. Tidewyrm, Deeptide and Rillwhisk are serpents that ripple along the ground; Bogbough, Cairnclasp and Siltjaw are turtles with plated shells; Veilmote, Fogsail and Dawntassel are moths drifting on slow wings; Orchardroot, Flintroot and Meadowmantle are tree-folk on root feet. Picture: docs/screenshots/wildbond-wd2/new-shapes.png.
+- Realmbound (2026-10-09, RB1.5): opened conversations wait for their reader; Focus fallback waits for the first victory, then gives the existing fifteen seconds. QuestHelper and background hunting respect dialogue. The sun and clouds sit below the title and health frames.
+- Wildbond writing handoff (2026-10-09, T58): three inspectable late observations, Toren and Isolde's final-truth conversation, four depth-return lines and eight Warden responses. [Placement contract](docs/lore/wildbond-reveal.md); no playable behavior changes.
+
 - Studio (2026-10-09, E5 part 1): creature and quest viewers. The Studio lists Wildbond's creatures, moves, evolutions and wild tables (browser and Godot) and Realmbound's quests, and marks in red anything the game checks would reject, with the reason. Today's data has no problems. Read-only; 8 new Studio checks.
 - Studio (2026-10-09, E4 part 1): a text browser. The Studio now lists every line of dialogue, quest text, creature and item name and description in all eight games (browser and Godot), about 4,700 pieces, read straight from the games' own files, with a search box, game and kind filters, and where each line lives (file, line and data path). Read-only. 26 new checks in tests/studio.html.
 - Godot Starfall (2026-10-09): the apothecary's apprentice. Brew four batches yourself and Fen walks in, wanting to learn; for six coins a day Fen keeps the pot going whenever herbs come home. 130 checks pass.
