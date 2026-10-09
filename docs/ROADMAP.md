@@ -92,6 +92,30 @@ Branch: codex/wildbond-champion-returns, stacked after #80 for shared ledger/han
 - Gate staging with clear standing positions in docs/lore/wildbond-champion-returns.md, using T53's payoff map. No new culprit, pair/watcher identity, leader motive or claimed depth restoration. Record every echo in the ledger.
 - Add content checks in tests/wildbond-checks.js; verify source preservation, actual 39-table export and real portrait previews at four sizes. All eight pages pass. No Godot/engine/exporter/save/version changes; normal claim/README/Session/COMMS only.
 
+### T55: Wildbond final-truth clue audit (WB4.4b part 1)
+Why: Evan chose the account in the ledger, and Claude asks for a short reviewable audit before reveal dialogue.
+Branch: codex/wildbond-final-truth-audit, from latest main.
+- Write docs/lore/wildbond-final-truth-audit.md: inspect browser/exported and Godot-specific placed text, cover every ledger clue group, distinguish factual contradictions from attributed misunderstandings, list fixes or evidence gaps without rewriting player text.
+- Propose exactly three shared late observations with location, evidence, competing explanations narrowed, accessibility for all heritages, and fair sequence after wild-bond discovery and before reveal. Observation proposals only, not dialogue, placed clues or new canon.
+- Preserve the decided account and future hooks; identify any residual ambiguity explicitly rather than secretly deciding identity/fate. No runtime/Godot/exporter/save/version changes. All eight pages pass; source addresses verified, normal claim/README/Session/COMMS notes. Claude reviews this before part 2.
+- [x] T55 audit ready in PR #82: all ledger groups, two chronology risks, one identity ambiguity and exactly three shared observation proposals. 56 source/reference checks and eight browser suites pass; no reveal dialogue or Godot edits.
+
+### T56: Wildbond areas 5-8 and league pacing (WB3.6)
+Why: Claude requests expected team levels for Halen, Rysa, the courts and Avenne, using current Godot rules.
+Branch: codex/wildbond-late-pacing, stacked after T55 from current main.
+- Add a reproducible diagnostic outside wildbond-godot: copy the current unmodified battle/rules/figures and exported data to a disposable project, drive actual battles and XP, never use player saves or write into Godot/play.
+- Record current teams/caps and compare ordinary entry-level teams, several seeded potential/trait rolls and a lower-powered team. Model the two route trainers, current staged story fights and wild training in areas 5-8; record before/after levels, defeats and wild wins needed, not invented human completion hours. League uses actual full rests between courts and resets on loss.
+- Include a no-extra-training route to expose deficits, and a bounded train-to-ace policy to measure the grind needed. Label synthetic starting fixtures, command policy, evolution, missing systems and differences from Classic. Verify browser/export/Godot data and numeric rules; report drift instead of silently assuming parity.
+- Write docs/wildbond-godot-pacing.md plus machine-readable results under docs/measurements; tests/tools may be new or changed. No gameplay tuning, engine/preview/save/version edits. All eight browser pages pass. Normal README/Session/COMMS/project/queue/path notes; open PR, never merge.
+- [x] T56 ready in PR #83: 24 entry benchmarks, six continuous direct routes, four train-to-ace journeys, raw results and copied-input hashes. 79,732 diagnostic checks and all eight browser suites pass. Deeptide cooldown stalls handed to Claude; no engine/gameplay tuning.
+### T57: Starfall seasons one to four (SF3.3)
+Why: Claude asks for four outlines in docs/plans/starfall-village.md using the shared calendar's existing festival timings.
+Branch: codex/starfall-season-outlines, stacked after T56 because planning notes overlap.
+- Append four original chapter outlines to docs/plans/starfall-village.md: one threat, one named shared-calendar festival and one newcomer each. Include street staging, active guildmaster actions through existing places, a meaningful recoverable choice and a visible aftermath.
+- Preserve current cast, six member arcs, earned staffing, recovery and no-windfall economy. Distinguish new proposals from implemented systems, chapter readiness from calendar dates, and shared-calendar day length from Starfall's existing service/wage day. No new mandatory calendar waits or missable essential story in real/held modes.
+- Include a smallest-first build order and acceptance checks for Claude; no final dialogue arrays or engine/save/economy edits. Change only the plan plus normal ticket/project/queue/path/README/Session/COMMS notes. All eight browser test pages remain passing; no versions or Godot/play edits.
+- [x] T57 outlines ready in PR #84: four threats/festivals/newcomers, recoverable decisions, no mandatory calendar waits; shared timing and service-day distinction verified. All eight browser pages pass; docs only.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a
