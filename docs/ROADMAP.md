@@ -76,6 +76,13 @@ Branch: codex/starfall-member-writing, stacked after #78 for shared claim/handof
 - Use the existing after_jobs/needs/lines/options/morale/coins/trait shape; only steady, bold, mapper and healer traits. No new effect handler, save key, class, building or asset. Short original voices and legible choices with plainly shown, bounded consequences; no positive coin windfall or permanent punishment.
 - Validate against actual member/building IDs, increasing thresholds, all choices, economy and recoverable morale. Read-only inspect the Godot dialogue/choice surfaces; record previews without claiming integration. All eight browser pages stay pass. Normal claim/README/Session/COMMS only.
 
+### T53: Wildbond league script and payoff map (WB4.4a)
+Why: Claude builds WB4.1 next and requested ending text from the ledger. Separate the usable league finale from the deeper revelations whose truths remain open.
+Branch: codex/wildbond-finale-handoff, stacked after #79 for handoff/tracking documents.
+- docs/lore/wildbond-finale.json copies six existing league encounters and the existing ending, plus a clearly optional short Larkhaven homecoming. docs/lore/wildbond-finale-brief.md maps staging, cast, battle order, callbacks, every thread's status and heritage fairness.
+- Use current canon only. Record optional care-themed lines in the ledger. Do not invent the fading opponent, old pair, watcher identity or Unbound leader motive, or award depth restoration through a league win. A separate writer decision map records the unresolved reveals for later approval.
+- Data/docs only; no engine/exporter/Godot/play/save/version changes. Check source equality, exact IDs/order/teams/map connectivity, real export and optional dialogue readability; all eight browser pages pass. Normal README/Session/COMMS handoff.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a

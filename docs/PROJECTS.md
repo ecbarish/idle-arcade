@@ -30,6 +30,12 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 |---|---|---|---|---|
 | SF2.4a | Member arcs, separate JSON handoff (T52) | M | ready: PR #79, Codex, 2026-10-09 | Twelve new beats; Godot files remain Claude's |
 
+## League writing handoff
+
+| ID | Project | Size | Status | Notes |
+|---|---|---|---|---|
+| WB4.4a | League script and payoff map (T53) | S | claimed: Codex, 2026-10-09, codex/wildbond-finale-handoff | Existing finale and optional homecoming; undecided mystery reveals held |
+
 ## How to use this list
 
 - **Pick** any project whose status is `open` and whose dependencies are done. Prefer the **Launch track** and the
