@@ -68,7 +68,7 @@ lane R (or Evan) merges. Each line names its spec; read it first.
 | 8 | **Brisket's Crossing, then Ember Bricks** (AC3) | games-for-everyone.md | as AC1 | As AC1, one PR each |
 | 9 | **Realmbound phone pass** (RB1.4) | PROJECTS.md L3 | `games/realmbound/` | Plays at 375 px wide with no sideways scroll; `tests/run.html` passes |
 | 10 | **Realmbound second raid tier** (RB2.2) | PROJECTS.md R7 | `games/realmbound/` | Data and encounters, balanced; checks |
-| 11 | **Diamond Career: a full season** (DC2.1) | docs/plans/diamond-career.md D2 | `games/diamond-career/` | Standings, roles that change with form, an end-of-season review; `tests/diamond.html` passes |
+| 11 | **Diamond Manager: playability pass** (DM2; replaces the retired DC2.1) | docs/plans/sports-management.md | `games/diamond-manager/` | Two seasons played as a first-timer on desktop and phone, a short playtest note, the top three problems fixed; `tests/diamond-manager.html` passes |
 | 12 | **Newcomer playtests** (X1) and **link check** (X2), **Otherworld text sweep** (X3) | Lane X below | see Lane X | see Lane X |
 | 13 | **A Wildbond guide** (WB6.4) | `guides/` style | `guides/` | First steps, the element chart, the ranch, with real screenshots from `play/wildbond/` |
 
