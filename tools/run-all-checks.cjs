@@ -6,8 +6,8 @@
      node tools/run-all-checks.cjs wildbond starfall  only the suites whose names contain these words
      GODOT=C:\Users\evanb\Godot\Godot_v4.7.2-stable_win64_console.exe node tools/run-all-checks.cjs
 
-   Needs Node and the playwright package (npm i -g playwright). On Windows it uses the installed Chrome;
-   elsewhere Playwright's own Chromium (CHROME_PATH overrides both). GitHub runs this on every push and pull
+   Needs Node and the playwright package (npm i -g playwright). It uses any Chrome, Chromium or Edge already
+   installed, else Playwright's own Chromium (CHROME_PATH overrides all). GitHub runs this on every push and pull
    request (.github/workflows/checks.yml). No game saves are touched: every page runs in a fresh browser context. */
 const http=require('http'),fs=require('fs'),path=require('path'),{spawnSync}=require('child_process');
 const ROOT=path.resolve(__dirname,'..');
@@ -24,10 +24,21 @@ function serve(){return new Promise(ok=>{const server=http.createServer((req,res
   fs.readFile(file,(err,data)=>{if(err){res.writeHead(404);return res.end();}res.writeHead(200,{'Content-Type':TYPES[path.extname(file)]||'application/octet-stream'});res.end(data);});
  });server.listen(0,'localhost',()=>ok(server));});}
 
+/* Any browser already on the computer, before Playwright's own Chromium (which needs a download that some machines
+   and sandboxes can't make). Chrome or Edge on Windows (every Windows 10/11 PC has Edge), Chrome, Chromium or Edge on
+   macOS and Linux. CHROME_PATH still wins. Returns undefined to let Playwright use its own browser. */
 function browserPath(){
   if(process.env.CHROME_PATH)return process.env.CHROME_PATH;
-  const chrome='C:/Program Files/Google/Chrome/Application/chrome.exe';
-  return process.platform==='win32'&&fs.existsSync(chrome)?chrome:undefined;
+  const local=process.env.LOCALAPPDATA||'',pf=process.env.ProgramFiles||'C:/Program Files',pf86=process.env['ProgramFiles(x86)']||'C:/Program Files (x86)';
+  const candidates={
+    win32:[pf+'/Google/Chrome/Application/chrome.exe',pf86+'/Google/Chrome/Application/chrome.exe',local+'/Google/Chrome/Application/chrome.exe',
+      pf86+'/Microsoft/Edge/Application/msedge.exe',pf+'/Microsoft/Edge/Application/msedge.exe'],
+    darwin:['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome','/Applications/Chromium.app/Contents/MacOS/Chromium',
+      '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge'],
+    linux:['/usr/bin/google-chrome','/usr/bin/google-chrome-stable','/usr/bin/chromium','/usr/bin/chromium-browser',
+      '/snap/bin/chromium','/usr/bin/microsoft-edge','/opt/pw-browsers/chromium'],
+  }[process.platform]||[];
+  return candidates.find(p=>{try{return fs.statSync(p).isFile();}catch(e){return false;}});
 }
 
 function findGodot(){
@@ -43,7 +54,11 @@ function findGodot(){
   if(pages.length){
     const {chromium}=require('playwright');
     const server=await serve(),origin='http://localhost:'+server.address().port;
-    const browser=await chromium.launch({executablePath:browserPath(),headless:true});
+    const exe=browserPath();
+    console.log('browser: '+(exe||"Playwright's own Chromium"));
+    let browser;
+    try{browser=await chromium.launch({executablePath:exe,headless:true});}
+    catch(e){console.error('No browser could be started ('+e.message.split('\n')[0]+').\n  Install Chrome or Edge, or point CHROME_PATH at any Chromium-based browser. The same checks still run on GitHub for every pull request.');process.exit(2);}
     try{for(const name of pages){
       const context=await browser.newContext({serviceWorkers:'block'}),page=await context.newPage(),errors=[];
       page.on('pageerror',e=>errors.push(e.message));
