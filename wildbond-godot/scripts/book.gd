@@ -20,6 +20,7 @@ var seen: Dictionary = {}
 var bonded: Dictionary = {}
 var team: Array = []
 var ranch: Array = []
+var where := ""                                # where to go next, in Maren's words (main.gd where_next)
 var tab := 0                                   # 0 Wilddex, 1 Team
 var sel := 0
 var t := 0.0
@@ -178,3 +179,6 @@ func _draw_team() -> void:
 	for c in ranch:
 		_text("%s, level %d" % [c.name, c.lvl], Vector2(x, y2 + 12), 7, INK)
 		y2 += 12.0
+	if where != "":
+		_text("Where next", Vector2(193, 158), 8, INK, 163, HORIZONTAL_ALIGNMENT_CENTER)
+		draw_multiline_string(font, Vector2(202, 170), "Maren: \"%s\"" % where, HORIZONTAL_ALIGNMENT_LEFT, 146, 6, 4, Color("6a5a3a"))

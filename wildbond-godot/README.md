@@ -68,6 +68,9 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   (quicker off the mark), and four charms that soften one element's moves (Ember-Glass Band, Shell, Bark and Slate
   Charms). Gear **shows on the creature** wherever you see it: walking with you, at the ranch, in battle, on its page.
   Pieces you take off go in your satchel for another creature.
+- **Maren's letters:** every so often on the road a runner brings a letter from Maren: news of your ranch creatures
+  (who miss you a little, and trust you more), the egg, and where to go next. The field book's ranch page says
+  **Where next** in her words too.
 - **Tamer orders:** the battle menu's **Orders** holds Rally, one order from your family (Farmfolk: Patch Up;
   coastfolk: Read the Tide, your team braces itself for the next big attack; highlanders: Stand Firm; wanderers: Find
   an Opening, another creature acts at once) and orders people teach you: Toren teaches **Steady** (calm poison and
@@ -113,7 +116,7 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   See it: add `--write-movie <folder>/f.png --fixed-fps 10 --quit-after 200 -- --demo` (the demo plays the opening by
   itself) and look at the frames.
 - **Checks:** `Godot_v4.7.2-stable_win64_console.exe --headless --path wildbond-godot --script res://tests/run_tests.gd`
-  plays the opening, the first battle, Thornwood, a catch, the Warden and a save by itself; must stay all-pass (205 checks on 2026-10-08). `tests/battle_odds.gd` measures how winnable a battle is; run the game with `-- --skip-opening` to start in Thornwood (add `--at=saltmarsh` for the coast, `--at=emberfall` for the highlands, `--at=cloudglass` for the pass, `--at=larkhaven --ranch` to see creatures at the ranch, `--at=larkhaven --ranch --nursery` for the nursery with an egg, `--bench` for the workbench, `--book` to open the field book).
+  plays the opening, the first battle, Thornwood, a catch, the Warden and a save by itself; must stay all-pass (209 checks on 2026-10-08). `tests/battle_odds.gd` measures how winnable a battle is; run the game with `-- --skip-opening` to start in Thornwood (add `--at=saltmarsh` for the coast, `--at=emberfall` for the highlands, `--at=cloudglass` for the pass, `--at=larkhaven --ranch` to see creatures at the ranch, `--at=larkhaven --ranch --nursery` for the nursery with an egg, `--bench` for the workbench, `--book` to open the field book).
 - **Builds for sharing:** `tools/godot-build.ps1` (web: play/wildbond/, Windows: export/Wildbond-trial-windows.zip),
   once Godot's export templates are installed (Editor > Manage Export Templates > Download and Install).
 - Click or tap anywhere to walk there; tap a creature in the barn to walk up and meet it.

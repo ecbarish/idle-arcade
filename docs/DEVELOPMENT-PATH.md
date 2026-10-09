@@ -70,7 +70,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB2.3 [Claude] Variety pass (WG7): animated water and waterfalls, element effects in battle, area sounds, edge
   tiles.
 - [ ] WB2.4 [Claude] Interiors: the inn, the shop and two homes in Larkhaven, walkable.
-- [ ] WB2.5 [Claude] Maren's daily letter and the field book's "where next" hint (WG8).
+- [x] WB2.5 [Claude] Maren's letter and the field book's "where next" hint (WG8): done 2026-10-08.
 - [ ] WB2.6 [ChatGPT] Lore: a heritage line for every Warden and townsperson in areas 1-4 (data in the browser game,
   exported to Godot), recorded in the thread ledger.
 - [ ] WB2.7 [Claude] Bring T37's fourteen creatures into Godot (bodies, export) (WG9).

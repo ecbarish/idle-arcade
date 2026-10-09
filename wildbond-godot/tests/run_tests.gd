@@ -547,6 +547,19 @@ func _run() -> void:
 	check(main.egg.is_empty() and main.ranch.size() == n_ranch + 1 and main.ranch[-1].lvl == 3 and int(main.ranch[-1].gen) == 2, "after a walk on your journey the egg hatches into the ranch")
 	talk_through()
 	check(not main.R.breed_info(main.ranch[0], main.ranch[2]).ok, "a level-3 creature is too young to breed")
+	# ---- Maren's letters on the road, and where to go next
+	var keep_badges: Array = main.badges.duplicate()
+	main.badges = []
+	check("Isolde" in main.where_next() and "Thornwood" in main.where_next(), "with no badges, Maren points you to Warden Isolde in Thornwood")
+	main.badges = ["thorn", "tide"]
+	check("Emberfall" in main.where_next() and "Toren" in main.where_next(), "two badges: on to Emberfall and Toren")
+	main.letter_steps = 1
+	var bond_before: float = main.ranch[0].bond
+	main._letter_step()
+	check(main.lines.size() >= 3 and main.lines.any(func(l): return l.who == "maren" and "Emberfall" in l.text) and main.ranch[0].bond > bond_before, "a runner brings Maren's letter: ranch news, and where next (%s)" % [main.lines.map(func(l): return l.text.left(40))])
+	check(main.letter_steps == main.LETTER_STEPS, "and the next one comes after another stretch of road")
+	talk_through()
+	main.badges = keep_badges
 	# ---- Maren's workbench: gear for your creatures, worn and seen
 	main.me.tile = Vector2i(2, 9)
 	check(main._near_bench(), "standing at Maren's workbench")

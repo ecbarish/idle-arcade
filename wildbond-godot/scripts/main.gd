@@ -1387,6 +1387,7 @@ func _arrived(p: Vector2i) -> void:
 		return
 	if map_name != "larkhaven":
 		_egg_step()                                  # the egg warms while you're out on your journey
+		_letter_step()                               # and now and then a letter comes from Maren
 	for it in DATA.MAPS[map_name].get("items", []):
 		if not got_items.has(it.id) and Vector2i(int(it.at[0]), int(it.at[1])) == p:
 			got_items[it.id] = true
@@ -1690,6 +1691,47 @@ func _after_trainer(who: String, result: String) -> void:
 	else:
 		_after_wild("lost")
 
+## Where to go next, in Maren's words, by the badges you hold (the field book shows it; her letters mention it).
+const WHERE_NEXT := [
+	"Warden Isolde keeps the Thorn Badge, up the north road in Thornwood. Show her what you and {starter} can do.",
+	"Thornwood's south road runs down to Saltmarsh Coast. Warden Nerys tests tamers on the tide flats there.",
+	"From the coast, the high road climbs to the Emberfall Highlands. Warden Toren is patient, so be patient back.",
+	"North of Emberfall is Cloudglass Pass. Warden Vessa waits up in the cloud with the Beacon Badge.",
+	"Past the pass, the valley opens out toward Stillreed. That road isn't safe to travel yet; rest your team and wait.",
+]
+func where_next() -> String:
+	return _fill(WHERE_NEXT[mini(badges.size(), WHERE_NEXT.size() - 1)])
+
+## Maren's letters: every so often on your journey a runner brings one. Ranch news, a little about your creatures, and a
+## nudge toward where to go next. Being away lets the ranch creatures miss you a little (a touch more trust).
+const LETTER_STEPS := 220
+var letter_steps := LETTER_STEPS
+var letters := 0
+
+func _letter_step() -> void:
+	letter_steps -= 1
+	if letter_steps > 0 or not lines.is_empty():
+		return
+	letter_steps = LETTER_STEPS
+	letters += 1
+	var news: String
+	if ranch.is_empty():
+		news = "The paddock's quiet without anyone of yours in it. The pup keeps looking down the road for you."
+	else:
+		var c: Dictionary = ranch[letters % ranch.size()]
+		for r in ranch:
+			R.add_bond(r, 1.0)
+		news = ["%s has taken to sleeping by the barn door, waiting for you." % c.name,
+			"%s ate twice its share at the trough this morning and looked very pleased about it." % c.name,
+			"%s and the pup chased each other round the paddock till they both fell over." % c.name][letters % 3]
+		if ranch.size() > 1:
+			news += " The others are well, and they miss you."
+	if not egg.is_empty():
+		news += " The egg is warm. Not long now."
+	say("", "A runner from Larkhaven catches you up with a letter from Maren.")
+	say("maren", "\"Dear %s, all's well at the ranch. %s\"" % [my_look.get("name", "love"), news])
+	say("maren", "\"%s Mind how you go. Maren.\"" % where_next())
+
 ## Orders people teach you (battle.gd ORDERS), after you've earned their badge. More teachers come with more areas.
 const TEACHERS := {
 	"ember": { "order": "steady", "name": "Steady", "lines": [
@@ -1776,7 +1818,7 @@ func save_game() -> void:
 	var d := { "v": 1, "saved": Time.get_datetime_string_from_system(), "look": look, "team": team, "ranch": ranch, "bag": bag,
 		"badges": badges, "seen": seen, "bonded": bonded, "items": got_items, "beaten": beaten,
 		"restore": restore.map(func(r): return { "where": r.where, "x": r.at.x, "y": r.at.y, "goal": r.goal }),
-		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned, "taught": taught,
+		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned, "taught": taught, "letter": [letter_steps, letters],
 		"map": map_name, "x": me.tile.x, "y": me.tile.y, "partner": partner.id if partner else "" }
 	var f := FileAccess.open(save_path, FileAccess.WRITE)
 	if f:
@@ -1826,6 +1868,9 @@ func _load_game() -> bool:
 	story_done = d.get("story", {})
 	story_retry = d.get("retry", {})
 	taught = Array(d.get("taught", []))
+	var lt: Array = d.get("letter", [LETTER_STEPS, 0])
+	letter_steps = int(lt[0])
+	letters = int(lt[1])
 	gear_owned = {}
 	for k in d.get("gear", {}):
 		gear_owned[k] = int(d.gear[k])
@@ -1875,6 +1920,7 @@ func _open_book() -> void:
 	book.bonded = bonded
 	book.team = team
 	book.ranch = ranch
+	book.where = where_next()
 	book.open()
 
 # ---------------------------------------------------------------- story moments while you explore (the browser's STORY)
