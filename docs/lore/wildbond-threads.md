@@ -48,8 +48,9 @@ enslave the watcher and other powerful creatures?"
    shelter ties, the incomplete record).
 
 **Fitting what's already placed (to check in WB4.4b):**
-- **Toren's watcher** is the creature the ritual tried to enslave. "Failed, or slept" both stay true in a sense: it
-  slept rather than serve. The warm pocket is its rest.
+- **Toren's watcher** is the creature the ritual tried to enslave, and the friend it turned (Evan, 2026-10-09: the same
+  creature). "Failed, or slept" both stay true in a sense: freed, it slept to heal rather than ever serve. The warm
+  pocket is its rest.
 - **The present-day Unbound** are not the old order. Their founding copy saw the joining ("two became one, the land went
   pale") and concluded that bonds themselves caused the fading, so they want every creature freed from every bond.
   They are sincere, half right about what happened and wrong about why. The irony to land at the reveal: the old order
@@ -74,11 +75,9 @@ order of discovery after the wild bond is found (WB4.2) and before the reveal. T
   Nobody in the reveal calls the witness wrong; the sheet simply shows more of the night.
 - **Classic's early depth scenes** (SCENES.lightReturns, solidReturns) are not ported to Godot. Depth returns once, late:
   with the reveal, when the world remembers itself whole.
-- **The watcher and the turned friend:** asked Evan (decision card in the Wildbond builder thread). Default while he
-  decides: **the same creature**. The ritual bound and broke the watcher, the entity hid behind it, and the old pair had
-  to fight their friend. Once freed, it never served anyone: it slept to heal, and the warm pocket is its rest. It can
-  wake after the league (a hook for WB5.4). If Evan picks "two creatures", the watcher slept rather than serve and the
-  turned guardian's fate stays open.
+- **The watcher and the turned friend: the same creature** (Evan decided, 2026-10-09). The ritual bound and broke the
+  watcher, the entity hid behind it, and the old pair had to fight their friend. Once freed, it never served anyone: it
+  slept to heal, and the warm pocket is its rest. It can wake after the league (a hook for WB5.4).
 - **Older ledger notes** below that list candidates or a lost fight are superseded by the final truth above.
 Next: ChatGPT writes the observations' text and the reveal (T58), Claude places them in Godot (WB4.3 part 2).
 ## The threads (living ledger)

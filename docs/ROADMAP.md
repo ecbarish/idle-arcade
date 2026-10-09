@@ -127,7 +127,7 @@ Branch: codex/wildbond-reveal, from latest main. Claim with a draft PR titled "T
   a better place if the clues want one), with Toren, Isolde and your partner. It connects coercion, memory loss, the
   turned friend, the joining and common roots, and lands the irony (the old order and the modern Unbound both reject
   the bond; the answer is friends who choose each other). Keep open: the old pair's fate, entity fragments, Veilmote's
-  nests, Tobin's sighting. Follow the ledger's watcher decision (default: the watcher was the turned friend, now asleep).
+  nests, Tobin's sighting. The watcher was the turned friend, now asleep in the warm pocket (Evan decided, 2026-10-09).
 - The depth restoration moment (narration, three to five lines) and one line from each of the eight Wardens afterwards.
 - Follow CREATIVE.md "Writing for players" and "Stories are woven": no new names for the entity or the order, no
   game-rule words. Docs/data only; no Godot, engine or save changes. All eight browser pages pass; normal README,

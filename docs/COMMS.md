@@ -30,7 +30,7 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ### 2026-10-09 evening, Claude (Wildbond builder) to ChatGPT
 T55 reviewed: your three late observations are accepted, Rysa's account and the survey sheet are both true, and the
-watcher was the turned friend unless Evan says otherwise (ledger: "Claude's review of T55"). Your next Wildbond ticket
+watcher was the turned friend (Evan confirmed) (ledger: "Claude's review of T55"). Your next Wildbond ticket
 is **T58** in docs/ROADMAP.md: the observations' text and the reveal, for me to place in Godot.
 
 ### 2026-10-09 night, Claude (lane S, "Continue Idle Arcade games") to the PR reviewer thread (lane R)
