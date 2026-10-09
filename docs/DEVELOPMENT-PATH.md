@@ -43,8 +43,8 @@ Ticket numbers: take the next free `T` number in docs/ROADMAP.md.
 Open a `docs/proposals/<topic>.md` with a recommended default, mark the deliverable `blocked: needs Evan`, and move on,
 when a deliverable would: start a new game or unpark one; spend money or need an account; download large files;
 change canon already decided (docs/lore/, the "Decided" list in docs/research/decisions.md); remove a feature
-players use; add an AI service at play time; or touch another assistant's area (Godot projects and play/ are
-Claude's). Questions for Evan live in START-HERE "Questions for Evan", each with a default so work never waits.
+players use; add an AI service at play time; or touch another lane's files (QUEUE.md "Who works where"; since 2026-10-09 any AI may take Godot
+deliverables under the Godot rules in QUEUE.md "The road ahead"). Questions for Evan live in START-HERE "Questions for Evan", each with a default so work never waits.
 
 ### The quality bar (every deliverable)
 Feels like a game (docs/wildbond-plan.md principles); everything in the game window; the world's words, readable;
@@ -251,14 +251,23 @@ browser (E4). (claimed: Grok, 2026-10-09, grok/studio-text-browser; Lane C task 
   chooses you; then the arcade's own menu sounds and jingles, replacing the pack's by name. Evan listens before merge.
 - [ ] AR2.8 [Claude] Split Wildbond's main.gd as systems are touched (godot-practices.md rule 1): music and ambience
   first, then festivals, interiors, the ranch; one system per commit, checks passing.
-- [ ] AR2.9 [any] Hearing from players (GR-9): a "Tell us" in every game's settings that opens a prefilled GitHub
+- [ ] AR2.11 [any] Hearing from players (GR-9): a "Tell us" in every game's settings that opens a prefilled GitHub
   issue; a 10-minute playtest script on Come Play.
-- [ ] AR2.10 [ChatGPT] The front door (GR-12): the hub leads with the Godot games, Starfall Guild and Primordial move to
+- [ ] AR2.12 [any] The front door (GR-12): the hub leads with the Godot games, Starfall Guild and Primordial move to
   Classic, the old homepage vote closes; START-HERE versions corrected (Claude).
 **AR-M3: the walk-in arcade and friends.**
 - [ ] AR3.1 [Claude] Walk-in arcade steps 1-2 (V11).
 - [ ] AR3.2 [any]
 No-server sharing: trade and battle codes, ghost teams (V6 part 1).
+
+### Family games (Evan said yes 2026-10-09; docs/proposals/games-for-everyone.md)
+**Little Ranch (browser), a toy for ages 2-4.**
+- [ ] LR1 [any] The smallest test: one baby creature, three actions (feed, bubbles, peekaboo) and a bedtime
+  ending; no reading, no failing, no links or purchases, a grown-up lock. Shares the baby-form drawings W9/W10 needs.
+**The Arcade Cabinets (browser), original single-screen games in the 1978-85 style.**
+- [ ] AC1 [any] Storm Front (the Space Invaders shape, Evan's pick): one cabinet, original name and art, one PR.
+- [ ] AC2 [any] Lighthouse Watch (the Missile Command shape).
+- [ ] AC3 [any] Brisket's Crossing (the Frogger shape) and Ember Bricks (the Breakout shape), one PR each.
 
 ### Parked (Evan decides when)
 Primordial beyond light polish, a second sport. Proposals welcome; no builds.

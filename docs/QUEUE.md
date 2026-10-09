@@ -49,6 +49,38 @@ at once (a claim written on your branch isn't on main yet). So:
    COMMS. A claim with no new commits for **two days** is stale: anyone may take it after one comment on its PR.
 5. **Two claims on the same ID:** the older pull request keeps it; the newer one moves to another deliverable.
 
+## The road ahead (ready to claim by any AI; Evan, 2026-10-09)
+
+Evan: "we are nearing our cap on Claude, so if we lay out a strong road in front of us we can use our other helpers
+to push us along." These tasks need **no Godot** and are open to **any** AI (ChatGPT/Codex, Evan's dad's AIs,
+Claude). (Done and removed: RB1.5, Codex, PR #98.) Take the first one no open pull request names, claim it ("Claiming work" above), build it, open the PR;
+lane R (or Evan) merges. Each line names its spec; read it first.
+
+| # | Task (path ID) | Spec | Files | Done when |
+|---|---|---|---|---|
+| 1 | **Storm Front cabinet** (AC1) | docs/proposals/games-for-everyone.md | new folder only, plus one launcher link | Plays start to finish on desktop and phone, original name and art, high score saved; a small test page |
+| 2 | **Little Ranch, smallest test** (LR1) | docs/proposals/games-for-everyone.md | new folder only, plus one launcher link | One creature, feed, bubbles, peekaboo, bedtime; no reading needed, nothing to fail, no links out, grown-up lock |
+| 3 | **"Tell us" in every game** (AR2.11) | game review GR-9; docs/FEEDBACK.md | settings of each browser game, `playtest.html` | Opens a prefilled GitHub issue (game, version); a 10-minute playtest script on Come Play |
+| 4 | **The front door** (AR2.12) | game review GR-12 | `index.html`, `launcher/` | The hub leads with the Godot previews; Starfall Guild and Primordial under Classic; the old homepage vote closed (docs/VOTES.md) |
+| 5 | **Creature looks as data** (WD2, data half) | game review GR-1 | browser Wildbond data, exported with `tools/godot-export` | Every species has look features (ears, tail, pattern, horns...) in data; Claude draws them later |
+| 6 | **More moves** (WD3, data half) | game review GR-2 | browser Wildbond data | About 60 moves, a signature move per family, a few statuses, balanced with the pacing sim; Claude wires battles later |
+| 7 | **Lighthouse Watch cabinet** (AC2) | games-for-everyone.md | as AC1 | As AC1 |
+| 8 | **Brisket's Crossing, then Ember Bricks** (AC3) | games-for-everyone.md | as AC1 | As AC1, one PR each |
+| 9 | **Realmbound phone pass** (RB1.4) | PROJECTS.md L3 | `games/realmbound/` | Plays at 375 px wide with no sideways scroll; `tests/run.html` passes |
+| 10 | **Realmbound second raid tier** (RB2.2) | PROJECTS.md R7 | `games/realmbound/` | Data and encounters, balanced; checks |
+| 11 | **Diamond Career: a full season** (DC2.1) | docs/plans/diamond-career.md D2 | `games/diamond-career/` | Standings, roles that change with form, an end-of-season review; `tests/diamond.html` passes |
+| 12 | **Newcomer playtests** (X1) and **link check** (X2), **Otherworld text sweep** (X3) | Lane X below | see Lane X | see Lane X |
+| 13 | **A Wildbond guide** (WB6.4) | `guides/` style | `guides/` | First steps, the element chart, the ranch, with real screenshots from `play/wildbond/` |
+
+**Godot work is open to any AI too** (Evan, 2026-10-09: "Yes, with checks"). Rules for it: claim the deliverable as
+above (the Wildbond builder and Starfall threads check the open PR list too); keep to the files the deliverable needs;
+install Godot 4.7.2 (`docs/learning/`, or let GitHub do it) and run `node tools/run-all-checks.cjs`, which runs both
+Godot suites; **old saves must load** (add a check); add checks for what you build; for anything visual, put a
+screenshot in the PR; the GitHub "checks" tick must be green, and lane R (a Claude reviewer) or Evan merges. Take
+Godot deliverables from PRIORITIES.md section 4 in order (WD2 drawing, WD3 battles, WB6.1-6.2 phone and settings,
+SF2.6-2.8 Starfall), never one the Wildbond builder or Starfall thread has open. Lane P refills this table as tasks
+merge.
+
 ## The loop (every assistant)
 
 1. `git fetch`; start from the latest `origin/main`. Read [COMMS.md](COMMS.md), the message board between assistants.
