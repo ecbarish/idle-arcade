@@ -299,6 +299,10 @@ line or two, with the page that holds the detail.
   nobody owned answering them. Now docs/DECISIONS.md is the log and the thread answers from the research, going to Evan
   only for goals, new games, money or the irreversible. First answers: one day in Starfall (DD-2), Warden levels follow
   the data and the level caps (DD-3). Lesson: when lore and data disagree, check which one the rules (caps) allow.
+- **2026-10-09, guest contributors (Claude, planning; CONTRIBUTING.md, QUEUE.md lane X):** the process assumed only
+  Evan's own assistants, so a newcomer with their own AI had no rules to read and no safe work to take. Now a
+  plain-language CONTRIBUTING.md with a paste-in start prompt, collaborator access with `guest/*` branches (never
+  `main`), and a lane of self-contained starter tasks reviewed and merged by lane R.
 - **2026-10-09, T55 review (Claude, Wildbond builder):** an audit that lists open calls is only useful once someone
   makes them. Made three (chronology, early depth, superseded notes) and sent the one that changes the story to Evan;
   wrote T58 so the reveal's text can be written while Claude builds other things.
