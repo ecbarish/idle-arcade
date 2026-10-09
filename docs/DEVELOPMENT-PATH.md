@@ -335,3 +335,4 @@ line or two, with the page that holds the detail.
   buses: rules to grow out of them gradually, tied to WB6.1, WB6.2 and AR2.8.
 - **2026-10-07 to 10-09, earlier lessons:** recorded in docs/PROJECTS.md "Read first" (the game window, depth, woven
   stories, player text, variety, friends' testing, the process).
+- X1: Diamond Career newcomer playtest (claimed: Codex for Adam / abarish-dev, 2026-10-09, guest/diamond-newcomer-playtest). No code; first 20 minutes, interruption and repeat flows, screenshots. Findings remain private for Adam to review before any issue filing.
