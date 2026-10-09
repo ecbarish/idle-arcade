@@ -7,6 +7,7 @@ extends Control
 ## Arrow keys move, Q/E or 1 to 4 switch pages, Tab/J/Esc close. A gamepad, the mouse or a finger work too.
 
 signal closed
+signal want_howto                              # the Settings page's last row: show the How to play page
 const Figures := preload("res://scripts/figures.gd")
 const R := preload("res://scripts/rules.gd")
 const INK := Color("3e2c20")
@@ -102,7 +103,7 @@ func _input(e: InputEvent) -> void:
 		if hit >= 0: tab = hit
 		elif not Rect2(22, 10, 340, 198).has_point(p): close()
 		elif tab == SETTINGS_TAB:
-			for i in Settings.ROWS.size():
+			for i in Settings.ROWS.size() + 1:
 				if _row_rect(i).has_point(p):
 					row = i
 					_settings_key(Vector2i.LEFT if p.x < _row_rect(i).get_center().x else Vector2i.RIGHT)
@@ -257,13 +258,16 @@ func _draw_satchel() -> void:
 ## to raise it, or use the arrow keys. The right page explains the row you're on. Changes take effect at once and are
 ## kept on this device (settings.gd).
 func _row_rect(i: int) -> Rect2:
-	return Rect2(32, 50 + i * 23, 155, 21)
+	return Rect2(32, 49 + i * 21, 155, 20)
 
+## The rows are the settings plus one more at the foot, "Controls", which opens the How to play page.
 func _settings_key(d: Vector2i) -> void:
 	if settings == null:
 		return
 	if d.y != 0:
-		row = wrapi(row + d.y, 0, Settings.ROWS.size())
+		row = wrapi(row + d.y, 0, Settings.ROWS.size() + 1)
+	elif row == Settings.ROWS.size():
+		want_howto.emit()
 	elif d.x != 0:
 		settings.step(Settings.ROWS[row][0], d.x)
 
@@ -288,9 +292,15 @@ func _draw_settings() -> void:
 			_text("Off" if v == 0 else "", Vector2(r.position.x + 20, y + 7), 6, Color("a04030"), 108, HORIZONTAL_ALIGNMENT_CENTER)
 		else:
 			_text(settings.shown(key), Vector2(r.position.x + 14, y + 7), 7, INK, r.size.x - 28, HORIZONTAL_ALIGNMENT_CENTER)
-	var k: String = Settings.ROWS[row][0]
-	_text(Settings.ROWS[row][1], Vector2(193, 44), 8, INK, 163, HORIZONTAL_ALIGNMENT_CENTER)
-	draw_multiline_string(font, Vector2(202, 60), Settings.HELP[k], HORIZONTAL_ALIGNMENT_LEFT, 146, 7, -1, Color("6a5a3a"))
+	var c := _row_rect(Settings.ROWS.size())             # the last row: the controls page
+	if row == Settings.ROWS.size():
+		draw_rect(c, Color(0.85, 0.66, 0.36, 0.35))
+	_text("Controls", c.position + Vector2(4, 8), 7, INK)
+	_text("Show the How to play page", c.position + Vector2(14, 18), 7, INK, c.size.x - 28, HORIZONTAL_ALIGNMENT_CENTER)
+	var on_controls := row == Settings.ROWS.size()
+	_text("Controls" if on_controls else Settings.ROWS[row][1], Vector2(193, 44), 8, INK, 163, HORIZONTAL_ALIGNMENT_CENTER)
+	var help: String = "The keys, the phone buttons and the gamepad buttons, side by side." if on_controls else Settings.HELP[Settings.ROWS[row][0]]
+	draw_multiline_string(font, Vector2(202, 60), help, HORIZONTAL_ALIGNMENT_LEFT, 146, 7, -1, Color("6a5a3a"))
 	draw_multiline_string(font, Vector2(202, 150), "These stay with this computer or phone, whichever journey you play. Your journey saves itself as you go.", HORIZONTAL_ALIGNMENT_LEFT, 146, 6, -1, FAINT)
 
 ## The date, or the festival when there is one (the real calendar says so; C cycles the world's own, the real one and

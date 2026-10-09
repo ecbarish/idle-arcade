@@ -1,8 +1,8 @@
 extends Control
 ## The first page when a journey is saved: continue it, or start a new one. Same book style as the register.
-## Arrow keys and Enter, or the mouse.
+## Arrow keys and Enter, a gamepad, the mouse or a finger. The third button shows the controls (howto.gd).
 
-signal chosen(choice: String)                  # "continue" or "new"
+signal chosen(choice: String)                  # "continue", "new" or "howto" (the controls page)
 const INK := Color("3e2c20")
 const FAINT := Color("8a6e50")
 
@@ -25,7 +25,10 @@ func open(text: String) -> void:
 	queue_redraw()
 
 func _pick(i: int) -> void:
-	if i == 0:
+	if i == 2:
+		visible = false
+		chosen.emit("howto")
+	elif i == 0:
 		visible = false
 		chosen.emit("continue")
 	elif not confirm_new:
@@ -36,22 +39,21 @@ func _pick(i: int) -> void:
 		chosen.emit("new")
 
 func _btn(i: int) -> Rect2:
-	return Rect2(112, 118 + i * 24, 160, 18)
+	return Rect2(112, 106 + i * 22, 160, 18)
 
 func _input(e: InputEvent) -> void:
 	if not visible:
 		return
 	var d := Controls.dir(e)                    # named actions (controls.gd): keys, a gamepad
 	if d != Vector2i.ZERO or Controls.pressed(e, "interact") or Controls.pressed(e, "back") or (e is InputEventKey and e.pressed):
-		if d.y < 0: sel = 0
-		elif d.y > 0: sel = 1
+		if d.y != 0: sel = clampi(sel + d.y, 0, 2)
 		elif Controls.pressed(e, "interact"): _pick(sel)
 		elif Controls.pressed(e, "back"): confirm_new = false
 		get_viewport().set_input_as_handled()
 		queue_redraw()
 	elif e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
 		var p := get_local_mouse_position()
-		for i in 2:
+		for i in 3:
 			if _btn(i).has_point(p):
 				sel = i
 				_pick(i)
@@ -64,8 +66,8 @@ func _draw() -> void:
 	draw_rect(Rect2(76, 40, 232, 142), Color("f4e9cd"))
 	draw_string(font, Vector2(76, 62), "Wildbond", HORIZONTAL_ALIGNMENT_CENTER, 232, 14, INK)
 	draw_multiline_string(font, Vector2(90, 80), summary, HORIZONTAL_ALIGNMENT_CENTER, 204, 7, -1, FAINT)
-	var labels := ["Continue your journey", "Start a new journey" if not confirm_new else "Really start over? Press again"]
-	for i in 2:
+	var labels := ["Continue your journey", "Start a new journey" if not confirm_new else "Really start over? Press again", "How to play"]
+	for i in 3:
 		var r := _btn(i)
 		draw_rect(r, INK if sel == i else Color("d8c8a0"))
 		draw_string(font, r.position + Vector2(0, 13), labels[i], HORIZONTAL_ALIGNMENT_CENTER, r.size.x, 8, Color("f4e9cd") if sel == i else INK)

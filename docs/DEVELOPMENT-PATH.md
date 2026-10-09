@@ -295,6 +295,11 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, Evan's playtest (Claude, Wildbond builder):** "see-through roofs": the barn's picture is taller than
+  its footprint in the map data, so the row behind it was walkable and you walked across the roof. Now every
+  building's picture is listed (`buildings()`) and its roof rows are closed, with a check. "Controls not clear": a How
+  to play page opens before a new journey and from the title and the book. Lesson: when art is bigger than the map's
+  footprint, the map has to learn the art's size.
 - **2026-10-09, WB6.1-6.2 phone controls and settings (Claude, Wildbond builder):** taps already walked you anywhere,
   but talking needed the E key, so a phone could reach the ranch and nobody in it. Named actions (`controls.gd`) let one
   button, a key or a gamepad all mean Talk, and the phone button names what it will do. The pad hides whenever a menu

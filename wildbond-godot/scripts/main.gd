@@ -14,6 +14,7 @@ const Card := preload("res://scripts/card.gd")
 const Battle := preload("res://scripts/battle.gd")
 const Title := preload("res://scripts/title.gd")
 const TouchPad := preload("res://scripts/touch_pad.gd")
+const HowTo := preload("res://scripts/howto.gd")
 const Shop := preload("res://scripts/shop.gd")
 const Book := preload("res://scripts/book.gd")
 const Calendar := preload("res://scripts/calendar.gd")
@@ -107,6 +108,9 @@ var satchel: Control                         # the satchel you carry, top right:
 var place_t := 0.0                           # seconds since you arrived somewhere (the place name holds, then fades)
 var title: Control
 var touch: Control                               # the phone pad (touch_pad.gd)
+var howto: Control                               # the How to play page (howto.gd)
+var show_howto := true                           # it opens before a new journey (the checks turn it off)
+var howto_then_title := false                    # opened from the title page: go back to it after
 var settings := Settings.new()                   # sound, text size, battle pace, phone buttons (settings.gd, WB6.2)
 var shop: Control
 var book: Control
@@ -242,6 +246,10 @@ func _ready() -> void:
 	title = Title.new()
 	$UI.add_child(title)
 	title.chosen.connect(_on_title)
+	howto = HowTo.new()
+	$UI.add_child(howto)
+	howto.closed.connect(_on_howto_closed)
+	book.want_howto.connect(func(): howto.open("go on"))
 	if "--skip-opening" in OS.get_cmdline_user_args():
 		no_save = true
 		_skip_opening()
@@ -256,10 +264,21 @@ func _ready() -> void:
 	_begin_intro()
 
 func _begin_intro() -> void:
+	if show_howto and not demo:
+		howto.open()                              # the controls first, so nobody starts a journey not knowing them
 	say("", "The supply cart stops at the edge of the trees. Larkhaven: a handful of roofs and a ranch fence that runs right up to the forest.")
 	say("", "Everything here looks faded, like an old picture left in the sun. You too.")
 
+func _on_howto_closed() -> void:
+	if howto_then_title:
+		howto_then_title = false
+		title.visible = true
+
 func _on_title(choice: String) -> void:
+	if choice == "howto":
+		howto_then_title = true
+		howto.open("go on")
+		return
 	if choice == "continue" and _load_game():
 		return
 	_begin_intro()
@@ -492,7 +511,7 @@ func actors() -> Array:
 
 func walkable(p: Vector2i) -> bool:
 	var ch := tile_at(p)
-	if solid(ch):
+	if solid(ch) or _under_roof(p):
 		return false
 	if ch == "D" and not (p == BARN_DOOR and stage not in ["intro", "maren_walks", "maren_talks", "register", "signed"]):
 		return false                           # other people's houses stay shut in the trial
@@ -1564,6 +1583,42 @@ func _draw_structures() -> void:
 		draw_texture_rect_region(HOUSE, Rect2(Vector2(BARN_DOOR.x - 1, BARN_DOOR.y - 4) * TILE, BARN_SPRITE.size), BARN_SPRITE)
 		_snow_on(Vector2(BARN_DOOR.x - 1, BARN_DOOR.y - 4) * TILE + Vector2(4, 1), BARN_SPRITE.size.x - 8)
 		_draw_festival(doors)
+
+## Where each building stands on this map, in tiles: the whole picture, roof and wall (the cottages, Maren's barn and the
+## hand-drawn halls above). The bottom row is the wall with its door; every row above it is roof.
+func buildings() -> Array[Rect2i]:
+	var out: Array[Rect2i] = []
+	if indoors():
+		return out
+	var rows: Array = cur_map()
+	for y in rows.size():
+		for x in rows[0].length():
+			if rows[y][x] == "D" and not (map_name == "larkhaven" and Vector2i(x, y) == BARN_DOOR):
+				out.append(Rect2i(x - 1, y - 2, 4, 3))
+	match map_name:
+		"larkhaven": out.append(Rect2i(BARN_DOOR.x - 1, BARN_DOOR.y - 4, 4, 5))
+		"hollowecho": out.append(Rect2i(2, 1, 5, 3))
+		"sunthread": out.append(Rect2i(20, 1, 8, 3))
+		"farwatch":
+			out.append(Rect2i(7, 1, 4, 3))
+			out.append(Rect2i(4, 10, 5, 2))
+		"league":
+			for k in 5:
+				out.append(Rect2i(5 + k * 7, 3, 5, 2))
+	return out
+
+## True on a roof: nobody walks there, so nobody is ever drawn on top of a building as if its roof were glass.
+func _under_roof(p: Vector2i) -> bool:
+	if _roof_map != map_name:
+		_roof_map = map_name
+		_roofs.clear()
+		for b in buildings():
+			for y in range(b.position.y, b.end.y - 1):
+				for x in range(b.position.x, b.end.x):
+					_roofs[Vector2i(x, y)] = true
+	return _roofs.has(p)
+var _roofs := {}
+var _roof_map := ""
 
 # ---------------------------------------------------------------- Wren and the first battle
 func _beside_me() -> Vector2i:
@@ -3502,7 +3557,7 @@ func _take_along(ri: int, ti: int) -> void:
 ## how things look (text size) or run (battle pace).
 func _thumbs_tick() -> void:
 	touch.mode = settings.buttons()
-	var menus := battle.visible or book.visible or shop.visible or card.visible or register.visible or title.visible
+	var menus := battle.visible or book.visible or shop.visible or card.visible or register.visible or title.visible or howto.visible
 	touch.pad_on = not menus and lines.is_empty() and trans_t < 0.0 and stage in ["to_barn", "barn_choose", "walk_out", "free"]
 	touch.word = action_word()
 	touch.btn_on = not menus and trans_t < 0.0 and touch.word != ""

@@ -29,6 +29,7 @@ func _initialize() -> void:
 	main.no_save = true                           # never touch a real saved journey
 	main.demo = false
 	main.settings.keep = false                    # nor read or write this computer's settings
+	main.show_howto = false                       # the How to play page has its own checks below
 	root.add_child(main)
 	_run.call_deferred()
 
@@ -726,6 +727,36 @@ func _run() -> void:
 	main.book.close()
 	tick(0.05)
 	check(main.bubble_text.label_settings.font_size == 8 and not AudioServer.is_bus_mute(AudioServer.get_bus_index("Music")), "and back to normal")
+	# ---- How to play, and solid roofs (Evan's feedback, 2026-10-09)
+	main.touch.touched = false                    # (the pad checks above touched the screen)
+	tick(0.05)
+	main.howto.open()
+	check(main.howto.visible and main.howto.in_use() == "keys", "the How to play page shows the controls, the keyboard marked on a computer")
+	var anykey := InputEventKey.new()
+	anykey.pressed = true
+	anykey.physical_keycode = KEY_SPACE
+	main.howto._input(anykey)
+	check(main.howto.visible, "a key pressed the moment it opens doesn't close it")
+	main.howto._process(0.5)
+	main.howto._input(anykey)
+	check(not main.howto.visible, "then any key closes it")
+	var asked := [false]
+	main.book.want_howto.connect(func(): asked[0] = true, CONNECT_ONE_SHOT)
+	main.book.row = Settings.ROWS.size()
+	main.book._settings_key(Vector2i.RIGHT)
+	check(asked[0] and main.howto.visible, "the book's Settings page opens it too (Controls, the last row)")
+	main.howto.visible = false
+	var map_was: String = main.map_name
+	main.map_name = "larkhaven"
+	main._roof_map = ""
+	var roofs_ok := true
+	for house in main.buildings():
+		for ry in range(house.position.y, house.end.y - 1):
+			for rx in range(house.position.x, house.end.x):
+				if main.walkable(Vector2i(rx, ry)): roofs_ok = false
+	check(roofs_ok and main.buildings().size() >= 3 and not main.walkable(Vector2i(18, 1)), "nobody walks on a roof: the path behind Maren's barn is closed, so you're never drawn on top of it")
+	main.map_name = map_was
+	main._roof_map = ""
 	main._set_map(main.map_name)
 	tick(0.5)
 	var place_on: float = main.place.modulate.a
