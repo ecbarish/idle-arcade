@@ -25,6 +25,16 @@ jobs:
           timeout 120 "$GODOT" --headless --path wildbond-godot --editor --import --quit
           timeout 180 "$GODOT" --headless --path wildbond-godot --script res://tests/run_tests.gd | tee wd3-godot.log
           timeout 120 xvfb-run -a -s "-screen 0 3600x1600x24" "$GODOT" --path wildbond-godot --audio-driver Dummy --rendering-method gl_compatibility --script res://tests/battle_choices_screens.gd
+      - name: Capture the original workbench and battle
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || '26bd1a6f5a3d8c3f7d4160c940b4de0641dd2dcf' }}
+        run: |
+          set -euo pipefail
+          git worktree add "$RUNNER_TEMP/wd3-before" "$BASE_SHA"
+          cp wildbond-godot/tests/battle_choices_before.gd "$RUNNER_TEMP/wd3-before/wildbond-godot/tests/"
+          timeout 120 "$GODOT" --headless --path "$RUNNER_TEMP/wd3-before/wildbond-godot" --editor --import --quit
+          timeout 120 xvfb-run -a -s "-screen 0 3600x1600x24" "$GODOT" --path "$RUNNER_TEMP/wd3-before/wildbond-godot" --audio-driver Dummy --rendering-method gl_compatibility --script res://tests/battle_choices_before.gd
+          cp "$RUNNER_TEMP/wd3-before/wildbond-godot/frames/wd3/"*.png wildbond-godot/frames/wd3/
       - uses: actions/upload-artifact@v4
         if: always()
         with:

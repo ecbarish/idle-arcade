@@ -793,7 +793,6 @@ func _draw() -> void:
 				for button in [[12, "Previous"], [100, "Next"]]:
 					draw_rect(Rect2(button[0], 145, 80, 16), INK)
 					_text(button[1], Vector2(button[0] + 5, 156), 7, PAPER)
-				_text("Orders %d/%d" % [order_i / 4 + 1, ceili(ol.size() / 4.0)], Vector2(208, 157), 7, INK)
 			for i in range((order_i / 4) * 4, mini(ol.size(), (order_i / 4) * 4 + 4)):
 				var r := _move_rect(i % 4)
 				var on := i == order_i
@@ -803,7 +802,7 @@ func _draw() -> void:
 				_text("%s (%d)" % [o.name, int(o.cost)], r.position + Vector2(5, 12), 8, (PAPER if on else INK) if not short else Color("9a8a7a"))
 			var so: Dictionary = ORDERS[ol[order_i]]
 			var oinfo := Rect2(208, 166, 164, 42)
-			draw_multiline_string(font, oinfo.position + Vector2(4, 10), "%s Orders ready: %d." % [so.text, int(orders)],
+			draw_multiline_string(font, oinfo.position + Vector2(4, 10), "Page %d/%d. %s Orders ready: %d." % [order_i / 4 + 1, ceili(ol.size() / 4.0), so.text, int(orders)],
 				HORIZONTAL_ALIGNMENT_LEFT, oinfo.size.x - 8, 7, -1, INK)
 		"capture":
 			_text("Calm %s: press when the marker is in the green." % cap.u.c.name, Vector2(16, 180), 8, INK)
