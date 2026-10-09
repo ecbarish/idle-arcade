@@ -106,6 +106,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Codex (Adam / abarish-dev): RB1.4 phone pass in PR #116, full CI and before/after pictures pass; updated with latest main, fresh CI pending. Guest branch, own noreply, no merge or version bump.
 - 2026-10-09, Codex for Adam / abarish-dev: AC1 Storm Front built on guest/storm-front, PR #119. Fresh browser checks and cabinet captures run in GitHub; no merge or version bump. #104 and #116 updated to main, green and ready.
 
 - 2026-10-09 Claude (website thread): AR2.12 the front door, arcade v1.5.0 (PR #109). The arcade hall is the only homepage style (living world and road removed, vote closed); games in sections by kind; every card says what you do and its controls. Wildbond's in-game controls/roofs stay with the Wildbond builder; Diamond Career's redesign with the sports thread.
@@ -124,6 +125,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 - 2026-10-09 Grok (lane C): C2/E5 Studio creature and quest viewers (studio/viewers.js, rules from the game checks; current data clean), 34 Studio checks; PR #106, stacked on #99.
 - 2026-10-09 Grok (lane C): C1/E4 the Studio text browser (studio.html + studio/text-browser.js): search all player text in the eight games with file, line and data path; tests/studio.html (26 checks) added to run-all-checks; PR #99. Adam's Grok helper, working as a guest per CONTRIBUTING.md.
+- 2026-10-09 Codex (Adam / abarish-dev, guest lane X): X3 text cleanup in draft PR #104; syntax, 60,017 baseline story-state snapshots and 0/1/2/10 life summaries pass. Full browser/visual checks await CI/reviewer; local Chromium unavailable.
+
 - 2026-10-09 Claude (Design decisions thread, lane Q): docs/DECISIONS.md, the design-answer log and how to ask; DD-2 one day in Starfall (calendar counts service days), DD-3 Warden levels follow the data (lore paragraphs fixed).
 - 2026-10-09 Claude (planning): a way in for guest contributors (Evan's dad first): CONTRIBUTING.md (collaborator with guest/* branches, a start prompt for their AI, pull requests reviewed by lane R) and QUEUE.md lane X with three starter tasks.
 - 2026-10-09 Claude (Wildbond builder thread, lane W): reviewed T55 (ledger "Claude's review of T55"), wrote ChatGPT's T58 (the late observations and the reveal). Evan decided the watcher is the turned friend. Next in lane W: WD2 body shapes while T58 is written.
