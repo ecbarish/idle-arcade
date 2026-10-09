@@ -34,20 +34,10 @@ commit.
 changelog (your entry at the top), COMMS (your message), and ticking your own deliverable in DEVELOPMENT-PATH. Anything
 more in another lane's files: ask that lane in COMMS, or keep it to a few lines and say so in your PR.
 
-## Claiming work (the same for every assistant and thread)
+## Claiming, submitting and merging: see [PROCESS.md](PROCESS.md)
 
-A claim must be visible to everyone **before** any work, and only open pull requests and branches are visible to all
-at once (a claim written on your branch isn't on main yet). So:
-
-1. **Check it's free:** the deliverable's ID (for example `WD1`) appears in no open pull request title and no
-   `(claimed ...)` note on main. (`git fetch` and look at the open PR list.)
-2. **Claim it:** first commit on your branch marks the deliverable in DEVELOPMENT-PATH `(claimed: <who>, <date>,
-   <branch>)`; push and **open a draft pull request at once whose title starts with the ID** ("WD1: numbers off the
-   screen"). That draft PR is the claim. `<who>` is `Codex` or `Claude (<thread name>)`.
-3. **One deliverable per claim**, and claim the next only when the first is in review.
-4. **Release it** if you stop: close the draft PR with a one-line comment ("released: <why>"), or hand it over in
-   COMMS. A claim with no new commits for **two days** is stale: anyone may take it after one comment on its PR.
-5. **Two claims on the same ID:** the older pull request keeps it; the newer one moves to another deliverable.
+One page for every AI and thread: pick, claim with a draft pull request **before** building, build, submit (mark it
+ready), and who may merge (a Claude reviewer or Evan; another AI after 2 hours; never the author).
 
 ## Heavy lifting (for the AIs with the most usage: Evan's dad's AIs first; Evan, 2026-10-09)
 
@@ -83,7 +73,7 @@ and the creature drawing while Claude's usage is low.
 
 Evan: "we are nearing our cap on Claude, so if we lay out a strong road in front of us we can use our other helpers
 to push us along." These tasks need **no Godot** and are open to **any** AI (ChatGPT/Codex, Evan's dad's AIs,
-Claude). (Done and removed: RB1.5, Codex, PR #98.) Take the first one no open pull request names, claim it ("Claiming work" above), build it, open the PR;
+Claude). (Done and removed: RB1.5, Codex, PR #98.) Take the first one no open pull request names, claim it (docs/PROCESS.md), build it, open the PR;
 lane R (or Evan) merges. Each line names its spec; read it first.
 
 | # | Task (path ID) | Spec | Files | Done when |
@@ -110,21 +100,6 @@ screenshot in the PR; the GitHub "checks" tick must be green, and lane R (a Clau
 Godot deliverables from PRIORITIES.md section 4 in order (WD2 drawing, WD3 battles, WB6.1-6.2 phone and settings,
 SF2.6-2.8 Starfall), never one the Wildbond builder or Starfall thread has open. Lane P refills this table as tasks
 merge.
-
-## Backup merging (Evan, 2026-10-09: yes, and "less than 6 hours is better")
-
-So pull requests never pile up while Claude and ChatGPT are both away: **Evan's dad's AIs may merge someone else's
-pull request** (never their own) when **all** of these hold:
-
-1. No Claude reviewer (lane R) has commented, reviewed or merged on it for **2 hours**.
-2. The GitHub "checks" tick is green on the latest commit and it merges without conflicts.
-3. It follows its rules: the tests its task names pass (Godot: `node tools/run-all-checks.cjs`), old saves load,
-   anything visual has a screenshot in the PR, the commit email is a GitHub noreply address.
-4. It is not marked draft and has no unanswered "changes requested" review.
-
-Merge with a merge commit, then leave one comment: "Backup merge: <what you checked>". Add a line to START-HERE's
-Session log. A Claude reviewer reads every backup merge on its next sweep and fixes or reverts anything wrong.
-Never merge a pull request that changes `.github/`, CONTRIBUTING.md or this section.
 
 ## When the road is empty, or everything is waiting on review
 

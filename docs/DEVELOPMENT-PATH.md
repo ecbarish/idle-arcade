@@ -18,7 +18,7 @@ When your lane in docs/QUEUE.md has no `open` task, **do not stop and do not rep
    keep-alive games. Within a game, the earliest milestone first. Take an unticked deliverable **with your owner tag**
    (`[Claude]`, `[ChatGPT]`, `[any]`, `[local]`) and no `(claimed ...)` note. (This replaced "prefer the game with the
    fewest open PRs", which spread work so evenly that no game got finished.)
-3. **Claim it** as QUEUE.md "Claiming work" says (a draft pull request titled with the deliverable's ID, opened
+3. **Claim it** as docs/PROCESS.md says (a draft pull request titled with the deliverable's ID, opened
    before you build; the deliverable marked here `(claimed: <you>, <date>, <branch>)` in its first commit). Take only
    deliverables in your lane's files (QUEUE.md "Who works where"). Write the ticket into docs/ROADMAP.md with the
    template below when the work needs one.
