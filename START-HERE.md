@@ -19,8 +19,9 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
   `python -m http.server 8765`) in the repo folder and open http://localhost:8765/. **Godot games** (`wildbond-godot/`,
   `starfall-godot/`, Claude's): Godot 4.7.2 in `C:\Users\evanb\Godot`; their web previews live in `play/` (see play/README.md).
 - **Tests must stay all-pass:** the eight browser pages in `tests/` (run, wildbond, starfall, sound, offline, diamond,
-  otherworld, runner-safety; click **Run checks**) and, for the Godot games, `tests/run_tests.gd` in each project. Add
-  checks for what you build. After merging, `git grep -n "^<<<<<<< "` must find nothing.
+  otherworld, runner-safety; click **Run checks**) and, for the Godot games, `tests/run_tests.gd` in each project.
+  **`node tools/run-all-checks.cjs` runs all ten at once**, and GitHub runs it on every push and pull request: never
+  merge a red cross. Add checks for what you build. How we build (saves, sound formats, Godot structure): docs/learning/. After merging, `git grep -n "^<<<<<<< "` must find nothing.
 - **Old saves must keep loading.** New save fields need defaults (Wildbond `fresh()`/`load()`, Realmbound `migrate()`).
 - **Small playable steps,** each with a line in README.md's changelog.
 - **Save your work to GitHub at the end of every step** (commit and push). Never leave finished work only on one
@@ -103,12 +104,10 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude (craft review, branch claude/project-thread-2h7yfo): new docs/learning/ (glossary, Godot practices, saves and testing, web and shipping); safe saves in both Godot games (277 and 119 checks); Wildbond ambience to OGG and shared tunes (web pack 25.3 to 20.0 MB, both previews re-exported); `.import` files committed; `.gitattributes`; `node tools/run-all-checks.cjs` runs all ten suites (all pass) and GitHub runs it on every push and PR. DEVELOPMENT-PATH Part 4 now logs lessons; AR2.7 (build previews on GitHub) waits on Evan.
 - 2026-10-09, Codex: T57/SF3.3 ready in PR #84, stacked after #83: four seasonal village chapters, threats/festivals/newcomers, recoverable choices and date-independent story. Verified shared calendar versus service-day timing; eight browser suites pass. Docs only; Claude owns implementation.
-
 - 2026-10-09, Codex: T56 ready in PR #83, stacked after #82: actual copied Godot battle pacing, 24 entry benchmarks, six direct routes and four trained journeys. 79,732 diagnostic checks/eight pages pass; direct teams stall or lose, trained league can win at 70; Deeptide no-ready-turn finding for Claude. Godot unchanged.
-
 - 2026-10-09, Codex: T55 audit ready in PR #82: all clue groups fit checked against Evan's chosen account; Rysa/Classic chronology and watcher identity cautions, three shared late observation proposals. 56 reference checks and eight pages pass. Reveal waits for Claude review; no Godot edits.
-
 - 2026-10-09 Claude: Evan chose Wildbond's final truth (recorded in the thread ledger; WB4.4b to ChatGPT). Godot Starfall SF2.3 the Tavern (pouring, Tamsin, shutting, placement bonuses), 116 checks, web preview rebuilt.
 - 2026-10-09 Claude: merged T53 (finale handoff) and T54 (Champion returns); placed in Godot: the homecoming at the league gate and every Warden's welcome; 273 checks; browser Wildbond 2290; web preview rebuilt. Question for Evan: the final truth (docs/proposals/wildbond-final-reveals.md).
 - 2026-10-09, Codex: T54 ready in PR #81, stacked after #80: leagueAfter and eight Warden byStory.leagueEnding arrays, 22 lines. 69 new checks, 101 source/export/staging/layout checks, 88 full-card previews and eight suites pass. Classic dispatch/Godot/versions untouched.

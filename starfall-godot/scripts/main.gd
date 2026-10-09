@@ -6,6 +6,7 @@ extends Node2D
 ## Hurt adventurers rest at the inn until they're well. Nobody dies here; a bad job means a long rest.
 
 const Figures := preload("res://scripts/figures.gd")
+const SafeSave := preload("res://scripts/safe_save.gd")
 const FLOOR := preload("res://assets/env/floor.png")
 const NATURE := preload("res://assets/env/nature.png")
 const HOUSE := preload("res://assets/env/house.png")
@@ -1920,15 +1921,13 @@ func save_game() -> void:
 		"built": built, "jobs": total_jobs, "rank": rank, "herbs": herbs, "stock": stock, "price": price_i,
 		"pieces": pieces, "smith": smith_hired, "tavern": { "pours": pours, "hired": tamsin_hired, "here": tamsin.where == "town", "shut": tavern_shut, "quiet": tavern_quiet }, "garrick": garrick.where == "town", "good": good_days, "bad": bad_days, "visitors": visitors,
 		"heroes": heroes.map(func(h): return h.a) }
-	var f := FileAccess.open(save_path, FileAccess.WRITE)
-	if f:
-		f.store_string(JSON.stringify(d))
+	SafeSave.write(save_path, d)                 # a spare file first, the last good save kept as a backup
 
 func _load() -> bool:
-	if no_save or not FileAccess.file_exists(save_path):
+	if no_save:
 		return false
-	var d: Variant = JSON.parse_string(FileAccess.get_file_as_string(save_path))
-	if typeof(d) != TYPE_DICTIONARY:
+	var d := SafeSave.read(save_path, func(d: Dictionary) -> bool: return d.has("coins") and d.has("day"))
+	if d.is_empty():
 		return false
 	coins = int(d.coins)
 	day = int(d.day)
