@@ -42,7 +42,8 @@ function moneyTxt(c){c=Math.floor(c);const g=Math.floor(c/10000),s=Math.floor(c%
 let C=null;
 function freshC(){return {phase:'seek',t:1.5,mob:null,hp:ST?ST.hpMax:100,res:0,cp:0,gcd:0,cast:null,cds:{},buffs:{},win:{},swing:0,ai:0,aiArmed:false,
   absorb:0,loot:null,party:[],fightT:0,lastCast:-99,run:0,lastInput:-99,lastKill:0,err:'',errT:0,lines:[],fx:[],anim:{hero:0,mob:0}};}
-function aiOn(){return H().mode==='auto'||C.run-C.lastInput>15;}
+// Explicit Auto remains a choice; Focus fallback starts only after a first victory.
+function aiOn(){const h=H();return !!(h&&C&&!RTALK&&(h.mode==='auto'||h.stats.kills>0&&C.run-C.lastInput>15));}
 function engaged(){return H().mode==='focus'&&C.run-C.lastInput<=10;}
 function macroRank(){const h=H();if(!(h.addons.unl.macro&&h.addons.on.macro))return 0;const u=h.stats.manual;return u>=6000?3:u>=2000?2:1;}
 function aiEff(){return [.55,.7,.8,.9][macroRank()];}
@@ -98,7 +99,8 @@ function spawn(){
   if(beast&&rar>=2&&!t.rare)toast(`A ${RARITY[rar].name} beast: ${name}!`);
 }
 function onKill(){
-  const h=H(),m=C.mob;C.mob=null;C.cast=null;C.taming=null;h.stats.kills++;
+  const h=H(),m=C.mob;C.mob=null;C.cast=null;C.taming=null;if(!h.stats.kills)C.lastInput=C.run; // give the player a full 15 seconds after their first victory
+  h.stats.kills++;
   line(`${m.name} dies.`,'l-sys');
   // xp
   let x=groupXP(Math.round(killXP(m)*(m.xpM||1)));if(engaged())x=Math.round(x*1.1);gainXP(x,true);petGain(x);
@@ -181,7 +183,7 @@ function die(){
 }
 function step(h){
   if(typeof realmNotebookOpen==='function' && realmNotebookOpen())return; // Reading carried paperwork pauses the world.
-  if(arrivalPaused() || modalKind === 'memberstories' || RTALK && (RTALK.memberStory || RTALK.townService))return; // deliberate stories pause the world, never pick an outcome for the player
+  if(RTALK || modalKind === 'memberstories')return; // deliberate stories pause the world, never pick an outcome for the player
   memberStoryTick(h);
   const he=H();C.run+=h;he.stats.play+=h;
   C.gcd=Math.max(0,C.gcd-h);for(const k in C.cds)C.cds[k]=Math.max(0,C.cds[k]-h);

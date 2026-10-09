@@ -132,6 +132,10 @@ static func creature(ci: CanvasItem, o: Vector2, right: bool, pose: Dictionary, 
 		"bird": P = _bird(pose, look)
 		"spider": P = _spider(pose, look)
 		"sprite": P = _sprite(pose, look)
+		"serpent": P = _serpent(pose, look)
+		"turtle": P = _turtle(pose, look)
+		"moth": P = _moth(pose, look)
+		"treefolk": P = _treefolk(pose, look)
 		_: P = _wolf(pose, look)
 	if str(look.get("gear", "")) != "":
 		P.append_array(_gear_parts(P, str(look.gear)))
@@ -291,10 +295,21 @@ static func _boar(pose: Dictionary, look: Dictionary) -> Array:
 	P.append([13, hy + 1, 1, 1, _eye(pose, c)])
 	return P
 
+## Species that get one of the newer body shapes (WD2, game review GR-1): their family in the shared data stays as it
+## is for the browser game, but here they take the shape their description asks for, so whole families stop sharing
+## one outline. A "shape" field in the data, when ChatGPT adds one (WD2 data), wins over this table.
+const SHAPE_FOR := {
+	"tidewyrm": "serpent", "deeptide": "serpent", "rillwhisk": "serpent",           # a wyrm that rides the currents
+	"bogbough": "turtle", "cairnclasp": "turtle", "siltjaw": "turtle",              # shells, mossy backs, grip
+	"veilmote": "moth", "fogsail": "moth", "dawntassel": "moth",                    # drifting, pale-edged, dusk and dawn
+	"orchardroot": "treefolk", "flintroot": "treefolk", "meadowmantle": "treefolk", # roots, soil and a sheltering crown
+}
+
 ## A look for any species from the game data: its family's body plan in its own colour (main.gd overrides a few).
 static func look_for(species: Dictionary) -> Dictionary:
 	var c := Color(species.get("col", "#a08060"))
-	return { "kind": species.get("fam", "wolf"), "body": c, "belly": c.lightened(0.45), "dark": c.darkened(0.6),
+	var id := str(species.get("name", "")).to_lower()
+	return { "kind": species.get("shape", SHAPE_FOR.get(id, species.get("fam", "wolf"))), "body": c, "belly": c.lightened(0.45), "dark": c.darkened(0.6),
 		"accent": c.lightened(0.25) if species.get("el", "") != "Grove" else Color("5d9a3e"), "snout": c.lightened(0.3) }
 
 ## Pebblepaw's family: a slim cat with pointed ears, a long tail that curls up, stripes.
@@ -468,4 +483,97 @@ static func _sprite(pose: Dictionary, look: Dictionary) -> Array:
 	P.append([8, by + 7, 2, 1, c.lightened(0.2)]); P.append([9, by + 9, 1, 1, c.lightened(0.3)])   # a trail of light
 	var e := Color("3a3020") if not pose.get("blink", false) else glow
 	P.append([8, by + 2, 1, 1, e]); P.append([10, by + 2, 1, 1, e])
+	return P
+
+## Tidewyrm's shape: a serpent, a long body that ripples along the ground as it moves, its head held up on a neck,
+## a fin down its back and a frill that lifts when it's alert.
+static func _serpent(pose: Dictionary, look: Dictionary) -> Array:
+	var c: Color = look.body
+	var belly: Color = look.belly
+	var fin: Color = look.get("accent", look.dark)
+	var ripple := _frame(pose) % 2
+	var P: Array = []
+	var heights := [1, 2, 2, 3, 3, 3]
+	for i in 6:                                                                   # tail tip to neck, rising and falling
+		var h: int = heights[i]
+		var top: int = 12 - h - (1 if (i + ripple) % 2 == 0 else 0)
+		P.append([i * 2, top, 3, h, c])
+		if i >= 2:
+			P.append([i * 2 + 1, top - 1, 1, 1, fin])
+	P.append([3, 11, 8, 1, belly])
+	var hy := 2 + (2 if pose.get("sniff", false) else 0)
+	P.append([11, hy + 3, 3, 10 - (hy + 3), c]); P.append([12, hy + 4, 1, 10 - (hy + 4), belly])   # the neck
+	if pose.get("ears_up", false):
+		P.append([9, hy - 1, 2, 3, fin])                                          # the frill
+	P.append([11, hy, 6, 4, c]); P.append([12, hy + 3, 5, 1, belly])
+	P.append([14, hy + 1, 1, 1, _eye(pose, c)]); P.append([16, hy + 1, 1, 1, look.dark])
+	if pose.get("sniff", false):
+		P.append([17, hy + 2, 1, 1, Color("e05a6a")])                             # tasting the air
+	return P
+
+## Bogbough's shape: a turtle, a high domed shell with plates in its accent colour, a head that peeks out (and
+## tucks in to sniff), short stout legs.
+static func _turtle(pose: Dictionary, look: Dictionary) -> Array:
+	var c: Color = look.body
+	var shell: Color = c.darkened(0.25)
+	var plate: Color = look.get("accent", c.lightened(0.2))
+	var f := _frame(pose)
+	var P: Array = []
+	P.append([4 + _lift(f, 1), 10, 2, 2 - _lift(f, 1), c.darkened(0.25)]); P.append([11 + _lift(f, 0), 10, 2, 2 - _lift(f, 0), c.darkened(0.25)])
+	P.append([1, 9, 2, 1, c])                                                     # a stub of a tail
+	P.append([3, 4, 11, 6, shell]); P.append([5, 3, 7, 1, shell])
+	P.append([5, 5, 2, 2, plate]); P.append([8, 4, 2, 2, plate]); P.append([11, 5, 2, 2, plate]); P.append([7, 7, 2, 1, plate])
+	P.append([3, 9, 11, 1, look.belly])                                           # the rim of the shell
+	P.append([5 + _lift(f, 0), 10, 2, 2 - _lift(f, 0), c]); P.append([12 + _lift(f, 1), 10, 2, 2 - _lift(f, 1), c])
+	var hy := 6 + (1 if pose.get("sniff", false) else 0)
+	P.append([13, hy + 1, 2, 2, c]); P.append([14, hy, 3, 3, c]); P.append([15, hy + 2, 2, 1, look.belly])
+	P.append([15, hy + 1, 1, 1, _eye(pose, c)])
+	return P
+
+## Veilmote's shape: a moth, broad patterned wings that beat slowly, a soft body, feathered antennae, floating a
+## little above the ground with a drift of pale dust under it.
+static func _moth(pose: Dictionary, look: Dictionary) -> Array:
+	var c: Color = look.body
+	var body: Color = c.darkened(0.4)
+	var edge: Color = c.lightened(0.3)
+	var spot: Color = look.get("accent", c.lightened(0.4))
+	var flap: int = pose.get("wag", 0)
+	var by := 2 + (1 if flap == -1 else 0)
+	var P: Array = []
+	P.append([4, by + 6, 4, 2, c.darkened(0.15)])                                 # the hind wing
+	var rows: Array
+	match flap:
+		1: rows = [[7, -3, 3], [6, -2, 5], [5, -1, 6], [5, 0, 7], [6, 1, 6], [6, 2, 6], [7, 3, 5]]      # raised
+		-1: rows = [[5, 7, 7], [5, 8, 6], [6, 9, 4]]                                                  # swept down
+		_: rows = [[4, 1, 5], [3, 2, 7], [2, 3, 9], [3, 4, 8]]                                         # spread
+	for r in rows:
+		P.append([r[0], by + r[1], r[2], 1, c])
+	var top: Array = rows[0]
+	P.append([top[0], by + top[1], top[2], 1, edge])                               # a pale leading edge
+	var mid: Array = rows[rows.size() / 2]
+	P.append([mid[0] + 1, by + mid[1], 2, 1, spot])                                # the eye-spot
+	P.append([6, by + 5, 7, 2, body]); P.append([7, by + 6, 1, 1, c]); P.append([9, by + 6, 1, 1, c])   # a banded body
+	P.append([13, by + 4, 2, 2, body])
+	P.append([15, by + 2, 1, 2, look.dark, false]); P.append([16, by + 1, 1, 1, look.dark, false])     # antennae
+	P.append([14, by + 4, 1, 1, Color("e8e0c8") if not pose.get("blink", false) else body])
+	P.append([9, by + 9, 1, 1, spot.lightened(0.3)]); P.append([7, by + 10, 1, 1, spot.lightened(0.4)])   # a drift of dust
+	return P
+
+## Orchardroot's shape: tree-folk, a short trunk on root feet with a leafy crown, branch arms that sway, a kind face
+## in the bark.
+static func _treefolk(pose: Dictionary, look: Dictionary) -> Array:
+	var c: Color = look.body
+	var bark: Color = c.darkened(0.45)
+	var leaves: Color = look.get("accent", c)
+	var f := _frame(pose)
+	var wag: int = pose.get("wag", 0)
+	var P: Array = []
+	P.append([5 + _lift(f, 1), 10, 2, 2 - _lift(f, 1), bark.darkened(0.3)]); P.append([10 + _lift(f, 0), 10, 2, 2 - _lift(f, 0), bark.darkened(0.3)])
+	P.append([5, 4, 7, 7, bark]); P.append([6, 9, 5, 1, bark.darkened(0.2)]); P.append([7, 5, 1, 3, bark.lightened(0.15)])
+	P.append([3, 6 - maxi(0, wag), 2, 1, bark]); P.append([2, 5 - maxi(0, wag), 1, 2, leaves])     # branch arms
+	P.append([12, 6 + mini(0, wag), 2, 1, bark]); P.append([14, 5 + mini(0, wag), 1, 2, leaves])
+	var cy := 0 + (1 if pose.get("sniff", false) else 0)
+	P.append([3, cy, 11, 4, leaves]); P.append([2, cy + 1, 13, 2, leaves]); P.append([5, cy, 3, 1, leaves.lightened(0.2)])
+	P.append([10, cy + 1, 2, 1, leaves.lightened(0.15)])
+	P.append([8, 6, 1, 1, _eye(pose, bark)]); P.append([10, 6, 1, 1, _eye(pose, bark)]); P.append([9, 8, 1, 1, bark.darkened(0.4)])
 	return P

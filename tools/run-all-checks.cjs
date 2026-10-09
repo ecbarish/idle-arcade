@@ -1,5 +1,5 @@
 /* Every check in the arcade with one command (docs/learning/saves-and-testing.md).
-   Opens the eight browser test pages in a hidden browser, presses "Run checks" on each and reads the result, then
+   Opens the browser test pages (eight game pages and the Studio) in a hidden browser, presses "Run checks" on each and reads the result, then
    (when Godot is found) runs both Godot suites. Prints one line per suite and exits 1 if anything failed.
 
      node tools/run-all-checks.cjs                  every suite
@@ -11,7 +11,7 @@
    request (.github/workflows/checks.yml). No game saves are touched: every page runs in a fresh browser context. */
 const http=require('http'),fs=require('fs'),path=require('path'),{spawnSync}=require('child_process');
 const ROOT=path.resolve(__dirname,'..');
-const PAGES=['run','wildbond','starfall','sound','offline','diamond','otherworld','runner-safety'];
+const PAGES=['run','wildbond','starfall','sound','offline','diamond','otherworld','runner-safety','studio'];
 const GODOT_SUITES=['wildbond-godot','starfall-godot'];
 const only=process.argv.slice(2);
 const wanted=name=>!only.length||only.some(w=>name.includes(w));
