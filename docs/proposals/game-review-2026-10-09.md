@@ -2,7 +2,8 @@
 
 Written by Claude at Evan's request (2026-10-09): "We need one that reviews the games we have and thinks of updates or
 improvements to what we have." This page is that review. It does **not** set the order of work: the "Priorities and
-direction" thread owns the ordering and the main roadmap, and gets this list to fold in. Each proposal has an ID
+direction" thread owns the ordering and the main roadmap; it has scored and placed these in docs/PRIORITIES.md
+(2026-10-09). Each proposal has an ID
 (`GR-<number>`) so it can be turned into a ticket with the template in docs/DEVELOPMENT-PATH.md.
 
 ## How the review was done
