@@ -91,8 +91,8 @@ function updateWorld(){
   // mode
   $('#mFocus').classList.toggle('on',h.mode==='focus');$('#mAuto').classList.toggle('on',h.mode==='auto');
   const eff=Math.round(aiEff()*100);
-  $('#modeHint').innerHTML=h.mode==='auto'?`Auto plays at ${eff}% and skips openings. No Engaged bonus.`:
-    (C.run-C.lastInput>15?`Autopilot is covering for you (${eff}%). Press any ability to take over.`:(engaged()?`<span class="engaged">Engaged: +10% XP.</span> Press 1–${bar().length} or click.`:`Press 1–${bar().length} to stay Engaged (+10% XP).`));
+  $('#modeHint').innerHTML=RTALK?'Take your time. Continue when you are ready.':h.mode==='focus'&&!h.stats.kills?'Your first fight is yours. Try a lit ability.':h.mode==='auto'?`Auto plays at ${eff}% and skips openings. No Engaged bonus.`:
+    (aiOn()?`Autopilot is covering for you (${eff}%). Press any ability to take over.`:(engaged()?`<span class="engaged">Engaged: +10% XP.</span> Press 1–${bar().length} or click.`:`Press 1–${bar().length} to stay Engaged (+10% XP).`));
   // xp
   const need=xpNeed(h.lvl);$('#xpI').style.width=(h.lvl>=LEVEL_CAP?100:h.xp/need*100)+'%';
   const xl=h.lvl>=LEVEL_CAP?100:h.xp/need*100;$('#xpR').style.left=xl+'%';$('#xpR').style.width=(h.lvl>=LEVEL_CAP?0:Math.min(100-xl,h.rested/need*100))+'%';
