@@ -22,7 +22,8 @@ docs/PRIORITIES.md, docs/QUEUE.md ("Who works where", "Heavy lifting", "The road
 is empty"), docs/CREATIVE.md and docs/COMMS.md.
 Follow docs/PROCESS.md exactly: pick the first free task, claim it with a draft pull request from a branch named
 guest/<topic> before building, keep to the task's files, run its checks, mark the pull request ready, and merge only
-under PROCESS.md's "Who merges" rules. Never push to main, never bump version numbers, never touch other lanes' files.
+under PROCESS.md's "Who merges" rules. When every listed task is taken, follow PROCESS.md "When you get ahead
+of the road". Never push to main, never bump version numbers, never touch other lanes' files.
 Explain everything to me in plain words; I'm not a programmer.
 ```
 

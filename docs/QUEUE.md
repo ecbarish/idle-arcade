@@ -103,6 +103,9 @@ merge.
 
 ## When the road is empty, or everything is waiting on review
 
+(Past the end of the road with something that fits? docs/PROCESS.md "When you get ahead of the road" says how to write
+and claim your own next task.)
+
 Never sit idle. If every task above is claimed or waiting to merge, take one of these (no claim needed for 1 and 2;
 claim 3-5 with a draft PR titled `FB-<n>: ...`):
 

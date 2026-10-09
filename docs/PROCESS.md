@@ -36,6 +36,31 @@ reviewer reads every such merge on its next sweep and fixes or reverts anything 
 - Commits use a GitHub noreply email; no passwords, keys or personal details.
 - It stays in its task's files.
 
+## When you get ahead of the road (Evan, 2026-10-09)
+
+Helpers with lots of usage will run past the tasks we've written. Never sit idle and never guess wildly; go down this
+ladder and stop at the first rung that gives you work:
+
+1. **The written road:** QUEUE.md "Heavy lifting", "The road ahead", "Lane X" (taken in that order).
+2. **The open path:** any unticked, unclaimed item in [DEVELOPMENT-PATH.md](DEVELOPMENT-PATH.md) for a game in a
+   focus slot, taken in [PRIORITIES.md](PRIORITIES.md) order (section 4 for Wildbond, then Starfall's order). Its
+   path ID is the claim ID. Skip items tagged for a Claude thread that has an open PR on that game's files.
+3. **Your own next step:** a follow-on to work that has already merged (the next area after Thornwood, more moves
+   for a family, the next cabinet's polish). Write it as a ticket first: add one line under that game in
+   DEVELOPMENT-PATH with a new ID (`<game prefix><next number>`, plus `[any]`), with what it is, which files, and
+   "done when". Score it with PRIORITIES.md's scorecard and put the score on the line. **12 or more out of 21** (PRIORITIES.md: it belongs in the path): claim
+   it and build it like any task (the ticket line is your first commit). **Under 12:** leave the line, open a GitHub
+   issue with the "Suggestion" form instead, and go to rung 4.
+4. **The fallback list:** QUEUE.md "When the road is empty" (pre-review, playtest, bug fixes, tests, text polish).
+
+**It fits what we're doing only if** it is in a game in a focus slot (or a family game: Little Ranch, the cabinets),
+keeps to that game's look (the art direction page) and its story so far, and makes the game more fun to play, not
+just bigger. **Ask first** (a line in COMMS "to Claude (Priorities and direction)" or a GitHub issue; then take
+other work while you wait) before anything that: starts a new game or a new mode; adds story, characters or lore
+canon (the Design decisions thread, docs/DECISIONS.md, decides those, and docs/lore/wildbond-threads.md comes first);
+changes how saves, controls or the menus work across a game; adds an outside asset; or costs money. Lane P (the
+Priorities and direction thread) reads new ticket lines on each sweep and may move or reword them.
+
 ## Never
 
 - Never push straight to `main`.
