@@ -22,8 +22,8 @@ every game moves a little and none of them gets finished. Ideas arrive faster th
 | **Second** | about 25% | Grows steadily, one milestone at a time. | **Starfall village (Godot)** |
 | **ChatGPT's own** | ChatGPT's time after flagship support | One browser game ChatGPT moves forward. | **Realmbound** (the game window, phone pass, the second raid tier) |
 | **Family games** (Evan said yes 2026-10-09) | small, alongside | Two small browser games "for everyone", each starting with its one-PR smallest test; never at the flagship's expense. | **Little Ranch** (a tap-and-play toy for ages 2-4) and **the Arcade Cabinets** (original 1978-85 style single-screen games, Storm Front first), docs/proposals/games-for-everyone.md |
-| **Keep alive** | about 15% | Bugs from friends, small fixes, playtests. No new systems. | Diamond Career, Otherworld, browser Wildbond (Classic), the arcade and Come Play |
-| **Parked** | none | Ideas and proposals only, no builds. | Primordial, old Starfall Guild, card shop, Main Street, a second sport, walk-in arcade, the AI storyteller |
+| **Keep alive** | about 15% | Bugs from friends, small fixes, playtests. No new systems. | Diamond Manager (replaced Diamond Career; DM2, its playability pass, may go ahead), Otherworld, browser Wildbond (Classic), the arcade and Come Play |
+| **Parked** | none | Ideas and proposals only, no builds. | Primordial, old Starfall Guild, card shop, Main Street, walk-in arcade, the AI storyteller |
 
 Rules:
 - **Bugs friends report jump every queue**, in any slot (GitHub issues, Evan's messages).
@@ -69,7 +69,7 @@ of what we have). Anyone, Evan included, can add to either. The flow:
 
 | Idea | Score | Pitch | Note |
 |---|---|---|---|
-| A second sport: American football, Retro Bowl style (DC4) | 15/18 | docs/proposals/new-game-ideas.md | **Top of the list** (Evan, 2026-10-09: "I love Retro Bowl so that's a strong option"). Still needs Evan's go to start |
+| Lantern Bowl, our Retro Bowl-style football game (LB0-LB5) | 15/18 | docs/plans/sports-management.md | **Started** (Evan said yes 2026-10-09): LB0 and LB1 may be built now by any AI; LB2 onward waits for a focus slot |
 | "The Crossing", sailing between the worlds | 12/18 | docs/proposals/new-game-ideas.md | Waits |
 | Card shop, absorbing Main Street (CS1 + MS1) | 17/18 | docs/proposals/new-game-ideas.md | **At the back** (Evan, 2026-10-09: it is gated behind Wildbond's development). First step when its time comes: a one-PR Godot toy |
 | Primordial beyond polish | 10 | docs/plans/primordial.md | Evan: lower priority |
@@ -112,7 +112,7 @@ one-PR prototype first, and the cheapest step toward first person, V10).
 bugs jump the queue); then flagship support (WB4.4b, pacing fixes data, species look features for WD2, WB3.6 trainer
 teams and new moves for WD3, WB5.6 catalogue only when asked); then the arcade's front door (AR2.12, GR-12) and "Tell
 us" feedback in every game (AR2.11, GR-9, 14/21 each); then Realmbound (RB1.4 phone pass, RB2.2 second raid tier, RB2.1 battlegrounds proposal), then
-keep-alive writing for Diamond Career and Otherworld.
+keep-alive work for Diamond Manager (DM2) and Otherworld.
 
 ## 5. When to re-rank
 
@@ -146,3 +146,7 @@ keep-alive writing for Diamond Career and Otherworld.
 - 2026-10-09 Evan: his dad's AIs have much more usage, so they take the heavy lifting (QUEUE.md "Heavy lifting": WD3
   battles, WD4 explorable areas, WB5.1 Spire, Starfall SF2.6-2.8, WB3.7 Unbound). Claude threads keep to planning,
   reviews, the ending and creature drawing while Claude's weekly usage is low.
+- 2026-10-09 Evan (via the sports thread): the baseball game is one you manage (Diamond Manager, DM1 in PR #110,
+  replaces Diamond Career) and a Retro Bowl-style football game goes ahead (Lantern Bowl). Diamond Manager stays
+  keep-alive plus DM2; Lantern Bowl LB0-LB1 may start now, LB2 onward waits for a focus slot
+  (docs/plans/sports-management.md).
