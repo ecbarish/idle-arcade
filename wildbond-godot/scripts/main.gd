@@ -152,6 +152,11 @@ var battle: Control
 @onready var colour_layer: Node2D = $Painted/Figures
 var canopy: Node2D
 var cal := Calendar.new()                     # the turning year (WS1): seasons and festivals
+var fest_task := ""                           # the festival activity you've agreed to do today (WS5)
+var fest_step := 0                            # how far along it is (the race: 1 once you've reached the far end)
+var fest_done := {}                           # "<festival>:<year>" -> true: each festival's activity once a year
+var keepsakes := {}                           # festival keepsakes you've been given: id -> name
+var flowers: Array = []                       # flowers planted at the ranch on Planting Day ([x, y]); they stay
 
 func _ready() -> void:
 	demo = "--demo" in OS.get_cmdline_user_args()
@@ -743,6 +748,8 @@ func _unhandled_input(e: InputEvent) -> void:
 		advance()
 	elif stage == "free" and not (e is InputEventMouseButton) and not battle.visible and _talk_here():
 		pass
+	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _festival_here():
+		pass
 	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _near_trough():
 		_feed()
 	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _near_stall():
@@ -1064,6 +1071,7 @@ func _draw_outdoor() -> void:
 		for x in rows[0].length():
 			if rows[y][x] in "=Pjq":
 				_draw_tile(x, y, rows[y][x])
+	_draw_flowers()
 	if map_name == "stillreed":
 		_draw_basin()
 	if map_name == "hollowecho":
@@ -1895,6 +1903,121 @@ func _season_air() -> void:
 			"winter": draw_rect(Rect2(Vector2(x, y), Vector2(1, 1) if k % 3 else Vector2(2, 2)), Color(1, 1, 1, 0.85))
 			"autumn": draw_rect(Rect2(Vector2(x, y), Vector2(2, 1) if int(t * 3.0 + k) % 2 else Vector2(1, 2)), [Color("d8602a"), Color("e8a030")][k % 2])
 			"spring": draw_rect(Rect2(Vector2(x, y), Vector2(2, 1)), Color("f8c8d8"))
+# ---------------------------------------------------------------- seasons and festivals in what people say and do (WS3, WS5)
+## This place's wild table for the season (ChatGPT's WS3 data: small shifts, a few visitors who favour one season and
+## are rare in the others), or the usual table where there's none.
+func _wild_table() -> Array:
+	var seasonal: Dictionary = DATA.MAPS[map_name].get("seasonal", {})
+	if seasonal.has(cal.season()):
+		return seasonal[cal.season()].wild
+	return DATA.BIOMES[DATA.MAPS[map_name].biome].wild
+
+func _maren_data() -> Dictionary:
+	for n in DATA.MAPS.larkhaven.npcs:
+		if n.who == "maren":
+			return n
+	return {}
+
+## One more thing said after the usual: the festival's line on a festival day in Larkhaven, otherwise a remark about
+## the season.
+func _season_word(data: Dictionary) -> void:
+	var fest := cal.festival()
+	if fest != "" and map_name in ["larkhaven", "barn"] and data.get("byFestival", {}).has(fest):
+		for l in data.byFestival[fest]:
+			say(l[0], _fill(l[1]))
+	elif data.get("bySeason", {}).has(cal.season()):
+		for l in data.bySeason[cal.season()]:
+			say(l[0], _fill(l[1]))
+
+func _festival() -> Dictionary:
+	var fest := cal.festival()
+	return DATA.MAPS.larkhaven.get("festivals", {}).get(fest, {}) if fest != "" else {}
+
+func _fest_key() -> String:
+	return "%s:%d" % [cal.festival(), cal.year()]
+
+## Maren asks you to join in, once a festival (its "invite" lines), and says what to do in plain words.
+func _festival_invite() -> void:
+	var f := _festival()
+	if f.is_empty() or fest_done.has(_fest_key()) or fest_task == cal.festival():
+		return
+	fest_task = cal.festival()
+	fest_step = 0
+	for l in f.activity.invite:
+		say(l[0], _fill(l[1]))
+	say("", { "planting": "Plant a flower in the ranch paddock: stand on open ground inside the fence and press E.",
+		"longlight": "Run one lap with your partner: out along the road to the north edge of town, then back to Pip.",
+		"lanterns": "Fill the trough in the barn for every partner (two berries).",
+		"midwinter": "Make something small at Maren's workbench in the barn, then give it to someone in town." }[fest_task])
+
+## The festival's small activity, done where it happens. Returns true if E did something here.
+func _festival_here() -> bool:
+	if fest_task == "" or fest_task != cal.festival():
+		return false
+	match fest_task:
+		"planting":
+			if map_name == "larkhaven" and PADDOCK.has_point(me.tile) and not flowers.has([me.tile.x, me.tile.y]):
+				flowers.append([me.tile.x, me.tile.y])
+				say("", "You and %s dig a little hollow together and plant a flower. It'll still be here when the ribbons come down." % _partner_name())
+				_festival_complete()
+				return true
+		"longlight":
+			if fest_step == 1:
+				for n in npcs:
+					if n.id == "pip" and n.where == map_name and (me.tile - n.tile).length() <= 1.01:
+						_festival_complete()
+						return true
+		"lanterns":
+			if _near_trough() and int(bag.berries) >= 2:
+				_feed()
+				_festival_complete()
+				return true
+		"midwinter":
+			if _near_bench() and fest_step == 0:
+				fest_step = 1
+				say("", "You sit at Maren's bench and make something small: a soft cloth for cold paws, with a stitched star in the corner. Now, who is it for?")
+				return true
+	return false
+
+## Midwinter: give what you made to whoever you're talking to in town.
+func _festival_gift(who: String) -> void:
+	if fest_task == "midwinter" and fest_step == 1 and cal.festival() == "midwinter" and map_name == "larkhaven":
+		say("", "You give %s the little cloth you made. They turn it over in their hands and smile." % _npc_name(who))
+		_festival_complete()
+
+func _npc_name(id: String) -> String:
+	return str(DATA.get("CAST", {}).get(id, {}).get("name", id.capitalize()))
+
+## Every 0.25 s or so while the race is on: reaching the north edge of town marks the turn.
+func _festival_tick() -> void:
+	if fest_task == "longlight" and fest_step == 0 and map_name == "larkhaven" and me.tile.y <= 1:
+		fest_step = 1
+		say("", "The far end! %s is already turning for home. Back to Pip." % _partner_name())
+
+func _festival_complete() -> void:
+	var f := _festival()
+	if f.is_empty():
+		return
+	fest_done[_fest_key()] = true
+	for l in f.activity.complete:
+		say(l[0], _fill(l[1]))
+	keepsakes[f.keepsake.id] = f.keepsake.name
+	say("", "Keepsake: %s. %s" % [f.keepsake.name, f.keepsake.description])
+	for c in team:
+		R.add_bond(c, 2.0)
+	fest_task = ""
+	fest_step = 0
+
+## Flowers planted on Planting Day, in the paddock for good.
+func _draw_flowers() -> void:
+	if map_name != "larkhaven":
+		return
+	for p in flowers:
+		var o := Vector2(int(p[0]), int(p[1])) * TILE
+		draw_rect(Rect2(o + Vector2(7, 8), Vector2(2, 6)), Color("4a8a3a"))
+		draw_rect(Rect2(o + Vector2(5, 5), Vector2(6, 4)), Figures.OUTLINE)
+		draw_rect(Rect2(o + Vector2(6, 5), Vector2(4, 3)), Color("f07a9a"))
+		draw_rect(Rect2(o + Vector2(7, 6), Vector2(2, 1)), Color("f2d24a"))
 # ---------------------------------------------------------------- festivals in Larkhaven (WS5, decorations first)
 const SQUARE := Vector2i(13, 4)              # the green between the main street and Maren's barn
 const LIGHTS := [Color("e0483e"), Color("f2d24a"), Color("5b8def"), Color("59c38a")]
@@ -2036,6 +2159,7 @@ func _draw_water(x: int, y: int, o: Vector2, n: int) -> void:
 ## After each step: pick up anything lying there, and in tall grass, every 8-16 steps you find something (explore()
 ## in the browser game): a wild creature (62%), a small find (14%), or a moment in the woods.
 func _arrived(p: Vector2i) -> void:
+	_festival_tick()
 	if indoors() or stage != "free":
 		return
 	if map_name != "larkhaven":
@@ -2085,12 +2209,13 @@ func _explore() -> void:
 ## team's, within the area's range.
 func _wild_battle() -> void:
 	var biome: Dictionary = DATA.BIOMES[DATA.MAPS[map_name].biome]
+	var table: Array = _wild_table()
 	var total := 0.0
-	for w in biome.wild:
+	for w in table:
 		total += float(w[1])
 	var roll := rng.randf() * total
-	var id: String = biome.wild[0][0]
-	for w in biome.wild:
+	var id: String = table[0][0]
+	for w in table:
 		roll -= float(w[1])
 		if roll <= 0.0:
 			id = w[0]
@@ -2133,6 +2258,8 @@ func _maren_heals() -> void:
 	me.face = maren.tile - me.tile
 	say("maren", ["Let me look at you all... There. Good as new. Off you go.", "Rested and fed. Mind the bramble patches out there.",
 		"Everyone's fine, love. %s wants to show you something in the tall grass, I think." % _partner_name()][rng.randi() % 3])
+	_season_word(_maren_data())
+	_festival_invite()
 
 func _satchel_text() -> String:
 	if stage != "free" or battle.visible:
@@ -2430,9 +2557,12 @@ func _talk_here() -> bool:
 						talk = info.data.byBadge[b]
 				for l in talk:
 					say(l[0], _fill(l[1]))
+				_season_word(info.data)
+				_festival_gift(n.id)
 			elif info.beaten:
 				for l in (info.data.trainer.get("after", []) as Array):
 					say(l[0], _fill(l[1]))
+				_season_word(info.data)
 			else:
 				_challenge(n)
 			return true
@@ -2489,7 +2619,7 @@ func save_game() -> void:
 	var d := { "v": 1, "saved": Time.get_datetime_string_from_system(), "look": look, "team": team, "ranch": ranch, "bag": bag,
 		"badges": badges, "seen": seen, "bonded": bonded, "items": got_items, "beaten": beaten,
 		"restore": restore.map(func(r): return { "where": r.where, "x": r.at.x, "y": r.at.y, "goal": r.goal }),
-		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned, "taught": taught, "letter": [letter_steps, letters], "calendar": cal.to_dict(),
+		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned, "taught": taught, "letter": [letter_steps, letters], "calendar": cal.to_dict(), "festival": { "done": fest_done, "keep": keepsakes, "flowers": flowers },
 		"map": map_name, "x": me.tile.x, "y": me.tile.y, "partner": partner.id if partner else "" }
 	var f := FileAccess.open(save_path, FileAccess.WRITE)
 	if f:
@@ -2540,6 +2670,10 @@ func _load_game() -> bool:
 	story_retry = d.get("retry", {})
 	taught = Array(d.get("taught", []))
 	cal.from_dict(d.get("calendar", {}))
+	var fz: Dictionary = d.get("festival", {})
+	fest_done = fz.get("done", {})
+	keepsakes = fz.get("keep", {})
+	flowers = Array(fz.get("flowers", []))
 	var lt: Array = d.get("letter", [LETTER_STEPS, 0])
 	letter_steps = int(lt[0])
 	letters = int(lt[1])
@@ -2594,6 +2728,7 @@ func _open_book() -> void:
 	book.ranch = ranch
 	book.where = where_next()
 	book.cal = cal
+	book.keepsakes = keepsakes.values()
 	book.open()
 
 # ---------------------------------------------------------------- story moments while you explore (the browser's STORY)

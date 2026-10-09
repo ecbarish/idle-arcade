@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Godot Wildbond (2026-10-09): the seasons come alive. Wild creatures shift with the season (a few visitors favour one season and are rare in the others), everyone has a word about the time of year, and on festival days Maren invites you to join in: plant a flower that stays at the ranch, run a lap with your partner, fill the trough for the harvest supper, or make a gift at the workbench and give it to someone in town. Each festival gives a keepsake, kept in your field book. 260 checks pass.
 - Starfall writing handoff (2026-10-09, T52): three-beat arcs for Kaito, Hana and Sora and closing beats for Aki, Ren and Yuna. [Additive JSON and integration contract](docs/lore/starfall-member-stories.md); not playable until Claude wires it in.
 
 - Wildbond festival writing (2026-10-09, T51): four traditions, Maren and Pip conversations, activity invitations/completions and cosmetic keepsake names. [Integration contract](docs/lore/wildbond-festivals.md). Exported writing only; the calendar and activities remain Claude's Godot work.

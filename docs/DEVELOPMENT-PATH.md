@@ -91,14 +91,14 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
   "hold one season". Saved.
 - [x] WS2 [Claude] (done 2026-10-09: leaves tinted through the year, blossom and snow caps on crowns, snow on roofs, snow and frozen ponds, fallen leaves on paths, petals, leaves and snow in the air; the faded world washes it all out until colour returns; --season= picture flag) Four looks for every area: spring blossom, summer as now, autumn leaves, winter snow (tints and a
   few drawn extras over the same maps); faded places show the season faintly until colour returns.
-- [ ] WS3 [ChatGPT] (claimed: Codex, T50, codex/wildbond-seasonal-data) Seasonal data in the browser game, exported to Godot: wild-encounter weight shifts and a few
+- [x] WS3 [ChatGPT] (T50, merged 2026-10-09; in Godot: seasonal wild tables and one seasonal remark per person) Seasonal data in the browser game, exported to Godot: wild-encounter weight shifts and a few
   seasonal species (each also rare out of season), a seasonal line for each townsperson; check the faded-seasons
   idea against the thread ledger before it becomes canon.
 - [ ] WS4 [Claude] Winter weather (snow, frozen pond edges, breath) and spring rain, building on G6.
-- [ ] WS5 [Claude] (decorations done 2026-10-09: ribbons, flower boxes and a seed table for Planting Day; lanterns over the street for the Long Light; carved lanterns and a supper table for the Harvest Lanterns; garlands with lights on every house and the big tree with gifts for the Midwinter Hearth; --festival= picture flag. Left: festival lines, the small activity and keepsakes, after WS6) The four festivals in Larkhaven: Planting Day, the Long Light, the Harvest Lanterns and the
+- [x] WS5 [Claude] (done 2026-10-09: Maren invites you once a festival a year; plant a flower in the paddock (it stays), run a lap to the north edge and back to Pip, fill the trough, or make a gift at the bench and give it to someone; a keepsake each, shown on the Team page; festival lines from townsfolk. Decorations: ribbons, flower boxes and a seed table for Planting Day; lanterns over the street for the Long Light; carved lanterns and a supper table for the Harvest Lanterns; garlands with lights on every house and the big tree with gifts for the Midwinter Hearth; --festival= picture flag.) The four festivals in Larkhaven: Planting Day, the Long Light, the Harvest Lanterns and the
   Midwinter Hearth (garlands, lights on the houses, a big tree in the square, gifts). Decorations, festival lines,
   one small activity and a cosmetic keepsake each.
-- [ ] WS6 [ChatGPT] (ready: T51, PR #78; Claude integration in WS5) Festival writing: lines, keepsake names, a short tradition for each festival in docs/lore/.
+- [x] WS6 [ChatGPT] (T51, merged 2026-10-09; placed in Godot by WS5) Festival writing: lines, keepsake names, a short tradition for each festival in docs/lore/.
 **WB-M4: the ending.**
 - [ ] WB4.1 [Claude] The league: Wren at the gate, four courts, Champion Avenne.
 - [ ] WB4.2 [Claude] The wild bond's
