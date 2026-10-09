@@ -26,6 +26,7 @@ commit.
 | **P: planning** | Claude: "Priorities and direction" thread | `docs/PRIORITIES.md`, the order and owner tags in `docs/DEVELOPMENT-PATH.md`, this page's lanes, START-HERE "Where we are" and "Up next" | Scoring and placing ideas; refilling lanes |
 | **I: ideas and reviews** | Claude: "New game ideas" and "Improve existing games" threads | `docs/proposals/`, `docs/ideas.md`, `docs/research/` | Proposals only; lane P places them |
 | **D: local helper** | Ollama on Evan's PC | its own clone, read-only jobs | Lane D table below |
+| **X: guests** | Anyone outside the team with their own AI (Evan's dad first); start at [CONTRIBUTING.md](../CONTRIBUTING.md) | Only the files the task names | Lane X table below; lane P adds tasks no other lane is touching |
 
 **Files every lane touches, kept to one line each:** START-HERE's Session log (your dated line at the top), README's
 changelog (your entry at the top), COMMS (your message), and ticking your own deliverable in DEVELOPMENT-PATH. Anything
@@ -173,6 +174,17 @@ index.html or style.css until those phases are merged.
 | B7 | **V3** Game boxes on the launcher | open | docs/VISION.md §3 |
 | B8 | **G2** Realmbound dungeon lighting; **W3 part 2** roaming legendaries; **W10** baby forms | open | After Launch is fine |
 | — | Done | — | L2 save safety, L1 settings, L8 launcher (living world, road, hall, vote), L3 phone part 1, Wildbond v1.4-1.5.2 fixes from Evan's play |
+
+## Lane X: guests (fork and pull request; CONTRIBUTING.md has the steps)
+
+Self-contained tasks for someone new, each away from what the other lanes are building. Claim like everyone else (a
+draft pull request titled with the ID). Lane R reviews and merges; guests never merge. Lane P keeps this list stocked.
+
+| # | Task | Status | Notes |
+|---|---|---|---|
+| X1 | **Play a game's first 20 minutes as a newcomer** and file what's confusing or broken as GitHub issues (the Bug and Feedback forms), with screenshots | open | No code. Any game on the arcade; Wildbond and Starfall previews first. One issue per problem |
+| X2 | **Broken links and pictures** (AR2.4): check every link and image in `guides/` and `playtest.html`, fix the broken ones | open | Only those files. Say in the PR how you checked |
+| X3 | **Player-text sweep of Otherworld** (D1): fix names and wording in `games/otherworld/js/` that break docs/CREATIVE.md "Writing for players" | open | Text only, no rules or numbers; `tests/otherworld.html` must still pass (`node tools/run-all-checks.cjs`) |
 
 ## Lane D: the local helper (Ollama on Evan's PC; small, checkable jobs only)
 
