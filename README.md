@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- 2026-10-09 (WB6.4, guest): guides/wildbond.html, a field guide for the new Wildbond (play/wildbond/): first steps, the element chart and Maren's ranch, with eight real captures of the early preview; linked from guides/index.html.
 - Realmbound (2026-10-09, RB1.4): larger phone controls; notebook, dialogue and action bar fit portrait/landscape screens and larger text; XP bar clears ultrawide controls.
 - 2026-10-09 (AC1, guest PR #119): Storm Front harbour cabinet, original cloud and lighthouse art, crumbling walls, gull bonus, three-initial scores and two-player turns. Keyboard, touch and gamepad controls; shared sound and settings.
 
