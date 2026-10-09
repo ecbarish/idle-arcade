@@ -1067,6 +1067,19 @@ func _run() -> void:
 	check(main._gate_open("thornwood") and main.npc_info.bram.beaten, "beaten trainers and the open gate are remembered")
 	check(main.ranch_movers.size() == main.ranch.size(), "the ranch creatures are back in the paddock after loading (%d)" % main.ranch.size())
 	check(main._save_summary().begins_with(str(main.my_look.name)), "the start page sums it up: %s" % main._save_summary())
+	# WD4a keeps the original thornwood map id, so a pre-expansion save opens in the settlement instead of being displaced
+	var pre_wd4a: Dictionary = main._read_save()
+	pre_wd4a["map"] = "thornwood"
+	pre_wd4a["x"] = 13
+	pre_wd4a["y"] = 14
+	main.SafeSave.write(main.save_path, pre_wd4a)
+	check(main._load_game(), "WD4a: a pre-expansion save whose map is thornwood still loads")
+	tick(1.0)
+	talk_through()
+	check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 14), "WD4a: that old save lands at the same Thornwood coordinate, now in the settlement")
+	main._go("larkhaven", Vector2i(10, 1), Vector2i.DOWN)
+	tick(1.0)
+	main.save_game()
 	# a save cut off half-way (a crash, a closed tab) never costs the journey: the backup is read instead
 	main.save_game()
 	check(FileAccess.file_exists(main.save_path + ".bak") and not FileAccess.file_exists(main.save_path + ".tmp"), "the last good save is kept as a backup")
