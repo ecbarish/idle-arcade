@@ -17,11 +17,11 @@ let S = fresh();
 
 function sp(c) { return SPECIES[c.sp]; }
 function stOf(c) { const s = Cr.stats(c, sp(c).base); if ((c.fatigue || 0) > 70 || c.injured > 0) for (const k in s) if (k !== 'hp') s[k] = Math.round(s[k] * 0.9); return s; }
-function movesOf(c) { const L = sp(c).learn.filter(([l]) => l <= c.lvl).map(([, m]) => m); return [...new Set(L)].slice(-4); }
+function movesOf(c) { return keptMoves(c); }
 function healAll() { for (const c of S.team) c.hp = stOf(c).hp; }
 function alive() { return S.team.filter(c => c.hp > 0); }
 function slog(m) { S.log.unshift(m); if (S.log.length > 40) S.log.length = 40; }
-function newCreature(id, lvl, opts) { const c = Cr.make({ id, name: SPECIES[id].name }, lvl, opts); c.hp = Cr.stats(c, SPECIES[id].base).hp; return c; }
+function newCreature(id, lvl, opts) { const c = Cr.make({ id, name: SPECIES[id].name }, lvl, opts); c.hp = Cr.stats(c, SPECIES[id].base).hp; c.moves=defaultMoves(c); return c; }
 function keep(c, how) {
   S.caught[c.sp] = true; S.seen[c.sp] = true;
   if (S.team.length < teamMax() && !challengeLocked()) { S.team.push(c); return 'team'; }
@@ -33,13 +33,13 @@ function journey() { return JOURNEY[S.journey] || JOURNEY.classic; }
 function xpMult() { return journey().xp * (S.auto ? AUTO_XP : 1); }
 /* Level ups, new moves and evolution after gaining xp. Returns messages. */
 function grow(c, xp) {
-  const cap = levelCap(), msgs = [], before = movesOf(c);
+  const cap = levelCap(), msgs = [], before = learnedMoves(c), chosen=movesOf(c);
   let gained = 0;
   if (c.lvl < cap) gained = Cr.gainXp(c, xp, cap);
   else if (S.capMode === 'soft' && c.lvl < LEVEL_CAP) gained = Cr.gainXp(c, Math.round(xp * SOFT_TRICKLE), LEVEL_CAP);
   if (gained) {
     msgs.push(`${c.name} grew to level ${c.lvl}!`); sfx('level');
-    for (const m of movesOf(c)) if (!before.includes(m)) msgs.push(`${c.name} learned ${MOVES[m].name}!`);
+    for (const m of learnedMoves(c)) if (!before.includes(m)) { if(chosen.length<4)chosen.push(m); msgs.push(`${c.name} learned ${MOVES[m].name}!`); } c.moves=chosen;
     const evo = sp(c).evo;
     if (evo && c.lvl >= evo.at) { const old = c.name, wasDefault = c.name === sp(c).name; c.sp = evo.to; if (wasDefault) c.name = sp(c).name;
       msgs.push(`${old} evolved into ${sp(c).name}!`); S.seen[c.sp] = true; S.caught[c.sp] = true; slog(`${old} evolved into ${sp(c).name}.`); }

@@ -184,6 +184,7 @@ func _ready() -> void:
 		DATA.SPECIES[k] = ej.data.species[k]
 	DATA["EVOS"] = ej.data.evos
 	R.DATA = DATA
+	R.prepare_move_choices()
 	pup.look = CREATURE_LOOKS.pup
 	pup.home = PADDOCK
 	_make_npcs()
@@ -213,6 +214,11 @@ func _ready() -> void:
 	$UI.add_child(card)
 	card.chosen.connect(_on_chosen)
 	card.picked.connect(_on_card_pick)
+	lessons = preload("res://scripts/move_lessons.gd").new()
+	$UI.add_child(lessons)
+	lessons.closed.connect(func():
+		save_game()
+		_open_bench())
 	sfx = Sfx.new()
 	add_child(sfx)
 	battle = Battle.new()
@@ -699,7 +705,7 @@ func _process(dt: float) -> void:
 		maren.right = maren.face.x > 0
 		say("maren", "There you are! You must be the new tamer. I'm Maren. I keep the ranch.")
 		say("maren", "Before anything else: the ranch register. Every tamer in the valley signs it. Write yourself in, love.")
-	var free_to_walk: bool = stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and not shop.visible and not book.visible and trans_t < 0.0
+	var free_to_walk: bool = stage in ["to_barn", "barn_choose", "walk_out", "free"] and not lessons.visible and not card.visible and not battle.visible and not shop.visible and not book.visible and trans_t < 0.0
 	if lines.is_empty() and free_to_walk and me.path.is_empty() and me.pos.distance_to(Vector2(me.tile) * TILE) < 0.5:
 		var d := Controls.held_dir()                 # keys, a gamepad, or the phone pad (WB6.1)
 		if d != Vector2i.ZERO:
@@ -780,6 +786,7 @@ func _unhandled_input(e: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 	var want_book: bool = Controls.pressed(e, "open_book") or (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT and satchel.visible and satchel.get_global_rect().has_point(satchel.get_global_mouse_position()))
+	if lessons.visible: return
 	if want_book and stage == "free" and lines.is_empty() and not battle.visible and not shop.visible and not book.visible:
 		_open_book()
 		get_viewport().set_input_as_handled()
@@ -791,28 +798,28 @@ func _unhandled_input(e: InputEvent) -> void:
 		advance()
 	elif stage == "free" and not (e is InputEventMouseButton) and not battle.visible and _talk_here():
 		pass
-	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _festival_here():
+	elif stage == "free" and not (e is InputEventMouseButton) and not lessons.visible and not card.visible and _festival_here():
 		pass
-	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _near_trough():
+	elif stage == "free" and not (e is InputEventMouseButton) and not lessons.visible and not card.visible and _near_trough():
 		_feed()
-	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _near_stall():
+	elif stage == "free" and not (e is InputEventMouseButton) and not lessons.visible and not card.visible and _near_stall():
 		_breed_here()
-	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _near_bench():
+	elif stage == "free" and not (e is InputEventMouseButton) and not lessons.visible and not card.visible and _near_bench():
 		_open_bench()
-	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and not shop.visible and _near_keeper() != "":
+	elif stage == "free" and not (e is InputEventMouseButton) and not lessons.visible and not card.visible and not shop.visible and _near_keeper() != "":
 		_keeper_talk(_near_keeper())
 	elif stage == "free" and maren.where == map_name and (me.tile - maren.tile).length() <= 1.01 and not (e is InputEventMouseButton and Vector2i((get_global_mouse_position() / TILE).floor()) != maren.tile):
 		_maren_heals()
 	elif e is InputEventMouseButton:
 		_tap(get_global_mouse_position())
-	elif stage == "barn_choose" and not card.visible:
+	elif stage == "barn_choose" and not lessons.visible and not card.visible:
 		var s := _starter_beside_me()
 		if s:
 			_meet(s)
 
 ## Click or tap: walk there (around anything in the way). Tap a creature in the barn to walk up and meet it.
 func _tap(at: Vector2) -> void:
-	if not (stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and not shop.visible and not book.visible and trans_t < 0.0):
+	if not (stage in ["to_barn", "barn_choose", "walk_out", "free"] and not lessons.visible and not card.visible and not battle.visible and not shop.visible and not book.visible and trans_t < 0.0):
 		return
 	var goal := Vector2i((at / TILE).floor())
 	meet_after = null
@@ -2484,7 +2491,7 @@ func _maren_heals() -> void:
 	_festival_invite()
 
 func _satchel_shown() -> bool:
-	return stage == "free" and not battle.visible and not book.visible and not shop.visible
+	return stage == "free" and not lessons.visible and not battle.visible and not book.visible and not shop.visible
 
 ## Each badge's colour, pinned to the satchel strap and shown in the field book (the element of its Warden's town).
 const BADGE_COL := { "thorn": Color("5d9a3e"), "tide": Color("3a8fd8"), "ember": Color("e0602a"), "beacon": Color("e8c84a"),
@@ -2778,10 +2785,18 @@ func _letter_step() -> void:
 
 ## Orders people teach you (battle.gd ORDERS), after you've earned their badge. More teachers come with more areas.
 const TEACHERS := {
+	"thorn": { "order": "shelter", "name": "Shelter", "lines": ["Brace together before a heavy hit. Shelter buys your partner a moment."] },
+	"tide": { "order": "rain", "name": "Rain Call", "lines": ["Soak a foe, then let an Ember partner turn the water to steam."] },
+	"beacon": { "order": "tailwind", "name": "Tailwind", "lines": ["A quick partner can make room for the next. Tailwind lifts the whole team."] },
+	"reed": { "order": "snare", "name": "Hold the Line", "lines": ["Roots slow a foe. Give your partner time to choose the next step."] },
+	"echo": { "order": "expose", "name": "Spot the Gap", "lines": ["Watch for a gap. Expose a foe, then let your partner take the opening."] },
+	"loom": { "order": "mend", "name": "Shared Care", "lines": ["Let each partner catch its breath. Shared Care helps everyone recover."] },
+	"horizon": { "order": "renew", "name": "Fresh Start", "lines": ["When every plan is tangled, clear the harmful effects and start together."] },
 	"ember": { "order": "steady", "name": "Steady", "lines": [
 		"Before you go. Your creatures fight hard, but they panic when the poison takes or their legs go slow. I've watched it.",
 		"Speak low. Slow. Let them hear you're not afraid, and they won't be either. Up here we call it Steady. Use it." ] },
 }
+var lessons: Control
 var taught: Array = []                       # orders you've been taught (saved)
 
 ## Talking to someone beside you: a trainer you've beaten, a Warden, or a sign in front of you.
@@ -2859,7 +2874,7 @@ func _notification(what: int) -> void:
 		save_game()
 
 func save_game() -> void:
-	if no_save or stage != "free" or battle.visible or not lines.is_empty() or trans_t >= 0.0:
+	if no_save or stage != "free" or battle.visible or lessons.visible or not lines.is_empty() or trans_t >= 0.0:
 		return
 	var look := {}
 	for k in my_look:
@@ -2917,6 +2932,9 @@ func _load_game() -> bool:
 	story_done = d.get("story", {})
 	story_retry = d.get("retry", {})
 	taught = Array(d.get("taught", []))
+	for earned in badges:
+		if TEACHERS.has(earned) and not TEACHERS[earned].order in taught:
+			taught.append(TEACHERS[earned].order)
 	cal.from_dict(d.get("calendar", {}))
 	league_room = int(d.get("league", 0))
 	var fz: Dictionary = d.get("festival", {})
@@ -3349,6 +3367,7 @@ func _open_bench() -> void:
 		story_done["bench"] = true
 		say("maren", "My old workbench! I make harnesses and charms for the ranch creatures. Shells from the coast, glass from Emberfall, a bell or two.")
 		say("maren", "Bring whoever walks with you, and they can try things on. Each piece does one thing well. I'll make what you need for a few coins.")
+		say("maren", "Or choose Practice to remember a different move. Bring up to four, keep an attack, and let the others rest here. You never forget them.")
 		then_do = _open_bench
 		return
 	var ids := R.GEAR.keys()
@@ -3363,14 +3382,16 @@ func _open_bench() -> void:
 	page.note = "%s. %s %s %s" % [g.name, g.text, wearing, "You have %d spare." % spare if spare > 0 else ""]
 	var act := "Take it off" if str(c.get("gear", "")) == id else ("Put it on" if int(gear_owned.get(id, 0)) > 0 else "Have it made (%d coins)" % int(g.cost))
 	card_mode = "bench"
-	card.open(c.sp, page, ["Previous", act, "Next", "Done"])
+	card.open(c.sp, page, ["Practice", act, "Next", "Done"])
 
 func _bench_pick(i: int) -> void:
 	var ids := R.GEAR.keys()
 	var id: String = ids[bench_i % ids.size()]
 	var c: Dictionary = team[0]
 	match i:
-		0: bench_i = (bench_i + ids.size() - 1) % ids.size()
+		0:
+			lessons.open(team)
+			return
 		2: bench_i = (bench_i + 1) % ids.size()
 		1:
 			if str(c.get("gear", "")) == id:
@@ -3509,7 +3530,7 @@ var evolving: Dictionary = {}
 var evolve_to := ""
 
 func _check_evolution() -> void:
-	if stage != "free" or not lines.is_empty() or battle.visible or card.visible or shop.visible or book.visible or trans_t >= 0.0:
+	if stage != "free" or not lines.is_empty() or lessons.visible or battle.visible or card.visible or shop.visible or book.visible or trans_t >= 0.0:
 		return
 	var ctx := { "place": str(DATA.MAPS.get(map_name, {}).get("biome", map_name)), "team": team.map(func(x): return x.sp) }
 	for c in team:
@@ -3557,7 +3578,7 @@ func _take_along(ri: int, ti: int) -> void:
 ## how things look (text size) or run (battle pace).
 func _thumbs_tick() -> void:
 	touch.mode = settings.buttons()
-	var menus := battle.visible or book.visible or shop.visible or card.visible or register.visible or title.visible or howto.visible
+	var menus := lessons.visible or battle.visible or book.visible or shop.visible or card.visible or register.visible or title.visible or howto.visible
 	touch.pad_on = not menus and lines.is_empty() and trans_t < 0.0 and stage in ["to_barn", "barn_choose", "walk_out", "free"]
 	touch.word = action_word()
 	touch.btn_on = not menus and trans_t < 0.0 and touch.word != ""

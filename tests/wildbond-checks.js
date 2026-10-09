@@ -22,6 +22,34 @@ function wildbondChecks() {
   const lines = (label, list) => (list || []).forEach(([who], i) =>
     check(label + ' speaker ' + (i + 1), () => speaker(who)));
 
+  check('WD3: sixty shared moves', () => Object.keys(MOVES).length === 60);
+  for(const id of Object.keys(SPECIES)) {
+    check('WD3: ' + id + ' remembers six to eight and brings an attack', () => {
+      const c=newCreature(id,100),known=learnedMoves(c);
+      return known.length>=6 && known.length<=8 && movesOf(c).length===4 && movesOf(c).some(m=>['hit','aoe','dot'].includes(MOVES[m].kind));
+    });
+    check('WD3: ' + id + ' old save keeps original moves', () => {
+      const c=newCreature(id,100);delete c.moves;
+      return JSON.stringify(movesOf(c))===JSON.stringify([...new Set(sp(c).legacyLearn.map(l=>l[1]))].slice(-4));
+    });
+  }
+  for(const id of BattleEffects.bad) check('WD3: apply, expire and cleanse ' + id, () => {
+    const u={c:newCreature('cindercub',30),st:{hp:100},buff:{},dots:[],status:{}};
+    if(!BattleEffects.apply(u,id,2)||!BattleEffects.active(u,id))return false;
+    BattleEffects.tick(u,2.1);if(BattleEffects.active(u,id))return false;
+    u.wakeGrace=0;BattleEffects.apply(u,id,2);BattleEffects.cleanse(u);
+    return !BattleEffects.active(u,id)&&!u.c.status;
+  });
+  check('WD3: sleep cannot chain after waking', () => {
+    const u={c:newCreature('cindercub',30),st:{hp:100},buff:{},dots:[],status:{}};
+    BattleEffects.apply(u,'sleep',3);BattleEffects.wake(u);
+    return !BattleEffects.apply(u,'sleep',3)&&!BattleEffects.active(u,'sleep');
+  });
+  check('WD3: chosen moves survive serialization', () => {
+    const c=newCreature('cindercub',30),chosen=['bite','steamBurst','coalFlick','packHunt'];
+    return keepMoves(c,chosen)&&JSON.stringify(movesOf(JSON.parse(JSON.stringify(c))))===JSON.stringify(chosen)&&!keepMoves(c,['howl']);
+  });
+
   for (const [id, m] of Object.entries(MAPS)) {
     check(id + ': map rows have equal lengths', () => m.rows.length > 0 && m.rows[0].length > 0 && m.rows.every(r => r.length === m.rows[0].length));
     const exits = new Set(m.rows.join('').split('').filter(ch => TILES[ch] && TILES[ch].exit));
@@ -621,7 +649,7 @@ function wildbondChecks() {
     check(map + ': losing to ' + n.who + ' prevents another sight challenge until changing maps', () => {
       ready(); wb.placeAt(map); S.team = [wb.newCreature('ripplet', 1)]; S.team[0].hp = 1;
       talkTo(n); skipTalk();
-      let ticks = 0; while (B && !B.over && ticks++ < 10000) wb.worldTick(0.1);
+      let ticks = 0; while (B && !B.over && ticks++ < 10000) { if (B.wait) wb.chooseTurn(movesOf(B.wait.c).find(m => !(B.wait.cds[m] > 0))); wb.worldTick(0.1); }
       if (!B || B.over !== 'lost' || !WK.cool[n.who] || S.beaten && S.beaten[n.who]) return false;
       wb.finishBattle(); skipTalk();
       const [dx, dy] = DIRS[n.dir], x = n.at[0] + dx, y = n.at[1] + dy;
@@ -776,7 +804,7 @@ function wildbondChecks() {
   check('An empty Nuzlocke team ends the run gently with a second-chance partner', () => {
     ready(); S.modes = { nuzlocke: true }; S.team = [wb.newCreature('ripplet', 1)]; S.team[0].hp = 1;
     startBattle('wild', [wb.newCreature('tidewyrm', 100)]);
-    let ticks = 0; while (B && !B.over && ticks++ < 10000) wb.worldTick(0.1);
+    let ticks = 0; while (B && !B.over && ticks++ < 10000) { if (B.wait) wb.chooseTurn(movesOf(B.wait.c).find(m => !(B.wait.cds[m] > 0))); wb.worldTick(0.1); }
     if (!B || B.over !== 'lost') return false; wb.finishBattle();
     return !S.modes.nuzlocke && S.modes.nuzlockeEnded && S.team.length === 1 && S.team[0].hp > 0 && !!TALK && TALK.lines.some(([who]) => who === 'maren');
   });
