@@ -59,7 +59,7 @@ function finish(endId) {
   const e = ENDINGS[endId], life = S.life;
   if (!e || !life) return;
   life.ending = endId; save();
-  D.play([...(EPILOGUES[endId] || []), ...townEpilogue(life, endId)], () => {
+  D.play([...endingLines(life, endId), ...townEpilogue(life, endId)], () => {
     if (S.life !== life) return;
     const learned = e.keep.filter(k => !S.mem[k]);
     for (const k of e.keep) S.mem[k] = true;

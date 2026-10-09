@@ -152,7 +152,7 @@ townEpilogue=function(l,e){if(l.world!=='ashen')return epilogueBeforeAsh(l,e);if
 function ashRewind(l){
  if(S.life!==l||l.world!=='ashen'||l.gift!=='return')return false;
  const knowledge={...l.ash.knowledge},returns=l.ash.returns+1;
- l.flags={};l.entered={};l.silver=0;l.status=false;delete l.ending;delete l.town;
+ l.flags={};delete l.people;l.entered={};l.silver=0;l.status=false;delete l.ending;delete l.town;
  l.ash={day:1,returns,knowledge};l.at='s_wake';prepareLife(l);save();run('s_wake');return true;
 }
 const finishBeforeAsh=finish;

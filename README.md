@@ -40,6 +40,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 ## Changelog
 
 - Local helper (2026-10-08): preserve the runtime tool-permission order in both task modes; 19 runner checks pass.
+- Otherworld (2026-10-08): all eleven soul memories open practical uses across worlds; six people remember help, harm and repaired trust within a life. Promised cart journeys, shared winter reserves and witnesses happen in portrait conversations. Old saves and Return retain their rules.
 
 - Local helper (2026-10-08): queued local tasks use OpenCode, attach the project primer and lessons, and stop for failed tools or incomplete answers. Reports and edits require review; source in tools/local-ai/.
 
