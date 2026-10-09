@@ -38,6 +38,11 @@ use it.
   from two herbs (you stir the pot), and set the price on the slate: Cheap, Fair or Dear. Adventurers buy a tonic
   before a risky job if the price seems fair to them, leave the coins in the jar, and come home half as hurt. Too
   dear, and they go without.
+- **Members' stories:** each adventurer has a short arc. When one is ready (a few jobs done, spirits up) they ask for a
+  word and a **!** shows over their head. Talk to them, hear them out and choose what to say; your answer stays with
+  them: spirits, sometimes coins, sometimes a trait for good (steadier on every job, braver, a map that pays, quicker
+  to mend). Aki's sister, Ren's nerves and his map, Yuna's charity and her lessons with Ama. The stories are in
+  `data/stories.json`.
 - **Music:** a bright tune through the working day, a gentler one as evening comes. Press **M** to turn it off and on.
 - **The end of each day:** a short report at the foot of the screen (jobs done or gone badly, meals, coins), wages, and
   new requests on the board in the morning. No interruptions during the day.
@@ -47,7 +52,7 @@ use it.
 - `scripts/main.gd`: the whole town (map, people, adventurers' decisions, the counter, Bryn, the board, saving).
   `scripts/figures.gd` is copied from wildbond-godot (keep them in step until shared code has its own home).
 - **Checks:** `Godot_v4.7.2-stable_win64_console.exe --headless --path starfall-godot --script res://tests/run_tests.gd`
-  (85 checks on 2026-10-08). Run the game with `-- --no-save` to try it without touching the real town (add `--built`
+  (96 checks on 2026-10-08). Run the game with `-- --no-save` to try it without touching the real town (add `--built`
   to start with the hut built and the yard going up, or `--market` for all four buildings).
 - Next slices (docs/plans/starfall-village.md): more places to run by hand (the smithy, the apothecary), more plots as
   the town grows, guild members' stories, seasons as chapters.

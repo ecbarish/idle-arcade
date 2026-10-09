@@ -163,6 +163,7 @@ func _ready() -> void:
 	pup.look = CREATURE_LOOKS.pup
 	pup.home = PADDOCK
 	_make_npcs()
+	_make_keepers()
 	var x := 8
 	for id in DATA.STARTERS:
 		var m := Mover.new(id, "barn", Vector2i(x, 4))
@@ -235,10 +236,10 @@ func _set_map(n: String) -> void:
 	var m := cur_map()
 	cam.limit_right = m[0].length() * TILE
 	cam.limit_bottom = m.size() * TILE
-	place.text = "Maren's barn" if n == "barn" else str(DATA.MAPS[n].name)
+	place.text = "Maren's barn" if n == "barn" else (str(INTERIORS[n].name) if INTERIORS.has(n) else str(DATA.MAPS[n].name))
 	place.modulate.a = 1.0
 	if battle:
-		battle.area = "" if n == "barn" else str(DATA.MAPS[n].get("biome", ""))   # battles take place in the area you're in
+		battle.area = "" if n == "barn" or INTERIORS.has(n) else str(DATA.MAPS[n].get("biome", ""))   # battles take place in the area you're in
 	if MOUNTAINS.has(n):
 		CLIFF = MOUNTAINS[n].rock
 		TURF = MOUNTAINS[n].turf
@@ -347,23 +348,109 @@ func _partner_name() -> String:
 
 # ---------------------------------------------------------------- the map
 func cur_map() -> Array:
+	if INTERIORS.has(map_name):
+		return INTERIORS[map_name].rows
 	return BARN if map_name == "barn" else DATA.MAPS[map_name].rows
 
 ## Whether a tile blocks the way: the game data says so for outdoor maps (TILES), the barn has its own few.
 func solid(ch: String) -> bool:
 	if map_name == "barn":
 		return ch in BARN_SOLID
+	if INTERIORS.has(map_name):
+		return ch in ROOM_SOLID
 	return int(DATA.TILES.get(ch, {}).get("solid", 0)) == 1
 
 func tile_at(p: Vector2i) -> String:
 	var m := cur_map()
 	if p.y < 0 or p.y >= m.size() or p.x < 0 or p.x >= m[0].length():
-		return "X" if map_name == "barn" else "T"
+		return "X" if map_name == "barn" or INTERIORS.has(map_name) else "T"
 	return m[p.y][p.x]
+
+func indoors() -> bool:
+	return map_name == "barn" or INTERIORS.has(map_name)
+
+# ---------------------------------------------------------------- Larkhaven's inn and shop, walked into (WB2.4)
+## Rooms you walk into from their doors in town, like Maren's barn. X dark, W wall, , floor, c counter, t table,
+## s shelf, h hearth, k crates, d the door out. Each keeper stands behind the counter: walk up and press E.
+const ROOM_SOLID := "XWcthsk"
+const INTERIORS := {
+	"inn": { "name": "The Larkhaven Inn", "door": Vector2i(4, 4), "exit": Vector2i(11, 11), "keeper": "ned", "keeper_at": Vector2i(10, 4),
+		"rows": [
+			"XXXXXXXXXXXXXXXXXXXXXXXX",
+			"XXXXXWWWWWWWWWWWWWWXXXXX",
+			"XXXXXWWWWWWWWWWWWWWXXXXX",
+			"XXXXXh,,,,,,,,,,,,sXXXXX",
+			"XXXXX,,,,,,,,,,,,,sXXXXX",
+			"XXXXX,,,ccccc,,,,,,XXXXX",
+			"XXXXX,,,,,,,,,,,,,,XXXXX",
+			"XXXXX,,t,,,,,,,t,,,XXXXX",
+			"XXXXX,,,,,,,,,,,,,,XXXXX",
+			"XXXXX,,t,,,,,,,t,,,XXXXX",
+			"XXXXX,,,,,,,,,,,,,,XXXXX",
+			"XXXXXWWWWWWdWWWWWWWXXXXX",
+			"XXXXXXXXXXXXXXXXXXXXXXXX",
+			"XXXXXXXXXXXXXXXXXXXXXXXX",
+		] },
+	"shop": { "name": "Juniper's Shop", "door": Vector2i(7, 10), "exit": Vector2i(11, 11), "keeper": "juniper", "keeper_at": Vector2i(11, 4),
+		"rows": [
+			"XXXXXXXXXXXXXXXXXXXXXXXX",
+			"XXXXXXWWWWWWWWWWWWXXXXXX",
+			"XXXXXXWWWWWWWWWWWWXXXXXX",
+			"XXXXXXs,,,,,,,,,,sXXXXXX",
+			"XXXXXXs,,,,,,,,,,sXXXXXX",
+			"XXXXXX,,,cccccc,,,XXXXXX",
+			"XXXXXX,,,,,,,,,,,,XXXXXX",
+			"XXXXXXk,,,,,,,,,,kXXXXXX",
+			"XXXXXXk,,,,,,,,,,,XXXXXX",
+			"XXXXXX,,,,,,,,,,,,XXXXXX",
+			"XXXXXX,,,,,,,,,,,,XXXXXX",
+			"XXXXXXWWWWWdWWWWWWXXXXXX",
+			"XXXXXXXXXXXXXXXXXXXXXXXX",
+			"XXXXXXXXXXXXXXXXXXXXXXXX",
+		] },
+}
+var keepers: Array = []                      # Old Ned and Juniper, behind their counters
+func _make_keepers() -> void:
+	for room in INTERIORS:
+		var k := Mover.new(INTERIORS[room].keeper, room, INTERIORS[room].keeper_at)
+		k.face = Vector2i.DOWN
+		keepers.append(k)
+const KEEPER_LOOKS := {
+	"ned": { "name": "Old Ned", "skin": Color("e8b48a"), "hair": Color("d8d4cc"), "shirt": Color("7a5236"), "apron": Color("efe6d4"),
+		"legs": Color("4a3e34"), "shoes": Color("3a2a1e"), "style": "short", "body": "broad" },
+	"juniper": { "name": "Juniper", "skin": Color("c88a64"), "hair": Color("3a2a22"), "shirt": Color("4a7a5a"), "apron": Color("d8c8a4"),
+		"legs": Color("3a3040"), "shoes": Color("2a2228"), "style": "bun", "body": "narrow" },
+}
+
+## Walking up to a keeper's counter and pressing E: Old Ned rests your team, Juniper sets out her goods.
+func _near_keeper() -> String:
+	if not INTERIORS.has(map_name):
+		return ""
+	var at: Vector2i = INTERIORS[map_name].keeper_at
+	var front: Vector2i = at + Vector2i(0, 2)        # across the counter
+	return INTERIORS[map_name].keeper if (me.tile - front).length() <= 1.01 or (me.tile - at).length() <= 1.01 else ""
+
+func _keeper_talk(who: String) -> void:
+	walk_to.clear()
+	me.face = Vector2i.UP
+	if who == "ned":
+		for c in team:
+			c.hp = R.stats(c).hp
+		say("ned", ["Sit yourself down. Blankets by the fire, stew in the pot. Your creatures can have the warm corner.",
+			"Back again? Good. A tamer who rests is a tamer who comes home.",
+			"Maren says you're doing her proud. Don't tell her I told you."][int(t) % 3])
+		say("", "You rest a while at the Larkhaven Inn. Your team is fully healed.")
+	else:
+		say("juniper", "Welcome in! Lures for bonding, berries for a tired team. Have a look.")
+		then_do = func():
+			shop.open([
+				{ "name": "5 lures", "give": { "lures": 5 }, "cost": 50 },
+				{ "name": "5 berries", "give": { "berries": 5 }, "cost": 5 * int(DATA.FOODS.berries.cost) },
+			])
 
 func actors() -> Array:
 	var out: Array = []
-	for m in [me, maren, pup, wren] + starters + npcs + ranch_movers:
+	for m in [me, maren, pup, wren] + starters + npcs + ranch_movers + keepers:
 		if m.where == map_name:
 			out.append(m)
 	return out
@@ -410,7 +497,9 @@ func _check_doors() -> void:
 		_go("barn")
 	elif map_name == "barn" and me.tile == BARN_EXIT:
 		_go("larkhaven")
-	elif map_name != "barn":
+	elif INTERIORS.has(map_name) and me.tile == INTERIORS[map_name].exit:
+		_go("larkhaven", INTERIORS[map_name].door + Vector2i.DOWN, Vector2i.DOWN)
+	elif not indoors():
 		# the edge of a map: the road onward, if it's open
 		var ch := tile_at(me.tile)
 		if int(DATA.TILES.get(ch, {}).get("exit", 0)) != 1:
@@ -454,6 +543,9 @@ func _switch() -> void:
 			maren.pos = Vector2(maren.tile) * TILE
 			maren.path.clear()
 			maren.face = Vector2i.LEFT
+	elif INTERIORS.has(trans_to):
+		me.tile = INTERIORS[trans_to].exit + Vector2i.UP
+		me.face = Vector2i.UP
 	elif trans_at.x >= 0:
 		me.tile = trans_at                          # arriving along a road
 		me.face = trans_face
@@ -467,7 +559,9 @@ func _switch() -> void:
 	me.path.clear()
 	if partner:
 		partner.where = trans_to
-		partner.tile = BARN_EXIT if trans_to == "barn" else (BARN_DOOR if trans_at.x < 0 else me.tile - trans_face)
+		partner.tile = BARN_EXIT if trans_to == "barn" else (INTERIORS[trans_to].exit if INTERIORS.has(trans_to) else (BARN_DOOR if trans_at.x < 0 else me.tile - trans_face))
+		if map_name == "larkhaven" and DOORS.has(partner.tile):
+			partner.tile = me.tile + (Vector2i.RIGHT if walkable(me.tile + Vector2i.RIGHT) else Vector2i.LEFT)   # out of a doorway beside you
 		if trans_at.x >= 0 and solid(tile_at(partner.tile)):
 			partner.tile = me.tile
 		partner.pos = Vector2(partner.tile) * TILE
@@ -500,6 +594,7 @@ func _switch() -> void:
 func _process(dt: float) -> void:
 	t += dt
 	_music_tick(dt)
+	_ambience_tick(dt)
 	fade_in = min(1.0, fade_in + dt * 0.7)
 	var door_dark := 0.0
 	if trans_t >= 0.0:
@@ -588,7 +683,7 @@ func _step(d: Vector2i) -> void:
 	me.face = d
 	me.right = d.x > 0 if d.x != 0 else me.right
 	if map_name == "larkhaven" and stage == "free" and DOORS.has(me.tile + d):
-		_door(DOORS[me.tile + d])                # walking up to a door goes in
+		_go(DOORS[me.tile + d])                  # walking up to a door goes in: the inn and the shop are rooms
 		return
 	var was := me.tile
 	var aside := _gentle_at(me.tile + d)
@@ -643,6 +738,8 @@ func _unhandled_input(e: InputEvent) -> void:
 		_breed_here()
 	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _near_bench():
 		_open_bench()
+	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and not shop.visible and _near_keeper() != "":
+		_keeper_talk(_near_keeper())
 	elif stage == "free" and maren.where == map_name and (me.tile - maren.tile).length() <= 1.01 and not (e is InputEventMouseButton and Vector2i((get_global_mouse_position() / TILE).floor()) != maren.tile):
 		_maren_heals()
 	elif e is InputEventMouseButton:
@@ -833,6 +930,8 @@ func _butterfly(dt: float) -> void:
 	if map_name == "barn":
 		goal = home + Vector2(sin(t * 1.3) * 14.0, cos(t * 1.7) * 6.0 - fly_scare * 8.0)
 	fly = goal if fly == Vector2.ZERO else fly.lerp(goal, min(1.0, dt * 1.5))
+	if INTERIORS.has(map_name):
+		fly = Vector2(-100, -100)                    # no butterflies indoors
 
 func _bubbles(dt: float) -> void:
 	bubble_cd -= dt
@@ -884,10 +983,12 @@ func _demo(dt: float) -> void:
 func _draw() -> void:
 	if map_name == "barn":
 		_draw_barn()
+	elif INTERIORS.has(map_name):
+		_draw_room()
 	else:
 		_draw_outdoor()
 	# items lying on the ground: a little cloth pouch, tied at the top
-	if map_name != "barn":
+	if not indoors():
 		for it in DATA.MAPS[map_name].get("items", []):
 			if not got_items.has(it.id):
 				var io := Vector2(float(it.at[0]), float(it.at[1])) * TILE + Vector2(4, 5 + sin(t * 2.0 + float(it.at[0])) * 0.5)
@@ -955,6 +1056,40 @@ func _draw_painted() -> void:
 	list.sort_custom(func(a, b): return a.pos.y < b.pos.y)
 	for m in list:
 		_draw_actor(colour_layer, m, 0)
+	# true depth: anyone standing in front of you (lower on the screen, overlapping) is drawn again on top, faded just
+	# as the world is faded where they stand, so the colour layer never puts you in front of them
+	for o in actors():
+		if _is_painted(o):
+			continue
+		for m in list:
+			if o.pos.y > m.pos.y + 0.5 and absf(o.pos.x - m.pos.x) < 15.0 and o.pos.y - m.pos.y < 26.0:
+				_draw_actor(colour_layer, o, 0, 1.0 - _restored_at(o.pos + Vector2(8, 8)))
+				break
+
+## How much colour has come back at a point in the world (0 faded, 1 restored), as the fade shader computes it.
+func _restored_at(p: Vector2) -> float:
+	if INTERIORS.has(map_name) and spilled:
+		return 1.0
+	var best := 0.0
+	for r in restore:
+		if r.where == map_name and float(r.r) > 0.0:
+			best = maxf(best, 1.0 - smoothstep(float(r.r) * 0.8, float(r.r), p.distance_to(r.at)))
+	return best
+
+## A look with every colour washed out the way the fade shader does it (amount 0 = untouched, 1 = fully faded).
+func _faded_look(look: Dictionary, amount: float) -> Dictionary:
+	if amount <= 0.0:
+		return look
+	var out := {}
+	var fade: float = 0.78 * amount
+	for k in look:
+		var v = look[k]
+		if v is Color:
+			var g: float = v.r * 0.299 + v.g * 0.587 + v.b * 0.114
+			out[k] = Color(lerpf(v.r, g * 1.03, fade), lerpf(v.g, g, fade), lerpf(v.b, g * 0.92, fade), v.a)
+		else:
+			out[k] = v
+	return out
 	if paint_t >= 0.0 and paint_t < 1.4:
 		# the ink sparkles outward as you're painted in
 		var cols := [my_look.shirt, my_look.hair, my_look.legs, Color("f2d24a")]
@@ -965,7 +1100,7 @@ func _draw_painted() -> void:
 			c.a = 1.0 - paint_t / 1.4
 			colour_layer.draw_rect(Rect2(me.pos + Vector2(8, 6) + Vector2(cos(a), sin(a)) * d, Vector2(1, 1)), c)
 
-func _draw_actor(ci: CanvasItem, m: Mover, i: int) -> void:
+func _draw_actor(ci: CanvasItem, m: Mover, i: int, fade_amt := 0.0) -> void:
 	var walking := not m.path.is_empty()
 	if m.is_creature():
 		var happy: bool = m.act == "curious" or (m == partner and stage == "bonded")
@@ -978,13 +1113,13 @@ func _draw_actor(ci: CanvasItem, m: Mover, i: int) -> void:
 			"bird": m.look.kind == "boar" and not walking and fmod(t + 3.0, 16.0) < 10.0,
 		}
 		var wiggle := (1.0 if int(t * 16.0) % 2 == 0 else -1.0) if m.act == "pounce" and m.act_t > 0.4 and m.act_t < 0.8 else 0.0
-		Figures.creature(ci, m.pos + Vector2(-1 + wiggle, 4 + m.hop), m.right, pose, m.look)
+		Figures.creature(ci, m.pos + Vector2(-1 + wiggle, 4 + m.hop), m.right, pose, _faded_look(m.look, fade_amt))
 		return
 	var face := m.face
 	if not walking and face == Vector2i.DOWN and fmod(t + i, 6.0) > 5.2:
 		face = Vector2i.LEFT if int(t + i) % 2 == 0 else Vector2i.RIGHT   # a glance around while standing
-	var look: Dictionary = my_look if m == me else (LOOKS[m.id] if LOOKS.has(m.id) else _cast_look(m.id))
-	Figures.person(ci, m.pos + Vector2(2, -5), face, walking, int(m.step_t * 8.0) % 4, fmod(t + i * 1.7, 3.3) < 0.12, look)
+	var look: Dictionary = my_look if m == me else (LOOKS[m.id] if LOOKS.has(m.id) else (KEEPER_LOOKS[m.id] if KEEPER_LOOKS.has(m.id) else _cast_look(m.id)))
+	Figures.person(ci, m.pos + Vector2(2, -5), face, walking, int(m.step_t * 8.0) % 4, fmod(t + i * 1.7, 3.3) < 0.12, _faded_look(look, fade_amt))
 
 # ---------------------------------------------------------------- inside the barn (drawn in code: warm wood and straw)
 const WOOD := Color("7a5236")
@@ -1186,7 +1321,7 @@ func _update_ui() -> void:
 	if bubble.visible:
 		bubble_text.text = line.text + "   »"
 		var who: Mover = null
-		for m in [maren, wren] + npcs:
+		for m in [maren, wren] + npcs + keepers:
 			if line.who == m.id and m.where == map_name:
 				who = m
 		var w := 240.0
@@ -1203,6 +1338,8 @@ func _update_ui() -> void:
 	var final := get_viewport().get_final_transform()
 	var pts := PackedVector4Array()
 	var here := restore.filter(func(r): return r.where == map_name)
+	if INTERIORS.has(map_name) and spilled:
+		here = [{ "where": map_name, "at": me.pos, "r": 5000.0 }]     # a room in town is as bright as the town outside
 	here.sort_custom(func(a, b): return a.at.distance_to(me.pos) < b.at.distance_to(me.pos))   # the shader shows the 8 nearest
 	for r in here.slice(0, 8):
 		var sp: Vector2 = final * (to_screen * r.at)
@@ -1351,10 +1488,11 @@ func _draw_water(x: int, y: int, o: Vector2, n: int) -> void:
 ## After each step: pick up anything lying there, and in tall grass, every 8-16 steps you find something (explore()
 ## in the browser game): a wild creature (62%), a small find (14%), or a moment in the woods.
 func _arrived(p: Vector2i) -> void:
-	if map_name == "barn" or stage != "free":
+	if indoors() or stage != "free":
 		return
 	if map_name != "larkhaven":
 		_egg_step()                                  # the egg warms while you're out on your journey
+		_letter_step()                               # and now and then a letter comes from Maren
 	for it in DATA.MAPS[map_name].get("items", []):
 		if not got_items.has(it.id) and Vector2i(int(it.at[0]), int(it.at[1])) == p:
 			got_items[it.id] = true
@@ -1498,6 +1636,15 @@ func _skip_opening() -> void:
 		team[0].hp = R.stats(team[0]).hp
 	if "--photo" in OS.get_cmdline_user_args():      # pictures of the world: nobody asks to evolve mid-shot
 		for c in team: c["hold"] = 999
+	for a in OS.get_cmdline_user_args():           # a picture inside a room: -- --skip-opening --at=larkhaven --room=inn
+		if a.begins_with("--room="):
+			(func(): _go(a.substr(7))).call_deferred()
+	if "--depth" in OS.get_cmdline_user_args():       # a picture of depth: Maren stands just in front of you (-- --skip-opening --at=larkhaven --depth)
+		(func():
+			maren.where = map_name
+			maren.tile = me.tile + Vector2i.DOWN
+			maren.pos = Vector2(maren.tile) * TILE
+			maren.path.clear()).call_deferred()
 	if "--colour" in OS.get_cmdline_user_args():     # the area with its colour fully back (for pictures of the restored valley)
 		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "barn"]:
 			restore.append({ "where": m, "at": Vector2(192, 108), "r": 5000.0, "goal": 5000.0 })
@@ -1652,6 +1799,47 @@ func _after_trainer(who: String, result: String) -> void:
 	else:
 		_after_wild("lost")
 
+## Where to go next, in Maren's words, by the badges you hold (the field book shows it; her letters mention it).
+const WHERE_NEXT := [
+	"Warden Isolde keeps the Thorn Badge, up the north road in Thornwood. Show her what you and {starter} can do.",
+	"Thornwood's south road runs down to Saltmarsh Coast. Warden Nerys tests tamers on the tide flats there.",
+	"From the coast, the high road climbs to the Emberfall Highlands. Warden Toren is patient, so be patient back.",
+	"North of Emberfall is Cloudglass Pass. Warden Vessa waits up in the cloud with the Beacon Badge.",
+	"Past the pass, the valley opens out toward Stillreed. That road isn't safe to travel yet; rest your team and wait.",
+]
+func where_next() -> String:
+	return _fill(WHERE_NEXT[mini(badges.size(), WHERE_NEXT.size() - 1)])
+
+## Maren's letters: every so often on your journey a runner brings one. Ranch news, a little about your creatures, and a
+## nudge toward where to go next. Being away lets the ranch creatures miss you a little (a touch more trust).
+const LETTER_STEPS := 220
+var letter_steps := LETTER_STEPS
+var letters := 0
+
+func _letter_step() -> void:
+	letter_steps -= 1
+	if letter_steps > 0 or not lines.is_empty():
+		return
+	letter_steps = LETTER_STEPS
+	letters += 1
+	var news: String
+	if ranch.is_empty():
+		news = "The paddock's quiet without anyone of yours in it. The pup keeps looking down the road for you."
+	else:
+		var c: Dictionary = ranch[letters % ranch.size()]
+		for r in ranch:
+			R.add_bond(r, 1.0)
+		news = ["%s has taken to sleeping by the barn door, waiting for you." % c.name,
+			"%s ate twice its share at the trough this morning and looked very pleased about it." % c.name,
+			"%s and the pup chased each other round the paddock till they both fell over." % c.name][letters % 3]
+		if ranch.size() > 1:
+			news += " The others are well, and they miss you."
+	if not egg.is_empty():
+		news += " The egg is warm. Not long now."
+	say("", "A runner from Larkhaven catches you up with a letter from Maren.")
+	say("maren", "\"Dear %s, all's well at the ranch. %s\"" % [my_look.get("name", "love"), news])
+	say("maren", "\"%s Mind how you go. Maren.\"" % where_next())
+
 ## Orders people teach you (battle.gd ORDERS), after you've earned their badge. More teachers come with more areas.
 const TEACHERS := {
 	"ember": { "order": "steady", "name": "Steady", "lines": [
@@ -1738,7 +1926,7 @@ func save_game() -> void:
 	var d := { "v": 1, "saved": Time.get_datetime_string_from_system(), "look": look, "team": team, "ranch": ranch, "bag": bag,
 		"badges": badges, "seen": seen, "bonded": bonded, "items": got_items, "beaten": beaten,
 		"restore": restore.map(func(r): return { "where": r.where, "x": r.at.x, "y": r.at.y, "goal": r.goal }),
-		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned, "taught": taught,
+		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned, "taught": taught, "letter": [letter_steps, letters],
 		"map": map_name, "x": me.tile.x, "y": me.tile.y, "partner": partner.id if partner else "" }
 	var f := FileAccess.open(save_path, FileAccess.WRITE)
 	if f:
@@ -1754,7 +1942,7 @@ func _save_summary() -> String:
 	var d := _read_save()
 	if d.is_empty():
 		return ""
-	var where: String = "Maren's barn" if d.map == "barn" else str(DATA.MAPS.get(d.map, {}).get("name", d.map))
+	var where: String = "Maren's barn" if d.map == "barn" else (str(INTERIORS[d.map].name) if INTERIORS.has(d.map) else str(DATA.MAPS.get(d.map, {}).get("name", d.map)))
 	var nb: int = d.badges.size()
 	return "%s and %s, in %s. %d badge%s, %d in the Wilddex." % [d.look.get("name", "You"), DATA.SPECIES[d.team[0].sp].name if d.team[0].name == null else d.team[0].name,
 		where, nb, "" if nb == 1 else "s", d.seen.size()]
@@ -1788,6 +1976,9 @@ func _load_game() -> bool:
 	story_done = d.get("story", {})
 	story_retry = d.get("retry", {})
 	taught = Array(d.get("taught", []))
+	var lt: Array = d.get("letter", [LETTER_STEPS, 0])
+	letter_steps = int(lt[0])
+	letters = int(lt[1])
 	gear_owned = {}
 	for k in d.get("gear", {}):
 		gear_owned[k] = int(d.gear[k])
@@ -1837,6 +2028,7 @@ func _open_book() -> void:
 	book.bonded = bonded
 	book.team = team
 	book.ranch = ranch
+	book.where = where_next()
 	book.open()
 
 # ---------------------------------------------------------------- story moments while you explore (the browser's STORY)
@@ -2413,7 +2605,7 @@ var music_on := true
 func _music_key() -> String:
 	if battle and battle.visible:
 		return "wild" if battle.kind == "wild" else "trainer"
-	if map_name == "barn":
+	if indoors():
 		return "barn"
 	if map_name == "larkhaven":
 		return "larkhaven" if spilled else "faded"
@@ -2440,3 +2632,92 @@ func _music_tick(dt: float) -> void:
 				music.stop()
 	elif music.playing:
 		music.volume_db = move_toward(music.volume_db, MUSIC_VOL, dt * 30.0)   # ...and the new one in
+
+# ---------------------------------------------------------------- ambience (Ninja Adventure, CC0; assets/ambience)
+## A quiet sound of the place under the music: waves on the coast, wind in the highlands and up in the pass. It follows
+## the music switch (M), and goes quiet in battle.
+const AMBIENCE_VOL := -20.0
+var ambience: AudioStreamPlayer
+var ambience_now := ""
+
+func _ambience_tick(dt: float) -> void:
+	if ambience == null:
+		ambience = AudioStreamPlayer.new()
+		ambience.volume_db = -60.0
+		ambience.finished.connect(func(): if ambience_now != "": ambience.play())   # loop
+		add_child(ambience)
+	var want := map_name if music_on and not (battle and battle.visible) and ResourceLoader.exists("res://assets/ambience/%s.wav" % map_name) else ""
+	if want != ambience_now:
+		ambience.volume_db = move_toward(ambience.volume_db, -60.0, dt * 80.0)
+		if ambience.volume_db <= -59.0 or not ambience.playing:
+			ambience_now = want
+			if want != "":
+				ambience.stream = load("res://assets/ambience/%s.wav" % want)
+				ambience.play()
+			else:
+				ambience.stop()
+	elif ambience.playing:
+		ambience.volume_db = move_toward(ambience.volume_db, AMBIENCE_VOL, dt * 20.0)
+
+## A room in town (INTERIORS), drawn like Maren's barn: board floors, plank walls, the counter with its keeper behind
+## it, and the furniture of the place (the inn's hearth and tables, the shop's shelves and crates).
+func _draw_room() -> void:
+	var rows: Array = INTERIORS[map_name].rows
+	var w: int = rows[0].length()
+	draw_rect(Rect2(0, 0, w * TILE, rows.size() * TILE), Color("16100c"))
+	for y in rows.size():
+		for x in w:
+			var ch: String = rows[y][x]
+			var o := Vector2(x, y) * TILE
+			if ch == "X":
+				continue
+			if ch != "W":
+				_boards(o, x, y)
+			match ch:
+				"W":
+					draw_rect(Rect2(o, Vector2(16, 16)), WOOD)
+					for k in 4:
+						draw_rect(Rect2(o + Vector2(k * 4, 0), Vector2(1, 16)), WOOD_DARK)
+					if y == 2:
+						draw_rect(Rect2(o + Vector2(0, 13), Vector2(16, 3)), WOOD_DARK)          # the skirting beam
+					if y == 1:
+						draw_rect(Rect2(o + Vector2(0, 2), Vector2(16, 3)), WOOD_LIGHT)          # the cross beam
+					if y == rows.size() - 3:
+						draw_rect(Rect2(o, Vector2(16, 3)), WOOD_LIGHT)                         # the front wall's top edge
+				"c":
+					draw_rect(Rect2(o + Vector2(0, 2), Vector2(16, 12)), Figures.OUTLINE)          # the counter
+					draw_rect(Rect2(o + Vector2(0, 3), Vector2(16, 10)), WOOD_LIGHT)
+					draw_rect(Rect2(o + Vector2(0, 3), Vector2(16, 2)), WOOD_LIGHT.lightened(0.2))
+					draw_rect(Rect2(o + Vector2(0, 11), Vector2(16, 2)), WOOD_DARK)
+				"t":
+					draw_rect(Rect2(o + Vector2(1, 3), Vector2(14, 10)), Figures.OUTLINE)          # a table with a candle
+					draw_rect(Rect2(o + Vector2(2, 4), Vector2(12, 8)), WOOD)
+					draw_rect(Rect2(o + Vector2(7, 5), Vector2(2, 3)), Color("efe6d4"))
+					draw_rect(Rect2(o + Vector2(7, 3 + int(t * 6.0) % 2), Vector2(2, 2)), Color("f2c050"))
+				"s":
+					draw_rect(Rect2(o + Vector2(1, 0), Vector2(14, 16)), Figures.OUTLINE)          # shelves of jars and bottles
+					draw_rect(Rect2(o + Vector2(2, 1), Vector2(12, 14)), WOOD_DARK)
+					for r in 3:
+						draw_rect(Rect2(o + Vector2(2, 5 + r * 5), Vector2(12, 1)), WOOD_LIGHT)
+						for k in 3:
+							draw_rect(Rect2(o + Vector2(3 + k * 4, 2 + r * 5), Vector2(2, 3)), [Color("6ad08a"), Color("e8a84a"), Color("8ab8f0"), Color("e04a8a")][(x + y + r + k) % 4])
+				"k":
+					draw_rect(Rect2(o + Vector2(1, 2), Vector2(14, 13)), Figures.OUTLINE)          # crates
+					draw_rect(Rect2(o + Vector2(2, 3), Vector2(12, 11)), Color("a07040"))
+					draw_line(o + Vector2(2, 3), o + Vector2(14, 14), Color("6b4a2a"), 1.0)
+					draw_line(o + Vector2(14, 3), o + Vector2(2, 14), Color("6b4a2a"), 1.0)
+				"h":
+					draw_rect(Rect2(o + Vector2(0, -6), Vector2(16, 22)), Color("6a6a66"))         # the hearth, its fire alive
+					draw_rect(Rect2(o + Vector2(2, 4), Vector2(12, 10)), Color("2a1e18"))
+					var f := 0.75 + 0.25 * sin(t * 7.0)
+					draw_rect(Rect2(o + Vector2(4, 8), Vector2(8, 6)), Color(1.0, 0.45 * f + 0.2, 0.1))
+					draw_rect(Rect2(o + Vector2(6, 6 + int(t * 5.0) % 2), Vector2(4, 4)), Color("f2d24a"))
+				"d":
+					draw_rect(Rect2(o + Vector2(1, 0), Vector2(14, 16)), Color("2a1c12"))
+					draw_rect(Rect2(o + Vector2(1, 9), Vector2(14, 7)), Color("6a9a48").darkened(0.2))   # town outside
+	# the room's name on a board over the counter
+	var at: Vector2i = INTERIORS[map_name].keeper_at
+	var bo := Vector2(at.x - 1, 1) * TILE + Vector2(0, 6)
+	draw_rect(Rect2(bo - Vector2(1, 1), Vector2(50, 10)), Figures.OUTLINE)
+	draw_rect(Rect2(bo, Vector2(48, 8)), Color("2e3a32"))
+	draw_string(ThemeDB.fallback_font, bo + Vector2(0, 7), "Inn" if map_name == "inn" else "Goods", HORIZONTAL_ALIGNMENT_CENTER, 48, 6, Color("e8e4d8"))

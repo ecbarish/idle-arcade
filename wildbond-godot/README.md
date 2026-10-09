@@ -68,15 +68,24 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   (quicker off the mark), and four charms that soften one element's moves (Ember-Glass Band, Shell, Bark and Slate
   Charms). Gear **shows on the creature** wherever you see it: walking with you, at the ranch, in battle, on its page.
   Pieces you take off go in your satchel for another creature.
+- **The inn and the shop are rooms:** walk in through their doors in Larkhaven. **Old Ned** at the inn's counter rests
+  your team; **Juniper** behind hers sets out lures and berries. Walk back out through the door.
+- **Battle effects:** each element's hit has its own animated effect (flames, water, leaves, rock, lightning, a dark burst,
+  a golden shimmer), from the free Ninja Adventure pack.
+- **Maren's letters:** every so often on the road a runner brings a letter from Maren: news of your ranch creatures
+  (who miss you a little, and trust you more), the egg, and where to go next. The field book's ranch page says
+  **Where next** in her words too.
 - **Tamer orders:** the battle menu's **Orders** holds Rally, one order from your family (Farmfolk: Patch Up;
   coastfolk: Read the Tide, your team braces itself for the next big attack; highlanders: Stand Firm; wanderers: Find
   an Opening, another creature acts at once) and orders people teach you: Toren teaches **Steady** (calm poison and
   slowness) when you earn the Ember Badge. Orders cost orders, which come back as the battle goes on.
-- **Music:** a tune for each place and for battles (nine free tracks from the Ninja Adventure pack). Larkhaven plays a
+- **Music:** a tune for each place and for battles (nine free tracks from the Ninja Adventure pack). Under it, the
+  sound of the place: waves on Saltmarsh Coast, wind in the Highlands and up in Cloudglass Pass. Larkhaven plays a
   lost, quiet tune while it is faded and a warm village tune once its colour comes back. Press **M** to turn music off
   and on.
 - **People stand beside you, not on you:** Maren comes to your side to talk, and trainers who walk up from above or
   below stop a step further off, so tall figures never cover each other.
+  Whoever stands in front of you is drawn in front of you, even though you are in colour and they are still faded.
 - **Heritage** (docs/proposals/wildbond-heritage.md): the register's ninth line is your **Family**: Larkhaven farmfolk
   (field and forest creatures trust you a little sooner), Saltmarsh coastfolk (your lead creature's trust grows half
   again as fast), Emberfall highlanders (trust grows faster in battles against tamers) or Farwatch wanderers (you find
@@ -112,7 +121,7 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   See it: add `--write-movie <folder>/f.png --fixed-fps 10 --quit-after 200 -- --demo` (the demo plays the opening by
   itself) and look at the frames.
 - **Checks:** `Godot_v4.7.2-stable_win64_console.exe --headless --path wildbond-godot --script res://tests/run_tests.gd`
-  plays the opening, the first battle, Thornwood, a catch, the Warden and a save by itself; must stay all-pass (205 checks on 2026-10-08). `tests/battle_odds.gd` measures how winnable a battle is; run the game with `-- --skip-opening` to start in Thornwood (add `--at=saltmarsh` for the coast, `--at=emberfall` for the highlands, `--at=cloudglass` for the pass, `--at=larkhaven --ranch` to see creatures at the ranch, `--at=larkhaven --ranch --nursery` for the nursery with an egg, `--bench` for the workbench, `--book` to open the field book).
+  plays the opening, the first battle, Thornwood, a catch, the Warden and a save by itself; must stay all-pass (218 checks on 2026-10-08). `tests/battle_odds.gd` measures how winnable a battle is; run the game with `-- --skip-opening` to start in Thornwood (add `--at=saltmarsh` for the coast, `--at=emberfall` for the highlands, `--at=cloudglass` for the pass, `--at=larkhaven --ranch` to see creatures at the ranch, `--at=larkhaven --ranch --nursery` for the nursery with an egg, `--bench` for the workbench, `--book` to open the field book).
 - **Builds for sharing:** `tools/godot-build.ps1` (web: play/wildbond/, Windows: export/Wildbond-trial-windows.zip),
   once Godot's export templates are installed (Editor > Manage Export Templates > Download and Install).
 - Click or tap anywhere to walk there; tap a creature in the barn to walk up and meet it.

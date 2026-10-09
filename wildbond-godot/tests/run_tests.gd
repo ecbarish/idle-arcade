@@ -44,6 +44,13 @@ func talk_through() -> void:
 		main.advance()
 		guard += 1
 
+func wait_map(n: String) -> bool:
+	for i in 80:
+		tick(0.05)
+		if main.map_name == n and main.trans_t < 0.0:
+			return true
+	return false
+
 func walk_to(goal: Vector2i) -> bool:
 	var r: Array[Vector2i] = main.route(main.me.tile, goal)
 	main.walk_to = r
@@ -134,6 +141,7 @@ func _run() -> void:
 	check(main._music_key() == "larkhaven", "once the colour spills into town, a warm village tune")
 	main.spilled = false
 	check(["faded", "larkhaven", "barn", "thornwood", "saltmarsh", "emberfall", "cloudglass", "wild", "trainer"].all(func(k): return ResourceLoader.exists("res://assets/music/%s.ogg" % k)), "every tune is in the game")
+	check(["saltmarsh", "emberfall", "cloudglass"].all(func(k): return ResourceLoader.exists("res://assets/ambience/%s.wav" % k)), "waves on the coast and wind in the highlands and the pass")
 	# ---- the map: closed doors, the barn opens with the story
 	check(not main.walkable(Vector2i(4, 4)), "cottage doors stay shut")
 	check(not main.walkable(main.BARN_DOOR), "the barn is shut before you sign the register")
@@ -442,7 +450,13 @@ func _run() -> void:
 		coins1 = main.bag.coins
 		check(walk_to(Vector2i(7, 11)), "you can walk up to the shop door")
 		main._step(Vector2i.UP)
-		check(main.shop.visible, "walking into the shop door opens the counter")
+		check(wait_map("shop") and main.place.text == "Juniper's Shop", "walking into the shop door takes you inside Juniper's Shop")
+		check(walk_to(main.INTERIORS.shop.keeper_at + Vector2i(0, 2)), "you can walk up to the counter")
+		check(main._near_keeper() == "juniper", "Juniper is behind the counter")
+		main._keeper_talk("juniper")
+		check(main.lines.any(func(l): return l.who == "juniper"), "she greets you")
+		talk_through()
+		check(main.shop.visible, "and sets out her goods")
 		main.shop._buy(0)
 		check(main.bag.lures == lures1 + 5 and main.bag.coins == coins1 - 50, "5 lures for 50 coins, like the browser")
 		main.bag.coins = 0
@@ -450,11 +464,16 @@ func _run() -> void:
 		check(main.bag.berries >= 0 and main.bag.coins == 0 and "coins" in main.shop.note, "no coins, no berries (the shopkeeper says so)")
 		main.shop._buy(2)
 		check(not main.shop.visible, "leaving the counter")
+		check(walk_to(main.INTERIORS.shop.exit) and wait_map("larkhaven") and main.me.tile == main.INTERIORS.shop.door + Vector2i.DOWN, "out through the shop door, back in the street (me %s)" % [main.me.tile])
 		for c in main.team: c.hp = 1
 		check(walk_to(Vector2i(4, 5)), "you can walk to the inn")
 		main._step(Vector2i.UP)
+		check(wait_map("inn"), "inside the Larkhaven Inn")
+		check(walk_to(main.INTERIORS.inn.keeper_at + Vector2i(0, 2)) and main._near_keeper() == "ned", "Old Ned at his counter")
+		main._keeper_talk("ned")
 		check(main.team.all(func(c): return c.hp == main.R.stats(c).hp), "a night at the inn heals your team")
 		talk_through()
+		check(walk_to(main.INTERIORS.inn.exit) and wait_map("larkhaven"), "and back out into Larkhaven")
 		check(main.npcs.any(func(n): return n.id == "pip" and n.where == "larkhaven"), "Pip lives in Larkhaven")
 		check(walk_to(Vector2i(20, 7)), "you can walk up to Pip")
 		main.me.face = Vector2i.RIGHT
@@ -547,6 +566,19 @@ func _run() -> void:
 	check(main.egg.is_empty() and main.ranch.size() == n_ranch + 1 and main.ranch[-1].lvl == 3 and int(main.ranch[-1].gen) == 2, "after a walk on your journey the egg hatches into the ranch")
 	talk_through()
 	check(not main.R.breed_info(main.ranch[0], main.ranch[2]).ok, "a level-3 creature is too young to breed")
+	# ---- Maren's letters on the road, and where to go next
+	var keep_badges: Array = main.badges.duplicate()
+	main.badges = []
+	check("Isolde" in main.where_next() and "Thornwood" in main.where_next(), "with no badges, Maren points you to Warden Isolde in Thornwood")
+	main.badges = ["thorn", "tide"]
+	check("Emberfall" in main.where_next() and "Toren" in main.where_next(), "two badges: on to Emberfall and Toren")
+	main.letter_steps = 1
+	var bond_before: float = main.ranch[0].bond
+	main._letter_step()
+	check(main.lines.size() >= 3 and main.lines.any(func(l): return l.who == "maren" and "Emberfall" in l.text) and main.ranch[0].bond > bond_before, "a runner brings Maren's letter: ranch news, and where next (%s)" % [main.lines.map(func(l): return l.text.left(40))])
+	check(main.letter_steps == main.LETTER_STEPS, "and the next one comes after another stretch of road")
+	talk_through()
+	main.badges = keep_badges
 	# ---- Maren's workbench: gear for your creatures, worn and seen
 	main.me.tile = Vector2i(2, 9)
 	check(main._near_bench(), "standing at Maren's workbench")

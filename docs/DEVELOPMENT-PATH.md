@@ -66,12 +66,11 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 
 **WB-M2: who you are and where you stand.**
 - [x] WB2.1 [Claude] Tamer abilities with heritages (WG1): done 2026-10-08 (Orders menu: Rally, a family order, Toren's Steady).
-- [ ] WB2.2 [Claude] Depth step 1 (WG6): ground heights, object footprints and heights, the colour layer drawn in true
-  depth order.
-- [ ] WB2.3 [Claude] Variety pass (WG7): animated water and waterfalls, element effects in battle, area sounds, edge
+- [ ] WB2.2 [Claude] Depth step 1 (WG6): ground heights, object footprints and heights (part 1 done 2026-10-08: the colour layer drawn in true depth order, people in front of you faded as the world is). Left: ground heights, footprints and heights on objects, tree canopies in front of you.
+- [ ] WB2.3 [Claude] Variety pass (WG7) (done 2026-10-08: an animated effect per element in battle; waves and wind under the music. Tried the pack's water ripples: opaque tiles, rejected). Left: waterfalls, edge
   tiles.
-- [ ] WB2.4 [Claude] Interiors: the inn, the shop and two homes in Larkhaven, walkable.
-- [ ] WB2.5 [Claude] Maren's daily letter and the field book's "where next" hint (WG8).
+- [ ] WB2.4 [Claude] Interiors: the inn, the shop and two homes in Larkhaven, walkable (inn and shop done 2026-10-08, with Old Ned and Juniper; homes left).
+- [x] WB2.5 [Claude] Maren's letter and the field book's "where next" hint (WG8): done 2026-10-08.
 - [ ] WB2.6 [ChatGPT] Lore: a heritage line for every Warden and townsperson in areas 1-4 (data in the browser game,
   exported to Godot), recorded in the thread ledger.
 - [ ] WB2.7 [Claude] Bring T37's fourteen creatures into Godot (bodies, export) (WG9).
@@ -118,10 +117,10 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, detail, web preview.
 
 **SF-M2: people and stakes.**
-- [ ] SF2.1 [Claude] Members' stories (SV1).
+- [x] SF2.1 [Claude] Members' stories (SV1): done 2026-10-08 (two beats each for Aki, Ren and Yuna; data/stories.json).
 - [ ] SF2.2 [Claude] Failing and excelling, visible (SV3).
 - [ ] SF2.3 [Claude] The tavern you serve at, and placement that matters a little (SV4).
-- [ ] SF2.4 [ChatGPT] Story text for SF2.1: three short arcs per adventurer (choices that can go either way), in a
+- [ ] SF2.4 [ChatGPT] Story text for SF2.1 (the system is built; extend `starfall-godot/data/stories.json`: arcs for Kaito, Hana and Sora, and a third beat for Aki, Ren and Yuna; keep its format and the four traits): three short arcs per adventurer (choices that can go either way), in a
   data file Claude wires in (`starfall-godot/data/stories.json`; ChatGPT may write that one data file).
 - [ ] SF2.5 [Claude] Hire the apothecary's apprentice once you've brewed enough (the same "master it, then hire" rule).
 
