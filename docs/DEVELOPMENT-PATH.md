@@ -133,9 +133,9 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB5.7 [Claude] Fishing at Saltmarsh (from docs/proposals/new-game-ideas.md, scored 16/18; added 2026-10-09).
 
 **WB-M6: version 2.0, ready for everyone.**
-- [ ] WB6.1 [Claude] Phone controls (WG10). Start by moving every key to named Input Map actions
+- [ ] WB6.1 [Claude] Phone controls (WG10). **In progress (Wildbond builder thread, 2026-10-09).** Start by moving every key to named Input Map actions
   (docs/learning/godot-practices.md rule 2), so on-screen buttons, a gamepad and rebinding all come free.
-- [ ] WB6.2 [Claude] Settings in the game window (sound, music, text size,
+- [ ] WB6.2 [Claude] **In progress (Wildbond builder thread, 2026-10-09).** Settings in the game window (sound, music, text size,
   battle speed). Start with Music, Ambience and Effects sound buses (godot-practices.md rule 3).
 - [ ] WB6.3 [Claude] Import a browser Wildbond save into the new version.
 - [ ] WB6.4 [any] A Wildbond guide (first steps, the element chart, the ranch), now that systems are settling.
