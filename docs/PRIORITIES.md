@@ -68,9 +68,9 @@ of what we have). Anyone, Evan included, can add to either. The flow:
 
 | Idea | Score | Pitch | Note |
 |---|---|---|---|
-| Card shop, absorbing Main Street (CS1 + MS1) | 17/18 | docs/proposals/new-game-ideas.md | Recommended next new game once Evan says go; first step a one-PR Godot toy (counter, 20 cards, pricing, four customers, one Friday match). Uses the catalogue and Wildbond's elements |
-| A second sport: American football (DC4) | 15/18 | docs/proposals/new-game-ideas.md | Only if Evan picks a second sport; waits until Diamond Career's career mode (DC-M2) proves the framework |
+| A second sport: American football, Retro Bowl style (DC4) | 15/18 | docs/proposals/new-game-ideas.md | **Top of the list** (Evan, 2026-10-09: "I love Retro Bowl so that's a strong option"). Still needs Evan's go to start |
 | "The Crossing", sailing between the worlds | 12/18 | docs/proposals/new-game-ideas.md | Waits |
+| Card shop, absorbing Main Street (CS1 + MS1) | 17/18 | docs/proposals/new-game-ideas.md | **At the back** (Evan, 2026-10-09: it is gated behind Wildbond's development). First step when its time comes: a one-PR Godot toy |
 | Primordial beyond polish | 10 | docs/plans/primordial.md | Evan: lower priority |
 | Walk-in arcade (AR3.1) | 10 | docs/VISION.md | Evan: the games come first |
 
@@ -98,7 +98,7 @@ what a player *feels*, in this order:
 11. **Ship it:** import a browser save (WB6.3), a guide (WB6.4), trailer and builds (WB6.5).
 
 After-league life (contests, ranch jobs, roaming legendaries, baby forms, and now Saltmarsh fishing) is WB-M5 and comes
-after 2.0 unless Evan moves it up. First in WB-M5: **races and contests at the ranch** (WB5.2; scored 17/18 by the New
+after 2.0 unless Evan moves it up. Evan likes these "better as features" ideas (2026-10-09). First in WB-M5: **races and contests at the ranch** (WB5.2; scored 17/18 by the New
 game ideas thread), then **Saltmarsh fishing** (WB5.7, 16/18).
 
 **Starfall (second slot), in order:** SF2.5 the apprentice; **its own place** (SF2.6, GR-5, 18/21: a frontier
@@ -132,4 +132,7 @@ keep-alive writing for Diamond Career and Otherworld.
   place (18), Realmbound waits for the player (a bug, first in ChatGPT's lane), explorable areas (17), the wilds
   sooner (16), feedback and front door (14), by hand daily (14), shared Godot code (11, done as polish). Spire stays
   ahead of contests (GR-6, already so). Season and festival content slowed.
+- 2026-10-09 Evan: card shop to the back (it depends on Wildbond); a Retro Bowl-style football game is a strong
+  option and now tops the waiting list; the "better as features" ideas (ranch races, fishing, Starfall grid delves)
+  are good direction.
 - 2026-10-09 Evan confirmed: Wildbond first (flagship), as proposed.
