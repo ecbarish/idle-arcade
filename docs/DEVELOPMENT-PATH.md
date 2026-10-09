@@ -122,7 +122,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WD3 [Claude, ChatGPT data] Battles with real choices (GR-2): about 60 moves, family signature moves, a few
   statuses, an order per Warden; tuned with WB3.6.
 - [ ] WD4 [Claude] Areas you can explore (GR-3): route, settlement and hidden pocket per area, return spots gated by
-  element. Thornwood first, one area per PR.
+  element. **WD4a Thornwood done 2026-10-09 in PR #128:** Thornwood Trail, the preserved settlement, and Stone-gated Old Root Grove. Remaining areas stay open, one area per PR.
 - [ ] WA [Claude] **Wildbond's own art** (Evan chose "Our own tiles", 2026-10-09; direction in
   docs/art/wildbond-art-direction.md, which keeps a later 3D or first-person version in view). **Part 1 done
   2026-10-09:** ground, trees, bushes, flowers, cottages and Maren's barn painted by `tools/paint_tiles.gd`; the pack's

@@ -123,7 +123,7 @@ var npc_info := {}                           # id -> { data from the map, beaten
 var badges: Array = []
 var spotter: Mover = null                    # a trainer who has seen you and is walking over
 var spot_t := 0.0
-const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "league"]    # the maps the Godot version has so far
+const BUILT := ["larkhaven", "thornwood_route", "thornwood", "thornwood_grove", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "league"]    # the maps the Godot version has so far
 var starters: Array[Mover] = []
 var partner: Mover = null
 var map_name := "larkhaven"
@@ -574,6 +574,8 @@ func _check_doors() -> void:
 		var block := ""
 		if ex.is_empty():
 			block = "The road ends here for now."
+		elif ex.has("requiresElement") and not _team_has_element(str(ex.requiresElement)):
+			block = str(ex.get("locked", "One of your partners may be able to find a way through."))
 		elif ex.has("locked") and (not _gate_open(map_name) or (ex.to == "league" and badges.size() < 8)):
 			block = ex.locked
 		elif ex.to not in BUILT:
@@ -587,6 +589,12 @@ func _check_doors() -> void:
 				me.path = [back]                       # step back from the edge
 			return
 		_go(ex.to, Vector2i(int(ex.x), int(ex.y)), DIRS.get(ex.get("dir", "down"), Vector2i.DOWN))
+
+func _team_has_element(element: String) -> bool:
+	for creature in team:
+		if DATA.SPECIES.get(str(creature.get("sp", "")), {}).get("el", "") == element:
+			return true
+	return false
 
 const DIRS := { "up": Vector2i.UP, "down": Vector2i.DOWN, "left": Vector2i.LEFT, "right": Vector2i.RIGHT }
 var trans_at := Vector2i(-1, -1)
@@ -2012,6 +2020,8 @@ func _wild_table() -> Array:
 	var seasonal: Dictionary = DATA.MAPS[map_name].get("seasonal", {})
 	if seasonal.has(cal.season()):
 		return seasonal[cal.season()].wild
+	if DATA.MAPS[map_name].has("wild"):
+		return DATA.MAPS[map_name].wild
 	return DATA.BIOMES[DATA.MAPS[map_name].biome].wild
 
 func _maren_data() -> Dictionary:
@@ -3645,7 +3655,7 @@ func _music_key() -> String:
 	return map_name
 
 ## Places that share a tune play the same file, so the game carries each track once (a smaller web download).
-const SAME_TUNE := { "sunthread": "saltmarsh", "farwatch": "barn" }   # Sunny, and Peaceful
+const SAME_TUNE := { "thornwood_route": "thornwood", "thornwood_grove": "thornwood", "sunthread": "saltmarsh", "farwatch": "barn" }   # one Thornwood theme across its connected maps; Sunny and Peaceful elsewhere
 
 func music_path(key: String) -> String:
 	return "res://assets/music/%s.ogg" % SAME_TUNE.get(key, key)
