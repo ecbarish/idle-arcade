@@ -30,6 +30,7 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '26bd1a6f5a3d8c3f7d4160c940b4de0641dd2dcf' }}
         run: |
           set -euo pipefail
+          git fetch --depth=1 origin "$BASE_SHA"
           git worktree add "$RUNNER_TEMP/wd3-before" "$BASE_SHA"
           cp wildbond-godot/tests/battle_choices_before.gd "$RUNNER_TEMP/wd3-before/wildbond-godot/tests/"
           timeout 120 "$GODOT" --headless --path "$RUNNER_TEMP/wd3-before/wildbond-godot" --editor --import --quit
