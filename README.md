@@ -40,15 +40,13 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 ## Changelog
 
 - Local helper (2026-10-08): preserve the runtime tool-permission order in both task modes; 19 runner checks pass.
-- Otherworld (2026-10-08): all eleven soul memories open practical uses across worlds; six people remember help, harm and repaired trust within a life. Promised cart journeys, shared winter reserves and witnesses happen in portrait conversations. Old saves and Return retain their rules.
-### 2026-10-08: Wildbond early-road heritage recognition (T45; data handoff)
-- Eleven existing early-road people and all four Wardens have a distinct line for each origin, with clues recorded in the thread ledger. The existing Godot export carries all 60 reactions; Classic conversations and gameplay stay intact. Claude wires the data into Godot; no release bump.
-### 2026-10-08: browser reading and keyboard accessibility (T44; pending review)
-- Shared dialogue and Settings respect focused controls; complete scene lines are available to screen readers. Realmbound has named walking destinations inside its world. Larger text, visible focus and opaque reading surfaces improve the launcher, Realmbound, Diamond Career and Otherworld. [Verification and remaining gaps](docs/accessibility.md). No release version change.
+- Otherworld v0.4.0 (2026-10-08): all eleven soul memories open practical uses across worlds; six people remember help, harm and repaired trust within a life. Promised cart journeys, shared winter reserves and witnesses happen in portrait conversations. Old saves and Return retain their rules.
+- Wildbond v1.8.1 (2026-10-08): early-road heritage recognition (T45): Eleven existing early-road people and all four Wardens have a distinct line for each origin, with clues recorded in the thread ledger. The existing Godot export carries all 60 reactions; Classic conversations and gameplay stay intact. Claude wires the data into Godot; no release bump.
+- Accessibility (2026-10-08; Realmbound v1.7.0, Otherworld v0.4.0, Diamond Career v0.4.1): Shared dialogue and Settings respect focused controls; complete scene lines are available to screen readers. Realmbound has named walking destinations inside its world. Larger text, visible focus and opaque reading surfaces improve the launcher, Realmbound, Diamond Career and Otherworld. [Verification and remaining gaps](docs/accessibility.md). No release version change.
 
-- Realmbound (2026-10-08): shared creature species and short hunter observations appear beneath beast targets, covering all 31 zone beasts and 17 dungeon encounters. Local names, palettes, pets and combat stay the same; the normalized catalogue exports from Wildbond data.
+- Realmbound v1.7.0 (2026-10-08): shared creature species and short hunter observations appear beneath beast targets, covering all 31 zone beasts and 17 dungeon encounters. Local names, palettes, pets and combat stay the same; the normalized catalogue exports from Wildbond data.
 
-- Realmbound (2026-10-08): walk into the Trainer and Stable, arrange guild work at the board and supplies at the chest, and meet quest givers in town. Carried pages keep records; service choices happen over the world. Old saves and existing prices are preserved.
+- Realmbound v1.7.0 (2026-10-08): walk into the Trainer and Stable, arrange guild work at the board and supplies at the chest, and meet quest givers in town. Carried pages keep records; service choices happen over the world. Old saves and existing prices are preserved.
 
 - Local helper (2026-10-08): queued local tasks use OpenCode, attach the project primer and lessons, and stop for failed tools or incomplete answers. Reports and edits require review; source in tools/local-ai/.
 

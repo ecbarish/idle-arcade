@@ -71,7 +71,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
   tiles.
 - [ ] WB2.4 [Claude] Interiors: the inn, the shop and two homes in Larkhaven, walkable (inn and shop done 2026-10-08, with Old Ned and Juniper; homes left).
 - [x] WB2.5 [Claude] Maren's letter and the field book's "where next" hint (WG8): done 2026-10-08.
-- [ ] WB2.6 [ChatGPT] (claimed: Codex, 2026-10-08, codex/wildbond-early-heritages; T45) Lore: a heritage line for every Warden and townsperson in areas 1-4 (data in the browser game,
+- [x] WB2.6 [ChatGPT] (done, merged 2026-10-09; T45) Lore: a heritage line for every Warden and townsperson in areas 1-4 (data in the browser game,
   exported to Godot), recorded in the thread ledger.
 - [ ] WB2.7 [Claude] Bring T37's fourteen creatures into Godot (bodies, export) (WG9).
 
@@ -137,7 +137,7 @@ creatures as monsters.
 ### Realmbound (browser)
 **RB-M1: in the game window.**
 - [x] Part 1 (T38).
-- [ ] RB1.2 [ChatGPT] Part 2: pages become places (T41). (queued: Lane A16)
+- [x] RB1.2 [ChatGPT] Part 2: pages become places (T41). (merged 2026-10-09)
 - [ ] RB1.3 [ChatGPT] Part 3: the road between towns as a walkable stretch at key points (an inn on the road, a
   camp), keeping auto-combat where it already lives.
 - [ ] RB1.4 [ChatGPT] Phone pass for the new layout (L3 part 2).
@@ -146,7 +146,7 @@ creatures as monsters.
 - [ ] RB2.1 [ChatGPT] Battlegrounds plan in docs/proposals/ (R3; new system: Evan
 approves).
 - [ ] RB2.2 [ChatGPT] Second raid tier (R7), data and encounters.
-- [ ] RB2.3 [ChatGPT] The catalogue reaches Realmbound (T43). (queued: Lane A18)
+- [x] RB2.3 [ChatGPT] The catalogue reaches Realmbound (T43). (merged 2026-10-09)
 
 **RB-M3: a living world.**
 - [ ] RB3.1 [ChatGPT] Simulated adventurers in the zones (V5 part 1: questing, groups,
@@ -176,7 +176,7 @@ league history. **DC-M4:**
 **OW-M1: three lives (done through v0.3.0).**
 - [x] The Between, Asterhold with Lanthorn, Hearthmere, the Ashen Throne.
 **OW-M2: memories and a systemic world.**
-- [ ] OW2.1 [ChatGPT] Memories that matter across lives (T42). (queued: Lane A17)
+- [x] OW2.1 [ChatGPT] Memories that matter across lives (T42). (merged 2026-10-09)
 - [ ] OW2.2 [ChatGPT] Skills that grow through use (O1 in docs/plans/otherworld.md).
 - [ ] OW2.3 [ChatGPT] People
 with wants, grudges and debts that persist across a life, in every world.
@@ -190,7 +190,7 @@ rules; free local model first, as docs/otherworld-design.md says).
 **AR-M1: friends can play (done 2026-10-08).**
 - [x] Come Play, previews, trailer, Windows builds.
 **AR-M2: polish for everyone.**
-- [ ] AR2.1 [ChatGPT] Accessibility (T44, L10). (queued: Lane A19)
+- [x] AR2.1 [ChatGPT] Accessibility (T44, L10). (merged 2026-10-09)
 - [ ] AR2.2 [ChatGPT] The
 launcher shows the Godot previews as games (cards, covers, links).
 - [ ] AR2.3 [any] Game boxes (V3).

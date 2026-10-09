@@ -88,11 +88,11 @@ index.html or style.css until those phases are merged.
 | A13 | **T39** Otherworld: Hearthmere, the second world | done, merged 2026-10-08 (Otherworld v0.3.0, PR #63) | docs/ROADMAP.md T39 |
 | A14 | **T40** Wildbond areas 5-8: woven clues, signs and chatter (data; flows into the Godot version) | done, merged 2026-10-08 (Wildbond v1.8.0, PR #64) | docs/ROADMAP.md T40 |
 | A15 | **OW0c** Otherworld: the Ashen Throne, complete third life | done, merged 2026-10-08 (Otherworld v0.3.0, PR #65) | docs/otherworld-design.md: Kael, three gifts with costs, endings and cross-world memories; Evan authorized further development |
-| A16 | **T41** Realmbound in the game window, part 2: pages become places | open (2026-10-08) | docs/ROADMAP.md T41 |
-| A17 | **T42** Otherworld: memories that matter across lives, toward a systemic world | claimed: Codex, 2026-10-08, codex/otherworld-memories | docs/ROADMAP.md T42 |
-| A18 | **T43** The creature catalogue reaches Realmbound | open (2026-10-08) | docs/ROADMAP.md T43 |
-| A19 | **T44** Accessibility pass on the browser games (L10) | open (2026-10-08) | docs/ROADMAP.md T44 |
-| A20 | **T45** Early-road heritage dialogue (WB2.6) | claimed: Codex, 2026-10-08, codex/wildbond-early-heritages | Browser data and ledger; no Godot edits |
+| A16 | **T41** Realmbound in the game window, part 2: pages become places | done, merged 2026-10-09 (Realmbound v1.7.0) | docs/ROADMAP.md T41 |
+| A17 | **T42** Otherworld: memories that matter across lives, toward a systemic world | done, merged 2026-10-09 (Otherworld v0.4.0) | docs/ROADMAP.md T42 |
+| A18 | **T43** The creature catalogue reaches Realmbound | done, merged 2026-10-09 (Realmbound v1.7.0) | docs/ROADMAP.md T43 |
+| A19 | **T44** Accessibility pass on the browser games (L10) | done, merged 2026-10-09 | docs/ROADMAP.md T44 |
+| A20 | **T45** Early-road heritage dialogue (WB2.6) | done, merged 2026-10-09 (Wildbond v1.8.1) | Browser data and ledger; no Godot edits |
 | A8 | While you wait | always | Lore and dex text polish, more checks, bugs from GitHub issues |
 | — | Done | — | A2 L7a Wildbond balance, A3 L7b Realmbound balance, R9 heroic loot review (all merged 2026-10-07) |
 
