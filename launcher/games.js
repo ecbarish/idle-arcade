@@ -3,8 +3,8 @@
 (function(){'use strict';
 window.ArcadeGames=[
   {id:'wildbond-preview',title:'Wildbond',tcls:'t-wildbond',status:['New version · Early preview','s-proto'],href:'play/wildbond/',
-   blurb:'Walk into faded Larkhaven, choose a partner and bring colour back with your first bond. Explore all eight regions, from the coast and the bell-hung hills to the harbor at Farwatch, meet their Wardens, and care for creatures at the ranch.',
-   tags:['On foot','All eight regions','Ranch & nursery'],cover:'wildbond',preview:true,classic:'wildbond',image:'images/play/wb-barn.png',
+   blurb:'Walk into faded Larkhaven, choose a partner and bring colour back with your first bond. Explore all eight regions and take on the league: four courts and the Champion, meet their Wardens, and care for creatures at the ranch.',
+   tags:['On foot','Eight regions and the league','Ranch & nursery'],cover:'wildbond',preview:true,classic:'wildbond',image:'images/play/wb-barn.png',
    alt:'Wildbond preview: the barn, with creatures, a feeding trough and the nursery',
    controls:'Arrows or WASD to walk · Enter or E to talk · J for the field book · M for music.',
    load:'Best on a computer. The first load needs internet and may take a moment.'},
