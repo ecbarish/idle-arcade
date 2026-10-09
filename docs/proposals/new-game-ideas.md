@@ -1,10 +1,10 @@
 # New game ideas: pitched, researched and judged (Claude, 2026-10-09)
 
 Evan, 2026-10-09: "lets make a thread that thinks of new fun games and researches them and decides if theyre worth it
-and should be added to our development path." This page is that thread's output: a scorecard every idea goes through,
-the ideas judged so far with a verdict each, and how new ideas get in. **Nothing here is built or unparked.** Starting a
-new game is Evan's call (DEVELOPMENT-PATH "Ask Evan first"); the order of work belongs to the priorities thread and
-docs/DEVELOPMENT-PATH.md. This page only says which ideas have earned a place in that discussion.
+and should be added to our development path." This page is that thread's output: the pitch card for new games (used by
+docs/PRIORITIES.md, which holds the one ranking system), and the ideas judged so far with research and a verdict each. **Nothing here is built or unparked.** Starting a
+new game is Evan's call (DEVELOPMENT-PATH "Ask Evan first"); the order of work belongs to
+docs/PRIORITIES.md and docs/DEVELOPMENT-PATH.md. This page only says which ideas have earned a place in that discussion.
 
 ## The short version
 
@@ -20,7 +20,10 @@ docs/DEVELOPMENT-PATH.md. This page only says which ideas have earned a place in
 5. **No:** a farm sim, a survivors-style auto-shooter, puzzle or detective games, survival crafting, anything online
    or gacha. Reasons below.
 
-## The scorecard (every idea, every time)
+## The pitch card for new games
+
+This card is for whole new games only; features and improvements use the scorecard in
+[docs/PRIORITIES.md](../PRIORITIES.md) (section 2), and where a game lands in the build order is decided there.
 
 Each line scores 1 (weak), 2 (fair) or 3 (strong). 15 or more out of 18 earns a pitch to Evan; 12-14 waits; under 12
 is a no unless Evan loves it anyway (his taste outranks the sum).
@@ -35,7 +38,7 @@ is a no unless Evan loves it anyway (his taste outranks the sum).
 | 6 | **Does it suit short sessions?** | Fun in 10 minutes at work, and still deep over months ("bored at work or even at home") |
 
 Plus one test before the score: **could this be a feature of a game we already have?** If yes, it goes in as a
-feature unless being its own game makes it clearly better.
+feature unless being its own game makes it clearly better, and is then re-scored as a feature with PRIORITIES' card.
 
 ## The ideas
 
@@ -159,19 +162,13 @@ already have both halves: the Card Shop (A) does shopkeeping better, and Starfal
 - **Anything online or gacha:** online needs a server (V6 plans the free steps); gacha is a paywall in disguise and
   breaks "earned, never sold".
 
-## How new ideas get in (the standing process)
+## How new ideas get in
 
-1. **Anyone adds an idea** to the Inbox below: one line, who suggested it and why it might be fun.
-2. **The ideas thread (or any assistant with time) scores it** with the scorecard, with at least two comparable games
-   as evidence, and moves it into "The ideas" with a verdict.
-3. **15 or more:** a short pitch goes to Evan (and the priorities thread), with the smallest test that would prove it.
-   **Features** go to the owning game's milestone in DEVELOPMENT-PATH once the priorities thread places them.
-4. **A yes from Evan** turns it into a proposal in `docs/proposals/`, then a one-PR toy, then a plan. A toy that isn't
-   fun after 15 minutes is a valid, cheap "no".
-
-### Inbox (unscored ideas)
-
-- *(empty; add a line)*
+One system for the whole arcade: **[docs/PRIORITIES.md](../PRIORITIES.md)** section 3. New ideas go in one line in
+docs/ideas.md; new *games* are pitched with the card above (it is PRIORITIES' pitch card for new games); features and
+improvements are scored with PRIORITIES' own scorecard (section 2); the waiting list, focus slots and re-ranking live
+there too. This page keeps only the research and verdicts behind each pitch. A toy that isn't fun after 15 minutes is
+a valid, cheap "no".
 
 ## Sources
 
