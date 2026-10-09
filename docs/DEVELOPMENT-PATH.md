@@ -267,6 +267,9 @@ Judged ideas and the scorecard for new ones: docs/proposals/new-game-ideas.md (2
 - **Run every check** (`node tools/run-all-checks.cjs`) and fix or file anything red.
 - **A playtest pass:** play one game for its first 20 minutes as a newcomer, file what's confusing or broken as
   GitHub issues (or a short report in docs/playtests/).
+- **A game review** when a milestone closes: play it as a newcomer and add proposals with screenshots. The first one
+  (2026-10-09, docs/proposals/game-review-2026-10-09.md) proposes GR-1 to GR-12: creature looks, battle choices,
+  explorable areas, Starfall's own look, hearing from players; scored and placed in docs/PRIORITIES.md.
 - **Player-text sweep** of one game against docs/CREATIVE.md "Writing for players".
 - **Keep Come Play current** (playtest.html): versions, pictures, what's new.
 - **Research prompts** for Evan's Gemini reports (docs/research/gemini-prompts.md), then review the reports against
