@@ -39,6 +39,12 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Starfall writing handoff (2026-10-09, T52): three-beat arcs for Kaito, Hana and Sora and closing beats for Aki, Ren and Yuna. [Additive JSON and integration contract](docs/lore/starfall-member-stories.md); not playable until Claude wires it in.
+
+- Wildbond festival writing (2026-10-09, T51): four traditions, Maren and Pip conversations, activity invitations/completions and cosmetic keepsake names. [Integration contract](docs/lore/wildbond-festivals.md). Exported writing only; the calendar and activities remain Claude's Godot work.
+
+- Wildbond content handoff (2026-10-09, T50): four seasonal encounter tables per region, four existing visitors rare year-round, and 96 seasonal observations for route residents. [Schema and canon boundaries](docs/lore/wildbond-seasons.md). Export-only; Classic's encounters and conversations stay unchanged, with no release bump.
+
 - Godot Wildbond (2026-10-09): festival decorations in Larkhaven. Planting Day ties ribbons on the fences and sets out a seed table; the Long Light strings lanterns over the street; the Harvest Lanterns puts carved lanterns by every door and a supper table on the green; the Midwinter Hearth hangs garlands of coloured lights on every house and raises a big tree with a star and gifts. On the real calendar, the Midwinter Hearth falls on 20 to 31 December.
 - Godot Wildbond (2026-10-09): the four seasons. The world keeps its own calendar (a season is about two and a half hours of play): blossom and petals in spring, orange trees and fallen leaves in autumn, snow on the roofs and fields, frozen ponds and falling snow in winter. The date is in the field book; press C there to follow the real calendar (winter in December) or keep one season. Festivals come next. 254 checks pass.
 - Godot Wildbond (2026-10-09): Farwatch Reach, the eighth and last area before the league: a stone lookout with a lamp room, the harbor house with nets drying, a pier with shore lanterns, Rysa's open ledger and the sound of waves. All eight areas are now in the new Wildbond. 245 checks pass.

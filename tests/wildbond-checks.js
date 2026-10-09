@@ -1146,6 +1146,71 @@ function wildbondChecks() {
     check(area+'/'+who+': shared lines and all four plain-JSON origins retained',()=>entry.lines.length>0&&JSON.stringify(entry.byHeritage)===JSON.stringify(JSON.parse(JSON.stringify(entry.byHeritage)))&&Object.keys(entry.byHeritage).sort().join(',')==='coast,farm,highland,wander');
     for(const heritage of ['farm','coast','highland','wander'])check(who+'/'+heritage+': attributed, readable, original recognition',()=>{const lines=entry.byHeritage[heritage];return lines.length===1&&lines[0][0]===who&&CAST[who]&&lines[0][1].length>=50&&lines[0][1].length<=220&&!/[\n\r]/.test(lines[0][1]);});
   }
+  // WS3/T50: optional exported content must never remove baseline encounters or clues.
+  const seasons=['spring','summer','autumn','winter'];
+  for(const [area,biome] of Object.entries(BIOMES)){
+    const map=MAPS[area],original=biome.wild,ids=original.map(w=>w[0]),total=original.reduce((n,w)=>n+w[1],0);
+    check(area+': four plain-JSON seasonal tables',()=>map&&Object.keys(map.seasonal).join(',')===seasons.join(',')&&JSON.stringify(map.seasonal)===JSON.stringify(JSON.parse(JSON.stringify(map.seasonal))));
+    for(const season of seasons){
+      const table=map.seasonal[season].wild;
+      check(area+'/'+season+': same species in copied table, no guardian',()=>table!==original&&table.map(w=>w[0]).join(',')===ids.join(',')&&table.every((w,i)=>w!==original[i]&&!SPECIES[w[0]].unique));
+      check(area+'/'+season+': modest total and distinct ecology',()=>Math.abs(table.reduce((n,w)=>n+w[1],0)-total)<=total*.1&&JSON.stringify(table)!==JSON.stringify(original));
+      for(const [id,weight] of table)check(area+'/'+season+'/'+id+': positive safe relative weight',()=>SPECIES[id]&&Number.isInteger(weight)&&weight>0&&weight<=30&&Math.abs(weight-original.find(w=>w[0]===id)[1])<=3);
+    }
+  }
+  const visitors=Object.entries(SPECIES).filter(([,v])=>v.seasonal);
+  check('WS3: four existing favored visitors',()=>visitors.length===4);
+  for(const [id,spec] of visitors){
+    const v=spec.seasonal;
+    check(id+': favored season and plain export metadata',()=>seasons.includes(v.favoredSeason)&&v.inSeasonWeight===6&&v.outOfSeasonWeight===2&&!spec.unique&&JSON.stringify(v)===JSON.stringify(JSON.parse(JSON.stringify(v))));
+    for(const area of v.areas)for(const season of seasons)check(id+'/'+area+'/'+season+': available year-round without capture or badge conditions',()=>MAPS[area].seasonal[season].wild.find(w=>w[0]===id)[1]===(season===v.favoredSeason?6:2));
+  }
+  const seasonalPeople=Object.entries(MAPS).flatMap(([area,m])=>(m.npcs||[]).filter(n=>n.lines).map(n=>({area,n})));
+  check('WS3: all 24 ordinary map residents have seasonal observations',()=>seasonalPeople.length===24&&seasonalPeople.every(({n})=>n.bySeason));
+  for(const {area,n} of seasonalPeople){
+    check(area+'/'+n.who+': shared conversation retained with all four seasons',()=>n.lines.length>0&&Object.keys(n.bySeason).join(',')===seasons.join(',')&&JSON.stringify(n.bySeason)===JSON.stringify(JSON.parse(JSON.stringify(n.bySeason))));
+    for(const season of seasons)check(n.who+'/'+season+': readable attributed observation, no rule jargon or timed pressure',()=>{const lines=n.bySeason[season];return lines.length===1&&lines[0][0]===n.who&&CAST[n.who]&&lines[0][1].length>=45&&lines[0][1].length<=180&&/^[\x20-\x7e]+$/.test(lines[0][1])&&!/\b(XP|cooldown|gate|flag|stat|only today|must return)\b/i.test(lines[0][1]);});
+  }
+  for(const [area,who,badge] of [['stillreed','sivet','reed'],['hollowecho','orri','echo'],['sunthread','nesla','loom'],['farwatch','ceryn','horizon']])check(who+': seasonal observation cannot replace shared clue, heritage or small payoff',()=>{const n=MAPS[area].npcs.find(n=>n.who===who);return n.lines.length===3&&n.byBadge[badge].length===2&&Object.keys(n.byHeritage).length===4&&Object.values(n.bySeason).every(l=>l[0][0]===who);});
+  const festivalSeasons={planting:'spring',longlight:'summer',lanterns:'autumn',midwinter:'winter'};
+  const festivals=MAPS.larkhaven.festivals;
+  check('Larkhaven festivals use exactly the existing four calendar IDs',()=>JSON.stringify(Object.keys(festivals).sort())===JSON.stringify(Object.keys(festivalSeasons).sort()));
+  const keepsakeIds=new Set(), activityIds=new Set();
+  for(const [id,season] of Object.entries(festivalSeasons)){
+    const f=festivals[id];
+    check(id+' has its calendar season and a readable title',()=>f.season===season&&/^[A-Z]/.test(f.name)&&f.name.length<40);
+    check(id+' has a short local tradition',()=>typeof f.tradition==='string'&&f.tradition.length>80&&f.tradition.length<300);
+    check(id+' does not duplicate calendar dates or prices',()=>!Object.keys(f).some(k=>/date|day|price|cost|reward|stat/i.test(k)));
+    check(id+' keepsake has only descriptive cosmetic fields',()=>JSON.stringify(Object.keys(f.keepsake).sort())==='["description","id","name"]');
+    check(id+' keepsake ID is unique and safe',()=>/^[a-z][a-z_]+$/.test(f.keepsake.id)&&!keepsakeIds.has(f.keepsake.id));
+    keepsakeIds.add(f.keepsake.id);
+    check(id+' keepsake name and description are readable',()=>/^[A-Z]/.test(f.keepsake.name)&&f.keepsake.name.length<50&&f.keepsake.description.length>40&&f.keepsake.description.length<200);
+    check(id+' activity ID is unique and safe',()=>/^[a-z][a-z_]+$/.test(f.activity.id)&&!activityIds.has(f.activity.id));
+    activityIds.add(f.activity.id);
+    check(id+' activity has a short title',()=>/^[A-Z]/.test(f.activity.name)&&f.activity.name.length<40);
+    for(const phase of ['invite','complete']){
+      const lines=f.activity[phase];
+      check(id+' '+phase+' has a short shared dialogue scene',()=>Array.isArray(lines)&&lines.length===2);
+      for(const [i,line] of lines.entries()){
+        check(id+' '+phase+' '+i+' uses an existing local portrait speaker',()=>Array.isArray(line)&&line.length===2&&!!CAST[line[0]]&&MAPS.larkhaven.npcs.some(n=>n.who===line[0]));
+        check(id+' '+phase+' '+i+' is readable player-facing text',()=>typeof line[1]==='string'&&line[1].length>=40&&line[1].length<=200&&/^[\x20-\x7e]+$/.test(line[1])&&!/mood\s*[-+]|quest id|unlock flag|\bneedDun\b/i.test(line[1]));
+      }
+    }
+  }
+  check('Long Light celebrates participation, not only a race victory',()=>/taking part/.test(festivals.longlight.activity.complete.map(l=>l[1]).join(' ')));
+  check('Midwinter gift expects no returned gift',()=>/do not owe/.test(festivals.midwinter.activity.complete.map(l=>l[1]).join(' ')));
+  check('Planting flower remains after the celebration',()=>/flower stays/.test(festivals.planting.activity.complete.map(l=>l[1]).join(' ')));
+  for(const who of ['maren','pip']){
+    const n=MAPS.larkhaven.npcs.find(n=>n.who===who);
+    check(who+' festival observations preserve ordinary and seasonal dialogue',()=>!!n.lines&&n.lines.length>0&&Object.keys(n.bySeason).length===4);
+    check(who+' festival observations cover exactly the calendar IDs',()=>JSON.stringify(Object.keys(n.byFestival).sort())===JSON.stringify(Object.keys(festivalSeasons).sort()));
+    for(const id of Object.keys(festivalSeasons)){
+      const lines=n.byFestival[id];
+      check(who+' '+id+' uses its own portrait and short readable text',()=>lines.length===1&&lines[0].length===2&&lines[0][0]===who&&lines[0][1].length>=40&&lines[0][1].length<=200&&/^[\x20-\x7e]+$/.test(lines[0][1]));
+    }
+  }
+  check('Other residents retain their existing conversation shapes',()=>Object.values(MAPS).every(m=>(m.npcs||[]).every(n=>!n.byFestival||(m===MAPS.larkhaven&&['maren','pip'].includes(n.who)))));
+
   return checks;
 }
 

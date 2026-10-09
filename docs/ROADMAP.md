@@ -49,6 +49,33 @@ Branch: codex/wildbond-final-area-briefs, from latest main.
 - Gather existing canon only; mark recommendations as staging. No new clue, encounter, balance, engine/exporter, save or version changes. Preserve unresolved truths and all essential clues for every heritage.
 - Verify against read-only live browser inventory and run all eight test pages. Note stale historical prose rather than silently retuning; README and one Session log line, message board handoff.
 
+### T50: Wildbond seasonal data (WS3)
+- [x] Built by Codex, 2026-10-09; PR #77. 526 new checks, all eight pages and actual export pass; Classic unchanged.
+Why: Claude's calendar and seasonal looks need modest ecological changes and people noticing the season, without calendar-locked progress.
+Read first: docs/COMMS.md, seasons-and-holidays proposal, wildbond thread ledger, canon and CREATIVE.
+Branch: codex/wildbond-seasonal-data, from latest main.
+- Add plain-JSON seasonal fields in browser species/maps data: four keyed seasonal wild tables per regional map, modest relative-weight changes, a few existing seasonal visitors rare out of season. No removed species, guardians or progress requirements.
+- One seasonal line per townsperson for each season, with shared/base/badge/heritage lines retained; reserve festival writing for WS6. Keep essential clues shared and record any observations in the ledger.
+- Document export schema and integration rules, check faded-season presentation against decided canon without revealing an undecided cause. Classic behavior, encounters, levels, rewards, saves and versions unchanged; no Godot or exporter edit.
+- Files: games/wildbond/js/00-data.js, js/11-maps.js, tests/wildbond-checks.js, docs/lore/wildbond-seasons.md and thread ledger, normal claim/README/Session/message-board notes. Actual 39-table export and all eight browser suites pass.
+
+### T51: Wildbond festival writing (WS6)
+- [x] Ready in PR #78: writing/export handoff only; activities and cosmetic delivery remain WS5 integration.
+Why: Claude's four Larkhaven decorations need traditions, voices and keepsake names, using his current calendar IDs.
+Read first: seasons-and-holidays proposal, COMMS, T50 schema, thread ledger, CREATIVE and current Larkhaven data.
+Branch: codex/wildbond-festival-writing, stacked after T50/#77.
+- Four short traditions in docs/lore/wildbond-festivals.md; plain-JSON MAPS.larkhaven.festivals keyed planting/longlight/lanterns/midwinter. Include names, season, proposed-activity invite/completion text and cosmetic keepsake names/descriptions. No dates duplicated from the calendar.
+- Larkhaven's Maren and Pip each get byFestival lines in the bySeason shape; preserve their base, badge, heritage and seasonal lines. No required clue or revelation exclusive to a date; ledger notes all added lore.
+- Data/writing only in 11-maps.js and checks/lore/handoff docs; no engine, Godot, exporter, gameplay/save/version changes. Actual export, base preservation, readable scene previews and all eight suites pass.
+
+### T52: Starfall member writing handoff (SF2.4a)
+- [x] Writing ready in PR #79: twelve additive beats, existing six preserved, 640 content/path checks and Godot text measurements pass; integration remains Claude's.
+Why: Claude requested three-beat arcs for Kaito, Hana and Sora and a third beat for Aki, Ren and Yuna. Evan's no-Godot-edit rule remains authoritative; supply additive data for Claude to merge into his stories file.
+Branch: codex/starfall-member-writing, stacked after #78 for shared claim/handoff docs.
+- Create docs/lore/starfall-member-stories.json containing only the twelve new beats, with append semantics documented in docs/lore/starfall-member-stories.md. Existing six beats must remain byte-for-byte untouched in Godot.
+- Use the existing after_jobs/needs/lines/options/morale/coins/trait shape; only steady, bold, mapper and healer traits. No new effect handler, save key, class, building or asset. Short original voices and legible choices with plainly shown, bounded consequences; no positive coin windfall or permanent punishment.
+- Validate against actual member/building IDs, increasing thresholds, all choices, economy and recoverable morale. Read-only inspect the Godot dialogue/choice surfaces; record previews without claiming integration. All eight browser pages stay pass. Normal claim/README/Session/COMMS only.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a
