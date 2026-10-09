@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Wildbond (2026-10-09, WD2 part 1): four new body shapes, so whole families stop sharing one outline. Tidewyrm, Deeptide and Rillwhisk are serpents that ripple along the ground; Bogbough, Cairnclasp and Siltjaw are turtles with plated shells; Veilmote, Fogsail and Dawntassel are moths drifting on slow wings; Orchardroot, Flintroot and Meadowmantle are tree-folk on root feet. Picture: docs/screenshots/wildbond-wd2/new-shapes.png.
 - Realmbound (2026-10-09, RB1.5): opened conversations wait for their reader; Focus fallback waits for the first victory, then gives the existing fifteen seconds. QuestHelper and background hunting respect dialogue. The sun and clouds sit below the title and health frames.
 
 - Godot Starfall (2026-10-09): the apothecary's apprentice. Brew four batches yourself and Fen walks in, wanting to learn; for six coins a day Fen keeps the pot going whenever herbs come home. 130 checks pass.
