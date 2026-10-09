@@ -60,6 +60,7 @@ static func run(main: Node, check: Callable) -> void:
 	E.after_hit(v, R.DATA.MOVES.rootCharge)
 	check.call(v.buff.guard == 0, "WD3: boar charge breaks guard")
 	v.buff.guard = 3.0
+	check.call(R.damage(u, v, R.DATA.MOVES.skyDive, 1.0, 1.0, 1.0).d > ordinary, "WD3: bird dive bypasses guard")
 	E.after_hit(v, R.DATA.MOVES.skyDive)
 	check.call(v.buff.guard == 3.0, "WD3: bird dive leaves guard for partners to break")
 	check.call(not R.keep_moves(a, ["howl"]) and not R.keep_moves(a, ["missing"]), "WD3: practice rejects harmless or unknown loadouts")
@@ -70,7 +71,34 @@ static func run(main: Node, check: Callable) -> void:
 		check.call(main.battle.ORDERS.has(main.TEACHERS[badge].order), "WD3: usable order for " + badge)
 	main.lessons.open([a])
 	check.call(main.lessons.visible and main.lessons.team[0] == a, "WD3: practice opens without a new creature copy")
+	main.lessons.pick_move(0)
+	check.call(main.lessons.slot == 0 and main.lessons.replace_slot(0) and R.moves_of(a)[0] == "bite", "WD3: practice replaces a brought move without forgetting it")
+	main.lessons.row = 1
+	var key := InputEventKey.new()
+	key.physical_keycode = KEY_E
+	key.keycode = KEY_E
+	key.pressed = true
+	main.lessons._input(key)
+	check.call(main.lessons.selected == "emberSnap", "WD3: E chooses a move before the overlapping next-page action")
 	main.lessons.visible = false
+	main.battle.open("trainer", [a], [b], "Warden Nerys")
+	for id in ["shelter", "tailwind", "rain", "snare", "expose", "mend", "renew"]:
+		main.battle.orders = 3.0
+		var before_hp: int = a.hp
+		if id == "mend":
+			a.hp = 1
+			before_hp = 1
+		if id == "renew": E.apply(main.battle.allies[0], "scorched", 3.0)
+		check.call(main.battle.use_order(id), "WD3: can use " + id)
+		match id:
+			"shelter": check.call(main.battle.allies[0].buff.guard > 0, "WD3: Shelter braces allies")
+			"tailwind": check.call(main.battle.allies[0].buff.haste > 0, "WD3: Tailwind speeds allies")
+			"rain": check.call(E.active(main.battle.foes[0], "soaked"), "WD3: Rain Call soaks a foe")
+			"snare": check.call(E.active(main.battle.foes[0], "rooted"), "WD3: Hold the Line roots a foe")
+			"expose": check.call(E.active(main.battle.foes[0], "marked"), "WD3: Spot the Gap exposes a foe")
+			"mend": check.call(a.hp > before_hp, "WD3: Shared Care restores health")
+			"renew": check.call(not E.active(main.battle.allies[0], "scorched"), "WD3: Fresh Start clears burn")
+	main.battle.visible = false
 
 	# Run the actual ATB controller, including cooldowns, healing, setup and telegraphs.
 	var completed := 0

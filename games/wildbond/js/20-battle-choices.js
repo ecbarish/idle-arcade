@@ -76,13 +76,12 @@ const BattleEffects={
 };
 
 // Classic uses the same remembered moves. Practice is available on ranch creature cards.
-const beforePracticeCard = cardHTML;
-cardHTML = function(c, i, inTeam) {
-  const html = beforePracticeCard(c, i, inTeam);
-  if (S.tab !== 'ranch') return html;
+function practiceHTML(c) {
   const kept=movesOf(c),known=learnedMoves(c);
-  return html + `<fieldset class="cmoves" data-practice="${c.uid}"><legend>Maren's workbench · bring up to four moves</legend>${[0,1,2,3].map(slot=>`<label>Place ${slot+1} <select data-wdmove="${slot}" ${B||challengeLocked()?'disabled':''}><option value="">Rest this place</option>${known.map(m=>`<option value="${m}" ${kept[slot]===m?'selected':''}>${MOVES[m].name}</option>`).join('')}</select></label>`).join('')}<p class="meta">Keep one attack. Every learned move stays remembered.</p></fieldset>`;
-};
+  return `<fieldset class="cmoves practice" data-practice="${c.uid}"><legend>${c.name} · bring up to four moves</legend>${[0,1,2,3].map(slot=>`<label class="psel" style="margin:6px 0">Place ${slot+1} <select data-wdmove="${slot}" ${B||challengeLocked()?'disabled':''}><option value="">Rest this place</option>${known.map(m=>`<option value="${m}" ${kept[slot]===m?'selected':''}>${MOVES[m].name}</option>`).join('')}</select></label>`).join('')}<p class="meta">Keep one attack. Every learned move stays remembered.</p></fieldset>`;
+}
+const beforePracticeRanch=TABS.ranch.build;
+TABS.ranch.build=function(){return beforePracticeRanch()+(challengeLocked()?'':'<h4>Maren’s workbench · practice</h4>'+everyone().map(practiceHTML).join(''));};
 document.addEventListener('change', e => {
   const field=e.target.closest('[data-practice]');
   if(!field || !e.target.hasAttribute('data-wdmove')) return;

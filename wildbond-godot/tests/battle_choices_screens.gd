@@ -22,6 +22,7 @@ func capture() -> void:
 	main.fade_in = 1.0
 	main.fade_rect.color.a = 0.0
 	main.title.visible = false
+	main.satchel.visible = false
 	main.howto.visible = false
 	root.borderless = true
 	root.min_size = Vector2i(1, 1)
@@ -48,6 +49,14 @@ func capture() -> void:
 		await process_frame
 		await RenderingServer.frame_post_draw
 		save_window("battle", size)
+		main.battle.taught = main.TEACHERS.values().map(func(teacher): return teacher.order)
+		main.battle.state = "orders"
+		main.battle.order_i = 8
+		main.battle.queue_redraw()
+		await process_frame
+		await process_frame
+		await RenderingServer.frame_post_draw
+		save_window("orders", size)
 	main.queue_free()
 	await process_frame
 	quit()

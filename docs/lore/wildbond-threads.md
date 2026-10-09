@@ -303,4 +303,4 @@ wildbond-champion-returns.md; complete mystery payoff remains pending, not settl
 
 ## WD3 battle lessons (Codex, 2026-10-09)
 
-The eight Wardens teach practical orders after their existing badges. New lines describe bracing, soaking, roots, openings, speed and shared care. They add no mystery clue, history or account of the fading. All shared story lines remain intact.
+The eight Wardens teach practical orders after their existing badges. New lines describe bracing, soaking, roots, openings, speed and shared care. They add no mystery clue, history or account of the fading. All shared story lines remain intact. Maren's workbench reminder describes remembered moves and resting a move without forgetting it; it adds no historical clue.

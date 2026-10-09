@@ -3367,6 +3367,7 @@ func _open_bench() -> void:
 		story_done["bench"] = true
 		say("maren", "My old workbench! I make harnesses and charms for the ranch creatures. Shells from the coast, glass from Emberfall, a bell or two.")
 		say("maren", "Bring whoever walks with you, and they can try things on. Each piece does one thing well. I'll make what you need for a few coins.")
+		say("maren", "Or choose Practice to remember a different move. Bring up to four, keep an attack, and let the others rest here. You never forget them.")
 		then_do = _open_bench
 		return
 	var ids := R.GEAR.keys()
