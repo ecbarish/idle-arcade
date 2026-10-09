@@ -27,6 +27,7 @@ jobs:
           timeout 120 "$GODOT" --headless --path wildbond-godot --editor --import --quit
           timeout 180 "$GODOT" --headless --path wildbond-godot --script res://tests/run_tests.gd | tee wd3-godot.log
           timeout 120 xvfb-run -a -s "-screen 0 3600x1600x24" "$GODOT" --path wildbond-godot --audio-driver Dummy --rendering-method gl_compatibility --script res://tests/battle_choices_screens.gd
+          timeout 120 xvfb-run -a -s "-screen 0 1600x1000x24" "$GODOT" --path wildbond-godot --audio-driver Dummy --rendering-method gl_compatibility --script res://tests/wd4a_screens.gd
       - name: Capture the original workbench and battle
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '26bd1a6f5a3d8c3f7d4160c940b4de0641dd2dcf' }}
@@ -44,4 +45,5 @@ jobs:
           name: wd3-screens
           path: |
             wildbond-godot/frames/wd3/*.png
+            wildbond-godot/frames/wd4a/*.png
             wd3-godot.log

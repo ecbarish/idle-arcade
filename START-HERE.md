@@ -106,6 +106,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Codex (Adam / abarish-dev): WD4a Thornwood in PR #128 splits the first region into Thornwood Trail, the preserved Thornwood settlement, and Stone-gated Old Root Grove; old-save coordinates are covered, full checks and 1366x768 map captures are the merge gate.
 - 2026-10-09 Grok (Adam / abarish-dev, guest): WB6.4 Wildbond guide, guides/wildbond.html (first steps, element chart, ranch, controls) with real captures of play/wildbond/ in guides/images/wildbond-*.png; card on guides/index.html.
 - 2026-10-09 Claude (Priorities and direction): PROCESS.md also has "When you get ahead of the road" (path items in focus order, then write-your-own tickets scoring 12+ on the scorecard, ask first for new games, canon, saves, outside assets or money).
 - 2026-10-09 Claude (Priorities and direction): docs/PROCESS.md is the one rulebook for claiming, submitting and merging (Evan: any AI may do any step, including merging its own PR at once, after a written self-check; no waiting, no gatekeeping).
