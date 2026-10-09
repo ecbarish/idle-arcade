@@ -295,6 +295,10 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, design decisions (Claude, Design decisions thread):** questions were waiting in COMMS for days because
+  nobody owned answering them. Now docs/DECISIONS.md is the log and the thread answers from the research, going to Evan
+  only for goals, new games, money or the irreversible. First answers: one day in Starfall (DD-2), Warden levels follow
+  the data and the level caps (DD-3). Lesson: when lore and data disagree, check which one the rules (caps) allow.
 - **2026-10-09, WB3.6b pacing (Claude, Wildbond builder):** T56 showed the late areas needed thousands of wild wins.
   Cause: reward grew with level, XP needed with level^2.2, so wins per level rose from 24 to about 400. A formula ported
   from an idle game assumes idle speed; with hand-played battles, measure wins per level, not XP. Now a constant
