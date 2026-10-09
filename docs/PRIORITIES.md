@@ -18,7 +18,7 @@ every game moves a little and none of them gets finished. Ideas arrive faster th
 
 | Slot | Share of build effort | What it means | Now (2026-10-09) |
 |---|---|---|---|
-| **Flagship** | about 60% | The game we are finishing. Its next milestone comes before anything else in Claude's lane, and ChatGPT's data and writing for it comes first in Lane A. | **Wildbond (Godot)**, toward version 2.0 |
+| **Flagship** (confirmed by Evan 2026-10-09) | about 60% | The game we are finishing. Its next milestone comes before anything else in Claude's lane, and ChatGPT's data and writing for it comes first in Lane A. | **Wildbond (Godot)**, toward version 2.0 |
 | **Second** | about 25% | Grows steadily, one milestone at a time. | **Starfall village (Godot)** |
 | **ChatGPT's own** | ChatGPT's time after flagship support | One browser game ChatGPT moves forward. | **Realmbound** (the game window, phone pass, the second raid tier) |
 | **Keep alive** | about 15% | Bugs from friends, small fixes, playtests. No new systems. | Diamond Career, Otherworld, browser Wildbond (Classic), the arcade and Come Play |
@@ -114,3 +114,4 @@ keep-alive writing for Diamond Career and Otherworld.
   waiting list; ranch races and contests first in WB-M5, Saltmarsh fishing added (WB5.7); Starfall expeditions as
   grid delves. Primordial and the walk-in arcade keep their places; farm sim, survivors-style, puzzle, survival
   crafting and online/gacha ideas declined there.
+- 2026-10-09 Evan confirmed: Wildbond first (flagship), as proposed.
