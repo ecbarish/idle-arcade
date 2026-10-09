@@ -92,6 +92,13 @@ Branch: codex/wildbond-champion-returns, stacked after #80 for shared ledger/han
 - Gate staging with clear standing positions in docs/lore/wildbond-champion-returns.md, using T53's payoff map. No new culprit, pair/watcher identity, leader motive or claimed depth restoration. Record every echo in the ledger.
 - Add content checks in tests/wildbond-checks.js; verify source preservation, actual 39-table export and real portrait previews at four sizes. All eight pages pass. No Godot/engine/exporter/save/version changes; normal claim/README/Session/COMMS only.
 
+### T55: Wildbond final-truth clue audit (WB4.4b part 1)
+Why: Evan chose the account in the ledger, and Claude asks for a short reviewable audit before reveal dialogue.
+Branch: codex/wildbond-final-truth-audit, from latest main.
+- Write docs/lore/wildbond-final-truth-audit.md: inspect browser/exported and Godot-specific placed text, cover every ledger clue group, distinguish factual contradictions from attributed misunderstandings, list fixes or evidence gaps without rewriting player text.
+- Propose exactly three shared late observations with location, evidence, competing explanations narrowed, accessibility for all heritages, and fair sequence after wild-bond discovery and before reveal. Observation proposals only, not dialogue, placed clues or new canon.
+- Preserve the decided account and future hooks; identify any residual ambiguity explicitly rather than secretly deciding identity/fate. No runtime/Godot/exporter/save/version changes. All eight pages pass; source addresses verified, normal claim/README/Session/COMMS notes. Claude reviews this before part 2.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a

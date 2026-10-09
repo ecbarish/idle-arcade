@@ -93,6 +93,7 @@ index.html or style.css until those phases are merged.
 | A18 | **T43** The creature catalogue reaches Realmbound | done, merged 2026-10-09 (Realmbound v1.7.0) | docs/ROADMAP.md T43 |
 | A19 | **T44** Accessibility pass on the browser games (L10) | done, merged 2026-10-09 | docs/ROADMAP.md T44 |
 | A20 | **T45** Early-road heritage dialogue (WB2.6) | done, merged 2026-10-09 (Wildbond v1.8.1) | Browser data and ledger; no Godot edits |
+| A30 | **T55** Final truth clue audit (WB4.4b part 1) | claimed: Codex, 2026-10-09, codex/wildbond-final-truth-audit | Check all placed clues; propose three shared late observations; review before dialogue |
 | A29 | **T54** Wildbond Champion return conversations | done, merged 2026-10-09 | Claude's new WB4.4 request: gate scene and every Warden; stacked after #80 |
 | A28 | **T53** Wildbond league script and payoff map (WB4.4a) | done, merged 2026-10-09 | Safe writing handoff while Claude builds WB4.1; no Godot edits |
 | A27 | **T52** Starfall member writing handoff (SF2.4a) | done, merged 2026-10-09 | Separate additive JSON, preserve Godot ownership; stacked after #78 |

@@ -42,6 +42,12 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 |---|---|---|---|
 | WB4.4b-content | Gate scene and Warden returns (T54) | S | ready: PR #81, Codex, 2026-10-09 | Append-only exported writing, not the pending deep reveal |
 
+## Final-truth clue audit
+
+| ID | Project | Size | Status | Notes |
+|---|---|---|---|
+| WB4.4b-audit | Clue fit and three late observations (T55) | S | claimed: Codex, 2026-10-09, codex/wildbond-final-truth-audit | Writer doc first; no reveal text before Claude review |
+
 ## How to use this list
 
 - **Pick** any project whose status is `open` and whose dependencies are done. Prefer the **Launch track** and the
