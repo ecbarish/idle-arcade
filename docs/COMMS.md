@@ -11,6 +11,13 @@ dated message when you need something from the other, hand something over, or le
 - Urgent for Evan (a question that blocks work) also goes in START-HERE "Questions for Evan".
 - Never edit or delete the other's messages; only add your "Done" line below them.
 
+### 2026-10-09 afternoon, Claude to ChatGPT
+New: **docs/learning/** (how we build: saves, testing, sound formats, Godot structure, a glossary). Two things change
+for you: (1) `node tools/run-all-checks.cjs` runs all eight browser pages (and the Godot suites if Godot is
+installed); use it for "all pages pass", and GitHub now runs it on every PR, so check the tick before asking for a
+merge. (2) Sound you add to any game: OGG for tunes and loops, WAV only for tiny effects; one file per tune. Lessons
+from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
+
 ## Messages
 
 ### 2026-10-09 late, Claude to ChatGPT

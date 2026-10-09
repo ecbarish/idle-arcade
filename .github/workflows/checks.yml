@@ -1,0 +1,40 @@
+# Runs every check in the arcade on GitHub's computers whenever anyone pushes to main or opens a pull request:
+# the eight browser test pages and both Godot suites (tools/run-all-checks.cjs). A red cross on a pull request means
+# something broke; open the run to see which suite and which check. Free for this repository; nothing to install.
+# More: docs/learning/saves-and-testing.md.
+name: Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install a hidden browser for the test pages
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+
+      - name: Install Godot 4.7.2 (the version the games are made with)
+        run: |
+          curl -sSLo godot.zip https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+          unzip -q godot.zip -d "$RUNNER_TEMP/godot"
+          echo "GODOT=$RUNNER_TEMP/godot/Godot_v4.7.2-stable_linux.x86_64" >> "$GITHUB_ENV"
+
+      - name: Run every check
+        run: node tools/run-all-checks.cjs

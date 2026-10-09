@@ -530,7 +530,15 @@ func _run() -> void:
 	check(main.finished("healer") == "west" and main.finished("yard") == "east" and main.ama.where == "town" and main.rank >= 1, "with its buildings, Ama, and its rank")
 	check(main.finished("smithy") == "north" and main.smith_hired and main.garrick.where == "town" and main.stock == 2 and main.herbs > 0, "and its smithy, Garrick, the apothecary's shelf and herbs")
 	check(main.good_days == 4 and main.visitors.size() == 2, "and how the town has been doing, and who has come")
-	DirAccess.remove_absolute(ProjectSettings.globalize_path(main.save_path))
+	# a save cut off half-way (a crash, a closed tab) never costs the town: the backup is read instead
+	main.save_game()
+	check(FileAccess.file_exists(main.save_path + ".bak") and not FileAccess.file_exists(main.save_path + ".tmp"), "the last good save is kept as a backup")
+	var broken := FileAccess.open(main.save_path, FileAccess.WRITE)
+	broken.store_string('{"v": 1, "coins": 7')
+	broken.close()
+	check(int(main.SafeSave.read(main.save_path).get("coins", 0)) == 77, "a broken save falls back to the backup")
+	main.SafeSave.remove(main.save_path)
+	check(not main.SafeSave.exists(main.save_path), "and a cleared save leaves nothing behind")
 	main.no_save = true
 	print("Starfall Godot checks: %d passed, %d failed" % [passed, failed])
 	quit(1 if failed > 0 else 0)
