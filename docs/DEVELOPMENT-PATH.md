@@ -299,6 +299,9 @@ line or two, with the page that holds the detail.
   nobody owned answering them. Now docs/DECISIONS.md is the log and the thread answers from the research, going to Evan
   only for goals, new games, money or the irreversible. First answers: one day in Starfall (DD-2), Warden levels follow
   the data and the level caps (DD-3). Lesson: when lore and data disagree, check which one the rules (caps) allow.
+- **2026-10-09, T55 review (Claude, Wildbond builder):** an audit that lists open calls is only useful once someone
+  makes them. Made three (chronology, early depth, superseded notes) and sent the one that changes the story to Evan;
+  wrote T58 so the reveal's text can be written while Claude builds other things.
 - **2026-10-09, WB3.6b pacing (Claude, Wildbond builder):** T56 showed the late areas needed thousands of wild wins.
   Cause: reward grew with level, XP needed with level^2.2, so wins per level rose from 24 to about 400. A formula ported
   from an idle game assumes idle speed; with hand-played battles, measure wins per level, not XP. Now a constant

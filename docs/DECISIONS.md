@@ -59,5 +59,6 @@ file, a few lines, say so in the PR) or a copy in `shared/`.
 Settled by the Wildbond builder thread in PR #95 (docs/lore/wildbond-threads.md, "Claude's review of T55"), recorded
 here so the log is complete: the three late observations are accepted; Rysa's witness and Ceryn's survey are both true
 (the fading began long before; she saw the last local pallor); Classic's early depth scenes are not ported, depth
-returns once, late. **The watcher and the turned friend** went to Evan as a decision card, because it names a
-character in canon he chose; default meanwhile: the same creature. This log does not reopen it.
+returns once, late. **The watcher and the turned friend** went to Evan because it names a character in canon he
+chose; **Evan decided (2026-10-09): the same creature.** The ritual bound and broke the watcher, the entity hid behind
+it, and the old pair fought their friend; freed, it slept to heal in the warm pocket (ledger, PR #95).
