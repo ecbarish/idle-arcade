@@ -468,6 +468,54 @@ func _run() -> void:
 	main._judge_day()
 	check(main.visitors.size() == 2 and main.heroes.size() == people_before + 1, "a fourth good day brings the second traveller, and only once")
 	main.today = { "done": 0, "failed": 0, "meals": 0, "earned": 0 }
+	# ---- the tavern (SF2.3): evening drinks, a pour by hand, Tamsin, a place that shuts, placement
+	var keep_built2: Dictionary = main.built.duplicate(true)
+	main.built["south"] = { "what": "tavern", "left": 0.0 }
+	check(main.plan_note("tavern", "west").begins_with(" Here, near the inn") and main.plan_note("tavern", "east").begins_with(" Here, away"), "Hob says what a spot means: near the inn or away from it")
+	main.day_t = main.DAY_SECONDS * 0.7
+	var drinker: Variant = hero("Aki")
+	drinker.where = "town"
+	drinker.a.state = "town"
+	drinker.a.purse = 40
+	drinker.a.drank = 0
+	check(main.evening() and main.wants_drink(drinker), "in the evening, an adventurer with savings wants a drink")
+	drinker.a.state = "to_tavern"
+	drinker.tile = main._step_of("south")
+	drinker.pos = Vector2(drinker.tile) * main.TILE
+	drinker.path.clear()
+	var tav_coins: int = main.coins
+	drinker.a.morale = 5
+	main._use_tavern()
+	check(not main.pour.is_empty(), "at the tap with someone waiting, you start a pour")
+	main.pour_press()
+	main.pour.fill = 0.85
+	main.pour_press()
+	check(main.pour.is_empty() and main.coins == tav_coins + main.DRINK + 2 and int(drinker.a.morale) == 7 and int(drinker.a.purse) == 35, "a good pour: five coins from their savings, a tip, and better spirits")
+	check(not main.wants_drink(drinker), "one drink an evening")
+	main.pours = main.POUR_AFTER - 1
+	drinker.a.drank = 0
+	drinker.a.state = "to_tavern"
+	main._use_tavern()
+	main.pour_press()
+	main.pour.fill = 0.5
+	main.pour_press()
+	check(main.tamsin.where == "town", "after enough pours by hand, Tamsin walks in and asks for the tap")
+	main.talk_tamsin()
+	talk_through()
+	check(main.tamsin_hired, "and takes it on")
+	main.today = { "done": 0, "failed": 0, "meals": 0, "earned": 0, "unserved": 1 }
+	main.tamsin_hired = false
+	main.tavern_quiet = 1
+	var said2: String = main._tavern_evening()
+	check(main.tavern_shut and "closed its shutters" in said2, "two evenings with nobody served: the tavern shuts")
+	check(not main.wants_drink(drinker), "and nobody goes in")
+	main._use_tavern()
+	talk_through()
+	check(not main.tavern_shut, "you open it again yourself")
+	main.built = keep_built2
+	main.tamsin.where = "gone"
+	main.today = { "done": 0, "failed": 0, "meals": 0, "earned": 0 }
+	main.day_t = 0.0
 	# ---- saving the town and loading it back (a test file, never the real one)
 	main.no_save = false
 	main.save_path = "user://test_town.json"

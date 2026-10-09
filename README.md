@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Godot Starfall (2026-10-09): the Tavern. Build it on a plot and adventurers with savings drop in each evening; you pour, and a well-judged pour earns a tip and lifts their spirits. Pour enough and Tamsin asks to run the tap. Leave it unserved two evenings and it shuts its shutters until you open it again. Where you build matters a little: near the inn the room is livelier, and a smithy beside the training yard makes practice count double. 116 checks pass.
 - Godot Wildbond (2026-10-09): the homecoming. After you beat the Champion, Maren and Isolde are waiting at the league gate with Wren, Avenne walks down to join them, and everyone quiets for water and rest. Every Warden now welcomes you back as Champion. Written by ChatGPT. 273 checks pass.
 - Wildbond content (2026-10-09, T54): exported post-Champion gate scene and eight Warden return conversations. [Staging/dispatch contract](docs/lore/wildbond-champion-returns.md). New fields only; Godot integration remains with Claude.
 

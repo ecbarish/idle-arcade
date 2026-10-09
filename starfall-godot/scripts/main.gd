@@ -58,6 +58,8 @@ const BUILDINGS := {
 		"text": "Posts and straw dummies. Adventurers with nothing to do practise here and slowly grow stronger." },
 	"smithy": { "name": "The Smithy", "cost": 140, "time": 22.0,
 		"text": "A forge and an anvil. Adventurers bring their savings for better gear, and you work the hammer." },
+	"tavern": { "name": "The Tavern", "cost": 130, "time": 20.0,
+		"text": "A taproom for the evenings. Adventurers spend a little of their savings on a drink and go to bed in better spirits. You pour." },
 	"apothecary": { "name": "The Apothecary", "cost": 110, "time": 18.0,
 		"text": "Herbs from the jobs become tonics. A tonic before a hard job means coming home less hurt. You set the price." },
 }
@@ -172,6 +174,12 @@ var stock := 0                              # tonics on the shelf
 var price_i := 1                            # Cheap, Fair or Dear
 var shelf_open := false
 var brewing := 0.0                          # seconds of stirring left at the pot
+var tamsin := Mover.new("tamsin", Vector2i(-5, -5))   # a barkeep who wants the tavern, once you've shown it's worth running
+var tamsin_hired := false
+var pours := 0                              # drinks you've poured by hand, all time
+var pour := {}                              # while you're at the tap: { fill: 0..1, on: pouring }
+var tavern_shut := false                    # left unserved two evenings running, the tavern closes until you open it
+var tavern_quiet := 0                       # evenings in a row nobody was served
 var good_days := 0                          # good days in a row (SF2.2): bunting, a busier board, word travels
 var bad_days := 0                           # hard days in a row: a quieter board
 var visitors: Array = []                    # the travelling adventurers who have come because of the town's name
@@ -188,6 +196,7 @@ var board_view: Control
 const LOOKS := {
 	"me": { "skin": "e8b48a", "hair": "3a2a22", "shirt": "2f5e78", "legs": "3a3040", "style": "short" },
 	"bryn": { "skin": "f1c9a0", "hair": "b8642e", "shirt": "e8e0d0", "apron": "7a5236", "legs": "5a4636", "style": "ponytail", "body": "narrow" },
+	"tamsin": { "skin": "c8946a", "hair": "2b2b3a", "shirt": "8a3a3a", "apron": "e8e0d0", "legs": "3a3040", "style": "short" },
 }
 
 func _ready() -> void:
@@ -196,6 +205,7 @@ func _ready() -> void:
 	ama.where = "gone"
 	ama.look = { "skin": "c88a64", "hair": "f2f0ec", "shirt": "5d9a3e", "apron": "f4f0e8", "legs": "3e5a34", "style": "bun", "body": "narrow" }
 	garrick.where = "gone"
+	tamsin.where = "gone"
 	garrick.look = { "skin": "b87a54", "hair": "3a2a22", "shirt": "8a3a2a", "apron": "4a3a30", "legs": "3a3040", "style": "short" }
 	if "--no-save" in OS.get_cmdline_user_args():
 		no_save = true                           # recordings and tries never touch the real town (-- --no-save)
@@ -213,6 +223,10 @@ func _ready() -> void:
 		built = { "west": { "what": "healer", "left": 0.0 }, "east": { "what": "yard", "left": 8.0 } }
 		_place_ama()
 		lines.clear()
+	if "--tavern" in OS.get_cmdline_user_args():      # the tavern standing by the inn, in the evening (-- --no-save --built --tavern)
+		built["north"] = { "what": "tavern", "left": 0.0 }
+		rank = maxi(rank, 1)
+		day_t = DAY_SECONDS * 0.7
 	if "--goodrun" in OS.get_cmdline_user_args():     # a town on a good run: bunting over the street (-- --no-save --built --goodrun)
 		good_days = 2
 	if "--story" in OS.get_cmdline_user_args():       # Ren wants a word, and you're mid-conversation: -- --no-save --story
@@ -298,7 +312,7 @@ func walkable(p: Vector2i, who: Mover = null) -> bool:
 	return true
 
 func people() -> Array[Mover]:
-	var out: Array[Mover] = [me, bryn, ama, garrick]
+	var out: Array[Mover] = [me, bryn, ama, garrick, tamsin]
 	out.append_array(heroes)
 	return out
 
@@ -349,6 +363,7 @@ func _process(dt: float) -> void:
 	_garrick(dt)
 	_counter(dt)
 	_forge_tick(dt)
+	_pour_tick(dt)
 	_brew(dt)
 	_construction(dt)
 	for m in people():
@@ -433,6 +448,9 @@ func _arrived() -> void:
 
 ## Enter, Space or E: talk to whoever is beside you, read the board, or serve at the counter.
 func use() -> bool:
+	if tamsin.where == "town" and not tamsin_hired and (me.tile - tamsin.tile).length() <= 1.01:
+		talk_tamsin()
+		return true
 	if garrick.where == "town" and (me.tile - garrick.tile).length() <= 1.01 and not (me.tile == forge_at() and (smith_hired or _customer_ready())):
 		talk_garrick()
 		return true
@@ -459,6 +477,8 @@ func use() -> bool:
 				say("", "Hob's crew are hard at work. It'll be standing soon.")
 			elif built[k].what == "smithy":
 				_use_smithy()
+			elif built[k].what == "tavern":
+				_use_tavern()
 			elif built[k].what == "apothecary":
 				shelf_open = true
 				board_sel = 0
@@ -493,6 +513,11 @@ func _unhandled_input(e: InputEvent) -> void:
 		return
 	if e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_M:
 		music_on = not music_on                  # M: music on or off
+		get_viewport().set_input_as_handled()
+		return
+	if not pour.is_empty():
+		if e.is_action_pressed("ui_accept") or (e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_E) or (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT):
+			pour_press()
 		get_viewport().set_input_as_handled()
 		return
 	if not forge.is_empty():
@@ -563,6 +588,10 @@ func _hero(h: Mover, dt: float) -> void:
 				posted.erase(job)
 				a.state = "to_board"
 				send(h, READ_AT)
+			elif wants_drink(h) and rng.randf() < 0.5:
+				a.state = "to_tavern"                    # evening: a drink at the tavern before bed
+				a.waited = 0.0
+				send(h, _step_of(finished("tavern")))
 			elif wants_gear(h) and smith_customer == null and rng.randf() < 0.6:
 				smith_customer = h                       # savings enough for better gear: off to the smithy
 				a.state = "to_smith"
@@ -585,7 +614,7 @@ func _hero(h: Mover, dt: float) -> void:
 			a.drill = float(a.get("drill", 0.0)) + dt
 			if float(a.drill) >= 2.5:
 				a.drill = 0.0
-				gain_xp(h, 1)
+				gain_xp(h, 2 if near("smithy", "yard") else 1)    # placement: the smith fixes kit between drills
 				if rng.randf() < 0.3:
 					bark(h, ["Hyah!", "Again!", "One more set.", "Take that, straw!"][rng.randi() % 4])
 			if a.timer <= 0.0 or _pick_job(h) != "":
@@ -642,6 +671,23 @@ func _hero(h: Mover, dt: float) -> void:
 		"away":
 			if a.timer <= 0.0:
 				_come_home(h)
+		"to_tavern":
+			var tap := _step_of(finished("tavern"))
+			if h.path.is_empty():
+				if h.tile == tap or (h.tile - tap).length() <= 1.01:
+					a.waited = float(a.get("waited", 0.0)) + dt
+					if tamsin_hired and tamsin.where == "town" and a.waited > 2.5:
+						drink(h, 1)
+					elif a.waited > PATIENCE and pour.is_empty():
+						bark(h, "Nobody at the tap tonight. Never mind.")
+						today["unserved"] = int(today.get("unserved", 0)) + 1
+						a.state = "town"
+						a.timer = 3.0
+						a.drank = day
+				elif a.timer <= 0.0:
+					a.timer = 1.0
+					if not send(h, tap):
+						a.state = "town"
 		"quitting":
 			if h.path.is_empty():
 				if h.tile == GATE + Vector2i.LEFT:
@@ -1177,6 +1223,7 @@ func _day(dt: float) -> void:
 	if int(today.get("tonics", 0)) > 0:
 		report += " Tonics sold: %d." % int(today.tonics)
 	report += " The guild earned %d coins." % today.earned
+	report += _tavern_evening()
 	if smith_hired:
 		if coins >= SMITH_WAGE:
 			coins -= SMITH_WAGE
@@ -1275,6 +1322,190 @@ func _bunting_draw() -> void:
 		if k % 2 == 0 and k < 24:
 			var flap := sin(t * 3.0 + k) * 1.0
 			draw_colored_polygon(PackedVector2Array([p, p + Vector2(5, 0), p + Vector2(2.5 + flap, 6)]), cols[(k / 2) % cols.size()])
+# ---------------------------------------------------------------- the tavern (SF2.3): pour by hand, then hire Tamsin
+const DRINK := 5                            # what a drink costs an adventurer, from their own savings
+const POUR_AFTER := 6                       # drinks you pour yourself before Tamsin asks for the tap
+const TAMSIN_WAGE := 8
+const FULL := Vector2(0.78, 0.95)           # stop pouring with the mug in this band: a good pour
+
+func evening() -> bool:
+	return day_t >= DAY_SECONDS * 0.55
+
+func _tap_at() -> Vector2i:
+	return _step_of(finished("tavern")) + Vector2i.RIGHT
+
+## Placement that matters a little: two places count as neighbours when their plots are close.
+func near(a_what: String, b_what: String) -> bool:
+	var pa := finished(a_what)
+	var pb := INN_DOOR if b_what == "inn" else Vector2i(-99, -99)
+	if b_what != "inn":
+		var k := finished(b_what)
+		if k == "" or pa == "":
+			return false
+		pb = PLOTS[k]
+	if pa == "":
+		return false
+	return (Vector2(PLOTS[pa]) - Vector2(pb)).length() <= 9.0
+
+## What Hob says about placing a building on a plot, beside its usual description.
+func plan_note(id: String, plot: String) -> String:
+	var spot: Vector2 = Vector2(PLOTS[plot])
+	match id:
+		"tavern":
+			return " Here, near the inn: a livelier room, drinks lift spirits more." if (spot - Vector2(INN_DOOR)).length() <= 9.0 else " Here, away from the inn: a quieter room."
+		"smithy", "yard":
+			var other := "yard" if id == "smithy" else "smithy"
+			var k := finished(other)
+			if k != "" and (spot - Vector2(PLOTS[k])).length() <= 9.0:
+				return " Next to the %s: training counts double." % ("training yard" if other == "yard" else "smithy")
+	return ""
+
+func wants_drink(h: Mover) -> bool:
+	var a: Dictionary = h.a
+	return finished("tavern") != "" and not tavern_shut and evening() and int(a.get("drank", 0)) != day and int(a.get("purse", 0)) >= DRINK
+
+func _tavern_customer() -> Mover:
+	for h in heroes:
+		if h.a.state == "to_tavern" and h.path.is_empty() and (h.tile - _step_of(finished("tavern"))).length() <= 1.01:
+			return h
+	return null
+
+func _use_tavern() -> void:
+	if tavern_shut:
+		tavern_shut = false
+		tavern_quiet = 0
+		say("", "You take the bar off the shutters and light the lamps. The Tavern is open again.")
+		return
+	if tamsin_hired:
+		say("tamsin", ["Busy night. I like busy.", "Aki tips in stories. I'd rather coins, but the stories are good.",
+			"Pour, wipe, listen. That's the whole job, and most people only do the first one."][rng.randi() % 3])
+		return
+	if _tavern_customer() == null:
+		say("", "The tap's quiet. In the evening, adventurers with a few coins put by come in for a drink; you pour." if not evening() else "Nobody at the tap just now. They'll come in as the evening goes on.")
+		return
+	pour = { "fill": 0.0, "on": false }
+	caption.text = "Press E to start pouring, and E again to stop when the mug is nearly full (the gold band). Don't let it spill."
+	caption_t = 6.0
+
+## E at the tap: start the pour, then stop it.
+func pour_press() -> void:
+	if pour.is_empty():
+		return
+	if not pour.on:
+		pour.on = true
+		return
+	_finish_pour(float(pour.fill))
+
+func _pour_tick(dt: float) -> void:
+	if not pour.is_empty() and pour.on:
+		pour.fill = float(pour.fill) + dt * 0.55
+		if float(pour.fill) >= 1.05:
+			_finish_pour(1.05)
+	if pour.is_empty() and tamsin.where == "town" and tamsin.path.is_empty():
+		var home := _tap_at() if tamsin_hired else _tap_at() + Vector2i.RIGHT
+		if tamsin.tile != home and int(t * 10) % 10 == 0:
+			send(tamsin, home)
+
+func _finish_pour(fill: float) -> void:
+	var h := _tavern_customer()
+	pour = {}
+	if h == null:
+		return
+	var good: bool = fill >= FULL.x and fill <= FULL.y
+	if fill > 1.0:
+		bark(me, "Oops, all over the bar.")
+	drink(h, 2 if good else 1, true)
+
+## A drink served: the adventurer pays from their savings and goes home in better spirits (more beside the inn).
+func drink(h: Mover, quality: int, by_hand := false) -> void:
+	var a: Dictionary = h.a
+	a.purse = int(a.purse) - DRINK
+	coins += DRINK
+	today.earned += DRINK
+	today["drinks"] = int(today.get("drinks", 0)) + 1
+	var lift := 1 + (1 if quality >= 2 else 0) + (1 if near("tavern", "inn") else 0)
+	a.morale = mini(10, int(a.morale) + lift)
+	if quality >= 2 and by_hand:
+		coins += 2                                  # a tip for a good pour
+		today.earned += 2
+	a.drank = day
+	a.state = "town"
+	a.timer = 2.0
+	bark(h, ["Just right. Thank you.", "That's a proper pour!", "Ahh. Now I can sleep."][clampi(quality, 0, 2)] if quality >= 2 else ["Bit of foam. Still good.", "Cheers, guildmaster."][rng.randi() % 2])
+	if by_hand:
+		pours += 1
+		if pours >= POUR_AFTER and tamsin.where == "gone" or (pours >= POUR_AFTER and tamsin.tile == Vector2i(-5, -5)):
+			tamsin.where = "town"                    # word gets round: a barkeep walks in through the gate
+			tamsin.tile = GATE + Vector2i.LEFT
+			tamsin.pos = Vector2(tamsin.tile) * TILE
+			bark(tamsin, "Who's been pouring at that tap? You've a light hand. Can I have a word?")
+			send(tamsin, _tap_at() + Vector2i.RIGHT)
+
+func talk_tamsin() -> void:
+	tamsin.face = me.tile - tamsin.tile
+	say("tamsin", "Tamsin. I've kept bars in three towns, and I've been watching you pour. You'd make a fair barkeep, if you weren't also running a guild.")
+	say("tamsin", "Eight coins a day and the tap is mine. Every evening, everyone who comes in gets served, and I'll keep the place open.")
+	then_do = func():
+		tamsin_hired = true
+		send(tamsin, _tap_at())
+		say("", "Tamsin ties on an apron and takes the tap. She'll pour every evening, for eight coins at the end of each day.")
+
+## At nightfall: the tavern's evening in the report, Tamsin's wages, and a tavern left unserved two evenings shuts.
+func _tavern_evening() -> String:
+	if finished("tavern") == "":
+		return ""
+	var out := ""
+	var drinks := int(today.get("drinks", 0))
+	if drinks > 0:
+		out += " Drinks poured: %d." % drinks
+		tavern_quiet = 0
+	elif int(today.get("unserved", 0)) > 0 and not tavern_shut:
+		tavern_quiet += 1
+		if tavern_quiet >= 2:
+			tavern_shut = true
+			out += " Nobody has been served at the tavern two evenings running; it has closed its shutters. Open it again yourself."
+	if tamsin_hired:
+		if coins >= TAMSIN_WAGE:
+			coins -= TAMSIN_WAGE
+			out += " Tamsin paid."
+		else:
+			tamsin_hired = false
+			out += " You couldn't pay Tamsin; she'll wait by the tavern until you can."
+	return out
+
+## The tavern: a timber taproom with a hanging mug sign, warm windows in the evening, and shutters when it's closed.
+func _draw_tavern(o: Vector2) -> void:
+	draw_rect(Rect2(o + Vector2(1, 9), Vector2(30, 22)), Figures.OUTLINE)
+	draw_rect(Rect2(o + Vector2(2, 10), Vector2(28, 20)), Color("9a6a42"))
+	for i in 7:
+		draw_rect(Rect2(o + Vector2(2, 11 + i * 3), Vector2(28, 1)), Color("7a5236"))
+	for i in 8:                                                                       # a red tiled roof
+		draw_rect(Rect2(o + Vector2(-1 + i, 10 - i), Vector2(34 - i * 2, 2)), Color("a84a3a").darkened(0.03 * i))
+	draw_rect(Rect2(o + Vector2(3, 20), Vector2(9, 11)), Figures.OUTLINE)             # the door, at the step
+	draw_rect(Rect2(o + Vector2(4, 21), Vector2(7, 10)), Color("5a3a1e"))
+	for wx in [15, 23]:
+		var lit := evening() and not tavern_shut
+		draw_rect(Rect2(o + Vector2(wx, 16), Vector2(6, 6)), Color("f2c84a") if lit else Color("4a4a5a"))
+		if tavern_shut:
+			draw_line(o + Vector2(wx, 16), o + Vector2(wx + 6, 22), Color("6b4a2a"), 2.0)
+			draw_line(o + Vector2(wx + 6, 16), o + Vector2(wx, 22), Color("6b4a2a"), 2.0)
+	draw_rect(Rect2(o + Vector2(26, 2), Vector2(1, 6)), Color("4e3220"))               # the sign: a mug
+	draw_rect(Rect2(o + Vector2(23, 7), Vector2(7, 7)), Figures.OUTLINE)
+	draw_rect(Rect2(o + Vector2(24, 8), Vector2(5, 5)), Color("d8a868"))
+	draw_rect(Rect2(o + Vector2(25, 9), Vector2(3, 3)), Color("f4ecd8"))
+
+## The pour, close up: a mug filling, with the gold band where to stop.
+func _draw_pour(font: Font, to_screen: Transform2D) -> void:
+	var p: Vector2 = to_screen * (Vector2(_tap_at()) * TILE + Vector2(8, -30))
+	var r := Rect2(Vector2(clampf(p.x - 12, 4, 350), maxf(16.0, p.y)), Vector2(24, 30))
+	board_view.draw_rect(r.grow(2), Figures.OUTLINE)
+	board_view.draw_rect(r, Color("3a2a22"))
+	var band := Rect2(r.position + Vector2(0, r.size.y * (1.0 - FULL.y)), Vector2(r.size.x, r.size.y * (FULL.y - FULL.x)))
+	board_view.draw_rect(band, Color(0.95, 0.8, 0.3, 0.45))
+	var f := clampf(float(pour.fill), 0.0, 1.0)
+	board_view.draw_rect(Rect2(r.position + Vector2(2, r.size.y * (1.0 - f)), Vector2(r.size.x - 4, r.size.y * f)), Color("e8a030"))
+	board_view.draw_rect(Rect2(r.position + Vector2(2, r.size.y * (1.0 - f)), Vector2(r.size.x - 4, 2)), Color("fff4e0"))
+	board_view.draw_string(font, r.position + Vector2(-30, -5), "Stop in the gold" if pour.on else "E to pour", HORIZONTAL_ALIGNMENT_CENTER, 84, 7, Color.WHITE)
 # ---------------------------------------------------------------- conversations and passing remarks
 func say(who: String, text: String) -> void:
 	lines.append({ "who": who, "text": text })
@@ -1447,6 +1678,8 @@ func _draw_plot(k: String) -> void:
 		return
 	if b.what == "smithy":
 		_draw_smithy(o)
+	elif b.what == "tavern":
+		_draw_tavern(o)
 	elif b.what == "apothecary":
 		_draw_apothecary(o)
 	elif b.what == "healer":
@@ -1610,6 +1843,8 @@ func _draw_board_view() -> void:
 		return
 	if not forge.is_empty():
 		_draw_forge(font, to_screen)
+	if not pour.is_empty():
+		_draw_pour(font, to_screen)
 	if shelf_open:
 		_draw_shelf(font)
 		return
@@ -1658,7 +1893,7 @@ func _draw_plans(font: Font) -> void:
 		board_view.draw_rect(r, Color("f4f6f8"))
 		board_view.draw_multiline_string(font, r.position + Vector2(5, 13), b.name, HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 10, 8, -1, Color("2f3a46"))
 		board_view.draw_string(font, r.position + Vector2(5, 40), "%d coins" % int(b.cost), HORIZONTAL_ALIGNMENT_LEFT, -1, 7, Color("3a6a3a") if afford else Color("a03a2a"))
-		board_view.draw_multiline_string(font, r.position + Vector2(5, 52), b.text, HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 10, 7 if r.size.x > 90.0 else 6, -1, Color("4a5560"))
+		board_view.draw_multiline_string(font, r.position + Vector2(5, 52), b.text + plan_note(ps[i], build_plot), HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 10, 7 if r.size.x > 90.0 else 6, -1, Color("4a5560"))
 		board_view.draw_string(font, r.position + Vector2(5, r.size.y - 5), "Build it" if afford else "Not enough coins", HORIZONTAL_ALIGNMENT_LEFT, -1, 7, Color("2f3a46") if afford else Color("8a8a8a"))
 	var done := _plan_rect(n - 1, n)
 	board_view.draw_rect(done, Color("2f3a46") if board_sel == n - 1 else Color("4a5866"))
@@ -1683,7 +1918,7 @@ func save_game() -> void:
 	var d := { "v": 1, "coins": coins, "day": day, "day_t": day_t, "meals": meals, "hired": hired, "offered": bryn_offered,
 		"notices": notices, "posted": posted, "today": today, "me": [me.tile.x, me.tile.y],
 		"built": built, "jobs": total_jobs, "rank": rank, "herbs": herbs, "stock": stock, "price": price_i,
-		"pieces": pieces, "smith": smith_hired, "garrick": garrick.where == "town", "good": good_days, "bad": bad_days, "visitors": visitors,
+		"pieces": pieces, "smith": smith_hired, "tavern": { "pours": pours, "hired": tamsin_hired, "here": tamsin.where == "town", "shut": tavern_shut, "quiet": tavern_quiet }, "garrick": garrick.where == "town", "good": good_days, "bad": bad_days, "visitors": visitors,
 		"heroes": heroes.map(func(h): return h.a) }
 	var f := FileAccess.open(save_path, FileAccess.WRITE)
 	if f:
@@ -1711,6 +1946,15 @@ func _load() -> bool:
 	stock = int(d.get("stock", 0))
 	price_i = int(d.get("price", 1))
 	pieces = int(d.get("pieces", 0))
+	var tv: Dictionary = d.get("tavern", {})
+	pours = int(tv.get("pours", 0))
+	tamsin_hired = bool(tv.get("hired", false))
+	tavern_shut = bool(tv.get("shut", false))
+	tavern_quiet = int(tv.get("quiet", 0))
+	if tv.get("here", false) and finished("tavern") != "":
+		tamsin.where = "town"
+		tamsin.tile = _tap_at() + (Vector2i.ZERO if tamsin_hired else Vector2i.RIGHT)
+		tamsin.pos = Vector2(tamsin.tile) * TILE
 	good_days = int(d.get("good", 0))
 	bad_days = int(d.get("bad", 0))
 	visitors = Array(d.get("visitors", []))
