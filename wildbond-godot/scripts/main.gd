@@ -1483,12 +1483,14 @@ func _update_ui() -> void:
 	cmat.set_shader_parameter("points", pts)
 	cmat.set_shader_parameter("count", count)
 
-# ---------------------------------------------------------------- the environment (Ninja Adventure tilesets, CC0)
-# Evan (2026-10-08) liked the pack's structures and nature. Figures stay our own (figures.gd). Each tile or object
-# is picked by its cell in a 16x16 grid: floor.png (ground), nature.png (trees, bushes, flowers), house.png (houses).
-const FLOOR := preload("res://assets/env/floor.png")
-const NATURE := preload("res://assets/env/nature.png")
-const HOUSE := preload("res://assets/env/house.png")
+# ---------------------------------------------------------------- the environment: Wildbond's own tiles
+# Evan chose "Our own tiles" (2026-10-09) so Wildbond has a look of its own, apart from Starfall's pack, and an art
+# direction that can grow (docs/art/wildbond-art-direction.md). tools/paint_tiles.gd paints assets/env/wild/: ground,
+# trees, bushes, flowers, the cottage and Maren's barn, each picked by its cell in a 16x16 grid. Water and a few
+# details still come from the Ninja Adventure pack (CC0) until part 2.
+const FLOOR := preload("res://assets/env/wild/floor.png")
+const NATURE := preload("res://assets/env/wild/nature.png")
+const HOUSE := preload("res://assets/env/wild/house.png")
 const NOTICE := preload("res://assets/emote/notice.png")   # the "!" over a trainer who has seen you (Ninja Adventure, CC0)
 const WATER := preload("res://assets/env/water.png")
 const BARN_SPRITE := Rect2(400, 224, 64, 80)  # Maren's barn in house.png: measured pixel by pixel (4x5 tiles, door in the 2nd column)

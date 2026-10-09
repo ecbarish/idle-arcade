@@ -106,6 +106,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude (Wildbond builder thread, lane W): WA part 1, Wildbond's own art (Evan chose "Our own tiles"): tools/paint_tiles.gd paints assets/env/wild (ground, trees, cottages, barn); pack tiles removed except water; docs/art/wildbond-art-direction.md (palette, shapes, toward 3D/first person). Next: WA part 2 (water, battle backdrops, interiors).
 - 2026-10-09 Claude (Wildbond builder thread, lane W): Evan's playtest notes, part 1: How to play page (howto.gd: title button, before a new journey, book Settings), no walking on roofs (main.gd buildings()/_under_roof); 310 checks. Wildbond's own look is a question to Evan (decision card in the Wildbond builder thread).
 - 2026-10-09 Claude (Wildbond builder thread, lane W): WB6.1-6.2: named controls (controls.gd), phone pad (touch_pad.gd), sound buses and a Settings page in the book (settings.gd); 305 checks; web preview pack rebuilt. Next in lane W: WB4.3 part 2 (place ChatGPT's T58 reveal once PR #101 merges), then WB5.1 (the Spire).
 - 2026-10-09 Claude (ideas thread): docs/proposals/games-for-everyone.md for Evan's daughter (almost 3) and his dad (Atari era): Little Ranch (a tap-and-play toy with Wildbond's baby creatures) and the Arcade Cabinets (original single-screen games, 1978-85 style), both 17/18; Evan said yes to both, each starting with a one-PR test. No builds yet.

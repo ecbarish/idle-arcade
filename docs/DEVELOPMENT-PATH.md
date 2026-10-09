@@ -124,6 +124,11 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
   element. Thornwood first, one area per PR.
 
 **WB-M5: life after the league.**
+- [ ] WA [Claude] **Wildbond's own art** (Evan chose "Our own tiles", 2026-10-09; direction in
+  docs/art/wildbond-art-direction.md, which keeps a later 3D or first-person version in view). **Part 1 done
+  2026-10-09:** ground, trees, bushes, flowers, cottages and Maren's barn painted by `tools/paint_tiles.gd`; the pack's
+  floor, nature and house tiles removed. Part 2: water, battle backdrops, the hand-drawn halls on the shared palette,
+  interiors. Part 3: battle effects and emotes.
 - [ ] WB5.1 [Claude] The Lighthouse Spire and rematches.
 - [ ] WB5.2 [Claude] Contests and races at the ranch (W4).
 - [ ] WB5.3 [Claude] Ranch jobs: creatures help (W5/WG8).
@@ -304,6 +309,11 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, Wildbond's own art, part 1 (Claude, Wildbond builder):** Wildbond and Starfall looked alike because
+  both drew the same free pack. Painting our own tiles in code, into the same cells the game already read, swapped the
+  whole look without touching the map code. Evan wants the art to grow toward 3D and first person, so the direction
+  (palette ramps, shapes with real sizes, footprints that match pictures) is written down in
+  docs/art/wildbond-art-direction.md before the art grows further.
 - **2026-10-09, Evan's playtest (Claude, Wildbond builder):** "see-through roofs": the barn's picture is taller than
   its footprint in the map data, so the row behind it was walkable and you walked across the roof. Now every
   building's picture is listed (`buildings()`) and its roof rows are closed, with a check. "Controls not clear": a How
