@@ -27,6 +27,7 @@ commit.
 | **Q: design decisions** | Claude: "Design decisions" thread (started 2026-10-09) | `docs/DECISIONS.md` | Answers design questions from any lane (ask in COMMS "to Claude (Design decisions)"); turns answers into notes or tickets for the lane that builds |
 | **I: ideas and reviews** | Claude: "New game ideas" and "Improve existing games" threads | `docs/proposals/`, `docs/ideas.md`, `docs/research/` | Proposals only; lane P places them |
 | **D: local helper** | Ollama on Evan's PC | its own clone, read-only jobs | Lane D table below |
+| **C: the Studio** | Grok (Adam's assistant, 2026-10-09) | `studio.html`, `studio/`, `tests/studio.html` and `tests/studio-checks.js` | Lane C table below (E4, E5, E7 and playtesting) |
 | **X: guests** | Anyone outside the team with their own AI (first: Evan's dad, GitHub `abarish-dev`); start at [CONTRIBUTING.md](../CONTRIBUTING.md) | Only the files the task names | Lane X table below; lane P adds tasks no other lane is touching |
 
 **Files every lane touches, kept to one line each:** START-HERE's Session log (your dated line at the top), README's
@@ -52,12 +53,11 @@ at once (a claim written on your branch isn't on main yet). So:
 
 Evan: "we are nearing our cap on Claude, so if we lay out a strong road in front of us we can use our other helpers
 to push us along." These tasks need **no Godot** and are open to **any** AI (ChatGPT/Codex, Evan's dad's AIs,
-Claude). Take the first one no open pull request names, claim it ("Claiming work" above), build it, open the PR;
+Claude). (Done and removed: RB1.5, Codex, PR #98.) Take the first one no open pull request names, claim it ("Claiming work" above), build it, open the PR;
 lane R (or Evan) merges. Each line names its spec; read it first.
 
 | # | Task (path ID) | Spec | Files | Done when |
 |---|---|---|---|---|
-| 1 | **Realmbound waits for the player** (RB1.5, a bug) | docs/proposals/game-review-2026-10-09.md GR-10 | `games/realmbound/` | Autopilot never acts during the first dialogue (`js/13-world-ui.js` near line 95); no stray blocks in the sky; a check proves it; `tests/run.html` passes |
 | 2 | **Storm Front cabinet** (AC1) | docs/proposals/games-for-everyone.md | new folder only, plus one launcher link | Plays start to finish on desktop and phone, original name and art, high score saved; a small test page |
 | 3 | **Little Ranch, smallest test** (LR1) | docs/proposals/games-for-everyone.md | new folder only, plus one launcher link | One creature, feed, bubbles, peekaboo, bedtime; no reading needed, nothing to fail, no links out, grown-up lock |
 | 4 | **"Tell us" in every game** (AR2.11) | game review GR-9; docs/FEEDBACK.md | settings of each browser game, `playtest.html` | Opens a prefilled GitHub issue (game, version); a 10-minute playtest script on Come Play |
@@ -173,7 +173,7 @@ index.html or style.css until those phases are merged.
 | A18 | **T43** The creature catalogue reaches Realmbound | done, merged 2026-10-09 (Realmbound v1.7.0) | docs/ROADMAP.md T43 |
 | A19 | **T44** Accessibility pass on the browser games (L10) | done, merged 2026-10-09 | docs/ROADMAP.md T44 |
 | A20 | **T45** Early-road heritage dialogue (WB2.6) | done, merged 2026-10-09 (Wildbond v1.8.1) | Browser data and ledger; no Godot edits |
-| A33 | **T58** Wildbond late observations and the reveal (WB4.4b part 2) | open, for ChatGPT | docs/ROADMAP.md T58; text for Claude to place in Godot |
+| A33 | **T58** Wildbond late observations and the reveal (WB4.4b part 2) | ready: PR #101, Codex, 2026-10-09 | docs/ROADMAP.md T58; text for Claude to place in Godot |
 | A32 | **T57** Starfall four seasonal chapter outlines (SF3.3) | ready: PR #84, Codex, 2026-10-09 | One threat/festival/newcomer each; current calendar, existing street loop; docs only |
 | A31 | **T56** Wildbond final-four-area and league pacing (WB3.6) | ready: PR #83, Codex, 2026-10-09 | Actual Godot battle/rules in a disposable diagnostic project; no Godot edits |
 | A30 | **T55** Final truth clue audit (WB4.4b part 1) | ready: PR #82, Codex, 2026-10-09 | Check all placed clues; propose three shared late observations; review before dialogue |
@@ -237,15 +237,15 @@ is merged without review. Queue tasks in `C:\Users\evanb\Local-AI\queue\` (one J
 | D2 | Draft ten dex lines for the newest catalogue creatures in the house style, for review | open (read-only; output in its log) | A person picks and edits |
 | D3 | Check every link and image in guides/ and playtest.html points to a file that exists | open (read-only) | |
 
-## Lane C: parked (a third assistant, if one joins): the Studio
+## Lane C: Grok (since 2026-10-09): the Studio
 
 Self-contained work that touches almost nothing the other lanes use: the Studio is one page (`studio.html`) plus small
 read-only hooks, and the accessibility audit is mostly reports and small fixes.
 
 | # | Task | Status | Notes |
 |---|---|---|---|
-| C1 | **E4** Studio text browser | open | In studio.html: browse and search every line of dialogue, quest text, item and creature name (read them from the games' data files); show where each is used. Read-only first; editing comes with E1's patch format |
-| C2 | **E5** Creature and quest viewers with the test rules as validators | open | Studio pages that list species, moves, evolutions, wild tables and quests, flagging anything the checks in tests/ would reject |
+| C1 | **E4** Studio text browser | claimed by Grok, 2026-10-09, `grok/studio-text-browser` | In studio.html: browse and search every line of dialogue, quest text, item and creature name (read them from the games' data files); show where each is used. Read-only first; editing comes with E1's patch format |
+| C2 | **E5** Creature and quest viewers with the test rules as validators | claimed by Grok, 2026-10-09, `grok/studio-viewers` (stacked on C1, #99) | Studio pages that list species, moves, evolutions, wild tables and quests, flagging anything the checks in tests/ would reject |
 | C4 | **E7** Lighting and music tuner | open | Studio sliders for a zone's fog, shadow strength and grade, writing to localStorage only; previews in an iframe |
 | C5 | While you wait | always | Playtest a game end to end and file what you find as GitHub issues (bug / suggestion templates) |
 
