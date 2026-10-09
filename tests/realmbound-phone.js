@@ -17,7 +17,7 @@ async function checkRealmPhone(frame) {
   check(bar.bottom<=rect('.xp').top+1,label+' action bar clears XP and dock');
   if(width<=700){
    check([...d.querySelectorAll('#slots button')].every(el=>el.getBoundingClientRect().width>=44&&el.getBoundingClientRect().height>=44),label+' abilities have 44px tap targets');
-   check([...d.querySelectorAll('#fieldDock button')].every(el=>el.getBoundingClientRect().height>=44),label+' dock has 44px tap targets');
+   check([...d.querySelectorAll('#fieldDock button')].filter(el=>!el.hidden).every(el=>el.getBoundingClientRect().height>=44),label+' dock has 44px tap targets');
    d.querySelector('#fieldOptions').open=true;await settle();const options=rect('.field-options-list');
    check(options.left>=0&&options.right<=width+1&&options.bottom<=height+1,label+' Options stays inside screen');d.querySelector('#fieldOptions').open=false;
    w.eval('questOffer(QUESTS.thornvale[0].id);SCN.skip();');await settle();const dialogue=rect('.scene .dlg');
