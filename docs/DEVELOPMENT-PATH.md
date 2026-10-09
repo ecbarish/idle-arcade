@@ -117,7 +117,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 **WB-D: deeper play (from the game review, docs/proposals/game-review-2026-10-09.md; before 2.0, order in PRIORITIES.md).**
 - [ ] WD1 [Claude] Numbers off the screen (GR-4): remove the Badges/Lures/Coins/Wilddex line; a readable arrival name.
 - [ ] WD2 [ChatGPT data, Claude drawing] Creatures that look different (GR-1): per-species look features in data;
-  parts drawn in figures.gd; 4-5 new body shapes.
+  parts drawn in figures.gd; 4-5 new body shapes. *Part 1 done 2026-10-09: serpent, turtle, moth and tree-folk shapes for twelve species (figures.gd `SHAPE_FOR`; a `shape` field in the data overrides it). Left: ChatGPT's look features, then Claude draws them as parts; a fish shape with WB5.7.*
 - [ ] WD3 [Claude, ChatGPT data] Battles with real choices (GR-2): about 60 moves, family signature moves, a few
   statuses, an order per Warden; tuned with WB3.6.
 - [ ] WD4 [Claude] Areas you can explore (GR-3): route, settlement and hidden pocket per area, return spots gated by
@@ -295,6 +295,9 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, WD2 part 1 (Claude, Wildbond builder):** new shapes are cheapest where a description already asks for
+  one (a "wyrm", roots, a shell, dusk drifting), and a Godot-side table (figures.gd `SHAPE_FOR`) lets them land without
+  touching the browser's shared families. A pixel shape needs a look at 2x before shipping: the first moth read as a box.
 - **2026-10-09, T55 review (Claude, Wildbond builder):** an audit that lists open calls is only useful once someone
   makes them. Made three (chronology, early depth, superseded notes) and sent the one that changes the story to Evan;
   wrote T58 so the reveal's text can be written while Claude builds other things.
