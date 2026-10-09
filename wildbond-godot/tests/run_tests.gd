@@ -912,6 +912,33 @@ func _run() -> void:
 	main.SafeSave.remove(main.save_path)
 	check(not main.SafeSave.exists(main.save_path), "and a cleared save leaves nothing behind")
 	main.no_save = true
+	# ---- sound effects: every sound asked for has a file, and battles and talk answer with one
+	var missing: Array[String] = []
+	var rx := RegEx.create_from_string("(?:sfx\\.play|_sfx)\\(\"([a-z]+)\"")
+	for f in ["main", "battle", "shop"]:
+		for m in rx.search_all(FileAccess.get_file_as_string("res://scripts/%s.gd" % f)):
+			if not Sfx.has(m.get_string(1)):
+				missing.append(m.get_string(1))
+	for el in main.battle.EL_FX:
+		if not Sfx.has(main.battle.EL_FX[el][0]):
+			missing.append(main.battle.EL_FX[el][0])
+	check(missing.is_empty(), "every sound effect has a file, each element's hit included (missing: %s)" % ", ".join(missing))
+	check(main.battle.sfx == main.sfx and main.shop.sfx == main.sfx, "the battle and the shop share the game's sound effects")
+	var heard: int = main.sfx.count
+	main.say("", "A test line.")
+	main.say("", "And another.")
+	main.advance()
+	check(main.sfx.count == heard + 1 and main.sfx.last == "talk", "talking makes a soft blip")
+	main.lines.clear()
+	var foe2: Dictionary = main.team[0].duplicate(true)
+	main.battle.open("wild", main.team, [foe2], "")
+	var fu: Dictionary = main.battle.foes[0]
+	main.battle._hurt(fu, 1, false, "Ember")
+	check(main.sfx.last == "ember", "an Ember hit sounds like fire")
+	main.battle._hurt(fu, 1, false, null)
+	check(main.sfx.last == "hit", "a plain hit thumps")
+	main.battle.visible = false
+	main.battle.state = ""
 	# ---- the done line
 	print("Wildbond Godot checks: %d passed, %d failed" % [passed, failed])
 	quit(1 if failed > 0 else 0)

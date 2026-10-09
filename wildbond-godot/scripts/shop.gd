@@ -25,6 +25,8 @@ func open(items: Array) -> void:
 	visible = true
 	queue_redraw()
 
+var sfx: Sfx = null                            # sound effects (main.gd hands over its own)
+
 func _buy(i: int) -> void:
 	if i >= goods.size():
 		visible = false
@@ -32,9 +34,11 @@ func _buy(i: int) -> void:
 		return
 	var g: Dictionary = goods[i]
 	if int(bag.get("coins", 0)) < int(g.cost):
+		if sfx: sfx.play("warn", -6.0)
 		note = "\"That's %d coins, love, and you've %d. Come back after a few battles.\"" % [g.cost, bag.get("coins", 0)]
 	else:
 		bag.coins -= int(g.cost)
+		if sfx: sfx.play("coin")
 		for k in g.give:
 			bag[k] = int(bag.get(k, 0)) + int(g.give[k])
 		note = "\"There you go: %s. Anything else?\"" % g.name.to_lower()

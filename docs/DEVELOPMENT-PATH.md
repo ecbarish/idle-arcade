@@ -73,7 +73,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB2.2 [Claude] Depth step 1 (WG6): ground heights, object footprints and heights (part 1 done 2026-10-08: the colour layer drawn in true depth order, people in front of you faded as the world is). Part 2 done 2026-10-09: trees beside open ground stand at their true height and their crowns pass in front of you (see-through, faded like the world: shaders/canopy.gdshader), never over a sign or an item. Left: ground heights, footprints and heights on objects (houses and rocks).
 - [ ] WB2.3 [Claude] Variety pass (WG7) (done 2026-10-08: an animated effect per element in battle; waves and wind under the music. Tried the pack's water ripples: opaque tiles, rejected). Left: waterfalls, edge
   tiles.
-- [ ] WB2.4 [Claude] Interiors: the inn, the shop and two homes in Larkhaven, walkable (inn and shop done 2026-10-08, with Old Ned and Juniper; homes left).
+- [ ] WB2.4 [Claude] Interiors: the inn, the shop and two homes in Larkhaven, walkable (inn and shop done 2026-10-08, with Old Ned and Juniper; homes left; the pack's unused Interior tileset has furniture, floors and walls: docs/learning/assets.md).
 - [x] WB2.5 [Claude] Maren's letter and the field book's "where next" hint (WG8): done 2026-10-08.
 - [x] WB2.6 [ChatGPT] (done, merged 2026-10-09; T45) Lore: a heritage line for every Warden and townsperson in areas 1-4 (data in the browser game,
   exported to Godot), recorded in the thread ledger.
@@ -98,7 +98,8 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [x] WS3 [ChatGPT] (T50, merged 2026-10-09; in Godot: seasonal wild tables and one seasonal remark per person) Seasonal data in the browser game, exported to Godot: wild-encounter weight shifts and a few
   seasonal species (each also rare out of season), a seasonal line for each townsperson; check the faded-seasons
   idea against the thread ledger before it becomes canon.
-- [ ] WS4 [Claude] Winter weather (snow, frozen pond edges, breath) and spring rain, building on G6.
+- [ ] WS4 [Claude] Winter weather (snow, frozen pond edges, breath) and spring rain, building on G6 (the pack has rain and
+  storm sounds and rain and leaf particles, unused: docs/learning/assets.md).
 - [x] WS5 [Claude] (done 2026-10-09: Maren invites you once a festival a year; plant a flower in the paddock (it stays), run a lap to the north edge and back to Pip, fill the trough, or make a gift at the bench and give it to someone; a keepsake each, shown on the Team page; festival lines from townsfolk. Decorations: ribbons, flower boxes and a seed table for Planting Day; lanterns over the street for the Long Light; carved lanterns and a supper table for the Harvest Lanterns; garlands with lights on every house and the big tree with gifts for the Midwinter Hearth; --festival= picture flag.) The four festivals in Larkhaven: Planting Day, the Long Light, the Harvest Lanterns and the
   Midwinter Hearth (garlands, lights on the houses, a big tree in the square, gifts). Decorations, festival lines,
   one small activity and a cosmetic keepsake each.
@@ -224,6 +225,12 @@ browser (E4).
   committed import settings, line-ending rules, one command for all checks, checks on GitHub).
 - [ ] AR2.7 blocked: needs Evan. Build the web previews on GitHub instead of committing them (docs/learning/web-and-shipping.md;
   default: keep committing packs at milestones only). Needs Evan to set Pages' source to "GitHub Actions".
+- [x] AR2.9 [Claude] Sound effects and feeling bubbles in both Godot games: done 2026-10-09 (`scripts/sfx.gd`, sounds
+  named by meaning, N toggles them, checks for every sound; Starfall's emotes over heads, Wildbond's "!" when spotted;
+  the asset guide docs/learning/assets.md and the arcade palette).
+- [ ] AR2.10 [Claude] Our own signature sounds, the first original assets (docs/learning/assets.md "Making our own"):
+  a short cry for each Wildbond creature body type, made in jfxr or sfxr and played when it appears and when it
+  chooses you; then the arcade's own menu sounds and jingles, replacing the pack's by name. Evan listens before merge.
 - [ ] AR2.8 [Claude] Split Wildbond's main.gd as systems are touched (godot-practices.md rule 1): music and ambience
   first, then festivals, interiors, the ranch; one system per commit, checks passing.
 **AR-M3: the walk-in arcade and friends.**
@@ -248,6 +255,14 @@ Judged ideas and the scorecard for new ones: docs/proposals/new-game-ideas.md (2
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, art and sound (Claude, docs/learning/assets.md):** neither Godot game made a sound when you did
+  something, against CREATIVE.md's "every action answers with sound": both now have sound effects from the Ninja
+  Adventure pack already on Evan's PC (no new download), named by meaning so originals can replace them file by file,
+  with a check that every sound named in code has a file. Feelings (spirits, waiting, wanting a word) were invisible
+  or drawn ad hoc: the pack's emote bubbles now show them over heads. Learned: the cloud can't reach asset sites (only
+  GitHub), so new downloads happen on Evan's PC via the folder tools; a picture loaded with `load()` inside `_draw()` drew as a
+  white box in our test screenshot (GL renderer); loading it once and keeping it (`_emote()`) fixed it; the pack's palette is the
+  bridge to original art (docs/learning/art/arcade-palette.gpl). Next: AR2.10, our own sounds first.
 - **2026-10-09, priorities (Claude, docs/PRIORITIES.md):** spreading work evenly across every game kept all of them
   moving and none finishing, while ideas kept arriving. Now focus slots (Evan confirmed Wildbond first) and one
   scorecard; new ideas and improvements are scored and filed before anyone builds them.

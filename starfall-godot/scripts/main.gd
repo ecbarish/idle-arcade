@@ -149,6 +149,7 @@ var queue: Array[Mover] = []                # hungry adventurers waiting at the 
 var serve_t := 0.0                          # Bryn's serving time for the customer in front
 var lines: Array = []                       # conversation: [{who, text}]
 var barks: Array = []                       # short things people say as they pass: [{m, text, t}]
+var feels: Array = []                       # a feeling shown in a bubble over someone's head for a moment: [{m, id, t}]
 var then_do := Callable()
 var walk_to: Array[Vector2i] = []
 var use_after := ""                         # walking somewhere you tapped, to use it on arrival: board, counter
@@ -217,6 +218,8 @@ func _ready() -> void:
 	cam.limit_bottom = MAP.size() * TILE
 	cam.position_smoothing_enabled = true
 	add_child(cam)
+	sfx = Sfx.new()
+	add_child(sfx)
 	_make_ui()
 	if not _load():
 		_new_town()
@@ -372,6 +375,9 @@ func _process(dt: float) -> void:
 	for b in barks:
 		b.t -= dt
 	barks = barks.filter(func(b): return b.t > 0.0)
+	for f in feels:
+		f.t -= dt
+	feels = feels.filter(func(f): return f.t > 0.0)
 	caption_t = maxf(0.0, caption_t - dt)
 	_autosave(dt)
 	_update_ui()
@@ -473,6 +479,7 @@ func use() -> bool:
 			if not built.has(k):
 				build_plot = k                       # the plan for this plot: what could stand here
 				board_sel = 0
+				sfx.play("open")
 				walk_to.clear()
 			elif float(built[k].left) > 0.0:
 				say("", "Hob's crew are hard at work. It'll be standing soon.")
@@ -483,6 +490,7 @@ func use() -> bool:
 			elif built[k].what == "apothecary":
 				shelf_open = true
 				board_sel = 0
+				sfx.play("open")
 				walk_to.clear()
 			elif built[k].what == "healer":
 				say("ama", ["Bring me the hurt ones. Bandages, broth and quiet: that's most of medicine.", "Aki tried to leave before I'd finished with him. He won't again.",
@@ -514,6 +522,10 @@ func _unhandled_input(e: InputEvent) -> void:
 		return
 	if e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_M:
 		music_on = not music_on                  # M: music on or off
+		get_viewport().set_input_as_handled()
+		return
+	if e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_N:
+		sfx.on = not sfx.on                      # N: sound effects on or off
 		get_viewport().set_input_as_handled()
 		return
 	if not pour.is_empty():
@@ -837,6 +849,8 @@ func serve(h: Mover, by_hand: bool) -> void:
 		meals += 1
 	h.a.morale = mini(10, int(h.a.morale) + 1)
 	if by_hand:
+		sfx.play("coin")
+		feel(h, "pleased", 4.0)
 		bark(h, ["That smells wonderful.", "Thank you, guildmaster!", "Just what I needed."][rng.randi() % 3])
 	else:
 		bark(bryn, ["Here you go. Mind, it's hot.", "One stew!", "Eat up."][rng.randi() % 3])
@@ -905,6 +919,7 @@ func build(id: String) -> bool:
 		return false
 	coins -= int(b.cost)
 	built[build_plot] = { "what": id, "left": float(b.time) }
+	sfx.play("build")
 	caption.text = "Hob and his crew arrive with timber and rope. %s will be standing soon." % b.name
 	caption_t = 6.0
 	build_plot = ""
@@ -1003,6 +1018,7 @@ func strike() -> void:
 	if good:
 		forge.hits = int(forge.hits) + 1
 	bark(me, "Clang!" if good else "Tink...")
+	sfx.play("clang" if good else "tink")
 	if int(forge.n) >= 3:
 		var hits := int(forge.hits)
 		forge = {}
@@ -1036,6 +1052,9 @@ func finish_piece(h: Mover, hits: int, by_hand: bool) -> void:
 	a.fine = hits >= 3
 	if by_hand:
 		pieces += 1
+		sfx.play("success" if hits >= 3 else "coin")
+	if hits >= 3:
+		feel(h, "heart", 6.0)
 	bark(h, ["It'll do. A bit lumpy, but it'll do.", "Good, solid work. Thank you!", "Look at that edge! The finest work I've seen."][clampi(hits - 1, 0, 2)])
 	smith_customer = null
 	a.state = "town"
@@ -1090,6 +1109,7 @@ func buy_tonic(h: Mover) -> void:
 	today.earned += PRICES[price_i]
 	today.tonics = int(today.get("tonics", 0)) + 1
 	bark(h, "One tonic, coins in the jar. Thank you!")
+	sfx.play("coin", -6.0)
 
 func _shelf_input(e: InputEvent) -> void:
 	var n := 3                                  # brew, the price, done
@@ -1121,6 +1141,7 @@ func shelf_pick(i: int) -> void:
 				shelf_open = false
 				shelf_note = ""
 				caption.text = "You tip the herbs into the pot and stir. The steam smells of mint and wet stones."
+				sfx.play("brew")
 				caption_t = 3.0
 		1:
 			price_i = (price_i + 1) % PRICES.size()
@@ -1153,6 +1174,7 @@ func _check_rank() -> void:
 	if built_n < int(nxt.built) or total_jobs < int(nxt.jobs):
 		return
 	rank += 1
+	sfx.play("levelup")
 	caption.text = "Word travels: Starfall is a %s now. Someone new is walking in through the gate." % RANKS[rank].name.to_lower()
 	for k in PLOTS:
 		if int(PLOT_RANK[k]) == rank:
@@ -1262,10 +1284,12 @@ func _judge_day() -> String:
 		good_days += 1
 		bad_days = 0
 		out += " A good day; people are talking about Starfall." if good_days < 2 else " Another good day. The town has hung out bunting."
+		sfx.play("success")
 	elif failed > done or unfed >= 2:
 		bad_days += 1
 		good_days = 0
 		out += " A hard day." if bad_days < 2 else " Another hard day. Fewer people bring work to the board."
+		sfx.play("sad", -4.0)
 	else:
 		good_days = maxi(0, good_days - 1)
 		bad_days = maxi(0, bad_days - 1)
@@ -1274,6 +1298,7 @@ func _judge_day() -> String:
 			h.a.state = "quitting"
 			h.a.timer = 0.0
 			bark(h, "I'm sorry, guildmaster. My heart's not in it any more.")
+			feel(h, "heartbreak", 7.0)
 			send(h, GATE + Vector2i.LEFT)
 			out += " %s has packed up and gone; if Starfall does better, they may come back." % h.a.name
 			break
@@ -1394,6 +1419,7 @@ func pour_press() -> void:
 		return
 	if not pour.on:
 		pour.on = true
+		sfx.play("pour")
 		return
 	_finish_pour(float(pour.fill))
 
@@ -1415,6 +1441,9 @@ func _finish_pour(fill: float) -> void:
 	var good: bool = fill >= FULL.x and fill <= FULL.y
 	if fill > 1.0:
 		bark(me, "Oops, all over the bar.")
+		sfx.play("warn")
+	elif good:
+		sfx.play("success")
 	drink(h, 2 if good else 1, true)
 
 ## A drink served: the adventurer pays from their savings and goes home in better spirits (more beside the inn).
@@ -1428,6 +1457,8 @@ func drink(h: Mover, quality: int, by_hand := false) -> void:
 	a.morale = mini(10, int(a.morale) + lift)
 	if quality >= 2 and by_hand:
 		coins += 2                                  # a tip for a good pour
+		sfx.play("coin", -3.0)
+		feel(h, "heart", 6.0)
 		today.earned += 2
 	a.drank = day
 	a.state = "town"
@@ -1515,10 +1546,44 @@ func advance() -> void:
 	if lines.is_empty():
 		return
 	lines.pop_front()
+	sfx.play("talk", -8.0)
 	if lines.is_empty() and then_do.is_valid():
 		var f := then_do
 		then_do = Callable()
 		f.call()
+
+var _emotes := {}
+func _emote(id: String) -> Texture2D:
+	if not _emotes.has(id):
+		_emotes[id] = load("res://assets/emote/%s.png" % id)
+	return _emotes[id]
+
+## A feeling in a bubble over someone's head for a moment (assets/emote: heart, pleased, heartbreak...).
+func feel(m: Mover, id: String, seconds := 2.5) -> void:
+	feels = feels.filter(func(f): return f.m != m)
+	feels.append({ "m": m, "id": id, "t": seconds })
+
+## What shows over someone's head, if anything: a moment's feeling first; then "!" when they want a word; "..." when
+## they've waited a while at the counter; and now and then, how an idle adventurer's spirits are (very low or very
+## high). Nothing while they're speaking, so the bubble and their words never overlap.
+func feeling(m: Mover, i := 0) -> String:
+	if barks.any(func(b): return b.m == m):
+		return ""
+	for f in feels:
+		if f.m == m:
+			return f.id
+	if m.a.is_empty():
+		return ""
+	if story_ready(m):
+		return "notice"
+	if m.a.state == "to_counter" and float(m.a.get("waited", 0.0)) > PATIENCE * 0.5:
+		return "waiting"
+	if m.a.state == "town" and m.path.is_empty() and fmod(t + i * 2.3, 7.0) < 2.0:
+		if int(m.a.morale) <= 2:
+			return "sad"
+		if int(m.a.morale) >= 9:
+			return "happy"
+	return ""
 
 func bark(m: Mover, text: String) -> void:
 	barks = barks.filter(func(b): return b.m != m)
@@ -1539,6 +1604,7 @@ func speaker(who: String) -> Mover:
 # ---------------------------------------------------------------- the guild board
 func open_board() -> void:
 	board_open = true
+	sfx.play("open")
 	board_sel = 0
 	walk_to.clear()
 
@@ -1560,12 +1626,15 @@ func _board_input(e: InputEvent) -> void:
 func board_pick(i: int) -> void:
 	if i >= notices.size():
 		board_open = false
+		sfx.play("close", -4.0)
 		return
 	var id: String = notices[i]
 	if id in posted:
 		posted.erase(id)
+		sfx.play("close", -4.0)
 	elif posted.size() < MAX_POSTED:
 		posted.append(id)
+		sfx.play("pick")
 	board_sel = i
 
 func _note_rect(i: int) -> Rect2:
@@ -1607,12 +1676,9 @@ func _draw() -> void:
 		var look := _look(m)
 		var walking := not m.path.is_empty()
 		Figures.person(self, m.pos + Vector2(2, -5), m.face, walking, int(m.step_t * 8.0) % 4, fmod(t + i * 1.7, 3.3) < 0.12, look)
-		if not m.a.is_empty() and story_ready(m):                     # they want a word: a "!" over their head
-			var bob := sin(t * 4.0) * 1.5
-			draw_rect(Rect2(m.pos + Vector2(5, -17 + bob), Vector2(6, 9)), Figures.OUTLINE)
-			draw_rect(Rect2(m.pos + Vector2(6, -16 + bob), Vector2(4, 7)), Color("f2d24a"))
-			draw_rect(Rect2(m.pos + Vector2(7, -15 + bob), Vector2(2, 3)), Color("8a3a2a"))
-			draw_rect(Rect2(m.pos + Vector2(7, -11 + bob), Vector2(2, 1)), Color("8a3a2a"))
+		var feel := feeling(m, i)                                      # a bubble over their head: how they feel
+		if feel != "":
+			draw_texture(_emote(feel), m.pos + Vector2(1, -19 + sin(t * 4.0) * 1.0))
 		if not m.a.is_empty() and badly_hurt(m):
 			draw_rect(Rect2(m.pos + Vector2(4, -3), Vector2(8, 2)), Color("f4f0e8"))      # a bandage round the head
 	_lit_windows()
@@ -2162,6 +2228,7 @@ func _doorstep(k: String) -> void:
 ## A bright tune through the working day, a gentler one as evening comes (the last fifth of the day). M: off and on.
 const MUSIC_VOL := -14.0
 var music: AudioStreamPlayer
+var sfx: Sfx                                     # short sound effects (scripts/sfx.gd)
 var music_now := ""
 var music_on := true
 
@@ -2240,6 +2307,7 @@ func story_choose(i: int) -> void:
 		say(str(l[0]), str(l[1]))
 	a.beat = int(a.beat) + 1
 	a.asked = false
+	sfx.play("pick")
 
 func _story_input(e: InputEvent) -> void:
 	var n: int = story_pick.opts.size()
