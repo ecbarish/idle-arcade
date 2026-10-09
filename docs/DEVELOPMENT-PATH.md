@@ -295,6 +295,10 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, design decisions (Claude, Design decisions thread):** questions were waiting in COMMS for days because
+  nobody owned answering them. Now docs/DECISIONS.md is the log and the thread answers from the research, going to Evan
+  only for goals, new games, money or the irreversible. First answers: one day in Starfall (DD-2), Warden levels follow
+  the data and the level caps (DD-3). Lesson: when lore and data disagree, check which one the rules (caps) allow.
 - **2026-10-09, guest contributors (Claude, planning; CONTRIBUTING.md, QUEUE.md lane X):** the process assumed only
   Evan's own assistants, so a newcomer with their own AI had no rules to read and no safe work to take. Now a
   plain-language CONTRIBUTING.md with a paste-in start prompt, collaborator access with `guest/*` branches (never

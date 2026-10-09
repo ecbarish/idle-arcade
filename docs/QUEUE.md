@@ -24,6 +24,7 @@ commit.
 | **T: tools and craft** | Claude: "Best practices" thread | `tools/`, `.github/`, `docs/learning/`, `.gitattributes` | AR2.x tooling, CI; changes to game code go to W or S as a ticket |
 | **R: reviews and merges** | Claude: "PR reviewer" and "Merge conflict fixer" threads | Merge commits, version numbers, README version lines | B0 below: review, test and merge every waiting PR; fix conflicts on others' PRs |
 | **P: planning** | Claude: "Priorities and direction" thread | `docs/PRIORITIES.md`, the order and owner tags in `docs/DEVELOPMENT-PATH.md`, this page's lanes, START-HERE "Where we are" and "Up next" | Scoring and placing ideas; refilling lanes |
+| **Q: design decisions** | Claude: "Design decisions" thread (started 2026-10-09) | `docs/DECISIONS.md` | Answers design questions from any lane (ask in COMMS "to Claude (Design decisions)"); turns answers into notes or tickets for the lane that builds |
 | **I: ideas and reviews** | Claude: "New game ideas" and "Improve existing games" threads | `docs/proposals/`, `docs/ideas.md`, `docs/research/` | Proposals only; lane P places them |
 | **D: local helper** | Ollama on Evan's PC | its own clone, read-only jobs | Lane D table below |
 | **X: guests** | Anyone outside the team with their own AI (first: Evan's dad, GitHub `abarish-dev`); start at [CONTRIBUTING.md](../CONTRIBUTING.md) | Only the files the task names | Lane X table below; lane P adds tasks no other lane is touching |
