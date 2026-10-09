@@ -103,7 +103,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
-- 2026-10-09 Claude (ideas thread): docs/proposals/new-game-ideas.md, a scorecard for new game ideas and seven ideas judged with research. Top picks: the Card Shop (absorbing Main Street) as the next new game when Evan says go; ranch races, Saltmarsh fishing and Starfall delves as features. No builds, no path reordering (the priorities thread owns that).
+- 2026-10-09 Claude (ideas thread): docs/proposals/new-game-ideas.md, a scorecard for new game ideas and seven ideas judged with research. Evan: the features (ranch races, Saltmarsh fishing, Starfall delves) are good direction; football in the Retro Bowl shape is a strong option (he loves Retro Bowl); the Card Shop moves to the back, gated behind Wildbond. No builds, no path reordering (the priorities thread owns that).
 - 2026-10-09 Claude: Evan chose Wildbond's final truth (recorded in the thread ledger; WB4.4b to ChatGPT). Godot Starfall SF2.3 the Tavern (pouring, Tamsin, shutting, placement bonuses), 116 checks, web preview rebuilt.
 - 2026-10-09 Claude: merged T53 (finale handoff) and T54 (Champion returns); placed in Godot: the homecoming at the league gate and every Warden's welcome; 273 checks; browser Wildbond 2290; web preview rebuilt. Question for Evan: the final truth (docs/proposals/wildbond-final-reveals.md).
 - 2026-10-09, Codex: T54 ready in PR #81, stacked after #80: leagueAfter and eight Warden byStory.leagueEnding arrays, 22 lines. 69 new checks, 101 source/export/staging/layout checks, 88 full-card previews and eight suites pass. Classic dispatch/Godot/versions untouched.

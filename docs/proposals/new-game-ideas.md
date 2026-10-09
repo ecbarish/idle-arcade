@@ -8,15 +8,19 @@ docs/PRIORITIES.md and docs/DEVELOPMENT-PATH.md. This page only says which ideas
 
 ## The short version
 
-1. **Best new game: the Card Shop** (the parked CS1, with Main Street folded into it). Highest score, proven fun,
-   and it makes Wildbond and the shared catalogue better instead of competing with them. Recommended as the *next*
-   new game once Evan says go, starting with a one-PR toy to prove the loop.
-2. **Two ideas are better as features than as games**, and are worth adding to the path now:
-   **creature races and contests** at the Wildbond ranch (W4, moved to Godot), and **fishing on the Saltmarsh Coast**.
-3. **One idea gives Starfall its missing half:** a **first-person delve**, where you lead guild members into the wilds
-   past the gate on a grid. It is Starfall's expeditions (SV5) and the cheapest real step toward first person (V10).
-4. **Wait:** a second sport (American football, if Evan picks one), and a sailing game across the sea between the
-   Reach and Wildbond's valley. Good ideas, wrong time.
+**Evan's answers (2026-10-09):** "Card shop can move to the back as its gated behind Wildbonds development. I love
+Retro Bowl so thats a strong option. But I think the Better as features section is good direction as well." So:
+
+1. **The features are the direction:** **creature races and contests** at the Wildbond ranch (W4, moved to Godot),
+   **fishing on the Saltmarsh Coast**, and Starfall's **first-person delves**, where you lead guild members into the
+   wilds past the gate on a grid (Starfall's expeditions, SV5, and the cheapest real step toward first person, V10).
+   Where each sits in the build order is set in docs/PRIORITIES.md.
+2. **American football in the Retro Bowl shape is the strongest new-game candidate:** Evan loves Retro Bowl. It
+   becomes the favoured second sport; when it starts still follows PRIORITIES (Diamond Career's career mode proves the
+   sports framework first) and Evan's word.
+3. **The Card Shop (with Main Street folded in) moves to the back:** it scored highest on paper, but it depends on
+   Wildbond's catalogue and element rules being finished, so it waits until Wildbond is done.
+4. **Wait:** a sailing game across the sea between the Reach and Wildbond's valley. Good idea, wrong time.
 5. **No:** a farm sim, a survivors-style auto-shooter, puzzle or detective games, survival crafting, anything online
    or gacha. Reasons below.
 
@@ -44,15 +48,15 @@ feature unless being its own game makes it clearly better, and is then re-scored
 
 | Idea | Proven | Fits | Two birds | Different | Buildable | Short sessions | Score | Verdict |
 |---|---|---|---|---|---|---|---|---|
-| A. The Card Shop (with Main Street) | 3 | 3 | 3 | 3 | 2 | 3 | **17** | Next new game, when Evan says go |
+| A. The Card Shop (with Main Street) | 3 | 3 | 3 | 3 | 2 | 3 | **17** | Back of the list: gated behind Wildbond (Evan) |
 | B. Ranch races and contests | 3 | 3 | 3 | 2 | 3 | 3 | **17** | Feature of Wildbond (W4) |
 | C. Saltmarsh fishing | 3 | 3 | 2 | 2 | 3 | 3 | **16** | Feature of Wildbond |
 | D. Starfall delves (first person, on a grid) | 3 | 3 | 3 | 3 | 2 | 2 | **16** | Feature of Starfall (SV5), prototype first |
-| E. A second sport: American football | 3 | 2 | 2 | 3 | 2 | 3 | **15** | Wait for Evan's choice of sport |
+| E. A second sport: American football | 3 | 2 | 2 | 3 | 2 | 3 | **15** | Strongest new-game candidate (Evan loves Retro Bowl) |
 | F. The Crossing (sail between the worlds) | 2 | 3 | 2 | 3 | 1 | 1 | **12** | Wait; revisit after two Godot games ship |
 | G. Shop by day, dungeon by night | 2 | 2 | 2 | 1 | 2 | 2 | **11** | No as a game; its lesson goes to A and Starfall |
 
-### A. The Card Shop (CS1, absorbing Main Street MS1): score 17, recommended next new game
+### A. The Card Shop (CS1, absorbing Main Street MS1): score 17, at the back until Wildbond is done
 
 **The pitch.** You take over a run-down card shop on a market street. The cards are the shared creature catalogue,
 each with our own art and a line of lore, so collecting teaches the world. Open boxes, sort and price singles, haggle
@@ -79,9 +83,8 @@ running-the-town side, which is why it stays one street, not a town.
 **Smallest test (one PR).** A toy in Godot: one counter, a box of 20 cards, open packs, set three prices, four
 customers who buy or walk out, one Friday match. If that toy is fun for 15 minutes, write the full plan.
 
-**Recommendation.** Ask Evan to unpark it as the next new game after the Godot Wildbond reaches 2.0 (or earlier as
-the toy only, if he wants something fresh to test with friends). Merging Main Street into it turns two parked ideas
-into one game.
+**Decision (Evan, 2026-10-09).** To the back of the list: it is gated behind Wildbond's development (the catalogue,
+card art and element rules come from it). Merging Main Street into it still turns two parked ideas into one game.
 
 ### B. Ranch races and contests (Wildbond W4): score 17, a feature
 
@@ -124,14 +127,15 @@ heart, and it uses the shared catalogue as the monsters.
 **Verdict.** Worth a one-PR prototype in `starfall-godot/` (one delve, five rooms, one fight) before it becomes SV5's
 form. If it doesn't feel good in first person, SV5 stays as top-down camps.
 
-### E. A second sport: American football: score 15, waits for Evan
+### E. A second sport: American football: score 15, the strongest candidate
 
 **Evidence.** *Retro Bowl*, by the small New Star Games team, became a huge mobile and browser hit with short drives,
 a simple play-calling touch and a career with front-office choices; it is exactly the "bored at work" shape.
 
-**Verdict.** If and when Evan picks a second sport (an open owner question), football in the Retro Bowl shape is the
-recommendation: it reuses Diamond Career's career, contract and wallet ideas, and short drives suit phones. Not to
-start until he chooses.
+**Verdict.** Evan (2026-10-09): "I love Retro Bowl so thats a strong option." Football in the Retro Bowl shape is the
+favoured second sport and the strongest new-game candidate: it reuses Diamond Career's career, contract and wallet
+ideas, and short drives suit phones. When it starts is set in docs/PRIORITIES.md and is Evan's call; the next step
+when it does is a one-page pitch (one drive, play calling, one season's front-office choice) and a one-PR toy.
 
 ### F. The Crossing (sail between the worlds): score 12, wait
 
@@ -147,7 +151,7 @@ Godot game are done; until then, a ship can appear in either game as a hint.
 ### G. Shop by day, dungeon by night (Moonlighter): score 11, no as its own game
 
 *Moonlighter* is praised for the loop of selling what you found, and criticised for combat that gets repetitive. We
-already have both halves: the Card Shop (A) does shopkeeping better, and Starfall's Apothecary and delves (D) do the
+already have both halves: the Card Shop (A, later) does shopkeeping better, and Starfall's Apothecary and delves (D) do the
 "sell what you brought back" loop. The lesson (watch customers react to your prices) goes into A.
 
 ## Not worth it (and why)
