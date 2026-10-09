@@ -141,7 +141,7 @@ static func xp_need(lvl: int) -> int:
 ## costs about WINS_PER_LEVEL even-level wild wins all the way through (trainer battles count 1.6 times). The foe's level
 ## counts up to 3 above yours (beating stronger creatures is worth more, but you can't leap); weaker foes are worth less
 ## because the curve is steep. journey_xp is the journey's XP setting (Classic 0.13, Breezy 0.36, Long Road 0.08).
-const WINS_PER_LEVEL := 8.0
+const WINS_PER_LEVEL := 12.0                 # Evan chose 12 (2026-10-09): training before each Warden matters
 static func win_xp(foe_count: int, foe_avg_lvl: float, my_lvl: int, trainer: bool, journey_xp: float) -> float:
 	var at := clampi(roundi(foe_avg_lvl), 1, my_lvl + 3)
 	return foe_count * xp_need(at) / WINS_PER_LEVEL * (journey_xp / 0.13) * (1.6 if trainer else 1.0)
