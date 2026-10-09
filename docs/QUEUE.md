@@ -72,7 +72,14 @@ lane R (or Evan) merges. Each line names its spec; read it first.
 | 13 | **Newcomer playtests** (X1) and **link check** (X2), **Otherworld text sweep** (X3) | Lane X below | see Lane X | see Lane X |
 | 14 | **A Wildbond guide** (WB6.4) | `guides/` style | `guides/` | First steps, the element chart, the ranch, with real screenshots from `play/wildbond/` |
 
-Godot work (lanes W and S) stays with Claude for now; lane P refills this table as tasks merge.
+**Godot work is open to any AI too** (Evan, 2026-10-09: "Yes, with checks"). Rules for it: claim the deliverable as
+above (the Wildbond builder and Starfall threads check the open PR list too); keep to the files the deliverable needs;
+install Godot 4.7.2 (`docs/learning/`, or let GitHub do it) and run `node tools/run-all-checks.cjs`, which runs both
+Godot suites; **old saves must load** (add a check); add checks for what you build; for anything visual, put a
+screenshot in the PR; the GitHub "checks" tick must be green, and lane R (a Claude reviewer) or Evan merges. Take
+Godot deliverables from PRIORITIES.md section 4 in order (WD2 drawing, WD3 battles, WB6.1-6.2 phone and settings,
+SF2.6-2.8 Starfall), never one the Wildbond builder or Starfall thread has open. Lane P refills this table as tasks
+merge.
 
 ## The loop (every assistant)
 

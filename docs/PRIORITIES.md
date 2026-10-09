@@ -141,3 +141,5 @@ keep-alive writing for Diamond Career and Otherworld.
   slot: LR1 and AC1 in DEVELOPMENT-PATH, each one smallest-test PR first. Evan: the cabinets (and Little Ranch) can be claimed by any AI that's building.
 - 2026-10-09 Evan: Claude is near its usage cap and Evan's dad has two AIs helping, so the road ahead is laid out as
   ready-to-claim tasks any AI can take (QUEUE.md "The road ahead"); cabinets and Little Ranch are open to any AI.
+- 2026-10-09 Evan: other AIs may build in the Godot games too, with checks (all suites green, old saves load,
+  screenshots, a Claude reviewer or Evan merges). Rules in QUEUE.md "The road ahead".

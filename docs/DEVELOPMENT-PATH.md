@@ -43,8 +43,8 @@ Ticket numbers: take the next free `T` number in docs/ROADMAP.md.
 Open a `docs/proposals/<topic>.md` with a recommended default, mark the deliverable `blocked: needs Evan`, and move on,
 when a deliverable would: start a new game or unpark one; spend money or need an account; download large files;
 change canon already decided (docs/lore/, the "Decided" list in docs/research/decisions.md); remove a feature
-players use; add an AI service at play time; or touch another assistant's area (Godot projects and play/ are
-Claude's). Questions for Evan live in START-HERE "Questions for Evan", each with a default so work never waits.
+players use; add an AI service at play time; or touch another lane's files (QUEUE.md "Who works where"; since 2026-10-09 any AI may take Godot
+deliverables under the Godot rules in QUEUE.md "The road ahead"). Questions for Evan live in START-HERE "Questions for Evan", each with a default so work never waits.
 
 ### The quality bar (every deliverable)
 Feels like a game (docs/wildbond-plan.md principles); everything in the game window; the world's words, readable;
