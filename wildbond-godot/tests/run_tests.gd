@@ -307,7 +307,10 @@ func _run() -> void:
 	main.cal.mode = "winter"
 	check(main._leaf_tint() != Color.WHITE and main.cal.season() == "winter", "winter turns the leaves")
 	main.cal.mode = keep_mode
+	var wd4a_map_after_calendar: String = main.map_name
+	main.map_name = "thornwood"                  # this legacy geometry check belongs to the original settlement map
 	check(main._tree_at(8, 4).y == 3.0 * main.TILE and main._tree_at(12, 14).y > 13.5 * main.TILE, "trees beside open ground stand tall, but never over the first signpost")
+	main.map_name = wd4a_map_after_calendar
 	check(main.canopy != null and main.canopy.material is ShaderMaterial, "tree tops that pass in front of you are washed out like the world around them")
 	check(main.npcs.filter(func(n): return n.where in ["thornwood_route", "thornwood"]).size() == 3 and main.npc_info.has("bram") and main.npc_info.has("lise") and main.npc_info.has("isolde"), "WD4a: Bram is on the trail; Lise and Warden Isolde are in the settlement")
 	main.npc_info.lise.beaten = true                # keep Lise out of the way for these checks
@@ -620,10 +623,18 @@ func _run() -> void:
 		check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 1), "and back into Thornwood by the gate")
 		talk_through()
 	# ---- Maren heals your team
-	if main.map_name != "larkhaven":
-		check(walk_to(Vector2i(13, 15)) or main.map_name == "larkhaven", "back down the road")
+	if main.map_name == "thornwood":
+		check(walk_to(Vector2i(13, 15)), "back down through the Thornwood settlement")
 		main._step(Vector2i.DOWN)
 		tick(1.0)
+		check(main.map_name == "thornwood_route" and main.me.tile == Vector2i(13, 1), "WD4a: south from the settlement returns to Thornwood Trail")
+		talk_through()
+	if main.map_name == "thornwood_route":
+		check(walk_to(Vector2i(13, 16)), "follow the expanded trail back toward Larkhaven")
+		main._step(Vector2i.DOWN)
+		tick(1.0)
+	elif main.map_name != "larkhaven":
+		check(false, "unexpected map on the way home: %s" % main.map_name)
 	talk_through()
 	check(main.map_name == "larkhaven", "home to Larkhaven")
 	for c in main.team: c.hp = 1
