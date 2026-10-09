@@ -295,6 +295,13 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, guest contributors (Claude, planning; CONTRIBUTING.md, QUEUE.md lane X):** the process assumed only
+  Evan's own assistants, so a newcomer with their own AI had no rules to read and no safe work to take. Now a
+  plain-language CONTRIBUTING.md with a paste-in start prompt, collaborator access with `guest/*` branches (never
+  `main`), and a lane of self-contained starter tasks reviewed and merged by lane R.
+- **2026-10-09, T55 review (Claude, Wildbond builder):** an audit that lists open calls is only useful once someone
+  makes them. Made three (chronology, early depth, superseded notes) and sent the one that changes the story to Evan;
+  wrote T58 so the reveal's text can be written while Claude builds other things.
 - **2026-10-09, WB3.6b pacing (Claude, Wildbond builder):** T56 showed the late areas needed thousands of wild wins.
   Cause: reward grew with level, XP needed with level^2.2, so wins per level rose from 24 to about 400. A formula ported
   from an idle game assumes idle speed; with hand-played battles, measure wins per level, not XP. Now a constant
