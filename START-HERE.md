@@ -103,6 +103,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Codex: T43 ready in PR #70, stacked after T41/PR #67: all 48 zone/dungeon beasts show shared species and hunter observations; generated catalogue checked against Wildbond. All eight pages pass (Realmbound 8,205), four-size before/after pictures; old pets, combat and Godot unchanged.
+
 - 2026-10-08 Codex: T41 ready in PR #67: walk-in Trainer/Stable, physical Guild board/chest/member conversations, all quest givers placed and Journal routes to them. All eight pages pass (Realmbound 8,029); real purchases/jobs/quest rewards and exact reload at all four widths. Old saves, prices and Godot/version files preserved; Claude merged D0 separately in PR #66.
 
 - 2026-10-08 Codex: D0 queue runner ready in PR #66: OpenCode with local Ollama, Claude's primer/lessons attached, selectable model, strict error/completion handling. Nine runner regressions and actual read-only queue lookup pass; all eight browser pages pass. Broader model audit remains unapproved; no game/Godot/version changes.

@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Realmbound (2026-10-08): shared creature species and short hunter observations appear beneath beast targets, covering all 31 zone beasts and 17 dungeon encounters. Local names, palettes, pets and combat stay the same; the normalized catalogue exports from Wildbond data.
+
 - Realmbound (2026-10-08): walk into the Trainer and Stable, arrange guild work at the board and supplies at the chest, and meet quest givers in town. Carried pages keep records; service choices happen over the world. Old saves and existing prices are preserved.
 
 - Local helper (2026-10-08): queued local tasks use OpenCode, attach the project primer and lessons, and stop for failed tools or incomplete answers. Reports and edits require review; source in tools/local-ai/.

@@ -1026,5 +1026,44 @@ module.exports = function scenarios() {
         const legacy=JSON.parse(JSON.stringify(S));check(!Object.keys(legacy).some(k=>/place|field/i.test(k)),'T41: place/room interfaces add no persistent fields');S=migrate(legacy);boot();check(!PLACE_BOOK&&!realmNotebookOpen()&&H().riding===1&&H().mounts.length===1&&H().quests.done[q.id],'T41: legacy save/reload keeps earned riding, mount and quest rewards');
        }finally{closeRealmNotebook(false);clearTownService();S=keep;PW=keepWidth;TOWN.inside=false;TOWN.on=false;if(H())boot();}
       }
+      // T43: correspondence is presentation data, never an encounter or pet conversion.
+      {
+       const keep=S,keepC=C,keepTown=TOWN.on,keepRandom=Math.random;const hero=rb.newHero('Catalogue','concord','human','hunter');
+       try{S.chars=[hero];S.cur=hero.id;rb.boot();TOWN.on=false;let zones=0,dungeons=0;
+        for(const [zone,def]of Object.entries(ZONES))for(const m of def.mobs){
+         const info=catalogueForMob(m,{zone});
+         if(m.kind==='beast'){
+          zones++;check(!!info,'T43: zone beast mapped '+zone+'/'+m.id);
+          check(info.species.family===m.fam,'T43: zone silhouette family retained '+m.id);
+          check(info.localName===m.name&&typeof info.observation==='string'&&info.observation.length>15,'T43: local alias and hunter observation retained '+m.id);
+         }else check(info===null,'T43: a person is not mapped to an animal '+m.id);
+        }
+        check(zones===31,'T43: all 31 zone beasts covered');
+        for(const [id,def]of Object.entries(DUNGEONS))for(const [step,e]of def.enc.entries()){
+         const mob={...e,id:'dun'+step,dun:true,name:e.name},info=catalogueForMob(mob,{dun:{id,step:step+1}});
+         if(e.kind==='beast'){
+          dungeons++;check(!!info,'T43: dungeon beast mapped '+id+'/'+step);
+          check(info.species.family===e.fam,'T43: dungeon silhouette family retained '+id+'/'+step);
+          check(info.localName===e.name,'T43: boss/brood title retained '+e.name);
+         }else check(info===null,'T43: dungeon person is not an animal '+e.name);
+        }
+        check(dungeons===17,'T43: all 17 dungeon beasts including named bosses covered');
+        const data=JSON.stringify({ZONES,DUNGEONS,QUESTS,FAMILIES,RARITY});
+        hero.zone='thornvale';hero.lvl=10;rb.boot();hero.grind='wolf';Math.random=()=>.5;rb.spawn();Math.random=keepRandom;TOWN.on=false;
+        const before=JSON.stringify(C.mob),info=catalogueForMob(C.mob);const xp=killXP(C.mob);updateWorld();updateWorld();
+        check(!!info&&info.species.name==='Flintpup','T43: actual spawned wolf resolves its shared species');
+        check(before===JSON.stringify(C.mob)&&xp===killXP(C.mob),'T43: showing a name changes no combat runtime field');
+        check(!$('#catalogueSighting').hidden&&$('#catalogueSighting strong').textContent==='Flintpup'&&$('#catalogueSighting span').textContent===info.observation,'T43: species and hunter line are inside the active world');
+        check($('#tName').textContent.includes(C.mob.name),'T43: generated local rarity name remains in the target');
+        C.mob=null;updateWorld();check($('#catalogueSighting').hidden,'T43: no stale observation after losing the target');
+        check(data===JSON.stringify({ZONES,DUNGEONS,QUESTS,FAMILIES,RARITY}),'T43: encounter, quest, pet and rarity definitions are unchanged');
+        const pet={id:'old',name:'Moss',species:'Thornback Boar',family:'boar',rar:0,col:'#7a4a2a',lvl:5,xp:0,bond:25,happy:60,traits:[],hp:1};hero.pets=[pet];hero.activePet=pet.id;
+        const stats=JSON.stringify(petStats(pet)),saved=JSON.stringify(hero);S=migrate(JSON.parse(JSON.stringify(S)));rb.boot();
+        check(JSON.stringify(H().pets[0])===JSON.stringify(pet)&&JSON.stringify(petStats(H().pets[0]))===stats,'T43: old pet name, species and combat stats survive reload');
+        check(!saved.includes('catalogue')&&!saved.includes('observation'),'T43: catalogue presentation adds no save fields');
+        check(catalogueForMob({id:'wolf',kind:'humanoid'},{zone:'thornvale'})===null&&catalogueForMob({id:'unknown',kind:'beast'},{zone:'thornvale'})===null,'T43: unknown or non-beast targets are not guessed');
+        check(catalogueForMob({id:'dun4',dun:true,kind:'beast'},{dun:{id:'raid'}})===null,'T43: raid identities are left to their own future pass');
+       }finally{Math.random=keepRandom;S=keep;C=keepC;TOWN.on=keepTown;if(H())rb.boot();}
+      }
 return checks;
 };
