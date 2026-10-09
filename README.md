@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Wildbond content (2026-10-09, T54): exported post-Champion gate scene and eight Warden return conversations. [Staging/dispatch contract](docs/lore/wildbond-champion-returns.md). New fields only; Godot integration remains with Claude.
+
 - Wildbond finale handoff (2026-10-09, T53): existing league script, an optional homecoming and a thread payoff map for Claude's Godot build. [Writing contract](docs/lore/wildbond-finale-brief.md). Unresolved mystery truths remain open; no playable behavior changed.
 
 - Godot Wildbond (2026-10-09): the Returning Light League. With all eight badges the road north from Farwatch opens: Wren waits at the gate, then four courts in order (listening, shelter, shared work, an honest record) and Champion Avenne on the terrace. Nelva heals your team between rooms; lose a court and the courts begin again. Win, and everyone you met is waiting at the gate. The new Wildbond can now be played from start to finish. 269 checks pass.

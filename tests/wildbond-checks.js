@@ -1211,6 +1211,24 @@ function wildbondChecks() {
   }
   check('Other residents retain their existing conversation shapes',()=>Object.values(MAPS).every(m=>(m.npcs||[]).every(n=>!n.byFestival||(m===MAPS.larkhaven&&['maren','pip'].includes(n.who)))));
 
+  check('Post-Champion gate scene is a short shared portrait scene',()=>Array.isArray(SCENES.leagueAfter)&&SCENES.leagueAfter.length===6);
+  for(const [i,line] of SCENES.leagueAfter.entries()){
+    check('Gate return line '+i+' has an existing speaker',()=>line.length===2&&!!CAST[line[0]]);
+    check('Gate return line '+i+' is short readable world text',()=>line[1].length>=40&&line[1].length<=180&&/^[\x20-\x7e]+$/.test(line[1]));
+  }
+  const returningWardens=[['warden','isolde'],['warden2','nerys'],['warden3','toren'],['warden4','vessa'],['warden5','olan'],['warden6','senna'],['warden7','halen'],['warden8','rysa']];
+  for(const [id,who] of returningWardens){
+    const b=STORY.find(b=>b.id===id), lines=b.byStory.leagueEnding;
+    check(id+' returns through the existing Warden actor',()=>!!b.gate&&!!CAST[who]&&b.lines.length>0&&b.win.length>0);
+    check(id+' has two post-Champion lines',()=>Array.isArray(lines)&&lines.length===2);
+    for(const [i,line] of lines.entries()){
+      check(id+' return '+i+' uses its own portrait',()=>line.length===2&&line[0]===who);
+      check(id+' return '+i+' is short and readable',()=>line[1].length>=40&&line[1].length<=100&&/^[\x20-\x7e]+$/.test(line[1]));
+    }
+  }
+  check('Exactly the eight Wardens receive the ending appendix',()=>STORY.filter(b=>b.byStory&&b.byStory.leagueEnding).length===8);
+  check('Existing Champion ending remains a separate scene',()=>SCENES.leagueEnding!==SCENES.leagueAfter&&SCENES.leagueEnding.some(l=>l[1].includes('reason it faded')));
+
   return checks;
 }
 

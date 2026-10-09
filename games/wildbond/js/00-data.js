@@ -1015,3 +1015,100 @@ for (const [id, who] of [['warden','isolde'],['warden2','nerys'],['warden3','tor
 for (const [id,season,area] of [['sunspark','summer','thornwood'],['glassbill','spring','stillreed'],['chimespark','autumn','hollowecho'],['fogsail','winter','cloudglass']]) {
   SPECIES[id].seasonal = { favoredSeason: season, areas: [area], inSeasonWeight: 6, outOfSeasonWeight: 2 };
 }
+// T54: exported return conversations; Classic dispatch remains unchanged.
+SCENES.leagueAfter = [
+  [
+    "avenne",
+    "Champion, {name}. Rest here. Nobody needs you to prove the whole journey twice."
+  ],
+  [
+    "wren",
+    "I promised to cheer here. I did not promise to be quiet about it."
+  ],
+  [
+    "maren",
+    "Water first, all of you. The story can wait until the smallest paws stop shaking."
+  ],
+  [
+    "isolde",
+    "Look at the colour on the shore. Every safe return helped the world remember."
+  ],
+  [
+    "wren",
+    "We still have questions. Let us walk those roads without inventing answers."
+  ],
+  [
+    "maren",
+    "Tomorrow gets a new page. Tonight, there is room for all of you at home."
+  ]
+];
+const WARDEN_RETURNS = [
+  [
+    "warden",
+    "isolde",
+    [
+      "Champion. You kept listening, even when the road grew louder.",
+      "Staying beside you is still your partner's choice. Make room for it."
+    ]
+  ],
+  [
+    "warden2",
+    "nerys",
+    [
+      "Welcome back, Champion. A returning boat needs a safe landing too.",
+      "Shore and mountain tales look different ways. The missing page stays open."
+    ]
+  ],
+  [
+    "warden3",
+    "toren",
+    [
+      "Champion. A tired team can still stop at a warm stone. Take your time.",
+      "The stone is warm. Who kept watch here is still a question."
+    ]
+  ],
+  [
+    "warden4",
+    "vessa",
+    [
+      "You came back, Champion. Sit beside your partner. The shelter is still open.",
+      "Keep the latch opening both ways. A welcome should not trap anyone."
+    ]
+  ],
+  [
+    "warden5",
+    "olan",
+    [
+      "Champion. Let the next crossing go ahead. Leave a safe landing behind you.",
+      "Sivet found the rope and nest. The old ferry tally is a different question."
+    ]
+  ],
+  [
+    "warden6",
+    "senna",
+    [
+      "Orri mended the loose bell tongue. Welcome back to a clearer path, Champion.",
+      "The survey draws a ledge where the wall is flat. Its question is still open."
+    ]
+  ],
+  [
+    "warden7",
+    "halen",
+    [
+      "Champion. Carry a bowl if you want company. There is room at the gathering.",
+      "The youngster stayed when the pen opened. Care listens to that choice too."
+    ]
+  ],
+  [
+    "warden8",
+    "rysa",
+    [
+      "Welcome back, Champion. Leave your corrected notes for the next team.",
+      "The old page never names what the pair faced. Leave that space honest."
+    ]
+  ]
+];
+for (const [id,who,texts] of WARDEN_RETURNS) {
+ const actor=STORY.find(b=>b.id===id);
+ actor.byStory={...(actor.byStory||{}),leagueEnding:texts.map(text=>[who,text])};
+}

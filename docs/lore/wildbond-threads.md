@@ -228,3 +228,16 @@ and pending revelation. wildbond-final-reveals.md holds writer decisions only: a
 common ancestry remains decided but needs shared confirmation staged before its explicit reveal. Existing
 byBadge small answers, heritage perspectives, encounters and ending are unchanged. WB4.4's complete mystery
 resolution remains pending; this handoff is not a canon decision or implemented Godot finale.
+
+## Champion return observations (WB4.4 content / T54, Codex, 2026-10-09)
+
+Six gate lines and sixteen Warden lines add recognition after the completed league ending. Gate speakers are
+Avenne, Wren, Maren and Isolde: recognition, a cheer, water, observed colour and an open notebook. The Wardens
+echo their existing lessons and shared evidence: Nerys's witness directions, Toren's warmth without a name,
+Olan's rope/nest answer separate from the tally, Senna's repaired bell separate from the flat survey wall,
+Halen's youngster choosing to stay, Rysa's honest incomplete page, and Isolde/Vessa's freely chosen companionship.
+
+These are not new clues or testimony. No culprit, old pair, watcher or leader identity is assigned; no depth
+restoration or ancestry proof is asserted. All base/win/heritage and byBadge answers stay unchanged. Every heritage
+can hear the appendix, but no essential reveal or progress depends on hearing it. Contract/staging in
+wildbond-champion-returns.md; complete mystery payoff remains pending, not settled by a Champion title.

@@ -100,7 +100,7 @@ no flashes or mandatory sweeping camera. Depth waits for actual WB4.2/WB4.3 impl
 
 271 source/export/path/layout checks pass: exact source entries and ending, existing cast and team species,
 ordered IDs, all seven NPC approaches reachable, clean 39-table export, and 37 lines at four screen sizes
-(148 shared portrait previews). Frames in docs/screenshots/wildbond-finale-writing/ show the optional welcome
-on the real Classic dialogue surface, in isolated browser saves. This is writing validation, not a Godot league
+(148 shared portrait text/width/bottom previews). Frames in docs/screenshots/wildbond-finale-writing/ show the optional welcome
+on the real Classic dialogue surface, in isolated browser saves. Those initial previews did not check the whole card against the scene top; longer original Classic lines may clip the portrait heading on phones. T54 tightens that check for its new lines. This is writing validation, not a Godot league
 playthrough. All eight browser pages pass; no runtime, save, export tool, Godot, preview or version change.
 Latest main's seasonal/festival integration and Starfall story integration were preserved through the merge.
