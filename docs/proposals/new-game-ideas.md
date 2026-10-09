@@ -24,6 +24,9 @@ Retro Bowl so thats a strong option. But I think the Better as features section 
 5. **No:** a farm sim, a survivors-style auto-shooter, puzzle or detective games, survival crafting, anything online
    or gacha. Reasons below.
 
+**Games for other players** (Evan, 2026-10-09: "something for everyone"): a toddler toy and retro arcade cabinets are
+judged in [games-for-everyone.md](games-for-everyone.md).
+
 ## The pitch card for new games
 
 This card is for whole new games only; features and improvements use the scorecard in
