@@ -21,6 +21,7 @@ every game moves a little and none of them gets finished. Ideas arrive faster th
 | **Flagship** (confirmed by Evan 2026-10-09) | about 60% | The game we are finishing. Its next milestone comes before anything else in Claude's lane, and ChatGPT's data and writing for it comes first in Lane A. | **Wildbond (Godot)**, toward version 2.0 |
 | **Second** | about 25% | Grows steadily, one milestone at a time. | **Starfall village (Godot)** |
 | **ChatGPT's own** | ChatGPT's time after flagship support | One browser game ChatGPT moves forward. | **Realmbound** (the game window, phone pass, the second raid tier) |
+| **Family games** (Evan said yes 2026-10-09) | small, alongside | Two small browser games "for everyone", each starting with its one-PR smallest test; never at the flagship's expense. | **Little Ranch** (a tap-and-play toy for ages 2-4) and **the Arcade Cabinets** (original 1978-85 style single-screen games, Storm Front first), docs/proposals/games-for-everyone.md |
 | **Keep alive** | about 15% | Bugs from friends, small fixes, playtests. No new systems. | Diamond Career, Otherworld, browser Wildbond (Classic), the arcade and Come Play |
 | **Parked** | none | Ideas and proposals only, no builds. | Primordial, old Starfall Guild, card shop, Main Street, a second sport, walk-in arcade, the AI storyteller |
 
@@ -136,3 +137,6 @@ keep-alive writing for Diamond Career and Otherworld.
   option and now tops the waiting list; the "better as features" ideas (ranch races, fishing, Starfall grid delves)
   are good direction.
 - 2026-10-09 Evan confirmed: Wildbond first (flagship), as proposed.
+- 2026-10-09 Evan: yes to Little Ranch and the Arcade Cabinets (Storm Front first). Placed in a small "family games"
+  slot: LR1 and AC1 in DEVELOPMENT-PATH, each one smallest-test PR first. Default owners: Little Ranch ChatGPT
+  (browser), the cabinets the guest lane (Evan's dad), pending Evan's OK.

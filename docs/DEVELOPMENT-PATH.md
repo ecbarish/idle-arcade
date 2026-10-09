@@ -260,6 +260,15 @@ browser (E4).
 - [ ] AR3.2 [any]
 No-server sharing: trade and battle codes, ghost teams (V6 part 1).
 
+### Family games (Evan said yes 2026-10-09; docs/proposals/games-for-everyone.md)
+**Little Ranch (browser), a toy for ages 2-4.**
+- [ ] LR1 [ChatGPT] The smallest test: one baby creature, three actions (feed, bubbles, peekaboo) and a bedtime
+  ending; no reading, no failing, no links or purchases, a grown-up lock. Shares the baby-form drawings W9/W10 needs.
+**The Arcade Cabinets (browser), original single-screen games in the 1978-85 style.**
+- [ ] AC1 [guest] Storm Front (the Space Invaders shape, Evan's pick): one cabinet, original name and art, one PR.
+- [ ] AC2 [guest] Lighthouse Watch (the Missile Command shape).
+- [ ] AC3 [guest] Brisket's Crossing (the Frogger shape) and Ember Bricks (the Breakout shape), one PR each.
+
 ### Parked (Evan decides when)
 Primordial beyond light polish, a second sport. Proposals welcome; no builds.
 Judged ideas and the scorecard for new ones: docs/proposals/new-game-ideas.md (2026-10-09).

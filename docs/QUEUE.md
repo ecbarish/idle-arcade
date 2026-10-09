@@ -188,6 +188,7 @@ draft pull request titled with the ID). Lane R reviews and merges; guests never 
 |---|---|---|---|
 | X1 | **Play a game's first 20 minutes as a newcomer** and file what's confusing or broken as GitHub issues (the Bug and Feedback forms), with screenshots | open | No code. Any game on the arcade; Wildbond and Starfall previews first. One issue per problem |
 | X2 | **Broken links and pictures** (AR2.4): check every link and image in `guides/` and `playtest.html`, fix the broken ones | open | Only those files. Say in the PR how you checked |
+| X4 | **Arcade cabinet: Storm Front** (AC1, docs/proposals/games-for-everyone.md): an original 1978-85 style single-screen game in the Space Invaders shape, new name and art | open | Only new files under the folder the proposal names; pending Evan's OK for the guest lane |
 | X3 | **Player-text sweep of Otherworld** (D1): fix names and wording in `games/otherworld/js/` that break docs/CREATIVE.md "Writing for players" | open | Text only, no rules or numbers; `tests/otherworld.html` must still pass (`node tools/run-all-checks.cjs`) |
 
 ## Lane D: the local helper (Ollama on Evan's PC; small, checkable jobs only)
