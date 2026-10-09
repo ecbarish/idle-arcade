@@ -49,7 +49,7 @@ ladder and stop at the first rung that gives you work:
    for a family, the next cabinet's polish). Write it as a ticket first: add one line under that game in
    DEVELOPMENT-PATH with a new ID (`<game prefix><next number>`, plus `[any]`), with what it is, which files, and
    "done when". Score it with PRIORITIES.md's scorecard and put the score on the line. **12 or more out of 21** (PRIORITIES.md: it belongs in the path): claim
-   it and build it like any task (the ticket line is your first commit). **Under 12:** leave the line, open a GitHub
+   it and build it like any task (the ticket line is your first commit). **Under 12:** take the line back out, open a GitHub
    issue with the "Suggestion" form instead, and go to rung 4.
 4. **The fallback list:** QUEUE.md "When the road is empty" (pre-review, playtest, bug fixes, tests, text polish).
 
