@@ -115,7 +115,7 @@ Garrick, the Apothecary with prices, ranks and newcomers, music, saving. Checks:
 | ID | Project | Size | Status | Notes |
 |---|---|---|---|---|
 | SV1 | **Members' stories**: short arcs per adventurer, choices that can go either way | M | open (next) | Like Realmbound's R4 |
-| SV2 | **Seasons as chapters**, festivals, travelling merchants | L | open | starfall-village.md |
+| SV2 | **Seasons as chapters**, festivals, travelling merchants | L | open | starfall-village.md; shared calendar and festivals: docs/proposals/seasons-and-holidays.md |
 | SV3 | **Failing and excelling, visible**: a place that closes when run badly (and reopens), people who leave, rarer adventurers drawn by a well-run town | M | open | starfall-village.md "Failing and doing exceptionally" |
 | SV4 | **The tavern and placement**: a tavern you serve at; buildings near each other help a little | M | open | |
 | SV5 | **Expeditions you can see**: the wilds past the gate as a place, adventurers' camps, catalogue creatures as monsters | L | open | Shared catalogue |
