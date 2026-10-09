@@ -52,8 +52,8 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 
 ## How to use this list
 
-- **Pick** any project whose status is `open` and whose dependencies are done. Prefer the **Launch track** and the
-  current focus (Realmbound and Wildbond) unless Evan says otherwise.
+- **Pick** any project whose status is `open` and whose dependencies are done, in the focus order of
+  [PRIORITIES.md](PRIORITIES.md) (2026-10-09: Wildbond in Godot, then the Starfall village, then Realmbound).
 - **Claim it** before starting: change its status to `claimed: <who>, <date>, <branch>` in a tiny first commit
   (push it), so two assistants don't build the same thing. Release it (`open`) if you stop without finishing.
 - **One project, one branch** (`claude/<topic>`, `codex/<topic>`, `<ai>/<topic>`). Keep to the files the project

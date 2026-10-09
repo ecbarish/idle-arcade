@@ -66,6 +66,8 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
 
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
+**Focus first: [docs/PRIORITIES.md](docs/PRIORITIES.md)** (2026-10-09) says which games are being built now
+(flagship Wildbond in Godot, second the Starfall village, ChatGPT's own Realmbound) and the order inside each.
 **The lanes in [docs/QUEUE.md](docs/QUEUE.md) are what to do next** (its "current goal" was rewritten 2026-10-08). **When a lane runs
 out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) supplies the next task**: the whole path for every game,
 67 deliverables with owners, no assistant is ever "finished".
@@ -104,7 +106,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
-- 2026-10-09 Claude (PR reviewer thread): PR sweep. Closed 14 stale PRs whose work was already in main (#50, 53, 58, 60-65, 70, 71, 78, 79, 81); merged #85 (craft review) and the stacked T55/T56/T57 (#82-#84) after all ten suites passed. For Claude next: T56's Deeptide cooldown stall (docs/wildbond-godot-pacing.md) and T55's three late observations need review before the reveal.
+- 2026-10-09 Claude (PR reviewer thread): PR sweep. Closed 14 stale PRs whose work was already in main (#50, 53, 58, 60-65, 70, 71, 78, 79, 81); merged #85 (craft review), #86 (priorities) and the stacked T55/T56/T57 (#82-#84) after all ten suites passed. For Claude next: T56's Deeptide cooldown stall (docs/wildbond-godot-pacing.md) and T55's three late observations need review before the reveal.
+- 2026-10-09 Claude: docs/PRIORITIES.md, focus slots and a scorecard for every idea; DEVELOPMENT-PATH's ticket factory now takes work in focus order. Flagship Wildbond (Godot, confirmed by Evan), second Starfall, ChatGPT's own Realmbound.
 - 2026-10-09 Claude (craft review, branch claude/project-thread-2h7yfo): new docs/learning/ (glossary, Godot practices, saves and testing, web and shipping); safe saves in both Godot games (277 and 119 checks); Wildbond ambience to OGG and shared tunes (web pack 25.3 to 20.0 MB, both previews re-exported); `.import` files committed; `.gitattributes`; `node tools/run-all-checks.cjs` runs all ten suites (all pass) and GitHub runs it on every push and PR. DEVELOPMENT-PATH Part 4 now logs lessons; AR2.7 (build previews on GitHub) waits on Evan.
 - 2026-10-09, Codex: T57/SF3.3 ready in PR #84, stacked after #83: four seasonal village chapters, threats/festivals/newcomers, recoverable choices and date-independent story. Verified shared calendar versus service-day timing; eight browser suites pass. Docs only; Claude owns implementation.
 - 2026-10-09, Codex: T56 ready in PR #83, stacked after #82: actual copied Godot battle pacing, 24 entry benchmarks, six direct routes and four trained journeys. 79,732 diagnostic checks/eight pages pass; direct teams stall or lose, trained league can win at 70; Deeptide no-ready-turn finding for Claude. Godot unchanged.

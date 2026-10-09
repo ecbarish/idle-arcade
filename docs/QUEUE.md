@@ -37,7 +37,13 @@ and how much creative freedom you have are in [CREATIVE.md](CREATIVE.md).
 - **Saves:** new fields get defaults; old saves must load (add a check). Commits only as
   `206636510+ecbarish@users.noreply.github.com`.
 
-## The current goal (updated 2026-10-08, night)
+## The focus (2026-10-09): read [PRIORITIES.md](PRIORITIES.md) first
+
+**Flagship: Wildbond (Godot) to version 2.0. Second: the Starfall village. ChatGPT's own: Realmbound. Keep alive:
+Diamond Career, Otherworld, browser Wildbond. Parked: the rest.** Each lane takes flagship work first. PRIORITIES.md
+section 4 has the order inside each game; new ideas go through its scorecard before they reach a lane.
+
+## The current goal (updated 2026-10-08, night; the focus above now decides the order)
 
 What changed since the "Launch" goal of 2026-10-07: Evan moved the fleshed-out games to **Godot** (the new Wildbond
 and the Starfall village, which also play on the web), asked that **everything happen in the game window** in every
@@ -121,7 +127,7 @@ index.html or style.css until those phases are merged.
 | B4 | **Wildbond phase 4: menus you hold** | in Godot: the field book (J) and creature pages done; the Journal with map and badge case is part of WG8 | Wilddex field book, team scene, Journal with map and badge case |
 | B5 | **Wildbond phase 5: the ranch as a place** | in Godot: paddock, barn, nursery, trough, workbench done 2026-10-08; Maren's daily letter is WG8 | Trough, posts, meadow, breeding stall, shop counter, Maren's daily letter |
 | B6 | **L10** Accessibility; **L3** phone pass part 2 | open | Browser games now; the Godot previews need phone controls (WG10) |
-| B9 | **Next in Godot (in order):** WG1 tamer abilities, WG6 depth step 1 (including the colour-layer fix), WG7 variety pass, WG2 Stillreed Basin and on, SV1 Starfall members' stories, SV3 failing and excelling; rebuild the previews (play/) and the Come Play pictures after big steps | open | PROJECTS.md "Wildbond in Godot" and "Starfall in Godot" |
+| B9 | **Next in Godot, in focus order (PRIORITIES.md section 4, 2026-10-09):** Wildbond: pacing fixes from T56, finish the ending (WB4.3 with WB4.4b), phone controls and settings (WB6.1-6.2), the Spire and rematches (WB5.1), the Unbound (WB3.7), polish alongside (WB2.2-2.4, WS4). Starfall: SF2.5 apprentice, SF3.1 seasons, SF3.4 festivals. Rebuild play/ and the Come Play pictures after big steps | open | Was: WG1, WG6, WG7, WG2, SV1, SV3 (all done or under way by 2026-10-09) |
 | B6b | **The screen is the world, for every game** | Wildbond and Starfall: done in Godot; Diamond Career: ChatGPT A10 (T36); Realmbound: ChatGPT A12 (T38) | Evan, 2026-10-08. Realmbound first, done in Godot when Realmbound moves (docs/research/decisions.md, 2026-10-08 evening), unless it stays in the browser (the world fills the window; quests, bags, guild and the new Road guide move into the world: quest givers speak in place, bags and the quest log are things you open over the scene); then Diamond Career (the ballpark fills the screen, at-bat choices and contracts happen in the scene: the clubhouse, Iona, your home); then Starfall. One plan doc per game first, then small steps |
 | B6c | **V11 walk-in arcade, steps 1-2** | later (Evan: the games come first) | docs/research/arcade-first-visit-review.md: each game saves a small look record of its character; the hall puts you by the last door as that game's character, shows progress on the doors, glows the last-played door for a one-tap return |
 | B6d | **Starfall village, first slice (Godot)** | done 2026-10-08 (starfall-godot/, 33 checks); slice 2 done 2026-10-08 (plots, the Healer's Hut, a Training Yard, the town's rank and newcomers; 51 checks); slice 3 done 2026-10-08 (the Smithy worked by hand, Garrick, the Apothecary with prices, more plots, adventurers' savings; 85 checks); next: members' stories, seasons | docs/plans/starfall-village.md: the guild board, one inn run by hand, three adventurers who take bounties, return hurt and recover, hiring the first barkeep |

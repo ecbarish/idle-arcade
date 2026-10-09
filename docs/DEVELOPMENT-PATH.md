@@ -13,9 +13,11 @@ When your lane in docs/QUEUE.md has no `open` task, **do not stop and do not rep
 
 1. **Reviews first** (Claude): merge waiting PRs. **Bugs first** (everyone): open GitHub issues and anything Evan
    reported.
-2. **Find your next deliverable here:** go to the earliest milestone (M1 before M2) of any game that has an unticked
-   deliverable **with your owner tag** (`[Claude]`, `[ChatGPT]`, `[any]`, `[local]`) and no `(claimed ...)` note.
-   Prefer the game with the fewest open PRs, so work spreads out.
+2. **Find your next deliverable here, in focus order** ([PRIORITIES.md](PRIORITIES.md), updated 2026-10-09): the
+   flagship game first (its order is in PRIORITIES section 4), then the second game, then your own slot, then
+   keep-alive games. Within a game, the earliest milestone first. Take an unticked deliverable **with your owner tag**
+   (`[Claude]`, `[ChatGPT]`, `[any]`, `[local]`) and no `(claimed ...)` note. (This replaced "prefer the game with the
+   fewest open PRs", which spread work so evenly that no game got finished.)
 3. **Write the ticket** into docs/ROADMAP.md using the template below, add a row to your lane in QUEUE.md, and mark
    the deliverable here `(claimed: <you>, <date>, <branch>)`. Push that as the branch's first commit.
 4. **Build it, test it, open the PR** (QUEUE.md "The loop"), and go straight back to step 2.
@@ -115,6 +117,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB5.4 [Claude] Roaming legendaries (W3 part 2).
 - [ ] WB5.5 blocked: needs Evan (baby forms, W9/W10; default: the proposal's recommendations).
 - [ ] WB5.6 [ChatGPT] Catalogue batch 3 and 4 (12-15 creatures each, data and lore).
+- [ ] WB5.7 [Claude] Fishing at Saltmarsh (from docs/proposals/new-game-ideas.md, scored 16/18; added 2026-10-09).
 
 **WB-M6: version 2.0, ready for everyone.**
 - [ ] WB6.1 [Claude] Phone controls (WG10). Start by moving every key to named Input Map actions
@@ -151,7 +154,7 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
   visitor. Builds on the good-day bunting (SF2.2).
 **SF-M4: the wilds.**
 - [ ] SF4.1 [Claude] Expeditions you can see (SV5): the wilds past the gate, camps, catalogue
-creatures as monsters.
+creatures as monsters. Built as first-person grid delves (docs/proposals/new-game-ideas.md), one-PR prototype first.
 - [ ] SF4.2 [Claude] Phone controls and settings; Starfall guide [any]; trailer.
 
 ### Realmbound (browser)
@@ -244,6 +247,9 @@ Card shop (CS1), Main Street (MS1), Primordial beyond light polish, a second spo
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, priorities (Claude, docs/PRIORITIES.md):** spreading work evenly across every game kept all of them
+  moving and none finishing, while ideas kept arriving. Now focus slots (Evan confirmed Wildbond first) and one
+  scorecard; new ideas and improvements are scored and filed before anyone builds them.
 - **2026-10-09, craft review (Claude, docs/learning/):** saves were written straight over the old file, so a crash
   mid-write could lose a journey: both Godot games now save through a spare file and keep a backup. Wildbond's place
   sounds were WAV and two tunes were stored twice: now OGG and shared, web pack 25.3 to 20.0 MB. Godot's `.import`
