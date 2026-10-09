@@ -1010,6 +1010,8 @@ func _draw() -> void:
 		_draw_embers()
 	if map_name == "cloudglass":
 		_draw_clouds()
+	if map_name == "stillreed":
+		_draw_dragonflies()
 	if spotter and spot_t < 0.9:
 		# the "!" over a trainer who has just seen you
 		var ex := spotter.pos + Vector2(4, -18 - minf(spot_t * 20.0, 4.0))
@@ -1044,6 +1046,8 @@ func _draw_outdoor() -> void:
 		for x in rows[0].length():
 			if rows[y][x] in "=Pjq":
 				_draw_tile(x, y, rows[y][x])
+	if map_name == "stillreed":
+		_draw_basin()
 	# 3. houses, the barn and trees: standing objects with a footprint (so a 3D renderer can stand them up later)
 	_draw_structures()
 
@@ -1490,6 +1494,48 @@ func _on_battle(result: String) -> void:
 
 ## Water (the pack's water tiles, CC0): open water with now and then a lily pad or a glint, and a sandy shore with a dark
 ## edge drawn wherever the water meets land.
+## Stillreed's own look (WB3.1): the current running south down the river, cattails where the banks meet the water,
+## windfall under the orchard trees and a coil of ferry rope at the landing. All on the ground; nothing blocks the way.
+func _draw_basin() -> void:
+	var rows: Array = cur_map()
+	for y in rows.size():
+		for x in rows[0].length():
+			var ch: String = rows[y][x]
+			var o := Vector2(x, y) * TILE
+			if ch == "~":
+				for k in 2:
+					var ph := fmod(t * 0.8 + k * 0.5 + x * 0.31 + y * 0.07, 1.0)
+					draw_rect(Rect2(o + Vector2(4 + k * 6 + (y + k) % 3, ph * 16.0), Vector2(1, 4)), Color(1, 1, 1, 0.28 * (1.0 - ph)))
+			elif ch == "\"" and (tile_at(Vector2i(x - 1, y)) == "~" or tile_at(Vector2i(x + 1, y)) == "~"):
+				var side := 12.0 if tile_at(Vector2i(x + 1, y)) == "~" else 1.0
+				var sway := sin(t * 1.3 + y) * 0.8
+				for k in 2:
+					var p := o + Vector2(side + k * 2 + sway, 1 + k * 7)
+					draw_rect(Rect2(p + Vector2(1, 3), Vector2(1, 6)), Color("4a6a32"))
+					draw_rect(Rect2(p, Vector2(3, 4)), Figures.OUTLINE)
+					draw_rect(Rect2(p + Vector2(1, 0), Vector2(1, 3)), Color("7a4a26"))   # a cattail head
+			elif ch == "T" and y in [2, 3] and x > 16 and rows[y + 1][x] in ",.":
+				var u := o + Vector2(0, 16)
+				for k in 3:
+					var fx := Vector2(2 + (x * 7 + k * 5) % 12, 1 + (k * 3) % 5)
+					draw_rect(Rect2(u + fx - Vector2.ONE, Vector2(4, 4)), Figures.OUTLINE)
+					draw_rect(Rect2(u + fx, Vector2(2, 2)), Color("d8603a") if k != 1 else Color("e8b040"))
+	# the coil of ferry rope beside the landing post
+	var c := Vector2(10, 7) * TILE + Vector2(8, 9)
+	draw_circle(c, 5.0, Figures.OUTLINE)
+	draw_circle(c, 4.0, Color("cfb07a"))
+	draw_circle(c, 2.0, Color("8a6a3a"))
+	draw_rect(Rect2(c + Vector2(3, -1), Vector2(5, 1)), Color("cfb07a"))
+
+func _draw_dragonflies() -> void:
+	for k in 2:
+		var home := Vector2(13 * TILE + 8, (3 + k * 7) * TILE)
+		var p := home + Vector2(sin(t * 0.9 + k * 2.0) * 18.0, cos(t * 1.4 + k) * 10.0 + sin(t * 3.1 + k) * 3.0)
+		var flick := int(t * 20.0 + k) % 2 == 0
+		draw_rect(Rect2(p + Vector2(-1, 0), Vector2(6, 1)), Color("3a8ab0"))                       # the body
+		draw_rect(Rect2(p + Vector2(-3, -2 if flick else -1), Vector2(3, 1)), Color(0.9, 0.95, 1.0, 0.7))
+		draw_rect(Rect2(p + Vector2(-3, 2 if flick else 1), Vector2(3, 1)), Color(0.9, 0.95, 1.0, 0.7))
+		draw_rect(Rect2(p + Vector2(5, 0), Vector2(1, 1)), Color("1a3a4a"))
 func _draw_water(x: int, y: int, o: Vector2, n: int) -> void:
 	_tex(WATER, Vector2i(11, 0), Vector2i.ONE, o)
 	var sea: bool = map_name == "saltmarsh"
