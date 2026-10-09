@@ -6,7 +6,7 @@ function otherworldChecks() {
   const clone = l => JSON.parse(JSON.stringify(l));
   // walk every branch: returns { endings: Set, problems: [] }
   function explore(world, gift, mem, town) {
-    const endings = new Set(), problems = [];
+    const endings = new Set(), problems = [], reachableChoices = new Set();
     const life0 = { world, gift, name: 'Test', flags: {}, at: WORLDS[world].start, silver: 0, status: false, mem, ...(town ? { town: { ...town } } : {}) };
     const stack = [[WORLDS[world].start, life0, 0]];
     while (stack.length) {
@@ -18,13 +18,13 @@ function otherworldChecks() {
       if (!Array.isArray(lines) || lines.some(l => !Array.isArray(l) || typeof l[1] !== 'string')) problems.push('bad lines at ' + id);
       const avail = (n.choices || []).filter(c => !c.need || c.need(life));
       if (n.choices && !avail.length) problems.push('no choice available at ' + id);
-      if (avail.length) for (const c of avail) { const l2 = clone(life); l2.mem = life.mem; if (c.fx) c.fx(l2);
+      if (avail.length) for (const c of avail) { reachableChoices.add(c); const l2 = clone(life); l2.mem = life.mem; if (c.fx) c.fx(l2);
         if (c.end) endings.add(c.end); else stack.push([typeof c.go === 'function' ? c.go(l2) : c.go, l2, depth + 1]); }
       else if (n.end) endings.add(typeof n.end === 'function' ? n.end(life) : n.end);
       else if (n.go) stack.push([typeof n.go === 'function' ? n.go(life) : n.go, life, depth + 1]);
       else problems.push('dead end at ' + id);
     }
-    return { endings, problems };
+    return { endings, problems, reachableChoices };
   }
   const built = Object.keys(WORLDS).filter(w => WORLDS[w].start);
   const memSets = [{}, { tide: true }, { oldroot: true }, { guildmaster: true }, Object.fromEntries(Object.keys(MEMORIES).map(k => [k, true]))];
@@ -73,7 +73,7 @@ function otherworldChecks() {
   const withLife = fn => { const old = ow.S; try { ow.S = { ...fresh(), life: fixture() }; return fn(ow.S.life); } finally { ow.S = old; } };
   check('every conditional choice has an authored reason', () => Object.values(NODES).every(n => (n.choices || []).every(c => !c.need || typeof c.why === 'string' || typeof c.why === 'function')));
   check('locked options remain in their original order, rather than disappearing', () => withLife(l => {
-    l.gift = 'pocket'; return ow.choicesOf(NODES.a_alone).length === 3 && !ow.choiceReady(NODES.a_alone.choices[0]) && !ow.choiceReady(NODES.a_alone.choices[1]);
+    l.gift = 'pocket'; return ow.choicesOf(NODES.a_alone).length === 4 && !ow.choiceReady(NODES.a_alone.choices[0]) && !ow.choiceReady(NODES.a_alone.choices[1]);
   }));
   check("Appraisal closes Ressa's private door but keeps bread and labor available", () => withLife(l => {
     ow.run('a_market'); ow.D.skip();
@@ -313,6 +313,100 @@ function otherworldChecks() {
   }));
   check('Ashen rendering state and counters stay bounded without erasing learned knowledge',()=>{
     const l=af();l.ash={day:NaN,returns:-9,knowledge:{store:true}};ow.prepareLife(l,true);return l.ash.day===1&&l.ash.returns===0&&l.ash.knowledge.store;
+  });
+  // T42: knowledge travels; objects, relationships and the previous world's work do not.
+  const mf=(world,mem={},gift=Object.keys(GIFTS[world])[0])=>ow.prepareLife({world,gift,name:'Test',flags:{},at:WORLDS[world].start,silver:0,status:false,mem});
+  const mc=(node,text)=>NODES[node].choices.find(c=>typeof c.t==='string'&&c.t.includes(text));
+  check('every existing soul memory has a concrete use in a different world',()=>Object.keys(MEMORIES).every(k=>MEMORY_USES.some(u=>u.memory===k&&u.world!==MEMORY_ORIGIN[k]&&u.choice&&NODES[u.at].choices.includes(u.choice))));
+  for(const u of MEMORY_USES){
+    check('cross-life use is reachable: '+u.memory+' in '+u.world,()=>Object.keys(GIFTS[u.world]).some(g=>{
+      const r=explore(u.world,g,{[u.memory]:true});return !r.problems.length&&r.reachableChoices.has(u.choice);
+    }));
+    check('cross-life knowledge changes the world: '+u.memory,()=>{
+      const gift=u.world==='hearthmere'?'green':u.world==='ashen'?'return':'pocket';
+      const l=mf(u.world,{},gift);l.flags.records=true;
+      if(u.choice.need(l))return false;l.mem[u.memory]=true;if(!u.choice.need(l))return false;
+      const before=JSON.stringify({flags:l.flags,town:l.town,hearth:l.hearth,ash:l.ash});u.choice.fx(l);
+      return before!==JSON.stringify({flags:l.flags,town:l.town,hearth:l.hearth,ash:l.ash})&&l.silver===0;
+    });
+  }
+  for(const world of built)for(const gift of Object.keys(GIFTS[world]))for(const key of Object.keys(MEMORIES)){
+    const r=explore(world,gift,{[key]:true});
+    check('single carried memory has no dead end: '+world+', '+gift+', '+key,()=>{if(r.problems.length)throw Error(r.problems.slice(0,3).join('; '));return r.endings.size>0;});
+  }
+  check('each world has two people with wants, not relationship meters',()=>built.every(w=>{
+    const people=mf(w).people;return Object.keys(people).length===2&&Object.values(people).every(p=>typeof p.want==='string'&&typeof p.state==='string');
+  }));
+  check('Ressa remembers diverted flour and its repair, while Appraisal still costs privacy',()=>{
+    const l=mf('asterhold',{},'pocket'),ask=mc('a_return_market','kitchen hands');
+    NODES.a_market.choices[0].fx(l);if(!ask.need(l)||l.people.bren.state!=='owesHands')return false;
+    NODES.a_pocket_job.choices[0].fx(l);if(ask.need(l)||l.people.ressa.state!=='hurt')return false;
+    mc('a_return_market','retrieve the relief').fx(l);if(!ask.need(l)||l.people.ressa.state!=='mended')return false;
+    l.flags.readRessa=true;ow.prepareLife(l);return !ask.need(l)&&l.people.ressa.state==='guarded';
+  });
+  check('Bren repays hands with a rescue; the debt cannot be claimed twice',()=>{
+    const l=mf('asterhold'),cart=mc('a_return_market','cart journey');if(cart.need(l))return false;
+    NODES.a_market.choices[0].fx(l);if(!cart.need(l))return false;cart.fx(l);
+    return !cart.need(l)&&l.people.bren.state==='repaid'&&l.flags.farmersRescued&&endingLines(l,'e_walls').some(([,t])=>t.includes('Fennels stand inside'));
+  });
+  check('a rescued family is not described as still outside or erased at the feast',()=>{
+    const l=mf('asterhold',{mercy:true});l.flags.mira=true;mc('a_council','Stand beside Hesta').fx(l);
+    return !NODES.a_council.lines(l).some(([,t])=>t.includes('still out there'))&&!endingLines(l,'e_walls').some(([,t])=>t.includes('Nobody says'));
+  });
+  check('Vesper offers her reserve only after shared work; it can change a banked winter into an open table',()=>{
+    const l=mf('hearthmere',{},'cooking'),reserve=mc('h_winter','Vesper\'s own reserve');
+    l.hearth={day:3,stores:0,warmth:2,welcome:2};if(reserve.need(l)||winterReady(l))return false;
+    l.flags.door=true;ow.prepareLife(l);if(!reserve.need(l))return false;reserve.fx(l);
+    return winterReady(l)&&l.people.vesper.state==='sharedReserve'&&townEpilogue(l,'e_hearth_shared').some(([,t])=>t.includes('last sack'));
+  });
+  check('Puddle shares as a guest; a promise to stay at the spring is not converted into compulsory inn work',()=>{
+    const l=mf('hearthmere'),water=mc('h_prepared','share spring water');if(water.need(l))return false;
+    NODES.h_spring.choices[0].fx(l);if(!water.need(l))return false;water.fx(l);
+    if(water.need(l)||l.people.puddle.state!=='sharedWater'||!l.flags.puddleWater)return false;
+    const other=mf('hearthmere',{rootsong:true},'green');other.flags.puddle=true;NODES.h_spring.choices[1].fx(other);return other.people.puddle.state==='companioned'&&!water.need(other);
+  });
+  check('Kael remembers a hurt door, accepts repair, and then offers his word',()=>{
+    const l=mf('ashen',{},'silence'),witness=mc('s_work','your witness');l.flags.kael=true;l.flags.records=true;ow.prepareLife(l);if(!witness.need(l))return false;
+    NODES.s_square.choices[1].fx(l);if(witness.need(l)||l.people.kael.state!=='hurt')return false;
+    NODES.s_work.choices[0].fx(l);if(!witness.need(l)||l.people.kael.state!=='mended')return false;witness.fx(l);return l.flags.recordPublic&&l.flags.kaelWitness;
+  });
+  check('Emmet can carry evidence after help at the boats; no record is invented',()=>{
+    const l=mf('ashen'),copy=mc('s_work','Emmet to carry');l.flags.records=true;ow.prepareLife(l);if(copy.need(l))return false;
+    NODES.s_square.choices[2].fx(l);if(!copy.need(l))return false;copy.fx(l);return !copy.need(l)&&l.people.emmet.state==='repaid'&&l.flags.recordPublic&&l.flags.guided;
+  });
+  check('the forest song calms a beast in Asterhold, without overriding the Sword Saint\'s cost',()=>{
+    const l=mf('asterhold',{rootsong:true},'pocket'),song=mc('a_alone','Sing the forest');
+    if(!song.need(l))return false;song.fx(l);if(!l.flags.songCalmed||!NODES.a_alone_live.lines(l).some(([,t])=>t.includes('boar slows')))return false;
+    l.gift='sword';return !song.need(l);
+  });
+  check('all memories together cannot free hands bound by Blood Oath',()=>{
+    const l=mf('ashen',Object.fromEntries(Object.keys(MEMORIES).map(k=>[k,true])),'oath');l.flags.records=true;l.flags.oathBroken=true;
+    return !mc('s_work','Mira\'s lantern').need(l)&&!NODES.s_work.choices[0].need(l)&&!NODES.s_work.choices[3].need(l)&&!NODES.s_dusk.choices[0].need(l);
+  });
+  check('old saves derive wants and debts from choices without repeating their rewards',()=>{
+    const old=ow.S;try{const l=mf('asterhold');l.flags.unloaded=true;l.flags.mendedCrate=true;l.entered.a_market=true;l.silver=9;delete l.people;
+      ow.S={...fresh(),life:l,mem:{seed:true}};ow.save();ow.S=fresh();ow.load();const r=ow.S.life;
+      if(r.people.bren.state!=='owesHands'||r.people.ressa.state!=='mended'||r.silver!==9||!r.entered.a_market)return false;
+      const before=JSON.stringify(r);ow.save();ow.S=fresh();ow.load();return before===JSON.stringify(ow.S.life)&&ow.S.mem.seed;
+    }finally{ow.S=old;}
+  });
+  check('a returned dawn forgets all personal debts but remembers knowledge and soul memories',()=>withA(l=>{
+    l.flags.boats=true;l.flags.kael=true;l.ash.knowledge.record=true;l.mem.mercy=true;ow.prepareLife(l);
+    if(l.people.emmet.state!=='owesHands')return false;ow.finish('e_ash_death');ow.D.skip();
+    return l.people.emmet.state==='waiting'&&l.people.kael.state==='waiting'&&l.ash.knowledge.record&&l.mem.mercy;
+  }));
+  check('a memory decision cannot be clicked or selected with a key before it is carried',()=>{
+    const old=ow.S;try{const l=mf('ashen',{},'return');ow.S={...fresh(),life:l};ow.run('s_stair');ow.D.skip();const i=NODES.s_stair.choices.findIndex(c=>c.memory==='shelter');
+      const button=ow.D.el.querySelectorAll('.dlg-choices button')[i],before=JSON.stringify(l);button.click();ow.D.choose(i);document.dispatchEvent(new KeyboardEvent('keydown',{key:String(i+1),bubbles:true}));
+      return button.disabled&&/Hearthmere/.test(button.textContent)&&JSON.stringify(l)===before;
+    }finally{ow.S=old;}
+  });
+  check('real portrait choice, reload and resume preserve one lantern supply delivery',()=>{
+    const old=ow.S;try{const l=mf('ashen',{lantern:true},'return');l.flags.records=true;l.flags.shelter=true;ow.S={...fresh(),mem:{lantern:true},life:l};
+      ow.run('s_work');ow.D.skip();const i=NODES.s_work.choices.findIndex(c=>c.memory==='lantern');ow.D.el.querySelectorAll('.dlg-choices button')[i].click();
+      if(l.at!=='s_dusk'||!l.flags.supplies||!NODES.s_dusk.choices[0].need(l))return false;
+      ow.save();const before=JSON.stringify(l);ow.S=fresh();ow.load();ow.run(ow.S.life.at);return before===JSON.stringify(ow.S.life);
+    }finally{ow.S=old;}
   });
   return out;
 }

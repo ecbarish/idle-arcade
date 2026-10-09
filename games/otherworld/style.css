@@ -44,3 +44,13 @@
 .dlg-otherworld.asking .dlg-choices{display:flex}
 .dlg-otherworld .dlg-choices button:focus-visible{outline:3px solid #ffe3a0;outline-offset:2px}
 @media(max-width:560px){.dlg-otherworld.dlg{bottom:8px;max-height:calc(100dvh - 130px)}.dlg-otherworld .dlg-choices button{font-size:13px}.dlg-otherworld .choice-why{font-size:12px}}
+/* A wide world still needs readable people and choices. */
+@media(min-width:1600px){
+ .dlg-otherworld.dlg{width:min(1040px,90vw);padding:16px;gap:16px}
+ .dlg.dlg-otherworld .dlg-face{width:80px;height:80px}
+ .dlg.dlg-otherworld .dlg-who{font-size:24px}
+ .dlg.dlg-otherworld .dlg-role{font-size:16px}
+ .dlg.dlg-otherworld .dlg-say{font-size:20px}
+ .dlg.dlg-otherworld .dlg-choices button{font-size:18px}
+ .dlg.dlg-otherworld .choice-why{font-size:14px}
+}
