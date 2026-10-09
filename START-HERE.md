@@ -103,6 +103,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude: game review of every game (docs/proposals/game-review-2026-10-09.md): twelve proposals GR-1 to GR-12 with screenshots, for the priorities thread to order. Godot checks 273 and 116 pass.
 - 2026-10-09 Claude: Evan chose Wildbond's final truth (recorded in the thread ledger; WB4.4b to ChatGPT). Godot Starfall SF2.3 the Tavern (pouring, Tamsin, shutting, placement bonuses), 116 checks, web preview rebuilt.
 - 2026-10-09 Claude: merged T53 (finale handoff) and T54 (Champion returns); placed in Godot: the homecoming at the league gate and every Warden's welcome; 273 checks; browser Wildbond 2290; web preview rebuilt. Question for Evan: the final truth (docs/proposals/wildbond-final-reveals.md).
 - 2026-10-09, Codex: T54 ready in PR #81, stacked after #80: leagueAfter and eight Warden byStory.leagueEnding arrays, 22 lines. 69 new checks, 101 source/export/staging/layout checks, 88 full-card previews and eight suites pass. Classic dispatch/Godot/versions untouched.
