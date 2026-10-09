@@ -10,6 +10,9 @@ the build order is set in [docs/PRIORITIES.md](../PRIORITIES.md).
 
 ## The short version
 
+**Decided (Evan, 2026-10-09): both.** Little Ranch and the Arcade Cabinets join the plan, each starting with its
+smallest test (below); docs/PRIORITIES.md places them.
+
 1. **For his daughter: Little Ranch** (17/18). A tap-and-play toy for ages 2 to 4: baby creatures from Wildbond's
    catalogue to feed, bathe, play peekaboo with and tuck into bed. No words to read, no way to lose, no timers, no
    links or purchases, and a bedtime scene that ends each visit gently. The baby creature drawings it needs are the
