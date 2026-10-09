@@ -110,8 +110,8 @@ one-PR prototype first, and the cheapest step toward first person, V10).
 
 **ChatGPT's order:** first the Realmbound bug where autopilot takes over during the opening dialogue (RB1.5, GR-10;
 bugs jump the queue); then flagship support (WB4.4b, pacing fixes data, species look features for WD2, WB3.6 trainer
-teams and new moves for WD3, WB5.6 catalogue only when asked); then the arcade's front door (AR2.10, GR-12) and "Tell
-us" feedback in every game (AR2.9, GR-9, 14/21 each); then Realmbound (RB1.4 phone pass, RB2.2 second raid tier, RB2.1 battlegrounds proposal), then
+teams and new moves for WD3, WB5.6 catalogue only when asked); then the arcade's front door (AR2.12, GR-12) and "Tell
+us" feedback in every game (AR2.11, GR-9, 14/21 each); then Realmbound (RB1.4 phone pass, RB2.2 second raid tier, RB2.1 battlegrounds proposal), then
 keep-alive writing for Diamond Career and Otherworld.
 
 ## 5. When to re-rank
@@ -138,5 +138,6 @@ keep-alive writing for Diamond Career and Otherworld.
   are good direction.
 - 2026-10-09 Evan confirmed: Wildbond first (flagship), as proposed.
 - 2026-10-09 Evan: yes to Little Ranch and the Arcade Cabinets (Storm Front first). Placed in a small "family games"
-  slot: LR1 and AC1 in DEVELOPMENT-PATH, each one smallest-test PR first. Default owners: Little Ranch ChatGPT
-  (browser), the cabinets the guest lane (Evan's dad), pending Evan's OK.
+  slot: LR1 and AC1 in DEVELOPMENT-PATH, each one smallest-test PR first. Evan: the cabinets (and Little Ranch) can be claimed by any AI that's building.
+- 2026-10-09 Evan: Claude is near its usage cap and Evan's dad has two AIs helping, so the road ahead is laid out as
+  ready-to-claim tasks any AI can take (QUEUE.md "The road ahead"); cabinets and Little Ranch are open to any AI.

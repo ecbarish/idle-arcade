@@ -48,6 +48,32 @@ at once (a claim written on your branch isn't on main yet). So:
    COMMS. A claim with no new commits for **two days** is stale: anyone may take it after one comment on its PR.
 5. **Two claims on the same ID:** the older pull request keeps it; the newer one moves to another deliverable.
 
+## The road ahead (ready to claim by any AI; Evan, 2026-10-09)
+
+Evan: "we are nearing our cap on Claude, so if we lay out a strong road in front of us we can use our other helpers
+to push us along." These tasks need **no Godot** and are open to **any** AI (ChatGPT/Codex, Evan's dad's AIs,
+Claude). Take the first one no open pull request names, claim it ("Claiming work" above), build it, open the PR;
+lane R (or Evan) merges. Each line names its spec; read it first.
+
+| # | Task (path ID) | Spec | Files | Done when |
+|---|---|---|---|---|
+| 1 | **Realmbound waits for the player** (RB1.5, a bug) | docs/proposals/game-review-2026-10-09.md GR-10 | `games/realmbound/` | Autopilot never acts during the first dialogue (`js/13-world-ui.js` near line 95); no stray blocks in the sky; a check proves it; `tests/run.html` passes |
+| 2 | **Storm Front cabinet** (AC1) | docs/proposals/games-for-everyone.md | new folder only, plus one launcher link | Plays start to finish on desktop and phone, original name and art, high score saved; a small test page |
+| 3 | **Little Ranch, smallest test** (LR1) | docs/proposals/games-for-everyone.md | new folder only, plus one launcher link | One creature, feed, bubbles, peekaboo, bedtime; no reading needed, nothing to fail, no links out, grown-up lock |
+| 4 | **"Tell us" in every game** (AR2.11) | game review GR-9; docs/FEEDBACK.md | settings of each browser game, `playtest.html` | Opens a prefilled GitHub issue (game, version); a 10-minute playtest script on Come Play |
+| 5 | **The front door** (AR2.12) | game review GR-12 | `index.html`, `launcher/` | The hub leads with the Godot previews; Starfall Guild and Primordial under Classic; the old homepage vote closed (docs/VOTES.md) |
+| 6 | **Creature looks as data** (WD2, data half) | game review GR-1 | browser Wildbond data, exported with `tools/godot-export` | Every species has look features (ears, tail, pattern, horns...) in data; Claude draws them later |
+| 7 | **More moves** (WD3, data half) | game review GR-2 | browser Wildbond data | About 60 moves, a signature move per family, a few statuses, balanced with the pacing sim; Claude wires battles later |
+| 8 | **Lighthouse Watch cabinet** (AC2) | games-for-everyone.md | as AC1 | As AC1 |
+| 9 | **Brisket's Crossing, then Ember Bricks** (AC3) | games-for-everyone.md | as AC1 | As AC1, one PR each |
+| 10 | **Realmbound phone pass** (RB1.4) | PROJECTS.md L3 | `games/realmbound/` | Plays at 375 px wide with no sideways scroll; `tests/run.html` passes |
+| 11 | **Realmbound second raid tier** (RB2.2) | PROJECTS.md R7 | `games/realmbound/` | Data and encounters, balanced; checks |
+| 12 | **Diamond Career: a full season** (DC2.1) | docs/plans/diamond-career.md D2 | `games/diamond-career/` | Standings, roles that change with form, an end-of-season review; `tests/diamond.html` passes |
+| 13 | **Newcomer playtests** (X1) and **link check** (X2), **Otherworld text sweep** (X3) | Lane X below | see Lane X | see Lane X |
+| 14 | **A Wildbond guide** (WB6.4) | `guides/` style | `guides/` | First steps, the element chart, the ranch, with real screenshots from `play/wildbond/` |
+
+Godot work (lanes W and S) stays with Claude for now; lane P refills this table as tasks merge.
+
 ## The loop (every assistant)
 
 1. `git fetch`; start from the latest `origin/main`. Read [COMMS.md](COMMS.md), the message board between assistants.
@@ -188,7 +214,6 @@ draft pull request titled with the ID). Lane R reviews and merges; guests never 
 |---|---|---|---|
 | X1 | **Play a game's first 20 minutes as a newcomer** and file what's confusing or broken as GitHub issues (the Bug and Feedback forms), with screenshots | open | No code. Any game on the arcade; Wildbond and Starfall previews first. One issue per problem |
 | X2 | **Broken links and pictures** (AR2.4): check every link and image in `guides/` and `playtest.html`, fix the broken ones | open | Only those files. Say in the PR how you checked |
-| X4 | **Arcade cabinet: Storm Front** (AC1, docs/proposals/games-for-everyone.md): an original 1978-85 style single-screen game in the Space Invaders shape, new name and art | open | Only new files under the folder the proposal names; pending Evan's OK for the guest lane |
 | X3 | **Player-text sweep of Otherworld** (D1): fix names and wording in `games/otherworld/js/` that break docs/CREATIVE.md "Writing for players" | open | Text only, no rules or numbers; `tests/otherworld.html` must still pass (`node tools/run-all-checks.cjs`) |
 
 ## Lane D: the local helper (Ollama on Evan's PC; small, checkable jobs only)
