@@ -84,7 +84,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [x] WB3.4 [Claude] Farwatch Reach. *Done 2026-10-09 from the T49 brief: the stone lookout with its lamp room, the harbor house with drying nets, the pier over the water, Rysa's open ledger, a dry bench, mooring posts and shore lanterns; Delka, Sivren, Ceryn and Warden Rysa from data (Rysa's team as the data has it, 68-70); the Peaceful tune and waves. The road north to the league is honest that the league is not built yet (WB4.1). Not done: the Watchlight and answering-lights scene staging (story beats, later).*
 - [x] WB3.5 [ChatGPT] (Hollowecho T47, Sunthread and Farwatch T49: all merged 2026-10-09) For each area before Claude builds it: a short "area brief" in docs/lore/ (places, people,
   clues from T40, creatures, one memorable moment) so the Godot build has everything in one page.
-- [x] WB3.6 [ChatGPT] T56 ready for review in PR #83: actual copied Godot battle/rules, final-area and league pacing, raw measurements and cooldown finding; no balance tuning or Godot edits. Report: docs/wildbond-godot-pacing.md.
+- [x] WB3.6 [ChatGPT] T56, merged 2026-10-09 (PR #83): actual copied Godot battle/rules, final-area and league pacing, raw measurements and cooldown finding; no balance tuning or Godot edits. Report: docs/wildbond-godot-pacing.md.
 - [ ] WB3.7 [Claude] The Unbound appear (WG5): first encounters, a choice to help or oppose; reputation begins.
 
 **WB-S: the turning year (Evan asked 2026-10-09; can run alongside WB-M3; docs/proposals/seasons-and-holidays.md).**
@@ -144,7 +144,7 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
 **SF-M3: seasons.**
 - [ ] SF3.1 [Claude] Seasons as chapters (SV2), the first one ending in a festival.
 - [ ] SF3.2 [Claude] Travelling merchants and visitors from other games (the shared universe, lightly).
-- [x] SF3.3 [ChatGPT] T57 ready in PR #84: four seasonal chapters in docs/plans/starfall-village.md, each with threat/festival/newcomer, recoverable choices and shared-calendar boundaries; docs only, Claude implements.
+- [x] SF3.3 [ChatGPT] T57, merged 2026-10-09 (PR #84): four seasonal chapters in docs/plans/starfall-village.md, each with threat/festival/newcomer, recoverable choices and shared-calendar boundaries; docs only, Claude implements.
 
 - [ ] SF3.4 [Claude] Festivals in Starfall on the shared calendar (WS1's rules): the square and every building you've
   built decorated for each season's festival (lights and garlands at midwinter), a festival supper at the inn, a
