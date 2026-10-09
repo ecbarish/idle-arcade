@@ -17,7 +17,7 @@ commit.
 
 | Lane | Owner | Owns these files | Takes from the path |
 |---|---|---|---|
-| **W: Wildbond (Godot)**, the flagship | Claude: the Wildbond thread (none yet: any free Claude thread takes it until one exists) | `wildbond-godot/` (except `assets/`), `play/wildbond/` | Every `[Claude]` WB, WD and WS deliverable, AR2.8 (splitting main.gd) |
+| **W: Wildbond (Godot)**, the flagship | Claude: "Wildbond builder" thread (started 2026-10-09) | `wildbond-godot/` (except `assets/`), `play/wildbond/` | Every `[Claude]` WB, WD and WS deliverable, AR2.8 (splitting main.gd) |
 | **S: Starfall (Godot)** | Claude: "Continue Idle Arcade games" thread | `starfall-godot/` (except `assets/`), `play/starfall/` | Every `[Claude]` SF deliverable |
 | **A: browser games, data and lore** | ChatGPT/Codex | `games/`, `tests/*.html`, `docs/lore/`, the hub and launcher, `guides/` | Every `[ChatGPT]` deliverable (table below) |
 | **G: art, sound and music** | Claude: "Game assets" thread | `*/assets/`, `shared/` art and sound, `CREDITS.md`, `licenses/` | Asset requests from any lane; hands wiring code to W or S as a short note in COMMS |
