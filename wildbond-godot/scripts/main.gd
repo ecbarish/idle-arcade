@@ -112,7 +112,7 @@ var npc_info := {}                           # id -> { data from the map, beaten
 var badges: Array = []
 var spotter: Mover = null                    # a trainer who has seen you and is walking over
 var spot_t := 0.0
-const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed"]    # the maps the Godot version has so far
+const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho"]    # the maps the Godot version has so far
 var starters: Array[Mover] = []
 var partner: Mover = null
 var map_name := "larkhaven"
@@ -149,6 +149,7 @@ var battle: Control
 @onready var caption: Label = $UI/Caption
 @onready var place: Label = $UI/Place
 @onready var colour_layer: Node2D = $Painted/Figures
+var canopy: Node2D
 
 func _ready() -> void:
 	demo = "--demo" in OS.get_cmdline_user_args()
@@ -175,6 +176,12 @@ func _ready() -> void:
 	_set_map("larkhaven")
 	cam.position = me.pos + Vector2(8, 8)
 	colour_layer.draw.connect(_draw_painted)
+	canopy = Node2D.new()                         # tree tops in front of you, above the colour layer (depth, WB2.2)
+	var cm := ShaderMaterial.new()
+	cm.shader = preload("res://shaders/canopy.gdshader")
+	canopy.material = cm
+	$Painted.add_child(canopy)
+	canopy.draw.connect(_draw_canopy)
 	register = Register.new()
 	register.keep = not demo
 	$UI.add_child(register)
@@ -678,6 +685,7 @@ func _process(dt: float) -> void:
 	_update_ui()
 	queue_redraw()
 	colour_layer.queue_redraw()
+	canopy.queue_redraw()
 
 func _step(d: Vector2i) -> void:
 	me.face = d
@@ -1012,6 +1020,9 @@ func _draw() -> void:
 		_draw_clouds()
 	if map_name == "stillreed":
 		_draw_dragonflies()
+	if map_name == "hollowecho":
+		_draw_bells()
+		_draw_mist()
 	if spotter and spot_t < 0.9:
 		# the "!" over a trainer who has just seen you
 		var ex := spotter.pos + Vector2(4, -18 - minf(spot_t * 20.0, 4.0))
@@ -1048,6 +1059,8 @@ func _draw_outdoor() -> void:
 				_draw_tile(x, y, rows[y][x])
 	if map_name == "stillreed":
 		_draw_basin()
+	if map_name == "hollowecho":
+		_draw_hills()
 	# 3. houses, the barn and trees: standing objects with a footprint (so a 3D renderer can stand them up later)
 	_draw_structures()
 
@@ -1070,6 +1083,40 @@ func _draw_painted() -> void:
 				_draw_actor(colour_layer, o, 0, 1.0 - _restored_at(o.pos + Vector2(8, 8)))
 				break
 
+## The big trees: which picture (two kinds) and where it stands, staggered half a tile off the grid so the edge reads as
+## woods. Edge rows sit low so they never hide the town.
+func _tree_cell(x: int, y: int) -> Vector2i:
+	return Vector2i(0 if (x * 3 + y) % 4 < 2 else 2, 0)
+
+func _tree_at(x: int, y: int) -> Vector2:
+	var above := Vector2i(x, y - 1)
+	if tile_at(above) == "T":
+		return Vector2(x - 0.5, y - 1.5) * TILE
+	# a tree at the edge of open ground stands at its true height (its crown over the tile above, and over you when
+	# you walk behind it: _draw_canopy), but never over a sign or something lying on the ground
+	var open: bool = tile_at(above) in [",", "\"", "."] and not DATA.MAPS.get(map_name, {}).get("items", []).any(func(it): return Vector2i(int(it.at[0]), int(it.at[1])) == above)
+	return Vector2(x - 0.5, y - (1.0 if open else 0.25)) * TILE
+
+## Depth (WB2.2): when you or your partner walk behind a tree, its top passes in front of you, a little see-through
+## so you never lose yourself. Faded by the same rule as the world (shaders/canopy.gdshader).
+func _draw_canopy() -> void:
+	if indoors():
+		return
+	var rows: Array = cur_map()
+	for m in actors():
+		if not _is_painted(m):
+			continue
+		var body: Rect2 = Rect2(m.pos + Vector2(2, -6), Vector2(12, 22))
+		var feet: float = m.pos.y + 16.0
+		var x0: int = maxi(0, int(m.pos.x / TILE) - 2)
+		var y0: int = maxi(0, int(m.pos.y / TILE) - 1)
+		for y in range(y0, mini(rows.size(), y0 + 4)):
+			for x in range(x0, mini(rows[0].length(), x0 + 5)):
+				if rows[y][x] != "T" or (x + y) % 2 != 0:
+					continue
+				var r := Rect2(_tree_at(x, y), Vector2(32, 32))
+				if r.end.y - 3.0 > feet and r.intersects(body):
+					canopy.draw_texture_rect_region(NATURE, r, Rect2(Vector2(_tree_cell(x, y)) * 16.0, Vector2(32, 32)), Color(1, 1, 1, 0.72))
 ## How much colour has come back at a point in the world (0 faded, 1 restored), as the fade shader computes it.
 func _restored_at(p: Vector2) -> float:
 	if INTERIORS.has(map_name) and spilled:
@@ -1369,6 +1416,9 @@ func _update_ui() -> void:
 	var mat: ShaderMaterial = $FadeWorld/Shade.material
 	mat.set_shader_parameter("points", pts)
 	mat.set_shader_parameter("count", count)
+	var cmat: ShaderMaterial = canopy.material
+	cmat.set_shader_parameter("points", pts)
+	cmat.set_shader_parameter("count", count)
 
 # ---------------------------------------------------------------- the environment (Ninja Adventure tilesets, CC0)
 # Evan (2026-10-08) liked the pack's structures and nature. Figures stay our own (figures.gd). Each tile or object
@@ -1441,7 +1491,7 @@ func _draw_structures() -> void:
 			var ch: String = rows[y][x]
 			if ch == "T":
 				_tex(NATURE, Vector2i(1, 10), Vector2i.ONE, Vector2(x, y) * TILE)        # a hedge bush under the treeline
-			elif ch in "r#" and not doors.any(func(d): return x - d.x >= -1 and x - d.x <= 2 and y >= d.y - 2 and y <= d.y):
+			elif ch in "r#" and map_name != "hollowecho" and not doors.any(func(d): return x - d.x >= -1 and x - d.x <= 2 and y >= d.y - 2 and y <= d.y):
 				_tex(NATURE, Vector2i(0, 10), Vector2i.ONE, Vector2(x, y) * TILE)        # garden bushes beside each cottage
 	for d in doors:
 		if not (map_name == "larkhaven" and d == BARN_DOOR):
@@ -1449,7 +1499,9 @@ func _draw_structures() -> void:
 	for y in rows.size():                                                               # big trees, back to front
 		for x in rows[0].length():
 			if rows[y][x] == "T" and (x + y) % 2 == 0:       # staggered, half a tile off the grid, so the edge reads as woods
-				_tex(NATURE, Vector2i(0 if (x * 3 + y) % 4 < 2 else 2, 0), Vector2i(2, 2), Vector2(x - 0.5, y - (1.5 if tile_at(Vector2i(x, y - 1)) == "T" else 0.25)) * TILE)   # edge rows sit low so they never hide the town
+				_tex(NATURE, _tree_cell(x, y), Vector2i(2, 2), _tree_at(x, y))   # edge rows sit low so they never hide the town
+	if map_name == "hollowecho":
+		_draw_bell_house(Vector2i(2, 1))
 	# Maren's barn stands taller than the cottages and in front of the trees behind it
 	if map_name == "larkhaven":
 		draw_texture_rect_region(HOUSE, Rect2(Vector2(BARN_DOOR.x - 1, BARN_DOOR.y - 4) * TILE, BARN_SPRITE.size), BARN_SPRITE)
@@ -1536,6 +1588,92 @@ func _draw_dragonflies() -> void:
 		draw_rect(Rect2(p + Vector2(-3, -2 if flick else -1), Vector2(3, 1)), Color(0.9, 0.95, 1.0, 0.7))
 		draw_rect(Rect2(p + Vector2(-3, 2 if flick else 1), Vector2(3, 1)), Color(0.9, 0.95, 1.0, 0.7))
 		draw_rect(Rect2(p + Vector2(5, 0), Vector2(1, 1)), Color("1a3a4a"))
+## Hollowecho's ground (WB3.2): worn flagstones in the hamlet, and cave mouths where the floor runs in under the rock,
+## dark inside so you can see they go somewhere (no interior yet).
+func _draw_stone_floor(x: int, y: int, o: Vector2, n: int) -> void:
+	draw_rect(Rect2(o, Vector2(16, 16)), Color("8c8c80"))
+	for k in 2:
+		draw_rect(Rect2(o + Vector2(0, k * 8 + 7), Vector2(16, 1)), Color("6e6e62"))
+		draw_rect(Rect2(o + Vector2((k * 8 + x * 5 + y * 3) % 14 + 1, k * 8), Vector2(1, 7)), Color("6e6e62"))
+	if n == 3:
+		draw_rect(Rect2(o + Vector2(4, 3), Vector2(2, 1)), Color("a4a496"))
+	if tile_at(Vector2i(x, y - 1)) == "R" and tile_at(Vector2i(x, y + 1)) != "#":
+		# under the rock: the mouth of a cave, darkening toward the back
+		var deep := 1 if tile_at(Vector2i(x, y + 1)) == "_" else 0
+		draw_rect(Rect2(o, Vector2(16, 16)), Color(0.08, 0.08, 0.10, 0.55 + 0.2 * deep))
+		draw_rect(Rect2(o + Vector2(0, 12), Vector2(16, 4)), Color(0.08, 0.08, 0.10, 0.25))
+
+## The three places of the hills, each recognisable at a glance (from the area brief): the hamlet's tool roll, the
+## surveyor's measuring cord and chalk marks, and the flat resting stones outside the Warden's cave. Nothing blocks the way.
+func _draw_hills() -> void:
+	# the bell mender's tool roll, open on the step
+	var tr := Vector2(2, 5) * TILE
+	draw_rect(Rect2(tr + Vector2(1, 6), Vector2(14, 6)), Figures.OUTLINE)
+	draw_rect(Rect2(tr + Vector2(2, 7), Vector2(12, 4)), Color("8a5a32"))
+	for k in 4:
+		draw_rect(Rect2(tr + Vector2(3 + k * 3, 6), Vector2(1, 3)), Color("b8b8b0"))
+	# the survey cord, pegged across the grass with a knot every few paces, and chalk arrows on the rock
+	var a := Vector2(13, 7) * TILE + Vector2(2, 12)
+	var b := Vector2(17, 7) * TILE + Vector2(14, 12)
+	for p in [a, b]:
+		draw_rect(Rect2(p - Vector2(1, 4), Vector2(2, 5)), Color("6b4a2a"))
+	draw_line(a, b, Color("e8dcb0"), 1.0)
+	for k in 5:
+		draw_rect(Rect2(a.lerp(b, (k + 1) / 6.0) - Vector2(1, 1), Vector2(2, 2)), Color("c84a3a"))
+	for c in [Vector2i(12, 8), Vector2i(18, 8)]:
+		var o := Vector2(c) * TILE
+		draw_line(o + Vector2(4, 8), o + Vector2(11, 8), Color(0.95, 0.95, 0.9, 0.8), 1.0)
+		draw_line(o + Vector2(8, 5), o + Vector2(11, 8), Color(0.95, 0.95, 0.9, 0.8), 1.0)
+		draw_line(o + Vector2(8, 11), o + Vector2(11, 8), Color(0.95, 0.95, 0.9, 0.8), 1.0)
+	# flat resting stones in Senna's clearing
+	for c in [Vector2i(21, 6), Vector2i(23, 6)]:
+		var o := Vector2(c) * TILE
+		draw_rect(Rect2(o + Vector2(1, 6), Vector2(14, 8)), Figures.OUTLINE)
+		draw_rect(Rect2(o + Vector2(2, 7), Vector2(12, 6)), Color("9a9a8c"))
+		draw_rect(Rect2(o + Vector2(2, 7), Vector2(12, 2)), Color("b4b4a6"))
+
+## The bell keeper's house in the hamlet (5 tiles wide: two rows of slate roof over a stone wall, an open doorway in the
+## middle where the map leaves a gap). Drawn here because the cottage sprite is for houses with a door tile.
+func _draw_bell_house(at: Vector2i) -> void:
+	var o := Vector2(at) * TILE
+	var w := 5 * TILE
+	draw_rect(Rect2(o + Vector2(-1, 31), Vector2(w + 2, 18)), Figures.OUTLINE)
+	draw_rect(Rect2(o + Vector2(0, 32), Vector2(w, 16)), Color("a8a494"))                     # the stone wall
+	for k in 2:
+		for j in 6:
+			draw_rect(Rect2(o + Vector2(j * 14 + (k * 7) % 14, 32 + k * 8), Vector2(1, 8)), Color("807c6e"))
+		draw_rect(Rect2(o + Vector2(0, 39 + k * 8), Vector2(w, 1)), Color("807c6e"))
+	draw_rect(Rect2(o + Vector2(2 * TILE + 2, 34), Vector2(12, 14)), Color("1e1c22"))       # the open doorway
+	draw_rect(Rect2(o + Vector2(2 * TILE + 1, 33), Vector2(14, 2)), Color("5a3a1e"))
+	draw_rect(Rect2(o + Vector2(TILE / 2 - 4, 37), Vector2(8, 6)), Color("4a6a8a"))         # two small windows
+	draw_rect(Rect2(o + Vector2(w - TILE / 2 - 4, 37), Vector2(8, 6)), Color("4a6a8a"))
+	draw_rect(Rect2(o + Vector2(-4, -3), Vector2(w + 8, 36)), Figures.OUTLINE)                # the slate roof, overhanging
+	draw_rect(Rect2(o + Vector2(-3, -2), Vector2(w + 6, 34)), Color("56645c"))
+	for k in 5:
+		draw_rect(Rect2(o + Vector2(-3, 4 + k * 6), Vector2(w + 6, 1)), Color("44504a"))
+	draw_rect(Rect2(o + Vector2(-3, -2), Vector2(w + 6, 2)), Color("74847a"))
+	draw_rect(Rect2(o + Vector2(w / 2 - 3, -9), Vector2(6, 8)), Figures.OUTLINE)            # a little bell cote on the ridge
+	draw_rect(Rect2(o + Vector2(w / 2 - 2, -8), Vector2(4, 6)), Color("d8a840"))
+## The hamlet's bells, hanging under the eaves and swaying a little; one answers the other.
+func _draw_bells() -> void:
+	for k in 2:
+		var hook := Vector2(3 + k * 2, 3) * TILE + Vector2(8, 1)
+		var sw := sin(t * 1.7 + k * 1.9) * 2.0
+		draw_line(hook, hook + Vector2(sw, 5), Color("4e3220"), 1.0)
+		var bp := hook + Vector2(sw - 3, 5)
+		draw_rect(Rect2(bp - Vector2(1, 1), Vector2(8, 8)), Figures.OUTLINE)
+		draw_rect(Rect2(bp + Vector2(1, 0), Vector2(4, 2)), Color("d8a840"))
+		draw_rect(Rect2(bp + Vector2(0, 2), Vector2(6, 4)), Color("d8a840"))
+		draw_rect(Rect2(bp + Vector2(1, 2), Vector2(1, 3)), Color("f4d880"))
+		draw_rect(Rect2(bp + Vector2(2, 6), Vector2(2, 1)), Color("6b4a2a"))
+
+## Low lavender-grey mist that lies in the hollows and drifts slowly; it stays below faces and paths stay readable.
+func _draw_mist() -> void:
+	for k in 5:
+		var y := (8.5 + k * 1.1) * TILE
+		var x := fmod(t * (4.0 + k) + k * 97.0, 30.0 * TILE + 160.0) - 160.0
+		draw_rect(Rect2(Vector2(x, y), Vector2(150, 6)), Color(0.78, 0.74, 0.86, 0.10))
+		draw_rect(Rect2(Vector2(x + 20, y + 3), Vector2(100, 4)), Color(0.78, 0.74, 0.86, 0.08))
 func _draw_water(x: int, y: int, o: Vector2, n: int) -> void:
 	_tex(WATER, Vector2i(11, 0), Vector2i.ONE, o)
 	var sea: bool = map_name == "saltmarsh"
@@ -1704,16 +1842,24 @@ func _skip_opening() -> void:
 		_place_ranch()
 	var st: Array = DATA.MAPS[start].get("start", [16, 12, "up"] if start == "larkhaven" else [13, 14, "up"])
 	if start != "thornwood":
-		var order := ["thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed"]
+		var order := ["thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho"]
 		var at := maxi(1, order.find(start))
-		badges = ["thorn", "tide", "ember", "beacon"].slice(0, at)
-		team[0].lvl = [5, 14, 24, 34, 46][at]
+		badges = ["thorn", "tide", "ember", "beacon", "reed"].slice(0, at)
+		team[0].lvl = [5, 14, 24, 34, 46, 56][at]
 		team[0].hp = R.stats(team[0]).hp
 	if "--photo" in OS.get_cmdline_user_args():      # pictures of the world: nobody asks to evolve mid-shot
 		for c in team: c["hold"] = 999
 	for a in OS.get_cmdline_user_args():           # a picture inside a room: -- --skip-opening --at=larkhaven --room=inn
 		if a.begins_with("--room="):
 			(func(): _go(a.substr(7))).call_deferred()
+	for a in OS.get_cmdline_user_args():           # stand on a tile for a picture: -- --skip-opening --at=stillreed --stand=18,1
+		if a.begins_with("--stand="):
+			var xy := a.substr(8).split(",")
+			get_tree().create_timer(0.4).timeout.connect(func():
+				me.tile = Vector2i(int(xy[0]), int(xy[1]))
+				me.pos = Vector2(me.tile) * TILE
+				me.path.clear()
+				me.face = Vector2i.DOWN)
 	if "--depth" in OS.get_cmdline_user_args():       # a picture of depth: Maren stands just in front of you (-- --skip-opening --at=larkhaven --depth)
 		(func():
 			maren.where = map_name
@@ -1721,7 +1867,7 @@ func _skip_opening() -> void:
 			maren.pos = Vector2(maren.tile) * TILE
 			maren.path.clear()).call_deferred()
 	if "--colour" in OS.get_cmdline_user_args():     # the area with its colour fully back (for pictures of the restored valley)
-		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "barn"]:
+		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "barn"]:
 			restore.append({ "where": m, "at": Vector2(192, 108), "r": 5000.0, "goal": 5000.0 })
 	if "--bench" in OS.get_cmdline_user_args():      # at Maren's workbench, the partner trying on a harness (-- --skip-opening --bench)
 		for c in team: c["hold"] = 999
@@ -2185,6 +2331,9 @@ func _after_story(id: String, result: String) -> void:
 
 ## Sand (the floor tileset) and rocks (drawn in code: a boulder with a lit top and a dark base).
 func _draw_sand(x: int, y: int, o: Vector2, n: int) -> void:
+	if map_name == "hollowecho":
+		_draw_stone_floor(x, y, o, n)
+		return
 	_tex(FLOOR, Vector2i(1, 1), Vector2i.ONE, o)
 	if n == 2:
 		draw_rect(Rect2(o + Vector2(5, 9), Vector2(2, 1)), Color("c8a070"))          # a shell
@@ -2198,6 +2347,7 @@ func _draw_sand(x: int, y: int, o: Vector2, n: int) -> void:
 const MOUNTAINS := {
 	"emberfall": { "rock": Color("8a7464"), "turf": Color(0.65, 0.54, 0.41, 0.32) },
 	"cloudglass": { "rock": Color("8d97a3"), "turf": Color(0.62, 0.68, 0.72, 0.34) },
+	"hollowecho": { "rock": Color("7d8576"), "turf": Color(0.40, 0.49, 0.38, 0.30) },
 }
 var CLIFF := Color("8a7464")
 var TURF := Color(0.65, 0.54, 0.41, 0.32)

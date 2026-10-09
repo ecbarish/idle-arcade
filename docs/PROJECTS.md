@@ -10,6 +10,12 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 |---|---|---|---|---|
 | RB1.3 | Walkable town road (T48) | M | claimed: Codex, 2026-10-09, codex/realmbound-road-places | Inn and traveler camp in the world; no Godot work |
 
+## Area briefs for the Godot build
+
+| ID | Project | Size | Status | Notes |
+|---|---|---|---|---|
+| WB3.5a | Hollowecho brief (T47) | S | claimed: Codex, 2026-10-09, codex/wildbond-hollowecho-brief | Existing canon/data gathered for Claude; Stillreed already built, Sunthread/Farwatch later |
+
 ## How to use this list
 
 - **Pick** any project whose status is `open` and whose dependencies are done. Prefer the **Launch track** and the
@@ -70,6 +76,12 @@ for every game, and how to make your next ticket when your lane is empty: [DEVEL
   leftover conflict markers (`git grep -n "^<<<<<<< "`). Evan likes big chunks per prompt.
 - **Tools on Evan's PC:** Godot 4.7.2 and its export templates (`C:\Users\evanb\Godot`), ffmpeg
   (`C:\Users\evanb\Tools\ffmpeg-9.0.2-essentials_build\bin`).
+
+## Arcade preview discoverability
+
+| ID | Project | Size | Status | Notes |
+|---|---|---|---|---|
+| AR2.2 | **Put the new previews on the arcade shelf** (T46) | S | claimed: Codex, 2026-10-09, codex/arcade-previews | New preview cards and links; Classic saves stay separate; no Godot/export edit |
 
 ## Wildbond in Godot (the new Wildbond; Claude's lane)
 

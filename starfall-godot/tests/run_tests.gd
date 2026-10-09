@@ -379,10 +379,13 @@ func _run() -> void:
 	check(main.price_i == 1, "the slate changes the price (Cheap, Fair, Dear)")
 	var herbs0: int = main.herbs
 	b_ap.a.lvl = 9
-	b_ap.a.job = "slimes"
-	b_ap.a.hp = b_ap.a.max
-	main._come_home(b_ap)
-	main.queue.erase(b_ap)
+	for _try in 3:                                    # a 95% job: try again on the rare bad day
+		if main.herbs > herbs0:
+			break
+		b_ap.a.hp = b_ap.a.max
+		b_ap.a.job = "slimes"
+		main._come_home(b_ap)
+		main.queue.erase(b_ap)
 	b_ap.a.state = "town"
 	b_ap.a.lvl = 2
 	check(main.herbs > herbs0, "jobs by the creek and the woods bring herbs home")
@@ -430,6 +433,39 @@ func _run() -> void:
 	check(not main.story_ready(yh), "Yuna's lesson with Ama needs the Healer's Hut")
 	main.built = keep_built
 	check(main.story_ready(yh), "with the hut standing, she's ready to ask")
+	# ---- failing and excelling, visible (SF2.2)
+	main.good_days = 0
+	main.bad_days = 0
+	main.today = { "done": 0, "failed": 2, "meals": 0, "earned": 0, "unfed": 0 }
+	main._judge_day()
+	main.today = { "done": 0, "failed": 1, "meals": 0, "earned": 0, "unfed": 2 }
+	var hard: String = main._judge_day()
+	check(main.bad_days == 2 and "Fewer people" in hard, "two hard days in a row: the town notices")
+	main._new_notices()
+	check(main.notices.size() == 2, "and the board is quieter (two notices)")
+	var low: Variant = hero("Aki")
+	low.where = "town"
+	low.a.state = "town"
+	low.a.morale = 1
+	main.today = { "done": 0, "failed": 0, "meals": 0, "earned": 0 }
+	var left: String = main._judge_day()
+	check(low.a.state == "quitting" and "Aki has packed up" in left, "someone at rock bottom packs up and walks to the gate")
+	low.where = "gone"
+	low.a.state = "gone"
+	main.bad_days = 0
+	for i in 3:
+		main.today = { "done": 3, "failed": 0, "meals": 4, "earned": 30, "unfed": 0 }
+		var said: String = main._judge_day()
+		if i == 1:
+			check("bunting" in said and "Aki has come back" in said and low.where == "town" and int(low.a.morale) == 6, "two good days: bunting, and Aki comes back")
+	check(main.good_days == 3 and main.visitors == ["Mirelle"] and hero("Mirelle") != null and "bold" in hero("Mirelle").a.traits, "three good days: a rarer adventurer comes because of the town's name")
+	main._new_notices()
+	check(main.notices.size() == 4 and main._note_rect(3).end.x <= 352.0, "and the board fills up (four notices, all on the board)")
+	var people_before: int = main.heroes.size()
+	main.today = { "done": 3, "failed": 0, "meals": 4, "earned": 30, "unfed": 0 }
+	main._judge_day()
+	check(main.visitors.size() == 2 and main.heroes.size() == people_before + 1, "a fourth good day brings the second traveller, and only once")
+	main.today = { "done": 0, "failed": 0, "meals": 0, "earned": 0 }
 	# ---- saving the town and loading it back (a test file, never the real one)
 	main.no_save = false
 	main.save_path = "user://test_town.json"
@@ -443,6 +479,7 @@ func _run() -> void:
 	check(main._load() and main.coins == 77 and main.heroes.size() == heroes_saved and main.day == day_saved, "the town saves and loads back")
 	check(main.finished("healer") == "west" and main.finished("yard") == "east" and main.ama.where == "town" and main.rank >= 1, "with its buildings, Ama, and its rank")
 	check(main.finished("smithy") == "north" and main.smith_hired and main.garrick.where == "town" and main.stock == 2 and main.herbs > 0, "and its smithy, Garrick, the apothecary's shelf and herbs")
+	check(main.good_days == 4 and main.visitors.size() == 2, "and how the town has been doing, and who has come")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(main.save_path))
 	main.no_save = true
 	print("Starfall Godot checks: %d passed, %d failed" % [passed, failed])

@@ -3,6 +3,15 @@
 Shared plan for every contributor (Claude, ChatGPT/Codex, or a person). One ticket per session.
 Mark a ticket done in the same PR that finishes it.
 
+### T46: Arcade, put the new previews on the shelf (AR2.2)
+- [x] Built 2026-10-09; PR #73 for review. Separate editions and saves; 174 launcher checks and all eight pages pass.
+Why: friends should find the current Godot games without hunting through Come Play, while keeping Classic journeys and saves reachable.
+Read first: docs/DEVELOPMENT-PATH.md AR2.2, docs/PROJECTS.md Read first, docs/CREATIVE.md, play/README.md and current preview READMEs.
+Branch: codex/arcade-previews (stacked after T44/#71; launcher overlaps).
+- Add distinct new Wildbond/Starfall preview cards with real existing screenshots, factual scope, desktop/loading guidance and direct play/ links. Keep Classic cards, progress and reset tied only to their existing browser saves.
+- Primary landscape places enter the new versions; both versions remain on the road and in the hall. Preview cards never load the engines before the player chooses them or claim a Classic save is a preview save.
+- Do not edit Godot, play/ exports, service worker, save schemas or versions. Keyboard links, phone through ultrawide, reduced motion, all eight pages, new launcher checks; README and one Session line.
+
 ### T45: Wildbond, early-road heritage recognition (WB2.6)
 - [x] Built by Codex, 2026-10-08; PR #72 for review, not merged. 60 exported reactions; all eight pages pass. Godot dispatch remains with Claude.
 Why: the chosen roots should change who confides in the tamer while keeping every route to the truth open (heritage proposal and thread ledger).
@@ -21,6 +30,15 @@ Branch: codex/realmbound-road-places.
 - The town exit invokes existing travel; return resumes the same field state. No battles, dungeon/raid shortcuts, automatic gold/items or instant healing. Deliberate catch-your-breath uses the current rest rate; no progress ticks while reading.
 - Road state is transient, hero/account/zone-bound and cleared on boot; old saves remain unchanged. No Godot/shared engine/version edits. Files: new js/33-road-places.js and road-places.css; small scene/step/boot/index hooks; tests/realmbound-scenarios.cjs and documentation.
 - All eight pages pass; connected paths and transitions, callback safety, normal healing, no currency/quest windfalls and reload checks; inspect phone through ultrawide with screenshots. README and one Session log line.
+
+### T47: Wildbond, Hollowecho build brief (WB3.5 part 1)
+- [x] Built 2026-10-09; runtime inventory verified; documentation-only handoff, no new clues or engine edits.
+Why: Claude is building the next Godot area; its existing people, clues and encounter data should be together without a new canon or engine rewrite.
+Read first: docs/lore/wildbond.md, docs/lore/wildbond-threads.md, browser 00-data.js and 11-maps.js, docs/CREATIVE.md, docs/wildbond-plan.md.
+Branch: codex/wildbond-hollowecho-brief, from latest main.
+- Write docs/lore/wildbond-hollowecho-brief.md: route/coordinates, people/voices, species and encounters, all T40 clues/payoffs, heritage delivery, one memorable arrival-to-return moment and a concrete acceptance checklist for Claude.
+- Distinguish existing exported canon from proposed staging. Preserve names, levels, badge rewards and undecided mysteries. No engine, browser data, save or version changes.
+- Verify cited source IDs/coordinates/content using a read-only browser inventory; all eight pages pass. README and one Session log line.
 
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.

@@ -69,6 +69,11 @@ const RANKS := [
 	{ "name": "Market Town", "built": 4, "jobs": 30 },
 ]
 const NEWCOMERS := [["Kaito", "archer", 1], ["Hana", "knight", 2], ["Sora", "monk", 3]]
+## Rarer adventurers who only come once Starfall has a good name (three good days in a row), one each time.
+const VISITORS := [["Mirelle", "mage", 4, "bold", "I heard Starfall pays fairly and feeds its people. A wandering mage could do worse."],
+	["Tobin", "thief", 4, "mapper", "Three good days running, they say in the next valley. I came to see for myself. I know every back road."]]
+## What makes a day good or hard (shown in the evening report).
+const GOOD_DAY := { "done": 2 }
 ## The smithy: what each better set of gear costs an adventurer (from their own savings), and the forge's hot spot.
 const GEAR_COST := [40, 80, 130]
 const GEAR_WORD := ["plain kit", "good gear", "fine gear", "masterwork gear"]
@@ -167,6 +172,9 @@ var stock := 0                              # tonics on the shelf
 var price_i := 1                            # Cheap, Fair or Dear
 var shelf_open := false
 var brewing := 0.0                          # seconds of stirring left at the pot
+var good_days := 0                          # good days in a row (SF2.2): bunting, a busier board, word travels
+var bad_days := 0                           # hard days in a row: a quieter board
+var visitors: Array = []                    # the travelling adventurers who have come because of the town's name
 
 var cam: Camera2D
 var ui: CanvasLayer
@@ -205,6 +213,8 @@ func _ready() -> void:
 		built = { "west": { "what": "healer", "left": 0.0 }, "east": { "what": "yard", "left": 8.0 } }
 		_place_ama()
 		lines.clear()
+	if "--goodrun" in OS.get_cmdline_user_args():     # a town on a good run: bunting over the street (-- --no-save --built --goodrun)
+		good_days = 2
 	if "--story" in OS.get_cmdline_user_args():       # Ren wants a word, and you're mid-conversation: -- --no-save --story
 		for h in heroes:
 			if h.a.name == "Ren":
@@ -257,7 +267,7 @@ func _dress(m: Mover) -> void:
 func _new_notices() -> void:
 	var ids: Array = JOBS.map(func(j): return j.id)
 	ids.shuffle()
-	notices = ids.slice(0, 3)
+	notices = ids.slice(0, clampi(3 + (1 if good_days >= 2 else 0) - (1 if bad_days >= 2 else 0), 2, 4))
 	posted = posted.filter(func(p): return p in notices)
 
 # ---------------------------------------------------------------- the map
@@ -632,6 +642,14 @@ func _hero(h: Mover, dt: float) -> void:
 		"away":
 			if a.timer <= 0.0:
 				_come_home(h)
+		"quitting":
+			if h.path.is_empty():
+				if h.tile == GATE + Vector2i.LEFT:
+					h.where = "gone"
+					a.state = "gone"
+				elif a.timer <= 0.0:
+					a.timer = 1.0
+					send(h, GATE + Vector2i.LEFT)
 		"to_counter":
 			if h.path.is_empty() and a.timer <= 0.0:
 				a.timer = 0.6
@@ -761,6 +779,7 @@ func _counter(dt: float) -> void:
 	if float(h.a.waited) > PATIENCE:
 		h.a.morale = maxi(0, int(h.a.morale) - 1)
 		bark(h, "Nobody's cooking? Fine. Dry bread it is.")
+		today["unfed"] = int(today.get("unfed", 0)) + 1
 		_to_bed(h)
 
 func serve(h: Mover, by_hand: bool) -> void:
@@ -1174,12 +1193,88 @@ func _day(dt: float) -> void:
 			bryn_offered = false
 			meals = HIRE_AFTER - 3
 			report += " You couldn't pay Bryn, so she's gone back to her own kitchen."
+	report += _judge_day()
 	caption.text = report
-	caption_t = 9.0
+	caption_t = 11.0
 	day += 1
 	today = { "done": 0, "failed": 0, "meals": 0, "earned": 0 }
 	_new_notices()
 
+# ---------------------------------------------------------------- failing and excelling, visible (SF2.2)
+## How the day went, judged at nightfall, with what it means in the street. A good day: at least two jobs done, none
+## gone badly, nobody left hungry at the counter. A hard day: more jobs gone badly than done, or two left hungry.
+## Someone at rock bottom packs up and leaves (and may come back once things are better); a good run brings bunting,
+## more work on the board and, in time, rarer adventurers who have heard Starfall's name. Returns the report's words.
+func _judge_day() -> String:
+	var out := ""
+	var done := int(today.done)
+	var failed := int(today.failed)
+	var unfed := int(today.get("unfed", 0))
+	if done >= int(GOOD_DAY.done) and failed == 0 and unfed == 0:
+		good_days += 1
+		bad_days = 0
+		out += " A good day; people are talking about Starfall." if good_days < 2 else " Another good day. The town has hung out bunting."
+	elif failed > done or unfed >= 2:
+		bad_days += 1
+		good_days = 0
+		out += " A hard day." if bad_days < 2 else " Another hard day. Fewer people bring work to the board."
+	else:
+		good_days = maxi(0, good_days - 1)
+		bad_days = maxi(0, bad_days - 1)
+	for h in heroes:
+		if h.where == "town" and h.a.state == "town" and int(h.a.morale) <= 1:
+			h.a.state = "quitting"
+			h.a.timer = 0.0
+			bark(h, "I'm sorry, guildmaster. My heart's not in it any more.")
+			send(h, GATE + Vector2i.LEFT)
+			out += " %s has packed up and gone; if Starfall does better, they may come back." % h.a.name
+			break
+	if good_days >= 2:
+		for h in heroes:
+			if h.where == "gone":
+				_return(h, "I heard things are going well here. Have you room for me again?")
+				out += " %s has come back." % h.a.name
+				break
+	if good_days >= 3 and visitors.size() < VISITORS.size():
+		var v: Array = VISITORS[visitors.size()]
+		visitors.append(v[0])
+		var c: Dictionary = CLASSES[v[1]]
+		var mx := int(c.hp * (1.0 + 0.2 * (int(v[2]) - 1)))
+		var m := Mover.new("hero%d" % heroes.size(), GATE + Vector2i.LEFT)
+		m.a = { "name": v[0], "cls": v[1], "lvl": v[2], "xp": 0, "hp": mx, "max": mx, "morale": 8, "state": "town", "job": "", "timer": 3.0, "hair": HAIR[(heroes.size() * 4 + 3) % HAIR.size()], "purse": 50, "gear": 1, "fine": false, "tonic": false, "beat": 0, "jobs_done": 0, "traits": [v[3]], "asked": false }
+		_dress(m)
+		heroes.append(m)
+		bark(m, v[4])
+		send(m, TOWN_AREA.position + Vector2i(4, 2))
+		out += " A traveller, %s, has come because of the town's good name." % v[0]
+	return out
+
+## Someone who left walks back in through the gate, ready to try again.
+func _return(h: Mover, line: String) -> void:
+	h.where = "town"
+	h.tile = GATE + Vector2i.LEFT
+	h.pos = Vector2(h.tile) * TILE
+	h.path.clear()
+	h.a.state = "town"
+	h.a.morale = 6
+	h.a.timer = 2.0
+	bark(h, line)
+	send(h, TOWN_AREA.position + Vector2i(3, 1))
+
+## Bunting strung across the street while the town is having a good run: little flags that flutter.
+func _bunting_draw() -> void:
+	var a := Vector2(INN_DOOR.x + 2, INN_DOOR.y - 1) * TILE + Vector2(8, 4)
+	var b := Vector2(HALL_DOOR.x - 2, HALL_DOOR.y - 1) * TILE + Vector2(8, 4)
+	var cols := [Color("e0483e"), Color("f2d24a"), Color("5b8def"), Color("59c38a")]
+	var prev := a
+	for k in 25:
+		var f := (k + 1) / 25.0
+		var p := a.lerp(b, f) + Vector2(0, sin(f * PI) * 10.0)
+		draw_line(prev, p, Color("4e3220"), 1.0)
+		prev = p
+		if k % 2 == 0 and k < 24:
+			var flap := sin(t * 3.0 + k) * 1.0
+			draw_colored_polygon(PackedVector2Array([p, p + Vector2(5, 0), p + Vector2(2.5 + flap, 6)]), cols[(k / 2) % cols.size()])
 # ---------------------------------------------------------------- conversations and passing remarks
 func say(who: String, text: String) -> void:
 	lines.append({ "who": who, "text": text })
@@ -1244,7 +1339,9 @@ func board_pick(i: int) -> void:
 func _note_rect(i: int) -> Rect2:
 	if i >= notices.size():
 		return Rect2(158, 186, 68, 16)
-	return Rect2(42 + i * 102, 46, 96, 120)
+	var n := maxi(1, notices.size())
+	var w := (308.0 - 6.0 * (n - 1)) / n
+	return Rect2(38 + i * (w + 6.0), 46, w, 120)
 
 # ---------------------------------------------------------------- drawing the town
 func _tex(tex: Texture2D, cell: Vector2i, size: Vector2i, at: Vector2) -> void:
@@ -1287,7 +1384,8 @@ func _draw() -> void:
 		if not m.a.is_empty() and badly_hurt(m):
 			draw_rect(Rect2(m.pos + Vector2(4, -3), Vector2(8, 2)), Color("f4f0e8"))      # a bandage round the head
 	_lit_windows()
-
+	if good_days >= 2:
+		_bunting_draw()
 func _look(m: Mover) -> Dictionary:
 	var src: Dictionary = LOOKS.get(m.id, m.look)
 	var out := {}
@@ -1585,7 +1683,7 @@ func save_game() -> void:
 	var d := { "v": 1, "coins": coins, "day": day, "day_t": day_t, "meals": meals, "hired": hired, "offered": bryn_offered,
 		"notices": notices, "posted": posted, "today": today, "me": [me.tile.x, me.tile.y],
 		"built": built, "jobs": total_jobs, "rank": rank, "herbs": herbs, "stock": stock, "price": price_i,
-		"pieces": pieces, "smith": smith_hired, "garrick": garrick.where == "town",
+		"pieces": pieces, "smith": smith_hired, "garrick": garrick.where == "town", "good": good_days, "bad": bad_days, "visitors": visitors,
 		"heroes": heroes.map(func(h): return h.a) }
 	var f := FileAccess.open(save_path, FileAccess.WRITE)
 	if f:
@@ -1613,6 +1711,9 @@ func _load() -> bool:
 	stock = int(d.get("stock", 0))
 	price_i = int(d.get("price", 1))
 	pieces = int(d.get("pieces", 0))
+	good_days = int(d.get("good", 0))
+	bad_days = int(d.get("bad", 0))
+	visitors = Array(d.get("visitors", []))
 	smith_hired = bool(d.get("smith", false))
 	smith_customer = null
 	if d.get("garrick", false) and finished("smithy") != "":
@@ -1638,7 +1739,10 @@ func _load() -> bool:
 		var m := Mover.new("hero%d" % i, TOWN_AREA.position + Vector2i(i * 3 + 1, i % 2))
 		m.a = a
 		# whoever was out or queuing comes home to rest; everyone else is in town
-		if a.state in ["away", "leaving", "to_board", "to_apoth", "to_counter", "to_rest", "resting"]:
+		if a.state in ["gone", "quitting"]:
+			a.state = "gone"                           # still away; they may come back on a good run
+			m.where = "gone"
+		elif a.state in ["away", "leaving", "to_board", "to_apoth", "to_counter", "to_rest", "resting"]:
 			a.state = "resting"
 			a.job = ""
 			m.where = "inside"

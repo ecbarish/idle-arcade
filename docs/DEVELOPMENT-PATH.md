@@ -66,7 +66,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 
 **WB-M2: who you are and where you stand.**
 - [x] WB2.1 [Claude] Tamer abilities with heritages (WG1): done 2026-10-08 (Orders menu: Rally, a family order, Toren's Steady).
-- [ ] WB2.2 [Claude] Depth step 1 (WG6): ground heights, object footprints and heights (part 1 done 2026-10-08: the colour layer drawn in true depth order, people in front of you faded as the world is). Left: ground heights, footprints and heights on objects, tree canopies in front of you.
+- [ ] WB2.2 [Claude] Depth step 1 (WG6): ground heights, object footprints and heights (part 1 done 2026-10-08: the colour layer drawn in true depth order, people in front of you faded as the world is). Part 2 done 2026-10-09: trees beside open ground stand at their true height and their crowns pass in front of you (see-through, faded like the world: shaders/canopy.gdshader), never over a sign or an item. Left: ground heights, footprints and heights on objects (houses and rocks).
 - [ ] WB2.3 [Claude] Variety pass (WG7) (done 2026-10-08: an animated effect per element in battle; waves and wind under the music. Tried the pack's water ripples: opaque tiles, rejected). Left: waterfalls, edge
   tiles.
 - [ ] WB2.4 [Claude] Interiors: the inn, the shop and two homes in Larkhaven, walkable (inn and shop done 2026-10-08, with Old Ned and Juniper; homes left).
@@ -77,10 +77,10 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 
 **WB-M3: the rest of the valley (areas 5-8).**
 - [ ] WB3.1 [Claude] Stillreed Basin in Godot (map, ferry, trainers, Warden), with its own furniture, sound and music. *Step 1 done 2026-10-09: the area is walkable with its wooden footbridges, trainers, Warden, river ambience and the Boat tune; step 2: the moored ferry skiff and its mooring sign (readable), the river flowing under the bridges. Step 3: its own touches: the current running down the river, cattails on the banks, windfall under the orchard, a coil of ferry rope, dragonflies. Still to do (later, with the story): a ferry ride once the rope is mended.*
-- [ ] WB3.2 [Claude] Hollowecho Hills.
+- [x] WB3.2 [Claude] Hollowecho Hills. *Done 2026-10-09 from ChatGPT's brief (docs/lore/wildbond-hollowecho-brief.md): walkable with Veslin, Narro, Orri (byBadge and heritage lines from data), Warden Senna and her gate; the bell house with two swaying bells, the tool roll, the survey cord and chalk arrows, Senna's resting stones, cave mouths, grey-green hill stone, low mist, the Quiet tune. Not done: Undertone's reunion staging and the answering-bell moment (story beats, later); Senna's team levels left as the data has them (58-60; the lore paragraph says 60-63).*
 - [ ] WB3.3 [Claude] Sunthread Commons.
 - [ ] WB3.4 [Claude] Farwatch Reach.
-- [ ] WB3.5 [ChatGPT] For each area before Claude builds it: a short "area brief" in docs/lore/ (places, people,
+- [ ] WB3.5 [ChatGPT] (Hollowecho brief done, merged 2026-10-09, T47; Sunthread/Farwatch remain open) For each area before Claude builds it: a short "area brief" in docs/lore/ (places, people,
   clues from T40, creatures, one memorable moment) so the Godot build has everything in one page.
 - [ ] WB3.6 [ChatGPT] Trainer teams and a pacing sim for areas 5-8 using the Godot rules (rules.gd matches the browser).
 - [ ] WB3.7 [Claude] The Unbound appear (WG5): first encounters, a choice to help or oppose; reputation begins.
@@ -118,7 +118,7 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
 
 **SF-M2: people and stakes.**
 - [x] SF2.1 [Claude] Members' stories (SV1): done 2026-10-08 (two beats each for Aki, Ren and Yuna; data/stories.json).
-- [ ] SF2.2 [Claude] Failing and excelling, visible (SV3).
+- [x] SF2.2 [Claude] Failing and excelling, visible (SV3). *Done 2026-10-09: each evening judges the day (good: two jobs done, none gone badly, nobody left hungry; hard: more failed than done, or two left hungry). Someone at rock bottom packs up and leaves, and comes back on a good run; two good days hang bunting and add a notice to the board, two hard days take one away; three good days bring rarer travellers (Mirelle, a mage; Tobin, a thief). Still open from SV3: a place that closes when run badly (comes with SF2.3, the tavern).*
 - [ ] SF2.3 [Claude] The tavern you serve at, and placement that matters a little (SV4).
 - [ ] SF2.4 [ChatGPT] Story text for SF2.1 (the system is built; extend `starfall-godot/data/stories.json`: arcs for Kaito, Hana and Sora, and a third beat for Aki, Ren and Yuna; keep its format and the four traits): three short arcs per adventurer (choices that can go either way), in a
   data file Claude wires in (`starfall-godot/data/stories.json`; ChatGPT may write that one data file).
@@ -191,7 +191,7 @@ rules; free local model first, as docs/otherworld-design.md says).
 - [x] Come Play, previews, trailer, Windows builds.
 **AR-M2: polish for everyone.**
 - [x] AR2.1 [ChatGPT] Accessibility (T44, L10). (merged 2026-10-09)
-- [ ] AR2.2 [ChatGPT] The
+- [x] AR2.2 [ChatGPT] (done, merged 2026-10-09; T46) The
 launcher shows the Godot previews as games (cards, covers, links).
 - [ ] AR2.3 [any] Game boxes (V3).
 - [ ] AR2.4 [local] Link and image check across guides and pages (Lane D3).
