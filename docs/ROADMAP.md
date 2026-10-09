@@ -31,6 +31,7 @@ Branch: codex/wildbond-hollowecho-brief, from latest main.
 - Verify cited source IDs/coordinates/content using a read-only browser inventory; all eight pages pass. README and one Session log line.
 
 ### T49: Wildbond, Sunthread and Farwatch build briefs (WB3.5 part 2)
+- [x] Built by Codex, 2026-10-09; 73 live inventory/export/route checks and all eight pages pass. Documentation only, for Claude's build.
 Why: Claude requested the final two area handoffs before their Godot builds; preserve existing exported canon and separate physical staging from new mechanics.
 Read first: docs/COMMS.md, docs/lore/wildbond.md, docs/lore/wildbond-threads.md, Hollowecho brief, browser data/maps/sound/scene, docs/CREATIVE.md and docs/wildbond-plan.md.
 Branch: codex/wildbond-final-area-briefs, from latest main.
