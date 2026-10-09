@@ -3,7 +3,7 @@
 Evan's personal stable of browser games, live at https://ecbarish.github.io/idle-arcade/ (GitHub Pages from `main`).
 Evan works on this from more than one computer and with ChatGPT/Codex too, so **this repo is the shared memory**:
 read **`START-HERE.md`** (where we are, what's next, the session log, shared by every assistant), **`docs/PRIORITIES.md`**
-(which games get the focus now, and the scorecard every idea goes through), **`docs/PROJECTS.md`**
+(which games get the focus now, and the scorecard every idea goes through), **`docs/PROCESS.md`** (how every AI claims, submits and merges work), **`docs/PROJECTS.md`**
 (the master list of every outlined project, with the launch track), **`docs/CREATIVE.md`** (ground rules and how much
 creative freedom assistants have), this
 file, `HANDOFF.md` (rules, layout, workflow) and `docs/ROADMAP.md` (full tickets) at the start of a session.
@@ -100,5 +100,7 @@ Grok), bumping game versions on merge, keeping START-HERE current and refilling 
 ## Working style (Evan, 2026-10-09)
 Evan wants **larger chunks per prompt**: when he says "proceed", finish several queue items in one go (review and merge
 ChatGPT's branches, write ChatGPT a sizeable ticket, then build more than one item yourself), committing after each.
+**Token efficiency** (Evan, 2026-10-09): Claude's usage is the scarcest resource. Batch reviews, no status-only
+replies, short plans, big builds to the helpers' Heavy lifting list. Rules: docs/QUEUE.md "Saving Claude's usage".
 
 **Player-facing text** (Evan, 2026-10-08): capitalised names and titles, correct spelling, the world's words instead of the rules' words (no "mood -8" or "gate" in story text), and look at the real screen as a first-time player before shipping. Full rules: docs/CREATIVE.md "Writing for players".
