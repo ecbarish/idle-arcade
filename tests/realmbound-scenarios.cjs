@@ -1065,5 +1065,42 @@ module.exports = function scenarios() {
         check(catalogueForMob({id:'dun4',dun:true,kind:'beast'},{dun:{id:'raid'}})===null,'T43: raid identities are left to their own future pass');
        }finally{Math.random=keepRandom;S=keep;C=keepC;TOWN.on=keepTown;if(H())rb.boot();}
       }
+      // T48: roads are transient physical places; existing transactions and combat remain authoritative.
+      {
+       const keep=S,keepC=C;const hero=rb.newHero('Roadkeeper','concord','human','warrior');hero.lvl=20;hero.mode='focus';S=migrate(JSON.parse(JSON.stringify(keep)));S.chars=[hero];S.cur=hero.id;
+       const ready=()=>{clearRealmRoad();clearTownService();closeRealmNotebook(false);closeModal();boot();clearArrival();TOWN.inside=false;C.phase='seek';C.mob=null;C.t=100;updateWorld();};
+       try{
+        for(const faction of ['concord','wild'])for(const zone of Object.keys(ZONES)){
+         hero.faction=faction;hero.zone=zone;ready();const before=JSON.stringify({money:hero.money,xp:hero.xp,quests:hero.quests,bags:hero.bags});
+         check(startRealmRoad()&&realmRoadActive()&&!townActive(),'T48: physical road opens in '+faction+' '+zone);
+         check(REALM_ROAD_MAP.rows.every(row=>row.length===28),'T48: road has a rectangular footprint '+zone);
+         for(const d of realmRoadDestinations()){REALM_ROAD_WALK.place(1,12,'right');check(REALM_ROAD_WALK.walkTo(...d.at),'T48: connected path to '+d.name+' '+faction+' '+zone);}
+         REALM_ROAD_WALK.place(8,7,'up');REALM_ROAD_WALK.step('up');check(REALM_ROAD.inside,'T48: physical inn doorway enters '+zone);
+         for(const d of realmRoadDestinations()){REALM_ROAD_WALK.place(...REALM_ROAD_INN.start);check(REALM_ROAD_WALK.walkTo(...d.at),'T48: inn path to '+d.name+' '+zone);}
+         exitRealmRoad(6);check(!REALM_ROAD.inside&&REALM_ROAD.pos.x===8&&REALM_ROAD.pos.y===7,'T48: inn door returns to same approach '+zone);
+         returnFromRealmRoad();check(before===JSON.stringify({money:hero.money,xp:hero.xp,quests:hero.quests,bags:hero.bags}),'T48: sightseeing earns no currency, quest or item windfall '+zone);
+        }
+        hero.zone='thornvale';hero.faction='concord';ready();startRealmRoad();const snapshot=JSON.stringify(C);step(30);check(JSON.stringify(C)===snapshot,'T48: road walking cannot spawn or tick combat');REALM_ROAD_WALK.step('right');const beforeWalk=REALM_ROAD_WALK.fx;step(.1);check(REALM_ROAD_WALK.fx>beforeWalk&&REALM_ROAD_WALK.fx<REALM_ROAD.pos.x,'T48: smooth walking advances on the game timer without a rendered frame');REALM_ROAD_WALK.place(1,12,'right');
+        openRealmNotebook('bags');const pos=JSON.stringify(REALM_ROAD.pos);REALM_ROAD_WALK.step('right');step(10);check(pos===JSON.stringify(REALM_ROAD.pos)&&JSON.stringify(C)===snapshot,'T48: reading freezes road and combat');closeRealmNotebook(false);
+        exitRealmRoad(27);check(!realmRoadActive()&&C.phase==='town'&&C.t===travel(10),'T48: town gate uses normal travel duration');
+        ready();C.phase='intown';townEnter();startRealmRoad();exitRealmRoad(0);check(C.phase==='seek'&&C.t===travel(6),'T48: field gate from town uses normal outward travel');
+        ready();C.phase='intown';townEnter();startRealmRoad();returnFromRealmRoad();check(C.phase==='intown','T48: putting aside town walk returns to the same town');
+        for(const phase of ['fight','loot','dead','town']){ready();C.phase=phase;check(!startRealmRoad(),'T48: cannot interrupt '+phase);}
+        ready();hero.dun={id:'sanctum'};check(!startRealmRoad(),'T48: road never shortcuts dungeon');hero.dun=null;hero.mode='auto';check(!startRealmRoad(),'T48: Auto route remains unchanged');hero.mode='focus';ready();
+        startRealmRoad();REALM_ROAD_WALK.place(8,7,'up');REALM_ROAD_WALK.step('up');REALM_ROAD_WALK.place(6,4,'up');REALM_ROAD_WALK.interact();
+        check(RTALK&&RTALK.roadScene&&RTALK.choices.includes('Buy a potion (2s)'),'T48: keeper speaks in the physical inn');
+        let hp=C.hp,timer=C.t;step(20);check(C.hp===hp&&C.t===timer,'T48: dialogue never heals or spends travel time');
+        const stale=RTALK.done;hero.money=200;const pots=bank().potion;SCN.choose(1);check(hero.money===0&&bank().potion===pots+1,'T48: potion spends exactly existing two-silver price');stale(1);check(hero.money===0&&bank().potion===pots+1,'T48: duplicate callback cannot buy twice');
+        talkRealmRoad(realmRoadPeople()[0]);SCN.choose(1);check(hero.money===0&&bank().potion===pots+1,'T48: insufficient purse grants no potion');
+        talkRealmRoad(realmRoadPeople()[0]);C.hp=ST.hpMax*.4;SCN.choose(0);hp=C.hp;step(.1);check(Math.abs(C.hp-hp-ST.hpMax*.07*.1)<.00001&&C.hp<ST.hpMax,'T48: deliberate rest uses existing gradual rate, not instant healing');
+        openRealmNotebook('bags');hp=C.hp;step(10);check(C.hp===hp,'T48: notebook pauses even deliberate rest');closeRealmNotebook(false);
+        C.hp=ST.hpMax;step(.1);check(C.phase==='seek'&&!REALM_ROAD.rest,'T48: completed rest settles without starting fight');timer=C.t;step(20);check(C.phase==='seek'&&C.t===timer&&!C.mob,'T48: no combat after roadside recovery until walk is put aside');
+        talkRealmRoad(realmRoadPeople()[0]);const cancelled=RTALK.done;clearTownService();cancelled(1);check(bank().potion===pots+1,'T48: cancelled conversation cannot spend');
+        talkRealmRoad(realmRoadPeople()[0]);const replaced=RTALK.done,money=hero.money;S=JSON.parse(JSON.stringify(S));check(!realmRoadActive(),'T48: account replacement invalidates road');replaced(1);check(H().money===money&&!RTALK,'T48: stale keeper cannot spend replacement purse');
+        S=migrate(JSON.parse(JSON.stringify(keep)));C=keepC;if(H())boot();S.chars=[hero];S.cur=hero.id;hero.mode='focus';hero.dun=null;ready();startRealmRoad();hero.zone='fens';check(!realmRoadActive(),'T48: changing region clears approach');
+        hero.zone='thornvale';ready();startRealmRoad();hero.mode='auto';check(!realmRoadActive(),'T48: switching Auto clears walking');hero.mode='focus';ready();startRealmRoad();const saved=JSON.stringify(S);check(!saved.includes('REALM_ROAD')&&!saved.includes('roadScene'),'T48: road saves no new runtime fields');S=migrate(JSON.parse(saved));boot();check(!realmRoadActive()&&$('#leaveRoad').hidden,'T48: reload clears transient road');
+       }finally{clearRealmRoad();clearTownService();closeRealmNotebook(false);S=keep;C=keepC;if(H())boot();}
+      }
+
 return checks;
 };

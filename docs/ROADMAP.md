@@ -13,6 +13,7 @@ Branch: codex/wildbond-early-heritages.
 - Record every clue in the ledger. Add content/JSON checks and inspect the actual export from an isolated browser; all eight pages pass. README and Session log only, no versions.
 
 ### T48: Realmbound, the walkable town road (RB1.3)
+- [x] Built by Codex, 2026-10-09, codex/realmbound-road-places; ready for review. All eight pages pass; no release bump.
 Why: give the journey a physical approach with a roadside inn and camp while retaining Realmbound's established combat and travel (DEVELOPMENT-PATH RB1.3; in-window plan).
 Read first: docs/plans/realmbound-in-window.md, docs/lore/realmbound.md, docs/VISION.md, docs/CREATIVE.md.
 Branch: codex/realmbound-road-places.

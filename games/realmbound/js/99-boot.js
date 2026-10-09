@@ -2,6 +2,7 @@
 const VERSION = '1.7.0'; // the game's version (L9): bump it on release, see HANDOFF.md "Releasing a version"
 /* =================== boot =================== */
 function boot(){
+  clearRealmRoad();
   closeRealmNotebook(false);
   clearArrival(); clearMemberStory(); clearTownService();
   const h=H();
@@ -27,9 +28,9 @@ function start(data){
   resize();
   let lastT=performance.now(),uiT=0,chk=0;
   setInterval(()=>{const t=performance.now();let dt=(t-lastT)/1000;lastT=t;if(!H()||!C)return;
-    if(dt>60){const r=offline(dt);if(r&&!modalKind)openModal('offline',offlineHTML(r));dt=0;}
+    if(dt>60){const r=realmRoadActive()?null:offline(dt);if(r&&!modalKind)openModal('offline',offlineHTML(r));dt=0;}
     let guard=0;while(dt>0&&guard++<700){const st=Math.min(.1,dt);dt-=st;step(st);}
-    if(H().addons.unl.questhelper&&H().addons.on.questhelper)questHelper();
+    if(!realmRoadActive()&&H().addons.unl.questhelper&&H().addons.on.questhelper)questHelper();
     chk+=.1;if(chk>=1){chk=0;checkAddons();supplyTick();}
     uiT+=.1;if(uiT>=.1){uiT=0;updateWorld();}},100);
   setInterval(save,10000);addEventListener('beforeunload',save);document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
