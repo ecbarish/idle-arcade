@@ -55,7 +55,7 @@ Evan: "my dad's AIs have much more usage available, so we can steer them to a lo
 running out of usage for this week." These are the **big builds**, in the order that matters most. They are Godot
 work: follow the Godot rules under "The road ahead" (all checks green, old saves load, screenshots, a reviewer
 merges). Before starting, check the open pull request list: the Wildbond builder thread is on the ending (WB4.3) and
-creature drawing (WD2), and #107 is phone controls and settings (WB6.1-6.2); don't take those. One task per pull
+creature drawing (WD2), and phone controls and settings (WB6.1-6.2) shipped in #107; don't take those. One task per pull
 request; split a big one into steps ("WD4a: Thornwood's route") and open the next when the first is in review.
 
 | # | Big build (path ID) | Read first | Files | Done when |
