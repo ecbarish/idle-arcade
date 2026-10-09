@@ -112,7 +112,7 @@ var npc_info := {}                           # id -> { data from the map, beaten
 var badges: Array = []
 var spotter: Mover = null                    # a trainer who has seen you and is walking over
 var spot_t := 0.0
-const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread"]    # the maps the Godot version has so far
+const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch"]    # the maps the Godot version has so far
 var starters: Array[Mover] = []
 var partner: Mover = null
 var map_name := "larkhaven"
@@ -1020,6 +1020,8 @@ func _draw() -> void:
 		_draw_clouds()
 	if map_name == "stillreed":
 		_draw_dragonflies()
+	if map_name == "farwatch":
+		_draw_shore_lights()
 	if map_name == "hollowecho":
 		_draw_bells()
 		_draw_mist()
@@ -1063,6 +1065,8 @@ func _draw_outdoor() -> void:
 		_draw_hills()
 	if map_name == "sunthread":
 		_draw_commons()
+	if map_name == "farwatch":
+		_draw_harbor()
 	# 3. houses, the barn and trees: standing objects with a footprint (so a 3D renderer can stand them up later)
 	_draw_structures()
 
@@ -1452,7 +1456,9 @@ func _draw_ground(x: int, y: int, ch: String) -> void:
 		_draw_sand(x, y, o, n)                                                     # the beach
 	if ch == "R":
 		_draw_rock(o, n)
-	if _is_path(x, y):
+	if map_name == "farwatch" and ch == "." and x >= 24:
+		_draw_pier(x, y, o)
+	elif _is_path(x, y):
 		# dirt with soft grass edges where the path ends (the tileset's 3x3 edge set)
 		var up := _is_path(x, y - 1); var down := _is_path(x, y + 1); var left := _is_path(x - 1, y); var right := _is_path(x + 1, y)
 		var cell := Vector2i(12, 8)
@@ -1493,7 +1499,7 @@ func _draw_structures() -> void:
 			var ch: String = rows[y][x]
 			if ch == "T":
 				_tex(NATURE, Vector2i(1, 10), Vector2i.ONE, Vector2(x, y) * TILE)        # a hedge bush under the treeline
-			elif ch in "r#" and not map_name in ["hollowecho", "sunthread"] and not doors.any(func(d): return x - d.x >= -1 and x - d.x <= 2 and y >= d.y - 2 and y <= d.y):
+			elif ch in "r#" and not map_name in ["hollowecho", "sunthread", "farwatch"] and not doors.any(func(d): return x - d.x >= -1 and x - d.x <= 2 and y >= d.y - 2 and y <= d.y):
 				_tex(NATURE, Vector2i(0, 10), Vector2i.ONE, Vector2(x, y) * TILE)        # garden bushes beside each cottage
 	for d in doors:
 		if not (map_name == "larkhaven" and d == BARN_DOOR):
@@ -1506,6 +1512,9 @@ func _draw_structures() -> void:
 		_draw_bell_house(Vector2i(2, 1))
 	if map_name == "sunthread":
 		_draw_meeting_hall(Vector2i(20, 1), 8)
+	if map_name == "farwatch":
+		_draw_lookout(Vector2i(7, 1))
+		_draw_boathouse(Vector2i(4, 10))
 	# Maren's barn stands taller than the cottages and in front of the trees behind it
 	if map_name == "larkhaven":
 		draw_texture_rect_region(HOUSE, Rect2(Vector2(BARN_DOOR.x - 1, BARN_DOOR.y - 4) * TILE, BARN_SPRITE.size), BARN_SPRITE)
@@ -1713,6 +1722,85 @@ func _draw_commons() -> void:
 			draw_rect(Rect2(n + Vector2(3 + s * 4, 7 + (s + k) % 2 * 3), Vector2(2, 2)), Color("7ab040"))
 		draw_rect(Rect2(n + Vector2(13, 1), Vector2(1, 8)), Color("6b4a2a"))
 		draw_rect(Rect2(n + Vector2(14, 1 + sin(t * 2.0 + k) * 1.0), Vector2(3, 2)), Color("59c38a"))
+## Farwatch's pier (WB3.4): the map marks it as path running out over the water; boards on posts, water beneath.
+func _draw_pier(x: int, y: int, o: Vector2) -> void:
+	_tex(WATER, Vector2i(11, 0), Vector2i.ONE, o)
+	draw_rect(Rect2(o + Vector2(0, 1), Vector2(16, 14)), Color("6b4a2a"))
+	for k in 4:
+		draw_rect(Rect2(o + Vector2(1, 1 + k * 4), Vector2(14, 3)), Color("a88458").darkened(0.06 * ((y + k) % 2)))
+	if tile_at(Vector2i(x, y + 1)) == "~":
+		draw_rect(Rect2(o + Vector2(2, 14), Vector2(2, 2)), Color("4e3220"))       # the posts going down into the water
+		draw_rect(Rect2(o + Vector2(12, 14), Vector2(2, 2)), Color("4e3220"))
+
+## The lookout on the bluff: a stone tower-house with a slate roof and a lamp room on top, where the recorders sit.
+func _draw_lookout(at: Vector2i) -> void:
+	var o := Vector2(at) * TILE
+	var w := 4 * TILE
+	draw_rect(Rect2(o + Vector2(-1, 31), Vector2(w + 2, 18)), Figures.OUTLINE)
+	draw_rect(Rect2(o + Vector2(0, 32), Vector2(w, 16)), Color("9a9a90"))
+	for k in 2:
+		draw_rect(Rect2(o + Vector2(0, 39 + k * 8), Vector2(w, 1)), Color("76766c"))
+		for j in 5:
+			draw_rect(Rect2(o + Vector2(j * 14 + (k * 7) % 14, 32 + k * 8), Vector2(1, 8)), Color("76766c"))
+	draw_rect(Rect2(o + Vector2(w / 2 - 6, 35), Vector2(12, 13)), Color("3a2a1e"))            # the doorway
+	draw_rect(Rect2(o + Vector2(-4, -1), Vector2(w + 8, 34)), Figures.OUTLINE)
+	draw_rect(Rect2(o + Vector2(-3, 0), Vector2(w + 6, 32)), Color("4e5a66"))                 # slate
+	for k in 5:
+		draw_rect(Rect2(o + Vector2(-3, 5 + k * 6), Vector2(w + 6, 1)), Color("3e4852"))
+	var lamp := o + Vector2(w / 2 - 6, -12)
+	draw_rect(Rect2(lamp - Vector2(1, 1), Vector2(14, 14)), Figures.OUTLINE)                 # the lamp room
+	draw_rect(Rect2(lamp, Vector2(12, 12)), Color("9a9a90"))
+	draw_rect(Rect2(lamp + Vector2(2, 3), Vector2(8, 6)), Color("f4d070").lerp(Color("fff4c0"), 0.5 + 0.5 * sin(t * 2.0)))
+
+## The harbor house down by the water: a low boathouse with a turf roof and nets drying on its wall.
+func _draw_boathouse(at: Vector2i) -> void:
+	var o := Vector2(at) * TILE
+	var w := 5 * TILE
+	draw_rect(Rect2(o + Vector2(-1, 15), Vector2(w + 2, 18)), Figures.OUTLINE)
+	draw_rect(Rect2(o + Vector2(0, 16), Vector2(w, 16)), Color("8a6a4a"))
+	for k in 10:
+		draw_rect(Rect2(o + Vector2(k * 8 + 7, 16), Vector2(1, 16)), Color("6a4a2e"))
+	draw_rect(Rect2(o + Vector2(TILE + 2, 19), Vector2(20, 13)), Color("2e2218"))             # the wide boat door
+	for k in 3:                                                                                # nets drying
+		draw_line(o + Vector2(52 + k * 4, 18), o + Vector2(50 + k * 4, 30), Color("c8c0a0"), 1.0)
+	draw_line(o + Vector2(50, 22), o + Vector2(62, 22), Color("c8c0a0"), 1.0)
+	draw_line(o + Vector2(50, 26), o + Vector2(62, 26), Color("c8c0a0"), 1.0)
+	draw_rect(Rect2(o + Vector2(-4, -3), Vector2(w + 8, 20)), Figures.OUTLINE)
+	draw_rect(Rect2(o + Vector2(-3, -2), Vector2(w + 6, 18)), Color("6a8060"))
+	for k in 2:
+		draw_rect(Rect2(o + Vector2(-3, 4 + k * 6), Vector2(w + 6, 1)), Color("566a4c"))
+
+## The harbor's useful things (from the area brief): Rysa's open ledger on its stand, a dry bench by the keeper,
+## and mooring posts with cloth tied round them at the head of the pier.
+func _draw_harbor() -> void:
+	var l := Vector2(21, 2) * TILE
+	draw_rect(Rect2(l + Vector2(7, 8), Vector2(2, 8)), Color("4e3220"))
+	draw_rect(Rect2(l + Vector2(1, 3), Vector2(14, 7)), Figures.OUTLINE)
+	draw_rect(Rect2(l + Vector2(2, 4), Vector2(5, 5)), Color("f4ecd8"))
+	draw_rect(Rect2(l + Vector2(9, 4), Vector2(5, 5)), Color("f4ecd8"))
+	draw_rect(Rect2(l + Vector2(3, 5), Vector2(3, 1)), Color("7a6a5a"))
+	draw_rect(Rect2(l + Vector2(10, 5), Vector2(3, 1)), Color("7a6a5a"))
+	draw_line(l + Vector2(10, 7), l + Vector2(13, 7), Color("c84a3a"), 1.0)                  # a crossed-out estimate
+	var b := Vector2(18, 7) * TILE
+	draw_rect(Rect2(b + Vector2(1, 8), Vector2(14, 5)), Figures.OUTLINE)
+	draw_rect(Rect2(b + Vector2(2, 9), Vector2(12, 3)), Color("b08a5a"))
+	draw_rect(Rect2(b + Vector2(3, 12), Vector2(2, 3)), Color("6b4a2a"))
+	draw_rect(Rect2(b + Vector2(11, 12), Vector2(2, 3)), Color("6b4a2a"))
+	for p in [Vector2i(23, 9), Vector2i(23, 10)]:
+		var o := Vector2(p) * TILE
+		draw_rect(Rect2(o + Vector2(11, 2), Vector2(4, 13)), Figures.OUTLINE)
+		draw_rect(Rect2(o + Vector2(12, 3), Vector2(2, 11)), Color("6b4a2a"))
+		draw_rect(Rect2(o + Vector2(11, 7), Vector2(4, 2)), Color("c84a3a") if p.y == 9 else Color("4a7ab8"))
+
+## Low shore lanterns along the pier and the harbor's edge, glowing warm and breathing a little, so a returning team
+## can see the way in (staged; no signal to answer).
+func _draw_shore_lights() -> void:
+	for p in [Vector2i(24, 9), Vector2i(27, 9), Vector2i(24, 10), Vector2i(27, 10), Vector2i(22, 11), Vector2i(22, 7)]:
+		var c := Vector2(p) * TILE + Vector2(8, 4)
+		var glow := 0.18 + 0.06 * sin(t * 1.5 + p.x)
+		draw_circle(c, 11.0, Color(1.0, 0.82, 0.45, glow))
+		draw_rect(Rect2(c - Vector2(3, 3), Vector2(6, 7)), Figures.OUTLINE)
+		draw_rect(Rect2(c - Vector2(2, 2), Vector2(4, 5)), Color("f4c860"))
 ## The hamlet's bells, hanging under the eaves and swaying a little; one answers the other.
 func _draw_bells() -> void:
 	for k in 2:
@@ -1735,7 +1823,7 @@ func _draw_mist() -> void:
 		draw_rect(Rect2(Vector2(x + 20, y + 3), Vector2(100, 4)), Color(0.78, 0.74, 0.86, 0.08))
 func _draw_water(x: int, y: int, o: Vector2, n: int) -> void:
 	_tex(WATER, Vector2i(11, 0), Vector2i.ONE, o)
-	var sea: bool = map_name == "saltmarsh"
+	var sea: bool = map_name in ["saltmarsh", "farwatch"]
 	if sea:
 		# the open sea: lines of swell that roll slowly toward the beach
 		var ph := fmod(t * 0.6 + x * 0.37 + y * 0.9, 3.0)
@@ -1901,10 +1989,10 @@ func _skip_opening() -> void:
 		_place_ranch()
 	var st: Array = DATA.MAPS[start].get("start", [16, 12, "up"] if start == "larkhaven" else [13, 14, "up"])
 	if start != "thornwood":
-		var order := ["thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread"]
+		var order := ["thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch"]
 		var at := maxi(1, order.find(start))
-		badges = ["thorn", "tide", "ember", "beacon", "reed", "echo"].slice(0, at)
-		team[0].lvl = [5, 14, 24, 34, 46, 56, 62][at]
+		badges = ["thorn", "tide", "ember", "beacon", "reed", "echo", "loom"].slice(0, at)
+		team[0].lvl = [5, 14, 24, 34, 46, 56, 62, 66][at]
 		team[0].hp = R.stats(team[0]).hp
 	if "--photo" in OS.get_cmdline_user_args():      # pictures of the world: nobody asks to evolve mid-shot
 		for c in team: c["hold"] = 999
@@ -1926,7 +2014,7 @@ func _skip_opening() -> void:
 			maren.pos = Vector2(maren.tile) * TILE
 			maren.path.clear()).call_deferred()
 	if "--colour" in OS.get_cmdline_user_args():     # the area with its colour fully back (for pictures of the restored valley)
-		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "barn"]:
+		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "barn"]:
 			restore.append({ "where": m, "at": Vector2(192, 108), "r": 5000.0, "goal": 5000.0 })
 	if "--bench" in OS.get_cmdline_user_args():      # at Maren's workbench, the partner trying on a harness (-- --skip-opening --bench)
 		for c in team: c["hold"] = 999
@@ -2407,6 +2495,7 @@ const MOUNTAINS := {
 	"emberfall": { "rock": Color("8a7464"), "turf": Color(0.65, 0.54, 0.41, 0.32) },
 	"cloudglass": { "rock": Color("8d97a3"), "turf": Color(0.62, 0.68, 0.72, 0.34) },
 	"hollowecho": { "rock": Color("7d8576"), "turf": Color(0.40, 0.49, 0.38, 0.30) },
+	"farwatch": { "rock": Color("7a8a8c"), "turf": Color(0.45, 0.55, 0.54, 0.28) },
 }
 var CLIFF := Color("8a7464")
 var TURF := Color(0.65, 0.54, 0.41, 0.32)

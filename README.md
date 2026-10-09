@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Godot Wildbond (2026-10-09): Farwatch Reach, the eighth and last area before the league: a stone lookout with a lamp room, the harbor house with nets drying, a pier with shore lanterns, Rysa's open ledger and the sound of waves. All eight areas are now in the new Wildbond. 245 checks pass.
 - Godot Wildbond (2026-10-09): Sunthread Commons, the seventh area: a timber meeting hall with pennants on its turf roof, a sunny forecourt where Pell, Nesla and Warden Halen wait, Mirel's mending frame, the weaver's bench with four braided ties, nursery beds with green ribbons, and a bright tune. 239 checks pass.
 - Wildbond build handoff (2026-10-09, T49): [Sunthread](docs/lore/wildbond-sunthread-brief.md) and [Farwatch](docs/lore/wildbond-farwatch-brief.md) briefs gather current exported routes, people, creatures, clues and badge payoffs. Proposed staging is explicit; stale Warden levels and the historical future-finale paragraph are flagged. No gameplay or version change.
 - Realmbound v1.8.0 (2026-10-09, T48): Walk the road opens an optional town approach, the Lantern Rest inn and a courier's camp. Talk by the hearth, rest at the usual pace or buy a potion; connected paths preserve existing travel and combat. All eight test pages pass. No release version change.

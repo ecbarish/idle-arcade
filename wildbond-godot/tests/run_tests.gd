@@ -140,7 +140,7 @@ func _run() -> void:
 	main.spilled = true
 	check(main._music_key() == "larkhaven", "once the colour spills into town, a warm village tune")
 	main.spilled = false
-	check(["faded", "larkhaven", "barn", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "wild", "trainer"].all(func(k): return ResourceLoader.exists("res://assets/music/%s.ogg" % k)), "every tune is in the game")
+	check(["faded", "larkhaven", "barn", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "wild", "trainer"].all(func(k): return ResourceLoader.exists("res://assets/music/%s.ogg" % k)), "every tune is in the game")
 	check(["saltmarsh", "emberfall", "cloudglass"].all(func(k): return ResourceLoader.exists("res://assets/ambience/%s.wav" % k)), "waves on the coast and wind in the highlands and the pass")
 	# ---- the map: closed doors, the barn opens with the story
 	check(not main.walkable(Vector2i(4, 4)), "cottage doors stay shut")
@@ -437,6 +437,19 @@ func _run() -> void:
 		check(not main._gate_open("sunthread"), "the road east stays shut until Warden Halen is beaten")
 		check(main.route(Vector2i(1, 9), Vector2i(24, 6)).size() > 0 and main.route(Vector2i(1, 9), Vector2i(27, 5)).size() > 0, "a clear path to Halen and to the shelter sign")
 		check(main.DATA.MAPS.sunthread.get("items", []).size() == 3 and main._heritage_line("nesla", main.npc_info.nesla.data) != "", "three supplies, and Nesla has a word for your family")
+		# ---- Farwatch Reach (WB3.4), with the Loom Badge
+		main.badges.append("loom")
+		main._go("farwatch", Vector2i(1, 9), Vector2i.RIGHT)
+		tick(1.0)
+		check(main.map_name == "farwatch" and main.level_cap() == int(main.DATA.CAP_TABLE[7]), "seven badges: into Farwatch Reach, with the cap the game data sets")
+		check(["delka", "sivren", "ceryn"].all(func(id): return main.npcs.any(func(n): return n.id == id and n.where == "farwatch")), "Delka the recorder, Sivren the harbor keeper and Ceryn the witness keeper")
+		check(not main._gate_open("farwatch"), "the road north to the league stays shut until Warden Rysa is beaten")
+		check(main.route(Vector2i(1, 9), Vector2i(27, 9)).size() > 0 and main.solid("~"), "you can walk out to the end of the pier, and the sea stays sea")
+		check(main.route(Vector2i(1, 9), Vector2i(20, 4)).size() > 0 and main._heritage_line("ceryn", main.npc_info.ceryn.data) != "", "a clear path up to Rysa's ledger, and Ceryn has a word for your family")
+		check(ResourceLoader.exists("res://assets/ambience/farwatch.wav"), "waves against the harbor")
+		main.badges.erase("loom")
+		main._go("sunthread", Vector2i(1, 9), Vector2i.RIGHT)
+		tick(1.0)
 		main.badges.erase("echo")
 		main._go("hollowecho", Vector2i(1, 9), Vector2i.RIGHT)
 		tick(1.0)
