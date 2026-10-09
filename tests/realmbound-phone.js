@@ -7,9 +7,10 @@ async function checkRealmPhone(frame) {
  w.eval("clearRealmRoad();clearTownService();closeRealmNotebook(false);const phoneHero=newHero('Phonecheck','concord','human','hunter');phoneHero.lvl=60;phoneHero.onboarding={arrival:true,hints:{}};phoneHero.mode='focus';S.chars=[phoneHero];S.cur=phoneHero.id;boot();closeModal();updateWorld();");
  const settle=()=>new Promise(resolve=>w.requestAnimationFrame(()=>w.requestAnimationFrame(()=>w.requestAnimationFrame(resolve))));
  const rect=selector=>d.querySelector(selector).getBoundingClientRect();
- for(const [width,height]of [[320,568],[390,844],[667,375],[1366,768],[1920,1080],[3440,1440]]){
+ for(const [width,height,text]of [[320,568,1],[390,844,1],[390,844,1.5],[667,375,1],[1366,768,1],[1920,1080,1],[3440,1440,1]]){
+  d.documentElement.style.setProperty("--arc-text",text);
   frame.style.width=width+'px';frame.style.height=height+'px';await settle();
-  const label=width+'×'+height;
+  const label=width+'×'+height+' text '+text;
   check(d.documentElement.scrollWidth<=w.innerWidth,label+' keeps page within viewport');
   check(rect('#fieldDock').bottom<=height+1,label+' dock stays on screen');
   const bar=rect('.abar');check(bar.left>=0&&bar.right<=width+1,label+' action bar fits horizontally');
@@ -19,6 +20,9 @@ async function checkRealmPhone(frame) {
    check([...d.querySelectorAll('#fieldDock button')].every(el=>el.getBoundingClientRect().height>=44),label+' dock has 44px tap targets');
    d.querySelector('#fieldOptions').open=true;await settle();const options=rect('.field-options-list');
    check(options.left>=0&&options.right<=width+1&&options.bottom<=height+1,label+' Options stays inside screen');d.querySelector('#fieldOptions').open=false;
+   w.eval('questOffer(QUESTS.thornvale[0].id);SCN.skip();');await settle();const dialogue=rect('.scene .dlg');
+   check(dialogue.top>=0&&dialogue.bottom<=bar.top+1,label+' conversation fits above abilities');
+   w.eval('clearTownService();RTALK=null;SCN.el.hidden=true;');
   }
   d.querySelector('[data-field-book="bags"]').click();await settle();
   check(!d.querySelector('.menu').hidden,label+' tap opens Satchel');
