@@ -1,0 +1,36 @@
+/* T46: separate editions, separate progress. Preview IDs intentionally have no browser save keys.
+   Scope/controls come from the current game READMEs; screenshots are existing recorded game frames. */
+(function(){'use strict';
+window.ArcadeGames=[
+  {id:'wildbond-preview',title:'Wildbond',tcls:'t-wildbond',status:['New version · Early preview','s-proto'],href:'play/wildbond/',
+   blurb:'Walk into faded Larkhaven, choose a partner and bring colour back with your first bond. Explore the first four regions, meet their Wardens, and care for creatures at the ranch.',
+   tags:['On foot','First four regions','Ranch & nursery'],cover:'wildbond',preview:true,classic:'wildbond',image:'images/play/wb-barn.png',
+   alt:'Wildbond preview: the barn, with creatures, a feeding trough and the nursery',
+   controls:'Arrows or WASD to walk · Enter or E to talk · J for the field book · M for music.',
+   load:'Best on a computer. The first load needs internet and may take a moment.'},
+  {id:'starfall-preview',title:'Starfall Guild',tcls:'t-starfall',status:['New version · Early preview','s-proto'],href:'play/starfall/',
+   blurb:'Build a frontier guild town. Post jobs for adventurers, serve meals at the inn, work the forge and grow the town with a healer, training yard and apothecary.',
+   tags:['Guild village','Hands-on work','Earned helpers'],cover:'starfall',preview:true,classic:'starfall-guild',image:'images/play/sf-town.png',
+   alt:'Starfall preview: the Guild Hall, inn, Smithy, Apothecary, Healer’s Hut and Training Yard',
+   controls:'Arrows, WASD or a click to walk · Enter or E to use a place · M for music.',
+   load:'Best on a computer. The first load needs internet and may take a moment.'},
+  {id:'primordial',title:'Primordial',tcls:'t-primordial',status:['Playable','s-play'],href:'games/primordial/index.html',
+   blurb:'Grow from a single cell. Evolve instincts that play for you, draft random mutations, and restart through extinctions for permanent progress.',
+   tags:['Evolution','Idle','Roguelike runs'],cover:'primordial'},
+  {id:'starfall-guild',title:'Starfall Guild Classic',tcls:'t-starfall',status:['Prototype','s-proto'],href:'games/starfall-guild/index.html',
+   blurb:'Run an adventurer guild. Recruit heroes, find class combos, push the dungeon, build up the town, and hire staff who manage it for you.',
+   tags:['Guild sim','Autobattler','Pixel art'],cover:'starfall'},
+  {id:'realmbound',title:'Realmbound',tcls:'t-mmo',status:['Beta','s-play'],href:'games/realmbound/index.html',
+   blurb:'A classic-MMO adventure: pick a faction and a class, quest from level 1 to 60 through eight zones, clear four dungeons and their Heroic tiers, found a guild whose members work and fight beside you, and raid The Hollow Throne. Play it yourself or let Auto take over.',
+   tags:['Classic MMO','Level 1–60','Guild & raid'],cover:'mmo',guide:'guides/realmbound.html'},
+  {id:'wildbond',title:'Wildbond Classic',tcls:'t-wildbond',status:['Beta','s-play'],href:'games/wildbond/index.html',
+   blurb:'Pick a partner, meet your rival Wren and walk from Larkhaven across eight regions, earning eight Warden badges on the way to the league and its Champion. Catch, raise and breed creatures, climb the Lighthouse Spire after the story, and watch a faded world grow from Game Boy greens into a 3D diorama.',
+   tags:['Catch & raise','Evolving art','Full story'],cover:'wildbond'},
+  {id:'baseball',title:'Diamond Career',tcls:'t-baseball',status:['Prototype','s-proto'],href:'games/diamond-career/index.html',
+   blurb:'Six games under the lights. Time your swing or read the pitcher, earn a call-up, choose more pay or more playing time, and bring your first payday home.',
+   tags:['Baseball','Two batting styles','First payday'],cover:'baseball'},
+  {id:'otherworld',title:'Otherworld',tcls:'t-otherworld',status:['Prototype','s-proto'],href:'games/otherworld/index.html',
+   blurb:'Your old life ends. In the Between, the Archivist lets you choose your next world, each a different kind of story, and one gift with a cost. Live a life, make choices that branch, reach your ending, and carry soul memories into the next life.',
+   tags:['Isekai','Story arcs','Reincarnation'],cover:'otherworld'},
+];
+})();
