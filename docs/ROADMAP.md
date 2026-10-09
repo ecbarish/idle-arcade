@@ -12,6 +12,15 @@ Branch: codex/wildbond-early-heritages.
 - Preserve base lines, trainer battles, badges, maps, save data and all unresolved mysteries. Classic has no heritage dispatcher; Claude wires the exported lines into Godot. Never edit Godot or its exporter.
 - Record every clue in the ledger. Add content/JSON checks and inspect the actual export from an isolated browser; all eight pages pass. README and Session log only, no versions.
 
+### T47: Wildbond, Hollowecho build brief (WB3.5 part 1)
+- [x] Built 2026-10-09; runtime inventory verified; documentation-only handoff, no new clues or engine edits.
+Why: Claude is building the next Godot area; its existing people, clues and encounter data should be together without a new canon or engine rewrite.
+Read first: docs/lore/wildbond.md, docs/lore/wildbond-threads.md, browser 00-data.js and 11-maps.js, docs/CREATIVE.md, docs/wildbond-plan.md.
+Branch: codex/wildbond-hollowecho-brief, from latest main.
+- Write docs/lore/wildbond-hollowecho-brief.md: route/coordinates, people/voices, species and encounters, all T40 clues/payoffs, heritage delivery, one memorable arrival-to-return moment and a concrete acceptance checklist for Claude.
+- Distinguish existing exported canon from proposed staging. Preserve names, levels, badge rewards and undecided mysteries. No engine, browser data, save or version changes.
+- Verify cited source IDs/coordinates/content using a read-only browser inventory; all eight pages pass. README and one Session log line.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a

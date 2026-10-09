@@ -93,6 +93,7 @@ index.html or style.css until those phases are merged.
 | A18 | **T43** The creature catalogue reaches Realmbound | done, merged 2026-10-09 (Realmbound v1.7.0) | docs/ROADMAP.md T43 |
 | A19 | **T44** Accessibility pass on the browser games (L10) | done, merged 2026-10-09 | docs/ROADMAP.md T44 |
 | A20 | **T45** Early-road heritage dialogue (WB2.6) | done, merged 2026-10-09 (Wildbond v1.8.1) | Browser data and ledger; no Godot edits |
+| A22 | **T47** Hollowecho area brief (WB3.5 part 1) | claimed: Codex, 2026-10-09, codex/wildbond-hollowecho-brief | Data/lore handoff for Claude, no Godot edits |
 | A8 | While you wait | always | Lore and dex text polish, more checks, bugs from GitHub issues |
 | — | Done | — | A2 L7a Wildbond balance, A3 L7b Realmbound balance, R9 heroic loot review (all merged 2026-10-07) |
 

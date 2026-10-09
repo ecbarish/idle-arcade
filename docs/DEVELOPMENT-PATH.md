@@ -80,7 +80,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB3.2 [Claude] Hollowecho Hills.
 - [ ] WB3.3 [Claude] Sunthread Commons.
 - [ ] WB3.4 [Claude] Farwatch Reach.
-- [ ] WB3.5 [ChatGPT] For each area before Claude builds it: a short "area brief" in docs/lore/ (places, people,
+- [ ] WB3.5 [ChatGPT] (Hollowecho brief claimed: Codex, 2026-10-09, codex/wildbond-hollowecho-brief; T47; Sunthread/Farwatch remain open) For each area before Claude builds it: a short "area brief" in docs/lore/ (places, people,
   clues from T40, creatures, one memorable moment) so the Godot build has everything in one page.
 - [ ] WB3.6 [ChatGPT] Trainer teams and a pacing sim for areas 5-8 using the Godot rules (rules.gd matches the browser).
 - [ ] WB3.7 [Claude] The Unbound appear (WG5): first encounters, a choice to help or oppose; reputation begins.

@@ -4,6 +4,12 @@ Every outlined project in one place, so Evan can hand work to any assistant (Cla
 and they can carry it to launch. START-HERE.md says what is happening *right now*; this file says *everything there
 is to do*. Ground rules for how assistants work, and how much creative freedom they have: [CREATIVE.md](CREATIVE.md).
 
+## Area briefs for the Godot build
+
+| ID | Project | Size | Status | Notes |
+|---|---|---|---|---|
+| WB3.5a | Hollowecho brief (T47) | S | claimed: Codex, 2026-10-09, codex/wildbond-hollowecho-brief | Existing canon/data gathered for Claude; Stillreed already built, Sunthread/Farwatch later |
+
 ## How to use this list
 
 - **Pick** any project whose status is `open` and whose dependencies are done. Prefer the **Launch track** and the
