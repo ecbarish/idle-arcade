@@ -116,7 +116,17 @@ Branch: codex/starfall-season-outlines, stacked after T56 because planning notes
 - Include a smallest-first build order and acceptance checks for Claude; no final dialogue arrays or engine/save/economy edits. Change only the plan plus normal ticket/project/queue/path/README/Session/COMMS notes. All eight browser test pages remain passing; no versions or Godot/play edits.
 - [x] T57 outlines ready in PR #84: four threats/festivals/newcomers, recoverable decisions, no mandatory calendar waits; shared timing and service-day distinction verified. All eight browser pages pass; docs only.
 
+### T59: Realmbound waits for the reader (RB1.5 / GR-10)
+- [x] Built by Codex, 2026-10-09, PR #98; awaiting review.
+Why: first-time readers must not see fallback take over while learning their first errand.
+Branch: codex/realmbound-opening-polish, from latest main.
+- Pause every opened portrait conversation; no automated dialogue choices, QuestHelper rewards or background hunting behind it.
+- Focus fallback waits until the first victory, then keeps the existing fifteen seconds. Explicit Auto remains a player choice; HUD and combat use the same predicate. Preserve basic attacks and old saves without new save fields.
+- Move the sun/cloud details clear of the title and health frames, with finer sky pixels. Browser Realmbound only: combat, world UI, scenes, onboarding, quest helper, offline-state and ambience hooks; regression scenarios and four-size screenshots.
+- Run tools/run-all-checks.cjs; add normal changelog, Session, path and COMMS notes. No versions, Godot, preview or shared-engine changes; never merge.
+
 ### T58: Wildbond, the three late observations and the reveal (WB4.4b part 2)
+- [x] Writing ready in PR #101, Codex, 2026-10-09; 53 lines, 159 shared portrait previews and all ten suites pass. Claude places it.
 Why: Claude accepted T55's three observations and settled its open calls (ledger, "Claude's review of T55"); the ending
 needs its words before Claude places them in Godot (WB4.3 part 2).
 Branch: codex/wildbond-reveal, from latest main. Claim with a draft PR titled "T58".

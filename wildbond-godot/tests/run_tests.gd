@@ -788,6 +788,11 @@ func _run() -> void:
 	tgt["gear"] = "ember"
 	var d_band: int = main.R.damage(att, { "c": tgt, "st": main.R.stats(tgt), "buff": {}, "side": "a" }, main.DATA.MOVES.emberSnap, 1.0, 0.5, 1.0).d
 	check(d_band < d_bare, "an Ember-Glass Band: Ember moves hurt less (%d against %d)" % [d_band, d_bare])
+	var shapes_ok := true
+	for sid in main.Figures.SHAPE_FOR:
+		var lk: Dictionary = main.Figures.look_for(main.DATA.SPECIES[sid])
+		shapes_ok = shapes_ok and lk.kind == main.Figures.SHAPE_FOR[sid] and main.Figures.call("_" + str(lk.kind), { "wag": 1, "walking": true, "frame": 1 }, lk).size() > 8
+	check(shapes_ok and main.Figures.look_for(main.DATA.SPECIES.mosshog).kind == "boar", "WD2: twelve species take the new serpent, turtle, moth and tree-folk shapes; the rest keep their family's")
 	check(main.Figures._gear_parts(main.Figures._wolf({}, main.CREATURE_LOOKS.cindercub), "bell").size() > 0, "gear is drawn on the body, whatever its shape")
 	# ---- tamer orders: Rally, your family's order, and orders people teach you
 	var ob = main.battle

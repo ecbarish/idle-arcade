@@ -112,12 +112,12 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB4.2 [Claude] The wild bond's
   discovery (WG4) and the first-person glimpse.
 - [ ] WB4.3 [Claude] The homecoming ending, colour and depth restored. *Part 1 done 2026-10-09: after the Champion, Maren and Isolde come to the league gate and Avenne walks down (T54 staging), the ending and the quiet-down lines play, and every Warden welcomes the Champion on return. Left: the deeper reveal (waits on Evan's choice of the final truth, docs/proposals/wildbond-final-reveals.md, and WB4.4b).*
-- [ ] WB4.4 [ChatGPT] (WB4.4a: T53 and T54 merged 2026-10-09 and placed; WB4.4b, the full mystery payoff, waits on Evan's choice in docs/proposals/wildbond-final-reveals.md) The ending's text and every thread's payoff, written from the ledger, for Claude to place.
+- [ ] WB4.4 [ChatGPT] (T58 writing ready: PR #101, Codex, 2026-10-09; Claude places approved reveal) (WB4.4a: T53 and T54 merged 2026-10-09 and placed; WB4.4b, the full mystery payoff, waits on Evan's choice in docs/proposals/wildbond-final-reveals.md) The ending's text and every thread's payoff, written from the ledger, for Claude to place.
 
 **WB-D: deeper play (from the game review, docs/proposals/game-review-2026-10-09.md; before 2.0, order in PRIORITIES.md).**
 - [ ] WD1 [Claude] Numbers off the screen (GR-4): remove the Badges/Lures/Coins/Wilddex line; a readable arrival name.
 - [ ] WD2 [ChatGPT data, Claude drawing] Creatures that look different (GR-1): per-species look features in data;
-  parts drawn in figures.gd; 4-5 new body shapes.
+  parts drawn in figures.gd; 4-5 new body shapes. *Part 1 done 2026-10-09: serpent, turtle, moth and tree-folk shapes for twelve species (figures.gd `SHAPE_FOR`; a `shape` field in the data overrides it). Left: ChatGPT's look features, then Claude draws them as parts; a fish shape with WB5.7.*
 - [ ] WD3 [Claude, ChatGPT data] Battles with real choices (GR-2): about 60 moves, family signature moves, a few
   statuses, an order per Warden; tuned with WB3.6.
 - [ ] WD4 [Claude] Areas you can explore (GR-3): route, settlement and hidden pocket per area, return spots gated by
@@ -181,7 +181,7 @@ creatures as monsters. Built as first-person grid delves (docs/proposals/new-gam
 - [x] RB1.3 [ChatGPT] (done, merged 2026-10-09; T48) Part 3: the road between towns as a walkable stretch at key points (an inn on the road, a
   camp), keeping auto-combat where it already lives.
 - [ ] RB1.4 [ChatGPT] Phone pass for the new layout (L3 part 2).
-- [ ] RB1.5 [ChatGPT] Wait for the player (GR-10, a bug): autopilot must not take over during the first dialogue
+- [x] RB1.5 [ChatGPT] (built: Codex, 2026-10-09, PR #98; awaiting review) Wait for the player (GR-10, a bug): autopilot must not take over during the first dialogue
   (games/realmbound/js/13-world-ui.js:95); fix the stray blocks in the sky. Do first.
 
 **RB-M2: what the raid set up.**
@@ -238,7 +238,7 @@ launcher shows the Godot previews as games (cards, covers, links).
 - [ ] AR2.3 [any] Game boxes (V3).
 - [ ] AR2.4 [local] Link and image check across guides and pages (Lane D3).
 - [ ] AR2.5 [ChatGPT] Studio text
-browser (E4).
+browser (E4). (claimed: Grok, 2026-10-09, grok/studio-text-browser; Lane C task C1)
 - [x] AR2.6 [Claude] Craft review and learning notes (docs/learning/): done 2026-10-09 (safe saves, smaller web pack,
   committed import settings, line-ending rules, one command for all checks, checks on GitHub).
 - [ ] AR2.7 blocked: needs Evan. Build the web previews on GitHub instead of committing them (docs/learning/web-and-shipping.md;
@@ -295,6 +295,9 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, WD2 part 1 (Claude, Wildbond builder):** new shapes are cheapest where a description already asks for
+  one (a "wyrm", roots, a shell, dusk drifting), and a Godot-side table (figures.gd `SHAPE_FOR`) lets them land without
+  touching the browser's shared families. A pixel shape needs a look at 2x before shipping: the first moth read as a box.
 - **2026-10-09, design decisions (Claude, Design decisions thread):** questions were waiting in COMMS for days because
   nobody owned answering them. Now docs/DECISIONS.md is the log and the thread answers from the research, going to Evan
   only for goals, new games, money or the irreversible. First answers: one day in Starfall (DD-2), Warden levels follow
@@ -333,5 +336,7 @@ line or two, with the page that holds the detail.
   on every push and PR. Web packs committed on every rebuild had grown the history to 284 MB: rebuild at milestones
   only, and AR2.7 proposes building them on GitHub. Wildbond's main.gd (3,600 lines), raw key reads and missing sound
   buses: rules to grow out of them gradually, tied to WB6.1, WB6.2 and AR2.8.
+- **2026-10-09, RB1.5:** use one fallback predicate for combat and HUD; dialogue pauses must also cover QuestHelper and background hunting. Existing victory counts can protect the first fight without adding save fields.
+- **2026-10-09, T58:** reveal handoffs distinguish observed documents from character interpretation, shared evidence from optional family perspective, and written restoration from engine placement. Never claim the visual payoff ships with a JSON file.
 - **2026-10-07 to 10-09, earlier lessons:** recorded in docs/PROJECTS.md "Read first" (the game window, depth, woven
   stories, player text, variety, friends' testing, the process).

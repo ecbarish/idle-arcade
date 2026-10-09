@@ -49,7 +49,8 @@ function ambBack(t, gy, p) {
   if (!dun && !reduce && (C.phase === 'seek' || C.phase === 'town')) ambScroll += dt * PW * (activeMount() ? .22 : .11);
   const wk = dun ? 'clear' : zoneWeather(h.zone), W = AMB_WEATHER[wk] || {}, night = dun ? 0 : realmNight();
   AMB.sky(cx, PW, PH, t, { top: z.sky[0], bottom: z.sky[1], h: gy, night, stars: !dun, moon: !dun, sun: !dun && !!P.sun, aurora: !!P.aurora && !W.storm,
-    clouds: dun ? null : { n: (P.clouds || 4) + (W.rain ? 3 : 0), speed: 7 + (W.wind || 0) * 10, col: P.cloudCol }, storm: W.storm ? 1 : W.rain ? .45 : W.snow > 1 ? .5 : 0, px: p / 2 });
+    sunY: .45, moonY: .45,
+    clouds: dun ? null : { y0: .48, y1: .58, n: (P.clouds || 4) + (W.rain ? 3 : 0), speed: 7 + (W.wind || 0) * 10, col: P.cloudCol }, storm: W.storm ? 1 : W.rain ? .45 : W.snow > 1 ? .5 : 0, px: 1 });
   if (!dun) AMB.life(cx, PW, PH, t, { birds: night < .5 && !W.rain ? (P.birds || 0) : 0, bats: night > .3 ? 2 : 0, drakes: P.drakes || 0, col: P.birdCol, y0: .08, y1: .38, px: Math.max(2, p / 2) });
   if (P.far) AMB.far(cx, PW, PH, t, { layers: P.far, scroll: ambScroll, wind: .3 + (W.wind || 0), night, px: Math.max(2, Math.round(p / 2)) });
   const dark = c => Ambience.mix(c, '#0b0f22', night * .5);

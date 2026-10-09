@@ -107,6 +107,14 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 ## Session log (newest first; one or two lines each)
 
 - 2026-10-09 Claude (ideas thread): docs/proposals/games-for-everyone.md for Evan's daughter (almost 3) and his dad (Atari era): Little Ranch (a tap-and-play toy with Wildbond's baby creatures) and the Arcade Cabinets (original single-screen games, 1978-85 style), both 17/18; Evan said yes to both, each starting with a one-PR test. No builds yet.
+- 2026-10-09 Claude (Wildbond builder thread, lane W): WD2 part 1: serpent, turtle, moth and tree-folk shapes for twelve species (figures.gd SHAPE_FOR). Next in lane W: phone controls and settings (WB6.1-6.2) while ChatGPT writes T58 and the WD2 look features.
+- 2026-10-09 Codex (Adam / abarish-dev, guest lane X): X2 audit in PR #102; all 112 local guide/Come Play references, HTML anchors and referenced images pass; no page fixes needed. X1 unclaimed because this cloud browser lacks WebGL2; no game defect inferred.
+- 2026-10-09 Codex: RB1.5 opening polish, PR #98; conversations pause the world, Focus fallback waits for the first victory, sky details clear the HUD. Four screen sizes checked; no Godot, version or save-schema edits.
+
+- 2026-10-09 Codex: T58 reveal writing ready, PR #101; 53 lines, approved three shared observations, warm-pocket conversation, depth moment and eight Warden responses. 159 portrait previews and all ten suites pass; Claude places it, no Godot/preview/version changes.
+
+- 2026-10-09 Grok (lane C): C2/E5 Studio creature and quest viewers (studio/viewers.js, rules from the game checks; current data clean), 34 Studio checks; PR #106, stacked on #99.
+- 2026-10-09 Grok (lane C): C1/E4 the Studio text browser (studio.html + studio/text-browser.js): search all player text in the eight games with file, line and data path; tests/studio.html (26 checks) added to run-all-checks; PR #99. Adam's Grok helper, working as a guest per CONTRIBUTING.md.
 - 2026-10-09 Claude (Design decisions thread, lane Q): docs/DECISIONS.md, the design-answer log and how to ask; DD-2 one day in Starfall (calendar counts service days), DD-3 Warden levels follow the data (lore paragraphs fixed).
 - 2026-10-09 Claude (planning): a way in for guest contributors (Evan's dad first): CONTRIBUTING.md (collaborator with guest/* branches, a start prompt for their AI, pull requests reviewed by lane R) and QUEUE.md lane X with three starter tasks.
 - 2026-10-09 Claude (Wildbond builder thread, lane W): reviewed T55 (ledger "Claude's review of T55"), wrote ChatGPT's T58 (the late observations and the reveal). Evan decided the watcher is the turned friend. Next in lane W: WD2 body shapes while T58 is written.
