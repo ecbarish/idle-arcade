@@ -47,3 +47,11 @@ placeholders to save time; the goal is the arcade's own original art and identit
 place: *Lost Village* (faded.ogg), *Calm Village* (larkhaven.ogg), *Peaceful* (barn.ogg), *Clearing* (thornwood.ogg),
 *Sunny* (saltmarsh.ogg), *Adventure* (emberfall.ogg), *Ascension* (cloudglass.ogg), *Fight* (wild.ogg) and the second
 *Fight* (trainer.ogg). **Ambience since 2026-10-08:** `wildbond-godot/assets/ambience/`: *WaveFar* (saltmarsh), *Wind2* (emberfall), *Wind* (cloudglass), *River* (stillreed, since 2026-10-09), unchanged except that since 2026-10-09 they are stored as OGG Vorbis instead of WAV (a sixteenth of the size); music *Boat* (stillreed.ogg, since 2026-10-09) *Quiet* (hollowecho.ogg, since 2026-10-09) *Sunny* (Sunthread, since 2026-10-09, playing saltmarsh.ogg) and *Peaceful* (Farwatch, since 2026-10-09, playing barn.ogg; places sharing a tune share the file); ambience *Wave* (farwatch, since 2026-10-09). **Battle effects since 2026-10-08:** `wildbond-godot/assets/fx/` holds seven of the pack's FX/Elemental sprite sheets, unchanged and renamed by element: *Flam* (ember.png), *Water* (tide.png), *Plant* (grove.png), *Rock* (stone.png), *Thunder* (gale.png), *Explosion* (shade.png, tinted violet in game) and *Ice* (radiant.png, tinted gold in game). Starfall's Godot town uses the same pack's tiles (`starfall-godot/assets/env/`) and two tracks in `starfall-godot/assets/music/`: *Good Time* (town.ogg) and *Chill* (evening.ogg).
+
+**Sound effects and feeling bubbles since 2026-10-09** (same pack, CC0; the full list of names, uses and source files
+is in [docs/learning/assets.md](docs/learning/assets.md)): `starfall-godot/assets/sfx/` and `wildbond-godot/assets/sfx/`
+hold sounds from *Audio/Sounds* (Menu, Bonus, Hit & Impact, Elemental, Magic & Skill, Whoosh & Slash, Alert, Creature)
+and *Audio/Jingles* (LevelUp1, Success1, Secret1, GameOver), renamed by meaning; unchanged, except that the ones near a
+second or longer are stored as OGG Vorbis. `starfall-godot/assets/emote/` and `wildbond-godot/assets/emote/` hold
+emotes from *Ui/Emote*, unchanged and renamed by meaning. The pack's 53-colour palette is copied (enlarged, and as a
+palette file) in `docs/learning/art/` for drawing our own art to match.
