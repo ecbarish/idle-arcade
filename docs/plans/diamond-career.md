@@ -1,5 +1,9 @@
 # Diamond Career: first sports module
 
+**Replaced 2026-10-09:** Evan found the batting game too hard to read and to hit and asked for a game you manage.
+The direction is now [sports-management.md](sports-management.md) (Diamond Manager, and Lantern Bowl for football).
+This page is kept for history; the batting prototype stays in games/diamond-career/, off the arcade shelf.
+
 **Unparked 2026-10-08:** batter first, timing and tactical batting both (switchable); browser first. ChatGPT builds
 **No physics engine (Evan's worry, 2026-10-08):** like Retro Bowl, New Star Soccer and Baseball Superstars, outcomes
 come from a statistics model (batter vs pitcher, weighted rolls); the player acts in short readable moments (timing or

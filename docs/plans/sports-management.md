@@ -68,9 +68,9 @@ side panel. Text is in full words.
 
 ### The road (each about one pull request; claim with a draft PR titled with the ID)
 
-- [ ] **DM1** [Claude] (claimed: Claude, 2026-10-09, claude/project-thread-v8qi1b) The first playable season: roster with ratings, watch or sim a game with play-by-play,
+- [x] **DM1** [Claude] (done 2026-10-09, PR #110) The first playable season: roster with ratings, watch or sim a game with play-by-play,
   standings, gate money, trades with a readable answer, free agents and contracts, stadium upgrades, offseason
-  aging and renewals, save and load. `tests/diamond-manager.html` passes. (This PR.)
+  aging and renewals, save and load. `tests/diamond-manager.html` passes.
 - [ ] **DM2** [any] **Playability pass** (Evan: "someone that checks if these games are even reasonably playable").
   Play two full seasons as a first-timer on desktop and a phone-sized window. Write
   docs/playtests/diamond-manager-1.md: what was unclear in the first five minutes, any number that felt wrong (a

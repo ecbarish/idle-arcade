@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Diamond Manager checks</title>
+<style>body{font:16px/1.5 system-ui;background:#102c31;color:#f2eedb;max-width:980px;margin:30px auto;padding:0 16px}button{font:inherit;min-height:44px;padding:10px 18px;cursor:pointer}.pass{color:#9ee7ba}.fail{color:#ffaaa6}iframe{width:100%;height:500px;border:1px solid #6d9189}li{padding:3px 0}summary{cursor:pointer}</style></head><body>
+<h1>Diamond Manager checks</h1><p>Game simulation, seasons and the final, gate money, upgrades, contracts, trades and saves. Your Diamond Manager save, its backups and hub progress are restored even when a check fails. Close other Diamond Manager tabs before running.</p>
+<button id="run">Run checks</button><p id="summary" role="status">Ready.</p><ol id="results"></ol><details><summary>Test game</summary><div id="game"></div></details>
+<script src="diamond-manager-checks.js"></script><script>
+'use strict';
+document.querySelector('#run').addEventListener('click',async()=>{
+  const button=document.querySelector('#run'),sum=document.querySelector('#summary'),res=document.querySelector('#results');
+  button.disabled=true;sum.textContent='Running…';res.replaceChildren();let frame,backup;
+  const managed=k=>k==='diamond-manager-save-v1'||k==='arcade-index-v1'||k.startsWith('arcade-backup:diamond-manager-save-v1:')||k.startsWith('arcade-backup:arcade-index-v1:');
+  try{
+    backup=new Map(Object.keys(localStorage).filter(managed).map(k=>[k,localStorage.getItem(k)]));
+    Object.keys(localStorage).filter(managed).forEach(k=>localStorage.removeItem(k));
+    frame=document.createElement('iframe');frame.title='Diamond Manager test instance';frame.src='../games/diamond-manager/index.html';
+    await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Game did not load within 20 seconds')),20000);frame.onload=()=>{clearTimeout(timer);resolve();};frame.onerror=()=>{clearTimeout(timer);reject(Error('Game load failed'));};document.querySelector('#game').appendChild(frame);});
+    if(!frame.contentWindow.__dm)throw Error('Run these checks on localhost, using serve.ps1.');
+    const list=frame.contentWindow.eval('('+diamondManagerChecks.toString()+')()');let fails=0;
+    for(const c of list){const li=document.createElement('li');li.className=c.ok?'pass':'fail';li.textContent=(c.ok?'PASS — ':'FAIL — ')+c.label;res.appendChild(li);if(!c.ok)fails++;}
+    sum.textContent=fails?`FAIL — ${fails} of ${list.length} checks.`:`PASS — ${list.length} checks.`;
+  }catch(e){sum.textContent='FAIL — '+e.message;}
+  finally{
+    if(frame)frame.remove();
+    if(backup){Object.keys(localStorage).filter(managed).forEach(k=>localStorage.removeItem(k));for(const [k,v]of backup)localStorage.setItem(k,v);}
+    button.disabled=false;
+  }
+});
+</script></body></html>
