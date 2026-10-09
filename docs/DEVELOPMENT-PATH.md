@@ -13,9 +13,11 @@ When your lane in docs/QUEUE.md has no `open` task, **do not stop and do not rep
 
 1. **Reviews first** (Claude): merge waiting PRs. **Bugs first** (everyone): open GitHub issues and anything Evan
    reported.
-2. **Find your next deliverable here:** go to the earliest milestone (M1 before M2) of any game that has an unticked
-   deliverable **with your owner tag** (`[Claude]`, `[ChatGPT]`, `[any]`, `[local]`) and no `(claimed ...)` note.
-   Prefer the game with the fewest open PRs, so work spreads out.
+2. **Find your next deliverable here, in focus order** ([PRIORITIES.md](PRIORITIES.md), updated 2026-10-09): the
+   flagship game first (its order is in PRIORITIES section 4), then the second game, then your own slot, then
+   keep-alive games. Within a game, the earliest milestone first. Take an unticked deliverable **with your owner tag**
+   (`[Claude]`, `[ChatGPT]`, `[any]`, `[local]`) and no `(claimed ...)` note. (This replaced "prefer the game with the
+   fewest open PRs", which spread work so evenly that no game got finished.)
 3. **Write the ticket** into docs/ROADMAP.md using the template below, add a row to your lane in QUEUE.md, and mark
    the deliverable here `(claimed: <you>, <date>, <branch>)`. Push that as the branch's first commit.
 4. **Build it, test it, open the PR** (QUEUE.md "The loop"), and go straight back to step 2.
@@ -221,6 +223,11 @@ No-server sharing: trade and battle codes, ghost teams (V6 part 1).
 
 ### Parked (Evan decides when)
 Card shop (CS1), Main Street (MS1), Primordial beyond light polish, a second sport. Proposals welcome; no builds.
+
+## Lessons (what we learned and changed)
+- 2026-10-09: spreading work evenly across every game kept all of them moving and none finishing, while ideas kept
+  arriving. Now: focus slots and one scorecard (PRIORITIES.md); new ideas and improvements are scored and filed
+  before anyone builds them.
 
 ## Part 3: standing work (always available, any assistant)
 - **A playtest pass:** play one game for its first 20 minutes as a newcomer, file what's confusing or broken as
