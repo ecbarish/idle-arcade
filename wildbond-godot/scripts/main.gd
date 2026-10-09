@@ -199,7 +199,10 @@ func _ready() -> void:
 	$UI.add_child(card)
 	card.chosen.connect(_on_chosen)
 	card.picked.connect(_on_card_pick)
+	sfx = Sfx.new()
+	add_child(sfx)
 	battle = Battle.new()
+	battle.sfx = sfx
 	battle.looks = CREATURE_LOOKS
 	battle.floor_tex = FLOOR
 	battle.nature_tex = NATURE
@@ -218,6 +221,7 @@ func _ready() -> void:
 	$UI.add_child(satchel)
 	shop = Shop.new()
 	shop.bag = bag
+	shop.sfx = sfx
 	$UI.add_child(shop)
 	book = Book.new()
 	book.looks = CREATURE_LOOKS
@@ -268,6 +272,7 @@ func advance() -> void:
 	if lines.is_empty():
 		return
 	lines.pop_front()
+	sfx.play("talk", -8.0)
 	if lines.is_empty():
 		if then_do.is_valid():
 			var f := then_do
@@ -737,6 +742,10 @@ func _walk(m: Mover, dt: float) -> void:
 func _unhandled_input(e: InputEvent) -> void:
 	if e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_M:
 		music_on = not music_on                  # M: music on or off
+		get_viewport().set_input_as_handled()
+		return
+	if e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_N:
+		sfx.on = not sfx.on                      # N: sound effects on or off
 		get_viewport().set_input_as_handled()
 		return
 	var want_book: bool = (e is InputEventKey and e.pressed and not e.echo and e.keycode in [KEY_TAB, KEY_J]) or (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT and satchel.text != "" and satchel.get_global_rect().has_point(satchel.get_global_mouse_position()))
@@ -2341,9 +2350,11 @@ func _explore() -> void:
 		if rng.randf() < 0.5:
 			var c := roundi(rng.randi_range(8, 20) * float(DATA.JOURNEY.classic.coins))
 			bag.coins += c
+			sfx.play("coin")
 			say("", "You find %d coins under a fallen log." % c)
 		else:
 			bag.lures += 1
+			sfx.play("pick")
 			say("", "You find a lure caught in some brambles.")
 	else:
 		say("", ["You follow a stream deeper into Thornwood.", "Birdsong all around. Your team looks happy.", "You rest in a sunny clearing for a moment.",
@@ -2627,6 +2638,7 @@ func _after_trainer(who: String, result: String) -> void:
 		if info.warden:
 			var badge: String = d.get("gate", "thorn")
 			badges.append(badge)
+			sfx.play("secret")
 			restore.append({ "where": map_name, "at": me.pos + Vector2(8, 8), "r": 0.0, "goal": 200.0 })
 			say("", "You earned the %s! The way onward opens, and colour runs out across %s." % [DATA.BADGES[badge].name, DATA.MAPS[map_name].name])
 			if TEACHERS.has(badge) and not TEACHERS[badge].order in taught:
@@ -2878,6 +2890,7 @@ func _door(kind: String) -> void:
 ## The field book (book.gd): the Wilddex and your team, from what you've seen and who chose you.
 func _open_book() -> void:
 	walk_to.clear()
+	sfx.play("open")
 	book.seen = seen
 	book.bonded = bonded
 	book.team = team
@@ -3461,6 +3474,7 @@ func _take_along(ri: int, ti: int) -> void:
 ## village tune once the colour has spilled into town: the music comes back with the colour. M turns it off and on.
 const MUSIC_VOL := -14.0
 var music: AudioStreamPlayer
+var sfx: Sfx                                     # short sound effects (scripts/sfx.gd)
 var music_now := ""
 var music_on := true
 

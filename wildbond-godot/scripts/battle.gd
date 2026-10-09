@@ -18,6 +18,7 @@ const EL_FX := { "Ember": ["ember", 25, 8, Color.WHITE], "Tide": ["tide", 40, 11
 const FX_FRAME := 0.055
 var fx_tex: Dictionary = {}
 var fx: Array = []                             # element effects playing: { u, el, age }
+var sfx: Sfx = null                            # sound effects (main.gd hands over its own; scripts/sfx.gd)
 const SPEED := 2.5                            # battle time runs faster than real time between turns (outcomes are unchanged)
 const MENU := ["Fight", "Guard", "Orders", "Bond", "Bag", "Run"]
 ## Tamer orders (docs/proposals/creature-catalogue-and-evolution.md §4): Rally for everyone, one from your family
@@ -101,6 +102,11 @@ func open(battle_kind: String, team: Array, foe_team: Array, who: String) -> voi
 	say("A wild %s appeared!" % names if kind == "wild" else "%s sends out %s!" % [trainer, names])
 	_go_to("fog_in")
 	visible = true
+	_sfx("whoosh")
+
+func _sfx(sound: String, louder_db := 0.0) -> void:
+	if sfx:
+		sfx.play(sound, louder_db)
 
 func say(s: String) -> void:
 	log_lines.append(s)
@@ -289,11 +295,13 @@ func _resolve(u: Dictionary, m: String, mult: float) -> void:
 			floats.append({ "u": low, "txt": "+%d" % hp, "col": Color("7cf08a"), "age": 0.0 })
 			sparks.append({ "u": low, "col": Color("7cf08a"), "age": 0.0 })
 			say("%s used %s. %s recovers %d." % [u.c.name, mv.name, low.c.name, hp])
+			_sfx("heal")
 
 func _hurt(u: Dictionary, d: int, crit: bool, el) -> void:
 	u.c.hp = maxi(0, u.c.hp - d)
 	u.hit = 0.45
 	floats.append({ "u": u, "txt": "-%d" % d, "col": Color("ffd23a") if crit else Color("ffffff"), "age": 0.0 })
+	_sfx(EL_FX[el][0] if el != null and EL_FX.has(el) else "hit", -3.0)
 	if el != null:
 		sparks.append({ "u": u, "col": EL_COL.get(el, Color.WHITE), "age": 0.0 })
 		if EL_FX.has(el):
@@ -303,6 +311,7 @@ func _hurt(u: Dictionary, d: int, crit: bool, el) -> void:
 
 # ---------------------------------------------------------------- your choices
 func _choose(i: int) -> void:
+	_sfx("pick", -6.0)
 	match MENU[i]:
 		"Fight":
 			move_i = 0
@@ -333,6 +342,7 @@ func _choose(i: int) -> void:
 				bag.lures -= 1
 				cap = { "u": tg, "pos": 0.0, "dir": 1.0, "zone": 0.62 + rng.randf() * 0.2 }
 				say("You throw a lure at %s. Calm it: press when the marker is in the green." % tg.c.name)
+				_sfx("whoosh")
 				_go_to("capture")
 		"Bag":
 			if int(bag.get("berries", 0)) <= 0:
@@ -348,6 +358,7 @@ func _choose(i: int) -> void:
 				floats.append({ "u": low, "txt": "+%d" % hp, "col": Color("7cf08a"), "age": 0.0 })
 				sparks.append({ "u": low, "col": Color("7cf08a"), "age": 0.0 })
 				say("%s eats a berry and recovers %d." % [low.c.name, hp])
+				_sfx("heal")
 				var u := wait_u
 				wait_u = {}
 				u.atb = 0.0                                # eating takes its turn
@@ -463,6 +474,10 @@ func _end(r: String) -> void:
 				results.append("%s trusts you more: %s." % [u.c.name, R.BOND[R.bond_lvl(u.c)][0]])
 	elif r == "lost":
 		results.append("Your team is exhausted.")
+	if r in ["won", "caught"]:
+		_sfx("levelup" if results.any(func(l): return " grew to level " in l) else "success")
+	elif r == "lost":
+		_sfx("faint", -4.0)
 	_go_to("results")
 
 # ---------------------------------------------------------------- input: keys, mouse or touch
@@ -832,12 +847,14 @@ func _calm() -> void:
 		sparks.append({ "u": u, "col": Color("7cf08a"), "age": 0.0 })
 		foes.erase(u)
 		caught.append(c)
+		_sfx("bond")
 		say("%s%s trusts you. It chose to come with you!" % ["Perfect calm! " if q == "perfect" else ("Nicely done. " if q == "good" else ""), c.name])
 		if living("f").is_empty():
 			_end("caught")
 			return
 	else:
 		say("%s%s broke free!" % ["It shies away. " if q == "miss" else "", c.name])
+		_sfx("warn")
 	_go_to("choose" if not wait_u.is_empty() else "run")
 
 ## One of your creatures on a single compact line (when your team has more than one): name, level, health.
