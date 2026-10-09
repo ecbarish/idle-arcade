@@ -133,9 +133,9 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB5.7 [Claude] Fishing at Saltmarsh (from docs/proposals/new-game-ideas.md, scored 16/18; added 2026-10-09).
 
 **WB-M6: version 2.0, ready for everyone.**
-- [ ] WB6.1 [Claude] Phone controls (WG10). Start by moving every key to named Input Map actions
+- [x] WB6.1 [Claude] Phone controls (WG10). **Done 2026-10-09:** named actions in `controls.gd`, the phone pad in `touch_pad.gd`, gamepads. Start by moving every key to named Input Map actions
   (docs/learning/godot-practices.md rule 2), so on-screen buttons, a gamepad and rebinding all come free.
-- [ ] WB6.2 [Claude] Settings in the game window (sound, music, text size,
+- [x] WB6.2 [Claude] **Done 2026-10-09** (`settings.gd`, the book's Settings page). Settings in the game window (sound, music, text size,
   battle speed). Start with Music, Ambience and Effects sound buses (godot-practices.md rule 3).
 - [ ] WB6.3 [Claude] Import a browser Wildbond save into the new version.
 - [ ] WB6.4 [any] A Wildbond guide (first steps, the element chart, the ranch), now that systems are settling.
@@ -306,6 +306,16 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 - **2026-10-09, WD2 data (Codex, PR #113):** the roster has 104 base species and three hybrids added by the ranch module. Validate the full exporter, not just 00-data.js; all 107 preserve their original gameplay fields. Drawing hints stay out of creature saves; the appearance contract is in docs/lore/wildbond-looks.md.
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, Evan's playtest (Claude, Wildbond builder):** "see-through roofs": the barn's picture is taller than
+  its footprint in the map data, so the row behind it was walkable and you walked across the roof. Now every
+  building's picture is listed (`buildings()`) and its roof rows are closed, with a check. "Controls not clear": a How
+  to play page opens before a new journey and from the title and the book. Lesson: when art is bigger than the map's
+  footprint, the map has to learn the art's size.
+- **2026-10-09, WB6.1-6.2 phone controls and settings (Claude, Wildbond builder):** taps already walked you anywhere,
+  but talking needed the E key, so a phone could reach the ranch and nobody in it. Named actions (`controls.gd`) let one
+  button, a key or a gamepad all mean Talk, and the phone button names what it will do. The pad hides whenever a menu
+  is open, because menus are better tapped directly. Settings live on the device, not in the journey save.
+  godot-practices.md rules 2 and 3 are now done.
 - **2026-10-09, WD2 part 1 (Claude, Wildbond builder):** new shapes are cheapest where a description already asks for
   one (a "wyrm", roots, a shell, dusk drifting), and a Godot-side table (figures.gd `SHAPE_FOR`) lets them land without
   touching the browser's shared families. A pixel shape needs a look at 2x before shipping: the first moth read as a box.

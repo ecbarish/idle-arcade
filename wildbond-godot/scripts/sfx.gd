@@ -17,7 +17,7 @@ func _ready() -> void:
 	for i in VOICES:
 		var p := AudioStreamPlayer.new()
 		if AudioServer.get_bus_index("Effects") >= 0:
-			p.bus = "Effects"            # the settings menu's Effects slider, once that bus exists (WB6.2)
+			p.bus = "Effects"            # the Effects slider on the Settings page (WB6.2)
 		add_child(p)
 		_players.append(p)
 

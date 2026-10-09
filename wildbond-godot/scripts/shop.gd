@@ -50,14 +50,13 @@ func _row(i: int) -> Rect2:
 func _input(e: InputEvent) -> void:
 	if not visible:
 		return
-	if e is InputEventKey and e.pressed and not e.echo:
-		match e.keycode:
-			KEY_UP, KEY_W: sel = maxi(0, sel - 1)
-			KEY_DOWN, KEY_S: sel = mini(goods.size(), sel + 1)
-			KEY_ENTER, KEY_KP_ENTER, KEY_SPACE, KEY_E: _buy(sel)
-			KEY_ESCAPE, KEY_BACKSPACE:
-				visible = false
-				closed.emit()
+	var d := Controls.dir(e)                    # named actions (controls.gd): keys, a gamepad
+	if d != Vector2i.ZERO or Controls.pressed(e, "interact") or Controls.pressed(e, "back") or (e is InputEventKey and e.pressed):
+		if d.y != 0: sel = clampi(sel + d.y, 0, goods.size())
+		elif Controls.pressed(e, "interact"): _buy(sel)
+		elif Controls.pressed(e, "back"):
+			visible = false
+			closed.emit()
 		get_viewport().set_input_as_handled()
 		queue_redraw()
 	elif e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:

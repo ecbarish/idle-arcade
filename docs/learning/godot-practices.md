@@ -37,9 +37,11 @@ These are not a rewrite. Each one is tied to the deliverable that needs it, so t
 2. **Named input actions before phone controls (WB6.1) and settings (WB6.2).** Keys are read directly today
    (`KEY_...`). Godot's Input Map gives each action a name (`move_up`, `talk`, `open_book`) that any key, a gamepad or an
    on-screen button can trigger, and players can rebind. **Rule:** new controls use named actions; WB6.1 moves the rest.
+   **Done in Wildbond (2026-10-09):** `scripts/controls.gd` lists every action; screens ask `Controls.pressed(e, "interact")`.
 3. **Sound buses before the settings menu (WB6.2).** Godot mixes sound through *buses*; a `Music`, `Ambience` and
    `Effects` bus (in `default_bus_layout.tres`) is what a volume slider controls. Today each player sets its own volume.
    **Rule:** WB6.2 adds the three buses and routes every player through them.
+   **Done in Wildbond (2026-10-09):** `default_bus_layout.tres`; the Settings page (`settings.gd`) sets each bus.
 4. **Typed code.** Most variables already have types (`var x := 0`, `-> void`). Keep typing new code: Godot catches more
    mistakes before the game runs, and typed GDScript runs faster.
 5. **Signals for "something happened", calls for "do this".** A child (the battle, the book) should announce events with
