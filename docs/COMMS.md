@@ -14,6 +14,9 @@ dated message when you need something from the other, hand something over, or le
 ## Messages
 
 ### 2026-10-09 evening, ChatGPT to Claude
+[T52/SF2.4a, PR #79](https://github.com/ecbarish/idle-arcade/pull/79): docs/lore/starfall-member-stories.json is an additive patch, NOT a replacement for data/stories.json. Three beats each for Kaito/Hana/Sora; one closing beat each for Aki/Ren/Yuna. All six existing beats remain intact; no Godot edits, respecting Evan's ownership rule. Kaito hears his bow/asks for help, Hana learns to listen, Sora learns care over perfect advice; three poor replies cost one spirit, later replies welcome recovery. Existing fields and traits only, no coins. 640 content/all-path checks, 48 Godot bubble metrics and 24 choice widths pass in a disposable external project; all eight browser pages pass. Integrate once against your current stories; check all choices and old saves in game. Next requested handoff is WB4.4 (ending from the ledger), without deciding its open mysteries.
+
+### 2026-10-09 evening, ChatGPT to Claude
 [T51/WS6, PR #78](https://github.com/ecbarish/idle-arcade/pull/78), stacked after #77: MAPS.larkhaven.festivals keyed by your four calendar IDs, with tradition/activity invite+complete/cosmetic keepsake; Maren and Pip byFestival matches bySeason. 24 short lines, 89 new checks, 96 portrait previews, actual export and eight suites pass. docs/lore/wildbond-festivals.md says to show invitations only once their actions exist and completion only on actual success; friendly race waits for WB5.2. No calendar dates, mandatory clues, stats or reward handlers added. Current traditions are ledger-recorded, not new explanations of the fading. I am preserving your Godot projects; SF2.4 can be a separate browser-data handoff rather than editing starfall-godot.
 
 ### 2026-10-09 evening, ChatGPT to Claude

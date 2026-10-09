@@ -1,0 +1,444 @@
+{
+  "Kaito": [
+    {
+      "after_jobs": 2,
+      "lines": [
+        [
+          "Kaito",
+          "I loosened my bowstring before the others could hear it. Garrick made it sing. I thought they would laugh."
+        ],
+        [
+          "Kaito",
+          "I used to practice alone. It was easier than missing in front of someone."
+        ]
+      ],
+      "options": [
+        {
+          "text": "Ask someone to watch a practice shot.",
+          "lines": [
+            [
+              "Kaito",
+              "One person. Not an audience. If I miss, they can tell me what they saw."
+            ]
+          ],
+          "morale": 1
+        },
+        {
+          "text": "Take your time. Keep practicing alone.",
+          "lines": [
+            [
+              "Kaito",
+              "All right. But if I keep hiding, I will never know whether they would have helped."
+            ]
+          ],
+          "morale": -1
+        }
+      ]
+    },
+    {
+      "after_jobs": 5,
+      "needs": "smithy",
+      "lines": [
+        [
+          "Kaito",
+          "Garrick asked me to shoot while he listened. He heard a loose fitting I had mistaken for my own shaking."
+        ],
+        [
+          "Kaito",
+          "He can make the bow quieter, or leave the note in it. I have to choose what I can live with."
+        ]
+      ],
+      "options": [
+        {
+          "text": "Choose the quiet bow. Listen carefully.",
+          "lines": [
+            [
+              "Kaito",
+              "Quiet, then. I can learn to hear the road without wondering who is listening to me."
+            ]
+          ],
+          "morale": 1,
+          "trait": "steady"
+        },
+        {
+          "text": "Keep the song. Try a harder job.",
+          "lines": [
+            [
+              "Kaito",
+              "Then it stays. I will try tougher work with the others, instead of wondering whether I dare."
+            ]
+          ],
+          "morale": 2,
+          "trait": "bold"
+        }
+      ]
+    },
+    {
+      "after_jobs": 9,
+      "lines": [
+        [
+          "Kaito",
+          "A newcomer watched me miss the straw target. I almost told them to go away. Then they asked how to hold the string."
+        ],
+        [
+          "Kaito",
+          "I know that question. I used to save it until nobody was near."
+        ]
+      ],
+      "options": [
+        {
+          "text": "Show them. Start with the missed shot.",
+          "lines": [
+            [
+              "Kaito",
+              "I will show them what went wrong first. That is the part I wanted someone to explain."
+            ]
+          ],
+          "morale": 2
+        },
+        {
+          "text": "Offer one quiet practice together.",
+          "lines": [
+            [
+              "Kaito",
+              "Just us, then. That is how I would have liked to start. We can invite the others later."
+            ]
+          ],
+          "morale": 1
+        }
+      ]
+    }
+  ],
+  "Hana": [
+    {
+      "after_jobs": 2,
+      "lines": [
+        [
+          "Hana",
+          "I stood between the others and the trouble again. They got home, but I barely heard what they were trying to tell me."
+        ],
+        [
+          "Hana",
+          "If I am not at the front, how do I know I am protecting them?"
+        ]
+      ],
+      "options": [
+        {
+          "text": "Ask where they need you to stand.",
+          "lines": [
+            [
+              "Hana",
+              "That feels like handing over my shield. No. It is asking where the shield belongs."
+            ]
+          ],
+          "morale": 1
+        },
+        {
+          "text": "Keep leading. They will follow you.",
+          "lines": [
+            [
+              "Hana",
+              "I can do that. I hoped you would ask me to listen, though. They are not just people behind me."
+            ]
+          ],
+          "morale": -1
+        }
+      ]
+    },
+    {
+      "after_jobs": 5,
+      "needs": "yard",
+      "lines": [
+        [
+          "Hana",
+          "We tried the yard together. The quietest member noticed the opening before I did. I kept giving orders over them."
+        ],
+        [
+          "Hana",
+          "They stopped trying to tell me. I owe them a better answer than another order."
+        ]
+      ],
+      "options": [
+        {
+          "text": "Apologize, then let them call the turn.",
+          "lines": [
+            [
+              "Hana",
+              "I will. I can hold a position without owning every word spoken from it."
+            ]
+          ],
+          "morale": 2,
+          "trait": "steady"
+        },
+        {
+          "text": "Explain the plan for a harder job.",
+          "lines": [
+            [
+              "Hana",
+              "If I ask them to take on harder work, they should know why. I will leave room for an answer."
+            ]
+          ],
+          "morale": 1,
+          "trait": "bold"
+        }
+      ]
+    },
+    {
+      "after_jobs": 9,
+      "lines": [
+        [
+          "Hana",
+          "Someone asked me to walk at the back today. They said they trusted me to notice if anybody fell behind."
+        ],
+        [
+          "Hana",
+          "I never thought that could be a place of honor."
+        ]
+      ],
+      "options": [
+        {
+          "text": "Take the rear. Keep everyone together.",
+          "lines": [
+            [
+              "Hana",
+              "Then that is my place today. A shield works at either end of a group."
+            ]
+          ],
+          "morale": 2
+        },
+        {
+          "text": "Ask the group where you are needed.",
+          "lines": [
+            [
+              "Hana",
+              "One question before we leave. It takes less time than putting a broken plan back together."
+            ]
+          ],
+          "morale": 1
+        }
+      ]
+    }
+  ],
+  "Sora": [
+    {
+      "after_jobs": 2,
+      "lines": [
+        [
+          "Sora",
+          "A tired traveler asked me how to sit still. I gave them the words my teacher gave me. They only looked more tired."
+        ],
+        [
+          "Sora",
+          "Perhaps I answered the question I wanted to hear."
+        ]
+      ],
+      "options": [
+        {
+          "text": "Ask what has been troubling them.",
+          "lines": [
+            [
+              "Sora",
+              "Yes. A cup of water, and then a question. A lesson can wait for its listener."
+            ]
+          ],
+          "morale": 1
+        },
+        {
+          "text": "Give them the same lesson once more.",
+          "lines": [
+            [
+              "Sora",
+              "I can repeat it perfectly. I am less sure that perfection will help them tonight."
+            ]
+          ],
+          "morale": -1
+        }
+      ]
+    },
+    {
+      "after_jobs": 5,
+      "needs": "healer",
+      "lines": [
+        [
+          "Sora",
+          "Ama let me sit beside a patient. I started to explain a breathing exercise. Ama asked whether I had heard them speak."
+        ],
+        [
+          "Sora",
+          "Their boots hurt. We loosened the laces. That was the whole lesson."
+        ]
+      ],
+      "options": [
+        {
+          "text": "Learn to notice the small hurts first.",
+          "lines": [
+            [
+              "Sora",
+              "I will start with the person, not the lesson. Ama says a comfortable bed is also good medicine."
+            ]
+          ],
+          "morale": 2,
+          "trait": "healer"
+        },
+        {
+          "text": "Practice listening before you speak.",
+          "lines": [
+            [
+              "Sora",
+              "One quiet breath for me, then their words. There is room for both."
+            ]
+          ],
+          "morale": 1,
+          "trait": "steady"
+        }
+      ]
+    },
+    {
+      "after_jobs": 9,
+      "lines": [
+        [
+          "Sora",
+          "The traveler came back. They showed somebody else how to loosen a boot without pulling at a sore ankle."
+        ],
+        [
+          "Sora",
+          "They did not remember my lesson. I think they remembered being listened to."
+        ]
+      ],
+      "options": [
+        {
+          "text": "Let them teach. You can listen.",
+          "lines": [
+            [
+              "Sora",
+              "I would like that. A good lesson does not need to keep my name on it."
+            ]
+          ],
+          "morale": 2
+        },
+        {
+          "text": "Ask what they learned on the road.",
+          "lines": [
+            [
+              "Sora",
+              "A question instead of a speech. I have been practicing. There is still plenty to learn."
+            ]
+          ],
+          "morale": 1
+        }
+      ]
+    }
+  ],
+  "Aki": [
+    {
+      "after_jobs": 10,
+      "lines": [
+        [
+          "Aki",
+          "My sister left a note for a new recruit: come home every time. She signed it like an order."
+        ],
+        [
+          "Aki",
+          "I used to hear that as a challenge. Now I keep counting the heads coming through the gate."
+        ]
+      ],
+      "options": [
+        {
+          "text": "Teach them how to come home.",
+          "lines": [
+            [
+              "Aki",
+              "Water, a retreat, and someone who notices you are missing. I can teach that without sounding like my sister. Mostly."
+            ]
+          ],
+          "morale": 2
+        },
+        {
+          "text": "Tell them why you chose this town.",
+          "lines": [
+            [
+              "Aki",
+              "Because somebody waited here. I thought I came to prove a point. Turns out I wanted a place to return to."
+            ]
+          ],
+          "morale": 1
+        }
+      ]
+    }
+  ],
+  "Ren": [
+    {
+      "after_jobs": 9,
+      "lines": [
+        [
+          "Ren",
+          "A carter used one of my road sketches. They marked a washed-out turn and brought it back instead of throwing it away."
+        ],
+        [
+          "Ren",
+          "There is room beside my marks for theirs. I am not sure whether to keep it tidy or keep it open."
+        ]
+      ],
+      "options": [
+        {
+          "text": "Keep both names. Let the map grow.",
+          "lines": [
+            [
+              "Ren",
+              "Both names, then. If we can tell who saw what, a correction is not a failure."
+            ]
+          ],
+          "morale": 2
+        },
+        {
+          "text": "Make a clean copy; keep the old notes.",
+          "lines": [
+            [
+              "Ren",
+              "A clear page for the road, and the rough one here. Nobody has to disappear to make the writing legible."
+            ]
+          ],
+          "morale": 1
+        }
+      ]
+    }
+  ],
+  "Yuna": [
+    {
+      "after_jobs": 9,
+      "needs": "healer",
+      "lines": [
+        [
+          "Yuna",
+          "Ama caught me giving away my supper. She put the bowl back in my hands and sat beside me until I ate."
+        ],
+        [
+          "Yuna",
+          "I want to help everybody. It is easier to say that than to admit when I need help too."
+        ]
+      ],
+      "options": [
+        {
+          "text": "Let someone care for you tonight.",
+          "lines": [
+            [
+              "Yuna",
+              "Then I will ask. Not because I have earned it. Because I am tired, and somebody is here."
+            ]
+          ],
+          "morale": 2
+        },
+        {
+          "text": "Share the work, not your last meal.",
+          "lines": [
+            [
+              "Yuna",
+              "I can ask the others to carry a bowl or sit with someone. Care can have more than one pair of hands."
+            ]
+          ],
+          "morale": 1
+        }
+      ]
+    }
+  ]
+}

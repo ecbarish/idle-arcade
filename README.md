@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Starfall writing handoff (2026-10-09, T52): three-beat arcs for Kaito, Hana and Sora and closing beats for Aki, Ren and Yuna. [Additive JSON and integration contract](docs/lore/starfall-member-stories.md); not playable until Claude wires it in.
+
 - Wildbond festival writing (2026-10-09, T51): four traditions, Maren and Pip conversations, activity invitations/completions and cosmetic keepsake names. [Integration contract](docs/lore/wildbond-festivals.md). Exported writing only; the calendar and activities remain Claude's Godot work.
 
 - Wildbond content handoff (2026-10-09, T50): four seasonal encounter tables per region, four existing visitors rare year-round, and 96 seasonal observations for route residents. [Schema and canon boundaries](docs/lore/wildbond-seasons.md). Export-only; Classic's encounters and conversations stay unchanged, with no release bump.

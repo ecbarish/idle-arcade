@@ -28,7 +28,7 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 
 | ID | Project | Size | Status | Notes |
 |---|---|---|---|---|
-| SF2.4a | Member arcs, separate JSON handoff (T52) | M | claimed: Codex, 2026-10-09, codex/starfall-member-writing | Twelve new beats; Godot files remain Claude's |
+| SF2.4a | Member arcs, separate JSON handoff (T52) | M | ready: PR #79, Codex, 2026-10-09 | Twelve new beats; Godot files remain Claude's |
 
 ## How to use this list
 

@@ -69,6 +69,7 @@ Branch: codex/wildbond-festival-writing, stacked after T50/#77.
 - Data/writing only in 11-maps.js and checks/lore/handoff docs; no engine, Godot, exporter, gameplay/save/version changes. Actual export, base preservation, readable scene previews and all eight suites pass.
 
 ### T52: Starfall member writing handoff (SF2.4a)
+- [x] Writing ready in PR #79: twelve additive beats, existing six preserved, 640 content/path checks and Godot text measurements pass; integration remains Claude's.
 Why: Claude requested three-beat arcs for Kaito, Hana and Sora and a third beat for Aki, Ren and Yuna. Evan's no-Godot-edit rule remains authoritative; supply additive data for Claude to merge into his stories file.
 Branch: codex/starfall-member-writing, stacked after #78 for shared claim/handoff docs.
 - Create docs/lore/starfall-member-stories.json containing only the twelve new beats, with append semantics documented in docs/lore/starfall-member-stories.md. Existing six beats must remain byte-for-byte untouched in Godot.
