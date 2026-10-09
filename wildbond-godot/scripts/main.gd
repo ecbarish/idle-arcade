@@ -1527,6 +1527,7 @@ func _draw_structures() -> void:
 	if map_name == "larkhaven":
 		draw_texture_rect_region(HOUSE, Rect2(Vector2(BARN_DOOR.x - 1, BARN_DOOR.y - 4) * TILE, BARN_SPRITE.size), BARN_SPRITE)
 		_snow_on(Vector2(BARN_DOOR.x - 1, BARN_DOOR.y - 4) * TILE + Vector2(4, 1), BARN_SPRITE.size.x - 8)
+		_draw_festival(doors)
 
 # ---------------------------------------------------------------- Wren and the first battle
 func _beside_me() -> Vector2i:
@@ -1894,6 +1895,100 @@ func _season_air() -> void:
 			"winter": draw_rect(Rect2(Vector2(x, y), Vector2(1, 1) if k % 3 else Vector2(2, 2)), Color(1, 1, 1, 0.85))
 			"autumn": draw_rect(Rect2(Vector2(x, y), Vector2(2, 1) if int(t * 3.0 + k) % 2 else Vector2(1, 2)), [Color("d8602a"), Color("e8a030")][k % 2])
 			"spring": draw_rect(Rect2(Vector2(x, y), Vector2(2, 1)), Color("f8c8d8"))
+# ---------------------------------------------------------------- festivals in Larkhaven (WS5, decorations first)
+const SQUARE := Vector2i(13, 4)              # the green between the main street and Maren's barn
+const LIGHTS := [Color("e0483e"), Color("f2d24a"), Color("5b8def"), Color("59c38a")]
+
+## The village dressed for whichever festival is on (calendar.gd festival()): what each one puts up, so that walking
+## into town on the day feels different. Lines and the festival's small activity come with WS5's writing (WS6).
+func _draw_festival(doors: Array) -> void:
+	var fest := cal.festival()
+	if fest == "" or map_name != "larkhaven":
+		return
+	var eaves: Array = []                     # [left, y, width] along the front of each house
+	for d in doors:
+		if d == BARN_DOOR:
+			eaves.append([Vector2(BARN_DOOR.x - 1, BARN_DOOR.y - 4) * TILE + Vector2(6, BARN_SPRITE.size.y - 22), BARN_SPRITE.size.x - 12])
+		else:
+			eaves.append([Vector2(d.x - 1, d.y - 2) * TILE + Vector2(3, 30), 58])
+	var sq := Vector2(SQUARE) * TILE
+	match fest:
+		"planting":
+			# ribbons tied along the paddock fence, a box of flowers under each window, a seed-swap table on the green
+			for y in cur_map().size():
+				for x in cur_map()[0].length():
+					if tile_at(Vector2i(x, y)) == "=" and (x + y) % 2 == 0:
+						var o := Vector2(x, y) * TILE + Vector2(7, 6)
+						draw_line(o, o + Vector2(2 + sin(t * 3.0 + x) * 1.5, 7), LIGHTS[(x + y) % 4], 1.0)
+			for e in eaves:
+				for k in 3:
+					var p: Vector2 = e[0] + Vector2(6 + k * (float(e[1]) - 14) / 2.0, 14)
+					draw_rect(Rect2(p, Vector2(8, 3)), Color("8a5a32"))
+					draw_rect(Rect2(p + Vector2(1, -2), Vector2(2, 2)), Color("f07a9a"))
+					draw_rect(Rect2(p + Vector2(5, -2), Vector2(2, 2)), Color("f2d24a"))
+			_table(sq + Vector2(0, 8), 32, [Color("c8a060"), Color("7ab040"), Color("d8b070")])
+		"longlight":
+			# lanterns strung across the main street, glowing as the light goes
+			var a := Vector2(3, 6) * TILE + Vector2(0, -4)
+			var b := Vector2(21, 6) * TILE + Vector2(0, -4)
+			var prev := a
+			for k in 37:
+				var f := (k + 1) / 37.0
+				var p := a.lerp(b, f) + Vector2(0, sin(f * PI * 3.0) * 4.0 + 4.0)
+				draw_line(prev, p, Color("4e3220"), 1.0)
+				prev = p
+				if k % 3 == 1:
+					draw_circle(p + Vector2(0, 3), 6.0, Color(1.0, 0.8, 0.45, 0.18 + 0.05 * sin(t * 2.0 + k)))
+					draw_rect(Rect2(p + Vector2(-2, 1), Vector2(4, 5)), Color("f4c860"))
+		"lanterns":
+			# carved lanterns by every door and a long supper table on the green
+			for d in doors:
+				for side in [-1, 1]:
+					var p := Vector2(d) * TILE + Vector2(8 + side * 12, 12)
+					draw_circle(p, 8.0, Color(1.0, 0.6, 0.2, 0.16 + 0.05 * sin(t * 2.5 + side)))
+					draw_rect(Rect2(p - Vector2(4, 3), Vector2(8, 7)), Figures.OUTLINE)
+					draw_rect(Rect2(p - Vector2(3, 2), Vector2(6, 5)), Color("e07a2a"))
+					draw_rect(Rect2(p - Vector2(2, 0), Vector2(1, 1)), Color("fff0a0"))
+					draw_rect(Rect2(p + Vector2(1, 0), Vector2(1, 1)), Color("fff0a0"))
+			_table(sq + Vector2(-8, 8), 48, [Color("e8a030"), Color("c84a3a"), Color("f0d8a0"), Color("a0702a")])
+		"midwinter":
+			# garlands with coloured lights along every house, and the big tree on the green with gifts beneath it
+			for e in eaves:
+				var left: Vector2 = e[0]
+				var w: float = e[1]
+				for k in int(w / 3.0):
+					var p := left + Vector2(k * 3, sin(k * 0.6) * 1.5)
+					draw_rect(Rect2(p, Vector2(3, 3)), Color("2e6a3a") if k % 2 else Color("3a7a46"))
+					if k % 3 == 0:
+						var on := int(t * 2.0 + k) % 4 != 0
+						draw_rect(Rect2(p + Vector2(1, 3), Vector2(2, 2)), LIGHTS[(k / 3) % 4] if on else LIGHTS[(k / 3) % 4].darkened(0.5))
+			var base := sq + Vector2(8, 16)
+			draw_rect(Rect2(base + Vector2(-3, -6), Vector2(6, 7)), Color("6b4a2a"))           # the trunk
+			for r in 4:                                                                          # four tiers of evergreen
+				var wid := 30.0 - r * 7.0
+				var top := -12.0 - r * 9.0
+				draw_colored_polygon(PackedVector2Array([base + Vector2(-wid / 2.0 - 1, top + 12), base + Vector2(wid / 2.0 + 1, top + 12), base + Vector2(0, top - 3)]), Figures.OUTLINE)
+				draw_colored_polygon(PackedVector2Array([base + Vector2(-wid / 2.0, top + 11), base + Vector2(wid / 2.0, top + 11), base + Vector2(0, top - 2)]), Color("2e6a3a"))
+				for k in 4:
+					var lp := base + Vector2(-wid / 2.0 + 3 + k * (wid - 6) / 3.0, top + 8)
+					draw_rect(Rect2(lp, Vector2(2, 2)), LIGHTS[(k + r) % 4] if int(t * 1.5 + k + r) % 3 else Color("fff8d0"))
+			var star := base + Vector2(0, -50)
+			draw_colored_polygon(PackedVector2Array([star + Vector2(0, -4), star + Vector2(1.2, -1.2), star + Vector2(4, 0), star + Vector2(1.2, 1.2), star + Vector2(0, 4), star + Vector2(-1.2, 1.2), star + Vector2(-4, 0), star + Vector2(-1.2, -1.2)]), Color("f8e070"))
+			draw_circle(star, 9.0, Color(1.0, 0.95, 0.6, 0.15 + 0.06 * sin(t * 2.0)))
+			for k in 3:                                                                          # gifts underneath
+				var g := base + Vector2(-16 + k * 12, -4)
+				draw_rect(Rect2(g, Vector2(8, 6)), Figures.OUTLINE)
+				draw_rect(Rect2(g + Vector2(1, 1), Vector2(6, 4)), [Color("c83a3a"), Color("4a7ab8"), Color("e8c040")][k])
+				draw_rect(Rect2(g + Vector2(3, 1), Vector2(2, 4)), Color("f4ecd8"))
+
+## A trestle table on the green with dishes or seed baskets on it.
+func _table(at: Vector2, w: float, things: Array) -> void:
+	draw_rect(Rect2(at + Vector2(-1, -1), Vector2(w + 2, 8)), Figures.OUTLINE)
+	draw_rect(Rect2(at, Vector2(w, 6)), Color("a07048"))
+	draw_rect(Rect2(at + Vector2(2, 6), Vector2(2, 5)), Color("6b4a2a"))
+	draw_rect(Rect2(at + Vector2(w - 4, 6), Vector2(2, 5)), Color("6b4a2a"))
+	for k in int(w / 8.0):
+		draw_rect(Rect2(at + Vector2(2 + k * 8, -2), Vector2(5, 3)), things[k % things.size()])
 ## The hamlet's bells, hanging under the eaves and swaying a little; one answers the other.
 func _draw_bells() -> void:
 	for k in 2:
@@ -2087,6 +2182,10 @@ func _skip_opening() -> void:
 		badges = ["thorn", "tide", "ember", "beacon", "reed", "echo", "loom"].slice(0, at)
 		team[0].lvl = [5, 14, 24, 34, 46, 56, 62, 66][at]
 		team[0].hp = R.stats(team[0]).hp
+	for a in OS.get_cmdline_user_args():           # a festival day for a picture: -- --skip-opening --at=larkhaven --festival=midwinter
+		if a.begins_with("--festival=") and Calendar.FESTIVALS.has(a.substr(11)):
+			var fz: Dictionary = Calendar.FESTIVALS[a.substr(11)]
+			cal.played = Calendar.DAY_SECONDS * (Calendar.DAYS * Calendar.SEASONS.find(fz.season) + int(fz.days[0]) - 1) + 1.0
 	for a in OS.get_cmdline_user_args():           # a season held for a picture: -- --skip-opening --at=larkhaven --season=winter
 		if a.begins_with("--season="):
 			cal.mode = a.substr(9)

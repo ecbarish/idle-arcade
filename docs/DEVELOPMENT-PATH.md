@@ -95,7 +95,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
   seasonal species (each also rare out of season), a seasonal line for each townsperson; check the faded-seasons
   idea against the thread ledger before it becomes canon.
 - [ ] WS4 [Claude] Winter weather (snow, frozen pond edges, breath) and spring rain, building on G6.
-- [ ] WS5 [Claude] The four festivals in Larkhaven: Planting Day, the Long Light, the Harvest Lanterns and the
+- [ ] WS5 [Claude] (decorations done 2026-10-09: ribbons, flower boxes and a seed table for Planting Day; lanterns over the street for the Long Light; carved lanterns and a supper table for the Harvest Lanterns; garlands with lights on every house and the big tree with gifts for the Midwinter Hearth; --festival= picture flag. Left: festival lines, the small activity and keepsakes, after WS6) The four festivals in Larkhaven: Planting Day, the Long Light, the Harvest Lanterns and the
   Midwinter Hearth (garlands, lights on the houses, a big tree in the square, gifts). Decorations, festival lines,
   one small activity and a cosmetic keepsake each.
 - [ ] WS6 [ChatGPT] Festival writing: lines, keepsake names, a short tradition for each festival in docs/lore/.

@@ -103,6 +103,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude: Godot Wildbond WS5 decorations for the four festivals in Larkhaven (lines, activity and keepsakes wait for ChatGPT's WS6); web preview rebuilt.
 - 2026-10-09 Claude: Godot Wildbond WS1 calendar (scripts/calendar.gd) and WS2 four seasonal looks; date in the field book, C cycles calendar modes; 254 checks; web preview rebuilt. Next: WS4 winter weather or WS5 festivals (waiting on WS6 writing), WB4.1 the league.
 - 2026-10-09 Claude: Godot Wildbond WB3.4 Farwatch Reach built: all eight areas now in Godot (245 checks, web preview rebuilt; card and Come Play updated). Next: WS1 the calendar and seasons, WB4.1 the league, SF2.3 the tavern.
 - 2026-10-09 Claude: Godot Wildbond WB3.3 Sunthread Commons built (meeting hall, forecourt, mending frame, braids, nursery beds, Sunny tune), 239 checks, web preview rebuilt; card and Come Play say seven regions. Next: WB3.4 Farwatch (brief ready), then WS1 the calendar.
