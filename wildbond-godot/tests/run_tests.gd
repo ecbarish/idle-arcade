@@ -140,8 +140,8 @@ func _run() -> void:
 	main.spilled = true
 	check(main._music_key() == "larkhaven", "once the colour spills into town, a warm village tune")
 	main.spilled = false
-	check(["faded", "larkhaven", "barn", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "wild", "trainer"].all(func(k): return ResourceLoader.exists("res://assets/music/%s.ogg" % k)), "every tune is in the game")
-	check(["saltmarsh", "emberfall", "cloudglass"].all(func(k): return ResourceLoader.exists("res://assets/ambience/%s.wav" % k)), "waves on the coast and wind in the highlands and the pass")
+	check(["faded", "larkhaven", "barn", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "wild", "trainer"].all(func(k): return ResourceLoader.exists(main.music_path(k))), "every tune is in the game")
+	check(["saltmarsh", "emberfall", "cloudglass"].all(func(k): return ResourceLoader.exists("res://assets/ambience/%s.ogg" % k)), "waves on the coast and wind in the highlands and the pass")
 	# ---- the map: closed doors, the barn opens with the story
 	check(not main.walkable(Vector2i(4, 4)), "cottage doors stay shut")
 	check(not main.walkable(main.BARN_DOOR), "the barn is shut before you sign the register")
@@ -471,7 +471,7 @@ func _run() -> void:
 		check(not main._gate_open("stillreed"), "the hill trail east stays shut until the basin's Warden is beaten")
 		check(main.tile_at(Vector2i(13, 7)) == "j" and main.solid("j") and main.solid("q"), "the ferry skiff is moored at the landing and you can't walk through it")
 		check(not main.solid("b") and main.route(Vector2i(1, 8), Vector2i(20, 9)).size() > 0, "the footbridges carry you across the river")
-		check(ResourceLoader.exists("res://assets/music/stillreed.ogg") and ResourceLoader.exists("res://assets/ambience/stillreed.wav"), "the basin has its own tune and the sound of running water")
+		check(ResourceLoader.exists(main.music_path("stillreed")) and ResourceLoader.exists("res://assets/ambience/stillreed.ogg"), "the basin has its own tune and the sound of running water")
 		# ---- Hollowecho Hills (WB3.2), with the Reed Badge
 		main.badges.append("reed")
 		main._go("hollowecho", Vector2i(1, 9), Vector2i.RIGHT)
@@ -501,7 +501,7 @@ func _run() -> void:
 		check(not main._gate_open("farwatch"), "the road north to the league stays shut until Warden Rysa is beaten")
 		check(main.route(Vector2i(1, 9), Vector2i(27, 9)).size() > 0 and main.solid("~"), "you can walk out to the end of the pier, and the sea stays sea")
 		check(main.route(Vector2i(1, 9), Vector2i(20, 4)).size() > 0 and main._heritage_line("ceryn", main.npc_info.ceryn.data) != "", "a clear path up to Rysa's ledger, and Ceryn has a word for your family")
-		check(ResourceLoader.exists("res://assets/ambience/farwatch.wav"), "waves against the harbor")
+		check(ResourceLoader.exists("res://assets/ambience/farwatch.ogg"), "waves against the harbor")
 		# ---- the Returning Light League (WB4.1): Wren, four courts in order, the Champion
 		main.badges.append_array(["loom", "horizon"])
 		main._go("league", Vector2i(3, 16), Vector2i.UP)
@@ -900,7 +900,17 @@ func _run() -> void:
 	check(main._gate_open("thornwood") and main.npc_info.bram.beaten, "beaten trainers and the open gate are remembered")
 	check(main.ranch_movers.size() == main.ranch.size(), "the ranch creatures are back in the paddock after loading (%d)" % main.ranch.size())
 	check(main._save_summary().begins_with(str(main.my_look.name)), "the start page sums it up: %s" % main._save_summary())
+	# a save cut off half-way (a crash, a closed tab) never costs the journey: the backup is read instead
+	main.save_game()
+	check(FileAccess.file_exists(main.save_path + ".bak") and not FileAccess.file_exists(main.save_path + ".tmp"), "the last good save is kept as a backup")
+	var broken := FileAccess.open(main.save_path, FileAccess.WRITE)
+	broken.store_string('{"v": 1, "team": [{"sp": "emb')
+	broken.close()
+	check(not main._read_save().is_empty() and main._save_summary().begins_with(str(main.my_look.name)), "a broken save falls back to the backup")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(main.save_path))
+	check(main.SafeSave.exists(main.save_path) and main._load_game(), "a missing save falls back to the backup too")
+	main.SafeSave.remove(main.save_path)
+	check(not main.SafeSave.exists(main.save_path), "and a cleared save leaves nothing behind")
 	main.no_save = true
 	# ---- the done line
 	print("Wildbond Godot checks: %d passed, %d failed" % [passed, failed])

@@ -108,6 +108,14 @@ Branch: codex/wildbond-late-pacing, stacked after T55 from current main.
 - Include a no-extra-training route to expose deficits, and a bounded train-to-ace policy to measure the grind needed. Label synthetic starting fixtures, command policy, evolution, missing systems and differences from Classic. Verify browser/export/Godot data and numeric rules; report drift instead of silently assuming parity.
 - Write docs/wildbond-godot-pacing.md plus machine-readable results under docs/measurements; tests/tools may be new or changed. No gameplay tuning, engine/preview/save/version edits. All eight browser pages pass. Normal README/Session/COMMS/project/queue/path notes; open PR, never merge.
 - [x] T56 ready in PR #83: 24 entry benchmarks, six continuous direct routes, four train-to-ace journeys, raw results and copied-input hashes. 79,732 diagnostic checks and all eight browser suites pass. Deeptide cooldown stalls handed to Claude; no engine/gameplay tuning.
+### T57: Starfall seasons one to four (SF3.3)
+Why: Claude asks for four outlines in docs/plans/starfall-village.md using the shared calendar's existing festival timings.
+Branch: codex/starfall-season-outlines, stacked after T56 because planning notes overlap.
+- Append four original chapter outlines to docs/plans/starfall-village.md: one threat, one named shared-calendar festival and one newcomer each. Include street staging, active guildmaster actions through existing places, a meaningful recoverable choice and a visible aftermath.
+- Preserve current cast, six member arcs, earned staffing, recovery and no-windfall economy. Distinguish new proposals from implemented systems, chapter readiness from calendar dates, and shared-calendar day length from Starfall's existing service/wage day. No new mandatory calendar waits or missable essential story in real/held modes.
+- Include a smallest-first build order and acceptance checks for Claude; no final dialogue arrays or engine/save/economy edits. Change only the plan plus normal ticket/project/queue/path/README/Session/COMMS notes. All eight browser test pages remain passing; no versions or Godot/play edits.
+- [x] T57 outlines ready in PR #84: four threats/festivals/newcomers, recoverable decisions, no mandatory calendar waits; shared timing and service-day distinction verified. All eight browser pages pass; docs only.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a

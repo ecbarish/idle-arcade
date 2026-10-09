@@ -46,13 +46,14 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 
 | ID | Project | Size | Status | Notes |
 |---|---|---|---|
+| SF3.3-outline | Four Starfall seasonal chapters (T57) | S | ready: PR #84, Codex, 2026-10-09 | Design/writing handoff in village plan; no Godot edits |
 | WB3.6-pacing | Final-four-area and league pacing (T56) | S | ready: PR #83, Codex, 2026-10-09 | Diagnostic copies of current Godot rules/battles; report before tuning |
 | WB4.4b-audit | Clue fit and three late observations (T55) | S | ready: PR #82, Codex, 2026-10-09 | Writer doc first; no reveal text before Claude review |
 
 ## How to use this list
 
-- **Pick** any project whose status is `open` and whose dependencies are done. Prefer the **Launch track** and the
-  current focus (Realmbound and Wildbond) unless Evan says otherwise.
+- **Pick** any project whose status is `open` and whose dependencies are done, in the focus order of
+  [PRIORITIES.md](PRIORITIES.md) (2026-10-09: Wildbond in Godot, then the Starfall village, then Realmbound).
 - **Claim it** before starting: change its status to `claimed: <who>, <date>, <branch>` in a tiny first commit
   (push it), so two assistants don't build the same thing. Release it (`open`) if you stop without finishing.
 - **One project, one branch** (`claude/<topic>`, `codex/<topic>`, `<ai>/<topic>`). Keep to the files the project

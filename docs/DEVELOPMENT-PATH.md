@@ -13,9 +13,11 @@ When your lane in docs/QUEUE.md has no `open` task, **do not stop and do not rep
 
 1. **Reviews first** (Claude): merge waiting PRs. **Bugs first** (everyone): open GitHub issues and anything Evan
    reported.
-2. **Find your next deliverable here:** go to the earliest milestone (M1 before M2) of any game that has an unticked
-   deliverable **with your owner tag** (`[Claude]`, `[ChatGPT]`, `[any]`, `[local]`) and no `(claimed ...)` note.
-   Prefer the game with the fewest open PRs, so work spreads out.
+2. **Find your next deliverable here, in focus order** ([PRIORITIES.md](PRIORITIES.md), updated 2026-10-09): the
+   flagship game first (its order is in PRIORITIES section 4), then the second game, then your own slot, then
+   keep-alive games. Within a game, the earliest milestone first. Take an unticked deliverable **with your owner tag**
+   (`[Claude]`, `[ChatGPT]`, `[any]`, `[local]`) and no `(claimed ...)` note. (This replaced "prefer the game with the
+   fewest open PRs", which spread work so evenly that no game got finished.)
 3. **Write the ticket** into docs/ROADMAP.md using the template below, add a row to your lane in QUEUE.md, and mark
    the deliverable here `(claimed: <you>, <date>, <branch>)`. Push that as the branch's first commit.
 4. **Build it, test it, open the PR** (QUEUE.md "The loop"), and go straight back to step 2.
@@ -45,7 +47,9 @@ Claude's). Questions for Evan live in START-HERE "Questions for Evan", each with
 ### The quality bar (every deliverable)
 Feels like a game (docs/wildbond-plan.md principles); everything in the game window; the world's words, readable;
 no windfalls; earned automation; old saves load; all test pages pass (eight browser pages, plus the Godot checks for
-Claude); one README changelog line; Claude bumps versions on merge.
+Claude: `node tools/run-all-checks.cjs` runs all ten, and GitHub runs it on every pull request, so never merge a red
+cross); one README changelog line; Claude bumps versions on merge. The craft rules (saving, sound formats, Godot
+structure, when to rebuild `play/`) are in docs/learning/.
 
 ### Owners
 - **Claude:** reviews and merges; the Godot games (`wildbond-godot/`, `starfall-godot/`) and their web previews
@@ -82,7 +86,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [x] WB3.4 [Claude] Farwatch Reach. *Done 2026-10-09 from the T49 brief: the stone lookout with its lamp room, the harbor house with drying nets, the pier over the water, Rysa's open ledger, a dry bench, mooring posts and shore lanterns; Delka, Sivren, Ceryn and Warden Rysa from data (Rysa's team as the data has it, 68-70); the Peaceful tune and waves. The road north to the league is honest that the league is not built yet (WB4.1). Not done: the Watchlight and answering-lights scene staging (story beats, later).*
 - [x] WB3.5 [ChatGPT] (Hollowecho T47, Sunthread and Farwatch T49: all merged 2026-10-09) For each area before Claude builds it: a short "area brief" in docs/lore/ (places, people,
   clues from T40, creatures, one memorable moment) so the Godot build has everything in one page.
-- [x] WB3.6 [ChatGPT] T56 ready for review in PR #83: actual copied Godot battle/rules, final-area and league pacing, raw measurements and cooldown finding; no balance tuning or Godot edits. Report: docs/wildbond-godot-pacing.md.
+- [x] WB3.6 [ChatGPT] T56, merged 2026-10-09 (PR #83): actual copied Godot battle/rules, final-area and league pacing, raw measurements and cooldown finding; no balance tuning or Godot edits. Report: docs/wildbond-godot-pacing.md.
 - [ ] WB3.7 [Claude] The Unbound appear (WG5): first encounters, a choice to help or oppose; reputation begins.
 
 **WB-S: the turning year (Evan asked 2026-10-09; can run alongside WB-M3; docs/proposals/seasons-and-holidays.md).**
@@ -113,11 +117,13 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB5.4 [Claude] Roaming legendaries (W3 part 2).
 - [ ] WB5.5 blocked: needs Evan (baby forms, W9/W10; default: the proposal's recommendations).
 - [ ] WB5.6 [ChatGPT] Catalogue batch 3 and 4 (12-15 creatures each, data and lore).
+- [ ] WB5.7 [Claude] Fishing at Saltmarsh (from docs/proposals/new-game-ideas.md, scored 16/18; added 2026-10-09).
 
 **WB-M6: version 2.0, ready for everyone.**
-- [ ] WB6.1 [Claude] Phone controls (WG10).
+- [ ] WB6.1 [Claude] Phone controls (WG10). Start by moving every key to named Input Map actions
+  (docs/learning/godot-practices.md rule 2), so on-screen buttons, a gamepad and rebinding all come free.
 - [ ] WB6.2 [Claude] Settings in the game window (sound, music, text size,
-  battle speed).
+  battle speed). Start with Music, Ambience and Effects sound buses (godot-practices.md rule 3).
 - [ ] WB6.3 [Claude] Import a browser Wildbond save into the new version.
 - [ ] WB6.4 [any] A Wildbond guide (first steps, the element chart, the ranch), now that systems are settling.
 - [ ] WB6.5 [Claude] A Wildbond trailer and store-style page; Windows build and web build published.
@@ -141,14 +147,14 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
 **SF-M3: seasons.**
 - [ ] SF3.1 [Claude] Seasons as chapters (SV2), the first one ending in a festival.
 - [ ] SF3.2 [Claude] Travelling merchants and visitors from other games (the shared universe, lightly).
-- [ ] SF3.3 [ChatGPT] Season 1 to 4 outlines in docs/plans/starfall-village.md (a threat, a festival, a newcomer each).
+- [x] SF3.3 [ChatGPT] T57, merged 2026-10-09 (PR #84): four seasonal chapters in docs/plans/starfall-village.md, each with threat/festival/newcomer, recoverable choices and shared-calendar boundaries; docs only, Claude implements.
 
 - [ ] SF3.4 [Claude] Festivals in Starfall on the shared calendar (WS1's rules): the square and every building you've
   built decorated for each season's festival (lights and garlands at midwinter), a festival supper at the inn, a
   visitor. Builds on the good-day bunting (SF2.2).
 **SF-M4: the wilds.**
 - [ ] SF4.1 [Claude] Expeditions you can see (SV5): the wilds past the gate, camps, catalogue
-creatures as monsters.
+creatures as monsters. Built as first-person grid delves (docs/proposals/new-game-ideas.md), one-PR prototype first.
 - [ ] SF4.2 [Claude] Phone controls and settings; Starfall guide [any]; trailer.
 
 ### Realmbound (browser)
@@ -214,6 +220,12 @@ launcher shows the Godot previews as games (cards, covers, links).
 - [ ] AR2.4 [local] Link and image check across guides and pages (Lane D3).
 - [ ] AR2.5 [ChatGPT] Studio text
 browser (E4).
+- [x] AR2.6 [Claude] Craft review and learning notes (docs/learning/): done 2026-10-09 (safe saves, smaller web pack,
+  committed import settings, line-ending rules, one command for all checks, checks on GitHub).
+- [ ] AR2.7 blocked: needs Evan. Build the web previews on GitHub instead of committing them (docs/learning/web-and-shipping.md;
+  default: keep committing packs at milestones only). Needs Evan to set Pages' source to "GitHub Actions".
+- [ ] AR2.8 [Claude] Split Wildbond's main.gd as systems are touched (godot-practices.md rule 1): music and ambience
+  first, then festivals, interiors, the ranch; one system per commit, checks passing.
 **AR-M3: the walk-in arcade and friends.**
 - [ ] AR3.1 [Claude] Walk-in arcade steps 1-2 (V11).
 - [ ] AR3.2 [any]
@@ -223,6 +235,7 @@ No-server sharing: trade and battle codes, ghost teams (V6 part 1).
 Card shop (CS1), Main Street (MS1), Primordial beyond light polish, a second sport. Proposals welcome; no builds.
 
 ## Part 3: standing work (always available, any assistant)
+- **Run every check** (`node tools/run-all-checks.cjs`) and fix or file anything red.
 - **A playtest pass:** play one game for its first 20 minutes as a newcomer, file what's confusing or broken as
   GitHub issues (or a short report in docs/playtests/).
 - **Player-text sweep** of one game against docs/CREATIVE.md "Writing for players".
@@ -230,3 +243,20 @@ Card shop (CS1), Main Street (MS1), Primordial beyond light polish, a second spo
 - **Research prompts** for Evan's Gemini reports (docs/research/gemini-prompts.md), then review the reports against
   the game.
 - **Small local-helper jobs** (Lane D), checked by a person.
+
+## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
+Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
+line or two, with the page that holds the detail.
+- **2026-10-09, priorities (Claude, docs/PRIORITIES.md):** spreading work evenly across every game kept all of them
+  moving and none finishing, while ideas kept arriving. Now focus slots (Evan confirmed Wildbond first) and one
+  scorecard; new ideas and improvements are scored and filed before anyone builds them.
+- **2026-10-09, craft review (Claude, docs/learning/):** saves were written straight over the old file, so a crash
+  mid-write could lose a journey: both Godot games now save through a spare file and keep a backup. Wildbond's place
+  sounds were WAV and two tunes were stored twice: now OGG and shared, web pack 25.3 to 20.0 MB. Godot's `.import`
+  files were ignored against Godot's advice: now committed. No line-ending rules across Windows and Linux: now
+  `.gitattributes`. Ten test suites were run by hand and "all pass" taken on trust: now one command, and GitHub runs it
+  on every push and PR. Web packs committed on every rebuild had grown the history to 284 MB: rebuild at milestones
+  only, and AR2.7 proposes building them on GitHub. Wildbond's main.gd (3,600 lines), raw key reads and missing sound
+  buses: rules to grow out of them gradually, tied to WB6.1, WB6.2 and AR2.8.
+- **2026-10-07 to 10-09, earlier lessons:** recorded in docs/PROJECTS.md "Read first" (the game window, depth, woven
+  stories, player text, variety, friends' testing, the process).
