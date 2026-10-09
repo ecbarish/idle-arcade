@@ -500,6 +500,7 @@ func _switch() -> void:
 func _process(dt: float) -> void:
 	t += dt
 	_music_tick(dt)
+	_ambience_tick(dt)
 	fade_in = min(1.0, fade_in + dt * 0.7)
 	var door_dark := 0.0
 	if trans_t >= 0.0:
@@ -2524,3 +2525,29 @@ func _music_tick(dt: float) -> void:
 				music.stop()
 	elif music.playing:
 		music.volume_db = move_toward(music.volume_db, MUSIC_VOL, dt * 30.0)   # ...and the new one in
+
+# ---------------------------------------------------------------- ambience (Ninja Adventure, CC0; assets/ambience)
+## A quiet sound of the place under the music: waves on the coast, wind in the highlands and up in the pass. It follows
+## the music switch (M), and goes quiet in battle.
+const AMBIENCE_VOL := -20.0
+var ambience: AudioStreamPlayer
+var ambience_now := ""
+
+func _ambience_tick(dt: float) -> void:
+	if ambience == null:
+		ambience = AudioStreamPlayer.new()
+		ambience.volume_db = -60.0
+		ambience.finished.connect(func(): if ambience_now != "": ambience.play())   # loop
+		add_child(ambience)
+	var want := map_name if music_on and not (battle and battle.visible) and ResourceLoader.exists("res://assets/ambience/%s.wav" % map_name) else ""
+	if want != ambience_now:
+		ambience.volume_db = move_toward(ambience.volume_db, -60.0, dt * 80.0)
+		if ambience.volume_db <= -59.0 or not ambience.playing:
+			ambience_now = want
+			if want != "":
+				ambience.stream = load("res://assets/ambience/%s.wav" % want)
+				ambience.play()
+			else:
+				ambience.stop()
+	elif ambience.playing:
+		ambience.volume_db = move_toward(ambience.volume_db, AMBIENCE_VOL, dt * 20.0)
