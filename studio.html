@@ -98,9 +98,25 @@ details{margin:2px 0}summary{cursor:pointer;padding:2px 0}.kids{margin-left:16px
     <div id="vwTable" class="vw-wrap"></div>
   </section>
 
+  <section class="card" id="tuner">
+    <h2>Lighting and music tuner</h2>
+    <p class="meta">Try a zone's fog, shadow strength and colour grade, and play a tune faster, slower, higher or lower. The numbers start at what
+      the game uses today. <b>Preview only:</b> your tweaks are kept in this browser (not in any save) and the games don't use them yet; copy the
+      list below to ask for a change.</p>
+    <div class="row"><select id="tnZone" aria-label="Zone"></select><button class="alt" id="tnReset">Back to the game's values</button></div>
+    <div id="tnSliders"></div>
+    <div class="row"><label class="meta">Time of day (preview only) <input type="range" id="tnTime" min="0" max="1" step="0.01" value="0.12"></label></div>
+    <iframe id="tnPreview" src="studio/tuner-preview.html" title="Light preview" style="width:100%;max-width:640px;aspect-ratio:16/9;border:1px solid var(--line);border-radius:6px;display:block"></iframe>
+    <h3 style="margin:14px 0 4px">Music</h3>
+    <div class="row"><select id="tnTune" aria-label="Tune"></select><button id="tnPlay">Play</button><button class="alt" id="tnTuneReset">Back to the game's values</button></div>
+    <div id="tnTuneSliders"></div>
+    <div id="tnStatus" class="meta" aria-live="polite">Reading the games' light and music…</div>
+    <textarea id="tnOut" readonly aria-label="Your tweaks" placeholder="No tweaks yet."></textarea>
+  </section>
+
   <section class="card">
     <h2>Coming next</h2>
-    <p class="meta">From the plan (docs/PROJECTS.md, Studio): editing the text found by the text browser (E4, with E1's patch format), a map painter (E6), and a lighting and music tuner (E7).</p>
+    <p class="meta">From the plan (docs/PROJECTS.md, Studio): editing the text found by the text browser (E4, with E1's patch format), a map painter (E6), and letting the games use the tuner's values (E7).</p>
   </section>
 </main>
 <script src="shared/engine.js"></script>
@@ -297,6 +313,47 @@ gmUI(); savesUI(); logUI(); docLoad();
   StudioViewers.load('./').then(d => { data = d; window.__studioViewers = d;
     for (const o of $('#vwView').options) { const [g, v] = o.value.split(':'), n = d[g][v].filter(r => r.problems.length).length; if (n) o.textContent += ` (${n} to fix)`; }
     draw(); }).catch(e => { $('#vwStatus').textContent = 'Could not read the games: ' + e.message; });
+})();
+</script>
+<script src="shared/sound.js"></script>
+<script src="studio/tuner.js"></script>
+<script>
+'use strict';
+/* ---- Lighting and music tuner (E7, preview-only): studio/tuner.js reads and keeps the tweaks; this draws the controls ---- */
+(function () {
+  const $ = s => document.querySelector(s), esc = v => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'), T = StudioTuner;
+  const NAMES = { fog: 'Fog', shadow: 'Shadow strength', grade: 'Colour grade', bpm: 'Tempo (beats a minute)', shift: 'Pitch (semitones)' };
+  let data = null, store = T.read(), sfx = null, playing = false;
+  const zone = () => data.zones.find(z => z.key === $('#tnZone').value), tune = () => data.tunes.find(z => z.key === $('#tnTune').value);
+  const slider = (k, [a, b, st], v, base) => `<div class="leaf"><label for="tn-${k}">${NAMES[k]}</label><input type="range" id="tn-${k}" data-k="${k}" min="${a}" max="${b}" step="${st}" value="${v}">
+    <span class="when">${v}${v !== base ? ` (game: ${base})` : ''}</span></div>`;
+  function out() { $('#tnOut').value = Object.keys(store.light).length || Object.keys(store.music).length ? JSON.stringify(store, null, 1) : ''; }
+  function preview() { if (!data) return; const z = zone(), e = T.effective(z, store, 'light'), w = $('#tnPreview').contentWindow;
+    if (w && w.show) w.show({ air: z.air, fog: e.fog, shadow: e.shadow, grade: e.grade, t: Number($('#tnTime').value) }); }
+  function drawLight() { const z = zone(), e = T.effective(z, store, 'light');
+    $('#tnSliders').innerHTML = Object.keys(T.SLIDERS).map(k => slider(k, T.SLIDERS[k], e[k], z.base[k])).join('') + `<div class="meta">From <a href="${esc(z.file)}" target="_blank" rel="noopener">${esc(z.file)}</a></div>`;
+    preview(); out(); }
+  function drawTune() { const t = tune(), e = T.effective(t, store, 'music');
+    $('#tnTuneSliders').innerHTML = Object.keys(T.TUNE).map(k => slider(k, T.TUNE[k], e[k], t.base[k])).join('') +
+      `<div class="leaf"><label for="tn-lead">Lead instrument</label><select id="tn-lead" data-k="lead">${T.LEADS.map(l => `<option ${l === e.lead ? 'selected' : ''}>${l}</option>`).join('')}</select>${e.lead !== t.base.lead ? `<span class="when">(game: ${t.base.lead})</span>` : ''}</div>`;
+    if (sfx) Object.assign(sfx.tracks[t.key] || {}, e); out(); }
+  function change(kind, item, el, redraw) { const now = T.effective(item, store, kind); now[el.dataset.k] = el.type === 'range' ? Number(el.value) : el.value;
+    T.set(store, kind, item, now); if (!T.write(store)) $('#tnStatus').textContent = 'This browser would not keep the tweak.'; redraw(); }
+  $('#tnSliders').addEventListener('input', e => { if (e.target.dataset.k) change('light', zone(), e.target, drawLight); });
+  $('#tnTuneSliders').addEventListener('input', e => { if (e.target.dataset.k) change('music', tune(), e.target, drawTune); });
+  $('#tnZone').onchange = drawLight; $('#tnTime').oninput = preview; $('#tnPreview').onload = preview;
+  $('#tnReset').onclick = () => { delete store.light[zone().key]; T.write(store); drawLight(); };
+  $('#tnTuneReset').onclick = () => { delete store.music[tune().key]; T.write(store); drawTune(); };
+  $('#tnTune').onchange = drawTune;
+  $('#tnPlay').onclick = () => {
+    if (!sfx) { const tracks = {}; for (const t of data.tunes) tracks[t.key] = Object.assign({}, t.track, T.effective(t, store, 'music'));
+      sfx = ArcadeSound.create({ tracks, mode: () => playing ? 2 : 0, setMode() {}, musicKey: () => playing ? $('#tnTune').value : null }); }
+    playing = !playing; $('#tnPlay').textContent = playing ? 'Stop' : 'Play'; if (playing) sfx.sfx('select'); };
+  T.load('./').then(d => { data = d; window.__studioTuner = d;
+    const opts = list => list.map(x => `<option value="${esc(x.key)}">${esc(x.gameName)}: ${esc(x.name)}${store.light[x.key] || store.music[x.key] ? ' (tweaked)' : ''}</option>`).join('');
+    $('#tnZone').innerHTML = opts(d.zones); $('#tnTune').innerHTML = opts(d.tunes);
+    $('#tnStatus').textContent = `${d.zones.length} zones and ${d.tunes.length} tunes, read from the games' files.`; drawLight(); drawTune();
+  }).catch(e => { $('#tnStatus').textContent = 'Could not read the games: ' + e.message; });
 })();
 </script>
 </body>
