@@ -7,7 +7,7 @@ async function checkRealmPhone(frame) {
  w.eval("clearRealmRoad();clearTownService();closeRealmNotebook(false);const phoneHero=newHero('Phonecheck','concord','human','hunter');phoneHero.lvl=60;phoneHero.onboarding={arrival:true,hints:{}};phoneHero.mode='focus';S.chars=[phoneHero];S.cur=phoneHero.id;boot();closeModal();updateWorld();");
  const settle=()=>new Promise(resolve=>w.requestAnimationFrame(()=>w.requestAnimationFrame(()=>w.requestAnimationFrame(resolve))));
  const rect=selector=>d.querySelector(selector).getBoundingClientRect();
- for(const [width,height,text]of [[320,568,1],[390,844,1],[390,844,1.5],[667,375,1],[1366,768,1],[1920,1080,1],[3440,1440,1]]){
+ for(const [width,height,text]of [[320,568,1],[375,812,1],[390,844,1],[390,844,1.5],[667,375,1],[1366,768,1],[1920,1080,1],[3440,1440,1]]){
   d.documentElement.style.setProperty("--arc-text",text);
   frame.style.width=width+'px';frame.style.height=height+'px';await settle();
   const label=width+'×'+height+' text '+text;
