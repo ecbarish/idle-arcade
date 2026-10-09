@@ -138,7 +138,7 @@ creatures as monsters.
 **RB-M1: in the game window.**
 - [x] Part 1 (T38).
 - [x] RB1.2 [ChatGPT] Part 2: pages become places (T41). (merged 2026-10-09)
-- [ ] RB1.3 [ChatGPT] Part 3: the road between towns as a walkable stretch at key points (an inn on the road, a
+- [ ] RB1.3 [ChatGPT] (claimed: Codex, 2026-10-09, codex/realmbound-road-places; T48) Part 3: the road between towns as a walkable stretch at key points (an inn on the road, a
   camp), keeping auto-combat where it already lives.
 - [ ] RB1.4 [ChatGPT] Phone pass for the new layout (L3 part 2).
 
