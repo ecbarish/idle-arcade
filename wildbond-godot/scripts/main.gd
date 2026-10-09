@@ -13,6 +13,8 @@ const Register := preload("res://scripts/register.gd")
 const Card := preload("res://scripts/card.gd")
 const Battle := preload("res://scripts/battle.gd")
 const Title := preload("res://scripts/title.gd")
+const TouchPad := preload("res://scripts/touch_pad.gd")
+const HowTo := preload("res://scripts/howto.gd")
 const Shop := preload("res://scripts/shop.gd")
 const Book := preload("res://scripts/book.gd")
 const Calendar := preload("res://scripts/calendar.gd")
@@ -105,6 +107,11 @@ var battle_story := ""                       # "rival1" for Wren's battle; empty
 var satchel: Control                         # the satchel you carry, top right: tap it (or Tab/J) for the field book
 var place_t := 0.0                           # seconds since you arrived somewhere (the place name holds, then fades)
 var title: Control
+var touch: Control                               # the phone pad (touch_pad.gd)
+var howto: Control                               # the How to play page (howto.gd)
+var show_howto := true                           # it opens before a new journey (the checks turn it off)
+var howto_then_title := false                    # opened from the title page: go back to it after
+var settings := Settings.new()                   # sound, text size, battle pace, phone buttons (settings.gd, WB6.2)
 var shop: Control
 var book: Control
 var no_save := false                         # tests and recordings never touch your saved journey
@@ -163,7 +170,12 @@ var guests: Array = []                        # people come to the league gate f
 var league_room := 0                          # the league (WB4.1): the next court in this attempt (0-3, then 4 the Champion)
 
 func _ready() -> void:
+	Controls.setup()                                # named controls for keys, gamepads and the phone pad (WB6.1)
 	demo = "--demo" in OS.get_cmdline_user_args()
+	settings.keep = settings.keep and not demo and not "--skip-opening" in OS.get_cmdline_user_args()   # the checks set keep off
+	if settings.keep:
+		settings.load_file()
+	settings.apply()
 	rng.seed = 7 if demo else Time.get_ticks_usec()
 	var j: JSON = load("res://data/wildbond.json")
 	DATA = j.data
@@ -224,10 +236,20 @@ func _ready() -> void:
 	$UI.add_child(shop)
 	book = Book.new()
 	book.looks = CREATURE_LOOKS
+	book.settings = settings
 	$UI.add_child(book)
+	var thumbs := CanvasLayer.new()                # the phone pad sits above everything, and hears touches first
+	thumbs.layer = 5
+	add_child(thumbs)
+	touch = TouchPad.new()
+	thumbs.add_child(touch)
 	title = Title.new()
 	$UI.add_child(title)
 	title.chosen.connect(_on_title)
+	howto = HowTo.new()
+	$UI.add_child(howto)
+	howto.closed.connect(_on_howto_closed)
+	book.want_howto.connect(func(): howto.open("go on"))
 	if "--skip-opening" in OS.get_cmdline_user_args():
 		no_save = true
 		_skip_opening()
@@ -242,10 +264,21 @@ func _ready() -> void:
 	_begin_intro()
 
 func _begin_intro() -> void:
+	if show_howto and not demo:
+		howto.open()                              # the controls first, so nobody starts a journey not knowing them
 	say("", "The supply cart stops at the edge of the trees. Larkhaven: a handful of roofs and a ranch fence that runs right up to the forest.")
 	say("", "Everything here looks faded, like an old picture left in the sun. You too.")
 
+func _on_howto_closed() -> void:
+	if howto_then_title:
+		howto_then_title = false
+		title.visible = true
+
 func _on_title(choice: String) -> void:
+	if choice == "howto":
+		howto_then_title = true
+		howto.open("go on")
+		return
 	if choice == "continue" and _load_game():
 		return
 	_begin_intro()
@@ -295,7 +328,7 @@ func _after_talk() -> void:
 			caption.text = "Follow Maren to her barn, the big wooden one at the top right, and walk in through its door."
 		"barn_meet":
 			stage = "barn_choose"
-			caption.text = "Walk up to one of the three and press Enter to meet it properly."
+			caption.text = "Walk up to one of the three and %s to meet it properly." % how("Enter", "Meet")
 		"bonded":
 			stage = "walk_out"
 			caption.text = "Walk out into Larkhaven; %s follows you." % _partner_name()
@@ -478,7 +511,7 @@ func actors() -> Array:
 
 func walkable(p: Vector2i) -> bool:
 	var ch := tile_at(p)
-	if solid(ch):
+	if solid(ch) or _under_roof(p):
 		return false
 	if ch == "D" and not (p == BARN_DOOR and stage not in ["intro", "maren_walks", "maren_talks", "register", "signed"]):
 		return false                           # other people's houses stay shut in the trial
@@ -620,6 +653,7 @@ func _process(dt: float) -> void:
 	cal.advance(dt)
 	_music_tick(dt)
 	_ambience_tick(dt)
+	_thumbs_tick()
 	fade_in = min(1.0, fade_in + dt * 0.7)
 	var door_dark := 0.0
 	if trans_t >= 0.0:
@@ -667,11 +701,7 @@ func _process(dt: float) -> void:
 		say("maren", "Before anything else: the ranch register. Every tamer in the valley signs it. Write yourself in, love.")
 	var free_to_walk: bool = stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and not shop.visible and not book.visible and trans_t < 0.0
 	if lines.is_empty() and free_to_walk and me.path.is_empty() and me.pos.distance_to(Vector2(me.tile) * TILE) < 0.5:
-		var d := Vector2i.ZERO
-		if Input.is_action_pressed("ui_up") or Input.is_physical_key_pressed(KEY_W): d = Vector2i.UP
-		elif Input.is_action_pressed("ui_down") or Input.is_physical_key_pressed(KEY_S): d = Vector2i.DOWN
-		elif Input.is_action_pressed("ui_left") or Input.is_physical_key_pressed(KEY_A): d = Vector2i.LEFT
-		elif Input.is_action_pressed("ui_right") or Input.is_physical_key_pressed(KEY_D): d = Vector2i.RIGHT
+		var d := Controls.held_dir()                 # keys, a gamepad, or the phone pad (WB6.1)
 		if d != Vector2i.ZERO:
 			walk_to.clear()                          # the keys always win over a tapped walk
 			meet_after = null
@@ -741,21 +771,20 @@ func _walk(m: Mover, dt: float) -> void:
 			_check_spotted()
 
 func _unhandled_input(e: InputEvent) -> void:
-	if e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_M:
+	if Controls.pressed(e, "toggle_music"):
 		music_on = not music_on                  # M: music on or off
 		get_viewport().set_input_as_handled()
 		return
-	if e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_N:
+	if Controls.pressed(e, "toggle_sound"):
 		sfx.on = not sfx.on                      # N: sound effects on or off
 		get_viewport().set_input_as_handled()
 		return
-	var want_book: bool = (e is InputEventKey and e.pressed and not e.echo and e.keycode in [KEY_TAB, KEY_J]) or (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT and satchel.visible and satchel.get_global_rect().has_point(satchel.get_global_mouse_position()))
+	var want_book: bool = Controls.pressed(e, "open_book") or (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT and satchel.visible and satchel.get_global_rect().has_point(satchel.get_global_mouse_position()))
 	if want_book and stage == "free" and lines.is_empty() and not battle.visible and not shop.visible and not book.visible:
 		_open_book()
 		get_viewport().set_input_as_handled()
 		return
-	var pressed: bool = (e.is_action_pressed("ui_accept") or (e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_E)
-		or (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT))
+	var pressed: bool = (Controls.pressed(e, "interact") or (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT))
 	if not pressed:
 		return
 	if not lines.is_empty():
@@ -1420,7 +1449,9 @@ func _update_ui() -> void:
 		for m in [maren, wren] + npcs + keepers + guests:
 			if line.who == m.id and m.where == map_name:
 				who = m
-		var w := 240.0
+		var w := 300.0 if settings.large_text() else 240.0
+		bubble_text.custom_minimum_size.x = w - 12.0
+		bubble.custom_minimum_size.x = w
 		bubble.size = Vector2(w, 0)
 		bubble.reset_size()
 		if who:
@@ -1552,6 +1583,42 @@ func _draw_structures() -> void:
 		draw_texture_rect_region(HOUSE, Rect2(Vector2(BARN_DOOR.x - 1, BARN_DOOR.y - 4) * TILE, BARN_SPRITE.size), BARN_SPRITE)
 		_snow_on(Vector2(BARN_DOOR.x - 1, BARN_DOOR.y - 4) * TILE + Vector2(4, 1), BARN_SPRITE.size.x - 8)
 		_draw_festival(doors)
+
+## Where each building stands on this map, in tiles: the whole picture, roof and wall (the cottages, Maren's barn and the
+## hand-drawn halls above). The bottom row is the wall with its door; every row above it is roof.
+func buildings() -> Array[Rect2i]:
+	var out: Array[Rect2i] = []
+	if indoors():
+		return out
+	var rows: Array = cur_map()
+	for y in rows.size():
+		for x in rows[0].length():
+			if rows[y][x] == "D" and not (map_name == "larkhaven" and Vector2i(x, y) == BARN_DOOR):
+				out.append(Rect2i(x - 1, y - 2, 4, 3))
+	match map_name:
+		"larkhaven": out.append(Rect2i(BARN_DOOR.x - 1, BARN_DOOR.y - 4, 4, 5))
+		"hollowecho": out.append(Rect2i(2, 1, 5, 3))
+		"sunthread": out.append(Rect2i(20, 1, 8, 3))
+		"farwatch":
+			out.append(Rect2i(7, 1, 4, 3))
+			out.append(Rect2i(4, 10, 5, 2))
+		"league":
+			for k in 5:
+				out.append(Rect2i(5 + k * 7, 3, 5, 2))
+	return out
+
+## True on a roof: nobody walks there, so nobody is ever drawn on top of a building as if its roof were glass.
+func _under_roof(p: Vector2i) -> bool:
+	if _roof_map != map_name:
+		_roof_map = map_name
+		_roofs.clear()
+		for b in buildings():
+			for y in range(b.position.y, b.end.y - 1):
+				for x in range(b.position.x, b.end.x):
+					_roofs[Vector2i(x, y)] = true
+	return _roofs.has(p)
+var _roofs := {}
+var _roof_map := ""
 
 # ---------------------------------------------------------------- Wren and the first battle
 func _beside_me() -> Vector2i:
@@ -1966,7 +2033,7 @@ func _festival_invite() -> void:
 	fest_step = 0
 	for l in f.activity.invite:
 		say(l[0], _fill(l[1]))
-	say("", { "planting": "Plant a flower in the ranch paddock: stand on open ground inside the fence and press E.",
+	say("", { "planting": "Plant a flower in the ranch paddock: stand on open ground inside the fence and " + how("E", "Plant") + ".",
 		"longlight": "Run one lap with your partner: out along the road to the north edge of town, then back to Pip.",
 		"lanterns": "Fill the trough in the barn for every partner (two berries).",
 		"midwinter": "Make something small at Maren's workbench in the barn, then give it to someone in town." }[fest_task])
@@ -3485,6 +3552,52 @@ func _take_along(ri: int, ti: int) -> void:
 	_lead_look()
 	_place_ranch()
 
+# ---------------------------------------------------------------- the phone pad and the settings (WB6.1-6.2)
+## Tells the phone pad when walking is possible and what its button would do, and applies the settings that change
+## how things look (text size) or run (battle pace).
+func _thumbs_tick() -> void:
+	touch.mode = settings.buttons()
+	var menus := battle.visible or book.visible or shop.visible or card.visible or register.visible or title.visible or howto.visible
+	touch.pad_on = not menus and lines.is_empty() and trans_t < 0.0 and stage in ["to_barn", "barn_choose", "walk_out", "free"]
+	touch.word = action_word()
+	touch.btn_on = not menus and trans_t < 0.0 and touch.word != ""
+	touch.refresh()
+	battle.pace = settings.pace()
+	var size := 10 if settings.large_text() else 8
+	if bubble_text.label_settings.font_size != size:  # only on a change, so the labels aren't laid out every frame
+		bubble_text.label_settings.font_size = size
+		caption.add_theme_font_size_override("font_size", size - 1)
+
+## What pressing Talk would do here, in a word for the phone button ("" when there's nothing to do). While someone
+## speaks the button steps aside (the bubble sits low): a tap anywhere moves the talk on.
+func action_word() -> String:
+	if not lines.is_empty():
+		return ""
+	if stage == "barn_choose" and _starter_beside_me():
+		return "Meet"
+	if stage != "free":
+		return ""
+	var near := func(m) -> bool: return m.where == map_name and (me.tile - m.tile).length() <= 1.01
+	if npcs.any(near) or _near_keeper() != "" or (maren.where == map_name and near.call(maren)):
+		return "Talk"
+	if ranch_movers.any(near):
+		return "Greet"
+	if fest_task == "planting" and fest_task == cal.festival() and map_name == "larkhaven" and PADDOCK.has_point(me.tile):
+		return "Plant"
+	if _near_trough():
+		return "Feed"
+	if _near_stall():
+		return "Look"
+	if _near_bench():
+		return "Use"
+	if tile_at(me.tile + me.face) in ["P", "q"]:
+		return "Read"
+	return ""
+
+## How to press: "tap Meet" on a phone, a key on a computer (for the few hints that name a control).
+func how(key: String, word: String) -> String:
+	return "tap %s" % word if Controls.touch else "press %s" % key
+
 # ---------------------------------------------------------------- music (Ninja Adventure pack, CC0; assets/music)
 ## A tune for each place, and one for battles. Larkhaven's is a lost, quiet tune while the valley is faded, and a warm
 ## village tune once the colour has spilled into town: the music comes back with the colour. M turns it off and on.
@@ -3513,6 +3626,7 @@ func _music_tick(dt: float) -> void:
 	if music == null:
 		music = AudioStreamPlayer.new()
 		music.volume_db = -60.0
+		music.bus = "Music"                       # the Music slider on the Settings page (WB6.2)
 		add_child(music)
 	var want := _music_key() if music_on else ""
 	if want != music_now:
@@ -3542,6 +3656,7 @@ func _ambience_tick(dt: float) -> void:
 	if ambience == null:
 		ambience = AudioStreamPlayer.new()
 		ambience.volume_db = -60.0
+		ambience.bus = "Ambience"
 		add_child(ambience)
 	var want := map_name if music_on and not (battle and battle.visible) and ResourceLoader.exists("res://assets/ambience/%s.ogg" % map_name) else ""
 	if want != ambience_now:
