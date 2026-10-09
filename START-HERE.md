@@ -103,6 +103,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude: Godot Starfall SF2.2 failing and excelling (day judged at nightfall, people leave and return, bunting, board size, two travellers); 104 checks; web preview rebuilt. Fixed a 5%-flaky herbs check.
 - 2026-10-09 Claude: merged T46 (launcher previews) and T47 (Hollowecho brief). Godot Wildbond: Hollowecho Hills built (WB3.2: bell house, bells, survey cord, cave mouths, mist, Quiet tune), 232 checks; web preview rebuilt; arcade card and Come Play say six regions. Next: WB3.3 Sunthread (waiting for its brief), SF2.2, WB2.2 canopies.
 - 2026-10-09, ChatGPT: T47 Hollowecho area brief ready on codex/wildbond-hollowecho-brief: source coordinates, encounters, all T40 clues/payoffs and staging checklist. Live inventory and all eight pages pass; flagged Senna lore/data discrepancy, no new canon or Godot edits.
 - 2026-10-09, ChatGPT: T46 launcher previews, PR #73, now against main after #71 merged. Real screenshots, separate Classic journeys, focus-safe road; 174 launcher and 164 accessibility checks plus all eight pages pass. No Godot, exports, worker or version edits.

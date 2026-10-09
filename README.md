@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Godot Starfall (2026-10-09): good and hard days show in the street. Each evening says how the day went; a run of good days hangs bunting, brings more work to the board and draws travelling adventurers (Mirelle and Tobin); hard days quieten the board, and someone who loses heart walks out the gate, but may come back when things improve. 104 checks pass.
 - Godot Wildbond (2026-10-09): Hollowecho Hills, the sixth area: the bell keeper's stone house with two bells swaying under the eaves, the surveyor's cord and chalk arrows, cave mouths, resting stones by Warden Senna's cave, low mist and a quiet tune. 232 checks pass.
 - Wildbond build handoff (2026-10-09): [Hollowecho area brief](docs/lore/wildbond-hollowecho-brief.md) gathers the existing route, people, teams, creatures and woven clues for the Godot build. It separates proposed staging from canon and flags Senna's stale documented team levels; gameplay is unchanged.
 - Arcade (2026-10-09): the current Wildbond and Starfall previews have screenshot cards and direct doors on the launcher. Classic games and progress remain separate; first-load and save guidance is explicit. Keyboard road panning keeps focused doors visible. [Checks and scope](docs/launcher-previews.md).
