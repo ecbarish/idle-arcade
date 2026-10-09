@@ -29,6 +29,7 @@ Object.assign(SPECIES, {
   bramblestag: { name: 'Bramblestag', fam: 'horse', antlers: 1, el: 'Grove', col: '#7a6a3a', hybrid: 1, base: { hp: 80, pow: 72, grd: 70, spd: 66, wit: 52, spi: 60 },
     learn: [[1, 'charge'], [5, 'vineLash'], [9, 'regrowth'], [13, 'thornQuake']], dex: 'A boar-horse hybrid crowned with thorny antlers. Steady, strong and gentle with foals.' }
 });
+applySpeciesLooks(Object.values(HYBRIDS));
 const PRE = {}; for (const id in SPECIES) { const e = SPECIES[id].evo; if (e) PRE[e.to] = id; }
 function baseForm(id) { while (PRE[id]) id = PRE[id]; return id; }
 

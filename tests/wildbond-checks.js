@@ -1229,6 +1229,27 @@ function wildbondChecks() {
   check('Exactly the eight Wardens receive the ending appendix',()=>STORY.filter(b=>b.byStory&&b.byStory.leagueEnding).length===8);
   check('Existing Champion ending remains a separate scene',()=>SCENES.leagueEnding!==SCENES.leagueAfter&&SCENES.leagueEnding.some(l=>l[1].includes('reason it faded')));
 
+
+  // WD2: appearance is species data, independent of family, stats and saved variants.
+  const appearanceShapes = ["wolf","lizard","boar","cat","hyena","croc","horse","bird","spider","sprite","serpent","turtle","moth","treefolk"];
+  const appearanceVocabulary = {"head":["bell-crown","branch-antlers","branch-crest","broad-crest","bubble-cheeks","bubble-crown","clay-beak","curved-tusks","ember-antlers","ember-fangs","feather-antennae","feather-crest","fin-crest","fin-ears","folded-ears","frilled-cheeks","glass-beak","glass-crest","glowing-tusks","lantern-crest","lantern-crown","leaf-crest","leaf-ears","long-tusks","long-whiskers","low-brow","moss-brow","pebble-crown","pennant-crest","pointed-cheeks","pointed-ears","reed-crest","round-cheeks","round-crest","round-ears","seed-beak","seed-fangs","short-tusks","small-fangs","stone-beak","stone-crown","stone-fangs","stone-jaw","sun-rays","swept-cheeks","swept-crest","swept-ears","tall-ears","tassel-antennae","tassel-crown","thorn-antlers","tufted-ears","wide-cheeks"],"back":["ash-collar","beacon-orbit","broad-sail","broad-wings","cairn-ridge","cloud-mane","crust-plates","crystal-ridge","dew-collar","echo-mane","ember-ruff","ember-spots","fern-ruff","fin-ridge","flame-mane","flower-canopy","flower-mane","foam-orbit","glass-wings","keel-ridge","leaf-mane","leaf-wings","light-orbit","mist-ruff","mist-wings","moss-bed","narrow-wings","orchard-canopy","reed-bed","reed-ridge","sand-ruff","seed-bed","shaggy-ruff","shell-plates","silk-collar","small-sail","smooth","soft-ruff","soft-wings","soil-bed","spark-orbit","spray-mane","spray-ruff","steam-orbit","steam-ruff","stone-canopy","stone-mane","stone-paws","stone-ruff","storm-sail","sun-sail","thorn-ridge","wave-mane","wave-ridge","willow-canopy","wind-mane"],"tail":["brush","copper","curled","fan","fin","forked","hook","lantern","paddle","plume","reed","ribbon","root","stub","tapered","tassel","thread"],"pattern":["bands","bars","chevrons","cracks","diamonds","ink","mottled","rays","rings","saddle","socks","speckles","spots","swirls","vines"]};
+  const appearanceSignatures = new Set();
+  for (const [id, species] of Object.entries(SPECIES)) {
+    check(id + ': complete drawable appearance', () => species.look && appearanceShapes.includes(species.shape) &&
+      Object.keys(species.look).length === 4 && Object.entries(appearanceVocabulary).every(([key, values]) => values.includes(species.look[key])));
+    check(id + ': appearance survives JSON export', () => JSON.stringify(JSON.parse(JSON.stringify(species.look))) === JSON.stringify(species.look));
+    const signature = JSON.stringify([species.shape, species.look]);
+    check(id + ': distinct silhouette and markings', () => !appearanceSignatures.has(signature));
+    appearanceSignatures.add(signature);
+  }
+  check('Appearance catalogue covers hybrids and base species exactly', () => Object.keys(SPECIES_LOOKS).length === Object.keys(SPECIES).length && Object.keys(SPECIES).every(id => SPECIES_LOOKS[id]));
+  for (const [id, shape] of Object.entries({tidewyrm:'serpent',rillwhisk:'serpent',bogbough:'turtle',cairnclasp:'turtle',siltjaw:'turtle',veilmote:'moth',fogsail:'moth',dawntassel:'moth',orchardroot:'treefolk',flintroot:'treefolk',meadowmantle:'treefolk'})) {
+    check(id + ': preserves Claude body override', () => SPECIES[id].shape === shape);
+  }
+  check('Drawing shape does not replace breeding family', () => SPECIES.tidewyrm.fam === 'croc' && SPECIES.orchardroot.fam === 'boar' && SPECIES.veilmote.fam === 'sprite' && HYBRIDS['cat+wolf'] === 'lynxhound');
+  const appearanceCreature = newCreature('cindercub', 5);
+  check('Appearance metadata stays out of creature saves', () => !('look' in appearanceCreature) && !('shape' in appearanceCreature));
+
   return checks;
 }
 

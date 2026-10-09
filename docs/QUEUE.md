@@ -49,6 +49,28 @@ at once (a claim written on your branch isn't on main yet). So:
    COMMS. A claim with no new commits for **two days** is stale: anyone may take it after one comment on its PR.
 5. **Two claims on the same ID:** the older pull request keeps it; the newer one moves to another deliverable.
 
+## Heavy lifting (for the AIs with the most usage: Evan's dad's AIs first; Evan, 2026-10-09)
+
+Evan: "my dad's AIs have much more usage available, so we can steer them to a lot of the heavy lifting since we're
+running out of usage for this week." These are the **big builds**, in the order that matters most. They are Godot
+work: follow the Godot rules under "The road ahead" (all checks green, old saves load, screenshots, a reviewer
+merges). Before starting, check the open pull request list: the Wildbond builder thread is on the ending (WB4.3) and
+creature drawing (WD2), and #107 is phone controls and settings (WB6.1-6.2); don't take those. One task per pull
+request; split a big one into steps ("WD4a: Thornwood's route") and open the next when the first is in review.
+
+| # | Big build (path ID) | Read first | Files | Done when |
+|---|---|---|---|---|
+| H1 | **Battles with real choices** (WD3) | docs/proposals/game-review-2026-10-09.md GR-2; `wildbond-godot/scripts/rules.gd`, `battle.gd` | Wildbond data and battle scripts | About 60 moves (from 22), a signature move per creature family, a few statuses (sleep, burn, guard...), each Warden fights with a plan; the pacing check (WB3.6b, about 12 wins a level) still holds; new checks for every status |
+| H2 | **Thornwood you can explore** (WD4a) | GR-3; docs/proposals/depth-and-first-person.md (maps are data) | `wildbond-godot/` Thornwood map data and scenes | Thornwood becomes a route, the settlement and one hidden pocket, with one spot you come back to with the right creature; old saves load in the right place; screenshots |
+| H3 | **The Lighthouse Spire and rematches** (WB5.1) | docs/wildbond-plan.md; browser Wildbond's Spire (`games/wildbond/`) | `wildbond-godot/` | The Spire opens after the Champion; floors of trainers; Wardens offer stronger rematches; checks |
+| H4 | **Starfall's own place** (SF2.6) | GR-5; docs/plans/starfall-village.md | `starfall-godot/` | A frontier stockade look and road layout instead of Larkhaven's, a map that scrolls; every building still reachable; old saves load; screenshots |
+| H5 | **See the wilds sooner** (SF2.7), then **something by hand every day** (SF2.8) | GR-7, GR-8 | `starfall-godot/` | A small walkable stretch past the gate; the next jobs to master, then hire (the "master it, then hire" rule) |
+| H6 | **The rest of the areas you can explore** (WD4b onward) | as H2 | as H2 | One area per pull request, in journey order |
+| H7 | **The Unbound appear** (WB3.7) | docs/lore/wildbond-threads.md (check every line against it), docs/proposals/reputation-and-consequence.md | `wildbond-godot/` | First encounters and a choice to help or oppose; reputation begins; no new canon without the Design decisions thread (docs/DECISIONS.md) |
+
+Browser work for any AI is in "The road ahead" below. Claude's own threads keep to planning, reviews, the ending
+and the creature drawing while Claude's usage is low.
+
 ## The road ahead (ready to claim by any AI; Evan, 2026-10-09)
 
 Evan: "we are nearing our cap on Claude, so if we lay out a strong road in front of us we can use our other helpers
@@ -61,14 +83,14 @@ lane R (or Evan) merges. Each line names its spec; read it first.
 | 1 | **Storm Front cabinet** (AC1) | docs/proposals/games-for-everyone.md | new folder only, plus one launcher link | Plays start to finish on desktop and phone, original name and art, high score saved; a small test page |
 | 2 | **Little Ranch, smallest test** (LR1) | docs/proposals/games-for-everyone.md | new folder only, plus one launcher link | One creature, feed, bubbles, peekaboo, bedtime; no reading needed, nothing to fail, no links out, grown-up lock |
 | 3 | **"Tell us" in every game** (AR2.11) | game review GR-9; docs/FEEDBACK.md | settings of each browser game, `playtest.html` | Opens a prefilled GitHub issue (game, version); a 10-minute playtest script on Come Play |
-| 4 | **The front door** (AR2.12) | game review GR-12 | `index.html`, `launcher/` | The hub leads with the Godot previews; Starfall Guild and Primordial under Classic; the old homepage vote closed (docs/VOTES.md) |
+| 4 | **The front door** (AR2.12; done by Claude, PR #109; next steps for the hall in PROJECTS.md L8) | game review GR-12 | `index.html`, `launcher/` | The hub leads with the Godot previews; Starfall Guild and Primordial under Classic; the old homepage vote closed (docs/VOTES.md) |
 | 5 | **Creature looks as data** (WD2, data half) | game review GR-1 | browser Wildbond data, exported with `tools/godot-export` | Every species has look features (ears, tail, pattern, horns...) in data; Claude draws them later |
 | 6 | **More moves** (WD3, data half) | game review GR-2 | browser Wildbond data | About 60 moves, a signature move per family, a few statuses, balanced with the pacing sim; Claude wires battles later |
 | 7 | **Lighthouse Watch cabinet** (AC2) | games-for-everyone.md | as AC1 | As AC1 |
 | 8 | **Brisket's Crossing, then Ember Bricks** (AC3) | games-for-everyone.md | as AC1 | As AC1, one PR each |
 | 9 | **Realmbound phone pass** (RB1.4) | PROJECTS.md L3 | `games/realmbound/` | Plays at 375 px wide with no sideways scroll; `tests/run.html` passes |
 | 10 | **Realmbound second raid tier** (RB2.2) | PROJECTS.md R7 | `games/realmbound/` | Data and encounters, balanced; checks |
-| 11 | **Diamond Career: a full season** (DC2.1) | docs/plans/diamond-career.md D2 | `games/diamond-career/` | Standings, roles that change with form, an end-of-season review; `tests/diamond.html` passes |
+| 11 | **Diamond Manager: playability pass** (DM2; replaces the retired DC2.1) | docs/plans/sports-management.md | `games/diamond-manager/` | Two seasons played as a first-timer on desktop and phone, a short playtest note, the top three problems fixed; `tests/diamond-manager.html` passes |
 | 12 | **Newcomer playtests** (X1) and **link check** (X2), **Otherworld text sweep** (X3) | Lane X below | see Lane X | see Lane X |
 | 13 | **A Wildbond guide** (WB6.4) | `guides/` style | `guides/` | First steps, the element chart, the ranch, with real screenshots from `play/wildbond/` |
 
@@ -246,7 +268,7 @@ read-only hooks, and the accessibility audit is mostly reports and small fixes.
 |---|---|---|---|
 | C1 | **E4** Studio text browser | claimed by Grok, 2026-10-09, `grok/studio-text-browser` | In studio.html: browse and search every line of dialogue, quest text, item and creature name (read them from the games' data files); show where each is used. Read-only first; editing comes with E1's patch format |
 | C2 | **E5** Creature and quest viewers with the test rules as validators | claimed by Grok, 2026-10-09, `grok/studio-viewers` (stacked on C1, #99) | Studio pages that list species, moves, evolutions, wild tables and quests, flagging anything the checks in tests/ would reject |
-| C4 | **E7** Lighting and music tuner | open | Studio sliders for a zone's fog, shadow strength and grade, writing to localStorage only; previews in an iframe |
+| C4 | **E7** Lighting and music tuner | claimed by Grok, 2026-10-09, `grok/studio-tuner` | Studio sliders for a zone's fog, shadow strength and grade, writing to localStorage only; previews in an iframe |
 | C5 | While you wait | always | Playtest a game end to end and file what you find as GitHub issues (bug / suggestion templates) |
 
 ## Where this list comes from
