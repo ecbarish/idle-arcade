@@ -13,6 +13,7 @@ Branch: codex/wildbond-early-heritages.
 - Record every clue in the ledger. Add content/JSON checks and inspect the actual export from an isolated browser; all eight pages pass. README and Session log only, no versions.
 
 ### T47: Wildbond, Hollowecho build brief (WB3.5 part 1)
+- [x] Built 2026-10-09; runtime inventory verified; documentation-only handoff, no new clues or engine edits.
 Why: Claude is building the next Godot area; its existing people, clues and encounter data should be together without a new canon or engine rewrite.
 Read first: docs/lore/wildbond.md, docs/lore/wildbond-threads.md, browser 00-data.js and 11-maps.js, docs/CREATIVE.md, docs/wildbond-plan.md.
 Branch: codex/wildbond-hollowecho-brief, from latest main.
