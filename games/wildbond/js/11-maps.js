@@ -888,3 +888,8 @@ MAPS.farwatch.npcs.push({who:'ceryn',at:[18,3],dir:'down',
   highland:[['ceryn','Your mountain verse begins while our shore verse ends. Do not throw either away because the clocks disagree; the witnesses may have been looking in different directions.']],
   wander:[['ceryn','A Wanderer gave me a copy of the one-shadow account and asked me to leave its last page blank. Another wrote a conclusion there. I kept the blank one too.']]}
 });
+/* T45: every existing early-road person has a perspective for all four origins.
+   Classic retains its base conversation; Godot appends these exported reactions. */
+for (const area of ['larkhaven','thornwood','saltmarsh','emberfall','cloudglass']) {
+ for (const npc of MAPS[area].npcs) npc.byHeritage=Object.fromEntries(['farm','coast','highland','wander'].map((h,i)=>[h,[[npc.who,EARLY_HERITAGE_LINES[npc.who][i]]]]));
+}

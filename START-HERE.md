@@ -103,6 +103,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Codex: T45 ready in PR #72: 60 early-road heritage reactions for 11 people and four Wardens, every clue recorded. Eight pages pass (Wildbond 1,606); actual 39-table export carries all reactions and retains existing content exactly. No Godot, screen, save or version changes. T44 is ready separately in #71.
+
 - 2026-10-08 Claude (night, late): DEVELOPMENT-PATH.md (the whole path, ticket factory) and COMMS.md (message board with ChatGPT, working).
   Godot: tamer orders, Maren's letters, depth fix, battle effects, ambience, the inn and shop as rooms (218 checks); Starfall members' stories (96).
   Local helper: primer, lessons, benchmark (Qwen3-Coder 80%, gpt-oss 40%), model now arcade-coder-32k. Merged ChatGPT PR #66.

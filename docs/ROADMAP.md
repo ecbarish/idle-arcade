@@ -4,6 +4,7 @@ Shared plan for every contributor (Claude, ChatGPT/Codex, or a person). One tick
 Mark a ticket done in the same PR that finishes it.
 
 ### T45: Wildbond, early-road heritage recognition (WB2.6)
+- [x] Built by Codex, 2026-10-08; PR #72 for review, not merged. 60 exported reactions; all eight pages pass. Godot dispatch remains with Claude.
 Why: the chosen roots should change who confides in the tamer while keeping every route to the truth open (heritage proposal and thread ledger).
 Read first: docs/proposals/wildbond-heritage.md, docs/lore/wildbond-threads.md, docs/CREATIVE.md.
 Branch: codex/wildbond-early-heritages.

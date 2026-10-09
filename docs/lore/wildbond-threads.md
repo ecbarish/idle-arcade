@@ -152,3 +152,43 @@ Actual walk-up conversations and badge payoffs checked at 375, 1366, 1920 and 34
 `tools/godot-export.html` response contains all four witnesses and all 16 reactions among its 39 tables, with
 no missing or dropped-code warning. Export was inspected in an isolated browser; no Godot JSON was written.
 Screenshots: `docs/screenshots/wildbond-threads/`. Claude owns the next export and Godot dialogue dispatch.
+
+## T45 / WB2.6: recognition on the early roads (Codex, 2026-10-08)
+
+Placement: existing NPCs in Larkhaven, Thornwood, Saltmarsh, Emberfall and Cloudglass, plus STORY's warden,
+warden2, warden3 and warden4. Each row below records the four single-line byHeritage reactions in farm/coast/
+highland/wander order. These are plain exported data, matching T40. Classic keeps its ordinary lines; Claude
+appends the appropriate reaction in Godot, without replacing a shared clue or changing a trainer battle.
+
+| Speaker | Farmfolk reaction | Coastfolk reaction | Highlander reaction | Wanderer reaction |
+|---|---|---|---|---|
+| Maren | A full paddock still needs individual quiet | One lifelong partner, spare water for visitors | Kindness before courage | A latch on both sides; return by choice |
+| Pip | Shared final harvest hum | Shore verse fits over harvest hum | Words lost before the tune | Travellers know the hum without its name |
+| Bram | Leave low berries for small creatures | Companion and tamer share different work | Waiting can be a trial of trust | Leave berries for creatures met after departure |
+| Lise | Separate nests warn the wood together | One listening companion can be a flock | Bird circles a gap marked as a ledge on an old sketch | Returning birds do not need a closed door |
+| Tobin | Field tale begins after shore tale ends | Saw tracks, not their maker | Fisher could not see behind the mountain | Traveller says glare came first; Tobin cannot verify it |
+| Cato | Flat carving feels unexpectedly shallow | Loop found above the usual tide line | Mountain mark could have travelled as a stone or a story | Shell can be returned for somebody else |
+| Marit | Harvest hum carried over the water | Shore song's pause outlasted the moving lamp | Sleep does not prove whose failure the tale records | Returning does not require staying |
+| Orsk | Repairing trails resembles repairing fences | Narrow ridge safe by care, not party size | Family disagrees: watcher slept or never stopped looking | Unnamed traveller left useful rope, not a claim |
+| Sela | Warm green patch as room for tired land to rest | Old waterline above a flattened bank | Old spring song asks watcher to come home; singer unknown | Open spring path welcomes returning creatures |
+| Ilka | Harvest and mountain knot share a spare loop | Shore knot and mountain rope both help cold/wet hands | Test a rope gently rather than break it to prove trust | Preserve quick-release loop during repair |
+| Teodor | Soil and mist leave outlines after passage | Old chart draws an inlet now inland | Chart records where a witness looked, not what they saw | A traveller leaves the chart's unknown corner blank |
+| Isolde | Care between partners before land's recovery | Hear a single companion's answer | Trials reveal trust rather than justify pride | A companion who may leave can choose to stay |
+| Nerys | Fields and sea are partial views of one night | Song faithfully carries fear as well as fact | Shore and mountain witnesses may face different ways | Two return paths, for creature and tamer |
+| Toren | Warm stones persisted after colour was lost | Two witnesses' windows have a valley between them | Warmth real, watcher identity unknown | Incomplete copied mark is more honest than an invented ending |
+| Vessa | Harvest hum sung in the fog shelter | Wait beside the companion, not in front of it | Two old blankets, no invented account of their owners | Open shelter latch joins freedom with welcome |
+
+Thread links: Pip, Marit, Ilka, Teodor and Vessa suggest common roots (5), without announcing the late reveal.
+Lise/Cato/Sela/Teodor supply attributed traces of depth (1); old maps and carvings remain interpretable as ordinary
+land change or memory. Tobin/Nerys/Toren place witnesses in different directions (1/5) and do not identify the
+thing the bond fought. Orsk/Sela/Toren keep thread 4's watcher identities and blame unresolved. The uncertain
+traveller's glare and Vessa's blankets allow thread 2's possibilities without claiming who the pair were.
+Care, freedom and open paths across Maren/Bram/Lise/Cato/Marit/Orsk/Sela/Ilka/Isolde/Nerys/Vessa echo thread 3's
+fair concern for creatures without endorsing any leader's hidden motive. Every clue above is attributed speech;
+no omniscient narration identifies a culprit. All four paths keep the essential shared story.
+
+Checks: 76 additional Wildbond checks (1,606 total), all eight pages pass. An isolated Chrome loaded the actual
+export page on the Codex server (8766): 39 tables, 15 speakers, all 60 reactions, no missing/dropped-code warning.
+A second isolated export substituted origin/main's two data sources; after removing heritage additions the entire
+export matched exactly (existing maps, base lines, stats, battles, rewards and story). No Godot file, export tool,
+screen, save or version was changed. Godot dispatch and the final in-engine copy review remain with Claude.

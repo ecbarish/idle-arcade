@@ -39,6 +39,9 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+### 2026-10-08: Wildbond early-road heritage recognition (T45; data handoff)
+- Eleven existing early-road people and all four Wardens have a distinct line for each origin, with clues recorded in the thread ledger. The existing Godot export carries all 60 reactions; Classic conversations and gameplay stay intact. Claude wires the data into Godot; no release bump.
+
 - Local helper (2026-10-08): queued local tasks use OpenCode, attach the project primer and lessons, and stop for failed tools or incomplete answers. Reports and edits require review; source in tools/local-ai/.
 
 - Otherworld v0.3.0 (2026-10-08): the Ashen Throne opens: Kael, a fallen house, three costly gifts, five final outcomes plus a death route, Return's remembered dawns and cross-world knowledge. The guide now covers all three worlds.
