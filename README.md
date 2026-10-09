@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Godot Wildbond (2026-10-09, WD4a): Thornwood is now three connected places—a winding trail, the original settlement, and Old Root Grove. The grove is a return spot opened by bringing a Stone creature, with a stronger chance to find Sunspark and a small Elderhorn clue; pre-expansion Thornwood saves keep their map and coordinate.
 - Realmbound (2026-10-09, RB1.4): larger phone controls; notebook, dialogue and action bar fit portrait/landscape screens and larger text; XP bar clears ultrawide controls.
 - 2026-10-09 (AC1, guest PR #119): Storm Front harbour cabinet, original cloud and lighthouse art, crumbling walls, gull bonus, three-initial scores and two-player turns. Keyboard, touch and gamepad controls; shared sound and settings.
 
