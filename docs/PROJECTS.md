@@ -65,6 +65,12 @@ for every game, and how to make your next ticket when your lane is empty: [DEVEL
 - **Tools on Evan's PC:** Godot 4.7.2 and its export templates (`C:\Users\evanb\Godot`), ffmpeg
   (`C:\Users\evanb\Tools\ffmpeg-9.0.2-essentials_build\bin`).
 
+## Arcade preview discoverability
+
+| ID | Project | Size | Status | Notes |
+|---|---|---|---|---|
+| AR2.2 | **Put the new previews on the arcade shelf** (T46) | S | claimed: Codex, 2026-10-09, codex/arcade-previews | New preview cards and links; Classic saves stay separate; no Godot/export edit |
+
 ## Wildbond in Godot (the new Wildbond; Claude's lane)
 
 Browser-data handoff T40: areas 5–8 clues and chatter merged 2026-10-08 (Wildbond v1.8.0, PR #64); they reach the Godot version when Claude builds those areas (WG2).

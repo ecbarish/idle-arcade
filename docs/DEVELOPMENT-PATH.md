@@ -191,7 +191,7 @@ rules; free local model first, as docs/otherworld-design.md says).
 - [x] Come Play, previews, trailer, Windows builds.
 **AR-M2: polish for everyone.**
 - [ ] AR2.1 [ChatGPT] Accessibility (T44, L10). (queued: Lane A19)
-- [ ] AR2.2 [ChatGPT] The
+- [ ] AR2.2 [ChatGPT] (claimed: Codex, 2026-10-09, codex/arcade-previews; T46) The
 launcher shows the Godot previews as games (cards, covers, links).
 - [ ] AR2.3 [any] Game boxes (V3).
 - [ ] AR2.4 [local] Link and image check across guides and pages (Lane D3).

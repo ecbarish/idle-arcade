@@ -3,6 +3,14 @@
 Shared plan for every contributor (Claude, ChatGPT/Codex, or a person). One ticket per session.
 Mark a ticket done in the same PR that finishes it.
 
+### T46: Arcade, put the new previews on the shelf (AR2.2)
+Why: friends should find the current Godot games without hunting through Come Play, while keeping Classic journeys and saves reachable.
+Read first: docs/DEVELOPMENT-PATH.md AR2.2, docs/PROJECTS.md Read first, docs/CREATIVE.md, play/README.md and current preview READMEs.
+Branch: codex/arcade-previews (stacked after T44/#71; launcher overlaps).
+- Add distinct new Wildbond/Starfall preview cards with real existing screenshots, factual scope, desktop/loading guidance and direct play/ links. Keep Classic cards, progress and reset tied only to their existing browser saves.
+- Primary landscape places enter the new versions; both versions remain on the road and in the hall. Preview cards never load the engines before the player chooses them or claim a Classic save is a preview save.
+- Do not edit Godot, play/ exports, service worker, save schemas or versions. Keyboard links, phone through ultrawide, reduced motion, all eight pages, new launcher checks; README and one Session line.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a
