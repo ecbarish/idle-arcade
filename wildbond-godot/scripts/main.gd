@@ -121,9 +121,13 @@ var then_do := Callable()                    # runs when the current conversatio
 var npcs: Array[Mover] = []                  # people out in the world (from the game data): trainers, Wardens
 var npc_info := {}                           # id -> { data from the map, beaten, warden }
 var badges: Array = []
+var spire_floor := 0
+var spire_best := 0
+var spire_active := false
+var rematch_wins := {}                       # Warden id -> post-Champion rematch wins
 var spotter: Mover = null                    # a trainer who has seen you and is walking over
 var spot_t := 0.0
-const BUILT := ["larkhaven", "thornwood_route", "thornwood", "thornwood_grove", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "league"]    # the maps the Godot version has so far
+const BUILT := ["larkhaven", "thornwood_route", "thornwood", "thornwood_grove", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "league", "spire"]    # the maps the Godot version has so far
 var starters: Array[Mover] = []
 var partner: Mover = null
 var map_name := "larkhaven"
@@ -576,6 +580,8 @@ func _check_doors() -> void:
 			block = "The road ends here for now."
 		elif ex.has("requiresElement") and not _team_has_element(str(ex.requiresElement)):
 			block = str(ex.get("locked", "One of your partners may be able to find a way through."))
+		elif ex.to == "spire" and not story_done.has("leagueEnding"):
+			block = str(ex.get("locked", "The Spire opens after the Champion ending."))
 		elif ex.has("locked") and (not _gate_open(map_name) or (ex.to == "league" and badges.size() < 8)):
 			block = ex.locked
 		elif ex.to not in BUILT:
@@ -1664,6 +1670,16 @@ func _on_battle(result: String) -> void:
 		var lid := battle_story.substr(7)
 		battle_story = ""
 		_after_league(lid, result)
+		return
+	if battle_story.begins_with("spire:"):
+		var floor := int(battle_story.substr(6))
+		battle_story = ""
+		_after_spire(floor, result)
+		return
+	if battle_story.begins_with("rematch:"):
+		var rematch_who := battle_story.substr(8)
+		battle_story = ""
+		_after_warden_rematch(rematch_who, result)
 		return
 	if battle_story.begins_with("trainer:"):
 		var who := battle_story.substr(8)
@@ -2759,6 +2775,107 @@ func _after_trainer(who: String, result: String) -> void:
 	else:
 		_after_wild("lost")
 
+# ---------------------------------------------------------------- post-Champion Spire and Warden rematches (WB5.1)
+func _postgame_open() -> bool:
+	return story_done.has("leagueEnding")
+
+func _grown_for_level(id: String, level: int) -> String:
+	var out := id
+	var guard := 0
+	while DATA.SPECIES.get(out, {}).has("evo") and level >= int(DATA.SPECIES[out].evo.at) and guard < 4:
+		out = str(DATA.SPECIES[out].evo.to)
+		guard += 1
+	return out
+
+func _spire_floor_data(floor: int) -> Dictionary:
+	var areas := ["thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch"]
+	var area: String = areas[(floor - 1) % areas.size()]
+	var level := mini(100, 74 + maxi(1, floor))
+	var pool: Array = DATA.BIOMES[DATA.MAPS[area].biome].wild.map(func(w): return str(w[0])).filter(func(id): return not bool(DATA.SPECIES[id].get("unique", false)))
+	var foes: Array = []
+	for i in 3:
+		foes.append(_grown_for_level(pool[(floor + i * 2) % pool.size()], level))
+	return { "area": area, "level": level, "team": foes }
+
+func _spire_talk(_n: Mover) -> void:
+	if not _postgame_open():
+		say("orla", "The light is for Champions. Finish your league journey first; then come back with the team that carried you.")
+		return
+	if not spire_active:
+		spire_floor = 0
+		spire_active = true
+		for c in team: c.hp = R.stats(c).hp
+		say("orla", "A climb begins rested. Every fifth floor has water and a quiet bench. Leave whenever your partners need the road again.")
+	else:
+		say("orla", "Floor %d is behind you. Your best is %d. Ready for the next question?" % [spire_floor, spire_best])
+	then_do = _spire_fight
+
+func _spire_fight() -> void:
+	if not spire_active or not _postgame_open() or map_name != "spire":
+		return
+	if team.filter(func(c): return c.hp > 0).is_empty():
+		spire_active = false
+		spire_floor = 0
+		say("orla", "That is enough for this climb. Your partners come first.")
+		return
+	var floor := spire_floor + 1
+	var data := _spire_floor_data(floor)
+	var foes: Array = []
+	for id in data.team:
+		foes.append(R.make(id, int(data.level), { "rar": mini(3, 1 + floor / 10) }, rng))
+		seen[id] = true
+	battle_story = "spire:" + str(floor)
+	battle.max_level = 100
+	battle.open("trainer", team, foes, "Spire floor %d" % floor)
+
+func _after_spire(floor: int, result: String) -> void:
+	if not spire_active or floor != spire_floor + 1:
+		return
+	if result != "won":
+		spire_active = false
+		spire_floor = 0
+		for c in team: c.hp = R.stats(c).hp
+		say("orla", "That is enough for this climb. Your best floor is safe; your team gets the bench and the water.")
+		return
+	spire_floor = floor
+	spire_best = maxi(spire_best, floor)
+	var coins := 180 + floor * 20
+	bag.coins += coins
+	bag.lures += 2
+	say("", "Spire floor %d cleared: %d coins and 2 lures." % [floor, coins])
+	if floor % 5 == 0:
+		for c in team: c.hp = R.stats(c).hp
+		say("orla", "Five floors together. Water, a quiet bench, and a full rest before you choose whether to climb again.")
+	else:
+		say("orla", "Talk to me when your partners are ready for the next floor.")
+
+func _start_warden_rematch(n: Mover) -> void:
+	var d: Dictionary = npc_info[n.id].data
+	var tier := int(rematch_wins.get(n.id, 0)) + 1
+	var team_data: Array = d.get("team", [])
+	var foes: Array = []
+	for t2 in team_data:
+		var level := mini(100, int(t2[1]) + 8 + (tier - 1) * 3)
+		var id := _grown_for_level(str(t2[0]), level)
+		foes.append(R.make(id, level, { "rar": mini(3, tier) }, rng))
+		seen[id] = true
+	say(n.id, "Champion. Our last battle taught us something. Let us see what changed since then.")
+	then_do = func():
+		battle_story = "rematch:" + n.id
+		battle.max_level = 100
+		battle.open("trainer", team, foes, "%s · rematch %d" % [DATA.CAST.get(n.id, {}).get("name", n.id.capitalize()), tier])
+
+func _after_warden_rematch(who: String, result: String) -> void:
+	if result != "won":
+		say(who, "Good. A rematch should give both teams something to carry home. Rest, then come find us again.")
+		return
+	var tier := int(rematch_wins.get(who, 0)) + 1
+	rematch_wins[who] = tier
+	var coins := 240 + tier * 60
+	bag.coins += coins
+	say(who, "Stronger than last time, and still listening. Come back when you want the next version of this battle.")
+	say("", "Warden rematch tier %d cleared: %d coins." % [tier, coins])
+
 ## Where to go next, in Maren's words, by the badges you hold (the field book shows it; her letters mention it).
 const WHERE_NEXT := [
 	"Warden Isolde keeps the Thorn Badge, up the north road in Thornwood. Show her what you and {starter} can do.",
@@ -2829,9 +2946,14 @@ func _talk_here() -> bool:
 			if known != "" and not story_done.has("her:" + n.id):
 				story_done["her:" + n.id] = true       # they recognise your family, once (T45 lines, from the game data)
 				say(n.id, _fill(known))
-			if info.warden and info.beaten and story_done.has("leagueEnding") and info.data.get("byStory", {}).has("leagueEnding"):
-				for l in info.data.byStory.leagueEnding:      # every Warden welcomes the Champion back (T54)
+			if info.data.get("tower", "") == "keeper":
+				_spire_talk(n)
+			elif info.warden and info.beaten and story_done.has("leagueEnding") and not story_done.has("championGreeting:" + n.id) and info.data.get("byStory", {}).has("leagueEnding"):
+				story_done["championGreeting:" + n.id] = true
+				for l in info.data.byStory.leagueEnding:      # first return: the Champion welcome remains a conversation
 					say(l[0], _fill(l[1]))
+			elif info.warden and info.beaten and story_done.has("leagueEnding"):
+				_start_warden_rematch(n)
 			elif info.warden and info.beaten:
 				say(n.id, _fill(DATA.MAPS[map_name].get("wardenDone", "The gate is yours, {name}.")))
 			elif not info.warden and not info.data.has("trainer"):
@@ -2904,6 +3026,7 @@ func save_game() -> void:
 		"badges": badges, "seen": seen, "bonded": bonded, "items": got_items, "beaten": beaten,
 		"restore": restore.map(func(r): return { "where": r.where, "x": r.at.x, "y": r.at.y, "goal": r.goal }),
 		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned, "taught": taught, "letter": [letter_steps, letters], "calendar": cal.to_dict(), "festival": { "done": fest_done, "keep": keepsakes, "flowers": flowers }, "league": league_room,
+		"spire": { "floor": spire_floor, "best": spire_best, "active": spire_active }, "rematches": rematch_wins,
 		"map": map_name, "x": me.tile.x, "y": me.tile.y, "partner": partner.id if partner else "" }
 	SafeSave.write(save_path, d)                 # a spare file first, the last good save kept as a backup
 
@@ -2954,6 +3077,11 @@ func _load_game() -> bool:
 			taught.append(TEACHERS[earned].order)
 	cal.from_dict(d.get("calendar", {}))
 	league_room = int(d.get("league", 0))
+	var sz: Dictionary = d.get("spire", {})
+	spire_floor = int(sz.get("floor", 0))
+	spire_best = int(sz.get("best", 0))
+	spire_active = bool(sz.get("active", false)) and story_done.has("leagueEnding")
+	rematch_wins = d.get("rematches", {})
 	var fz: Dictionary = d.get("festival", {})
 	fest_done = fz.get("done", {})
 	keepsakes = fz.get("keep", {})
@@ -3116,6 +3244,7 @@ const MOUNTAINS := {
 	"hollowecho": { "rock": Color("7d8576"), "turf": Color(0.40, 0.49, 0.38, 0.30) },
 	"farwatch": { "rock": Color("7a8a8c"), "turf": Color(0.45, 0.55, 0.54, 0.28) },
 	"league": { "rock": Color("a8a49a"), "turf": Color(0.55, 0.60, 0.58, 0.22) },
+	"spire": { "rock": Color("8a9698"), "turf": Color(0.48, 0.58, 0.58, 0.24) },
 }
 var CLIFF := Color("8a7464")
 var TURF := Color(0.65, 0.54, 0.41, 0.32)
@@ -3655,7 +3784,7 @@ func _music_key() -> String:
 	return map_name
 
 ## Places that share a tune play the same file, so the game carries each track once (a smaller web download).
-const SAME_TUNE := { "thornwood_route": "thornwood", "thornwood_grove": "thornwood", "sunthread": "saltmarsh", "farwatch": "barn" }   # one Thornwood theme across its connected maps; Sunny and Peaceful elsewhere
+const SAME_TUNE := { "thornwood_route": "thornwood", "thornwood_grove": "thornwood", "sunthread": "saltmarsh", "farwatch": "barn", "spire": "barn" }   # one Thornwood theme across its connected maps; Sunny and Peaceful elsewhere
 
 func music_path(key: String) -> String:
 	return "res://assets/music/%s.ogg" % SAME_TUNE.get(key, key)
