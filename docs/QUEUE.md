@@ -37,7 +37,7 @@ more in another lane's files: ask that lane in COMMS, or keep it to a few lines 
 ## Claiming, submitting and merging: see [PROCESS.md](PROCESS.md)
 
 One page for every AI and thread: pick, claim with a draft pull request **before** building, build, submit (mark it
-ready), and who may merge (a Claude reviewer or Evan; another AI, or the author itself, after 2 hours and a written self-check).
+ready), and merging: any AI may do any step, including merging its own pull request straight away, after a written self-check.
 
 ## Heavy lifting (for the AIs with the most usage: Evan's dad's AIs first; Evan, 2026-10-09)
 
@@ -74,7 +74,7 @@ and the creature drawing while Claude's usage is low.
 Evan: "we are nearing our cap on Claude, so if we lay out a strong road in front of us we can use our other helpers
 to push us along." These tasks need **no Godot** and are open to **any** AI (ChatGPT/Codex, Evan's dad's AIs,
 Claude). (Done and removed: RB1.5, Codex, PR #98.) Take the first one no open pull request names, claim it (docs/PROCESS.md), build it, open the PR;
-lane R (or Evan) merges. Each line names its spec; read it first.
+any AI merges after the self-check in docs/PROCESS.md. Each line names its spec; read it first.
 
 | # | Task (path ID) | Spec | Files | Done when |
 |---|---|---|---|---|
@@ -96,7 +96,7 @@ lane R (or Evan) merges. Each line names its spec; read it first.
 above (the Wildbond builder and Starfall threads check the open PR list too); keep to the files the deliverable needs;
 install Godot 4.7.2 (`docs/learning/`, or let GitHub do it) and run `node tools/run-all-checks.cjs`, which runs both
 Godot suites; **old saves must load** (add a check); add checks for what you build; for anything visual, put a
-screenshot in the PR; the GitHub "checks" tick must be green, and lane R (a Claude reviewer) or Evan merges. Take
+screenshot in the PR; the GitHub "checks" tick must be green, and any AI merges after the self-check in docs/PROCESS.md. Take
 Godot deliverables from PRIORITIES.md section 4 in order (WD2 drawing, WD3 battles, WB6.1-6.2 phone and settings,
 SF2.6-2.8 Starfall), never one the Wildbond builder or Starfall thread has open. Lane P refills this table as tasks
 merge.
@@ -138,7 +138,7 @@ Claude's weekly usage is the scarcest thing in the project. Claude threads:
    work" says: a draft pull request titled with the deliverable's ID, opened before you build.
 3. Build it on its own branch (`codex/<topic>`, `grok/<topic>`, `claude/<topic>`), with checks; all eight test pages pass
    (`tests/run.html`, `wildbond.html`, `starfall.html`, `sound.html`, `offline.html`, `diamond.html`, `otherworld.html`, `runner-safety.html`; Claude also runs the Godot checks).
-4. Open a pull request (Codex and Grok never merge their own). In the PR: what you built, the files you touched,
+4. Open a pull request (then self-check and merge it yourself, docs/PROCESS.md). In the PR: what you built, the files you touched,
    before/after screenshots for anything visual, and an "An idea" section if you have one.
 5. **Go straight to the next task in your lane.** Don't wait for the review.
    - If the next task needs files your open PR touches, branch from that PR's branch and say so in the new PR.
@@ -265,7 +265,7 @@ index.html or style.css until those phases are merged.
 Evan chose (2026-10-09) to add guests as collaborators: they push `guest/*` branches to this repo, never `main`.
 
 Self-contained tasks for someone new, each away from what the other lanes are building. Claim like everyone else (a
-draft pull request titled with the ID). Lane R reviews and merges; guests never merge. Lane P keeps this list stocked.
+draft pull request titled with the ID). Any AI merges after the self-check in docs/PROCESS.md. Lane P keeps this list stocked.
 
 | # | Task | Status | Notes |
 |---|---|---|---|

@@ -12,25 +12,21 @@ point here.
 | **2. Claim** | **Before you write any code** | Make a branch (`codex/<topic>`, `claude/<topic>`, `guest/<topic>`), push one small commit (the `(claimed: <who>, <date>)` mark on the task in DEVELOPMENT-PATH), and **open a draft pull request at once whose title starts with the ID** ("WD3: battles with real choices"). | A draft PR with the ID: the task is taken |
 | **3. Build** | While the draft is open | Build in small commits and push at least once a day (a claim with no commits for **2 days** is stale; anyone may take it after one comment on it). Keep to the files the task names. One task per pull request. | Commits appearing on the draft |
 | **4. Submit** | When it's done and tested | Run the checks the task names (Godot: `node tools/run-all-checks.cjs`; browser: its test page), add screenshots for anything visual, write in plain words what changed and how you tested it, then **mark the pull request "Ready for review"**. Then go back to step 1. | A ready PR with a green "checks" tick |
-| **5. Merge** | See "Who merges" below | Merge with a merge commit, add a line to START-HERE's Session log, tick the task in DEVELOPMENT-PATH. | The change is live |
+| **5. Merge** | As soon as the self-check below passes | Merge with a merge commit, add a line to START-HERE's Session log, tick the task in DEVELOPMENT-PATH. | The change is live |
 
 **Stopping early:** close your draft with a comment "released: <why>". **Two drafts with the same ID:** the older
 keeps it, the newer moves on.
 
-## Who merges (in this order, whichever comes first)
+## Who merges: any AI, any step (Evan, 2026-10-09)
 
-1. **A Claude reviewer** (lane R) or **Evan**, any time the PR is ready and green.
-2. **Another AI, after 2 hours:** if no Claude reviewer has commented on or merged a ready PR for **2 hours**, any
-   *other* AI (Evan's dad's AIs, ChatGPT/Codex) may merge it after checking it as in "What a merger checks".
-3. **The author itself, after 2 hours** (Evan, 2026-10-09: "AIs can merge their own requests as long as it self
-   checks using the same process and makes sure it matches our requirements"): if no Claude reviewer has commented
-   on or merged your ready PR for **2 hours**, you may merge it yourself after going through every line of "What a
-   merger checks" below on the latest commit, honestly, as if it were someone else's.
-
-Whoever merges under rule 2 or 3 first leaves one comment listing each line of "What a merger checks" with what they
-did for it ("Merged under PROCESS.md rule 3: checks green on <commit>; ran ...; old save from ... loads; screenshot
-above; ..."), then merges. If any line fails, fix it first or leave the PR for a reviewer. A Claude
-reviewer reads every such merge on its next sweep and fixes or reverts anything wrong.
+Evan: "No 2 hour rule, just make a process where any AI can do any step of the process, no need to gatekeep." So
+**any AI (or Evan) may do any step, including merging any ready pull request, its own included, straight away.**
+There is no waiting period and no special reviewer. The one requirement is the self-check: before merging, go
+through every line of "What a merger checks" on the latest commit, honestly, as if it were someone else's work, and
+leave one comment listing each line and what you did for it ("Self-check: checks green on <commit>; ran ...; old
+save from ... loads; screenshot above; ..."). Then merge with a merge commit, bump the game's version and README
+changelog if it changes a game, add a Session log line to START-HERE, and tick the task in DEVELOPMENT-PATH. If any
+line fails, fix it first. Claude threads read merged work on their sweeps and fix anything that slipped through.
 
 ## What a merger checks (every merge, every rule)
 
@@ -68,6 +64,6 @@ Priorities and direction thread) reads new ticket lines on each sweep and may mo
 ## Never
 
 - Never push straight to `main`.
-- Never merge a pull request that changes `.github/`, CONTRIBUTING.md or this page without Evan or a Claude reviewer.
+- Never weaken the checks themselves (`.github/`, `tools/run-all-checks.cjs`, test pages) to get a green tick.
 - Never skip or switch off a test to get a green tick.
-- Never bump game version numbers outside lane R (the Claude reviewer does that on merge).
+- Never merge with a red tick, a conflict, or a self-check line you skipped.
