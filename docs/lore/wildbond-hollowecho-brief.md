@@ -8,7 +8,7 @@ After Stillreed's open water, the trail folds between green hills and grey outcr
 
 The route should feel occupied by people caring for one another: a bell keeper who answers returning teams, a surveyor who lets a creature correct his map, a bell mender who can explain one strange noise without explaining the mountain. No timed dusk obligation, blind audio puzzle or punishment for being unable to hear. The bell's meaning comes from people and visible reactions too.
 
-**Source of truth:** [Area 6 canon](wildbond.md#area-6-canon-hollowecho-hills--levels-5864-t28); [T40 clue ledger](wildbond-threads.md#areas-58-clue-placement-t40-codex-2026-10-08); browser [00-data.js](../../games/wildbond/js/00-data.js), [11-maps.js](../../games/wildbond/js/11-maps.js), [10-sound.js](../../games/wildbond/js/10-sound.js), [12-walk.js](../../games/wildbond/js/12-walk.js) and [06-scene.js](../../games/wildbond/js/06-scene.js). Use the existing exported rows and dialogue rather than transcribing this prose into game code.
+**Source of truth:** [Area 6 canon](wildbond.md); [T40 clue ledger](wildbond-threads.md#areas-58-clue-placement-t40-codex-2026-10-08); browser [00-data.js](../../games/wildbond/js/00-data.js), [11-maps.js](../../games/wildbond/js/11-maps.js), [10-sound.js](../../games/wildbond/js/10-sound.js), [12-walk.js](../../games/wildbond/js/12-walk.js) and [06-scene.js](../../games/wildbond/js/06-scene.js). Use the existing exported rows and dialogue rather than transcribing this prose into game code.
 
 ## Route and places: the exported contract
 
