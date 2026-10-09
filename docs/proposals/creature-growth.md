@@ -66,3 +66,20 @@ Part 2 adds care-shaped potential and elders; part 3 adds lost hatchlings.
 4. **How long is babyhood?** Recommended 3 ranch days (about 15 minutes of play). Longer makes raising deeper but
    slower; the journey-length setting could scale it.
 5. **Lost hatchlings:** is the return-or-adopt choice the right tone, or would you rather they simply join you?
+
+## Evan's answers (2026-10-09)
+"Proposal looks good, though eventually we can build baby forms. I like the idea of young to old." So: **life stages**,
+with the recommended defaults for questions 2-5 (babies stay on the ranch, elders yes, 3 ranch days, return or adopt).
+It's a later build (WB5.5), after the journey is polished.
+
+**How age and evolution work together** (Evan asked; this is the rule):
+- **Two separate clocks.** *Age* (baby, young, adult, elder) is about time and care, and every species has it.
+  *Evolution* (Cindercub to Blazefang) is about level (and sometimes place), and only species with a next form have it.
+  Some species never evolve; they still grow up and grow old.
+- **Eggs hatch from the bottom.** Any two adult parents can breed, at any evolution stage (a Blazefang and a
+  Tidehound both work, as now, from level 8 and Friendly). The egg always hatches the **first form** of the line, as
+  a baby. You never need the top evolution to breed.
+- **They meet in one place:** a baby can't evolve. It must grow up to young first; if it has already passed its
+  evolution level by then, it grows up and evolves in the same moment (a double scene).
+- **Elder is at any form:** a level-80 Cindercub that never evolved can become an elder just like a Blazefang.
+  Elders don't evolve further or get weaker; they teach babies on the ranch.

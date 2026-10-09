@@ -83,15 +83,15 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
-1. **What does "launch" (version 2.0) mean now?** The new Wildbond in Godot replaces the browser screens. Options: (a)
+1. **Answered 2026-10-09: (a), the Godot Wildbond becomes the main one.** **What does "launch" (version 2.0) mean now?** The new Wildbond in Godot replaces the browser screens. Options: (a)
    launch when the Godot Wildbond reaches the full journey (all eight areas and the league), with the browser version
    kept as "Wildbond Classic"; (b) launch the browser games as they are now, and the Godot version later as a sequel.
    **Default:** (a), and keep friends testing the previews meanwhile.
 2. **Realmbound: stay in the browser, or move to Godot later?** **Default:** stay in the browser, move into the game
    window there (T38), and decide after the Godot Wildbond is further along.
-3. **Baby forms (W9):** read `docs/proposals/creature-growth.md` and answer its five questions. **Default:** its
+3. **Answered 2026-10-09: approved as life stages (see the proposal).** **Baby forms (W9):** read `docs/proposals/creature-growth.md` and answer its five questions. **Default:** its
    recommendations.
-4. **The card shop (CS1) and Main Street (MS1):** parked until you say when.
+4. **Answered 2026-10-09: unparked.** The card shop is one of Main Street's businesses; design now, build after Wildbond 2.0.
 
 **Answered:** browser or standalone (Godot, 2026-10-08); heritages, the Unbound, the wild bond, reputation, depth
 (all approved 2026-10-08); see the "Decided" section at the top of `docs/research/decisions.md`.
