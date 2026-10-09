@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Little Ranch v0.1.0 (2026-10-09, LR1, the smallest test): a toy for ages 2 to 4. A baby Cindercub to feed, bathe in bubbles and play peekaboo with behind the bush, until it yawns, the sky turns orange and it curls up to a lullaby. No reading, nothing to lose, no links out; grown-ups hold the corner lock for three seconds to leave or turn the sound off.
 - Realmbound (2026-10-09, RB1.4): larger phone controls; notebook, dialogue and action bar fit portrait/landscape screens and larger text; XP bar clears ultrawide controls.
 - 2026-10-09 (AC1, guest PR #119): Storm Front harbour cabinet, original cloud and lighthouse art, crumbling walls, gull bonus, three-initial scores and two-player turns. Keyboard, touch and gamepad controls; shared sound and settings.
 
