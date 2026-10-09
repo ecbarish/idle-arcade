@@ -1042,7 +1042,7 @@ func _draw_outdoor() -> void:
 	# 2. fences and the signpost (drawn in code; they already looked right)
 	for y in rows.size():
 		for x in rows[0].length():
-			if rows[y][x] in "=P":
+			if rows[y][x] in "=Pjq":
 				_draw_tile(x, y, rows[y][x])
 	# 3. houses, the barn and trees: standing objects with a footprint (so a 3D renderer can stand them up later)
 	_draw_structures()
@@ -1303,7 +1303,22 @@ func _draw_tile(x: int, y: int, ch: String) -> void:
 				draw_rect(Rect2(o + Vector2(9, y0), Vector2(1, y1 - y0)), rail)
 			draw_rect(Rect2(o + Vector2(6, 4), Vector2(4, 10)), Color("7a5028"))   # the post
 			draw_rect(Rect2(o + Vector2(6, 4), Vector2(4, 1)), Color("b8885a"))
-		"P":
+		"j":
+			# Stillreed's ferry skiff, moored at the landing while its rope is mended: a shallow green hull, plank seats
+			var hull := Color("344c3f")
+			draw_rect(Rect2(o + Vector2(4, 2), Vector2(8, 2)), hull)
+			draw_rect(Rect2(o + Vector2(2, 4), Vector2(12, 8)), hull)
+			draw_rect(Rect2(o + Vector2(4, 12), Vector2(8, 2)), hull)
+			draw_rect(Rect2(o + Vector2(4, 4), Vector2(8, 8)), Color("ae8553"))
+			draw_rect(Rect2(o + Vector2(4, 4), Vector2(8, 1)), Color("d8b982"))
+			draw_rect(Rect2(o + Vector2(4, 6), Vector2(8, 1)), Color("e0c28e"))         # the seats
+			draw_rect(Rect2(o + Vector2(4, 10), Vector2(8, 1)), Color("e0c28e"))
+			draw_rect(Rect2(o + Vector2(2, 4), Vector2(1, 8)), Color("57745b"))
+			draw_rect(Rect2(o + Vector2(12, 2), Vector2(1, 10)), Color("cfa96d"))       # the oar
+			draw_rect(Rect2(o + Vector2(11, 1), Vector2(3, 2)), Color("e0c28e"))
+			draw_rect(Rect2(o + Vector2(7, 13), Vector2(1, 3)), Color("ded2a7"))        # the rope to the landing
+			draw_rect(Rect2(o + Vector2(1, 14), Vector2(14, 1)), Color(1, 1, 1, 0.25))  # a ripple at the waterline
+		"P", "q":
 			# the ground underneath comes from the tileset (_draw_ground); the sign gets an outline so it reads on any ground
 			draw_rect(Rect2(o + Vector2(6, 7), Vector2(4, 9)), Figures.OUTLINE)
 			draw_rect(Rect2(o + Vector2(7, 7), Vector2(2, 8)), Color("6b4a2a"))
@@ -1397,6 +1412,8 @@ func _draw_ground(x: int, y: int, ch: String) -> void:
 		_tex(NATURE, Vector2i(5 - n % 2, 10), Vector2i.ONE, o + Vector2(4 + sway, 2))
 	elif ch == "~":
 		_draw_water(x, y, o, n)
+	elif ch == "j" or ch == "q":
+		_draw_water(x, y, o, n)                                                    # the skiff and its sign stand in the river
 	elif ch == "b":
 		# a wooden footbridge over the river: water underneath, boards across, a rail on each side
 		_tex(WATER, Vector2i(11, 0), Vector2i.ONE, o)
@@ -1487,13 +1504,13 @@ func _draw_water(x: int, y: int, o: Vector2, n: int) -> void:
 		_tex(WATER, Vector2i(11, 2), Vector2i.ONE, o)                              # a glint of light
 	var shore := Color("d8c088")
 	var edge := Color("4a6a8a")
-	if tile_at(Vector2i(x, y - 1)) != "~":
+	if tile_at(Vector2i(x, y - 1)) not in ["~", "j", "q", "b"]:
 		draw_rect(Rect2(o, Vector2(16, 3)), shore); draw_rect(Rect2(o + Vector2(0, 3), Vector2(16, 1)), edge)
-	if tile_at(Vector2i(x, y + 1)) != "~":
+	if tile_at(Vector2i(x, y + 1)) not in ["~", "j", "q", "b"]:
 		draw_rect(Rect2(o + Vector2(0, 13), Vector2(16, 3)), shore); draw_rect(Rect2(o + Vector2(0, 12), Vector2(16, 1)), edge)
-	if tile_at(Vector2i(x - 1, y)) != "~":
+	if tile_at(Vector2i(x - 1, y)) not in ["~", "j", "q", "b"]:
 		draw_rect(Rect2(o, Vector2(3, 16)), shore); draw_rect(Rect2(o + Vector2(3, 0), Vector2(1, 16)), edge)
-	if tile_at(Vector2i(x + 1, y)) != "~":
+	if tile_at(Vector2i(x + 1, y)) not in ["~", "j", "q", "b"]:
 		draw_rect(Rect2(o + Vector2(13, 0), Vector2(3, 16)), shore); draw_rect(Rect2(o + Vector2(12, 0), Vector2(1, 16)), edge)
 
 # ---------------------------------------------------------------- out in the wild: items, tall grass, finds, catching
@@ -1890,7 +1907,7 @@ func _talk_here() -> bool:
 			_visit(m)
 			return true
 	var ahead: Vector2i = me.tile + me.face
-	if tile_at(ahead) == "P":
+	if tile_at(ahead) in ["P", "q"]:
 		var key := "%d,%d" % [ahead.x, ahead.y]
 		say("", str(DATA.MAPS[map_name].get("signs", {}).get(key, "The sign is too weathered to read.")))
 		return true
