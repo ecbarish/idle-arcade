@@ -555,5 +555,27 @@ func _run() -> void:
 	check(main.sfx.on == false and main.sfx.last == "open", "sound effects can be turned off (N) without breaking anything")
 	main.sfx.on = true
 	main.lines.clear()
+	# ---- feelings in bubbles over heads (assets/emote)
+	var hf = main.heroes[0]
+	main.barks.clear()
+	main.feel(hf, "heart", 2.0)
+	check(main.feeling(hf) == "heart", "a moment's feeling shows over someone's head")
+	main.bark(hf, "Hello!")
+	check(main.feeling(hf) == "", "but not while they're speaking, so the two never overlap")
+	main.barks.clear()
+	tick(2.5)
+	main.feels.clear()
+	var keep_state: String = hf.a.state
+	var keep_wait: float = float(hf.a.get("waited", 0.0))
+	hf.a.state = "to_counter"
+	hf.a.waited = main.PATIENCE * 0.8
+	check(main.feeling(hf) == "waiting" or main.story_ready(hf), "someone kept waiting at the counter shows it")
+	hf.a.state = keep_state
+	hf.a.waited = keep_wait
+	var missing_feel: Array[String] = []
+	for id in ["notice", "sad", "happy", "waiting", "heart", "heartbreak", "pleased"]:
+		if not ResourceLoader.exists("res://assets/emote/%s.png" % id):
+			missing_feel.append(id)
+	check(missing_feel.is_empty(), "every feeling has its picture (missing: %s)" % ", ".join(missing_feel))
 	print("Starfall Godot checks: %d passed, %d failed" % [passed, failed])
 	quit(1 if failed > 0 else 0)

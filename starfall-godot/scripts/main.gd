@@ -148,6 +148,7 @@ var queue: Array[Mover] = []                # hungry adventurers waiting at the 
 var serve_t := 0.0                          # Bryn's serving time for the customer in front
 var lines: Array = []                       # conversation: [{who, text}]
 var barks: Array = []                       # short things people say as they pass: [{m, text, t}]
+var feels: Array = []                       # a feeling shown in a bubble over someone's head for a moment: [{m, id, t}]
 var then_do := Callable()
 var walk_to: Array[Vector2i] = []
 var use_after := ""                         # walking somewhere you tapped, to use it on arrival: board, counter
@@ -373,6 +374,9 @@ func _process(dt: float) -> void:
 	for b in barks:
 		b.t -= dt
 	barks = barks.filter(func(b): return b.t > 0.0)
+	for f in feels:
+		f.t -= dt
+	feels = feels.filter(func(f): return f.t > 0.0)
 	caption_t = maxf(0.0, caption_t - dt)
 	_autosave(dt)
 	_update_ui()
@@ -845,6 +849,7 @@ func serve(h: Mover, by_hand: bool) -> void:
 	h.a.morale = mini(10, int(h.a.morale) + 1)
 	if by_hand:
 		sfx.play("coin")
+		feel(h, "pleased", 4.0)
 		bark(h, ["That smells wonderful.", "Thank you, guildmaster!", "Just what I needed."][rng.randi() % 3])
 	else:
 		bark(bryn, ["Here you go. Mind, it's hot.", "One stew!", "Eat up."][rng.randi() % 3])
@@ -1047,6 +1052,8 @@ func finish_piece(h: Mover, hits: int, by_hand: bool) -> void:
 	if by_hand:
 		pieces += 1
 		sfx.play("success" if hits >= 3 else "coin")
+	if hits >= 3:
+		feel(h, "heart", 6.0)
 	bark(h, ["It'll do. A bit lumpy, but it'll do.", "Good, solid work. Thank you!", "Look at that edge! The finest work I've seen."][clampi(hits - 1, 0, 2)])
 	smith_customer = null
 	a.state = "town"
@@ -1290,6 +1297,7 @@ func _judge_day() -> String:
 			h.a.state = "quitting"
 			h.a.timer = 0.0
 			bark(h, "I'm sorry, guildmaster. My heart's not in it any more.")
+			feel(h, "heartbreak", 7.0)
 			send(h, GATE + Vector2i.LEFT)
 			out += " %s has packed up and gone; if Starfall does better, they may come back." % h.a.name
 			break
@@ -1449,6 +1457,7 @@ func drink(h: Mover, quality: int, by_hand := false) -> void:
 	if quality >= 2 and by_hand:
 		coins += 2                                  # a tip for a good pour
 		sfx.play("coin", -3.0)
+		feel(h, "heart", 6.0)
 		today.earned += 2
 	a.drank = day
 	a.state = "town"
@@ -1542,6 +1551,39 @@ func advance() -> void:
 		then_do = Callable()
 		f.call()
 
+var _emotes := {}
+func _emote(id: String) -> Texture2D:
+	if not _emotes.has(id):
+		_emotes[id] = load("res://assets/emote/%s.png" % id)
+	return _emotes[id]
+
+## A feeling in a bubble over someone's head for a moment (assets/emote: heart, pleased, heartbreak...).
+func feel(m: Mover, id: String, seconds := 2.5) -> void:
+	feels = feels.filter(func(f): return f.m != m)
+	feels.append({ "m": m, "id": id, "t": seconds })
+
+## What shows over someone's head, if anything: a moment's feeling first; then "!" when they want a word; "..." when
+## they've waited a while at the counter; and now and then, how an idle adventurer's spirits are (very low or very
+## high). Nothing while they're speaking, so the bubble and their words never overlap.
+func feeling(m: Mover, i := 0) -> String:
+	if barks.any(func(b): return b.m == m):
+		return ""
+	for f in feels:
+		if f.m == m:
+			return f.id
+	if m.a.is_empty():
+		return ""
+	if story_ready(m):
+		return "notice"
+	if m.a.state == "to_counter" and float(m.a.get("waited", 0.0)) > PATIENCE * 0.5:
+		return "waiting"
+	if m.a.state == "town" and m.path.is_empty() and fmod(t + i * 2.3, 7.0) < 2.0:
+		if int(m.a.morale) <= 2:
+			return "sad"
+		if int(m.a.morale) >= 9:
+			return "happy"
+	return ""
+
 func bark(m: Mover, text: String) -> void:
 	barks = barks.filter(func(b): return b.m != m)
 	barks.append({ "m": m, "text": text, "t": 3.0 })
@@ -1633,12 +1675,9 @@ func _draw() -> void:
 		var look := _look(m)
 		var walking := not m.path.is_empty()
 		Figures.person(self, m.pos + Vector2(2, -5), m.face, walking, int(m.step_t * 8.0) % 4, fmod(t + i * 1.7, 3.3) < 0.12, look)
-		if not m.a.is_empty() and story_ready(m):                     # they want a word: a "!" over their head
-			var bob := sin(t * 4.0) * 1.5
-			draw_rect(Rect2(m.pos + Vector2(5, -17 + bob), Vector2(6, 9)), Figures.OUTLINE)
-			draw_rect(Rect2(m.pos + Vector2(6, -16 + bob), Vector2(4, 7)), Color("f2d24a"))
-			draw_rect(Rect2(m.pos + Vector2(7, -15 + bob), Vector2(2, 3)), Color("8a3a2a"))
-			draw_rect(Rect2(m.pos + Vector2(7, -11 + bob), Vector2(2, 1)), Color("8a3a2a"))
+		var feel := feeling(m, i)                                      # a bubble over their head: how they feel
+		if feel != "":
+			draw_texture(_emote(feel), m.pos + Vector2(1, -19 + sin(t * 4.0) * 1.0))
 		if not m.a.is_empty() and badly_hurt(m):
 			draw_rect(Rect2(m.pos + Vector2(4, -3), Vector2(8, 2)), Color("f4f0e8"))      # a bandage round the head
 	_lit_windows()
