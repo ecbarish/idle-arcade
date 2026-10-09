@@ -404,6 +404,20 @@ func _run() -> void:
 		main.explored_in["cloudglass"] = 6
 		check(main._beat_here("cloudglass").get("id", "") == "rival5", "Wren is somewhere in the cloud after a few explorations")
 		main.explored_in["cloudglass"] = 0
+		# ---- Stillreed Basin (WB3.1): down the basin path to the ferry landing
+		main.badges.append("beacon")
+		main._go("stillreed", Vector2i(1, 8), Vector2i.RIGHT)
+		tick(1.0)
+		check(main.map_name == "stillreed" and main.level_cap() == int(main.DATA.CAP_TABLE[4]), "four badges: into Stillreed Basin, with the cap the game data sets")
+		check(main.npcs.any(func(n): return n.id == "tavil" and n.where == "stillreed") and main.npcs.any(func(n): return n.id == "evren" and n.where == "stillreed"), "Tavil the rope-mender and Evren on the orchard path")
+		check(main.npcs.any(func(n): return n.where == "stillreed" and main.npc_info[n.id].warden), "a Warden keeps the basin")
+		check(not main._gate_open("stillreed"), "the hill trail east stays shut until the basin's Warden is beaten")
+		check(main.tile_at(Vector2i(13, 7)) == "j" and main.solid("j") and main.solid("q"), "the ferry skiff is moored at the landing and you can't walk through it")
+		check(not main.solid("b") and main.route(Vector2i(1, 8), Vector2i(20, 9)).size() > 0, "the footbridges carry you across the river")
+		check(ResourceLoader.exists("res://assets/music/stillreed.ogg") and ResourceLoader.exists("res://assets/ambience/stillreed.wav"), "the basin has its own tune and the sound of running water")
+		main._go("cloudglass", Vector2i(13, 12), Vector2i.UP)
+		tick(1.0)
+		main.badges.erase("beacon")
 		main._step(Vector2i.DOWN)
 		tick(1.0)
 		check(main.map_name == "emberfall" and main.me.tile == Vector2i(13, 1) and main.CLIFF == main.MOUNTAINS.emberfall.rock, "and back down to the warm stone of Emberfall")
