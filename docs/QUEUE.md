@@ -213,7 +213,7 @@ read-only hooks, and the accessibility audit is mostly reports and small fixes.
 | # | Task | Status | Notes |
 |---|---|---|---|
 | C1 | **E4** Studio text browser | claimed by Grok, 2026-10-09, `grok/studio-text-browser` | In studio.html: browse and search every line of dialogue, quest text, item and creature name (read them from the games' data files); show where each is used. Read-only first; editing comes with E1's patch format |
-| C2 | **E5** Creature and quest viewers with the test rules as validators | open | Studio pages that list species, moves, evolutions, wild tables and quests, flagging anything the checks in tests/ would reject |
+| C2 | **E5** Creature and quest viewers with the test rules as validators | claimed by Grok, 2026-10-09, `grok/studio-viewers` (stacked on C1, #99) | Studio pages that list species, moves, evolutions, wild tables and quests, flagging anything the checks in tests/ would reject |
 | C4 | **E7** Lighting and music tuner | open | Studio sliders for a zone's fog, shadow strength and grade, writing to localStorage only; previews in an iframe |
 | C5 | While you wait | always | Playtest a game end to end and file what you find as GitHub issues (bug / suggestion templates) |
 
