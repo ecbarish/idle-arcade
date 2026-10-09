@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Godot Wildbond (2026-10-09): the homecoming. After you beat the Champion, Maren and Isolde are waiting at the league gate with Wren, Avenne walks down to join them, and everyone quiets for water and rest. Every Warden now welcomes you back as Champion. Written by ChatGPT. 273 checks pass.
 - Wildbond content (2026-10-09, T54): exported post-Champion gate scene and eight Warden return conversations. [Staging/dispatch contract](docs/lore/wildbond-champion-returns.md). New fields only; Godot integration remains with Claude.
 
 - Wildbond finale handoff (2026-10-09, T53): existing league script, an optional homecoming and a thread payoff map for Claude's Godot build. [Writing contract](docs/lore/wildbond-finale-brief.md). Unresolved mystery truths remain open; no playable behavior changed.

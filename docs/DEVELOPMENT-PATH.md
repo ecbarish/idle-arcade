@@ -103,8 +103,8 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [x] WB4.1 [Claude] The league: Wren at the gate, four courts, Champion Avenne. *Done 2026-10-09: from Farwatch with all eight badges; five stone courts with banners (a gold mark once won); Nelva explains and heals; the battles, lines and teams from the game data; healed between rooms; a loss starts the courts again (Wren stays beaten); the Champion brings the homecoming lines. The Spire stays closed (WB5.1).*
 - [ ] WB4.2 [Claude] The wild bond's
   discovery (WG4) and the first-person glimpse.
-- [ ] WB4.3 [Claude] The homecoming ending, colour and depth restored.
-- [ ] WB4.4 [ChatGPT] (league handoff ready: T53, PR #80; full mystery payoff awaits the ledger's open truths) The ending's text and every thread's payoff, written from the ledger, for Claude to place.
+- [ ] WB4.3 [Claude] The homecoming ending, colour and depth restored. *Part 1 done 2026-10-09: after the Champion, Maren and Isolde come to the league gate and Avenne walks down (T54 staging), the ending and the quiet-down lines play, and every Warden welcomes the Champion on return. Left: the deeper reveal (waits on Evan's choice of the final truth, docs/proposals/wildbond-final-reveals.md, and WB4.4b).*
+- [ ] WB4.4 [ChatGPT] (WB4.4a: T53 and T54 merged 2026-10-09 and placed; WB4.4b, the full mystery payoff, waits on Evan's choice in docs/proposals/wildbond-final-reveals.md) The ending's text and every thread's payoff, written from the ledger, for Claude to place.
 
 **WB-M5: life after the league.**
 - [ ] WB5.1 [Claude] The Lighthouse Spire and rematches.

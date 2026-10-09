@@ -157,6 +157,7 @@ var fest_step := 0                            # how far along it is (the race: 1
 var fest_done := {}                           # "<festival>:<year>" -> true: each festival's activity once a year
 var keepsakes := {}                           # festival keepsakes you've been given: id -> name
 var flowers: Array = []                       # flowers planted at the ranch on Planting Day ([x, y]); they stay
+var guests: Array = []                        # people come to the league gate for the homecoming (WB4.3)
 var league_room := 0                          # the league (WB4.1): the next court in this attempt (0-3, then 4 the Champion)
 
 func _ready() -> void:
@@ -465,7 +466,7 @@ func _keeper_talk(who: String) -> void:
 
 func actors() -> Array:
 	var out: Array = []
-	for m in [me, maren, pup, wren] + starters + npcs + ranch_movers + keepers:
+	for m in [me, maren, pup, wren] + starters + npcs + ranch_movers + keepers + guests:
 		if m.where == map_name:
 			out.append(m)
 	return out
@@ -548,6 +549,8 @@ func _go(to: String, at := Vector2i(-1, -1), face := Vector2i.DOWN) -> void:
 	trans_face = face
 
 func _switch() -> void:
+	if trans_to != "league":
+		guests.clear()                               # the homecoming guests go home
 	_set_map(trans_to)
 	if trans_to == "barn":
 		me.tile = BARN_EXIT + Vector2i.UP
@@ -1408,7 +1411,7 @@ func _update_ui() -> void:
 	if bubble.visible:
 		bubble_text.text = line.text + "   »"
 		var who: Mover = null
-		for m in [maren, wren] + npcs + keepers:
+		for m in [maren, wren] + npcs + keepers + guests:
 			if line.who == m.id and m.where == map_name:
 				who = m
 		var w := 240.0
@@ -2105,7 +2108,10 @@ func _after_league(id: String, result: String) -> void:
 		var w: String = l[0]
 		say("" if w.begins_with("@") else w, _fill(l[1]))
 	if id == "leagueChampion":
+		_homecoming()
 		for l in DATA.SCENES.get("leagueEnding", []):
+			say(l[0], _fill(l[1]))
+		for l in DATA.SCENES.get("leagueAfter", []):          # ChatGPT's T54: the group quiets for water and rest
 			say(l[0], _fill(l[1]))
 		story_done["leagueEnding"] = true
 		return
@@ -2115,6 +2121,26 @@ func _after_league(id: String, result: String) -> void:
 	if not nxt.is_empty():
 		say("nelva", "A quiet rest between courts. Your team is healed. Next: %s." % nxt.title)
 
+## The homecoming (WB4.3, staged from ChatGPT's T54 brief): Maren and Isolde come to the league gate and Avenne walks
+## down from the terrace; Wren is already there. Each has their own tile, off the path at x=3, with room for partners.
+## They go home again when you leave the league.
+func _homecoming() -> void:
+	guests.clear()
+	for g in [["maren", Vector2i(2, 14), Vector2i.RIGHT], ["isolde", Vector2i(4, 13), Vector2i.LEFT]]:
+		var mv := Mover.new(g[0], "league", g[1])
+		mv.face = g[2]
+		mv.right = mv.face.x >= 0
+		guests.append(mv)
+	for n in npcs:
+		if n.id == "avenne":
+			n.tile = Vector2i(5, 14)
+			n.pos = Vector2(n.tile) * TILE
+			n.path.clear()
+			n.face = Vector2i.LEFT
+	me.tile = Vector2i(3, 14)
+	me.pos = Vector2(me.tile) * TILE
+	me.path.clear()
+	me.face = Vector2i.UP
 ## A court on the terrace: a white stone hall with a slate roof and its own coloured banner (the Champion's is violet).
 func _draw_court(at: Vector2i, k: int) -> void:
 	var o := Vector2(at) * TILE
@@ -2434,6 +2460,11 @@ func _skip_opening() -> void:
 	for a in OS.get_cmdline_user_args():           # a season held for a picture: -- --skip-opening --at=larkhaven --season=winter
 		if a.begins_with("--season="):
 			cal.mode = a.substr(9)
+	if "--homecoming" in OS.get_cmdline_user_args():   # the league gate after the Champion (-- --skip-opening --at=league --homecoming)
+		(func():
+			story_done["leagueChampion"] = true
+			story_done["leagueEnding"] = true
+			_homecoming()).call_deferred()
 	if "--photo" in OS.get_cmdline_user_args():      # pictures of the world: nobody asks to evolve mid-shot
 		for c in team: c["hold"] = 999
 	for a in OS.get_cmdline_user_args():           # a picture inside a room: -- --skip-opening --at=larkhaven --room=inn
@@ -2669,7 +2700,10 @@ func _talk_here() -> bool:
 			if known != "" and not story_done.has("her:" + n.id):
 				story_done["her:" + n.id] = true       # they recognise your family, once (T45 lines, from the game data)
 				say(n.id, _fill(known))
-			if info.warden and info.beaten:
+			if info.warden and info.beaten and story_done.has("leagueEnding") and info.data.get("byStory", {}).has("leagueEnding"):
+				for l in info.data.byStory.leagueEnding:      # every Warden welcomes the Champion back (T54)
+					say(l[0], _fill(l[1]))
+			elif info.warden and info.beaten:
 				say(n.id, _fill(DATA.MAPS[map_name].get("wardenDone", "The gate is yours, {name}.")))
 			elif not info.warden and not info.data.has("trainer"):
 				var talk: Array = info.data.get("lines", [])

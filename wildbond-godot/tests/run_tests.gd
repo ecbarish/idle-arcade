@@ -531,6 +531,25 @@ func _run() -> void:
 		main.lines.clear()
 		main._after_league("leagueChampion", "won")
 		check(main.story_done.has("leagueEnding") and main.lines.size() >= 9, "the Champion, and the homecoming at the gate")
+		check(main.guests.size() == 2 and main.guests.all(func(g): return g.where == "league") and main.npcs.any(func(n): return n.id == "avenne" and n.tile == Vector2i(5, 14)), "Maren and Isolde come to the gate, and Avenne walks down to meet them")
+		check(main.lines.any(func(l): return "smallest paws" in str(l.text)), "then everyone quiets for water and rest (ChatGPT's homecoming lines)")
+		var isolde_info: Dictionary = main.npc_info.isolde
+		var was_beaten: bool = isolde_info.beaten
+		isolde_info.beaten = true
+		main.lines.clear()
+		main._go("thornwood", Vector2i(12, 3), Vector2i.UP)
+		tick(1.0)
+		main.me.tile = Vector2i(12, 2)
+		for n in main.npcs:
+			if n.id == "isolde":
+				main.me.tile = n.tile + Vector2i.DOWN
+		main.lines.clear()
+		main._talk_here()
+		check(main.lines.any(func(l): return "Champion" in str(l.text)), "back in Thornwood, Isolde welcomes the Champion")
+		isolde_info.beaten = was_beaten
+		check(main.guests.is_empty(), "and the guests have gone home from the league gate")
+		main._go("league", Vector2i(3, 16), Vector2i.UP)
+		tick(1.0)
 		for id in ["leagueWren", "league1", "league2", "league3", "league4", "leagueChampion", "leagueEnding"]:
 			main.story_done.erase(id)
 		main.league_room = 0
