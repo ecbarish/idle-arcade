@@ -10,6 +10,11 @@ window.ArcadeKinds=[
   {id:'different',name:'Something different',like:'Small experiments that do not fit the others. Primordial is an idle game about evolving life from one cell.'},
 ];
 window.ArcadeGames=[
+  {id:'storm-front',title:'Storm Front',tcls:'t-mmo',status:['Test version','s-proto'],href:'games/storm-front/index.html',
+   blurb:'Light Saltmarsh harbour through a marching storm. Clear cloud formations, shelter behind a crumbling sea wall and catch the passing gull for a bonus.',
+   tags:['Arcade cabinet','High scores','Two-player turns'],cover:'storm',kind:'different',
+   goal:'Clear the clouds before they reach the harbour, and put your initials on the local high-score board.',
+   controls:'Arrows or A/D move · Space fires · P pauses. Touch buttons and USB gamepads work too. Two players take turns on one device.'},
   {id:'wildbond-preview',title:'Wildbond',tcls:'t-wildbond',status:['New version · Early preview','s-proto'],href:'play/wildbond/',
    blurb:'Walk into faded Larkhaven, choose a partner and bring colour back with your first bond. Explore all eight regions and take on the league: four courts and the Champion, meet their Wardens, and care for creatures at the ranch.',
    tags:['On foot','Eight regions and the league','Ranch & nursery'],cover:'wildbond',preview:true,classic:'wildbond',image:'images/play/wb-barn.png',
