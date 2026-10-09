@@ -21,6 +21,7 @@ every game moves a little and none of them gets finished. Ideas arrive faster th
 | **Flagship** (confirmed by Evan 2026-10-09) | about 60% | The game we are finishing. Its next milestone comes before anything else in Claude's lane, and ChatGPT's data and writing for it comes first in Lane A. | **Wildbond (Godot)**, toward version 2.0 |
 | **Second** | about 25% | Grows steadily, one milestone at a time. | **Starfall village (Godot)** |
 | **ChatGPT's own** | ChatGPT's time after flagship support | One browser game ChatGPT moves forward. | **Realmbound** (the game window, phone pass, the second raid tier) |
+| **Family games** (Evan said yes 2026-10-09) | small, alongside | Two small browser games "for everyone", each starting with its one-PR smallest test; never at the flagship's expense. | **Little Ranch** (a tap-and-play toy for ages 2-4) and **the Arcade Cabinets** (original 1978-85 style single-screen games, Storm Front first), docs/proposals/games-for-everyone.md |
 | **Keep alive** | about 15% | Bugs from friends, small fixes, playtests. No new systems. | Diamond Career, Otherworld, browser Wildbond (Classic), the arcade and Come Play |
 | **Parked** | none | Ideas and proposals only, no builds. | Primordial, old Starfall Guild, card shop, Main Street, a second sport, walk-in arcade, the AI storyteller |
 
@@ -109,8 +110,8 @@ one-PR prototype first, and the cheapest step toward first person, V10).
 
 **ChatGPT's order:** first the Realmbound bug where autopilot takes over during the opening dialogue (RB1.5, GR-10;
 bugs jump the queue); then flagship support (WB4.4b, pacing fixes data, species look features for WD2, WB3.6 trainer
-teams and new moves for WD3, WB5.6 catalogue only when asked); then the arcade's front door (AR2.10, GR-12) and "Tell
-us" feedback in every game (AR2.9, GR-9, 14/21 each); then Realmbound (RB1.4 phone pass, RB2.2 second raid tier, RB2.1 battlegrounds proposal), then
+teams and new moves for WD3, WB5.6 catalogue only when asked); then the arcade's front door (AR2.12, GR-12) and "Tell
+us" feedback in every game (AR2.11, GR-9, 14/21 each); then Realmbound (RB1.4 phone pass, RB2.2 second raid tier, RB2.1 battlegrounds proposal), then
 keep-alive writing for Diamond Career and Otherworld.
 
 ## 5. When to re-rank
@@ -136,3 +137,9 @@ keep-alive writing for Diamond Career and Otherworld.
   option and now tops the waiting list; the "better as features" ideas (ranch races, fishing, Starfall grid delves)
   are good direction.
 - 2026-10-09 Evan confirmed: Wildbond first (flagship), as proposed.
+- 2026-10-09 Evan: yes to Little Ranch and the Arcade Cabinets (Storm Front first). Placed in a small "family games"
+  slot: LR1 and AC1 in DEVELOPMENT-PATH, each one smallest-test PR first. Evan: the cabinets (and Little Ranch) can be claimed by any AI that's building.
+- 2026-10-09 Evan: Claude is near its usage cap and Evan's dad has two AIs helping, so the road ahead is laid out as
+  ready-to-claim tasks any AI can take (QUEUE.md "The road ahead"); cabinets and Little Ranch are open to any AI.
+- 2026-10-09 Evan: other AIs may build in the Godot games too, with checks (all suites green, old saves load,
+  screenshots, a Claude reviewer or Evan merges). Rules in QUEUE.md "The road ahead".

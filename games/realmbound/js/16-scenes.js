@@ -17,7 +17,7 @@ const SCN = Dialogue.create({
   get: () => RTALK, set: s => { RTALK = s; },
   cast: who => memberStoryPortrait(who) || giverLook(who),
   blip: who => sfx('blip', voiceOf(who)),
-  auto: () => !!H() && H().mode === 'auto' && !(RTALK && (RTALK.memberStory || RTALK.townService))
+  auto: () => false // every deliberately opened conversation waits for its reader
 });
 /* the Accept button in the quest log: hear the request first */
 function questOffer(id) {

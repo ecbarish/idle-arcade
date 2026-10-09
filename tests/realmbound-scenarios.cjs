@@ -734,6 +734,30 @@ module.exports = function scenarios() {
         check(old.xp===12345&&old.rested===6789&&old.lvl===52,'late-zone tuning does not rewrite earned XP, rested XP or saved levels');
       }finally{rb.S.guild=keepGuild;rb.C.party=keepParty;}
 
+      // RB1.5: deliberate conversations and the first victory protect Focus from fallback.
+      {
+        const hero=newHero('Patient Reader','concord','human','warrior');S.chars=[hero];S.cur=hero.id;boot();
+        accept(firstErrand(hero).id);beginArrival(false);C.run=40;C.lastInput=-99;updateWorld();
+        check(!aiOn()&&!$('#modeHint').textContent.includes('Autopilot'),'RB1.5: arrival never advertises or enables fallback');
+        SCN.skip();C.run=100;check(!aiOn(),'RB1.5: no Focus fallback before a first victory, however long the wait');
+        const untouched=JSON.stringify({xp:hero.xp,kills:hero.stats.kills,money:hero.money});offline(3600,true);
+        check(JSON.stringify({xp:hero.xp,kills:hero.stats.kills,money:hero.money})===untouched,'RB1.5: away time cannot manufacture the first victory');
+        spawn();C.mob.hp=0;onKill();const victoryAt=C.run;
+        check(hero.stats.kills===1&&!aiOn(),'RB1.5: a real first victory starts the grace period');
+        C.run= victoryAt+15;check(!aiOn(),'RB1.5: full fifteen seconds after the first victory');
+        C.run+=.01;check(aiOn(),'RB1.5: established Focus fallback resumes after fifteen seconds');
+        hero.mode='auto';SCN.play([['Farmer Aldous','Take your time.']],null);
+        const before=JSON.stringify(C);step(30);check(JSON.stringify(C)===before&&!aiOn(),'RB1.5: every dialogue pauses combat even in explicit Auto');
+
+        hero.quests.active=[firstErrand(hero).id];hero.quests.prog[firstErrand(hero).id]=99;
+        questHelper();check(!hero.quests.done[firstErrand(hero).id],'RB1.5: QuestHelper cannot choose rewards behind a conversation');
+        const kills=hero.stats.kills;offline(3600,true);check(hero.stats.kills===kills,'RB1.5: long background gaps cannot hunt behind a conversation');
+        SCN.skip();check(aiOn(),'RB1.5: explicitly chosen Auto resumes after dialogue');
+        hero.mode='focus';C.lastInput=C.run;check(!aiOn(),'RB1.5: manual control resets established fallback');
+        const legacy=migrate({v:1,cur:hero.id,chars:[JSON.parse(JSON.stringify(hero))],last:Date.now()}).chars[0];
+        check(legacy.stats.kills===1,'RB1.5: existing victory record survives save migration without a new field');
+      }
+
       // L4/V1: both faction requests, every resource, optional guidance and legacy saves.
       for(const faction of ['concord','wild'])for(const cls of Object.keys(CLASSES)){
         const hero=rb.newHero('Roadtester',faction,FACTIONS[faction].races[0],cls);

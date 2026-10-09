@@ -43,8 +43,8 @@ Ticket numbers: take the next free `T` number in docs/ROADMAP.md.
 Open a `docs/proposals/<topic>.md` with a recommended default, mark the deliverable `blocked: needs Evan`, and move on,
 when a deliverable would: start a new game or unpark one; spend money or need an account; download large files;
 change canon already decided (docs/lore/, the "Decided" list in docs/research/decisions.md); remove a feature
-players use; add an AI service at play time; or touch another assistant's area (Godot projects and play/ are
-Claude's). Questions for Evan live in START-HERE "Questions for Evan", each with a default so work never waits.
+players use; add an AI service at play time; or touch another lane's files (QUEUE.md "Who works where"; since 2026-10-09 any AI may take Godot
+deliverables under the Godot rules in QUEUE.md "The road ahead"). Questions for Evan live in START-HERE "Questions for Evan", each with a default so work never waits.
 
 ### The quality bar (every deliverable)
 Feels like a game (docs/wildbond-plan.md principles); everything in the game window; the world's words, readable;
@@ -112,7 +112,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB4.2 [Claude] The wild bond's
   discovery (WG4) and the first-person glimpse.
 - [ ] WB4.3 [Claude] The homecoming ending, colour and depth restored. *Part 1 done 2026-10-09: after the Champion, Maren and Isolde come to the league gate and Avenne walks down (T54 staging), the ending and the quiet-down lines play, and every Warden welcomes the Champion on return. Left: the deeper reveal (waits on Evan's choice of the final truth, docs/proposals/wildbond-final-reveals.md, and WB4.4b).*
-- [ ] WB4.4 [ChatGPT] (WB4.4a: T53 and T54 merged 2026-10-09 and placed; WB4.4b, the full mystery payoff, waits on Evan's choice in docs/proposals/wildbond-final-reveals.md) The ending's text and every thread's payoff, written from the ledger, for Claude to place.
+- [ ] WB4.4 [ChatGPT] (T58 writing ready: PR #101, Codex, 2026-10-09; Claude places approved reveal) (WB4.4a: T53 and T54 merged 2026-10-09 and placed; WB4.4b, the full mystery payoff, waits on Evan's choice in docs/proposals/wildbond-final-reveals.md) The ending's text and every thread's payoff, written from the ledger, for Claude to place.
 
 **WB-D: deeper play (from the game review, docs/proposals/game-review-2026-10-09.md; before 2.0, order in PRIORITIES.md).**
 - [ ] WD1 [Claude] Numbers off the screen (GR-4): remove the Badges/Lures/Coins/Wilddex line; a readable arrival name.
@@ -181,7 +181,7 @@ creatures as monsters. Built as first-person grid delves (docs/proposals/new-gam
 - [x] RB1.3 [ChatGPT] (done, merged 2026-10-09; T48) Part 3: the road between towns as a walkable stretch at key points (an inn on the road, a
   camp), keeping auto-combat where it already lives.
 - [ ] RB1.4 [ChatGPT] Phone pass for the new layout (L3 part 2).
-- [ ] RB1.5 [ChatGPT] Wait for the player (GR-10, a bug): autopilot must not take over during the first dialogue
+- [x] RB1.5 [ChatGPT] (built: Codex, 2026-10-09, PR #98; awaiting review) Wait for the player (GR-10, a bug): autopilot must not take over during the first dialogue
   (games/realmbound/js/13-world-ui.js:95); fix the stray blocks in the sky. Do first.
 
 **RB-M2: what the raid set up.**
@@ -238,7 +238,7 @@ launcher shows the Godot previews as games (cards, covers, links).
 - [ ] AR2.3 [any] Game boxes (V3).
 - [ ] AR2.4 [local] Link and image check across guides and pages (Lane D3).
 - [ ] AR2.5 [ChatGPT] Studio text
-browser (E4).
+browser (E4). (claimed: Grok, 2026-10-09, grok/studio-text-browser; Lane C task C1)
 - [x] AR2.6 [Claude] Craft review and learning notes (docs/learning/): done 2026-10-09 (safe saves, smaller web pack,
   committed import settings, line-ending rules, one command for all checks, checks on GitHub).
 - [ ] AR2.7 blocked: needs Evan. Build the web previews on GitHub instead of committing them (docs/learning/web-and-shipping.md;
@@ -251,14 +251,23 @@ browser (E4).
   chooses you; then the arcade's own menu sounds and jingles, replacing the pack's by name. Evan listens before merge.
 - [ ] AR2.8 [Claude] Split Wildbond's main.gd as systems are touched (godot-practices.md rule 1): music and ambience
   first, then festivals, interiors, the ranch; one system per commit, checks passing.
-- [ ] AR2.9 [any] Hearing from players (GR-9): a "Tell us" in every game's settings that opens a prefilled GitHub
+- [ ] AR2.11 [any] Hearing from players (GR-9): a "Tell us" in every game's settings that opens a prefilled GitHub
   issue; a 10-minute playtest script on Come Play.
-- [ ] AR2.10 [ChatGPT] The front door (GR-12): the hub leads with the Godot games, Starfall Guild and Primordial move to
+- [ ] AR2.12 [any] The front door (GR-12): the hub leads with the Godot games, Starfall Guild and Primordial move to
   Classic, the old homepage vote closes; START-HERE versions corrected (Claude).
 **AR-M3: the walk-in arcade and friends.**
 - [ ] AR3.1 [Claude] Walk-in arcade steps 1-2 (V11).
 - [ ] AR3.2 [any]
 No-server sharing: trade and battle codes, ghost teams (V6 part 1).
+
+### Family games (Evan said yes 2026-10-09; docs/proposals/games-for-everyone.md)
+**Little Ranch (browser), a toy for ages 2-4.**
+- [ ] LR1 [any] The smallest test: one baby creature, three actions (feed, bubbles, peekaboo) and a bedtime
+  ending; no reading, no failing, no links or purchases, a grown-up lock. Shares the baby-form drawings W9/W10 needs.
+**The Arcade Cabinets (browser), original single-screen games in the 1978-85 style.**
+- [ ] AC1 [any] Storm Front (the Space Invaders shape, Evan's pick): one cabinet, original name and art, one PR.
+- [ ] AC2 [any] Lighthouse Watch (the Missile Command shape).
+- [ ] AC3 [any] Brisket's Crossing (the Frogger shape) and Ember Bricks (the Breakout shape), one PR each.
 
 ### Parked (Evan decides when)
 Primordial beyond light polish, a second sport. Proposals welcome; no builds.
@@ -346,5 +355,7 @@ line or two, with the page that holds the detail.
   on every push and PR. Web packs committed on every rebuild had grown the history to 284 MB: rebuild at milestones
   only, and AR2.7 proposes building them on GitHub. Wildbond's main.gd (3,600 lines), raw key reads and missing sound
   buses: rules to grow out of them gradually, tied to WB6.1, WB6.2 and AR2.8.
+- **2026-10-09, RB1.5:** use one fallback predicate for combat and HUD; dialogue pauses must also cover QuestHelper and background hunting. Existing victory counts can protect the first fight without adding save fields.
+- **2026-10-09, T58:** reveal handoffs distinguish observed documents from character interpretation, shared evidence from optional family perspective, and written restoration from engine placement. Never claim the visual payoff ships with a JSON file.
 - **2026-10-07 to 10-09, earlier lessons:** recorded in docs/PROJECTS.md "Read first" (the game window, depth, woven
   stories, player text, variety, friends' testing, the process).
