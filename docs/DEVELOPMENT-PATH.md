@@ -268,7 +268,7 @@ No-server sharing: trade and battle codes, ghost teams (V6 part 1).
 - [ ] LR1 [any] The smallest test: one baby creature, three actions (feed, bubbles, peekaboo) and a bedtime
   ending; no reading, no failing, no links or purchases, a grown-up lock. Shares the baby-form drawings W9/W10 needs.
 **The Arcade Cabinets (browser), original single-screen games in the 1978-85 style.**
-- [ ] AC1 [any] Storm Front (the Space Invaders shape, Evan's pick): one cabinet, original name and art, one PR. (claimed: Codex for Adam / abarish-dev, 2026-10-09, guest/storm-front)
+- [x] AC1 [any] Storm Front (the Space Invaders shape, Evan's pick): one cabinet, original name and art, one PR. (built: Codex for Adam / abarish-dev, guest/storm-front, PR #119; awaiting review)
 - [ ] AC2 [any] Lighthouse Watch (the Missile Command shape).
 - [ ] AC3 [any] Brisket's Crossing (the Frogger shape) and Ember Bricks (the Breakout shape), one PR each.
 
