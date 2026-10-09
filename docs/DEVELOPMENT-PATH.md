@@ -110,6 +110,15 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB4.3 [Claude] The homecoming ending, colour and depth restored. *Part 1 done 2026-10-09: after the Champion, Maren and Isolde come to the league gate and Avenne walks down (T54 staging), the ending and the quiet-down lines play, and every Warden welcomes the Champion on return. Left: the deeper reveal (waits on Evan's choice of the final truth, docs/proposals/wildbond-final-reveals.md, and WB4.4b).*
 - [ ] WB4.4 [ChatGPT] (WB4.4a: T53 and T54 merged 2026-10-09 and placed; WB4.4b, the full mystery payoff, waits on Evan's choice in docs/proposals/wildbond-final-reveals.md) The ending's text and every thread's payoff, written from the ledger, for Claude to place.
 
+**WB-D: deeper play (from the game review, docs/proposals/game-review-2026-10-09.md; before 2.0, order in PRIORITIES.md).**
+- [ ] WD1 [Claude] Numbers off the screen (GR-4): remove the Badges/Lures/Coins/Wilddex line; a readable arrival name.
+- [ ] WD2 [ChatGPT data, Claude drawing] Creatures that look different (GR-1): per-species look features in data;
+  parts drawn in figures.gd; 4-5 new body shapes.
+- [ ] WD3 [Claude, ChatGPT data] Battles with real choices (GR-2): about 60 moves, family signature moves, a few
+  statuses, an order per Warden; tuned with WB3.6.
+- [ ] WD4 [Claude] Areas you can explore (GR-3): route, settlement and hidden pocket per area, return spots gated by
+  element. Thornwood first, one area per PR.
+
 **WB-M5: life after the league.**
 - [ ] WB5.1 [Claude] The Lighthouse Spire and rematches.
 - [ ] WB5.2 [Claude] Contests and races at the ranch (W4).
@@ -142,6 +151,10 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
 - [x] SF2.3 [Claude] The tavern you serve at, and placement that matters a little (SV4). *Done 2026-10-09: a new building; adventurers with savings come in the evening; you pour (stop in the gold band: a tip and better spirits); Tamsin asks for the tap after six pours (8 a day); left unserved two evenings it shuts until you open it (the last piece of SV3); near the inn drinks lift spirits more, a smithy beside the yard makes training count double, and Hob says so on his plans.*
 - [x] SF2.4 [ChatGPT] (T52 merged and applied to starfall-godot/data/stories.json 2026-10-09: six members, three beats each; was: writing handoff, integration pending) Story text for SF2.1 (the system is built; extend `starfall-godot/data/stories.json`: arcs for Kaito, Hana and Sora, and a third beat for Aki, Ren and Yuna; keep its format and the four traits): three short arcs per adventurer (choices that can go either way), in a
   data file Claude wires in (`starfall-godot/data/stories.json`; ChatGPT may write that one data file).
+- [ ] SF2.6 [Claude] Its own place (GR-5): a frontier stockade look and road layout instead of Larkhaven's; a map
+  that scrolls. Before SF3.1.
+- [ ] SF2.7 [Claude] See the wilds sooner (GR-7): a small walkable stretch past the gate (an early piece of SF4.1).
+- [ ] SF2.8 [Claude] Something by hand every day (GR-8): the next jobs to master, then hire.
 - [ ] SF2.5 [Claude] Hire the apothecary's apprentice once you've brewed enough (the same "master it, then hire" rule).
 
 **SF-M3: seasons.**
@@ -164,6 +177,8 @@ creatures as monsters. Built as first-person grid delves (docs/proposals/new-gam
 - [x] RB1.3 [ChatGPT] (done, merged 2026-10-09; T48) Part 3: the road between towns as a walkable stretch at key points (an inn on the road, a
   camp), keeping auto-combat where it already lives.
 - [ ] RB1.4 [ChatGPT] Phone pass for the new layout (L3 part 2).
+- [ ] RB1.5 [ChatGPT] Wait for the player (GR-10, a bug): autopilot must not take over during the first dialogue
+  (games/realmbound/js/13-world-ui.js:95); fix the stray blocks in the sky. Do first.
 
 **RB-M2: what the raid set up.**
 - [ ] RB2.1 [ChatGPT] Battlegrounds plan in docs/proposals/ (R3; new system: Evan
@@ -226,6 +241,10 @@ browser (E4).
   default: keep committing packs at milestones only). Needs Evan to set Pages' source to "GitHub Actions".
 - [ ] AR2.8 [Claude] Split Wildbond's main.gd as systems are touched (godot-practices.md rule 1): music and ambience
   first, then festivals, interiors, the ranch; one system per commit, checks passing.
+- [ ] AR2.9 [any] Hearing from players (GR-9): a "Tell us" in every game's settings that opens a prefilled GitHub
+  issue; a 10-minute playtest script on Come Play.
+- [ ] AR2.10 [ChatGPT] The front door (GR-12): the hub leads with the Godot games, Starfall Guild and Primordial move to
+  Classic, the old homepage vote closes; START-HERE versions corrected (Claude).
 **AR-M3: the walk-in arcade and friends.**
 - [ ] AR3.1 [Claude] Walk-in arcade steps 1-2 (V11).
 - [ ] AR3.2 [any]
