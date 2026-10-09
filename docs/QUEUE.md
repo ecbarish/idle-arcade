@@ -6,12 +6,51 @@ tasks whose files don't overlap with the other lanes, so all of them can work at
 after another, without waiting to be prompted. Projects and their specs live in [PROJECTS.md](PROJECTS.md); the rules
 and how much creative freedom you have are in [CREATIVE.md](CREATIVE.md).
 
+## Who works where (lanes, updated 2026-10-09)
+
+Evan (2026-10-09): "make sure assistants are working on different things and make different lanes for development so
+AIs can claim different progression." By then several Claude threads worked at once beside ChatGPT, so "Claude" is no
+longer one lane. **Each lane owns a set of files**, so lanes can't collide, and **a lane takes work in the order of
+[PRIORITIES.md](PRIORITIES.md)**. Pick the lane that matches your thread or assistant; if none does, take the
+"Open" lane. A lane with no owner can be taken by anyone: write your name in the Owner column on your branch's first
+commit.
+
+| Lane | Owner | Owns these files | Takes from the path |
+|---|---|---|---|
+| **W: Wildbond (Godot)**, the flagship | Claude: "Wildbond builder" thread (started 2026-10-09) | `wildbond-godot/` (except `assets/`), `play/wildbond/` | Every `[Claude]` WB, WD and WS deliverable, AR2.8 (splitting main.gd) |
+| **S: Starfall (Godot)** | Claude: "Continue Idle Arcade games" thread | `starfall-godot/` (except `assets/`), `play/starfall/` | Every `[Claude]` SF deliverable |
+| **A: browser games, data and lore** | ChatGPT/Codex | `games/`, `tests/*.html`, `docs/lore/`, the hub and launcher, `guides/` | Every `[ChatGPT]` deliverable (table below) |
+| **G: art, sound and music** | Claude: "Game assets" thread | `*/assets/`, `shared/` art and sound, `CREDITS.md`, `licenses/` | Asset requests from any lane; hands wiring code to W or S as a short note in COMMS |
+| **T: tools and craft** | Claude: "Best practices" thread | `tools/`, `.github/`, `docs/learning/`, `.gitattributes` | AR2.x tooling, CI; changes to game code go to W or S as a ticket |
+| **R: reviews and merges** | Claude: "PR reviewer" and "Merge conflict fixer" threads | Merge commits, version numbers, README version lines | B0 below: review, test and merge every waiting PR; fix conflicts on others' PRs |
+| **P: planning** | Claude: "Priorities and direction" thread | `docs/PRIORITIES.md`, the order and owner tags in `docs/DEVELOPMENT-PATH.md`, this page's lanes, START-HERE "Where we are" and "Up next" | Scoring and placing ideas; refilling lanes |
+| **I: ideas and reviews** | Claude: "New game ideas" and "Improve existing games" threads | `docs/proposals/`, `docs/ideas.md`, `docs/research/` | Proposals only; lane P places them |
+| **D: local helper** | Ollama on Evan's PC | its own clone, read-only jobs | Lane D table below |
+
+**Files every lane touches, kept to one line each:** START-HERE's Session log (your dated line at the top), README's
+changelog (your entry at the top), COMMS (your message), and ticking your own deliverable in DEVELOPMENT-PATH. Anything
+more in another lane's files: ask that lane in COMMS, or keep it to a few lines and say so in your PR.
+
+## Claiming work (the same for every assistant and thread)
+
+A claim must be visible to everyone **before** any work, and only open pull requests and branches are visible to all
+at once (a claim written on your branch isn't on main yet). So:
+
+1. **Check it's free:** the deliverable's ID (for example `WD1`) appears in no open pull request title and no
+   `(claimed ...)` note on main. (`git fetch` and look at the open PR list.)
+2. **Claim it:** first commit on your branch marks the deliverable in DEVELOPMENT-PATH `(claimed: <who>, <date>,
+   <branch>)`; push and **open a draft pull request at once whose title starts with the ID** ("WD1: numbers off the
+   screen"). That draft PR is the claim. `<who>` is `Codex` or `Claude (<thread name>)`.
+3. **One deliverable per claim**, and claim the next only when the first is in review.
+4. **Release it** if you stop: close the draft PR with a one-line comment ("released: <why>"), or hand it over in
+   COMMS. A claim with no new commits for **two days** is stale: anyone may take it after one comment on its PR.
+5. **Two claims on the same ID:** the older pull request keeps it; the newer one moves to another deliverable.
+
 ## The loop (every assistant)
 
 1. `git fetch`; start from the latest `origin/main`. Read [COMMS.md](COMMS.md), the message board between assistants.
-2. Take the **first task in your lane** whose status is `open`. Claim it: set its status here to
-   `claimed: <you>, <date>, <branch>` as your branch's first commit, push, and open the pull request early (a draft is
-   fine), so the claim is visible. (Claude, who works on main, pushes the claim to main.)
+2. Take the **first task in your lane** (see "Who works where") whose status is `open`, and claim it as "Claiming
+   work" says: a draft pull request titled with the deliverable's ID, opened before you build.
 3. Build it on its own branch (`codex/<topic>`, `grok/<topic>`, `claude/<topic>`), with checks; all eight test pages pass
    (`tests/run.html`, `wildbond.html`, `starfall.html`, `sound.html`, `offline.html`, `diamond.html`, `otherworld.html`, `runner-safety.html`; Claude also runs the Godot checks).
 4. Open a pull request (Codex and Grok never merge their own). In the PR: what you built, the files you touched,
@@ -28,9 +67,9 @@ and how much creative freedom you have are in [CREATIVE.md](CREATIVE.md).
 
 ## Rules that keep parallel work merging cleanly
 
-- **Don't bump game versions** (`VERSION` in 99-boot.js and the header label). Claude bumps them when merging.
+- **Don't bump game versions** (`VERSION` in 99-boot.js and the header label). Lane R bumps them when merging.
 - **Don't edit START-HERE.md's "Where we are" or "Up next".** Add only your one dated line at the top of its Session
-  log. Claude keeps the rest current.
+  log. Lane P keeps the rest current.
 - **README changelog:** add your entry at the top, without a version number ("Wildbond (2026-10-08): ...").
 - **Stay inside your task's files.** If you must touch a file another lane owns, keep it to a few lines and say so.
 - **In the game window** (Evan, 2026-10-08): every feature in every game happens inside the game window (people, places, things you hold, a thin overlay), not in panels beside it. See CLAUDE.md.
@@ -114,7 +153,7 @@ index.html or style.css until those phases are merged.
 | A8 | While you wait | always | Lore and dex text polish, more checks, bugs from GitHub issues |
 | — | Done | — | A2 L7a Wildbond balance, A3 L7b Realmbound balance, R9 heroic loot review (all merged 2026-10-07) |
 
-## Lane B: Claude (reviews first, then the Godot games: Wildbond and Starfall)
+## Lane B: Claude (history; the work is now split into lanes W, S, R and P above)
 
 | # | Task | Status | Notes |
 |---|---|---|---|

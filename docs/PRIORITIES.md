@@ -68,9 +68,9 @@ of what we have). Anyone, Evan included, can add to either. The flow:
 
 | Idea | Score | Pitch | Note |
 |---|---|---|---|
-| Card shop, absorbing Main Street (CS1 + MS1) | 17/18 | docs/proposals/new-game-ideas.md | Recommended next new game once Evan says go; first step a one-PR Godot toy (counter, 20 cards, pricing, four customers, one Friday match). Uses the catalogue and Wildbond's elements |
-| A second sport: American football (DC4) | 15/18 | docs/proposals/new-game-ideas.md | Only if Evan picks a second sport; waits until Diamond Career's career mode (DC-M2) proves the framework |
+| A second sport: American football, Retro Bowl style (DC4) | 15/18 | docs/proposals/new-game-ideas.md | **Top of the list** (Evan, 2026-10-09: "I love Retro Bowl so that's a strong option"). Still needs Evan's go to start |
 | "The Crossing", sailing between the worlds | 12/18 | docs/proposals/new-game-ideas.md | Waits |
+| Card shop, absorbing Main Street (CS1 + MS1) | 17/18 | docs/proposals/new-game-ideas.md | **At the back** (Evan, 2026-10-09: it is gated behind Wildbond's development). First step when its time comes: a one-PR Godot toy |
 | Primordial beyond polish | 10 | docs/plans/primordial.md | Evan: lower priority |
 | Walk-in arcade (AR3.1) | 10 | docs/VISION.md | Evan: the games come first |
 
@@ -80,24 +80,37 @@ of what we have). Anyone, Evan included, can add to either. The flow:
 then everyone (START-HERE question 1, default (a)). The game is already playable start to finish, so what is left is
 what a player *feels*, in this order:
 
-1. **Pacing and rough edges from a full playthrough** (ChatGPT's T56 pacing diagnosis, PR #83; then fixes).
-2. **The ending finished** (WB4.3 with ChatGPT's WB4.4b, now that Evan chose the final truth).
-3. **Phone controls and settings in the game window** (WB6.1, WB6.2): friends play on phones.
-4. **The Lighthouse Spire and rematches** (WB5.1): reasons to come back.
-5. **The Unbound appear** (WB3.7): the next layer of story and reputation.
-6. **Polish that runs alongside:** depth (WB2.2), variety (WB2.3), Larkhaven homes (WB2.4), winter weather (WS4).
-7. **Ship it:** import a browser save (WB6.3), a guide (WB6.4), trailer and builds (WB6.5).
+1. **Numbers off the screen** (WD1, game review GR-4, scored 19/21): the stat line goes; a readable arrival name.
+2. **Pacing and rough edges from a full playthrough** (ChatGPT's T56 pacing diagnosis, PR #83; then fixes).
+3. **The ending finished** (WB4.3 with ChatGPT's WB4.4b, now that Evan chose the final truth).
+4. **Creatures that look different** (WD2, GR-1, 19/21): 107 species share 10 body shapes. ChatGPT writes each
+   species' look features as data now; Claude draws the parts and 4-5 new body shapes.
+5. **Battles with real choices** (WD3, GR-2, 18/21): about 60 moves, family signature moves, a few statuses, an
+   order per Warden; tuned with ChatGPT's pacing sim (WB3.6).
+6. **Phone controls and settings in the game window** (WB6.1, WB6.2): friends play on phones.
+7. **The Lighthouse Spire and rematches** (WB5.1): reasons to come back.
+8. **Areas you can explore** (WD4, GR-3, 17/21 per area): each area becomes a route, a settlement and a hidden pocket,
+   with spots you come back to with the right creature. Thornwood first.
+9. **The Unbound appear** (WB3.7): the next layer of story and reputation.
+10. **Polish that runs alongside:** depth (WB2.2), variety (WB2.3), Larkhaven homes (WB2.4), splitting main.gd as
+    systems are touched (AR2.8, with GR-11's shared Godot code). More season and festival content (WS4) waits until
+    creatures, battles and maps are deeper (game review).
+11. **Ship it:** import a browser save (WB6.3), a guide (WB6.4), trailer and builds (WB6.5).
 
 After-league life (contests, ranch jobs, roaming legendaries, baby forms, and now Saltmarsh fishing) is WB-M5 and comes
-after 2.0 unless Evan moves it up. First in WB-M5: **races and contests at the ranch** (WB5.2; scored 17/18 by the New
+after 2.0 unless Evan moves it up. Evan likes these "better as features" ideas (2026-10-09). First in WB-M5: **races and contests at the ranch** (WB5.2; scored 17/18 by the New
 game ideas thread), then **Saltmarsh fishing** (WB5.7, 16/18).
 
-**Starfall (second slot), in order:** SF2.5 the apprentice; SF3.1 seasons as chapters (with T57's outlines, PR #84);
-SF3.4 festivals on the shared calendar; then SF4.1 expeditions, built as **first-person grid delves** (16/18; a
+**Starfall (second slot), in order:** SF2.5 the apprentice; **its own place** (SF2.6, GR-5, 18/21: a frontier
+stockade and road layout instead of Larkhaven's, before seasons); **see the wilds sooner** (SF2.7, GR-7, 16/21: a
+small walkable stretch past the gate); SF3.1 seasons as chapters (with T57's outlines, PR #84); **something by hand
+every day** (SF2.8, GR-8, 14/21); SF3.4 festivals on the shared calendar; then SF4.1 expeditions, built as **first-person grid delves** (16/18; a
 one-PR prototype first, and the cheapest step toward first person, V10).
 
-**ChatGPT's order:** flagship support first (WB4.4b, pacing fixes data, WB3.6 trainer teams, WB5.6 catalogue only
-when asked), then Realmbound (RB1.4 phone pass, RB2.2 second raid tier, RB2.1 battlegrounds proposal), then
+**ChatGPT's order:** first the Realmbound bug where autopilot takes over during the opening dialogue (RB1.5, GR-10;
+bugs jump the queue); then flagship support (WB4.4b, pacing fixes data, species look features for WD2, WB3.6 trainer
+teams and new moves for WD3, WB5.6 catalogue only when asked); then the arcade's front door (AR2.10, GR-12) and "Tell
+us" feedback in every game (AR2.9, GR-9, 14/21 each); then Realmbound (RB1.4 phone pass, RB2.2 second raid tier, RB2.1 battlegrounds proposal), then
 keep-alive writing for Diamond Career and Otherworld.
 
 ## 5. When to re-rank
@@ -114,4 +127,12 @@ keep-alive writing for Diamond Career and Otherworld.
   waiting list; ranch races and contests first in WB-M5, Saltmarsh fishing added (WB5.7); Starfall expeditions as
   grid delves. Primordial and the walk-in arcade keep their places; farm sim, survivors-style, puzzle, survival
   crafting and online/gacha ideas declined there.
+- 2026-10-09 Claude: folded in the game review (docs/proposals/game-review-2026-10-09.md, PR #89), scored on this
+  card: numbers off the screen (19), creatures that look different (19), battles with choices (18), Starfall's own
+  place (18), Realmbound waits for the player (a bug, first in ChatGPT's lane), explorable areas (17), the wilds
+  sooner (16), feedback and front door (14), by hand daily (14), shared Godot code (11, done as polish). Spire stays
+  ahead of contests (GR-6, already so). Season and festival content slowed.
+- 2026-10-09 Evan: card shop to the back (it depends on Wildbond); a Retro Bowl-style football game is a strong
+  option and now tops the waiting list; the "better as features" ideas (ranch races, fishing, Starfall grid delves)
+  are good direction.
 - 2026-10-09 Evan confirmed: Wildbond first (flagship), as proposed.
