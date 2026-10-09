@@ -7,7 +7,7 @@
  .field-options-list{position:fixed;top:58px;left:8px;right:8px;width:auto;max-height:calc(100dvh - 74px)}
  .field-options-list button,.menu button,#fieldDock button,#arrivalControls button,.realm-surroundings button,.road-surroundings button{min-height:44px}
  #fieldDock{min-height:59px;padding-bottom:max(7px,env(safe-area-inset-bottom));scroll-padding-inline:10px;overscroll-behavior-x:contain}
- .xp{bottom:var(--field-dock-height,59px)}
+ .xp{zoom:1!important;bottom:var(--field-dock-height,59px)}
  .abar{bottom:calc(var(--field-dock-height,59px) + 19px);padding:5px;max-height:40dvh;overflow-y:auto;overscroll-behavior:contain}
  .abar>.slots{flex-wrap:wrap;justify-content:center;min-width:0;max-width:100%;gap:4px}
  .ab{width:44px;height:44px;flex:none}.abar .seg button{min-height:44px;padding:6px 12px}
@@ -16,6 +16,7 @@
  #arrivalControls{bottom:calc(var(--field-controls-top) + 8px);max-width:calc(100% - 16px);flex-wrap:wrap;justify-content:center}
  .scene .dlg{bottom:calc(var(--field-controls-top) + 12px)!important;max-height:calc(100% - var(--field-controls-top) - 70px)}
  .lootwin,.enccard{bottom:calc(var(--field-controls-top) + 48px);max-height:calc(100dvh - var(--field-controls-top) - 120px);overflow:auto}
+ .petframe,.enccard,.lootwin,#arrivalControls{zoom:1!important;font-size:calc(14px * var(--arc-text,1))}
  .petframe{bottom:calc(var(--field-controls-top) + 48px)}
  .menu{max-height:calc(100dvh - 16px - env(safe-area-inset-bottom));top:50%}
  .field-book-head{gap:6px}.field-book-head h2{font-size:20px;min-width:0}.field-book-head button{flex:none}
