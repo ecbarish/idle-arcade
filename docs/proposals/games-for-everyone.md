@@ -14,8 +14,8 @@ the build order is set in [docs/PRIORITIES.md](../PRIORITIES.md).
    catalogue to feed, bathe, play peekaboo with and tuck into bed. No words to read, no way to lose, no timers, no
    links or purchases, and a bedtime scene that ends each visit gently. The baby creature drawings it needs are the
    same ones Wildbond's baby forms need (W9/W10), so the work is shared.
-2. **For his dad: the Arcade Cabinets** (17/18). A row of small, original single-screen games in the style of 1978 to
-   1985: one stick, one button, a high score table with three initials, games that get faster until you lose. Each
+2. **For his dad: the Arcade Cabinets** (17/18). A growing row of small, original single-screen games in the style of
+   1978 to 1985 (Space Invaders, Frogger, Breakout, Pac-Man and friends, in our own art): one stick, one button, a high score table with three initials, games that get faster until you lose. Each
    cabinet is one small browser game, and later the same cabinets can stand in the walk-in arcade (V11) and in our
    games' inns.
 3. **Wait:** an NES-style side-scrolling adventure (13/18), the game Evan's dad would have moved on to in 1986-87. Much
@@ -82,12 +82,26 @@ up, three initials on the high score table, the game speeding up until it beats 
 taking turns on the couch. A "Modern" switch per cabinet adds today's touches (smoother speed-ups, combo bonuses,
 a short timed mode), the trick that made *Pac-Man Championship Edition* a hit, while "Classic" stays pure.
 
+**Evan, 2026-10-09:** "it can also do arcade style games like space invaders and things like that, but simple early
+gaming type things that evoke nostalgia and are fun." So the cabinets are a growing row, not a fixed three.
+
 **First three cabinets** (original games in loved shapes, set in our world):
-- **Lighthouse Watch** (the *Missile Command* shape): storm sparks fall on the Saltmarsh harbour; aim the
-  lighthouse beam to burst them before they hit the boats.
+- **Storm Front** (the *Space Invaders* shape, Evan's own example): rows of storm clouds march down on the
+  Saltmarsh harbour, shuffling side to side and speeding up as they thin out; fire from the lighthouse gallery and
+  hide behind the harbour wall as it crumbles. A gull sometimes crosses the top for bonus points.
 - **Brisket's Crossing** (the *Frogger* shape): help Pell's mule Brisket cross busy roads and a log-jammed river to
   deliver the lanterns.
 - **Ember Bricks** (the *Breakout* shape): knock sparks into a forge wall, brick by brick, at Garrick's smithy.
+
+**More cabinets for the row** (each one PR, built if the first ones are loved):
+- **Lighthouse Watch** (the *Missile Command* shape): aim the beam to burst falling storm sparks before they reach
+  the boats.
+- **Lantern Maze** (the *Pac-Man* shape): light every lantern in a hedge maze while the shadow-foxes hunt you; a
+  glowcap lets you chase them back.
+- **Driftrocks** (the *Asteroids* shape): a skiff spinning and thrusting among drifting ice floes that split.
+- **Burrow Run** (the *Centipede* shape): a long burrower winds down through a mushroom patch.
+- **Hob's Harvest** (the *Kaboom!* shape, a 2600 favourite): catch the apples Hob drops before they hit the ground.
+- **Gull Patrol** (the *Galaga* shape): swooping formations, and a beam that can capture one to fly beside you.
 
 **Why it is right for Evan's dad.** Born around 1969, he was the right age for the Atari 2600 (1977), the arcade
 golden age (*Pac-Man* 1980, *Donkey Kong* 1981) and the NES arriving in 1985-86. These games ask nothing new of him:
@@ -107,7 +121,7 @@ that can be turned off.
 playable machines in the walk-in arcade (V11) and in our games' inns and taverns (a cabinet in Larkhaven's inn, a
 cameo for Pell and Brisket), which makes those places feel lived in.
 
-**Smallest test (one PR).** Lighthouse Watch with its demo, high score table and two-player turns. If his dad plays
+**Smallest test (one PR).** Storm Front with its demo, high score table and two-player turns. If his dad plays
 it twice, build the next cabinet.
 
 ## Waits: an NES-style side-scroller (13/18)
