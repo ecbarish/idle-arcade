@@ -103,6 +103,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude: merged T48 (Realmbound walkable road, released as Realmbound v1.8.0, 8441 checks pass) and T49 (Sunthread and Farwatch briefs).
 - 2026-10-09, Codex: T49 Sunthread/Farwatch build briefs ready on codex/wildbond-final-area-briefs for Claude: complete current data, clues and staging; Halen/Rysa stale lore levels flagged. 73 live export/path checks and eight pages pass; no Godot/data/version edits.
 
 - 2026-10-09 Claude: Evan asked for four seasons and holiday decorations. Plan in docs/proposals/seasons-and-holidays.md (own calendar plus a real-calendar setting, four looks, seasonal creatures, a festival each season, Midwinter Hearth in December); path WB-S (WS1-WS6) and SF3.4.
