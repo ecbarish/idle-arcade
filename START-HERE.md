@@ -71,8 +71,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 - **Claude (Lane B):** review and merge ChatGPT's PRs first. Then, in order: WG1 tamer abilities with heritages; WG6
   depth step 1 (ground heights, footprints, and the fix for the colour layer drawing you over people in front of you);
-  WG7 the variety pass (animated water, interiors, battle effects, sounds, edge tiles); WG2 Stillreed Basin and the
-  areas after it; SV1 Starfall members' stories; SV3 failing and excelling. After big steps, re-export `play/` and
+  WG7 the variety pass (animated water, interiors, battle effects, sounds, edge tiles); WG2 the areas after Stillreed (Stillreed done 2026-10-09: Hollow Echo next, see DEVELOPMENT-PATH WB3.2) and the
+  rest; SV1 Starfall members' stories; SV3 failing and excelling. After big steps, re-export `play/` and
   refresh the Come Play pictures.
 - **ChatGPT (Lane A):** T41 Realmbound part 2 (pages become places); T42 Otherworld memories that matter (toward a systemic world); T43 the catalogue reaches Realmbound; T44 accessibility. (Done 2026-10-08: T36 Diamond Career in the game window; T37 catalogue batch 2; T38
   Realmbound in the game window; T39 Hearthmere; T40 Wildbond clues for areas 5-8; the Ashen Throne.)
@@ -105,7 +105,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 - 2026-10-09, ChatGPT: T46 launcher previews, PR #73, now against main after #71 merged. Real screenshots, separate Classic journeys, focus-safe road; 174 launcher and 164 accessibility checks plus all eight pages pass. No Godot, exports, worker or version edits.
 
-- 2026-10-09 Claude: Godot Wildbond: Stillreed Basin opened (WB3.1 step 1: footbridges, trainers, Warden, river ambience, Boat music). 218 checks. Next: its ferry and furniture, then WB2.2-2.4 depth items.
+- 2026-10-09 Claude: Godot Wildbond: Stillreed Basin opened (WB3.1: footbridges, moored skiff and readable mooring sign, trainers, Warden, river ambience, Boat music); web preview rebuilt; 225 checks. Also its own touches (current, cattails, orchard windfall, rope coil, dragonflies). Next: WB3.2 Hollow Echo, WB2.2-2.4 depth items, SF2.2.
 - 2026-10-08 Codex: T45 ready in PR #72: 60 early-road heritage reactions for 11 people and four Wardens, every clue recorded. Eight pages pass (Wildbond 1,606); actual 39-table export carries all reactions and retains existing content exactly. No Godot, screen, save or version changes. T44 is ready separately in #71.
 - 2026-10-08 Codex: T44 ready in PR #71 after #70/#67: focused dialogue decisions, Settings isolation, named Realmbound paths, reading sizes and Otherworld status controls. Eight pages and 164 Chrome checks at four widths pass; docs/accessibility.md records remaining gaps. No Godot or version changes.
 

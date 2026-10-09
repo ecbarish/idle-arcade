@@ -76,7 +76,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [x] WB2.7 [Claude] Bring T37's fourteen creatures into Godot (WG9): done 2026-10-09 (exported; all use existing body types; 107 species).
 
 **WB-M3: the rest of the valley (areas 5-8).**
-- [ ] WB3.1 [Claude] Stillreed Basin in Godot (map, ferry, trainers, Warden), with its own furniture, sound and music. *Step 1 done 2026-10-09: the area is walkable with its wooden footbridges, trainers, Warden, river ambience and the Boat tune; step 2: the moored ferry skiff and its mooring sign (readable), the river flowing under the bridges. Still to do: its own furniture (reed racks, rope posts) and a ferry ride once the rope is mended.*
+- [ ] WB3.1 [Claude] Stillreed Basin in Godot (map, ferry, trainers, Warden), with its own furniture, sound and music. *Step 1 done 2026-10-09: the area is walkable with its wooden footbridges, trainers, Warden, river ambience and the Boat tune; step 2: the moored ferry skiff and its mooring sign (readable), the river flowing under the bridges. Step 3: its own touches: the current running down the river, cattails on the banks, windfall under the orchard, a coil of ferry rope, dragonflies. Still to do (later, with the story): a ferry ride once the rope is mended.*
 - [ ] WB3.2 [Claude] Hollowecho Hills.
 - [ ] WB3.3 [Claude] Sunthread Commons.
 - [ ] WB3.4 [Claude] Farwatch Reach.

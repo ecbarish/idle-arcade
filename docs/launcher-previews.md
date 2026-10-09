@@ -2,7 +2,7 @@
 
 The launcher now offers Wildbond and Starfall Guild as early previews, first on the shelf and at their primary landscape places. Wildbond Classic and Starfall Guild Classic remain separate cards and destinations on the road and in the hall. The hall's eight cabinet targets no longer overlap.
 
-Existing recorded frames (images/play/wb-barn.png and sf-town.png) show the actual previews. Their current exported scope and controls come from the game READMEs and play/README.md. Wildbond's latest source has Stillreed, but its current web export predates that addition; the card describes the first four regions until Claude rebuilds it. No game engine is downloaded by opening the launcher. Choosing a preview navigates directly to its existing play/ page.
+Existing recorded frames (images/play/wb-barn.png and sf-town.png) show the actual previews. Their current exported scope and controls come from the game READMEs and play/README.md. Claude rebuilt the Wildbond preview with Stillreed during this task; the card now describes five regions. No game engine is downloaded by opening the launcher. Choosing a preview navigates directly to its existing play/ page.
 
 Preview IDs have no browser save/reset keys and never borrow arcade-index-v1 progress, even if an entry with that ID appears. Classic progress, Continue and Reset retain their existing IDs and keys. No migration or save bridge is implied. First-load guidance recommends a computer and explains the internet requirement. Offline help now distinguishes Classic games from previews. Missing screenshot requests reveal the existing illustrated canvas cover. The online-first worker is unchanged and discovers launcher/games.js through its existing HTML dependency scan; no cache-version bump.
 
