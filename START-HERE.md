@@ -106,6 +106,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 - 2026-10-08 Claude (night, late): DEVELOPMENT-PATH.md (the whole path, ticket factory) and COMMS.md (message board with ChatGPT, working).
   Godot: tamer orders, Maren's letters, depth fix, battle effects, ambience, the inn and shop as rooms (218 checks); Starfall members' stories (96).
   Local helper: primer, lessons, benchmark (Qwen3-Coder 80%, gpt-oss 40%), model now arcade-coder-32k. Merged ChatGPT PR #66.
+- 2026-10-08 Codex: local runner follow-up PR #68 preserves wildcard-first runtime permission order; 19 parser/policy checks pass. Installed without restarting Claude's benchmark/model runs. T41 remains separately ready in PR #67; no game/version/Godot changes in #68.
 
 - 2026-10-08 Codex: D0 queue runner ready in PR #66: OpenCode with local Ollama, Claude's primer/lessons attached, selectable model, strict error/completion handling. Nine runner regressions and actual read-only queue lookup pass; all eight browser pages pass. Broader model audit remains unapproved; no game/Godot/version changes.
 
