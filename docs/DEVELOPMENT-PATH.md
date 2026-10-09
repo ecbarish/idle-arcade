@@ -212,6 +212,10 @@ Evan said yes 2026-10-09. Plan: [plans/sports-management.md](plans/sports-manage
 - [ ] LB0 [any] One-page pitch with three mock screens. - [ ] LB1 [any] shared/sports-office.js from Diamond Manager.
 - [ ] LB2 [any] One drive, playable. - [ ] LB3 [any] One full game. - [ ] LB4 [any] Season and office. - [ ] LB5 [any] Playability pass.
 
+### Lantern Ice (hockey, after football; Evan 2026-10-09: baseball, football and hockey are his favourites, all sports eventually)
+Plan: [plans/sports-management.md](plans/sports-management.md) "Game 3". Reuses shared/sports-office.js (LB1).
+- [ ] HK0 [any] Pitch. - [ ] HK1 [any] Hockey simulation. - [ ] HK2 [any] Shootout moment. - [ ] HK3 [any] Season, lines, office. - [ ] HK4 [any] Playability pass.
+
 ### Otherworld (browser)
 **OW-M1: three lives (done through v0.3.0).**
 - [x] The Between, Asterhold with Lanthorn, Hearthmere, the Ashen Throne.

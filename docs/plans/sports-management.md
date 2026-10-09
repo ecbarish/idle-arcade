@@ -1,4 +1,4 @@
-# Sports, reworked: manage the club (Diamond Manager) and a football game of our own (Lantern Bowl)
+# Sports, reworked: manage the club (Diamond Manager), then football (Lantern Bowl) and hockey (Lantern Ice)
 
 Written 2026-10-09 by Claude (sports thread) after Evan played Diamond Career:
 
@@ -113,13 +113,33 @@ Manager, not copied), so both games improve together.
 - [ ] **LB0** [any] One-page pitch with three mock screens (the field, a play call, the office) in
   docs/plans/lantern-bowl.md, checked by the Design decisions thread for anything too close to Retro Bowl's look.
 - [ ] **LB1** [any] Extract the office code from Diamond Manager into `shared/sports-office.js` with no behaviour
-  change (all Diamond Manager checks still pass).
+  change (all Diamond Manager checks still pass). Make it sport-neutral (positions, rating names and the game
+  simulation passed in), since hockey and later sports reuse it.
 - [ ] **LB2** [any] **One drive, playable**: field, four play calls, the passing moment, first downs, a touchdown.
   Keyboard and touch. Checks: downs and distance rules, scoring, a seeded drive is reproducible.
 - [ ] **LB3** [any] **One full game**: alternating drives, simulated defence, clock and quarters, a final.
 - [ ] **LB4** [any] **A season and the office**: twelve-game season, roster, cap, contracts, facilities, draft
   (reusing shared/sports-office.js).
 - [ ] **LB5** [any] **Playability pass**, as DM2.
+
+## Game 3: hockey (working title Lantern Ice), after baseball and football
+
+Evan, 2026-10-09: "id also like a hockey game (eventually all sports but those 3 sports are my favorite)". Baseball,
+football and hockey are his three favourites; every sport is the long-term goal. So the front office is built once and
+shared: **shared/sports-office.js** (LB1) holds ratings words, salaries and asking prices, contracts and renewals, the
+trade judge, free agents, the owner's budget, facilities, staff hiring, schedules, standings and saves. Each sport
+supplies only its positions, its rating names and its game simulation (plus what you play, if anything). Adding a
+sport should mean writing a new simulation and a few screens, not a new front office.
+
+**The shape:** the Lanterns' hockey club. You manage, and in each game you can step in for a few short moments (a
+power play or a shootout: pick the shot, aim, shoot), the way Lantern Bowl lets you play drives. Lines (three forward
+lines, two defence pairs, a goalie) are the hockey version of the batting order. The ice rink upgrades like the ballpark.
+
+- [ ] **HK0** [any, after LB4] One-page pitch with three mock screens in docs/plans/lantern-ice.md.
+- [ ] **HK1** [any] A hockey game simulation from ratings (shots, saves, penalties, power plays) with a play-by-play,
+  reusing shared/sports-office.js for everything off the ice. Checks: believable scores (about 5 to 7 goals a game),
+  better ratings win more, seeded games are reproducible.
+- [ ] **HK2** [any] The shootout moment, playable. **HK3** [any] Season, lines and office. **HK4** [any] Playability pass.
 
 ## Owner decisions still open (route to the Design decisions thread first; only goals and money go to Evan)
 - Whether Lantern Bowl starts now or after DM2 (PRIORITIES places it; default: LB0 and LB1 may start now, LB2 after
