@@ -175,7 +175,9 @@ index.html or style.css until those phases are merged.
 | B8 | **G2** Realmbound dungeon lighting; **W3 part 2** roaming legendaries; **W10** baby forms | open | After Launch is fine |
 | — | Done | — | L2 save safety, L1 settings, L8 launcher (living world, road, hall, vote), L3 phone part 1, Wildbond v1.4-1.5.2 fixes from Evan's play |
 
-## Lane X: guests (fork and pull request; CONTRIBUTING.md has the steps)
+## Lane X: guests (a `guest/<topic>` branch and a pull request; CONTRIBUTING.md has the steps)
+
+Evan chose (2026-10-09) to add guests as collaborators: they push `guest/*` branches to this repo, never `main`.
 
 Self-contained tasks for someone new, each away from what the other lanes are building. Claim like everyone else (a
 draft pull request titled with the ID). Lane R reviews and merges; guests never merge. Lane P keeps this list stocked.
