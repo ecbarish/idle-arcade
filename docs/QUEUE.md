@@ -49,6 +49,28 @@ at once (a claim written on your branch isn't on main yet). So:
    COMMS. A claim with no new commits for **two days** is stale: anyone may take it after one comment on its PR.
 5. **Two claims on the same ID:** the older pull request keeps it; the newer one moves to another deliverable.
 
+## Heavy lifting (for the AIs with the most usage: Evan's dad's AIs first; Evan, 2026-10-09)
+
+Evan: "my dad's AIs have much more usage available, so we can steer them to a lot of the heavy lifting since we're
+running out of usage for this week." These are the **big builds**, in the order that matters most. They are Godot
+work: follow the Godot rules under "The road ahead" (all checks green, old saves load, screenshots, a reviewer
+merges). Before starting, check the open pull request list: the Wildbond builder thread is on the ending (WB4.3) and
+creature drawing (WD2), and #107 is phone controls and settings (WB6.1-6.2); don't take those. One task per pull
+request; split a big one into steps ("WD4a: Thornwood's route") and open the next when the first is in review.
+
+| # | Big build (path ID) | Read first | Files | Done when |
+|---|---|---|---|---|
+| H1 | **Battles with real choices** (WD3) | docs/proposals/game-review-2026-10-09.md GR-2; `wildbond-godot/scripts/rules.gd`, `battle.gd` | Wildbond data and battle scripts | About 60 moves (from 22), a signature move per creature family, a few statuses (sleep, burn, guard...), each Warden fights with a plan; the pacing check (WB3.6b, about 12 wins a level) still holds; new checks for every status |
+| H2 | **Thornwood you can explore** (WD4a) | GR-3; docs/proposals/depth-and-first-person.md (maps are data) | `wildbond-godot/` Thornwood map data and scenes | Thornwood becomes a route, the settlement and one hidden pocket, with one spot you come back to with the right creature; old saves load in the right place; screenshots |
+| H3 | **The Lighthouse Spire and rematches** (WB5.1) | docs/wildbond-plan.md; browser Wildbond's Spire (`games/wildbond/`) | `wildbond-godot/` | The Spire opens after the Champion; floors of trainers; Wardens offer stronger rematches; checks |
+| H4 | **Starfall's own place** (SF2.6) | GR-5; docs/plans/starfall-village.md | `starfall-godot/` | A frontier stockade look and road layout instead of Larkhaven's, a map that scrolls; every building still reachable; old saves load; screenshots |
+| H5 | **See the wilds sooner** (SF2.7), then **something by hand every day** (SF2.8) | GR-7, GR-8 | `starfall-godot/` | A small walkable stretch past the gate; the next jobs to master, then hire (the "master it, then hire" rule) |
+| H6 | **The rest of the areas you can explore** (WD4b onward) | as H2 | as H2 | One area per pull request, in journey order |
+| H7 | **The Unbound appear** (WB3.7) | docs/lore/wildbond-threads.md (check every line against it), docs/proposals/reputation-and-consequence.md | `wildbond-godot/` | First encounters and a choice to help or oppose; reputation begins; no new canon without the Design decisions thread (docs/DECISIONS.md) |
+
+Browser work for any AI is in "The road ahead" below. Claude's own threads keep to planning, reviews, the ending
+and the creature drawing while Claude's usage is low.
+
 ## The road ahead (ready to claim by any AI; Evan, 2026-10-09)
 
 Evan: "we are nearing our cap on Claude, so if we lay out a strong road in front of us we can use our other helpers
