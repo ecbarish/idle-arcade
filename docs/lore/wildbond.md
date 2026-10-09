@@ -39,6 +39,7 @@ Larkhaven is the home base: inn, shop, ranch, fenced paddock and a northward pat
 Wren should remain a friend whose ambition causes friction without cruelty. She wants to become Champion, recognizes the player's growing bond and keeps promising a better rematch. After her Emberfall defeat, both teams deserve the warm spring. Winning does not end their companionship or turn her into a villain.
 
 **Pip**, a seven-year-old in Larkhaven, also plans to become Champion and thinks having plenty of time is an advantage. He warns about tall grass with a child's confidence. When color returns he discovers that his shirt is yellow and questions whether it always was. His mother's brighter scarf suggests that even people who dismiss the change may respond to it.
+**Larkhaven's inn and shop** (Godot version, 2026-10-08): **Old Ned** keeps the Larkhaven Inn, a hearth, a few tablesand stew in the pot; he rests tired teams for nothing and is fond of Maren, though he would never say so to her.**Juniper** runs the shop across the lane, shelves of jars and crates of lures and berries. Both rooms are fadeduntil the colour spills out of Maren's barn, then as bright as the town outside.
 
 ## The Wardens and their badges
 
