@@ -4,6 +4,7 @@ Shared plan for every contributor (Claude, ChatGPT/Codex, or a person). One tick
 Mark a ticket done in the same PR that finishes it.
 
 ### T46: Arcade, put the new previews on the shelf (AR2.2)
+- [x] Built 2026-10-09; PR #73 for review. Separate editions and saves; 174 launcher checks and all eight pages pass.
 Why: friends should find the current Godot games without hunting through Come Play, while keeping Classic journeys and saves reachable.
 Read first: docs/DEVELOPMENT-PATH.md AR2.2, docs/PROJECTS.md Read first, docs/CREATIVE.md, play/README.md and current preview READMEs.
 Branch: codex/arcade-previews (stacked after T44/#71; launcher overlaps).
