@@ -1,11 +1,13 @@
 extends Control
 ## The field book you carry (docs/wildbond-plan.md phase 4, "menus you hold"): open it with Tab or J, or tap the satchel
-## bag in the corner. Three pages: the Wilddex (every creature in the game: seen ones in colour, the rest dark shapes, a mark for the ones
+## bag in the corner. Four pages: the Wilddex (every creature in the game: seen ones in colour, the rest dark shapes, a mark for the ones
 ## that chose you; pick one for its page), your Team (level, health, XP, moves; who rests at the ranch) and the Satchel
 ## (what you carry, your badges and keepsakes: the numbers live here, not on the screen, WD1).
-## Arrow keys move, Q/E or 1/2/3 switch pages, Tab/J/Esc close. The mouse works too.
+## The last page is Settings (WB6.2): sound, text size, battle pace and the phone buttons.
+## Arrow keys move, Q/E or 1 to 4 switch pages, Tab/J/Esc close. A gamepad, the mouse or a finger work too.
 
 signal closed
+signal want_howto                              # the Settings page's last row: show the How to play page
 const Figures := preload("res://scripts/figures.gd")
 const R := preload("res://scripts/rules.gd")
 const INK := Color("3e2c20")
@@ -26,8 +28,11 @@ var keepsakes: Array = []                      # festival keepsakes (names), sho
 var bag: Dictionary = {}                       # main.gd's satchel: coins, lures, berries
 var badges: Array = []                         # { name, col } for each badge you hold, in the order you earned them
 var cal: RefCounted = null                     # the calendar (calendar.gd): the date at the foot of the left page; C changes it                                # where to go next, in Maren's words (main.gd where_next)
-var tab := 0                                   # 0 Wilddex, 1 Team, 2 Satchel
-const TABS := [["Wilddex", 30, 58], ["Team", 90, 46], ["Satchel", 138, 50]]   # name, x, width
+var tab := 0                                   # 0 Wilddex, 1 Team, 2 Satchel, 3 Settings
+const TABS := [["Wilddex", 30, 40], ["Team", 72, 30], ["Satchel", 104, 38], ["Settings", 144, 44]]   # name, x, width
+const SETTINGS_TAB := 3
+var settings: Settings = null                  # main.gd's settings (settings.gd): the last page changes them
+var row := 0                                   # the setting picked on that page
 var sel := 0
 var t := 0.0
 var font: Font
@@ -62,20 +67,34 @@ func _cell(i: int) -> Rect2:
 func _input(e: InputEvent) -> void:
 	if not visible:
 		return
-	if e is InputEventKey and e.pressed and not e.echo:
-		match e.keycode:
-			KEY_TAB, KEY_J, KEY_ESCAPE: close()
-			KEY_Q: tab = (tab + 2) % 3
-			KEY_E: tab = (tab + 1) % 3
-			KEY_1: tab = 0
-			KEY_2: tab = 1
-			KEY_3: tab = 2
-			KEY_C: if cal: cal.next_mode()
-			KEY_LEFT, KEY_A: sel = maxi(0, sel - 1)
-			KEY_RIGHT, KEY_D: sel = mini(ids.size() - 1, sel + 1)
-			KEY_UP, KEY_W: sel = maxi(0, sel - COLS)
-			KEY_DOWN, KEY_S: sel = mini(ids.size() - 1, sel + COLS)
+	if e is InputEventKey and e.pressed and not e.echo and e.keycode >= KEY_1 and e.keycode < KEY_1 + TABS.size():
+		tab = e.keycode - KEY_1                    # 1 to 4 jump straight to a page
 		get_viewport().set_input_as_handled()
+	elif Controls.pressed(e, "page_prev"):         # Q or the left shoulder before Back, which also has Q
+		tab = (tab + TABS.size() - 1) % TABS.size()
+		get_viewport().set_input_as_handled()
+	elif Controls.pressed(e, "page_next"):
+		tab = (tab + 1) % TABS.size()
+		get_viewport().set_input_as_handled()
+	elif Controls.pressed(e, "open_book") or Controls.pressed(e, "back"):
+		close()
+		get_viewport().set_input_as_handled()
+	elif Controls.pressed(e, "calendar"):
+		if cal: cal.next_mode()
+		get_viewport().set_input_as_handled()
+	elif Controls.dir(e) != Vector2i.ZERO:
+		var d := Controls.dir(e)
+		if tab == SETTINGS_TAB:
+			_settings_key(d)
+		else:
+			sel = clampi(sel + d.x + d.y * COLS, 0, ids.size() - 1)
+		get_viewport().set_input_as_handled()
+	elif Controls.pressed(e, "interact"):
+		if tab == SETTINGS_TAB:
+			_settings_key(Vector2i.RIGHT)
+		get_viewport().set_input_as_handled()
+	elif e is InputEventKey and e.pressed:
+		get_viewport().set_input_as_handled()      # the open book keeps every other key from reaching the world
 	elif e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
 		var p := get_local_mouse_position()
 		var hit := -1
@@ -83,6 +102,11 @@ func _input(e: InputEvent) -> void:
 			if Rect2(TABS[i][1], 14, TABS[i][2], 14).has_point(p): hit = i
 		if hit >= 0: tab = hit
 		elif not Rect2(22, 10, 340, 198).has_point(p): close()
+		elif tab == SETTINGS_TAB:
+			for i in Settings.ROWS.size() + 1:
+				if _row_rect(i).has_point(p):
+					row = i
+					_settings_key(Vector2i.LEFT if p.x < _row_rect(i).get_center().x else Vector2i.RIGHT)
 		elif tab == 0:
 			for i in range(_page_start(), mini(ids.size(), _page_start() + COLS * ROWS)):
 				if _cell(i).has_point(p): sel = i
@@ -119,9 +143,12 @@ func _draw() -> void:
 		_draw_dex()
 	elif tab == 1:
 		_draw_team()
-	else:
+	elif tab == 2:
 		_draw_satchel()
-	_text("Tab or J to close   Q / E: pages   C: calendar", Vector2(193, 200), 6, FAINT, 163, HORIZONTAL_ALIGNMENT_CENTER)
+	else:
+		_draw_settings()
+	var hint := "Tap a page's ribbon; tap outside to close" if Controls.touch else "Tab or J to close   Q / E: pages   C: calendar"
+	_text(hint, Vector2(193, 200), 6, FAINT, 163, HORIZONTAL_ALIGNMENT_CENTER)
 
 func _draw_dex() -> void:
 	var start := _page_start()
@@ -226,6 +253,55 @@ func _draw_satchel() -> void:
 		draw_multiline_string(font, Vector2(202, 130), "None yet. Each Warden gives one to a tamer who earns it.", HORIZONTAL_ALIGNMENT_LEFT, 146, 6, 2, FAINT)
 	if not keepsakes.is_empty():
 		draw_multiline_string(font, Vector2(202, 148), "Keepsakes: " + ", ".join(keepsakes) + ".", HORIZONTAL_ALIGNMENT_LEFT, 146, 6, 4, Color("6a5a3a"))
+
+## Settings (WB6.2): each row reads in words, with arrows either side; tap the left half to lower it, the right half
+## to raise it, or use the arrow keys. The right page explains the row you're on. Changes take effect at once and are
+## kept on this device (settings.gd).
+func _row_rect(i: int) -> Rect2:
+	return Rect2(32, 49 + i * 21, 155, 20)
+
+## The rows are the settings plus one more at the foot, "Controls", which opens the How to play page.
+func _settings_key(d: Vector2i) -> void:
+	if settings == null:
+		return
+	if d.y != 0:
+		row = wrapi(row + d.y, 0, Settings.ROWS.size() + 1)
+	elif row == Settings.ROWS.size():
+		want_howto.emit()
+	elif d.x != 0:
+		settings.step(Settings.ROWS[row][0], d.x)
+
+func _draw_settings() -> void:
+	_text("Settings", Vector2(28, 44), 8, INK, 163, HORIZONTAL_ALIGNMENT_CENTER)
+	if settings == null:
+		return
+	for i in Settings.ROWS.size():
+		var key: String = Settings.ROWS[i][0]
+		var r := _row_rect(i)
+		if i == row:
+			draw_rect(r, Color(0.85, 0.66, 0.36, 0.35))
+		_text(Settings.ROWS[i][1], r.position + Vector2(4, 8), 7, INK)
+		var y := r.position.y + 11
+		for side in [-1, 1]:                   # the arrows either side of the value
+			var c := Vector2(r.position.x + (8 if side < 0 else r.size.x - 8), y + 4)
+			draw_colored_polygon(PackedVector2Array([c + Vector2(3 * side, 0), c + Vector2(-2 * side, -3), c + Vector2(-2 * side, 3)]), INK if i == row else FAINT)
+		if Settings.BUS.has(key):              # a volume: ten notches, filled up to the level
+			var v := int(settings.values[key])
+			for n in 10:
+				draw_rect(Rect2(r.position.x + 20 + n * 11, y + 1, 9, 6), INK if n < v else Color("e4d6b4"))
+			_text("Off" if v == 0 else "", Vector2(r.position.x + 20, y + 7), 6, Color("a04030"), 108, HORIZONTAL_ALIGNMENT_CENTER)
+		else:
+			_text(settings.shown(key), Vector2(r.position.x + 14, y + 7), 7, INK, r.size.x - 28, HORIZONTAL_ALIGNMENT_CENTER)
+	var c := _row_rect(Settings.ROWS.size())             # the last row: the controls page
+	if row == Settings.ROWS.size():
+		draw_rect(c, Color(0.85, 0.66, 0.36, 0.35))
+	_text("Controls", c.position + Vector2(4, 8), 7, INK)
+	_text("Show the How to play page", c.position + Vector2(14, 18), 7, INK, c.size.x - 28, HORIZONTAL_ALIGNMENT_CENTER)
+	var on_controls := row == Settings.ROWS.size()
+	_text("Controls" if on_controls else Settings.ROWS[row][1], Vector2(193, 44), 8, INK, 163, HORIZONTAL_ALIGNMENT_CENTER)
+	var help: String = "The keys, the phone buttons and the gamepad buttons, side by side." if on_controls else Settings.HELP[Settings.ROWS[row][0]]
+	draw_multiline_string(font, Vector2(202, 60), help, HORIZONTAL_ALIGNMENT_LEFT, 146, 7, -1, Color("6a5a3a"))
+	draw_multiline_string(font, Vector2(202, 150), "These stay with this computer or phone, whichever journey you play. Your journey saves itself as you go.", HORIZONTAL_ALIGNMENT_LEFT, 146, 6, -1, FAINT)
 
 ## The date, or the festival when there is one (the real calendar says so; C cycles the world's own, the real one and
 ## each season held).
