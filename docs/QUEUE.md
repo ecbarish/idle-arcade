@@ -63,13 +63,36 @@ request; split a big one into steps ("WD4a: Thornwood's route") and open the nex
 | H1 | **Battles with real choices** (WD3) | docs/proposals/game-review-2026-10-09.md GR-2; `wildbond-godot/scripts/rules.gd`, `battle.gd` | Wildbond data and battle scripts | About 60 moves (from 22), a signature move per creature family, a few statuses (sleep, burn, guard...), each Warden fights with a plan; the pacing check (WB3.6b, about 12 wins a level) still holds; new checks for every status |
 | H2 | **Thornwood you can explore** (WD4a) | GR-3; docs/proposals/depth-and-first-person.md (maps are data) | `wildbond-godot/` Thornwood map data and scenes | Thornwood becomes a route, the settlement and one hidden pocket, with one spot you come back to with the right creature; old saves load in the right place; screenshots |
 | H3 | **The Lighthouse Spire and rematches** (WB5.1) | docs/wildbond-plan.md; browser Wildbond's Spire (`games/wildbond/`) | `wildbond-godot/` | The Spire opens after the Champion; floors of trainers; Wardens offer stronger rematches; checks |
-| H4 | **Starfall's own place** (SF2.6) | GR-5; docs/plans/starfall-village.md | `starfall-godot/` | A frontier stockade look and road layout instead of Larkhaven's, a map that scrolls; every building still reachable; old saves load; screenshots |
+| H4 | **Starfall's own place** (SF2.6) | GR-5; docs/art/starfall.md (the look, using the ART-SF pieces above); docs/plans/starfall-village.md | `starfall-godot/` | A frontier stockade look and road layout instead of Larkhaven's, a map that scrolls; every building still reachable; old saves load; screenshots |
 | H5 | **See the wilds sooner** (SF2.7), then **something by hand every day** (SF2.8) | GR-7, GR-8 | `starfall-godot/` | A small walkable stretch past the gate; the next jobs to master, then hire (the "master it, then hire" rule) |
 | H6 | **The rest of the areas you can explore** (WD4b onward) | as H2 | as H2 | One area per pull request, in journey order |
 | H7 | **The Unbound appear** (WB3.7) | docs/lore/wildbond-threads.md (check every line against it), docs/proposals/reputation-and-consequence.md | `wildbond-godot/` | First encounters and a choice to help or oppose; reputation begins; no new canon without the Design decisions thread (docs/DECISIONS.md) |
 
 Browser work for any AI is in "The road ahead" below. Claude's own threads keep to planning, reviews, the ending
 and the creature drawing while Claude's usage is low.
+
+## Art tasks (our own art; any AI may claim; reviewed by the Art direction thread)
+
+Evan, 2026-10-09: "we need a thread that develops our graphical elements and pushes the envelope for our designs and
+games." The Art direction thread sets each game's look and reviews the pieces; the drawing itself is open to any AI.
+Read the arcade guide [docs/art/README.md](art/README.md) and the game's look sheet first. Each task makes **picture
+files only** (transparent PNG, the game's palette, 1 px ink outline, light from the upper left, no anti-aliasing),
+drawn in an editor or by a Pillow script in `tools/art/` that can be rerun. Put them in
+`starfall-godot/assets/env/frontier/` and do **not** wire them into the game (that is SF2.6). Each PR shows a contact
+sheet: every piece beside a 16 by 24 person and its neighbours, on the moss ground. Claim as usual (a draft PR titled
+with the ID).
+
+| # | Task | Look | Make | Done when |
+|---|---|---|---|---|
+| ART-SF-1 | **Ground**: moss grass (4 variants), a mud road that joins up (straight, corners, ends, crossings, edges onto grass), packed-earth square, stone footing strip | [starfall.md](art/starfall.md), palette `docs/art/starfall/palette.gpl` | 16 px tiles in one sheet `ground.png`, plus a note of which tile is which | A 24 by 14 tile test patch with a road, a crossing and the square reads as the mock-up's ground, with no visible repeat |
+| ART-SF-2 | **Palisade, gate, watchtower**: pointed-log wall (straight, corner, end, a stake for wall to come), gate 48 x 48 open and shut, watchtower 32 x 80 lantern lit and unlit | as above | `palisade.png` (16 x 32 pieces), `gate.png`, `watchtower.png` | A wall run with a corner, the gate in it and the tower beside it on the contact sheet |
+| ART-SF-3 | **The pine edge**: three pine sizes (1, 2 and 3 tiles tall), stumps, ferns, rocks; a dense edge that tiles sideways | as above | `pines.png`, `forest_edge.png` | A forest edge behind the palisade that reads as dark pine, unlike Wildbond's round trees |
+| ART-SF-4 | **Guild Hall and Inn** (96 x 80 and 64 x 80): log walls, slate-blue shingle, the hall's banner, the inn's two storeys and sign; windows lit and unlit | starfall.md "Buildings" | `guild_hall.png`, `inn.png` (day and night windows as separate files) | Both on the contact sheet with a person at the door; the door is 12 x 20; footprints marked |
+| ART-SF-5 | **Smithy, apothecary, healer, tavern** (sizes in starfall.md), plus well, job board, training yard | as above | one PNG per building, `well.png`, `board.png`, `yard.png` | Each building recognisable by its silhouette alone (fill them in ink and check); footprints marked |
+| ART-SF-6 | **Props**: barrels, crates, firewood, lantern post lit and unlit, cart, bunting, an empty plot's stakes and string | as above | `props.png` | Props scattered on the test patch from ART-SF-1 |
+
+Order: 1 to 3 first (they change the whole screen), then 4 to 6. One task per PR. Other games get their sheet first,
+then tasks here.
 
 ## The road ahead (ready to claim by any AI; Evan, 2026-10-09)
 
