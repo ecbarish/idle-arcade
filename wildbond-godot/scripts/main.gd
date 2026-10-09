@@ -1051,11 +1051,7 @@ func _draw() -> void:
 		_draw_mist()
 	if spotter and spot_t < 0.9:
 		# the "!" over a trainer who has just seen you
-		var ex := spotter.pos + Vector2(4, -18 - minf(spot_t * 20.0, 4.0))
-		draw_rect(Rect2(ex, Vector2(8, 11)), Figures.OUTLINE)
-		draw_rect(Rect2(ex + Vector2(1, 1), Vector2(6, 9)), Color("fdf6e6"))
-		draw_rect(Rect2(ex + Vector2(3, 2), Vector2(2, 4)), Color("c83a2a"))
-		draw_rect(Rect2(ex + Vector2(3, 7), Vector2(2, 2)), Color("c83a2a"))
+		draw_texture(NOTICE, spotter.pos + Vector2(1, -20 - minf(spot_t * 20.0, 4.0)))   # the pack's bubble, as in Starfall
 	if map_name == "barn":
 		_draw_barn_light()
 	# the butterfly (or moth) and Ripplet's bubbles
@@ -1459,6 +1455,7 @@ func _update_ui() -> void:
 const FLOOR := preload("res://assets/env/floor.png")
 const NATURE := preload("res://assets/env/nature.png")
 const HOUSE := preload("res://assets/env/house.png")
+const NOTICE := preload("res://assets/emote/notice.png")   # the "!" over a trainer who has seen you (Ninja Adventure, CC0)
 const WATER := preload("res://assets/env/water.png")
 const BARN_SPRITE := Rect2(400, 224, 64, 80)  # Maren's barn in house.png: measured pixel by pixel (4x5 tiles, door in the 2nd column)
 func _tex(tex: Texture2D, cell: Vector2i, size: Vector2i, at: Vector2, mod := Color.WHITE) -> void:
@@ -2584,6 +2581,7 @@ func _check_spotted() -> void:
 			if p == me.tile:
 				spotter = n
 				walk_to.clear()
+				sfx.play("warn")
 				me.face = -n.face
 				# they walk over and stop in front of you; coming up or down the screen they keep a tile's gap, since
 				# people are taller than a tile and would otherwise stand on each other
