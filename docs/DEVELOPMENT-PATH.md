@@ -238,7 +238,7 @@ launcher shows the Godot previews as games (cards, covers, links).
 - [ ] AR2.3 [any] Game boxes (V3).
 - [ ] AR2.4 [local] Link and image check across guides and pages (Lane D3).
 - [ ] AR2.5 [ChatGPT] Studio text
-browser (E4).
+browser (E4). (claimed: Grok, 2026-10-09, grok/studio-text-browser; Lane C task C1)
 - [x] AR2.6 [Claude] Craft review and learning notes (docs/learning/): done 2026-10-09 (safe saves, smaller web pack,
   committed import settings, line-ending rules, one command for all checks, checks on GitHub).
 - [ ] AR2.7 blocked: needs Evan. Build the web previews on GitHub instead of committing them (docs/learning/web-and-shipping.md;

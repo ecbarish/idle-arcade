@@ -26,6 +26,7 @@ commit.
 | **P: planning** | Claude: "Priorities and direction" thread | `docs/PRIORITIES.md`, the order and owner tags in `docs/DEVELOPMENT-PATH.md`, this page's lanes, START-HERE "Where we are" and "Up next" | Scoring and placing ideas; refilling lanes |
 | **I: ideas and reviews** | Claude: "New game ideas" and "Improve existing games" threads | `docs/proposals/`, `docs/ideas.md`, `docs/research/` | Proposals only; lane P places them |
 | **D: local helper** | Ollama on Evan's PC | its own clone, read-only jobs | Lane D table below |
+| **C: the Studio** | Grok (Adam's assistant, 2026-10-09) | `studio.html`, `studio/`, `tests/studio.html` and `tests/studio-checks.js` | Lane C table below (E4, E5, E7 and playtesting) |
 
 **Files every lane touches, kept to one line each:** START-HERE's Session log (your dated line at the top), README's
 changelog (your entry at the top), COMMS (your message), and ticking your own deliverable in DEVELOPMENT-PATH. Anything
@@ -188,14 +189,14 @@ is merged without review. Queue tasks in `C:\Users\evanb\Local-AI\queue\` (one J
 | D2 | Draft ten dex lines for the newest catalogue creatures in the house style, for review | open (read-only; output in its log) | A person picks and edits |
 | D3 | Check every link and image in guides/ and playtest.html points to a file that exists | open (read-only) | |
 
-## Lane C: parked (a third assistant, if one joins): the Studio
+## Lane C: Grok (since 2026-10-09): the Studio
 
 Self-contained work that touches almost nothing the other lanes use: the Studio is one page (`studio.html`) plus small
 read-only hooks, and the accessibility audit is mostly reports and small fixes.
 
 | # | Task | Status | Notes |
 |---|---|---|---|
-| C1 | **E4** Studio text browser | open | In studio.html: browse and search every line of dialogue, quest text, item and creature name (read them from the games' data files); show where each is used. Read-only first; editing comes with E1's patch format |
+| C1 | **E4** Studio text browser | claimed by Grok, 2026-10-09, `grok/studio-text-browser` | In studio.html: browse and search every line of dialogue, quest text, item and creature name (read them from the games' data files); show where each is used. Read-only first; editing comes with E1's patch format |
 | C2 | **E5** Creature and quest viewers with the test rules as validators | open | Studio pages that list species, moves, evolutions, wild tables and quests, flagging anything the checks in tests/ would reject |
 | C4 | **E7** Lighting and music tuner | open | Studio sliders for a zone's fog, shadow strength and grade, writing to localStorage only; previews in an iframe |
 | C5 | While you wait | always | Playtest a game end to end and file what you find as GitHub issues (bug / suggestion templates) |
