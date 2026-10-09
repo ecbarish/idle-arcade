@@ -12,7 +12,19 @@ const INK := Color("2a2230")
 const PAPER := Color("f8f2e4")
 const EL_COL := { "Ember": Color("e0602a"), "Tide": Color("3a8fd8"), "Grove": Color("5d9a3e") }
 const SPEED := 2.5                            # battle time runs faster than real time between turns (outcomes are unchanged)
-const MENU := ["Fight", "Guard", "Rally", "Bond", "Bag", "Run"]
+const MENU := ["Fight", "Guard", "Orders", "Bond", "Bag", "Run"]
+## Tamer orders (docs/proposals/creature-catalogue-and-evolution.md §4): Rally for everyone, one from your family
+## (the register's heritage), and orders people teach you along the way (Toren's Steady). Each costs orders, which
+## come back as the battle goes on.
+const ORDERS := {
+	"rally": { "name": "Rally", "cost": 2, "text": "Call out to your whole team: everyone recovers a little and trusts you more." },
+	"patch": { "name": "Patch Up", "cost": 1, "text": "Farmfolk know how to look after things that can't say what's wrong: your most hurt creature recovers, and poison eases." },
+	"tide": { "name": "Read the Tide", "cost": 1, "text": "Coastfolk see a wave coming. Your team braces by itself for the foe's next big attack." },
+	"firm": { "name": "Stand Firm", "cost": 2, "text": "Highland grit: your team braces and hits harder for a few moments." },
+	"opening": { "name": "Find an Opening", "cost": 2, "text": "A wanderer's eye for a gap: another of your creatures acts at once." },
+	"steady": { "name": "Steady", "cost": 1, "text": "Toren's way: a calm voice. Poison and slowness leave your team." },
+}
+const FAMILY_ORDER := { "farm": "patch", "coast": "tide", "highland": "firm", "wander": "opening" }
 
 var looks: Dictionary = {}                    # species id -> body plan (main.gd CREATURE_LOOKS)
 var floor_tex: Texture2D
@@ -40,6 +52,9 @@ var rng := RandomNumberGenerator.new()
 var font: Font
 var demo := false
 var heritage := "farm"                        # your family's heritage (main.gd): a small gift in bonding (register.gd FAMILY_TEXT)
+var taught: Array = []                        # orders people have taught you (main.gd), beyond Rally and your family's
+var order_i := 0
+var tide_ready := false                       # Read the Tide: the next gathered attack is braced for
 var area := ""                                 # the area the battle happens in (main.gd sets it): its sky and skyline
 var max_level := 15                           # the level cap (main.gd sets it from your badges, CAP_TABLE)
 var bag: Dictionary = { "lures": 0, "berries": 0 }  # the satchel (main.gd owns it): lures for Bond, berries for Bag
@@ -61,6 +76,8 @@ func unit(c: Dictionary, side: String) -> Dictionary:
 func open(battle_kind: String, team: Array, foe_team: Array, who: String) -> void:
 	kind = battle_kind
 	trainer = who
+	tide_ready = false
+	order_i = 0
 	allies = team.filter(func(c): return c.hp > 0).map(func(c): return unit(c, "a"))
 	foes = foe_team.map(func(c): return unit(c, "f"))
 	log_lines.clear()
@@ -204,6 +221,12 @@ func _act(u: Dictionary, forced: String, mult: float) -> void:
 	if u.side == "f" and forced == "" and (mv.kind == "aoe" or int(mv.get("pow", 0)) >= 80) and tele.is_empty():   # support moves have no power (like the browser, they never count)
 		tele = { "u": u, "m": m, "t": 1.6 }
 		say("%s is gathering power for %s!" % [u.c.name, mv.name])
+		if tide_ready:
+			tide_ready = false                       # Read the Tide: you saw it coming
+			for a in living("a"):
+				a.buff.guard = 3.0
+				a.buff.guardCmd = 1
+			say("You read it like a wave. Your team is already braced.")
 		_beat(1.0)
 		return
 	_resolve(u, m, mult)
@@ -282,17 +305,9 @@ func _choose(i: int) -> void:
 				a.buff.guard = 3.0
 				a.buff.guardCmd = 1
 			say("Guard! Your team braces for the hit.")
-		"Rally":
-			if orders < 2:
-				say("Rally needs two orders. They come back as the battle goes on.")
-				return
-			orders -= 2
-			for a in living("a"):
-				var hp := roundi(a.st.hp * 0.2)
-				a.c.hp = mini(a.st.hp, a.c.hp + hp)
-				R.add_bond(a.c, 1.0)
-				floats.append({ "u": a, "txt": "+%d" % hp, "col": Color("7cf08a"), "age": 0.0 })
-			say("You rally your team. Everyone recovers.")
+		"Orders":
+			order_i = 0
+			_go_to("orders")
 		"Bond":
 			if kind != "wild":
 				say("You can't bond with another tamer's creature.")
@@ -332,6 +347,66 @@ func _choose(i: int) -> void:
 				_end("fled")
 			else:
 				say("%s blocks the way: \"No running from a tamer battle!\"" % trainer)
+
+## The orders you know: Rally, your family's order, then what people have taught you.
+func known_orders() -> Array:
+	var out: Array = ["rally"]
+	if FAMILY_ORDER.has(heritage):
+		out.append(FAMILY_ORDER[heritage])
+	for o in taught:
+		if ORDERS.has(o) and not o in out:
+			out.append(o)
+	return out
+
+## Give an order. It costs orders (they come back as the battle goes on) and doesn't use your creature's turn.
+func use_order(id: String) -> bool:
+	var o: Dictionary = ORDERS[id]
+	if orders < int(o.cost):
+		say("%s needs %d order%s. They come back as the battle goes on." % [o.name, int(o.cost), "" if int(o.cost) == 1 else "s"])
+		return false
+	var team := living("a")
+	match id:
+		"rally":
+			for a in team:
+				var hp := roundi(a.st.hp * 0.2)
+				a.c.hp = mini(a.st.hp, a.c.hp + hp)
+				R.add_bond(a.c, 1.0)
+				floats.append({ "u": a, "txt": "+%d" % hp, "col": Color("7cf08a"), "age": 0.0 })
+			say("You rally your team. Everyone recovers.")
+		"patch":
+			var low: Dictionary = team[0]
+			for a in team:
+				if float(a.c.hp) / a.st.hp < float(low.c.hp) / low.st.hp:
+					low = a
+			var hp := roundi(low.st.hp * 0.25)
+			low.c.hp = mini(low.st.hp, low.c.hp + hp)
+			low.dots.clear()
+			floats.append({ "u": low, "txt": "+%d" % hp, "col": Color("7cf08a"), "age": 0.0 })
+			say("You kneel by %s and see to it, the way your family always did. It recovers %d." % [low.c.name, hp])
+		"tide":
+			tide_ready = true
+			say("You watch the foe the way you'd watch the sea. When its big attack comes, your team will be ready.")
+		"firm":
+			for a in team:
+				a.buff.guard = 3.0
+				a.buff.guardCmd = 1
+				a.buff.dmg = 4.0
+			say("Stand firm! Your team plants its feet, braced and ready to hit back.")
+		"opening":
+			var other: Array = team.filter(func(a): return a != wait_u)
+			if other.is_empty():
+				say("There's no one else to step in.")
+				return false
+			other[0].atb = R.ACT_AT
+			say("You spot a gap. %s darts in to act at once." % other[0].c.name)
+		"steady":
+			for a in team:
+				a.dots.clear()
+				a.buff.slow = 0.0
+				R.add_bond(a.c, 0.5)
+			say("You speak low and slow, the way Toren showed you. Your team steadies.")
+	orders -= float(o.cost)
+	return true
 
 func _use_move(m: String) -> void:
 	if wait_u.cds.get(m, 0.0) > 0:
@@ -413,6 +488,21 @@ func _input(e: InputEvent) -> void:
 			elif ok: _use_move(mv[move_i])
 			elif back: _go_to("choose")
 			else: move_i = _grid_move(move_i, key, mv.size(), 2)
+		"orders":
+			var ol := known_orders()
+			if click:
+				var hit := false
+				for i in ol.size():
+					if _move_rect(i).has_point(p):
+						hit = true
+						if i == order_i:
+							if use_order(ol[i]): _go_to("choose")
+						else: order_i = i
+				if not hit: _go_to("choose")
+			elif ok:
+				if use_order(ol[order_i]): _go_to("choose")
+			elif back: _go_to("choose")
+			else: order_i = _grid_move(order_i, key, ol.size(), 2)
 		"beat":
 			if ok or click: state_t = beat_t                 # skip ahead
 		"results":
@@ -575,12 +665,12 @@ func _draw() -> void:
 	match state:
 		"choose":
 			_text("What will %s do?" % wait_u.c.name, Vector2(16, 180), 9, INK)
-			_text("Orders ready: %d of 3  (Guard uses 1, Rally 2)" % int(orders), Vector2(16, 198), 7, Color("6a5a4a"))
+			_text("Orders ready: %d of 3  (Guard uses 1)" % int(orders), Vector2(16, 198), 7, Color("6a5a4a"))
 			for i in MENU.size():
 				var r := _menu_rect(i)
 				var on := i == menu_i
 				draw_rect(r, INK if on else Color("e8dcc4"))
-				var dim: bool = (MENU[i] == "Guard" and orders < 1) or (MENU[i] == "Rally" and orders < 2) or (MENU[i] in ["Run", "Bond"] and kind != "wild") or (MENU[i] == "Bond" and int(bag.get("lures", 0)) <= 0) or (MENU[i] == "Bag" and int(bag.get("berries", 0)) <= 0)
+				var dim: bool = (MENU[i] == "Guard" and orders < 1) or (MENU[i] == "Orders" and orders < 1) or (MENU[i] in ["Run", "Bond"] and kind != "wild") or (MENU[i] == "Bond" and int(bag.get("lures", 0)) <= 0) or (MENU[i] == "Bag" and int(bag.get("berries", 0)) <= 0)
 				_text(MENU[i], r.position + Vector2(0, 12), 8, (PAPER if on else INK) if not dim else Color("9a8a7a"), r.size.x, HORIZONTAL_ALIGNMENT_CENTER)
 		"moves":
 			var mv := R.moves_of(wait_u.c)
@@ -598,6 +688,19 @@ func _draw() -> void:
 			var info_r := Rect2(208, 166, 164, 42)
 			draw_multiline_string(font, info_r.position + Vector2(4, 10), "%s: %s.%s" % [sel.name, desc,
 				" Resting." if wait_u.cds.get(mv[move_i], 0.0) > 0 else ""], HORIZONTAL_ALIGNMENT_LEFT, info_r.size.x - 8, 7, -1, INK)
+		"orders":
+			var ol := known_orders()
+			for i in ol.size():
+				var r := _move_rect(i)
+				var on := i == order_i
+				var o: Dictionary = ORDERS[ol[i]]
+				var short: bool = orders < int(o.cost)
+				draw_rect(r, INK if on else Color("e8dcc4"))
+				_text("%s (%d)" % [o.name, int(o.cost)], r.position + Vector2(5, 12), 8, (PAPER if on else INK) if not short else Color("9a8a7a"))
+			var so: Dictionary = ORDERS[ol[order_i]]
+			var oinfo := Rect2(208, 166, 164, 42)
+			draw_multiline_string(font, oinfo.position + Vector2(4, 10), "%s Orders ready: %d." % [so.text, int(orders)],
+				HORIZONTAL_ALIGNMENT_LEFT, oinfo.size.x - 8, 7, -1, INK)
 		"capture":
 			_text("Calm %s: press when the marker is in the green." % cap.u.c.name, Vector2(16, 180), 8, INK)
 			var bar := Rect2(16, 188, 352, 10)

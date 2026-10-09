@@ -582,6 +582,33 @@ func _run() -> void:
 	var d_band: int = main.R.damage(att, { "c": tgt, "st": main.R.stats(tgt), "buff": {}, "side": "a" }, main.DATA.MOVES.emberSnap, 1.0, 0.5, 1.0).d
 	check(d_band < d_bare, "an Ember-Glass Band: Ember moves hurt less (%d against %d)" % [d_band, d_bare])
 	check(main.Figures._gear_parts(main.Figures._wolf({}, main.CREATURE_LOOKS.cindercub), "bell").size() > 0, "gear is drawn on the body, whatever its shape")
+	# ---- tamer orders: Rally, your family's order, and orders people teach you
+	var ob = main.battle
+	ob.heritage = "coast"
+	ob.taught = ["steady"]
+	check(ob.known_orders() == ["rally", "tide", "steady"], "orders: Rally, the coast family's Read the Tide, and Toren's Steady (%s)" % [ob.known_orders()])
+	ob.heritage = "farm"
+	ob.taught = []
+	check(ob.known_orders() == ["rally", "patch"], "a farm family's tamer knows Patch Up")
+	var o_team: Array = [main.R.make("cindercub", 12, { "rar": 1 }, main.rng), main.R.make("poolkit", 12, { "rar": 1 }, main.rng)]
+	ob.open("wild", o_team, [main.R.make("mosshog", 10, { "rar": 1 }, main.rng)], "")
+	ob.wait_u = ob.allies[0]
+	ob.orders = 3.0
+	ob.allies[1].c.hp = 5
+	ob.allies[1].dots = [{ "per": 2, "left": 3, "tick": 1.0 }]
+	check(ob.use_order("patch") and ob.allies[1].c.hp > 5 and ob.allies[1].dots.is_empty() and ob.orders == 2.0, "Patch Up: the most hurt creature recovers and its poison eases, for one order")
+	ob.heritage = "coast"
+	check(ob.use_order("tide") and ob.tide_ready, "Read the Tide: ready for the next big attack")
+	ob.orders = 0.0
+	check(not ob.use_order("rally"), "not enough orders: nothing happens, and you're told why")
+	ob.orders = 3.0
+	ob.heritage = "wander"
+	ob.allies[1].atb = 0.0
+	check(ob.use_order("opening") and ob.allies[1].atb >= main.R.ACT_AT, "Find an Opening: another of your creatures acts at once")
+	ob.visible = false
+	ob.state = "off"
+	main.battle.heritage = main.heritage()
+	check(main.TEACHERS.has("ember") and main.TEACHERS.ember.order == "steady", "Toren teaches Steady with the Ember Badge")
 	wearer.erase("gear")
 	main.gear_owned.clear()
 	main._lead_look()
