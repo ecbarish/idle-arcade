@@ -109,6 +109,7 @@ var place_t := 0.0                           # seconds since you arrived somewhe
 var title: Control
 var touch: Control                               # the phone pad (touch_pad.gd)
 var howto: Control                               # the How to play page (howto.gd)
+var turn_card: Control                             # covers the game while a phone is held upright
 var show_howto := true                           # it opens before a new journey (the checks turn it off)
 var howto_then_title := false                    # opened from the title page: go back to it after
 var settings := Settings.new()                   # sound, text size, battle pace, phone buttons (settings.gd, WB6.2)
@@ -243,6 +244,11 @@ func _ready() -> void:
 	add_child(thumbs)
 	touch = TouchPad.new()
 	thumbs.add_child(touch)
+	var tip := CanvasLayer.new()                   # and "turn your phone sideways" above even that
+	tip.layer = 6
+	add_child(tip)
+	turn_card = preload("res://scripts/turn_card.gd").new()
+	tip.add_child(turn_card)
 	title = Title.new()
 	$UI.add_child(title)
 	title.chosen.connect(_on_title)
