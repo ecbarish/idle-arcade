@@ -1,7 +1,7 @@
 'use strict';
 /* Otherworld: state, saves, the story runner, the Between (choose a world, a gift, a name and look), the status
    window, endings, soul memories and rebirth (by choice after an ending, or on death). docs/otherworld-design.md */
-const VERSION = '0.3.0';
+const VERSION = '0.4.0';
 const STORY_NAMES = ['Ren', 'Aki', 'Sora', 'Kai', 'Yuna', 'Haru'];
 const HAIR = ['#2a1a12', '#7a4a2a', '#d8b06a', '#c84a3a', '#e8e8f0', '#4a5aa8'];
 const SKIN = ['#f6d8c0', '#f1c9a0', '#d8a882', '#a8744e', '#7a4a2e'];
@@ -59,7 +59,7 @@ function finish(endId) {
   const e = ENDINGS[endId], life = S.life;
   if (!e || !life) return;
   life.ending = endId; save();
-  D.play([...(EPILOGUES[endId] || []), ...townEpilogue(life, endId)], () => {
+  D.play([...endingLines(life, endId), ...townEpilogue(life, endId)], () => {
     if (S.life !== life) return;
     const learned = e.keep.filter(k => !S.mem[k]);
     for (const k of e.keep) S.mem[k] = true;

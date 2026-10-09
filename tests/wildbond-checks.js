@@ -1138,6 +1138,14 @@ function wildbondChecks() {
     });
   }
   check('T40 signs retain road guidance and make no definitive accusation about the fading',()=>MAPS.stillreed.signs['12,7'].includes('LOW WATER')&&MAPS.hollowecho.signs['7,5'].includes('wall is flat')&&MAPS.sunthread.signs['27,4'].includes('one knot')&&MAPS.farwatch.signs['14,5'].includes('missing lines have not been guessed'));
+  // T45: lossless heritage handoff, every early NPC and Warden, with the shared route retained.
+  const earlyPeople=['larkhaven','thornwood','saltmarsh','emberfall','cloudglass'].flatMap(area=>MAPS[area].npcs.map(n=>({who:n.who,entry:n,area})));
+  const earlyWardens=[['warden','isolde'],['warden2','nerys'],['warden3','toren'],['warden4','vessa']].map(([id,who])=>({who,entry:STORY.find(b=>b.id===id),area:id}));
+  check('T45 covers eleven existing people and four Wardens, with no duplicate recognition text',()=>earlyPeople.length===11&&earlyWardens.length===4&&new Set(Object.values(EARLY_HERITAGE_LINES).flat()).size===60);
+  for(const {who,entry,area} of [...earlyPeople,...earlyWardens]){
+    check(area+'/'+who+': shared lines and all four plain-JSON origins retained',()=>entry.lines.length>0&&JSON.stringify(entry.byHeritage)===JSON.stringify(JSON.parse(JSON.stringify(entry.byHeritage)))&&Object.keys(entry.byHeritage).sort().join(',')==='coast,farm,highland,wander');
+    for(const heritage of ['farm','coast','highland','wander'])check(who+'/'+heritage+': attributed, readable, original recognition',()=>{const lines=entry.byHeritage[heritage];return lines.length===1&&lines[0][0]===who&&CAST[who]&&lines[0][1].length>=50&&lines[0][1].length<=220&&!/[\n\r]/.test(lines[0][1]);});
+  }
   return checks;
 }
 

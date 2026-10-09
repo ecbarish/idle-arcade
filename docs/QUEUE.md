@@ -88,10 +88,11 @@ index.html or style.css until those phases are merged.
 | A13 | **T39** Otherworld: Hearthmere, the second world | done, merged 2026-10-08 (Otherworld v0.3.0, PR #63) | docs/ROADMAP.md T39 |
 | A14 | **T40** Wildbond areas 5-8: woven clues, signs and chatter (data; flows into the Godot version) | done, merged 2026-10-08 (Wildbond v1.8.0, PR #64) | docs/ROADMAP.md T40 |
 | A15 | **OW0c** Otherworld: the Ashen Throne, complete third life | done, merged 2026-10-08 (Otherworld v0.3.0, PR #65) | docs/otherworld-design.md: Kael, three gifts with costs, endings and cross-world memories; Evan authorized further development |
-| A16 | **T41** Realmbound in the game window, part 2: pages become places | claimed: Codex, 2026-10-08, `codex/realmbound-window-2` | docs/ROADMAP.md T41 |
-| A17 | **T42** Otherworld: memories that matter across lives, toward a systemic world | open (2026-10-08) | docs/ROADMAP.md T42 |
-| A18 | **T43** The creature catalogue reaches Realmbound | claimed: Codex, 2026-10-08, codex/catalogue-realmbound | docs/ROADMAP.md T43 |
-| A19 | **T44** Accessibility pass on the browser games (L10) | claimed: Codex, 2026-10-08, codex/accessibility | docs/ROADMAP.md T44 |
+| A16 | **T41** Realmbound in the game window, part 2: pages become places | done, merged 2026-10-09 (Realmbound v1.7.0) | docs/ROADMAP.md T41 |
+| A17 | **T42** Otherworld: memories that matter across lives, toward a systemic world | done, merged 2026-10-09 (Otherworld v0.4.0) | docs/ROADMAP.md T42 |
+| A18 | **T43** The creature catalogue reaches Realmbound | done, merged 2026-10-09 (Realmbound v1.7.0) | docs/ROADMAP.md T43 |
+| A19 | **T44** Accessibility pass on the browser games (L10) | done, merged 2026-10-09 | docs/ROADMAP.md T44 |
+| A20 | **T45** Early-road heritage dialogue (WB2.6) | done, merged 2026-10-09 (Wildbond v1.8.1) | Browser data and ledger; no Godot edits |
 | A21 | **T46** Put the new previews on the arcade shelf (AR2.2) | claimed: Codex, 2026-10-09, codex/arcade-previews | Stacked after T44; no Godot/export edits |
 | A8 | While you wait | always | Lore and dex text polish, more checks, bugs from GitHub issues |
 | — | Done | — | A2 L7a Wildbond balance, A3 L7b Realmbound balance, R9 heroic loot review (all merged 2026-10-07) |
@@ -126,6 +127,7 @@ is merged without review. Queue tasks in `C:\Users\evanb\Local-AI\queue\` (one J
 | # | Task | Status | Notes |
 |---|---|---|---|
 | D0 | **Make the queue runner work**: switch Run-LocalAgent.ps1 from Codex to OpenCode (`opencode run`, OPENCODE_CONFIG) | done, merged 2026-10-08 (PR #66) | The model can't drive Codex's tools; OpenCode works |
+| D0b | **Preserve permission precedence in runtime overrides** (ChatGPT) | claimed: Codex, 2026-10-08, `codex/local-helper-permissions` | Ordered PowerShell policy; keep wildcard denial before explicit tool rules |
 | D1 | List every player-facing string in games/otherworld/js/ that breaks docs/CREATIVE.md "Writing for players" (lowercase names, rule words in story text) | open (read-only) | Claude or ChatGPT checks the list |
 | D2 | Draft ten dex lines for the newest catalogue creatures in the house style, for review | open (read-only; output in its log) | A person picks and edits |
 | D3 | Check every link and image in guides/ and playtest.html points to a file that exists | open (read-only) | |
@@ -146,4 +148,3 @@ read-only hooks, and the accessibility audit is mostly reports and small fixes.
 
 Lanes are re-filled by Claude from PROJECTS.md when they run low. Evan can reorder anything, or say "Lane A: do X
 next". Status here and in PROJECTS.md should agree; when a task is merged, Claude marks both `done`.
-

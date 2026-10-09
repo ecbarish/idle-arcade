@@ -11,6 +11,15 @@ Branch: codex/arcade-previews (stacked after T44/#71; launcher overlaps).
 - Primary landscape places enter the new versions; both versions remain on the road and in the hall. Preview cards never load the engines before the player chooses them or claim a Classic save is a preview save.
 - Do not edit Godot, play/ exports, service worker, save schemas or versions. Keyboard links, phone through ultrawide, reduced motion, all eight pages, new launcher checks; README and one Session line.
 
+### T45: Wildbond, early-road heritage recognition (WB2.6)
+- [x] Built by Codex, 2026-10-08; PR #72 for review, not merged. 60 exported reactions; all eight pages pass. Godot dispatch remains with Claude.
+Why: the chosen roots should change who confides in the tamer while keeping every route to the truth open (heritage proposal and thread ledger).
+Read first: docs/proposals/wildbond-heritage.md, docs/lore/wildbond-threads.md, docs/CREATIVE.md.
+Branch: codex/wildbond-early-heritages.
+- Add one plain-JSON byHeritage line for each farm/coast/highland/wander origin to all 11 existing map NPCs in Larkhaven and areas 1-4, and the four Warden STORY entries. Append-only handoff, same shape as T40.
+- Preserve base lines, trainer battles, badges, maps, save data and all unresolved mysteries. Classic has no heritage dispatcher; Claude wires the exported lines into Godot. Never edit Godot or its exporter.
+- Record every clue in the ledger. Add content/JSON checks and inspect the actual export from an isolated browser; all eight pages pass. README and Session log only, no versions.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a
@@ -185,6 +194,7 @@ Follows docs/plans/realmbound-in-window.md "Follow-ups" (T38). Branch `codex/rea
   eight test pages pass; before/after screenshots.
 
 ### T42: Otherworld, memories that matter across lives (O2)
+- [x] Built by Codex in PR #69 (2026-10-08), ready for review; no version bump. See docs/otherworld-memories.md.
 docs/otherworld-design.md ("A life, step by step" 7, "Rebirth", and the "Not predetermined" direction: systemic
 first). Branch `codex/otherworld-memories`.
 - Each memory the soul carries changes something real in other worlds: a choice that only appears because you

@@ -85,3 +85,8 @@ save and reload around choices, rebirth keeps exactly what the preview promised)
 ## Third browser life, ready for review (2026-10-08)
 
 Hearthmere is ready in PR #63; the Ashen Throne is ready in PR #65. All three approved worlds now have complete authored lives on the stacked branch. See [the Ashen implementation record](otherworld-ashen.md) for canon, gift costs, Return save semantics, outcomes and validation. These compact lives establish the narrative loop; systemic skill progression and walkable exploration remain later work.
+
+
+## Memories and people, ready for review (2026-10-08)
+
+T42, PR #69: every existing memory changes an action in another world; two people per world carry wants and the history of the current life. Relationships reset at rebirth and Return, while knowledge keeps its existing rules. See [the implementation record](otherworld-memories.md) for the canon, memory matrix, save defaults and validation. This remains an authored step toward the systemic direction, with no AI service.

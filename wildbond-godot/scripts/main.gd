@@ -112,7 +112,7 @@ var npc_info := {}                           # id -> { data from the map, beaten
 var badges: Array = []
 var spotter: Mover = null                    # a trainer who has seen you and is walking over
 var spot_t := 0.0
-const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass"]    # the maps the Godot version has so far
+const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed"]    # the maps the Godot version has so far
 var starters: Array[Mover] = []
 var partner: Mover = null
 var map_name := "larkhaven"
@@ -1042,7 +1042,7 @@ func _draw_outdoor() -> void:
 	# 2. fences and the signpost (drawn in code; they already looked right)
 	for y in rows.size():
 		for x in rows[0].length():
-			if rows[y][x] in "=P":
+			if rows[y][x] in "=Pjq":
 				_draw_tile(x, y, rows[y][x])
 	# 3. houses, the barn and trees: standing objects with a footprint (so a 3D renderer can stand them up later)
 	_draw_structures()
@@ -1303,7 +1303,22 @@ func _draw_tile(x: int, y: int, ch: String) -> void:
 				draw_rect(Rect2(o + Vector2(9, y0), Vector2(1, y1 - y0)), rail)
 			draw_rect(Rect2(o + Vector2(6, 4), Vector2(4, 10)), Color("7a5028"))   # the post
 			draw_rect(Rect2(o + Vector2(6, 4), Vector2(4, 1)), Color("b8885a"))
-		"P":
+		"j":
+			# Stillreed's ferry skiff, moored at the landing while its rope is mended: a shallow green hull, plank seats
+			var hull := Color("344c3f")
+			draw_rect(Rect2(o + Vector2(4, 2), Vector2(8, 2)), hull)
+			draw_rect(Rect2(o + Vector2(2, 4), Vector2(12, 8)), hull)
+			draw_rect(Rect2(o + Vector2(4, 12), Vector2(8, 2)), hull)
+			draw_rect(Rect2(o + Vector2(4, 4), Vector2(8, 8)), Color("ae8553"))
+			draw_rect(Rect2(o + Vector2(4, 4), Vector2(8, 1)), Color("d8b982"))
+			draw_rect(Rect2(o + Vector2(4, 6), Vector2(8, 1)), Color("e0c28e"))         # the seats
+			draw_rect(Rect2(o + Vector2(4, 10), Vector2(8, 1)), Color("e0c28e"))
+			draw_rect(Rect2(o + Vector2(2, 4), Vector2(1, 8)), Color("57745b"))
+			draw_rect(Rect2(o + Vector2(12, 2), Vector2(1, 10)), Color("cfa96d"))       # the oar
+			draw_rect(Rect2(o + Vector2(11, 1), Vector2(3, 2)), Color("e0c28e"))
+			draw_rect(Rect2(o + Vector2(7, 13), Vector2(1, 3)), Color("ded2a7"))        # the rope to the landing
+			draw_rect(Rect2(o + Vector2(1, 14), Vector2(14, 1)), Color(1, 1, 1, 0.25))  # a ripple at the waterline
+		"P", "q":
 			# the ground underneath comes from the tileset (_draw_ground); the sign gets an outline so it reads on any ground
 			draw_rect(Rect2(o + Vector2(6, 7), Vector2(4, 9)), Figures.OUTLINE)
 			draw_rect(Rect2(o + Vector2(7, 7), Vector2(2, 8)), Color("6b4a2a"))
@@ -1397,6 +1412,20 @@ func _draw_ground(x: int, y: int, ch: String) -> void:
 		_tex(NATURE, Vector2i(5 - n % 2, 10), Vector2i.ONE, o + Vector2(4 + sway, 2))
 	elif ch == "~":
 		_draw_water(x, y, o, n)
+	elif ch == "j" or ch == "q":
+		_draw_water(x, y, o, n)                                                    # the skiff and its sign stand in the river
+	elif ch == "b":
+		# a wooden footbridge over the river: water underneath, boards across, a rail on each side
+		_tex(WATER, Vector2i(11, 0), Vector2i.ONE, o)
+		draw_rect(Rect2(o + Vector2(0, 2), Vector2(16, 12)), Color("6b4a2a"))
+		for k in 4:
+			draw_rect(Rect2(o + Vector2(k * 4, 3), Vector2(3, 10)), Color("a07048").darkened(0.08 * ((x + k) % 2)))
+		draw_rect(Rect2(o + Vector2(0, 1), Vector2(16, 2)), Color("4e3220"))          # the rails
+		draw_rect(Rect2(o + Vector2(0, 13), Vector2(16, 2)), Color("4e3220"))
+		if tile_at(Vector2i(x - 1, y)) != "b":
+			draw_rect(Rect2(o + Vector2(0, 0), Vector2(2, 16)), Color("4e3220"))     # posts where it meets the bank
+		if tile_at(Vector2i(x + 1, y)) != "b":
+			draw_rect(Rect2(o + Vector2(14, 0), Vector2(2, 16)), Color("4e3220"))
 func _draw_structures() -> void:
 	var rows: Array = cur_map()
 	var doors: Array[Vector2i] = []
@@ -1475,13 +1504,13 @@ func _draw_water(x: int, y: int, o: Vector2, n: int) -> void:
 		_tex(WATER, Vector2i(11, 2), Vector2i.ONE, o)                              # a glint of light
 	var shore := Color("d8c088")
 	var edge := Color("4a6a8a")
-	if tile_at(Vector2i(x, y - 1)) != "~":
+	if tile_at(Vector2i(x, y - 1)) not in ["~", "j", "q", "b"]:
 		draw_rect(Rect2(o, Vector2(16, 3)), shore); draw_rect(Rect2(o + Vector2(0, 3), Vector2(16, 1)), edge)
-	if tile_at(Vector2i(x, y + 1)) != "~":
+	if tile_at(Vector2i(x, y + 1)) not in ["~", "j", "q", "b"]:
 		draw_rect(Rect2(o + Vector2(0, 13), Vector2(16, 3)), shore); draw_rect(Rect2(o + Vector2(0, 12), Vector2(16, 1)), edge)
-	if tile_at(Vector2i(x - 1, y)) != "~":
+	if tile_at(Vector2i(x - 1, y)) not in ["~", "j", "q", "b"]:
 		draw_rect(Rect2(o, Vector2(3, 16)), shore); draw_rect(Rect2(o + Vector2(3, 0), Vector2(1, 16)), edge)
-	if tile_at(Vector2i(x + 1, y)) != "~":
+	if tile_at(Vector2i(x + 1, y)) not in ["~", "j", "q", "b"]:
 		draw_rect(Rect2(o + Vector2(13, 0), Vector2(3, 16)), shore); draw_rect(Rect2(o + Vector2(12, 0), Vector2(1, 16)), edge)
 
 # ---------------------------------------------------------------- out in the wild: items, tall grass, finds, catching
@@ -1629,10 +1658,10 @@ func _skip_opening() -> void:
 		_place_ranch()
 	var st: Array = DATA.MAPS[start].get("start", [16, 12, "up"] if start == "larkhaven" else [13, 14, "up"])
 	if start != "thornwood":
-		var order := ["thornwood", "saltmarsh", "emberfall", "cloudglass"]
+		var order := ["thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed"]
 		var at := maxi(1, order.find(start))
-		badges = ["thorn", "tide", "ember"].slice(0, at)
-		team[0].lvl = [5, 14, 24, 34][at]
+		badges = ["thorn", "tide", "ember", "beacon"].slice(0, at)
+		team[0].lvl = [5, 14, 24, 34, 46][at]
 		team[0].hp = R.stats(team[0]).hp
 	if "--photo" in OS.get_cmdline_user_args():      # pictures of the world: nobody asks to evolve mid-shot
 		for c in team: c["hold"] = 999
@@ -1646,7 +1675,7 @@ func _skip_opening() -> void:
 			maren.pos = Vector2(maren.tile) * TILE
 			maren.path.clear()).call_deferred()
 	if "--colour" in OS.get_cmdline_user_args():     # the area with its colour fully back (for pictures of the restored valley)
-		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "barn"]:
+		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "barn"]:
 			restore.append({ "where": m, "at": Vector2(192, 108), "r": 5000.0, "goal": 5000.0 })
 	if "--bench" in OS.get_cmdline_user_args():      # at Maren's workbench, the partner trying on a harness (-- --skip-opening --bench)
 		for c in team: c["hold"] = 999
@@ -1854,6 +1883,10 @@ func _talk_here() -> bool:
 		if n.where == map_name and (me.tile - n.tile).length() <= 1.01:
 			var info: Dictionary = npc_info[n.id]
 			n.face = me.tile - n.tile
+			var known := _heritage_line(n.id, info.data)
+			if known != "" and not story_done.has("her:" + n.id):
+				story_done["her:" + n.id] = true       # they recognise your family, once (T45 lines, from the game data)
+				say(n.id, _fill(known))
 			if info.warden and info.beaten:
 				say(n.id, _fill(DATA.MAPS[map_name].get("wardenDone", "The gate is yours, {name}.")))
 			elif not info.warden and not info.data.has("trainer"):
@@ -1861,10 +1894,6 @@ func _talk_here() -> bool:
 				for b in badges:                       # what folk say changes with your badges (byBadge)
 					if info.data.get("byBadge", {}).has(b):
 						talk = info.data.byBadge[b]
-				var known: String = HERITAGE_TALK.get(n.id, {}).get(heritage(), "")
-				if known != "" and not story_done.has("her:" + n.id):
-					story_done["her:" + n.id] = true   # they recognise your family, once
-					say(n.id, _fill(known))
 				for l in talk:
 					say(l[0], _fill(l[1]))
 			elif info.beaten:
@@ -1878,7 +1907,7 @@ func _talk_here() -> bool:
 			_visit(m)
 			return true
 	var ahead: Vector2i = me.tile + me.face
-	if tile_at(ahead) == "P":
+	if tile_at(ahead) in ["P", "q"]:
 		var key := "%d,%d" % [ahead.x, ahead.y]
 		say("", str(DATA.MAPS[map_name].get("signs", {}).get(key, "The sign is too weathered to read.")))
 		return true
@@ -2721,3 +2750,11 @@ func _draw_room() -> void:
 	draw_rect(Rect2(bo - Vector2(1, 1), Vector2(50, 10)), Figures.OUTLINE)
 	draw_rect(Rect2(bo, Vector2(48, 8)), Color("2e3a32"))
 	draw_string(ThemeDB.fallback_font, bo + Vector2(0, 7), "Inn" if map_name == "inn" else "Goods", HORIZONTAL_ALIGNMENT_CENTER, 48, 6, Color("e8e4d8"))
+
+## What someone says the first time they see which family you're from: the game data's line for each person (byHeritage,
+## written by ChatGPT for T45), or the hand-written ones here for anyone the data doesn't cover.
+func _heritage_line(id: String, data: Dictionary) -> String:
+	var by: Dictionary = data.get("byHeritage", {})
+	if by.has(heritage()) and not (by[heritage()] as Array).is_empty():
+		return str(by[heritage()][0][1])
+	return str(HERITAGE_TALK.get(id, {}).get(heritage(), ""))

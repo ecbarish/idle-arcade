@@ -81,6 +81,7 @@ workbench and gear), evolution shapes and conditions, heritages, music, saving. 
 
 | ID | Project | Size | Status | Notes |
 |---|---|---|---|---|
+| WB2.6 | **Early-road heritage recognition** (T45; browser data exported for Claude) | S | claimed: Codex, 2026-10-08, codex/wildbond-early-heritages | All four origins for existing early-road NPCs and Wardens; ledger and checks |
 | WG1 | **Tamer abilities** with heritages: orders that grow from who you are and who taught you (Toren's Steady) | M | open (next) | creature-catalogue-and-evolution.md §4 |
 | WG2 | **Stillreed Basin** and the areas after it (Hollowecho, Sunthread, Farwatch), from the browser data | L | open | Each with its own furniture, sound and music (variety plan) |
 | WG3 | **The league, the Champion and the Spire** in Godot | L | open | After WG2 |
@@ -112,6 +113,8 @@ Garrick, the Apothecary with prices, ranks and newcomers, music, saving. Checks:
 | ID | Project | Size | Status | Notes |
 |---|---|---|---|---|
 | LH0 | Local helper queue runner (Lane D0) | S | done, merged 2026-10-08 (PR #66) | OpenCode with local Ollama; review required; docs/research/local-ai-helper.md |
+
+| LH1 | Local helper permission order (D0b) | S | claimed: Codex, 2026-10-08, `codex/local-helper-permissions` | Follow-up to Claude's benchmark: preserve wildcard-first runtime overrides |
 
 ## Showing the games
 
@@ -283,6 +286,7 @@ Merged 2026-10-08 (Realmbound v1.3.0, PR #53); written by Codex on codex/realmbo
 
 | ID | Project | Size | Kind | Depends | Status | Spec / notes |
 |---|---|---|---|---|---|---|
+| OW2 | **T42: memories that matter across lives** | M | Data+System | OW1 | claimed: Codex, 2026-10-08, codex/otherworld-memories | Cross-world knowledge and persistent wants, grudges and debts; authored rules |
 | OW1 | **T35: a living Lanthorn** | M | Data+Polish | OW0 | done, merged 2026-10-08 (Otherworld v0.2.0, PR #58) | docs/ROADMAP.md T35: visible locked choices, gift costs, food/fear over three days and Archivist memories |
 
 ## Diamond Career follow-up
