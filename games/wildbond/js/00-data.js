@@ -911,3 +911,100 @@ STORY.find(b=>b.id==='warden7').lines.splice(2,0,
  ['halen','Someone calling themselves Unbound opened a travel pen this morning. Two creatures went home; one frightened youngster stayed by its tamer. Freedom needs room for that answer too.']);
 STORY.find(b=>b.id==='warden8').lines.splice(2,0,
  ['rysa','An old witness wrote that two figures became one before the colour went. The page ends there. It says nothing about what they were facing. Leave that blank until we know.']);
+/* T45 / WB2.6: recognition for the first four roads. Exported data only.
+   Append to the existing conversation in Godot; never replace its shared lines or trainer choices. */
+const EARLY_HERITAGE_LINES = {
+ maren: [
+  'Farmfolk, then. Your family would know that a full paddock still needs a quiet place for each creature.',
+  'Coastfolk, then. One partner can fill a whole life; the spare trough is for whoever needs water today.',
+  'Highlander, then. There will be hard roads. Let your partner learn your kindness before it learns your courage.',
+  'Wanderer, then. There is a latch on both sides of the paddock. Coming back should always be a choice.'
+ ],
+ pip: [
+  'Your harvest song has the same last hum as ours! I thought Grandmother made that bit up.',
+  'Can you teach me the shore verse? Tobin says our harvest hum fits under it, if you sing slowly.',
+  'Do your mountain songs finish with a hum too? Grandmother says the oldest words got lost before the tune did.',
+  'Someone passing through hummed our harvest tune without knowing its name. Was it one of your travelling songs?'
+ ],
+ bram: [
+  'Farmfolk hands. You would know why I leave the lowest berries: the little ones cannot reach the rest.',
+  'Your family keeps one partner close? Mine picks the berries while I carry the basket. We each have our work.',
+  'A climb is not the only trial. Try waiting while a hungry creature decides whether to trust your hand.',
+  'Passing through? Leave a few berries on this stump. Something will find your kindness after you have gone.'
+ ],
+ lise: [
+  'At home you gather everyone under one roof. Birds keep nests apart, but still warn the whole wood together.',
+  'One partner for life sounds lonely until I see the way yours listens. Perhaps a flock is not always many.',
+  'You watch the high paths; I watch the branches. That bird circles a gap the old sketch calls a ledge.',
+  'I like that you leave room for goodbye. Birds return to this branch without anyone fastening a door to it.'
+ ],
+ tobin: [
+  'Your tired-land tale starts after our tide tale ends. I would like to hear what your elders remember of that morning.',
+  'Coastfolk. You know the verse about the lowest water. Mind who tells it: I saw tracks, not their maker.',
+  'Your watcher tale says the mountain went quiet. The same night, perhaps. A fisher cannot see behind a mountain.',
+  'A traveller once said the glare came before the water moved. I saw the water; I cannot swear to their glare.'
+ ],
+ cato: [
+  'You know a good seed by its weight? Shore stones have their own heft. This flat carving feels strangely shallow.',
+  'That worn loop is familiar, is it? I found it above the usual tide line, not where the waves write.',
+  'You have seen mountain marks like this shore loop? Perhaps someone carried a stone here. Or carried its story.',
+  'Keep the shell if you like. Bring it back if it starts to feel like somebody else should find it.'
+ ],
+ marit: [
+  'The lighthouse keeper used to ask for your harvest verse. Its last hum carries beautifully across dark water.',
+  'Our shore verse has a pause where the light turns. The old keeper waited there, even when the lamp was steady.',
+  'A watcher on a mountain and a keeper in a tower both need sleep. That does not tell us who failed whom.',
+  'A light can welcome a returning traveller without asking them to stay. That is the kind I try to keep.'
+ ],
+ orsk: [
+  'Farmfolk mend a fence after a storm. Up here we mend the trail. Either way, somebody must notice what broke.',
+  'You keep one companion? The narrow ridge has room for two walking carefully. Numbers are not what make it safe.',
+  'Our families disagree about the watcher. Grandfather says it slept; Mother says it never stopped looking. I listen to both.',
+  'A passing tamer left this spare rope without a name. I would rather remember their kindness than claim their creature.'
+ ],
+ sela: [
+  'The warm spring feeds that little green patch. Tired land can rest, your family says. I am trying to give it room.',
+  'Your sea has a pull; our spring has a breath. The old stone marks a waterline higher than this flat bank.',
+  'You have heard the watcher blamed too? The oldest spring song asks it to come home. I wonder who sang first.',
+  'A traveller taught me to leave the spring path open. Creatures return for warmth; they should not need permission.'
+ ],
+ ilka: [
+  'That harvest knot on your strap leaves the same spare loop as mine. Nobody here remembers who taught it first.',
+  'A shore knot on a mountain rope. Keep the loose tail; wet hands and cold hands both need something to grip.',
+  'You know why we test a rope gently before trusting it with a fall. Trust is not proved by breaking it.',
+  'I can mend your strap without closing its quick-release loop. You should still be able to put your burden down.'
+ ],
+ teodor: [
+  'Your family watches the soil; I watch the mist. Both leave an outline behind when something larger has passed.',
+  'Coastfolk name clouds for sails. The old lookout chart draws a deep inlet here, although it is inland now.',
+  'Our lookout chart puts the watcher beyond the ridge. A chart tells you where someone looked, not what they saw.',
+  'A wanderer copied this chart and left its empty corner empty. I liked that. Not knowing deserves an honest space.'
+ ],
+ isolde: [
+  'You were taught that care brings the land back. Show me the care between your partners; the field can wait.',
+  'One close partner can carry a great deal. Let us see whether you hear its answer as clearly as your own.',
+  'You learned trust through trials. A trial should reveal a bond, not demand that a creature endure your pride.',
+  'A companion who might leave is still a companion. I judge how you stand together while it chooses to stay.'
+ ],
+ nerys: [
+  'Your elders remember the tired fields. Mine remember the water leaving. Neither watched the whole valley that night.',
+  'You know our oldest verse. Remember its speaker stood on the shore; a song can carry fear as faithfully as fact.',
+  'A mountain watcher and something from the sea. Those tales might quarrel because their witnesses faced different ways.',
+  'You understand an open path. At low water I leave two ways back: one for a tamer, one for a creature.'
+ ],
+ toren: [
+  'Your family says the land grew tired. These stones stayed warm after the colour went. Rest can look different here.',
+  'Your elders watched the tide; mine watched the ridge. There is a whole valley between those two windows.',
+  'You have heard our watcher tale. I know the old warmth is real; I do not know whose vigil it belonged to.',
+  'The visitor who copied these stones left the last mark unfinished. I trust that restraint more than a tidy ending.'
+ ],
+ vessa: [
+  'Your harvest hum reaches this shelter too. We sing it when the fog closes in, although nobody calls it a field song.',
+  'You know waiting for the tide. Wait for the cloud the same way, with your partner beside you rather than behind.',
+  'You climbed from the warm stones. This shelter holds two old blankets; I will not guess who once needed them.',
+  'Someone left the shelter latch open for the next traveller. Freedom and welcome can share a hinge.'
+ ]
+};
+for (const [id, who] of [['warden','isolde'],['warden2','nerys'],['warden3','toren'],['warden4','vessa']]) {
+ STORY.find(b=>b.id===id).byHeritage=Object.fromEntries(['farm','coast','highland','wander'].map((h,i)=>[h,[[who,EARLY_HERITAGE_LINES[who][i]]]]));
+}

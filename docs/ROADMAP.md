@@ -3,6 +3,15 @@
 Shared plan for every contributor (Claude, ChatGPT/Codex, or a person). One ticket per session.
 Mark a ticket done in the same PR that finishes it.
 
+### T45: Wildbond, early-road heritage recognition (WB2.6)
+- [x] Built by Codex, 2026-10-08; PR #72 for review, not merged. 60 exported reactions; all eight pages pass. Godot dispatch remains with Claude.
+Why: the chosen roots should change who confides in the tamer while keeping every route to the truth open (heritage proposal and thread ledger).
+Read first: docs/proposals/wildbond-heritage.md, docs/lore/wildbond-threads.md, docs/CREATIVE.md.
+Branch: codex/wildbond-early-heritages.
+- Add one plain-JSON byHeritage line for each farm/coast/highland/wander origin to all 11 existing map NPCs in Larkhaven and areas 1-4, and the four Warden STORY entries. Append-only handoff, same shape as T40.
+- Preserve base lines, trainer battles, badges, maps, save data and all unresolved mysteries. Classic has no heritage dispatcher; Claude wires the exported lines into Godot. Never edit Godot or its exporter.
+- Record every clue in the ledger. Add content/JSON checks and inspect the actual export from an isolated browser; all eight pages pass. README and Session log only, no versions.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a
