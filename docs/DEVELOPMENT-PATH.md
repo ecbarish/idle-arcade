@@ -128,7 +128,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB5.2 [Claude] Contests and races at the ranch (W4).
 - [ ] WB5.3 [Claude] Ranch jobs: creatures help (W5/WG8).
 - [ ] WB5.4 [Claude] Roaming legendaries (W3 part 2).
-- [ ] WB5.5 blocked: needs Evan (baby forms, W9/W10; default: the proposal's recommendations).
+- [ ] WB5.5 [Claude] Baby forms as life stages (W9/W10, approved by Evan 2026-10-09 with the proposal's defaults; docs/proposals/creature-growth.md "Evan's answers"): part 1 eggs hatch as babies, care, growing up; part 2 elders and care-shaped potential; part 3 lost hatchlings.
 - [ ] WB5.6 [ChatGPT] Catalogue batch 3 and 4 (12-15 creatures each, data and lore).
 - [ ] WB5.7 [Claude] Fishing at Saltmarsh (from docs/proposals/new-game-ideas.md, scored 16/18; added 2026-10-09).
 
@@ -159,7 +159,7 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
   that scrolls. Before SF3.1.
 - [ ] SF2.7 [Claude] See the wilds sooner (GR-7): a small walkable stretch past the gate (an early piece of SF4.1).
 - [ ] SF2.8 [Claude] Something by hand every day (GR-8): the next jobs to master, then hire.
-- [ ] SF2.5 [Claude] Hire the apothecary's apprentice once you've brewed enough (the same "master it, then hire" rule).
+- [x] SF2.5 [Claude] Hire the apothecary's apprentice once you've brewed enough (the same "master it, then hire" rule). *Done 2026-10-09: after four batches by hand Fen walks in; six coins a day; brews whenever there are herbs and room on the shelf; leaves the pot to you if unpaid.*
 
 **SF-M3: seasons.**
 - [ ] SF3.1 [Claude] Seasons as chapters (SV2), the first one ending in a festival.
@@ -261,8 +261,23 @@ browser (E4).
 No-server sharing: trade and battle codes, ghost teams (V6 part 1).
 
 ### Parked (Evan decides when)
-Card shop (CS1), Main Street (MS1), Primordial beyond light polish, a second sport. Proposals welcome; no builds.
+Primordial beyond light polish, a second sport. Proposals welcome; no builds.
 Judged ideas and the scorecard for new ones: docs/proposals/new-game-ideas.md (2026-10-09).
+
+### Main Street (business game) and its card shop (unparked by Evan 2026-10-09)
+Evan: "Yes I want to develop these. The card shop is just one of the businesses for the game, and could have some card
+trend elements in it where people love pulling cards and grading them. Though the card shop is kind of locked behind the
+development of Wildbond, because we need the roster of creatures and trainers." So: **Main Street** is the business game;
+the **card shop** is one of its businesses, selling Wildbond cards (creatures and tamers from the shared catalogue).
+- [ ] MS0.1 [ChatGPT] Design doc docs/plans/main-street.md: the businesses (the card shop first), owning one then several,
+  staff and managers who automate (earned), the street as a place you walk (the screen is the world), progression,
+  what is shared with the arcade. Comparable games and what to borrow; no ads, no paid speed-ups.
+- [ ] MS0.2 [ChatGPT] Card shop design inside it: pulling packs (the thrill of the pull, rarities from the catalogue),
+  grading cards (a grading service with scores and turnaround), card trends (some creatures become hot after events,
+  prices move with what players and townsfolk chase), singles, regulars with stories, Friday tournaments on Wildbond's
+  element rules. Card art generated from the Godot creature figures.
+- [ ] MS0.3 [Claude] Platform and first slice (likely Godot, sharing figures and catalogue), built **after Wildbond 2.0**,
+  when the roster of creatures and tamers is settled.
 
 ## Part 3: standing work (always available, any assistant)
 - **Run every check** (`node tools/run-all-checks.cjs`) and fix or file anything red.

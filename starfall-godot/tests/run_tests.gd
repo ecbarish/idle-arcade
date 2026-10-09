@@ -468,6 +468,37 @@ func _run() -> void:
 	main._judge_day()
 	check(main.visitors.size() == 2 and main.heroes.size() == people_before + 1, "a fourth good day brings the second traveller, and only once")
 	main.today = { "done": 0, "failed": 0, "meals": 0, "earned": 0 }
+	# ---- the apothecary's apprentice (SF2.5): brew enough yourself, then Fen asks to learn
+	var keep_built3: Dictionary = main.built.duplicate(true)
+	var keep_herbs: int = main.herbs
+	var keep_stock: int = main.stock
+	main.built["south"] = { "what": "apothecary", "left": 0.0 }
+	main.fen.where = "gone"
+	main.batches = main.BREW_AFTER - 1
+	main.herbs = 4
+	main.stock = 0
+	main.shelf_pick(0)
+	main._brew(5.0)
+	check(main.batches == main.BREW_AFTER and main.fen.where == "town", "the fourth batch by hand: Fen walks in, wanting to learn")
+	main.fen.tile = main._pot_at() + Vector2i.RIGHT
+	main.fen.pos = Vector2(main.fen.tile) * main.TILE
+	main.fen.path.clear()
+	main.talk_fen()
+	talk_through()
+	check(main.fen_hired, "and takes the long spoon for six coins a day")
+	main.fen.tile = main._pot_at()
+	main.fen.pos = Vector2(main.fen.tile) * main.TILE
+	main.fen.path.clear()
+	main.herbs = 2
+	main.stock = 0
+	for i in 50:
+		main._fen_tick(0.1)
+	check(main.stock == 3 and main.herbs == 0, "Fen brews whenever there are herbs and room on the shelf")
+	main.fen_hired = false
+	main.fen.where = "gone"
+	main.built = keep_built3
+	main.herbs = keep_herbs
+	main.stock = keep_stock
 	# ---- the tavern (SF2.3): evening drinks, a pour by hand, Tamsin, a place that shuts, placement
 	var keep_built2: Dictionary = main.built.duplicate(true)
 	main.built["south"] = { "what": "tavern", "left": 0.0 }

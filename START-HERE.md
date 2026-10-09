@@ -83,15 +83,15 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Questions for Evan (work continues on the defaults until he answers)
 
-1. **What does "launch" (version 2.0) mean now?** The new Wildbond in Godot replaces the browser screens. Options: (a)
+1. **Answered 2026-10-09: (a), the Godot Wildbond becomes the main one.** **What does "launch" (version 2.0) mean now?** The new Wildbond in Godot replaces the browser screens. Options: (a)
    launch when the Godot Wildbond reaches the full journey (all eight areas and the league), with the browser version
    kept as "Wildbond Classic"; (b) launch the browser games as they are now, and the Godot version later as a sequel.
    **Default:** (a), and keep friends testing the previews meanwhile.
 2. **Realmbound: stay in the browser, or move to Godot later?** **Default:** stay in the browser, move into the game
    window there (T38), and decide after the Godot Wildbond is further along.
-3. **Baby forms (W9):** read `docs/proposals/creature-growth.md` and answer its five questions. **Default:** its
+3. **Answered 2026-10-09: approved as life stages (see the proposal).** **Baby forms (W9):** read `docs/proposals/creature-growth.md` and answer its five questions. **Default:** its
    recommendations.
-4. **The card shop (CS1) and Main Street (MS1):** parked until you say when.
+4. **Answered 2026-10-09: unparked.** The card shop is one of Main Street's businesses; design now, build after Wildbond 2.0.
 
 **Answered:** browser or standalone (Godot, 2026-10-08); heritages, the Unbound, the wild bond, reputation, depth
 (all approved 2026-10-08); see the "Decided" section at the top of `docs/research/decisions.md`.
@@ -107,6 +107,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 ## Session log (newest first; one or two lines each)
 
 - 2026-10-09 Claude (Wildbond builder thread, lane W): reviewed T55 (ledger "Claude's review of T55"), wrote ChatGPT's T58 (the late observations and the reveal). Evan decided the watcher is the turned friend. Next in lane W: WD2 body shapes while T58 is written.
+- 2026-10-09 Claude (lane S): SF2.5 the apothecary's apprentice (Fen), 130 Starfall checks, web preview rebuilt; branch claude/sf2.5-apprentice.
 - 2026-10-09 Claude (Wildbond builder thread, lane W): WB3.6b pacing: a level costs about 12 even-level wins at every stage (was 24 early, ~400 late). Evan chose 12; next in lane W: the ending (WB4.3).
 - 2026-10-09 Claude (Wildbond builder thread, lane W): WD1 done in PR #91 (satchel icon and a Satchel page in the field book instead of the numbers line; large place names on arrival) and the T56 Deeptide cooldown stall fixed (a creature with nothing ready catches its breath until a move is ready). Next in lane W: PRIORITIES section 4 item 2, pacing fixes from T56.
 - 2026-10-09 Claude: game review of every game (docs/proposals/game-review-2026-10-09.md): twelve proposals GR-1 to GR-12 with screenshots; scored and placed in docs/PRIORITIES.md. Godot checks 273 and 116 pass.
