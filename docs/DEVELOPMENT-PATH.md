@@ -159,7 +159,7 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
   that scrolls. Before SF3.1.
 - [ ] SF2.7 [Claude] See the wilds sooner (GR-7): a small walkable stretch past the gate (an early piece of SF4.1).
 - [ ] SF2.8 [Claude] Something by hand every day (GR-8): the next jobs to master, then hire.
-- [ ] SF2.5 [Claude] Hire the apothecary's apprentice once you've brewed enough (the same "master it, then hire" rule).
+- [x] SF2.5 [Claude] Hire the apothecary's apprentice once you've brewed enough (the same "master it, then hire" rule). *Done 2026-10-09: after four batches by hand Fen walks in; six coins a day; brews whenever there are herbs and room on the shelf; leaves the pot to you if unpaid.*
 
 **SF-M3: seasons.**
 - [ ] SF3.1 [Claude] Seasons as chapters (SV2), the first one ending in a festival.
