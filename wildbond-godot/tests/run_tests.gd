@@ -243,6 +243,8 @@ func _run() -> void:
 	check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 14), "the north road leads to Thornwood, arriving where the map says")
 	check(main.partner.where == "thornwood", "your partner comes too")
 	# ---- a route trainer spots you, walks over and battles (Bram, from the game data)
+	check(main._tree_at(8, 4).y == 3.0 * main.TILE and main._tree_at(12, 14).y > 13.5 * main.TILE, "trees beside open ground stand tall, but never over the first signpost")
+	check(main.canopy != null and main.canopy.material is ShaderMaterial, "tree tops that pass in front of you are washed out like the world around them")
 	check(main.npcs.filter(func(n): return n.where == "thornwood").size() == 3, "Thornwood has Bram, Lise and Warden Isolde")
 	main.npc_info.lise.beaten = true                # keep Lise out of the way for these checks
 	main.walk_to = main.route(main.me.tile, Vector2i(14, 10))

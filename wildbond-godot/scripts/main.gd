@@ -149,6 +149,7 @@ var battle: Control
 @onready var caption: Label = $UI/Caption
 @onready var place: Label = $UI/Place
 @onready var colour_layer: Node2D = $Painted/Figures
+var canopy: Node2D
 
 func _ready() -> void:
 	demo = "--demo" in OS.get_cmdline_user_args()
@@ -175,6 +176,12 @@ func _ready() -> void:
 	_set_map("larkhaven")
 	cam.position = me.pos + Vector2(8, 8)
 	colour_layer.draw.connect(_draw_painted)
+	canopy = Node2D.new()                         # tree tops in front of you, above the colour layer (depth, WB2.2)
+	var cm := ShaderMaterial.new()
+	cm.shader = preload("res://shaders/canopy.gdshader")
+	canopy.material = cm
+	$Painted.add_child(canopy)
+	canopy.draw.connect(_draw_canopy)
 	register = Register.new()
 	register.keep = not demo
 	$UI.add_child(register)
@@ -678,6 +685,7 @@ func _process(dt: float) -> void:
 	_update_ui()
 	queue_redraw()
 	colour_layer.queue_redraw()
+	canopy.queue_redraw()
 
 func _step(d: Vector2i) -> void:
 	me.face = d
@@ -1075,6 +1083,40 @@ func _draw_painted() -> void:
 				_draw_actor(colour_layer, o, 0, 1.0 - _restored_at(o.pos + Vector2(8, 8)))
 				break
 
+## The big trees: which picture (two kinds) and where it stands, staggered half a tile off the grid so the edge reads as
+## woods. Edge rows sit low so they never hide the town.
+func _tree_cell(x: int, y: int) -> Vector2i:
+	return Vector2i(0 if (x * 3 + y) % 4 < 2 else 2, 0)
+
+func _tree_at(x: int, y: int) -> Vector2:
+	var above := Vector2i(x, y - 1)
+	if tile_at(above) == "T":
+		return Vector2(x - 0.5, y - 1.5) * TILE
+	# a tree at the edge of open ground stands at its true height (its crown over the tile above, and over you when
+	# you walk behind it: _draw_canopy), but never over a sign or something lying on the ground
+	var open: bool = tile_at(above) in [",", "\"", "."] and not DATA.MAPS.get(map_name, {}).get("items", []).any(func(it): return Vector2i(int(it.at[0]), int(it.at[1])) == above)
+	return Vector2(x - 0.5, y - (1.0 if open else 0.25)) * TILE
+
+## Depth (WB2.2): when you or your partner walk behind a tree, its top passes in front of you, a little see-through
+## so you never lose yourself. Faded by the same rule as the world (shaders/canopy.gdshader).
+func _draw_canopy() -> void:
+	if indoors():
+		return
+	var rows: Array = cur_map()
+	for m in actors():
+		if not _is_painted(m):
+			continue
+		var body: Rect2 = Rect2(m.pos + Vector2(2, -6), Vector2(12, 22))
+		var feet: float = m.pos.y + 16.0
+		var x0: int = maxi(0, int(m.pos.x / TILE) - 2)
+		var y0: int = maxi(0, int(m.pos.y / TILE) - 1)
+		for y in range(y0, mini(rows.size(), y0 + 4)):
+			for x in range(x0, mini(rows[0].length(), x0 + 5)):
+				if rows[y][x] != "T" or (x + y) % 2 != 0:
+					continue
+				var r := Rect2(_tree_at(x, y), Vector2(32, 32))
+				if r.end.y - 3.0 > feet and r.intersects(body):
+					canopy.draw_texture_rect_region(NATURE, r, Rect2(Vector2(_tree_cell(x, y)) * 16.0, Vector2(32, 32)), Color(1, 1, 1, 0.72))
 ## How much colour has come back at a point in the world (0 faded, 1 restored), as the fade shader computes it.
 func _restored_at(p: Vector2) -> float:
 	if INTERIORS.has(map_name) and spilled:
@@ -1374,6 +1416,9 @@ func _update_ui() -> void:
 	var mat: ShaderMaterial = $FadeWorld/Shade.material
 	mat.set_shader_parameter("points", pts)
 	mat.set_shader_parameter("count", count)
+	var cmat: ShaderMaterial = canopy.material
+	cmat.set_shader_parameter("points", pts)
+	cmat.set_shader_parameter("count", count)
 
 # ---------------------------------------------------------------- the environment (Ninja Adventure tilesets, CC0)
 # Evan (2026-10-08) liked the pack's structures and nature. Figures stay our own (figures.gd). Each tile or object
@@ -1454,7 +1499,7 @@ func _draw_structures() -> void:
 	for y in rows.size():                                                               # big trees, back to front
 		for x in rows[0].length():
 			if rows[y][x] == "T" and (x + y) % 2 == 0:       # staggered, half a tile off the grid, so the edge reads as woods
-				_tex(NATURE, Vector2i(0 if (x * 3 + y) % 4 < 2 else 2, 0), Vector2i(2, 2), Vector2(x - 0.5, y - (1.5 if tile_at(Vector2i(x, y - 1)) == "T" else 0.25)) * TILE)   # edge rows sit low so they never hide the town
+				_tex(NATURE, _tree_cell(x, y), Vector2i(2, 2), _tree_at(x, y))   # edge rows sit low so they never hide the town
 	if map_name == "hollowecho":
 		_draw_bell_house(Vector2i(2, 1))
 	# Maren's barn stands taller than the cottages and in front of the trees behind it
@@ -1807,6 +1852,14 @@ func _skip_opening() -> void:
 	for a in OS.get_cmdline_user_args():           # a picture inside a room: -- --skip-opening --at=larkhaven --room=inn
 		if a.begins_with("--room="):
 			(func(): _go(a.substr(7))).call_deferred()
+	for a in OS.get_cmdline_user_args():           # stand on a tile for a picture: -- --skip-opening --at=stillreed --stand=18,1
+		if a.begins_with("--stand="):
+			var xy := a.substr(8).split(",")
+			get_tree().create_timer(0.4).timeout.connect(func():
+				me.tile = Vector2i(int(xy[0]), int(xy[1]))
+				me.pos = Vector2(me.tile) * TILE
+				me.path.clear()
+				me.face = Vector2i.DOWN)
 	if "--depth" in OS.get_cmdline_user_args():       # a picture of depth: Maren stands just in front of you (-- --skip-opening --at=larkhaven --depth)
 		(func():
 			maren.where = map_name
