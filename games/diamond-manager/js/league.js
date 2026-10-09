@@ -1,0 +1,296 @@
+'use strict';
+/* Diamond Manager: the league, its players and the game simulation. No drawing here, so checks can run it.
+   Money is in thousands of dollars (game currency): 1500 means $1.5M. Every random roll goes through one seeded
+   generator, so a seeded league and its games are reproducible. */
+const DM = {
+  key: 'diamond-manager-save-v1', you: 0, seasonGames: 30, rosterMax: 18, minBatters: 9, minPitchers: 5,
+  clubs: [
+    {name:'Brackenport Lanterns', short:'Lanterns', park:'Lamplight Field', color:'#ffd281', level:48},
+    {name:'Alder Quay Terns', short:'Terns', park:'Gullwing Park', color:'#9fd3e6', level:56},
+    {name:'Copperbank Rivets', short:'Rivets', park:'The Foundry Yard', color:'#e39b6a', level:58},
+    {name:'Windlecross Kites', short:'Kites', park:'Highmeadow Grounds', color:'#c7b6f2', level:54},
+    {name:'Saltmere Gulls', short:'Gulls', park:'Breakwater Field', color:'#f2f0e4', level:53},
+    {name:'Fennick Hollow Owls', short:'Owls', park:'Lantern Wood Park', color:'#a7d39a', level:55}
+  ],
+  first: ['Remi','Kit','Ada','Sol','Jules','Nell','Tavi','Pax','Milo','Sera','Orin','Bram','Ivo','Lena','Cass','Dov','Ezra','Fern','Gus','Hale','Isla','Joss','Kai','Lou','Mara','Nico','Odile','Pip','Quill','Rook','Sage','Teo','Una','Vic','Wren','Yara','Zeb','Arlo','Bea','Cy'],
+  last: ['Moss','Fenner','Lorne','Becket','Orrin','Calder','Reed','Alder','Venn','Penn','Bell','Hollis','Marsh','Tamsin','Crane','Duvall','Ember','Flint','Garrow','Hythe','Ives','Jory','Kestrel','Lowe','Merrow','Nash','Okafor','Pryce','Quint','Rowan','Stroud','Thorne','Usher','Vale','Weller','Yew','Zane','Ashby','Brook','Coll'],
+  batPos: ['C','1B','2B','3B','SS','LF','CF','RF','DH'],
+  upgrades: {
+    seats:    {name:'Seats', what:'More seats: more people can come to each home game.', cost:[300,600,1000,1500]},
+    lights:   {name:'Lights', what:'Bright towers: night games draw a bigger crowd.', cost:[400,800,1200]},
+    training: {name:'Training rooms', what:'Players aged 27 or younger grow one extra point a season per level.', cost:[350,700,1100]},
+    scouting: {name:'Scouting office', what:'Better free agents turn up each offseason.', cost:[300,650,1000]},
+    clubhouse:{name:'Clubhouse', what:'Happier players ask 5% less to stay, per level.', cost:[300,600,900]}
+  },
+  ticket: 20, words: [[80,'Star'],[70,'Excellent'],[62,'Good'],[54,'Solid'],[46,'Fair'],[0,'Raw']]
+};
+const clamp = (n,a,b) => Math.max(a,Math.min(b,n));
+const copy = o => JSON.parse(JSON.stringify(o));
+function rnd(r) { r.seed = (Math.imul(r.seed >>> 0,1664525) + 1013904223) >>> 0; return r.seed / 4294967296; }
+function ri(r,a,b) { return a + Math.floor(rnd(r)*(b-a+1)); }
+function money(k) { const a=Math.abs(k), s=k<0?'-':''; return a>=1000 ? s+'$'+(a/1000).toFixed(a%1000?2:1).replace(/0$/,'')+'M' : s+'$'+a+'K'; }
+function word(n) { return DM.words.find(w=>n>=w[0])[1]; }
+
+function overall(p) {
+  return Math.round(p.pitcher ? (p.stuff*.45+p.control*.35+p.stamina*.2) : (p.contact*.35+p.power*.25+p.eye*.2+p.glove*.2));
+}
+function askSalary(p, clubhouse=0) {
+  const o=overall(p), base=250+Math.pow(Math.max(0,o-45),1.8)*6, age=p.age<=24?.9:p.age>=33?.8:1;
+  return Math.round(base*age*(1-.05*clubhouse)/10)*10;
+}
+function makePlayer(r, id, level, pitcher, pos) {
+  const age=ri(r,21,34), g=()=>clamp(Math.round(level+(rnd(r)+rnd(r)-1)*14),25,92);
+  const p={id, name:DM.first[ri(r,0,DM.first.length-1)]+' '+DM.last[ri(r,0,DM.last.length-1)], age, pitcher:!!pitcher};
+  if(pitcher) Object.assign(p,{pos:'P',stuff:g(),control:g(),stamina:g()});
+  else Object.assign(p,{pos,contact:g(),power:g(),eye:g(),glove:g()});
+  p.salary=askSalary(p); p.years=ri(r,1,3); return p;
+}
+function newLeague(seed=1) {
+  const L={game:'diamond-manager', schema:1, seed:seed>>>0, nextId:1, season:1, day:0, cash:600, phase:'season',
+    clubs:[], schedule:[], results:[], log:[], inbox:[], freeAgents:[], upgrades:{seats:0,lights:0,training:0,scouting:0,clubhouse:0},
+    speed:1, intro:true, history:[], final:null, offer:null, sound:0};
+  DM.clubs.forEach((c,i)=>{
+    const club={name:c.name, short:c.short, w:0, l:0, rs:0, ra:0, budget:i===0?7500:13500, players:[], lineup:[], rot:0};
+    DM.batPos.forEach(pos=>club.players.push(makePlayer(L,L.nextId++,c.level,false,pos)));
+    for(let k=0;k<6;k++) club.players.push(makePlayer(L,L.nextId++,c.level,true));
+    club.players.push(makePlayer(L,L.nextId++,c.level-4,false,DM.batPos[ri(L,0,7)]));
+    fitPayroll(L,club); setLineup(club); L.clubs.push(club);
+  });
+  L.schedule=makeSchedule(DM.seasonGames);
+  fillFreeAgents(L, 8);
+  return L;
+}
+/* AI clubs, and the opening rosters, keep their payroll inside their budget by trimming salaries. */
+function fitPayroll(L,club) { let over=payroll(club)-club.budget; if(over<=0)return; const f=club.budget/payroll(club); club.players.forEach(p=>p.salary=Math.max(200,Math.round(p.salary*f/10)*10)); }
+function payroll(club) { return club.players.reduce((n,p)=>n+p.salary,0); }
+function batters(club) { return club.players.filter(p=>!p.pitcher); }
+function pitchers(club) { return club.players.filter(p=>p.pitcher); }
+/* Keep the chosen order; add any missing batters by overall; drop anyone who left. */
+function setLineup(club, order) {
+  const ids=new Set(batters(club).map(p=>p.id));
+  let line=(order||club.lineup||[]).filter(id=>ids.has(id));
+  const rest=batters(club).filter(p=>!line.includes(p.id)).sort((a,b)=>overall(b)-overall(a)).map(p=>p.id);
+  club.lineup=line.concat(rest).slice(0,9);
+}
+function autoLineup(club) { club.lineup=[]; setLineup(club); const by=id=>club.players.find(p=>p.id===id);
+  // Best on-base first, power in the middle: a familiar baseball order.
+  const l=club.lineup.map(by); l.sort((a,b)=>(b.eye+b.contact)-(a.eye+a.contact)); const top=l.slice(0,2), mid=l.slice(2).sort((a,b)=>b.power-a.power);
+  club.lineup=top.concat(mid).map(p=>p.id); }
+/* Round robin by the circle method, repeated with home and away swapped. */
+function makeSchedule(n) {
+  const t=[0,1,2,3,4,5], rounds=[];
+  for(let r=0;r<5;r++){ const a=[t[0]].concat(t.slice(1).map((_,i)=>t[1+((i+r)%5)])); const day=[]; for(let i=0;i<3;i++)day.push([a[i],a[5-i]]); rounds.push(day); }
+  const s=[]; for(let d=0;d<n;d++){ const day=rounds[d%5]; s.push(day.map(([h,a])=>Math.floor(d/5)%2?[a,h]:[h,a])); }
+  return s;
+}
+
+/* One plate appearance from ratings. Returns 'walk','k','out' or 1-4 bases. */
+function plateAppearance(r,b,p,glove) {
+  const walk=clamp(.085+(b.eye-50)*.0016-(p.control-50)*.0013,.03,.17);
+  const k=clamp(.20+(p.stuff-50)*.0032-(b.contact-50)*.0026,.08,.36);
+  const x=rnd(r); if(x<walk)return 'walk'; if(x<walk+k)return 'k';
+  const hit=clamp(.30+(b.contact-50)*.0022-(glove-50)*.0016-(p.stuff-50)*.0008,.2,.42);
+  if(rnd(r)>hit) return 'out';
+  const hr=clamp(.10+(b.power-50)*.0045-(p.stuff-50)*.001,.02,.3), y=rnd(r);
+  return y<hr?4 : y<hr+.02?3 : y<hr+.22?2 : 1;
+}
+const PLAY_WORDS={walk:'walks',k:'strikes out',out:['grounds out','flies out','lines out','pops up'],1:['singles to left','singles up the middle','singles to right'],2:['doubles into the gap','doubles down the line'],3:['triples to the corner'],4:['homers!','hits a home run!']};
+function pickWord(r,k){const w=PLAY_WORDS[k];return Array.isArray(w)?w[Math.floor(rnd(r)*w.length)]:w;}
+
+function bullpen(club,starter) { const ps=pitchers(club).filter(p=>p.id!==starter.id); const avg=k=>ps.reduce((n,p)=>n+p[k],0)/Math.max(1,ps.length);
+  return {name:'the bullpen', stuff:Math.round(avg('stuff'))-3, control:Math.round(avg('control'))-3, stamina:60, pen:true}; }
+function starterOf(club) { const ps=pitchers(club).slice().sort((a,b)=>overall(b)-overall(a)).slice(0,5); return ps[club.rot%ps.length]; }
+/* A full game. Returns the score, the box lines and a play-by-play event list with the state after each event. */
+function playGame(L,home,away,seed) {
+  const r={seed:seed>>>0}, teams=[L.clubs[away],L.clubs[home]], idx=[away,home];
+  const by=(c,id)=>c.players.find(p=>p.id===id);
+  const g={home,away,score:[0,0],line:[[],[]],hits:[0,0],order:[0,0],events:[],box:{},final:false};
+  const st=teams.map(starterOf), arms=st.slice(), faced=[0,0];
+  const glove=teams.map(c=>c.lineup.reduce((n,id)=>n+by(c,id).glove,0)/9);
+  const stat=id=>g.box[id]||(g.box[id]={ab:0,h:0,hr:0,rbi:0,bb:0,k:0});
+  for(let inning=1;inning<=15;inning++){
+    for(let half=0;half<2;half++){
+      if(inning>=9&&half===1&&g.score[1]>g.score[0]) break;
+      const bat=teams[half], def=1-half; let outs=0, bases=[null,null,null], runs=0;
+      g.events.push({t:(half?'Bottom':'Top')+' of the '+nth(inning)+'. '+bat.short+' batting.',inning,half,outs,bases:[0,0,0],score:g.score.slice(),head:true});
+      while(outs<3){
+        if(arms[def]!==null&&!arms[def].pen&&faced[def]>=16+Math.round(arms[def].stamina/5)){
+          arms[def]=bullpen(teams[def],st[def]);
+          g.events.push({t:teams[def].short+' go to the bullpen.',inning,half,outs,bases:bases.map(b=>b?1:0),score:g.score.slice()});
+        }
+        const b=by(bat,bat.lineup[g.order[half]]), p=arms[def]; g.order[half]=(g.order[half]+1)%9; faced[def]++;
+        const res=plateAppearance(r,b,p,glove[def]), s=stat(b.id); let scored=0;
+        if(res==='walk'){ s.bb++; if(bases[0]){ if(bases[1]){ if(bases[2])scored++; bases[2]=bases[1]; } bases[1]=bases[0]; } bases[0]=b.id; }
+        else if(res==='k'||res==='out'){ s.ab++; if(res==='k')s.k++; outs++;
+          // A fly ball with a runner on third and fewer than two outs brings him home.
+          if(res==='out'&&outs<3&&bases[2]&&rnd(r)<.35){ scored++; bases[2]=null; } }
+        else { s.ab++; s.h++; g.hits[half]++; if(res===4)s.hr++;
+          for(let i=2;i>=0;i--){ const id=bases[i]; if(!id)continue; bases[i]=null; const extra=(res<3&&i+res===2&&rnd(r)<.55)?1:0; if(i+res+extra>=3)scored++; else bases[i+res+extra]=id; }
+          if(res===4)scored++; else bases[res-1]=b.id; }
+        s.rbi+=scored; g.score[half]+=scored; runs+=scored;
+        const who=b.name.split(' ')[1]||b.name;
+        let text=b.name+' '+pickWord(r,res)+(scored?' '+(scored===1?'A run scores.':scored+' runs score.'):'');
+        if(res==='k'&&!p.pen) text=b.name+' strikes out against '+p.name+'.';
+        g.events.push({t:text,inning,half,outs,bases:bases.map(x=>x?1:0),score:g.score.slice(),runs:scored,res,who});
+        if(inning>=9&&half===1&&g.score[1]>g.score[0]) break;
+      }
+      g.line[half].push(runs);
+    }
+    if(inning>=9&&g.score[0]!==g.score[1]) break;
+  }
+  if(g.score[0]===g.score[1]) { // Fifteen innings is enough for a summer evening: the home club wins a tie on its last turn.
+    g.score[1]++; g.line[1][g.line[1].length-1]++; g.events.push({t:'A wild pitch brings the winning run home in the fifteenth.',inning:15,half:1,outs:2,bases:[0,0,0],score:g.score.slice(),runs:1});
+  }
+  g.final=true; g.starters=st.map(p=>p.id); g.winner=g.score[1]>g.score[0]?home:away;
+  return g;
+}
+function nth(n){return n+(n%10===1&&n!==11?'st':n%10===2&&n!==12?'nd':n%10===3&&n!==13?'rd':'th');}
+
+/* Record a played game into the standings and the season stats. */
+function recordGame(L,g) {
+  const h=L.clubs[g.home], a=L.clubs[g.away];
+  h.rs+=g.score[1]; h.ra+=g.score[0]; a.rs+=g.score[0]; a.ra+=g.score[1];
+  if(g.winner===g.home){h.w++;a.l++;}else{a.w++;h.l++;}
+  h.rot++; a.rot++;
+  for(const c of [h,a]) for(const p of c.players){ const s=g.box[p.id]; if(!s)continue; p.season=p.season||{ab:0,h:0,hr:0,rbi:0,bb:0,k:0,g:0};
+    for(const k in s)p.season[k]+=s[k]; p.season.g++; }
+}
+function gateMoney(L) {
+  const you=L.clubs[DM.you], gp=you.w+you.l, pct=gp?you.w/gp:.5, cap=6000+3000*L.upgrades.seats;
+  const demand=Math.round(3500+pct*7000+L.upgrades.lights*1500+(L.history.length?L.history.filter(h=>h.champion).length*800:0));
+  const crowd=Math.min(cap,demand); return {crowd, cap, money:Math.round(crowd*DM.ticket/1000)};
+}
+/* Play the day: our game is returned for watching, every other game is simulated at once. */
+function playDay(L) {
+  if(L.phase!=='season') return null;
+  const today=L.schedule[L.day]; let ours=null;
+  today.forEach(([h,a],i)=>{ const g=playGame(L,h,a,(L.seed^(L.day*977+i*131+L.season*7919))>>>0); recordGame(L,g); if(h===DM.you||a===DM.you)ours=g; });
+  const gate=ours.home===DM.you?gateMoney(L):null; if(gate)L.cash+=gate.money;
+  const res={day:L.day+1, home:ours.home, away:ours.away, score:ours.score, won:ours.winner===DM.you, gate};
+  L.results.push(res); L.day++;
+  if(L.day%5===0&&!L.offer) L.offer=aiOffer(L);
+  if(L.day>=DM.seasonGames) startFinal(L);
+  return ours;
+}
+function standings(L) { return L.clubs.map((c,i)=>({i,c})).sort((a,b)=>(b.c.w-a.c.w)||((b.c.rs-b.c.ra)-(a.c.rs-a.c.ra))||a.i-b.i); }
+function startFinal(L) { const s=standings(L); L.phase='final'; L.final={teams:[s[0].i,s[1].i],wins:[0,0],games:[]}; }
+/* Best of three; the first-placed club is at home in games one and three. */
+function playFinalGame(L) {
+  const f=L.final; if(L.phase!=='final')return null; const n=f.games.length, top=f.teams[0], other=f.teams[1];
+  const [h,a]=n===1?[other,top]:[top,other];
+  const g=playGame(L,h,a,(L.seed^(L.season*31337+n*101))>>>0);
+  f.wins[g.winner===top?0:1]++; f.games.push({home:h,away:a,score:g.score,winner:g.winner});
+  if(h===DM.you){ const gate=gateMoney(L); L.cash+=gate.money*2; }
+  if(f.wins[0]===2||f.wins[1]===2){ f.champion=f.wins[0]===2?top:other; L.phase='offseason'; endSeason(L); }
+  return g;
+}
+/* The offseason: owner's budget, aging, contracts, free agents. */
+function endSeason(L) {
+  const you=L.clubs[DM.you], champ=L.final.champion===DM.you, inFinal=L.final.teams.includes(DM.you);
+  L.history.push({season:L.season, w:you.w, l:you.l, place:standings(L).findIndex(s=>s.i===DM.you)+1, final:inFinal, champion:champ, championName:L.clubs[L.final.champion].name});
+  const raise=champ?1000:inFinal?600:you.w>you.l?300:0; you.budget=Math.min(18000,you.budget+raise);
+  L.report={raise, grew:[], slipped:[], expiring:[], left:[]};
+  L.clubs.forEach((c,ci)=>{
+    for(const p of c.players){ const before=overall(p); develop(L,p,ci===DM.you?L.upgrades.training:1); const d=overall(p)-before;
+      if(ci===DM.you){ if(d>=2)L.report.grew.push({name:p.name,d}); if(d<=-2)L.report.slipped.push({name:p.name,d}); }
+      p.years--; p.season=null; }
+    if(ci!==DM.you){ // Other clubs keep players worth their price and let the rest go.
+      c.players=c.players.filter(p=>{ if(p.years>0)return true; if(p.age<36&&overall(p)>=48){p.salary=askSalary(p);p.years=ri(L,1,3);return true;} if(p.age<36)L.freeAgents.push(p); return false; });
+    } else L.report.expiring=c.players.filter(p=>p.years<=0).map(p=>p.id);
+  });
+  fillFreeAgents(L, 8);
+  L.clubs.forEach((c,ci)=>{ if(ci!==DM.you){ refill(L,c); fitPayroll(L,c); } setLineup(c); });
+}
+function develop(L,p,training) {
+  const base=p.age<=24?ri(L,2,5):p.age<=27?ri(L,0,3):p.age<=30?ri(L,-1,1):p.age<=33?ri(L,-3,0):ri(L,-5,-1);
+  const bonus=p.age<=27?training:0;
+  for(const k of p.pitcher?['stuff','control','stamina']:['contact','power','eye','glove']) p[k]=clamp(p[k]+base+bonus+ri(L,-1,1),20,99);
+  p.age++;
+}
+function fillFreeAgents(L,n) {
+  const lvl=50+L.upgrades.scouting*3;
+  while(L.freeAgents.length<n){ const pitcher=rnd(L)<.4; const p=makePlayer(L,L.nextId++,lvl,pitcher,DM.batPos[ri(L,0,8)]); p.salary=askSalary(p); p.years=ri(L,1,3); L.freeAgents.push(p); }
+  L.freeAgents.sort((a,b)=>overall(b)-overall(a)); L.freeAgents=L.freeAgents.slice(0,12);
+}
+function refill(L,c) {
+  const need=()=>batters(c).length<DM.minBatters?'b':pitchers(c).length<DM.minPitchers?'p':null; let guard=0;
+  while(need()&&guard++<20){ const want=need(); let i=L.freeAgents.findIndex(p=>want==='p'?p.pitcher:!p.pitcher);
+    if(i<0){ L.freeAgents.push(makePlayer(L,L.nextId++,50,want==='p',DM.batPos[ri(L,0,8)])); i=L.freeAgents.length-1; }
+    c.players.push(L.freeAgents.splice(i,1)[0]); }
+}
+/* The next season starts once every expiring contract has an answer. */
+function canStartSeason(L) { return L.phase==='offseason' && L.clubs[DM.you].players.every(p=>p.years>0) && rosterOk(L.clubs[DM.you]) && payroll(L.clubs[DM.you])<=L.clubs[DM.you].budget; }
+function startSeason(L) {
+  if(!canStartSeason(L)) return false;
+  L.season++; L.day=0; L.results=[]; L.final=null; L.phase='season'; L.report=null; L.offer=null;
+  L.clubs.forEach(c=>{c.w=0;c.l=0;c.rs=0;c.ra=0;c.rot=0;});
+  return true;
+}
+function rosterOk(c) { return batters(c).length>=DM.minBatters && pitchers(c).length>=DM.minPitchers && c.players.length<=DM.rosterMax; }
+
+/* Contracts and free agents. Every function returns '' on success or a sentence saying why not. */
+function resign(L,id) {
+  const c=L.clubs[DM.you], p=c.players.find(x=>x.id===id); if(!p||p.years>0) return 'That contract is not ending.';
+  const ask=askSalary(p,L.upgrades.clubhouse); if(payroll(c)-p.salary+ask>c.budget) return p.name+' asks '+money(ask)+' a season; that would put the payroll over the owner\'s budget.';
+  p.salary=ask; p.years=p.age>=32?1:2; return '';
+}
+function release(L,id) {
+  const c=L.clubs[DM.you], p=c.players.find(x=>x.id===id); if(!p) return 'Nobody by that name.';
+  const after=c.players.filter(x=>x!==p);
+  if(!p.pitcher&&batters(c).length<=DM.minBatters) return 'You need at least nine batters. Sign one first.';
+  if(p.pitcher&&pitchers(c).length<=DM.minPitchers) return 'You need at least five pitchers. Sign one first.';
+  // Letting someone go mid-contract costs half of one season's salary; an expiring contract costs nothing.
+  const cost=p.years>0?Math.round(p.salary/2):0; if(cost>L.cash) return 'Letting '+p.name+' go costs '+money(cost)+' and the club has '+money(L.cash)+'.';
+  L.cash-=cost; c.players=after; if(p.age<36){p.salary=askSalary(p);p.years=ri(L,1,2);L.freeAgents.push(p);} setLineup(c); return '';
+}
+function signFree(L,id) {
+  const c=L.clubs[DM.you], i=L.freeAgents.findIndex(x=>x.id===id); if(i<0) return 'That player has signed elsewhere.';
+  const p=L.freeAgents[i]; if(c.players.length>=DM.rosterMax) return 'The roster is full ('+DM.rosterMax+'). Let someone go first.';
+  if(payroll(c)+p.salary>c.budget) return p.name+' wants '+money(p.salary)+' a season; that would put the payroll over the owner\'s budget of '+money(c.budget)+'.';
+  L.freeAgents.splice(i,1); c.players.push(p); setLineup(c); return '';
+}
+function buyUpgrade(L,k) {
+  const u=DM.upgrades[k], lv=L.upgrades[k]; if(!u) return 'Unknown upgrade.'; if(lv>=u.cost.length) return 'Already as good as it gets.';
+  if(L.cash<u.cost[lv]) return 'That costs '+money(u.cost[lv])+'; the club has '+money(L.cash)+'.';
+  L.cash-=u.cost[lv]; L.upgrades[k]++; if(k==='scouting')fillFreeAgents(L,L.freeAgents.length); return '';
+}
+
+/* Trades. A player's worth to another club: quality, youth, and how fair the salary is. */
+function worth(p) { const o=overall(p), age=p.age<=26?1.2:p.age<=30?1:p.age<=33?.75:.5; return Math.max(5,Math.round(Math.pow(Math.max(0,o-38),1.6)*age - (p.salary-askSalary(p))/40)); }
+function judgeTrade(L,other,give,get) {
+  const you=L.clubs[DM.you], them=L.clubs[other]; if(!them||other===DM.you) return {ok:false,why:'Pick a club to trade with.'};
+  const gp=give.map(id=>you.players.find(p=>p.id===id)).filter(Boolean), tp=get.map(id=>them.players.find(p=>p.id===id)).filter(Boolean);
+  if(!gp.length||!tp.length) return {ok:false,why:'Choose at least one player from each side.'};
+  const after=(c,out,inn)=>{const x={players:c.players.filter(p=>!out.includes(p)).concat(inn)};return x;};
+  const ya=after(you,gp,tp), ta=after(them,tp,gp);
+  if(!rosterOk(ya)) return {ok:false,why:'After this trade your roster would not have nine batters and five pitchers (or would pass '+DM.rosterMax+' players).'};
+  if(!rosterOk(ta)) return {ok:false,why:them.short+' would be left without nine batters and five pitchers.'};
+  if(payroll(ya)>you.budget) return {ok:false,why:'Your payroll would go over the owner\'s budget of '+money(you.budget)+'.'};
+  if(payroll(ta)>them.budget+500) return {ok:false,why:them.short+' can\'t take on that much salary.'};
+  const g=gp.reduce((n,p)=>n+worth(p),0), t=tp.reduce((n,p)=>n+worth(p),0);
+  if(g>=t*1.05) return {ok:true,why:them.short+'\' general manager shakes your hand: "Deal."',give:g,get:t};
+  const gap=t*1.05-g, more=gap<t*.15?'a little more':gap<t*.5?'a fair bit more':'much more';
+  return {ok:false,why:'"Not quite. We would need '+more+' for that." ('+them.short+' value what you offer at '+g+' and what you ask for at '+t+'.)',give:g,get:t};
+}
+function doTrade(L,other,give,get) {
+  const j=judgeTrade(L,other,give,get); if(!j.ok) return j.why;
+  const you=L.clubs[DM.you], them=L.clubs[other];
+  const gp=you.players.filter(p=>give.includes(p.id)), tp=them.players.filter(p=>get.includes(p.id));
+  you.players=you.players.filter(p=>!gp.includes(p)).concat(tp); them.players=them.players.filter(p=>!tp.includes(p)).concat(gp);
+  setLineup(you); setLineup(them); L.log.push('Season '+L.season+', day '+L.day+': traded '+gp.map(p=>p.name).join(', ')+' to '+them.short+' for '+tp.map(p=>p.name).join(', ')+'.');
+  return '';
+}
+/* Every fifth day another club may call with an offer that slightly favours them. */
+function aiOffer(L) {
+  const you=L.clubs[DM.you], mine=you.players.slice().sort((a,b)=>worth(b)-worth(a)).slice(0,10);
+  for(let tries=0;tries<6;tries++){
+    const other=1+Math.floor(rnd(L)*5), them=L.clubs[other], want=mine[Math.floor(rnd(L)*mine.length)];
+    const theirs=them.players.filter(p=>p.pitcher===want.pitcher&&worth(p)<=worth(want)/1.06&&worth(p)>=worth(want)*.7).sort((a,b)=>worth(b)-worth(a))[0];
+    if(theirs&&judgeTrade(L,other,[want.id],[theirs.id]).ok) return {club:other, give:want.id, get:theirs.id};
+  }
+  return null;
+}
+function answerOffer(L,yes) { const o=L.offer; L.offer=null; if(!o||!yes) return ''; return doTrade(L,o.club,[o.give],[o.get]); }
+
+function validLeague(o) { return !!o && typeof o==='object' && o.game==='diamond-manager' && Array.isArray(o.clubs) && o.clubs.length===6 && Array.isArray(o.schedule); }
+function migrateLeague(o) { if(!validLeague(o)) return newLeague((Date.now()>>>0)||1); return Object.assign({speed:1,intro:false,log:[],history:[],inbox:[],sound:0},o); }
