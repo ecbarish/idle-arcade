@@ -25,6 +25,44 @@ sign, dex entry, item text or NPC chatter in Wildbond, and add every clue you pl
 6. **Choices touch the threads.** What you do with the Unbound and the guardians changes which pieces you see and how
    the final picture lands, never whether the truth is reachable.
 
+## The final truth (decided by Evan, 2026-10-09; the reveal must fit it)
+
+Evan chose a combination of the candidates (asked in docs/proposals/wildbond-final-reveals.md). In his words: "Something
+that feeds on memories was eating the world, and this caused a guardian to turn. The bonded pair knew the guardian well
+beforehand and had to fight their friend, which the entity used as a top mastermind. The original entity was made by an
+older order's mistake of mistreating creatures and not valuing their bond; therefore they're the original Unbound. They
+think creatures should be slaves and fight for us and do our bidding, when they should be treated as friends and live
+symbiotically. And their hate took colour and depth from the world. Maybe they did some sort of ritual that was to
+enslave the watcher and other powerful creatures?"
+
+**The account, in order (canon from now on):**
+1. **An older order** of tamers (the first "Unbound": people *without* bonds) refused to treat creatures as friends.
+   They commanded them as tools, and tried a **ritual to enslave the most powerful creatures**, the watcher among them.
+2. **The ritual made the entity**: their contempt, given shape, became **something that feeds on memories**. It began
+   eating the world's memory of itself, and that is what the **colour and depth** are: the world remembering itself.
+3. The entity **turned a guardian** (the bound, broken creature at the centre of the ritual) and hid behind it as its
+   mastermind.
+4. **The old pair** (a tamer and their partner, ancestors of all four heritages) **knew that guardian as a friend**. They
+   had to fight it. Their bond joined them ("two figures, one shadow") and they stopped the entity, but the cost and the
+   fading were already done. The surviving pieces are what the clues show (the carved steps, the warm pocket, the
+   shelter ties, the incomplete record).
+
+**Fitting what's already placed (to check in WB4.4b):**
+- **Toren's watcher** is the creature the ritual tried to enslave. "Failed, or slept" both stay true in a sense: it
+  slept rather than serve. The warm pocket is its rest.
+- **The present-day Unbound** are not the old order. Their founding copy saw the joining ("two became one, the land went
+  pale") and concluded that bonds themselves caused the fading, so they want every creature freed from every bond.
+  They are sincere, half right about what happened and wrong about why. The irony to land at the reveal: the old order
+  and the modern Unbound both reject the bond, one as masters and one as strangers. The game's answer is the third way,
+  friends who choose each other (symbiosis).
+- **The four heritages** each saw a different part of one night, which stays canon.
+- **Kept open on purpose:** what became of the old pair after the joining; whether anything of the entity remains
+  (one future hook); Veilmote's guarded nests and Tobin's earlier sighting.
+
+Before writing the reveal, ChatGPT checks every placed clue against this account and lists any that would contradict it.
+Where a clue only fits loosely, add fair late clues (three shared observations before the reveal) rather than
+rewriting old ones.
+
 ## The threads (living ledger)
 
 For each: what players can see, the candidate explanations, the decided truth (if decided), and the clues placed.

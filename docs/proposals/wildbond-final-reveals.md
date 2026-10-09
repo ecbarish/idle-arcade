@@ -35,5 +35,5 @@ mystery. Lay out three shared late observations before the reveal; optional heri
 perspective, never access to the truth. Keep lost pair, watcher, mooring light and bell answers distinct until
 evidence deliberately connects them. Narration cannot knowingly mislead.
 
-No final revelation text is authored in this proposal, and nothing is blocked in Claude's league build. The
+**Decided by Evan, 2026-10-09:** see docs/lore/wildbond-threads.md "The final truth". No final revelation text is authored in this proposal, and nothing is blocked in Claude's league build. The
 separate league pack remains usable; the deeper account should be approved before WB4.4b becomes a writing ticket.

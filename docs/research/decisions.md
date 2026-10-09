@@ -247,3 +247,10 @@ Sources: [Kairosoft wiki: recurring characters](https://kairosoft.wiki.gg/wiki/R
 6. Shared systems in the order dialogue → sound → roster → world kit? **[Recommend yes]**
 7. A light shared multiverse (recurring characters, Otherworld visits the other worlds, maybe Primordial as the deep
    past)? **[Your call: it's taste, not data]**
+
+## 7. Wildbond's final truth (Evan, 2026-10-09)
+Decided: a combination of the candidates. An older order mistreated creatures and tried a ritual to enslave the most
+powerful ones (the original "Unbound", people without bonds); their contempt became a memory-eating entity that turned
+a guardian, the old pair's friend, and used it as its mastermind; the pair fought their friend and stopped the entity,
+and the world's colour and depth were its memory, eaten. The modern Unbound misread the joining and blame bonds.
+Full account: docs/lore/wildbond-threads.md "The final truth".
