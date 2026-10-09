@@ -156,3 +156,5 @@ Read-only isolated localhost browser inventory confirmed both maps, people/teams
 weights, appended Warden lines, four heritage keys, weather, original tracks and battle backdrops. All eight
 browser pages pass. Browser data, engine, exporter, Godot, saves and versions are unchanged.
 The real 39-table export matched the live inventory exactly, with no missing or dropped-code warning. Seventy-three handoff checks across both briefs verify source tables, documented IDs/species and actual shortest-path reachability to people, signs, supplies and exits. No Godot JSON was written.
+
+Latest main's [four-seasons proposal](../proposals/seasons-and-holidays.md) is preserved. The palette and weather contract above describe the current area baseline; seasonal looks and festivals belong to WS1-WS6, not new mechanics or calendar claims introduced by this brief.
