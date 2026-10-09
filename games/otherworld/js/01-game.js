@@ -17,7 +17,7 @@ function load() {
 function save() {
   Arcade.save(KEY, S);
   const n = S.lives.length, l = S.life;
-  Arcade.report('otherworld', { summary: l ? `${l.name} in ${WORLDS[l.world].name}` : n ? `${n} life${n > 1 ? 'ves' : ''} lived` : 'Waiting in the Between',
+  Arcade.report('otherworld', { summary: l ? `${l.name} in ${WORLDS[l.world].name}` : n ? `${n} ${n === 1 ? 'life' : 'lives'} lived` : 'Waiting in the Between',
     detail: `${Object.keys(S.mem).length} soul memories · ${n} ending${n === 1 ? '' : 's'} seen` });
 }
 

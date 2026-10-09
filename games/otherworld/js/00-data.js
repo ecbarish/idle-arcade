@@ -6,12 +6,12 @@ const KEY = 'otherworld-save-v1';
 
 /* the people (portrait looks for shared/dialogue.js) */
 const CAST = {
-  archivist: { name: 'The Archivist', title: 'Keeper of lives', skin: '#e8d6c2', hair: 'long', hairCol: '#c8c8e8', shirt: '#3a3a6a', bg: '#1d1b3a' },
+  archivist: { name: 'The Archivist', title: 'Keeper of Lives', skin: '#e8d6c2', hair: 'long', hairCol: '#c8c8e8', shirt: '#3a3a6a', bg: '#1d1b3a' },
   bren: { name: 'Old Bren', title: 'Carter', skin: '#d8a882', hair: 'short', hairCol: '#9a9a9a', shirt: '#7a5a3a', bg: '#e8d8b8', beard: '#9a9a9a' },
-  hesta: { name: 'Hesta', title: 'Guild registrar', skin: '#f0c8a8', hair: 'bun', hairCol: '#6a3a2a', shirt: '#4a6a8a', bg: '#d8e4f0' },
-  mira: { name: 'Mira', title: 'Apprentice mage', skin: '#f2cfb0', hair: 'long', hairCol: '#c84a3a', shirt: '#4a3a7a', bg: '#e4dcf4' },
+  hesta: { name: 'Hesta', title: 'Guild Registrar', skin: '#f0c8a8', hair: 'bun', hairCol: '#6a3a2a', shirt: '#4a6a8a', bg: '#d8e4f0' },
+  mira: { name: 'Mira', title: 'Apprentice Mage', skin: '#f2cfb0', hair: 'long', hairCol: '#c84a3a', shirt: '#4a3a7a', bg: '#e4dcf4' },
   corvin: { name: 'Corvin', title: 'Merchant', skin: '#d8b090', hair: 'short', hairCol: '#3a2a1a', shirt: '#7a2a2a', bg: '#f0e0c8' },
-  voss: { name: 'Guild Master Voss', title: 'Lanthorn guild', skin: '#c89878', hair: 'short', hairCol: '#5a5a5a', shirt: '#2a3a2a', bg: '#d8d8c8', beard: '#5a5a5a' }
+  voss: { name: 'Guild Master Voss', title: 'Lanthorn Guild', skin: '#c89878', hair: 'short', hairCol: '#5a5a5a', shirt: '#2a3a2a', bg: '#d8d8c8', beard: '#5a5a5a' }
 };
 
 /* the worlds the Archivist can offer; built ones have a start node */
@@ -87,8 +87,8 @@ const NODES = {
     ['mira', 'They\'re not attacking anything. They\'re just... running.'],
     ...{ appraisal: [['', 'You look closer, and your gift looks with you: fear. Every one of them is afraid of something behind it.']],
       sword: [['', 'A boar breaks from the herd and charges the tower door. Your hands move before you think, and it falls. Mira stares at you. Your hands are shaking.']],
-      pocket: [['', 'In the tower\'s storeroom: a crate of old ballista bolts. You slip all of them into your pocket space.'], ['mira', 'Where did they... how did you... never mind.']] }[life.gift],
-    ['mira', 'Something in the deep forest is frightening them. If the guild master knows that, why would he lie?']],
+      pocket: [['', 'In the tower\'s storeroom: a crate of old ballista bolts. You slip all of them into your Pocket Space.'], ['mira', 'Where did they... how did you... never mind.']] }[life.gift],
+    ['mira', 'Something in the deep forest is frightening them. If the Guild Master knows that, why would he lie?']],
     fx: life => { if (life.gift === 'appraisal') life.flags.truth = true; if (life.gift === 'pocket') life.flags.bolts = true; }, go: 'a_council' },
   a_corvin: { bg: 'road', night: true, lines: [
     ['', 'The wagons roll out at dusk. Corvin pays you half up front, as promised.'],
@@ -130,7 +130,7 @@ const NODES = {
     ['', 'By midnight, the outer farms are brought in behind the walls, and half the guild follows you to the forest\'s edge.']], go: 'a_heart' },
   a_walls: { bg: 'walls', night: true, lines: life => [
     ['', 'The tide comes at midnight: a river of eyes and backs in the torchlight. The palisade shudders.'],
-    ...(has(life, 'bolts') ? [['', 'You empty your pocket space onto the wall: a hundred ballista bolts. The archers whoop.']] : []),
+    ...(has(life, 'bolts') ? [['', 'You empty your Pocket Space onto the wall: a hundred ballista bolts. The archers whoop.']] : []),
     ['', 'The walls hold. By dawn the beasts have turned aside. Beyond the walls, the outer farms are smoke.']], end: 'e_walls' },
   a_heart: { bg: 'heart', night: true, lines: life => [
     ['', 'The heart of the Deepwood. Oldroot rises out of the earth, black rot crawling up its bark, and every beast in the forest circles it, terrified.'],
