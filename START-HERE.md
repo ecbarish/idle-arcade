@@ -66,6 +66,8 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
 
 ## Up next (take the first one that isn't claimed; mark it "claimed by <who>, <date>" when you start)
 
+**Focus first: [docs/PRIORITIES.md](docs/PRIORITIES.md)** (2026-10-09) says which games are being built now
+(flagship Wildbond in Godot, second the Starfall village, ChatGPT's own Realmbound) and the order inside each.
 **The lanes in [docs/QUEUE.md](docs/QUEUE.md) are what to do next** (its "current goal" was rewritten 2026-10-08). **When a lane runs
 out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) supplies the next task**: the whole path for every game,
 67 deliverables with owners, no assistant is ever "finished".
@@ -105,6 +107,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 ## Session log (newest first; one or two lines each)
 
 - 2026-10-09 Claude (art and sound, branch claude/project-thread-fhkf1l, includes the craft review branch): sound effects in both Godot games from the Ninja Adventure pack on Evan's PC (`scripts/sfx.gd`, N toggles, every sound checked); feeling bubbles over heads in Starfall and the "!" bubble for Wildbond's trainers; docs/learning/assets.md (what we use, the pack's unused treasures mapped to deliverables, safe licences and sources, making our own) and the arcade palette; CREDITS and credits.html. Starfall 127, Wildbond 282 checks; all 10 suites pass. Web previews not rebuilt (milestone rule). Next: AR2.10, our own sounds.
+- 2026-10-09 Claude: docs/PRIORITIES.md, focus slots and a scorecard for every idea; DEVELOPMENT-PATH's ticket factory now takes work in focus order. Flagship Wildbond (Godot, confirmed by Evan), second Starfall, ChatGPT's own Realmbound.
 - 2026-10-09 Claude (craft review, branch claude/project-thread-2h7yfo): new docs/learning/ (glossary, Godot practices, saves and testing, web and shipping); safe saves in both Godot games (277 and 119 checks); Wildbond ambience to OGG and shared tunes (web pack 25.3 to 20.0 MB, both previews re-exported); `.import` files committed; `.gitattributes`; `node tools/run-all-checks.cjs` runs all ten suites (all pass) and GitHub runs it on every push and PR. DEVELOPMENT-PATH Part 4 now logs lessons; AR2.7 (build previews on GitHub) waits on Evan.
 - 2026-10-09 Claude: Evan chose Wildbond's final truth (recorded in the thread ledger; WB4.4b to ChatGPT). Godot Starfall SF2.3 the Tavern (pouring, Tamsin, shutting, placement bonuses), 116 checks, web preview rebuilt.
 - 2026-10-09 Claude: merged T53 (finale handoff) and T54 (Champion returns); placed in Godot: the homecoming at the league gate and every Warden's welcome; 273 checks; browser Wildbond 2290; web preview rebuilt. Question for Evan: the final truth (docs/proposals/wildbond-final-reveals.md).
