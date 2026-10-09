@@ -5,7 +5,7 @@
 window.ArcadeKinds=[
   {id:'adventure',name:'Adventures',like:'Explore a world on foot, meet people, fight and grow stronger. Wildbond is about catching and raising creatures; Realmbound is a classic MMO with quests and a guild.'},
   {id:'build',name:'Build and manage',like:'Run a place and the people in it: post jobs, earn coin, upgrade buildings and hire helpers who take work off your hands.'},
-  {id:'sports',name:'Sports',like:'Sporting careers and teams. Diamond Career is an early baseball test; more sports and running a whole team are being planned.'},
+  {id:'sports',name:'Sports',like:'Run a team: ratings, trades, contracts and a ballpark to grow. Diamond Manager is baseball; football and hockey are planned.'},
   {id:'story',name:'Stories',like:'Read, choose and live with what you chose. Lives branch toward different endings.'},
   {id:'different',name:'Something different',like:'Small experiments that do not fit the others. Primordial is an idle game about evolving life from one cell.'},
 ];
