@@ -26,8 +26,8 @@ covers sources, licences and sound.
    objects and people; light from the upper left, so each material has a light, a middle and a dark value and the
    shadow side is the lower right.
 6. **Each game has its own palette** of at most about 32 colours, saved as a `.gpl` file (opens in Aseprite,
-   LibreSprite, Pixelorama, GIMP, Krita), with three values per material. Games share only the ink and the lamplight
-   yellow, so lit windows feel like the same arcade.
+   LibreSprite, Pixelorama, GIMP, Krita), with three values per material. Games share only the ink (`#1e1a22`, Wildbond's
+   figures.gd `OUTLINE`) and the lamplight (`#f2d080`), so outlines and lit windows feel like the same arcade.
 7. **Every building is known by its silhouette.** Chimney and glow for a smithy, a tower for a watch, a porch and a
    hanging sign for a tavern, a banner for the guild. If two buildings could swap places unnoticed, one is wrong.
 8. **People and creatures are ours,** drawn from parts in code (`figures.gd`), and feelings show as bubbles over heads.
@@ -58,7 +58,7 @@ Done when: a contact sheet beside a 16x24 person and the neighbouring pieces; re
 ## Look sheets (one per game)
 | Game | Sheet | In a line |
 |---|---|---|
-| Wildbond (Godot) | the Wildbond builder's art direction page, joining this folder as `wildbond.md` | A green river valley losing and regaining its colour: deep valley greens, whitewashed cottages, slate-blue roofs, a red barn |
+| Wildbond (Godot) | [wildbond-art-direction.md](wildbond-art-direction.md) (by the Wildbond builder; its palette lives in `wildbond-godot/tools/paint_tiles.gd`, keep the two in step) | A storybook valley that lost its colour and is getting it back: deep cool greens, whitewashed cottages, slate-blue roofs, a red barn |
 | Starfall village (Godot) | [starfall.md](starfall.md) | A log-walled frontier town in pine forest: cooler and darker, timber and stone, lamplight at night |
 | Realmbound (browser) | not yet | Classic high-fantasy roads and towns; its own sheet comes when it moves into the game window |
 | Diamond Career (browser) | not yet | Ballparks under lights; its own sheet with the sports framework |

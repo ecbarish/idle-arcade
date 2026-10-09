@@ -9,25 +9,28 @@ Wildbond's cottages, barn and summer greens, so the two games look like one.
 The right half is a **blocking mock-up**, not final art: it fixes the palette, the layout and the sizes. The buildings
 in it are still too alike; the list below says how each one must differ. It is drawn by
 [tools/art/starfall_mockup.py](../../tools/art/starfall_mockup.py) (rerun with `python3 tools/art/starfall_mockup.py`),
-which also writes [starfall/mockup-1x.png](starfall/mockup-1x.png) at the game's real 384 by 216 size.
+which also writes [starfall/mockup-1x.png](starfall/mockup-1x.png) at the game's real 384 by 216 size and
+[starfall/palette.gpl](starfall/palette.gpl) from the same colour list. Today's screenshot is
+[starfall/today-1x.png](starfall/today-1x.png). Wildbond is leaving the Ninja Adventure pack for its own art; Starfall
+leaves it too, piece by piece, as the ART-SF tasks land.
 
 ## In a line
 A log-walled frontier town cut out of a pine forest, at the edge of the wilds: cooler and darker than Wildbond, built
-from timber, stone and slate, with mud underfoot and lamplight at night. It should feel new, a little rough and
+from timber and stone under weathered wooden roofs, with mud underfoot and lamplight at night. It should feel new, a little rough and
 growing: empty staked plots inside the wall, stakes where the wall will go next.
 
 ## Palette
 [starfall/palette.gpl](starfall/palette.gpl), 27 colours, three values per material: pine (forest), moss (grass),
-mud (road and square), log and plank (walls), stone (footings, smithy, well), shingle (slate-blue roofs), plus ink,
-lamplight, the guild's blue, a banner red, water and smoke. Add a colour only with a reason, and stay under 32.
+mud (road and square), log and plank (walls), stone (footings, smithy, well), shake (weathered grey-brown wooden roofs), plus
+ink and lamplight (both shared with Wildbond), the guild's blue, a banner red, water and smoke. Add a colour only with a reason, and stay under 32.
 
 ## What must differ from Wildbond
 | | Wildbond (Larkhaven) | Starfall |
 |---|---|---|
 | Ground | bright summer grass, flowers | darker moss, mud road and square, ferns and stumps; no flowers inside the wall |
-| Trees | round leafy trees | pines (cones), in a dense dark edge |
+| Trees | round broadleaf crowns with teal pines between | only pines, greener and darker, in a dense edge; stumps where the town was cleared |
 | Walls | whitewash and timber frame | round logs (horizontal), stone footings |
-| Roofs | thatch, red and slate tiles | slate-blue shingle only (the guild's banner and the lamps carry the colour) |
+| Roofs | slate blue (and the red barn) | weathered wooden shakes, grey-brown; never blue or red (the guild's banner and the lamps carry the colour) |
 | Edges of town | hedges and open fields | a log palisade with a gate and a watchtower |
 | Light | sunny, warm | cool daylight; warm lamplight in windows and on posts, brighter at night |
 
