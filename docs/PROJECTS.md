@@ -285,3 +285,6 @@ Merged 2026-10-08 (Realmbound v1.3.0, PR #53); written by Codex on codex/realmbo
 |---|---|---|---|---|---|---|
 | D1d | **T36: in the game window and a road trip** | L | Polish+Data | D1c | done, merged 2026-10-08 (Diamond Career v0.4.0, PR #59) | docs/ROADMAP.md T36; keep existing features reachable, three away parks and calendar pay |
 
+
+
+T43 claimed by Codex, 2026-10-08, on codex/catalogue-realmbound: zone and dungeon beast catalogue correspondences and names in the game window; stacked after T41, with combat and local identities preserved.
