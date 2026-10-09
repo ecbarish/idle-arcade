@@ -104,7 +104,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB4.2 [Claude] The wild bond's
   discovery (WG4) and the first-person glimpse.
 - [ ] WB4.3 [Claude] The homecoming ending, colour and depth restored.
-- [ ] WB4.4 [ChatGPT] (league handoff claimed: T53; full mystery payoff awaits the ledger's open truths) The ending's text and every thread's payoff, written from the ledger, for Claude to place.
+- [ ] WB4.4 [ChatGPT] (league handoff ready: T53, PR #80; full mystery payoff awaits the ledger's open truths) The ending's text and every thread's payoff, written from the ledger, for Claude to place.
 
 **WB-M5: life after the league.**
 - [ ] WB5.1 [Claude] The Lighthouse Spire and rematches.

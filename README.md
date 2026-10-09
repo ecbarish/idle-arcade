@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Wildbond finale handoff (2026-10-09, T53): existing league script, an optional homecoming and a thread payoff map for Claude's Godot build. [Writing contract](docs/lore/wildbond-finale-brief.md). Unresolved mystery truths remain open; no playable behavior changed.
+
 - Godot Starfall (2026-10-09): every adventurer now has a three-part story. Kaito, Hana and Sora, who arrive as the town grows, each have their own (a bow that sings, a knight learning to listen, a monk learning from real people), and Aki, Ren and Yuna each get a closing chapter. Written by ChatGPT. 106 checks pass.
 - Godot Wildbond (2026-10-09): the seasons come alive. Wild creatures shift with the season (a few visitors favour one season and are rare in the others), everyone has a word about the time of year, and on festival days Maren invites you to join in: plant a flower that stays at the ranch, run a lap with your partner, fill the trough for the harvest supper, or make a gift at the workbench and give it to someone in town. Each festival gives a keepsake, kept in your field book. 260 checks pass.
 - Starfall writing handoff (2026-10-09, T52): three-beat arcs for Kaito, Hana and Sora and closing beats for Aki, Ren and Yuna. [Additive JSON and integration contract](docs/lore/starfall-member-stories.md); not playable until Claude wires it in.

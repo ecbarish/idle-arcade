@@ -93,7 +93,7 @@ index.html or style.css until those phases are merged.
 | A18 | **T43** The creature catalogue reaches Realmbound | done, merged 2026-10-09 (Realmbound v1.7.0) | docs/ROADMAP.md T43 |
 | A19 | **T44** Accessibility pass on the browser games (L10) | done, merged 2026-10-09 | docs/ROADMAP.md T44 |
 | A20 | **T45** Early-road heritage dialogue (WB2.6) | done, merged 2026-10-09 (Wildbond v1.8.1) | Browser data and ledger; no Godot edits |
-| A28 | **T53** Wildbond league script and payoff map (WB4.4a) | claimed: Codex, 2026-10-09, codex/wildbond-finale-handoff | Safe writing handoff while Claude builds WB4.1; no Godot edits |
+| A28 | **T53** Wildbond league script and payoff map (WB4.4a) | ready: PR #80, Codex, 2026-10-09 | Safe writing handoff while Claude builds WB4.1; no Godot edits |
 | A27 | **T52** Starfall member writing handoff (SF2.4a) | done, merged 2026-10-09 | Separate additive JSON, preserve Godot ownership; stacked after #78 |
 | A26 | **T51** Wildbond festival writing (WS6) | done, merged 2026-10-09 | Stacked after T50/#77; exact calendar IDs, traditions, town voices and cosmetic keepsakes |
 | A25 | **T50** Wildbond seasonal data (WS3) | done, merged 2026-10-09 | Claude's next request: regional shifts, rare year-round visitors, seasonal voices; export only |

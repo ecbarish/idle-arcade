@@ -95,3 +95,12 @@ no flashes or mandatory sweeping camera. Depth waits for actual WB4.2/WB4.3 impl
 - All four heritage routes reach the same essential truth; no guardian capture or festival date is required.
 - Classic post-game text and Godot availability remain distinct. No league line claims a mystery reveal or depth
   restoration that is not implemented. Read the decision map before writing WB4.4's remaining final revelations.
+
+## Verified handoff
+
+271 source/export/path/layout checks pass: exact source entries and ending, existing cast and team species,
+ordered IDs, all seven NPC approaches reachable, clean 39-table export, and 37 lines at four screen sizes
+(148 shared portrait previews). Frames in docs/screenshots/wildbond-finale-writing/ show the optional welcome
+on the real Classic dialogue surface, in isolated browser saves. This is writing validation, not a Godot league
+playthrough. All eight browser pages pass; no runtime, save, export tool, Godot, preview or version change.
+Latest main's seasonal/festival integration and Starfall story integration were preserved through the merge.

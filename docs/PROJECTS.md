@@ -34,7 +34,7 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 
 | ID | Project | Size | Status | Notes |
 |---|---|---|---|---|
-| WB4.4a | League script and payoff map (T53) | S | claimed: Codex, 2026-10-09, codex/wildbond-finale-handoff | Existing finale and optional homecoming; undecided mystery reveals held |
+| WB4.4a | League script and payoff map (T53) | S | ready: PR #80, Codex, 2026-10-09 | Existing finale and optional homecoming; undecided mystery reveals held |
 
 ## How to use this list
 
