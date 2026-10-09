@@ -107,6 +107,7 @@ Branch: codex/wildbond-late-pacing, stacked after T55 from current main.
 - Record current teams/caps and compare ordinary entry-level teams, several seeded potential/trait rolls and a lower-powered team. Model the two route trainers, current staged story fights and wild training in areas 5-8; record before/after levels, defeats and wild wins needed, not invented human completion hours. League uses actual full rests between courts and resets on loss.
 - Include a no-extra-training route to expose deficits, and a bounded train-to-ace policy to measure the grind needed. Label synthetic starting fixtures, command policy, evolution, missing systems and differences from Classic. Verify browser/export/Godot data and numeric rules; report drift instead of silently assuming parity.
 - Write docs/wildbond-godot-pacing.md plus machine-readable results under docs/measurements; tests/tools may be new or changed. No gameplay tuning, engine/preview/save/version edits. All eight browser pages pass. Normal README/Session/COMMS/project/queue/path notes; open PR, never merge.
+- [x] T56 ready in PR #83: 24 entry benchmarks, six continuous direct routes, four train-to-ace journeys, raw results and copied-input hashes. 79,732 diagnostic checks and all eight browser suites pass. Deeptide cooldown stalls handed to Claude; no engine/gameplay tuning.
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a

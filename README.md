@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Wildbond pacing (2026-10-09, T56): [actual Godot late-area and league diagnostic](docs/wildbond-godot-pacing.md), reproducible without player saves. Reports progression deficits and late move cooldown stalls; no gameplay tuning.
+
 - Wildbond writing audit (2026-10-09, T55): [final-truth clue fit and three proposed late observations](docs/lore/wildbond-final-truth-audit.md) for Claude's review. No new playable dialogue or behavior.
 
 - Godot Starfall (2026-10-09): the Tavern. Build it on a plot and adventurers with savings drop in each evening; you pour, and a well-judged pour earns a tip and lifts their spirits. Pour enough and Tamsin asks to run the tap. Leave it unserved two evenings and it shuts its shutters until you open it again. Where you build matters a little: near the inn the room is livelier, and a smithy beside the training yard makes practice count double. 116 checks pass.
