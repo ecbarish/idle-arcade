@@ -122,13 +122,13 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
   statuses, an order per Warden; tuned with WB3.6.
 - [ ] WD4 [Claude] Areas you can explore (GR-3): route, settlement and hidden pocket per area, return spots gated by
   element. Thornwood first, one area per PR.
-
-**WB-M5: life after the league.**
 - [ ] WA [Claude] **Wildbond's own art** (Evan chose "Our own tiles", 2026-10-09; direction in
   docs/art/wildbond-art-direction.md, which keeps a later 3D or first-person version in view). **Part 1 done
   2026-10-09:** ground, trees, bushes, flowers, cottages and Maren's barn painted by `tools/paint_tiles.gd`; the pack's
   floor, nature and house tiles removed. Part 2: water, battle backdrops, the hand-drawn halls on the shared palette,
   interiors. Part 3: battle effects and emotes.
+
+**WB-M5: life after the league.**
 - [ ] WB5.1 [Claude] The Lighthouse Spire and rematches.
 - [ ] WB5.2 [Claude] Contests and races at the ranch (W4).
 - [ ] WB5.3 [Claude] Ranch jobs: creatures help (W5/WG8).
