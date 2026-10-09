@@ -21,6 +21,10 @@ details{margin:2px 0}summary{cursor:pointer;padding:2px 0}.kids{margin-left:16px
 .leaf input[type=text],.leaf input[type=number]{width:220px;padding:3px 6px;font-size:13px}.leaf .when{font-size:12px;color:var(--dim)}
 .leaf.changed label{color:var(--gold)}.facts{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.facts span{background:var(--line);border-radius:12px;padding:2px 10px;font-size:13px}
 .issue{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0;font-size:14px}.issue::before{content:'!';color:var(--bad);font-weight:700}
+#tbMore[hidden]{display:none}.tb-stats{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.tb-stats span{background:var(--line);border-radius:12px;padding:2px 10px;font-size:13px}
+.tb-item{border-top:1px solid var(--line);padding:8px 0}.tb-text{white-space:pre-wrap;overflow-wrap:anywhere}#textBrowser mark{background:var(--gold);color:#1a1020;border-radius:2px}
+.tb-kind{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#c8b0ff;margin-right:6px}
+.tb-where{font-size:12px;color:var(--dim);margin:2px 0 0 0;padding:0;list-style:none}.tb-where li{overflow-wrap:anywhere}.tb-where code{color:var(--fg);font-size:12px}
 .healthy{color:var(--ok);font-size:14px;margin:6px 0}
 </style>
 </head>
@@ -63,9 +67,23 @@ details{margin:2px 0}summary{cursor:pointer;padding:2px 0}.kids{margin-left:16px
     <div id="log" class="meta"></div>
   </section>
 
+  <section class="card" id="textBrowser">
+    <h2>Text browser</h2>
+    <p class="meta">Every line of dialogue, quest text, creature and item name and description in the games, read straight from their own files,
+      with where each one lives: the game, the file, the line and the path inside the data. Read-only: nothing here changes a game or a save.
+      Type a few words to search the text (or a file or path, like <b>SPECIES</b> or <b>stories.json</b>).</p>
+    <div class="row"><input id="tbFind" type="search" placeholder="Search the text (e.g. Maren, Thornwood, bounty)" style="flex:1;min-width:180px" aria-label="Search the games' text">
+      <select id="tbGame" aria-label="Game"><option value="">Every game</option></select>
+      <select id="tbKind" aria-label="Kind of text"><option value="">Every kind</option></select></div>
+    <div id="tbStatus" class="meta" aria-live="polite">Reading the games' text…</div>
+    <div id="tbStats" class="tb-stats"></div>
+    <div id="tbList"></div>
+    <div class="row"><button class="alt" id="tbMore" hidden>Show more</button></div>
+  </section>
+
   <section class="card">
     <h2>Coming next</h2>
-    <p class="meta">From the plan (docs/PROJECTS.md, Studio): editors for dialogue and text (E4), creatures and quests (E5), a map painter (E6), and a lighting and music tuner (E7).</p>
+    <p class="meta">From the plan (docs/PROJECTS.md, Studio): editing the text found by the text browser (E4, with E1's patch format), creatures and quests (E5), a map painter (E6), and a lighting and music tuner (E7).</p>
   </section>
 </main>
 <script src="shared/engine.js"></script>
@@ -206,6 +224,41 @@ $('#docFind').addEventListener('input', docRender);
 $('#docGame').innerHTML = GAMES.map(([n, k]) => `<option value="${k}">${n}</option>`).join('');
 $('#docGame').onchange = () => { $('#docMsg').textContent = ''; docLoad(); };
 gmUI(); savesUI(); logUI(); docLoad();
+</script>
+<script src="studio/text-browser.js"></script>
+<script>
+'use strict';
+/* ---- Text browser (E4, read-only): studio/text-browser.js reads the games; this draws the list ---- */
+(function () {
+  const $ = s => document.querySelector(s), PAGE = 60;
+  const esc = v => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  let index = null, shown = PAGE;
+  function mark(text, words) {
+    let html = esc(text); if (!words.length) return html;
+    const re = new RegExp('(' + words.map(w => esc(w).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')', 'gi');
+    return html.replace(/(<[^>]*>)|([^<]+)/g, (m, tag, txt) => tag || txt.replace(re, '<mark>$1</mark>'));
+  }
+  function draw() {
+    if (!index) return;
+    const q = $('#tbFind').value, game = $('#tbGame').value, kind = $('#tbKind').value;
+    const words = q.toLowerCase().split(/\s+/).filter(Boolean), hits = StudioText.search(index.entries, q, game, kind);
+    $('#tbStatus').textContent = hits.length === index.entries.length ? `${hits.length} pieces of text.` : `${hits.length} of ${index.entries.length} pieces of text match.`;
+    $('#tbList').innerHTML = hits.slice(0, shown).map(e => `<div class="tb-item"><div class="tb-text">${e.kinds.map(k => `<span class="tb-kind">${esc(k)}</span>`).join('')}${mark(e.text, words)}</div>
+      <ul class="tb-where">${e.places.filter(p => !game || p.game === game).slice(0, 8).map(p => `<li>${esc(p.gameName)} · <a href="${esc(p.file)}" target="_blank" rel="noopener">${esc(p.file)}</a>${p.line ? ' line ' + p.line : ''}${p.path ? ' · <code>' + mark(p.path, words) + '</code>' : ''}</li>`).join('')}
+      ${e.places.length > 8 ? `<li>and ${e.places.length - 8} more places</li>` : ''}</ul></div>`).join('') || '<p class="meta">Nothing matches.</p>';
+    $('#tbMore').hidden = hits.length <= shown;
+  }
+  let timer; $('#tbFind').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(() => { shown = PAGE; draw(); }, 150); });
+  $('#tbGame').onchange = $('#tbKind').onchange = () => { shown = PAGE; draw(); };
+  $('#tbMore').onclick = () => { shown += PAGE * 2; draw(); };
+  $('#tbGame').insertAdjacentHTML('beforeend', StudioText.SOURCES.map(g => `<option value="${g.id}">${esc(g.name)}</option>`).join(''));
+  $('#tbKind').insertAdjacentHTML('beforeend', StudioText.KINDS.map(k => `<option>${esc(k)}</option>`).join(''));
+  StudioText.build('./', name => { $('#tbStatus').textContent = `Reading ${name}…`; }).then(r => {
+    index = r; window.__studioTextIndex = r;
+    $('#tbStats').innerHTML = StudioText.SOURCES.map(g => `<span title="${esc((r.notes[g.id] || []).join(' '))}">${esc(g.name)}: ${r.perGame[g.id] || 0}</span>`).join('');
+    draw();
+  }).catch(e => { $('#tbStatus').textContent = 'Could not read the games: ' + e.message + ' (open the Studio from the local server, not as a file).'; });
+})();
 </script>
 </body>
 </html>
