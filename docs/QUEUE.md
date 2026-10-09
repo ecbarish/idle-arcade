@@ -92,6 +92,7 @@ index.html or style.css until those phases are merged.
 | A17 | **T42** Otherworld: memories that matter across lives, toward a systemic world | open (2026-10-08) | docs/ROADMAP.md T42 |
 | A18 | **T43** The creature catalogue reaches Realmbound | open (2026-10-08) | docs/ROADMAP.md T43 |
 | A19 | **T44** Accessibility pass on the browser games (L10) | open (2026-10-08) | docs/ROADMAP.md T44 |
+| A20 | **T45** Early-road heritage dialogue (WB2.6) | claimed: Codex, 2026-10-08, codex/wildbond-early-heritages | Browser data and ledger; no Godot edits |
 | A8 | While you wait | always | Lore and dex text polish, more checks, bugs from GitHub issues |
 | — | Done | — | A2 L7a Wildbond balance, A3 L7b Realmbound balance, R9 heroic loot review (all merged 2026-10-07) |
 

@@ -75,6 +75,7 @@ workbench and gear), evolution shapes and conditions, heritages, music, saving. 
 
 | ID | Project | Size | Status | Notes |
 |---|---|---|---|---|
+| WB2.6 | **Early-road heritage recognition** (T45; browser data exported for Claude) | S | claimed: Codex, 2026-10-08, codex/wildbond-early-heritages | All four origins for existing early-road NPCs and Wardens; ledger and checks |
 | WG1 | **Tamer abilities** with heritages: orders that grow from who you are and who taught you (Toren's Steady) | M | open (next) | creature-catalogue-and-evolution.md §4 |
 | WG2 | **Stillreed Basin** and the areas after it (Hollowecho, Sunthread, Farwatch), from the browser data | L | open | Each with its own furniture, sound and music (variety plan) |
 | WG3 | **The league, the Champion and the Spire** in Godot | L | open | After WG2 |

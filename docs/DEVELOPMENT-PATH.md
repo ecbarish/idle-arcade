@@ -71,7 +71,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
   tiles.
 - [ ] WB2.4 [Claude] Interiors: the inn, the shop and two homes in Larkhaven, walkable (inn and shop done 2026-10-08, with Old Ned and Juniper; homes left).
 - [x] WB2.5 [Claude] Maren's letter and the field book's "where next" hint (WG8): done 2026-10-08.
-- [ ] WB2.6 [ChatGPT] Lore: a heritage line for every Warden and townsperson in areas 1-4 (data in the browser game,
+- [ ] WB2.6 [ChatGPT] (claimed: Codex, 2026-10-08, codex/wildbond-early-heritages; T45) Lore: a heritage line for every Warden and townsperson in areas 1-4 (data in the browser game,
   exported to Godot), recorded in the thread ledger.
 - [ ] WB2.7 [Claude] Bring T37's fourteen creatures into Godot (bodies, export) (WG9).
 
