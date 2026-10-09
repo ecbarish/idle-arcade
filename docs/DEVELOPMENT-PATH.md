@@ -116,7 +116,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 
 **WB-D: deeper play (from the game review, docs/proposals/game-review-2026-10-09.md; before 2.0, order in PRIORITIES.md).**
 - [ ] WD1 [Claude] Numbers off the screen (GR-4): remove the Badges/Lures/Coins/Wilddex line; a readable arrival name.
-- [ ] WD2 [ChatGPT data, Claude drawing] Creatures that look different (GR-1): per-species look features in data;
+- [ ] WD2 [ChatGPT data, Claude drawing] (data claimed: Codex, 2026-10-09, codex/wildbond-look-data) Creatures that look different (GR-1): per-species look features in data;
   parts drawn in figures.gd; 4-5 new body shapes. *Part 1 done 2026-10-09: serpent, turtle, moth and tree-folk shapes for twelve species (figures.gd `SHAPE_FOR`; a `shape` field in the data overrides it). Left: ChatGPT's look features, then Claude draws them as parts; a fish shape with WB5.7.*
 - [ ] WD3 [Claude, ChatGPT data] Battles with real choices (GR-2): about 60 moves, family signature moves, a few
   statuses, an order per Warden; tuned with WB3.6.

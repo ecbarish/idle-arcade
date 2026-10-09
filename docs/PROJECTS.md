@@ -118,6 +118,8 @@ for every game, and how to make your next ticket when your lane is empty: [DEVEL
 |---|---|---|---|---|
 | AR2.2 | **Put the new previews on the arcade shelf** (T46) | S | claimed: Codex, 2026-10-09, codex/arcade-previews | New preview cards and links; Classic saves stay separate; no Godot/export edit |
 
+| WD2-data | Species appearance contract | M | claimed: Codex, 2026-10-09, codex/wildbond-look-data | Additive browser metadata; renderer remains separate |
+
 ## Wildbond in Godot (the new Wildbond; Claude's lane)
 
 Browser-data handoff T40: areas 5–8 clues and chatter merged 2026-10-08 (Wildbond v1.8.0, PR #64); they reach the Godot version when Claude builds those areas (WG2).
