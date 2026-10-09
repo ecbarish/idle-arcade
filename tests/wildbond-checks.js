@@ -621,7 +621,7 @@ function wildbondChecks() {
     check(map + ': losing to ' + n.who + ' prevents another sight challenge until changing maps', () => {
       ready(); wb.placeAt(map); S.team = [wb.newCreature('ripplet', 1)]; S.team[0].hp = 1;
       talkTo(n); skipTalk();
-      let ticks = 0; while (B && !B.over && ticks++ < 10000) wb.worldTick(0.1);
+      let ticks = 0; while (B && !B.over && ticks++ < 10000) { if (B.wait) wb.chooseTurn(movesOf(B.wait.c).find(m => !(B.wait.cds[m] > 0))); wb.worldTick(0.1); }
       if (!B || B.over !== 'lost' || !WK.cool[n.who] || S.beaten && S.beaten[n.who]) return false;
       wb.finishBattle(); skipTalk();
       const [dx, dy] = DIRS[n.dir], x = n.at[0] + dx, y = n.at[1] + dy;
@@ -776,7 +776,7 @@ function wildbondChecks() {
   check('An empty Nuzlocke team ends the run gently with a second-chance partner', () => {
     ready(); S.modes = { nuzlocke: true }; S.team = [wb.newCreature('ripplet', 1)]; S.team[0].hp = 1;
     startBattle('wild', [wb.newCreature('tidewyrm', 100)]);
-    let ticks = 0; while (B && !B.over && ticks++ < 10000) wb.worldTick(0.1);
+    let ticks = 0; while (B && !B.over && ticks++ < 10000) { if (B.wait) wb.chooseTurn(movesOf(B.wait.c).find(m => !(B.wait.cds[m] > 0))); wb.worldTick(0.1); }
     if (!B || B.over !== 'lost') return false; wb.finishBattle();
     return !S.modes.nuzlocke && S.modes.nuzlockeEnded && S.team.length === 1 && S.team[0].hp > 0 && !!TALK && TALK.lines.some(([who]) => who === 'maren');
   });

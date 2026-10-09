@@ -5,6 +5,8 @@ extends RefCounted
 ## The data (species, moves, elements) comes from data/wildbond.json. Random rolls come from an rng you pass in, so the
 ## checks in tests/run_tests.gd can fix them and compare with the browser.
 
+const Effects := preload("res://scripts/battle_effects.gd")
+
 const STATS := ["hp", "pow", "grd", "spd", "wit", "spi"]
 const STAT_NAME := { "hp": "Health", "pow": "Power", "grd": "Guard", "spd": "Speed", "wit": "Wits", "spi": "Spirit" }
 const RARITY := [
@@ -54,6 +56,7 @@ static func make(species_id: String, lvl: int, opts: Dictionary, rng: RandomNumb
 	var c := { "sp": species_id, "name": opts.get("name", DATA.SPECIES[species_id].name), "lvl": lvl, "xp": 0, "rar": rar,
 		"pot": pot, "temp": opts.get("temp", TEMPERAMENTS.keys()[rng.randi() % TEMPERAMENTS.size()]), "traits": traits, "bond": 0.0 }
 	c.hp = stats(c).hp
+	c["moves"] = default_moves(c)
 	return c
 
 ## Breeding (games/wildbond/js/07-ranch.js breedInfo, shared/creatures.js breed): which pairs can have an egg, and
@@ -146,18 +149,58 @@ static func win_xp(foe_count: int, foe_avg_lvl: float, my_lvl: int, trainer: boo
 	var at := clampi(roundi(foe_avg_lvl), 1, my_lvl + 3)
 	return foe_count * xp_need(at) / WINS_PER_LEVEL * (journey_xp / 0.13) * (1.6 if trainer else 1.0)
 
-## The moves a creature knows: everything learned by its level, the last four (movesOf).
-static func moves_of(c: Dictionary) -> Array:
+## Learned moves stay available; Maren's workbench chooses up to four to bring.
+static func default_moves(c: Dictionary) -> Array:
+	var known := learned_moves(c)
+	var chosen := known.slice(-4)
+	if not chosen.any(func(m): return DATA.MOVES[m].kind in ["hit", "aoe"]):
+		var attacks := known.filter(func(m): return DATA.MOVES[m].kind in ["hit", "aoe"])
+		if not attacks.is_empty(): chosen[0] = attacks[-1]
+	return chosen
+
+static func learned_moves(c: Dictionary) -> Array:
 	var out: Array = []
 	for l in sp(c).learn:
 		if l[0] <= c.lvl and l[1] not in out:
 			out.append(l[1])
-	return out.slice(-4)
+	return out
+
+static func moves_of(c: Dictionary) -> Array:
+	var known := learned_moves(c)
+	var chosen: Array = []
+	if c.get("moves") is Array:
+		for m in c.moves:
+			if m in known and m not in chosen:
+				chosen.append(m)
+	if chosen.is_empty():
+		# Old saves keep the four moves they had before WD3, until their player chooses.
+		for l in sp(c).get("legacyLearn", sp(c).learn):
+			if l[0] <= c.lvl and l[1] not in chosen:
+				chosen.append(l[1])
+		chosen = chosen.slice(-4)
+	if chosen.is_empty():
+		chosen = known.slice(-4)
+	return chosen.slice(0, 4)
+
+static func keep_moves(c: Dictionary, list: Array) -> bool:
+	var known := learned_moves(c)
+	if list.is_empty() or list.size() > 4:
+		return false
+	var clean: Array = []
+	for m in list:
+		if m not in known or m in clean:
+			return false
+		clean.append(m)
+	if not clean.any(func(m): return DATA.MOVES[m].kind in ["hit", "aoe"]):
+		return false
+	c["moves"] = clean.duplicate()
+	return true
 
 ## XP in, levels out: new moves and evolution included (grow). Returns the messages to show.
 static func grow(c: Dictionary, xp: int, cap: int) -> Array:
 	var msgs: Array = []
-	var before := moves_of(c)
+	var before := learned_moves(c)
+	var chosen := moves_of(c)
 	var gained := 0
 	if c.lvl < cap:
 		c.xp += xp
@@ -169,9 +212,12 @@ static func grow(c: Dictionary, xp: int, cap: int) -> Array:
 			c.xp = 0
 	if gained > 0:
 		msgs.append("%s grew to level %d!" % [c.name, c.lvl])
-		for m in moves_of(c):
+		for m in learned_moves(c):
 			if m not in before:
+				if chosen.size() < 4:
+					chosen.append(m)
 				msgs.append("%s learned %s!" % [c.name, DATA.MOVES[m].name])
+		c["moves"] = chosen
 		var st := stats(c)
 		c.hp = mini(st.hp, c.hp + roundi(st.hp * 0.2))
 	return msgs
@@ -238,7 +284,8 @@ static func damage(att: Dictionary, def: Dictionary, mv: Dictionary, mult: float
 	var adv := advantage(el, def.c)
 	d *= (1.2 if el != null and el == sp(att.c).el else 1.0) * adv * (0.85 + roll * 0.15) * mult
 	if att.buff.get("dmg", 0.0) > 0: d *= 1.25
-	if def.buff.get("guard", 0.0) > 0: d *= 0.5 if def.side == "a" and def.buff.get("guardCmd", 0) else 0.6
+	d *= Effects.modifier(att, def, mv)
+	if def.buff.get("guard", 0.0) > 0 and not mv.get("pierce", false) and not mv.get("breakGuard", false): d *= 0.5 if def.side == "a" and def.buff.get("guardCmd", 0) else 0.6
 	if "ferocious" in att.c.traits: d *= 1.1
 	if "thick" in def.c.traits: d *= 0.9
 	if el != null and gear_of(def.c).get("resist", "") == el: d *= 0.75
@@ -247,8 +294,10 @@ static func damage(att: Dictionary, def: Dictionary, mv: Dictionary, mult: float
 	return { "d": maxi(1, roundi(d)), "crit": crit, "adv": adv }
 
 ## How a creature picks its move when nobody tells it (chooseMove, without Hardcore).
-static func choose_move(u: Dictionary, allies: Array, rng: RandomNumberGenerator) -> String:
+static func choose_move(u: Dictionary, allies: Array, rng: RandomNumberGenerator, enemies: Array = [], plan: String = "") -> String:
 	var moves: Array = moves_of(u.c).filter(func(m): return not (u.cds.get(m, 0.0) > 0))
+	if not enemies.is_empty():
+		return tactical_move(u, allies, enemies, plan)
 	var low = allies.filter(func(x): return x.c.hp < x.st.hp * 0.45)
 	if not low.is_empty() and "regrowth" in moves:
 		return "regrowth"
@@ -262,25 +311,75 @@ static func choose_move(u: Dictionary, allies: Array, rng: RandomNumberGenerator
 	dmg.sort_custom(func(a, b): return DATA.MOVES[a].pow > DATA.MOVES[b].pow)
 	return dmg[0] if not dmg.is_empty() else moves_of(u.c)[0]
 
+## Enemy tactics score ready moves against the situation rather than raw power alone.
+static func move_value(u: Dictionary, m: String, allies: Array, enemies: Array, plan: String = "") -> float:
+	var mv: Dictionary = DATA.MOVES[m]
+	if u.cds.get(m, 0.0) > 0:
+		return -1.0
+	var low := 1.0
+	for a in allies:
+		low = minf(low, float(a.c.hp) / a.st.hp)
+	if mv.kind == "heal":
+		var sick: bool = allies.any(func(a): return not Effects.label(a).is_empty() or not a.dots.is_empty())
+		return 115.0 if mv.get("cleanse", false) and sick else (100.0 if low < 0.45 else 0.0)
+	if mv.kind in ["buff", "haste", "guard"]:
+		var key: String = {"buff": "dmg", "haste": "haste", "guard": "guard"}[mv.kind]
+		var useful: bool = not allies.any(func(a): return a.buff.get(key, 0.0) > 0)
+		return (65.0 if plan in ["shelter", "patient"] else 38.0) if useful else 0.0
+	if mv.kind == "slow":
+		return 52.0 if enemies.any(func(e): return e.buff.get("slow", 0.0) <= 0) else 0.0
+	if enemies.is_empty():
+		return 0.0
+	var value := 0.0
+	for target in enemies:
+		var score := float(mv.get("pow", 0)) * (1.2 if mv.get("el") != null and mv.el == sp(u.c).el else 1.0) * advantage(mv.get("el"), target.c) * Effects.modifier(u, target, mv)
+		if target.buff.get("guard", 0.0) > 0:
+			score *= 1.4 if mv.get("breakGuard", false) else (1.1 if mv.get("pierce", false) else 0.6)
+		if mv.has("status") and not Effects.active(target, str(mv.status)):
+			score += 28.0 if plan in ["setup", "patient"] else 14.0
+		if mv.kind == "aoe":
+			score *= 0.75 * enemies.size()
+		value = maxf(value, score)
+	return value
+
+static func tactical_move(u: Dictionary, allies: Array, enemies: Array, plan: String = "") -> String:
+	var best := ""
+	var value := -2.0
+	for m in moves_of(u.c):
+		var next := move_value(u, m, allies, enemies, plan)
+		if next > value:
+			value = next
+			best = m
+	return best if value >= 0 else ""
+
 ## A move in plain words (moveInfo), for the move list.
 static func move_info(m: String) -> String:
 	var mv: Dictionary = DATA.MOVES[m]
+	if mv.has("text"):
+		return str(mv.text)
+	var extra := ""
+	if mv.get("breakGuard", false): extra = "; breaks guard"
+	elif mv.get("pierce", false): extra = "; ignores guard"
+	elif mv.has("status"): extra = "; leaves the foe " + Effects.LABEL[str(mv.status)].to_lower()
+	elif mv.has("combo"): extra = "; stronger on " + Effects.LABEL[str(mv.combo)].to_lower() + " foes"
 	var el: String = (mv.el + " ") if mv.get("el") != null else ""
 	var how := "special (uses Wits)" if mv.get("spec", 0) == 1 else "physical (uses Power)"
 	match mv.kind:
-		"hit": return "%s%s attack, power %d" % [el, how, mv.pow]
+		"hit": return "%s%s attack, power %d" % [el, how, mv.pow] + extra
 		"aoe": return "%shits every foe, power %d" % [el, mv.pow]
 		"dot": return "%spoisons a foe over time" % el
 		"buff": return "your team hits harder for a while"
 		"haste": return "your team acts faster for a while"
 		"guard": return "your team braces against damage"
 		"slow": return "slows a foe down"
-		"heal": return "heals your most hurt ally"
+		"heal": return "heals your most hurt ally" + ("; clears harmful effects" if mv.get("cleanse", false) else "")
 	return ""
 
 ## How fast a unit's turn meter fills each second (battleTick).
 static func atb_rate(u: Dictionary) -> float:
-	return (u.st.spd + 40.0) / 100.0 * (1.3 if u.buff.get("haste", 0.0) > 0 else 1.0) * (0.6 if u.buff.get("slow", 0.0) > 0 else 1.0) * (1.1 if "swift" in u.c.traits else 1.0)
+	if Effects.active(u, "sleep"):
+		return 0.0
+	return (0.65 if Effects.active(u, "rooted") else 1.0) * (u.st.spd + 40.0) / 100.0 * (1.3 if u.buff.get("haste", 0.0) > 0 else 1.0) * (0.6 if u.buff.get("slow", 0.0) > 0 else 1.0) * (1.1 if "swift" in u.c.traits else 1.0)
 
 ## A wild creature's rarity (Creatures.rollRarity): boost raises the odds (lures, traits, a Long Road lowers them).
 static func roll_rarity(boost: float, rng: RandomNumberGenerator) -> int:

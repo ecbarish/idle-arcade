@@ -116,6 +116,7 @@ func _run() -> void:
 	check(R.moves_of(a) == ["bite", "emberSnap"], "moves at level 5")
 	var a12 := a.duplicate(true)
 	a12.lvl = 12
+	a12.erase("moves") # a pre-WD3 save keeps its original four
 	check(R.moves_of(a12) == ["bite", "emberSnap", "howl", "flameRush"], "moves at level 12")
 	var g := a.duplicate(true)
 	g.lvl = 13
@@ -1074,6 +1075,7 @@ func _run() -> void:
 	check(main.sfx.last == "hit", "a plain hit thumps")
 	main.battle.visible = false
 	main.battle.state = ""
+	preload("res://tests/battle_choices.gd").run(main, check)
 	# ---- the done line
 	print("Wildbond Godot checks: %d passed, %d failed" % [passed, failed])
 	quit(1 if failed > 0 else 0)

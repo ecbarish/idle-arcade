@@ -7,6 +7,7 @@ extends Control
 
 signal finished(result: String)
 const Figures := preload("res://scripts/figures.gd")
+const Effects := preload("res://scripts/battle_effects.gd")
 const R := preload("res://scripts/rules.gd")
 const INK := Color("2a2230")
 const PAPER := Color("f8f2e4")
@@ -26,6 +27,13 @@ const MENU := ["Fight", "Guard", "Orders", "Bond", "Bag", "Run"]
 ## (the register's heritage), and orders people teach you along the way (Toren's Steady). Each costs orders, which
 ## come back as the battle goes on.
 const ORDERS := {
+	"shelter": { "name": "Shelter", "cost": 1, "text": "Your whole team braces for three seconds." },
+	"rain": { "name": "Rain Call", "cost": 1, "text": "Soak a foe for an Ember partner to follow up." },
+	"tailwind": { "name": "Tailwind", "cost": 2, "text": "Your team acts faster for five seconds." },
+	"snare": { "name": "Hold the Line", "cost": 1, "text": "Roots slow a foe for five seconds." },
+	"expose": { "name": "Spot the Gap", "cost": 1, "text": "Expose a foe: the next hit lands harder." },
+	"mend": { "name": "Shared Care", "cost": 2, "text": "Each partner recovers a quarter of its health." },
+	"renew": { "name": "Fresh Start", "cost": 1, "text": "Clear harmful effects from your whole team." },
 	"rally": { "name": "Rally", "cost": 2, "text": "Call out to your whole team: everyone recovers a little and trusts you more." },
 	"patch": { "name": "Patch Up", "cost": 1, "text": "Farmfolk know how to look after things that can't say what's wrong: your most hurt creature recovers, and poison eases." },
 	"tide": { "name": "Read the Tide", "cost": 1, "text": "Coastfolk see a wave coming. Your team braces by itself for the foe's next big attack." },
@@ -40,6 +48,8 @@ var floor_tex: Texture2D
 var nature_tex: Texture2D
 var kind := "trainer"
 var trainer := ""
+var tactic := ""
+const WARDEN_PLANS := {"Warden Isolde": "shelter", "Warden Nerys": "setup", "Warden Toren": "patient", "Warden Vessa": "rush", "Warden Olan": "shelter", "Warden Senna": "setup", "Warden Halen": "patient", "Warden Rysa": "adaptive"}
 var allies: Array = []
 var foes: Array = []
 var state := "off"                            # fog_in, intro, run, choose, moves, beat, results, fog_out
@@ -80,11 +90,12 @@ func unit(c: Dictionary, side: String) -> Dictionary:
 	var st := R.stats(c)
 	if c.get("hp") == null or c.hp > st.hp:
 		c.hp = st.hp
-	return { "c": c, "side": side, "st": st, "atb": rng.randf() * 1.2 + (1.0 if str(c.get("gear", "")) == "ribbon" else 0.0), "cds": {}, "buff": {}, "dots": [], "lunge": 0.0, "hit": 0.0, "shown": float(c.hp) }
+	return { "c": c, "side": side, "st": st, "atb": rng.randf() * 1.2 + (1.0 if str(c.get("gear", "")) == "ribbon" else 0.0), "cds": {}, "buff": {}, "dots": [], "status": {}, "wake_grace": 0.0, "lunge": 0.0, "hit": 0.0, "shown": float(c.hp) }
 
 func open(battle_kind: String, team: Array, foe_team: Array, who: String) -> void:
 	kind = battle_kind
 	trainer = who
+	tactic = str(WARDEN_PLANS.get(who, ""))
 	tide_ready = false
 	order_i = 0
 	allies = team.filter(func(c): return c.hp > 0).map(func(c): return unit(c, "a"))
@@ -99,6 +110,7 @@ func open(battle_kind: String, team: Array, foe_team: Array, who: String) -> voi
 	results.clear()
 	caught.clear()
 	cap = {}
+	fx.clear()
 	var names := ", ".join(foes.map(func(u): return "%s (Lv %d)" % [u.c.name, u.c.lvl]))
 	say("A wild %s appeared!" % names if kind == "wild" else "%s sends out %s!" % [trainer, names])
 	_go_to("fog_in")
@@ -171,13 +183,16 @@ func _tick(h: float) -> void:
 			var u: Dictionary = tele.u
 			var m: String = tele.m
 			tele = {}
-			if u.c.hp > 0 and not living("a").is_empty():
+			if u.c.hp > 0 and not Effects.active(u, "sleep") and not living("a").is_empty():
 				_resolve(u, m, 1.0)
 				_beat(1.1)
 				return
 	for u in allies + foes:
 		if u.c.hp <= 0:
 			continue
+		var burn := Effects.tick(u, h)
+		if burn > 0:
+			_hurt(u, burn, false, null)
 		for k in u.cds.keys():
 			u.cds[k] = maxf(0.0, u.cds[k] - h)
 		for k in ["dmg", "haste", "guard", "slow"]:
@@ -192,7 +207,7 @@ func _tick(h: float) -> void:
 				d.left -= 1
 				_hurt(u, d.per, false, null)
 		u.dots = u.dots.filter(func(d): return d.left > 0)
-		if u.c.hp <= 0 or (not tele.is_empty() and tele.u == u):
+		if u.c.hp <= 0 or Effects.active(u, "sleep") or (not tele.is_empty() and tele.u == u):
 			continue
 		u.atb += h * R.atb_rate(u)
 		if u.atb >= R.ACT_AT:
@@ -236,7 +251,9 @@ func _after_beat() -> void:
 
 # ---------------------------------------------------------------- acting (03-battle.js act / resolve)
 func _act(u: Dictionary, forced: String, mult: float) -> void:
-	var m: String = forced if forced != "" else R.choose_move(u, living(u.side), rng)
+	var m: String = forced if forced != "" else R.choose_move(u, living(u.side), rng, living("f" if u.side == "a" else "a"), tactic if u.side == "f" else "")
+	if m == "" or not R.DATA.MOVES.has(m):
+		return
 	var mv: Dictionary = R.DATA.MOVES[m]
 	if living("f" if u.side == "a" else "a").is_empty():
 		return
@@ -256,8 +273,11 @@ func _act(u: Dictionary, forced: String, mult: float) -> void:
 	_resolve(u, m, mult)
 	_beat(1.1)
 
-func _target(u: Dictionary) -> Dictionary:
+func _target(u: Dictionary, m: String = "") -> Dictionary:
 	var them := living("f" if u.side == "a" else "a")
+	if u.side == "f" and tactic != "" and m != "":
+		them.sort_custom(func(a, b): return R.move_value(u, m, living(u.side), [a], tactic) > R.move_value(u, m, living(u.side), [b], tactic))
+		return them[0]
 	return them[0] if rng.randf() < 0.65 else them[rng.randi() % them.size()]
 
 func _resolve(u: Dictionary, m: String, mult: float) -> void:
@@ -267,39 +287,46 @@ func _resolve(u: Dictionary, m: String, mult: float) -> void:
 	u.lunge = 0.35
 	match mv.kind:
 		"hit":
-			var tg := _target(u)
+			var tg := _target(u, m)
 			var r := R.damage(u, tg, mv, mult, rng.randf(), rng.randf())
 			_hurt(tg, r.d, r.crit, mv.get("el"))
+			Effects.after_hit(tg, mv)
+			if mv.has("status") and Effects.active(tg, str(mv.status)):
+				say("%s is %s." % [nm(tg), Effects.LABEL[str(mv.status)].to_lower()])
 			say("%s used %s%s on %s for %d%s" % [nm(u), mv.name, ", a critical hit" if r.crit else "", nm(tg), r.d,
 				". It hits hard!" if r.adv > 1 else (". Not very effective." if r.adv < 1 else ".")])
 		"aoe":
 			for tg in them:
 				var r := R.damage(u, tg, mv, mult * 0.75, rng.randf(), rng.randf())
 				_hurt(tg, r.d, r.crit, mv.get("el"))
+				Effects.after_hit(tg, mv)
 			say("%s used %s on everyone!" % [u.c.name, mv.name])
 		"dot":
-			var tg := _target(u)
+			var tg := _target(u, m)
 			tg.dots.append({ "per": maxi(1, roundi(R.damage(u, tg, mv, mult, rng.randf(), 1.0).d / 2.0)), "left": 4, "tick": 1.0 })
 			say("%s used %s. %s is poisoned." % [u.c.name, mv.name, tg.c.name])
 		"buff":
 			for a in us: a.buff.dmg = 6.0
 			say("%s used %s! Its team hits harder." % [u.c.name, mv.name])
 		"haste":
-			for a in us: a.buff.haste = 6.0
+			for a in us: a.buff.haste = float(mv.get("duration", 6.0))
 			say("%s used %s! Its team speeds up." % [u.c.name, mv.name])
 		"guard":
-			for a in us: a.buff.guard = 4.0
+			for a in us:
+				a.buff.guard = float(mv.get("duration", 4.0))
+				if mv.get("cleanse", false): Effects.cleanse(a)
 			say("%s used %s! Its team braces." % [u.c.name, mv.name])
 		"slow":
-			var tg := _target(u)
-			tg.buff.slow = 5.0
+			var tg := _target(u, m)
+			tg.buff.slow = float(mv.get("duration", 5.0))
 			say("%s used %s. %s slows down." % [u.c.name, mv.name, tg.c.name])
 		"heal":
 			var low: Dictionary = us[0]
 			for a in us:
 				if float(a.c.hp) / a.st.hp < float(low.c.hp) / low.st.hp:
 					low = a
-			var hp := roundi(low.st.hp * 0.25)
+			var hp := roundi(low.st.hp * float(mv.get("heal", 0.25)))
+			if mv.get("cleanse", false): Effects.cleanse(low)
 			low.c.hp = mini(low.st.hp, low.c.hp + hp)
 			floats.append({ "u": low, "txt": "+%d" % hp, "col": Color("7cf08a"), "age": 0.0 })
 			sparks.append({ "u": low, "col": Color("7cf08a"), "age": 0.0 })
@@ -307,6 +334,7 @@ func _resolve(u: Dictionary, m: String, mult: float) -> void:
 			_sfx("heal")
 
 func _hurt(u: Dictionary, d: int, crit: bool, el) -> void:
+	Effects.wake(u)
 	u.c.hp = maxi(0, u.c.hp - d)
 	u.hit = 0.45
 	floats.append({ "u": u, "txt": "-%d" % d, "col": Color("ffd23a") if crit else Color("ffffff"), "age": 0.0 })
@@ -397,6 +425,18 @@ func use_order(id: String) -> bool:
 		return false
 	var team := living("a")
 	match id:
+		"shelter":
+			for a in team: a.buff.guard = maxf(a.buff.get("guard", 0.0), 3.0)
+		"tailwind":
+			for a in team: a.buff.haste = maxf(a.buff.get("haste", 0.0), 5.0)
+		"rain", "snare", "expose":
+			var enemies := living("b")
+			if enemies.is_empty(): return false
+			Effects.apply(enemies[0], {"rain": "soaked", "snare": "rooted", "expose": "marked"}[id], 5.0)
+		"mend":
+			for a in team: a.c.hp = mini(a.st.hp, a.c.hp + roundi(a.st.hp * 0.25))
+		"renew":
+			for a in team: Effects.cleanse(a)
 		"rally":
 			for a in team:
 				var hp := roundi(a.st.hp * 0.2)
@@ -411,7 +451,7 @@ func use_order(id: String) -> bool:
 					low = a
 			var hp := roundi(low.st.hp * 0.25)
 			low.c.hp = mini(low.st.hp, low.c.hp + hp)
-			low.dots.clear()
+			Effects.cleanse(low)
 			floats.append({ "u": low, "txt": "+%d" % hp, "col": Color("7cf08a"), "age": 0.0 })
 			say("You kneel by %s and see to it, the way your family always did. It recovers %d." % [low.c.name, hp])
 		"tide":
@@ -432,10 +472,10 @@ func use_order(id: String) -> bool:
 			say("You spot a gap. %s darts in to act at once." % other[0].c.name)
 		"steady":
 			for a in team:
-				a.dots.clear()
-				a.buff.slow = 0.0
+				Effects.cleanse(a)
 				R.add_bond(a.c, 0.5)
 			say("You speak low and slow, the way Toren showed you. Your team steadies.")
+	if id in ["shelter", "tailwind", "rain", "snare", "expose", "mend", "renew"]: say("You call %s. %s" % [o.name, o.text])
 	orders -= float(o.cost)
 	return true
 
@@ -531,7 +571,7 @@ func _input(e: InputEvent) -> void:
 			if click:
 				var hit := false
 				for i in ol.size():
-					if _move_rect(i).has_point(p):
+					if i / 4 == order_i / 4 and _move_rect(i % 4).has_point(p):
 						hit = true
 						if i == order_i:
 							if use_order(ol[i]): _go_to("choose")
@@ -568,7 +608,7 @@ func best_value(m: String) -> float:
 	if foe.is_empty() or not mv.kind in ["hit", "aoe"]:
 		return 0.0
 	var el = mv.get("el")
-	return mv.pow * R.advantage(el, foe.c) * (1.2 if el != null and el == R.sp(wait_u.c).el else 1.0)
+	return R.move_value(wait_u, m, living("a"), living("f"))
 
 func _demo() -> void:
 	# the recorded demo: pick the strongest ready move, read the results, carry on
@@ -674,6 +714,12 @@ func _draw() -> void:
 		draw_set_transform(at - Vector2(9, 12) * sc, 0, Vector2(sc, sc))
 		Figures.creature(self, Vector2.ZERO, u.side == "a", pose, look)
 		draw_set_transform(Vector2.ZERO)
+	for u in allies + foes:
+		var status_line := Effects.label(u)
+		if u.c.hp > 0 and status_line != "":
+			var at := _spot(u) + Vector2(-38, -58)
+			draw_rect(Rect2(at + Vector2(-2, -7), Vector2(80, 10)), PAPER)
+			_text(status_line, at, 6, INK, 76, HORIZONTAL_ALIGNMENT_CENTER)
 	for e in fx:
 		var spec: Array = EL_FX[e.el]
 		if not fx_tex.has(spec[0]):
@@ -737,8 +783,8 @@ func _draw() -> void:
 				" Resting." if wait_u.cds.get(mv[move_i], 0.0) > 0 else ""], HORIZONTAL_ALIGNMENT_LEFT, info_r.size.x - 8, 7, -1, INK)
 		"orders":
 			var ol := known_orders()
-			for i in ol.size():
-				var r := _move_rect(i)
+			for i in range((order_i / 4) * 4, mini(ol.size(), (order_i / 4) * 4 + 4)):
+				var r := _move_rect(i % 4)
 				var on := i == order_i
 				var o: Dictionary = ORDERS[ol[i]]
 				var short: bool = orders < int(o.cost)
