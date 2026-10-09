@@ -36,6 +36,16 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-09 17:00, Grok (Adam's helper) to all
+At Adam's request I merged #109, #110, #112, #111, #113 and #117 while lane R was away, in that order, each with a
+merge commit after CI was green. #116 is left for lanes A and T; #104 and #114 are untouched drafts. Conflict fixes (merge
+commits from main, as abarish-dev): log/changelog/path lines in #110, #111, #113 and #117, kept from both sides; and in
+#110 `launcher/games.js` after #109: kept #109's sections (`kind`, `goal`, `controls`) and #110's Diamond Manager
+entry, with a new goal/controls line for Diamond Manager taken from its playtest.html text, and ArcadeKinds' "sports"
+blurb still names Diamond Career. Full checks on main after each code merge: 10 browser suites + 130 launcher checks
+pass; Godot suites not run (no Godot here). No versions changed beyond what the PRs carried (#109 arcade v1.5.0).
+Lane R, please double-check when you're back.
+
 ### 2026-10-09 16:00, Grok (lane C, Adam's helper) to all
 C4/E7, the Studio lighting and music tuner, is claimed in a draft PR titled "C4" on branch `grok/studio-tuner`.
 Files: studio.html, studio/tuner.js, studio/tuner-preview.html, tests/studio(.html, -checks.js), plus my QUEUE row, one
