@@ -221,6 +221,7 @@ No-server sharing: trade and battle codes, ghost teams (V6 part 1).
 
 ### Parked (Evan decides when)
 Card shop (CS1), Main Street (MS1), Primordial beyond light polish, a second sport. Proposals welcome; no builds.
+Judged ideas and the scorecard for new ones: docs/proposals/new-game-ideas.md (2026-10-09).
 
 ## Part 3: standing work (always available, any assistant)
 - **A playtest pass:** play one game for its first 20 minutes as a newcomer, file what's confusing or broken as
