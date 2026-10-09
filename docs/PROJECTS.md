@@ -118,6 +118,12 @@ for every game, and how to make your next ticket when your lane is empty: [DEVEL
 |---|---|---|---|---|
 | AR2.2 | **Put the new previews on the arcade shelf** (T46) | S | claimed: Codex, 2026-10-09, codex/arcade-previews | New preview cards and links; Classic saves stay separate; no Godot/export edit |
 
+## Species appearance data
+
+| ID | Project | Size | Status | Scope |
+|---|---|---|---|---|
+| WD2-data | Species appearance contract | M | built: Codex, PR #113 | Additive browser metadata; renderer remains separate |
+
 ## Wildbond in Godot (the new Wildbond; Claude's lane)
 
 Browser-data handoff T40: areas 5–8 clues and chatter merged 2026-10-08 (Wildbond v1.8.0, PR #64); they reach the Godot version when Claude builds those areas (WG2).
@@ -187,7 +193,7 @@ and the arcade's homepage shows them off. Any assistant may push these forward w
 | L5 | **Install and offline** (web app manifest + service worker), so the arcade works like an app | S | System | — | done: Codex, 2026-10-07, `codex/arcade-offline`, merged 2026-10-07 by Claude, who made it online-first (no version bumps; see docs/offline.md) | docs/offline.md; GitHub Pages scope, complete release cache, waiting updates, browser checks |
 | L6 | **Credits** page and `CREDITS.md` for any outside assets | S | Polish | — | done 2026-10-07 (Codex), merged 2026-10-07 by Claude on `codex/arcade-credits` | credits.html, CREDITS.md and full notices in licenses/; see CREATIVE.md "Outside assets" |
 | L7 | **Bug bash and balance pass**: full playthrough sims of both games, fix what they find | L | Polish | W1, W2 | done: both audits merged 2026-10-07 | Use the pacing sim methods in the design docs; docs/wildbond-launch-balance.md records challenge failures and remaining manual playtests |
-| L8 | **Immersive homepage** that shows off the engines (living scene, sound, dialogue, creatures) | L | Art | G1, W2 | part 1 done 2026-10-07 (Claude): launcher/launcher.js, two styles (the living world, the arcade hall) with a player vote (docs/VOTES.md); part 2 the road (walkable, scrolling, building sites for games in design); next: phone layout, the winning style | Evan: build once the games are further along (START-HERE) |
+| L8 | **Immersive homepage** that shows off the engines (living scene, sound, dialogue, creatures) | L | Art | G1, W2 | part 1 done 2026-10-07 (Claude): launcher/launcher.js, two styles (the living world, the arcade hall) with a player vote (docs/VOTES.md); part 2 the road; 2026-10-09 (AR2.12, PR #109) Evan chose **the arcade hall** as the one style to make the ultimate one (living world and road removed); next for the hall: more life in the room (other visitors, sound, a cabinet per new game, its own "coming soon" corner), then the walk-in arcade (AR3.1) | Evan: build once the games are further along (START-HERE) |
 | L9 | **Versioning and release notes**: a version number in each game, a release checklist | S | Polish | — | done 2026-10-10 (Jules) | HANDOFF.md "Releasing a version" |
 | L10 | **Accessibility**: keyboard play everywhere, colour contrast, readable fonts, screen-reader labels | M | Polish | — | claimed: Codex, 2026-10-08, codex/accessibility | |
 | L11 | **Big screens**: laptop, desktop and ultrawide (3440x1440) layouts that use the space: the scene grows (wider view in the walkable worlds, more of the zone in Realmbound), panels sit side by side, text scales, canvases stay crisp at high resolution | M | Polish | — | part done 2026-10-10 (Claude): wide layouts at 1700 px and 2400 px+ in every game and the hub (a 21:9 scene on ultrawides); panel text and buttons scale (zoom 1.12 / 1.3, canvases never zoom); Wildbond view distance (Close/Wide/Far, V key; Wide by default on tall scenes). Left: a similar zoom for the Realmbound town if wanted | Evan's main screen is a 45-inch ultrawide; test at 1366x768, 1920x1080 and 3440x1440 alongside 375 px |
