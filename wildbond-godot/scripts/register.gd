@@ -99,21 +99,24 @@ func demo_step() -> void:
 func _input(e: InputEvent) -> void:
 	if not visible:
 		return
-	if e is InputEventKey and e.pressed:
-		match e.keycode:
-			KEY_UP: row = wrapi(row - 1, 0, SIGN_ROW + 1)
-			KEY_DOWN, KEY_TAB: row = wrapi(row + 1, 0, SIGN_ROW + 1)
-			KEY_LEFT: change(-1)
-			KEY_RIGHT: change(1)
-			KEY_ENTER, KEY_KP_ENTER:
-				if row == SIGN_ROW: sign_it()
-				else: row += 1
-			KEY_BACKSPACE:
-				if row == 0: name_text = name_text.left(-1)
-			_:
-				var ch := char(e.unicode) if e.unicode >= 32 else ""
-				if row == 0 and ch != "" and name_text.length() < 12 and (ch.is_valid_identifier() or ch in " -'" or ch.is_valid_int()):
-					name_text += ch
+	var typed := char(e.unicode) if e is InputEventKey and e.pressed and e.unicode >= 32 else ""
+	if row == 0 and typed != "" and not (e.keycode in [KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT]):
+		if name_text.length() < 12 and (typed.is_valid_identifier() or typed in " -'" or typed.is_valid_int()):
+			name_text += typed                  # on the name line, letters (even W, A, S, D and E) are typing
+		get_viewport().set_input_as_handled()
+	elif row == 0 and e is InputEventKey and e.pressed and e.keycode == KEY_BACKSPACE:
+		name_text = name_text.left(-1)
+		get_viewport().set_input_as_handled()
+	elif e is InputEventKey and e.pressed and e.keycode == KEY_TAB:
+		row = wrapi(row + 1, 0, SIGN_ROW + 1)
+		get_viewport().set_input_as_handled()
+	elif Controls.dir(e) != Vector2i.ZERO or Controls.pressed(e, "interact") or (e is InputEventKey and e.pressed):
+		var d := Controls.dir(e)              # named actions (controls.gd): arrows, WASD off the name line, a gamepad
+		if d.y != 0: row = wrapi(row + d.y, 0, SIGN_ROW + 1)
+		elif d.x != 0: change(d.x)
+		elif Controls.pressed(e, "interact"):
+			if row == SIGN_ROW: sign_it()
+			else: row += 1
 		get_viewport().set_input_as_handled()
 	elif e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
 		var p := get_local_mouse_position()
@@ -195,4 +198,4 @@ func _draw() -> void:
 	draw_rect(Rect2(204, 166, 146, 15), INK if on else Color("7a5a3a"))
 	_text("Sign the register", Vector2(204, 177), 9, Color("f4e9cd"), 146)
 	_text("Up/Down choose a line, Left/Right change it", Vector2(193, 190), 6, FAINT, 163)
-	_text("Type your name; Enter or click to sign", Vector2(193, 198), 6, FAINT, 163)
+	_text("Tap a line to change it, then sign" if Controls.touch else "Type your name; Enter or click to sign", Vector2(193, 198), 6, FAINT, 163)

@@ -20,6 +20,7 @@ var fx_tex: Dictionary = {}
 var fx: Array = []                             # element effects playing: { u, el, age }
 var sfx: Sfx = null                            # sound effects (main.gd hands over its own; scripts/sfx.gd)
 const SPEED := 2.5                            # battle time runs faster than real time between turns (outcomes are unchanged)
+var pace := 1.0                                # the Settings page's battle pace: 1, 1.5 or 2 (only the waiting changes)
 const MENU := ["Fight", "Guard", "Orders", "Bond", "Bag", "Run"]
 ## Tamer orders (docs/proposals/creature-catalogue-and-evolution.md §4): Rally for everyone, one from your family
 ## (the register's heritage), and orders people teach you along the way (Toren's Steady). Each costs orders, which
@@ -142,13 +143,13 @@ func _process(dt: float) -> void:
 		"intro":
 			if state_t > 1.4: _go_to("run")
 		"run":
-			_tick(dt * SPEED)
+			_tick(dt * SPEED * pace)
 		"capture":
 			cap.pos += cap.dir * dt * 0.9
 			if cap.pos > 1.0: cap.pos = 1.0; cap.dir = -1.0
 			if cap.pos < 0.0: cap.pos = 0.0; cap.dir = 1.0
 		"beat":
-			if state_t > beat_t:
+			if state_t * pace > beat_t:
 				_after_beat()
 		"fog_out":
 			if state_t > 1.0:
@@ -495,13 +496,13 @@ func _end(r: String) -> void:
 func _input(e: InputEvent) -> void:
 	if not visible:
 		return
-	var key: int = e.keycode if e is InputEventKey and e.pressed and not e.echo else 0
 	var click: bool = e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT
-	if key == 0 and not click:
+	var ok := Controls.pressed(e, "interact")      # named actions (controls.gd): keys, a gamepad, or the phone's button
+	var back := Controls.pressed(e, "back")
+	var key := Controls.dir(e)
+	if not (click or ok or back or key != Vector2i.ZERO):
 		return
 	get_viewport().set_input_as_handled()
-	var ok := key in [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE, KEY_E]
-	var back := key in [KEY_ESCAPE, KEY_BACKSPACE, KEY_Q]
 	var p := get_local_mouse_position()
 	match state:
 		"choose":
@@ -545,12 +546,12 @@ func _input(e: InputEvent) -> void:
 		"results":
 			if (ok or click) and state_t > 0.5: _go_to("fog_out")
 
-func _grid_move(i: int, key: int, n: int, cols: int) -> int:
-	match key:
-		KEY_LEFT, KEY_A: i = i - 1 if i % cols > 0 else i
-		KEY_RIGHT, KEY_D: i = i + 1 if i % cols < cols - 1 and i + 1 < n else i
-		KEY_UP, KEY_W: i = i - cols if i >= cols else i
-		KEY_DOWN, KEY_S: i = i + cols if i + cols < n else i
+func _grid_move(i: int, d: Vector2i, n: int, cols: int) -> int:
+	match d:
+		Vector2i.LEFT: i = i - 1 if i % cols > 0 else i
+		Vector2i.RIGHT: i = i + 1 if i % cols < cols - 1 and i + 1 < n else i
+		Vector2i.UP: i = i - cols if i >= cols else i
+		Vector2i.DOWN: i = i + cols if i + cols < n else i
 	return i
 
 func _menu_rect(i: int) -> Rect2:
