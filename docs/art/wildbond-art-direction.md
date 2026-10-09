@@ -46,6 +46,7 @@ never look candy-bright. The faded world is the game's premise, so every colour 
 | Bark | `#4a3426` `#6a4a32` `#8a6444` | Trunks, timbers, doors |
 | Slate | `#33465e` `#435a78` `#56708f` `#7290ad` | Cottage roofs |
 | Whitewash | `#cfc4ac` `#e6dcc6` `#f4eddc` | Cottage walls, barn trim |
+| Water | `#2f5f7e` `#3a7090` `#4a84a2` `#8cc0d4` | Ponds, rivers and the sea; the darkest is the bank's edge |
 | Barn red | `#6e2620` `#8e342c` `#ab463a` `#c45e4e` | Maren's barn |
 | Lamplight | `#f2d080` | Windows at any hour |
 
@@ -68,7 +69,7 @@ Each object is listed with its shapes, so the same thing can be redrawn bigger o
 
 ## 5. What is still borrowed (and the order to replace it)
 
-- **Part 2:** water (rivers, the pond, the sea, lily pads), the battle backdrops, the remaining hand-drawn halls
+- **Part 2:** water is done (2026-10-09: still water, a glint and a lily pad on the Water ramp). Still to do: the battle backdrops, the remaining hand-drawn halls
   (the bell house, Sunthread's hall, the lookout, the boathouse and the league courts are already ours but should use
   these ramps), and the interiors.
 - **Part 3:** the battle effect sprites, the emotes (the "!" over a trainer) and the sound effects and music. Sound
@@ -92,7 +93,8 @@ The steps that keep that door open, in order of value:
 
 ## 7. How to change the art
 
-`wildbond-godot/tools/paint_tiles.gd` paints `wildbond-godot/assets/env/wild/` (floor.png, nature.png, house.png).
+`wildbond-godot/tools/paint_tiles.gd` paints `wildbond-godot/assets/env/wild/` (floor.png, nature.png, house.png,
+water.png).
 Change a colour or a shape there, run it, and then look at the result in the game:
 
 ```

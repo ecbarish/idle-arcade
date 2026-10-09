@@ -1486,13 +1486,12 @@ func _update_ui() -> void:
 # ---------------------------------------------------------------- the environment: Wildbond's own tiles
 # Evan chose "Our own tiles" (2026-10-09) so Wildbond has a look of its own, apart from Starfall's pack, and an art
 # direction that can grow (docs/art/wildbond-art-direction.md). tools/paint_tiles.gd paints assets/env/wild/: ground,
-# trees, bushes, flowers, the cottage and Maren's barn, each picked by its cell in a 16x16 grid. Water and a few
-# details still come from the Ninja Adventure pack (CC0) until part 2.
+# trees, bushes, flowers, the cottage, Maren's barn and water, each picked by its cell in a 16x16 grid.
 const FLOOR := preload("res://assets/env/wild/floor.png")
 const NATURE := preload("res://assets/env/wild/nature.png")
 const HOUSE := preload("res://assets/env/wild/house.png")
 const NOTICE := preload("res://assets/emote/notice.png")   # the "!" over a trainer who has seen you (Ninja Adventure, CC0)
-const WATER := preload("res://assets/env/water.png")
+const WATER := preload("res://assets/env/wild/water.png")
 const BARN_SPRITE := Rect2(400, 224, 64, 80)  # Maren's barn in house.png: measured pixel by pixel (4x5 tiles, door in the 2nd column)
 func _tex(tex: Texture2D, cell: Vector2i, size: Vector2i, at: Vector2, mod := Color.WHITE) -> void:
 	draw_texture_rect_region(tex, Rect2(at, Vector2(size) * 16.0), Rect2(Vector2(cell) * 16.0, Vector2(size) * 16.0), mod)
@@ -2366,8 +2365,8 @@ func _draw_water(x: int, y: int, o: Vector2, n: int) -> void:
 		_tex(WATER, Vector2i(11, 3), Vector2i.ONE, o)                              # a lily pad on the pond
 	elif n == 7 and int(t * 1.5 + x) % 3 == 0:
 		_tex(WATER, Vector2i(11, 2), Vector2i.ONE, o)                              # a glint of light
-	var shore := Color("d8c088")
-	var edge := Color("4a6a8a")
+	var shore := Color("e0c896")                    # the art direction's sand and deep water (docs/art)
+	var edge := Color("2f5f7e")
 	if tile_at(Vector2i(x, y - 1)) not in ["~", "j", "q", "b"]:
 		draw_rect(Rect2(o, Vector2(16, 3)), shore); draw_rect(Rect2(o + Vector2(0, 3), Vector2(16, 1)), edge)
 	if tile_at(Vector2i(x, y + 1)) not in ["~", "j", "q", "b"]:

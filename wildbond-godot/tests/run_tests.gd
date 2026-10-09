@@ -727,7 +727,7 @@ func _run() -> void:
 	main.book.close()
 	tick(0.05)
 	check(main.bubble_text.label_settings.font_size == 8 and not AudioServer.is_bus_mute(AudioServer.get_bus_index("Music")), "and back to normal")
-	check(main.FLOOR.resource_path.contains("/wild/") and main.NATURE.resource_path.contains("/wild/") and main.HOUSE.resource_path.contains("/wild/"), "the ground, trees and houses are Wildbond's own tiles (assets/env/wild), not the pack Starfall uses")
+	check(main.FLOOR.resource_path.contains("/wild/") and main.NATURE.resource_path.contains("/wild/") and main.HOUSE.resource_path.contains("/wild/") and main.WATER.resource_path.contains("/wild/"), "the ground, trees, houses and water are Wildbond's own tiles (assets/env/wild), not the pack Starfall uses")
 	# ---- How to play, and solid roofs (Evan's feedback, 2026-10-09)
 	main.touch.touched = false                    # (the pad checks above touched the screen)
 	tick(0.05)

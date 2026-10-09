@@ -5,7 +5,7 @@ extends SceneTree
 ## Everything here is drawn by this script: original art, ours to change. Run it again after changing a colour:
 ##   godot --headless --path wildbond-godot -s tools/paint_tiles.gd
 ## Part 1 (2026-10-09): grass, paths, sand, flowers, tall grass, bushes, two kinds of tree, the cottage and Maren's
-## barn. Water and the battle backdrops still use the pack (part 2).
+## barn. Part 2 (2026-10-09): water (still pond and river water, a glint, a lily pad).
 
 const OUT := "res://assets/env/wild/"
 const INK := Color("1e1a22")                   # the outline every Wildbond figure has (figures.gd OUTLINE)
@@ -19,6 +19,7 @@ const PINE := [Color("1f4a44"), Color("2a5e54"), Color("37766a"), Color("4f9480"
 const BARK := [Color("4a3426"), Color("6a4a32"), Color("8a6444")]
 const SLATE := [Color("33465e"), Color("435a78"), Color("56708f"), Color("7290ad")]
 const WASH := [Color("cfc4ac"), Color("e6dcc6"), Color("f4eddc")]
+const WATER := [Color("2f5f7e"), Color("3a7090"), Color("4a84a2"), Color("8cc0d4")]
 const RED := [Color("6e2620"), Color("8e342c"), Color("ab463a"), Color("c45e4e")]
 
 var img: Image
@@ -29,6 +30,7 @@ func _initialize() -> void:
 	_floor()
 	_nature()
 	_house()
+	_water()
 	print("Painted Wildbond's tiles into ", OUT)
 	quit()
 
@@ -329,3 +331,27 @@ func _house() -> void:
 	_cottage(0, 0)
 	_barn(400, 224)
 	_save("house.png")
+
+# ---------------------------------------------------------------- water (water.png)
+## Still water, 16 x 16: a deep blue-green with soft horizontal ripples, so it tiles in every direction.
+func _water_cell(ox: int, oy: int) -> void:
+	for y in 16:
+		for x in 16:
+			var v := _h(x, y, 21)
+			_px(ox + x, oy + y, WATER[1] if v < 0.7 else (WATER[0] if v < 0.85 else WATER[2]))
+	for r in [[2, 3, 5], [9, 7, 4], [4, 12, 6]]:  # ripples
+		_rect(ox + r[0], oy + r[1], r[2], 1, WATER[2])
+
+func _water() -> void:
+	_new(192, 64)
+	_water_cell(176, 0)                         # (11, 0) the water itself
+	_water_cell(176, 32)                        # (11, 2) with a glint of light
+	for g in [[5, 5], [6, 4], [7, 5], [6, 6], [11, 10]]:
+		_px(176 + g[0], 32 + g[1], WATER[3])
+	_water_cell(176, 48)                        # (11, 3) a lily pad with a notch, and a small white flower
+	_blob(176 + 8, 48 + 9, 5, 4, [LEAF[2], LEAF[3]])
+	_px(176 + 8, 48 + 7, WATER[1])
+	_px(176 + 9, 48 + 6, WATER[1])
+	_rect(176 + 6, 48 + 8, 2, 2, WASH[2])
+	_px(176 + 7, 48 + 9, Color("e8c040"))
+	_save("water.png")

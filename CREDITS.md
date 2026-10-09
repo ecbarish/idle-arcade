@@ -42,7 +42,7 @@ March 2026). Used in `wildbond-godot/assets/ninja/` (the tamer: *Boy*; Maren: *O
 legs) and preferred our own code-drawn figures. **Environment in use since 2026-10-08:** Evan liked the pack's
 structures and nature, so `wildbond-godot/assets/env/` holds its *TilesetFloor* (as floor.png: grass, dirt paths),
 *TilesetNature* (nature.png: trees, bushes, flowers) and *TilesetHouse* (house.png: the cottages), unchanged, with the
-pack's licence file beside them. People and creatures stay our own. **Replaced 2026-10-09 by our own art** (Evan chose "Our own tiles"): the game now draws its ground, trees, bushes, flowers, cottages and Maren's barn from `wildbond-godot/assets/env/wild/`, painted by our own `tools/paint_tiles.gd` (docs/art/wildbond-art-direction.md). Of the pack's tiles only the water (`assets/env/water.png`) is left, until part 2. Evan, 2026-10-08: free packs are
+pack's licence file beside them. People and creatures stay our own. **Replaced 2026-10-09 by our own art** (Evan chose "Our own tiles"): the game now draws its ground, trees, bushes, flowers, cottages, Maren's barn and water from `wildbond-godot/assets/env/wild/`, painted by our own `tools/paint_tiles.gd` (docs/art/wildbond-art-direction.md). None of the pack's tiles are left in Wildbond. Evan, 2026-10-08: free packs are
 placeholders to save time; the goal is the arcade's own original art and identity. **Music since 2026-10-08:** `wildbond-godot/assets/music/` holds nine of the pack's tracks, unchanged and renamed by
 place: *Lost Village* (faded.ogg), *Calm Village* (larkhaven.ogg), *Peaceful* (barn.ogg), *Clearing* (thornwood.ogg),
 *Sunny* (saltmarsh.ogg), *Adventure* (emberfall.ogg), *Ascension* (cloudglass.ogg), *Fight* (wild.ogg) and the second
