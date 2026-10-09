@@ -112,7 +112,7 @@ var npc_info := {}                           # id -> { data from the map, beaten
 var badges: Array = []
 var spotter: Mover = null                    # a trainer who has seen you and is walking over
 var spot_t := 0.0
-const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho"]    # the maps the Godot version has so far
+const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread"]    # the maps the Godot version has so far
 var starters: Array[Mover] = []
 var partner: Mover = null
 var map_name := "larkhaven"
@@ -1061,6 +1061,8 @@ func _draw_outdoor() -> void:
 		_draw_basin()
 	if map_name == "hollowecho":
 		_draw_hills()
+	if map_name == "sunthread":
+		_draw_commons()
 	# 3. houses, the barn and trees: standing objects with a footprint (so a 3D renderer can stand them up later)
 	_draw_structures()
 
@@ -1491,7 +1493,7 @@ func _draw_structures() -> void:
 			var ch: String = rows[y][x]
 			if ch == "T":
 				_tex(NATURE, Vector2i(1, 10), Vector2i.ONE, Vector2(x, y) * TILE)        # a hedge bush under the treeline
-			elif ch in "r#" and map_name != "hollowecho" and not doors.any(func(d): return x - d.x >= -1 and x - d.x <= 2 and y >= d.y - 2 and y <= d.y):
+			elif ch in "r#" and not map_name in ["hollowecho", "sunthread"] and not doors.any(func(d): return x - d.x >= -1 and x - d.x <= 2 and y >= d.y - 2 and y <= d.y):
 				_tex(NATURE, Vector2i(0, 10), Vector2i.ONE, Vector2(x, y) * TILE)        # garden bushes beside each cottage
 	for d in doors:
 		if not (map_name == "larkhaven" and d == BARN_DOOR):
@@ -1502,6 +1504,8 @@ func _draw_structures() -> void:
 				_tex(NATURE, _tree_cell(x, y), Vector2i(2, 2), _tree_at(x, y))   # edge rows sit low so they never hide the town
 	if map_name == "hollowecho":
 		_draw_bell_house(Vector2i(2, 1))
+	if map_name == "sunthread":
+		_draw_meeting_hall(Vector2i(20, 1), 8)
 	# Maren's barn stands taller than the cottages and in front of the trees behind it
 	if map_name == "larkhaven":
 		draw_texture_rect_region(HOUSE, Rect2(Vector2(BARN_DOOR.x - 1, BARN_DOOR.y - 4) * TILE, BARN_SPRITE.size), BARN_SPRITE)
@@ -1591,10 +1595,11 @@ func _draw_dragonflies() -> void:
 ## Hollowecho's ground (WB3.2): worn flagstones in the hamlet, and cave mouths where the floor runs in under the rock,
 ## dark inside so you can see they go somewhere (no interior yet).
 func _draw_stone_floor(x: int, y: int, o: Vector2, n: int) -> void:
-	draw_rect(Rect2(o, Vector2(16, 16)), Color("8c8c80"))
+	var warm := map_name == "sunthread"                                       # sandy flagstones in the sunny commons
+	draw_rect(Rect2(o, Vector2(16, 16)), Color("c4b48c") if warm else Color("8c8c80"))
 	for k in 2:
-		draw_rect(Rect2(o + Vector2(0, k * 8 + 7), Vector2(16, 1)), Color("6e6e62"))
-		draw_rect(Rect2(o + Vector2((k * 8 + x * 5 + y * 3) % 14 + 1, k * 8), Vector2(1, 7)), Color("6e6e62"))
+		draw_rect(Rect2(o + Vector2(0, k * 8 + 7), Vector2(16, 1)), Color("9a8a64") if warm else Color("6e6e62"))
+		draw_rect(Rect2(o + Vector2((k * 8 + x * 5 + y * 3) % 14 + 1, k * 8), Vector2(1, 7)), Color("9a8a64") if warm else Color("6e6e62"))
 	if n == 3:
 		draw_rect(Rect2(o + Vector2(4, 3), Vector2(2, 1)), Color("a4a496"))
 	if tile_at(Vector2i(x, y - 1)) == "R" and tile_at(Vector2i(x, y + 1)) != "#":
@@ -1654,6 +1659,60 @@ func _draw_bell_house(at: Vector2i) -> void:
 	draw_rect(Rect2(o + Vector2(-3, -2), Vector2(w + 6, 2)), Color("74847a"))
 	draw_rect(Rect2(o + Vector2(w / 2 - 3, -9), Vector2(6, 8)), Figures.OUTLINE)            # a little bell cote on the ridge
 	draw_rect(Rect2(o + Vector2(w / 2 - 2, -8), Vector2(4, 6)), Color("d8a840"))
+## Sunthread's meeting hall (WB3.3): a broad timber hall above the forecourt, a green turf roof with cloth pennants
+## that the wind worries at, and wide double doors (the map gives the hall a solid front, so the doors are shut).
+func _draw_meeting_hall(at: Vector2i, w_tiles: int) -> void:
+	var o := Vector2(at) * TILE
+	var w := w_tiles * TILE
+	draw_rect(Rect2(o + Vector2(-1, 31), Vector2(w + 2, 18)), Figures.OUTLINE)
+	draw_rect(Rect2(o + Vector2(0, 32), Vector2(w, 16)), Color("b08050"))                     # timber walls
+	for k in w_tiles * 2:
+		draw_rect(Rect2(o + Vector2(k * 8 + 7, 32), Vector2(1, 16)), Color("8a5e38"))
+	var d := o + Vector2(w / 2 - 12, 34)
+	draw_rect(Rect2(d, Vector2(24, 14)), Color("5a3a1e"))                                     # the double doors
+	draw_rect(Rect2(d + Vector2(11, 0), Vector2(2, 14)), Color("3a2412"))
+	draw_rect(Rect2(d + Vector2(8, 7), Vector2(2, 2)), Color("e8c040"))
+	draw_rect(Rect2(d + Vector2(14, 7), Vector2(2, 2)), Color("e8c040"))
+	for k in [1, w_tiles - 2]:
+		draw_rect(Rect2(o + Vector2(k * TILE + 3, 37), Vector2(10, 6)), Color("f2d080"))  # lit windows
+	draw_rect(Rect2(o + Vector2(-5, -3), Vector2(w + 10, 36)), Figures.OUTLINE)               # the turf roof
+	draw_rect(Rect2(o + Vector2(-4, -2), Vector2(w + 8, 34)), Color("6f8a3e"))
+	for k in 5:
+		draw_rect(Rect2(o + Vector2(-4, 4 + k * 6), Vector2(w + 8, 1)), Color("5a7230"))
+	draw_rect(Rect2(o + Vector2(-4, -2), Vector2(w + 8, 2)), Color("90ac5f"))
+	var cols := [Color("e0483e"), Color("f2d24a"), Color("5b8def"), Color("59c38a")]
+	for k in 4:                                                                                  # pennants on the ridge
+		var p := o + Vector2(12 + k * (w - 24) / 3.0, -2)
+		draw_rect(Rect2(p - Vector2(0, 10), Vector2(1, 10)), Color("4e3220"))
+		var flap := sin(t * 3.0 + k * 1.3) * 2.0
+		draw_colored_polygon(PackedVector2Array([p - Vector2(-1, 10), p - Vector2(-9 - flap, 7), p - Vector2(-1, 4)]), cols[k])
+
+## The commons' useful corners (from the area brief): Mirel's mending frame, Nesla's cloth bench with the four braided
+## shelter ties, and the low nursery beds marked with green ribbons. All on the ground; nothing blocks the way.
+func _draw_commons() -> void:
+	# the mending frame: two posts and a stretched shelter cloth with a patch half sewn
+	var m := Vector2(7, 5) * TILE
+	for x in [1, 14]:
+		draw_rect(Rect2(m + Vector2(x, 0), Vector2(2, 15)), Color("6b4a2a"))
+	draw_rect(Rect2(m + Vector2(3, 2), Vector2(11, 8)), Color("e8dcc0"))
+	draw_rect(Rect2(m + Vector2(6, 4), Vector2(4, 4)), Color("c8925a"))
+	draw_line(m + Vector2(6, 4), m + Vector2(10, 8), Color("8a3a2a"), 1.0)
+	# Nesla's bench, with four differently braided ties laid out side by side
+	var b := Vector2(23, 4) * TILE
+	draw_rect(Rect2(b + Vector2(0, 8), Vector2(16, 6)), Figures.OUTLINE)
+	draw_rect(Rect2(b + Vector2(1, 9), Vector2(14, 4)), Color("a07048"))
+	var braid := [Color("c84a3a"), Color("4a7ab8"), Color("d8a840"), Color("6aa04a")]
+	for k in 4:
+		draw_rect(Rect2(b + Vector2(2 + k * 3, 4), Vector2(2, 6)), braid[k])
+		draw_rect(Rect2(b + Vector2(2 + k * 3, 4 + (k % 2) * 2), Vector2(2, 1)), Color(1, 1, 1, 0.5))
+	# the nursery beds: dark turned soil, seedlings, a green ribbon on each marker stick
+	for k in 3:
+		var n := Vector2(9 + k, 11) * TILE
+		draw_rect(Rect2(n + Vector2(1, 5), Vector2(14, 9)), Color("6a4a2e"))
+		for s in 3:
+			draw_rect(Rect2(n + Vector2(3 + s * 4, 7 + (s + k) % 2 * 3), Vector2(2, 2)), Color("7ab040"))
+		draw_rect(Rect2(n + Vector2(13, 1), Vector2(1, 8)), Color("6b4a2a"))
+		draw_rect(Rect2(n + Vector2(14, 1 + sin(t * 2.0 + k) * 1.0), Vector2(3, 2)), Color("59c38a"))
 ## The hamlet's bells, hanging under the eaves and swaying a little; one answers the other.
 func _draw_bells() -> void:
 	for k in 2:
@@ -1842,10 +1901,10 @@ func _skip_opening() -> void:
 		_place_ranch()
 	var st: Array = DATA.MAPS[start].get("start", [16, 12, "up"] if start == "larkhaven" else [13, 14, "up"])
 	if start != "thornwood":
-		var order := ["thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho"]
+		var order := ["thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread"]
 		var at := maxi(1, order.find(start))
-		badges = ["thorn", "tide", "ember", "beacon", "reed"].slice(0, at)
-		team[0].lvl = [5, 14, 24, 34, 46, 56][at]
+		badges = ["thorn", "tide", "ember", "beacon", "reed", "echo"].slice(0, at)
+		team[0].lvl = [5, 14, 24, 34, 46, 56, 62][at]
 		team[0].hp = R.stats(team[0]).hp
 	if "--photo" in OS.get_cmdline_user_args():      # pictures of the world: nobody asks to evolve mid-shot
 		for c in team: c["hold"] = 999
@@ -1867,7 +1926,7 @@ func _skip_opening() -> void:
 			maren.pos = Vector2(maren.tile) * TILE
 			maren.path.clear()).call_deferred()
 	if "--colour" in OS.get_cmdline_user_args():     # the area with its colour fully back (for pictures of the restored valley)
-		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "barn"]:
+		for m in ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "barn"]:
 			restore.append({ "where": m, "at": Vector2(192, 108), "r": 5000.0, "goal": 5000.0 })
 	if "--bench" in OS.get_cmdline_user_args():      # at Maren's workbench, the partner trying on a harness (-- --skip-opening --bench)
 		for c in team: c["hold"] = 999
@@ -2331,7 +2390,7 @@ func _after_story(id: String, result: String) -> void:
 
 ## Sand (the floor tileset) and rocks (drawn in code: a boulder with a lit top and a dark base).
 func _draw_sand(x: int, y: int, o: Vector2, n: int) -> void:
-	if map_name == "hollowecho":
+	if map_name in ["hollowecho", "sunthread"]:
 		_draw_stone_floor(x, y, o, n)
 		return
 	_tex(FLOOR, Vector2i(1, 1), Vector2i.ONE, o)

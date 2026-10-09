@@ -140,7 +140,7 @@ func _run() -> void:
 	main.spilled = true
 	check(main._music_key() == "larkhaven", "once the colour spills into town, a warm village tune")
 	main.spilled = false
-	check(["faded", "larkhaven", "barn", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "wild", "trainer"].all(func(k): return ResourceLoader.exists("res://assets/music/%s.ogg" % k)), "every tune is in the game")
+	check(["faded", "larkhaven", "barn", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "wild", "trainer"].all(func(k): return ResourceLoader.exists("res://assets/music/%s.ogg" % k)), "every tune is in the game")
 	check(["saltmarsh", "emberfall", "cloudglass"].all(func(k): return ResourceLoader.exists("res://assets/ambience/%s.wav" % k)), "waves on the coast and wind in the highlands and the pass")
 	# ---- the map: closed doors, the barn opens with the story
 	check(not main.walkable(Vector2i(4, 4)), "cottage doors stay shut")
@@ -428,6 +428,18 @@ func _run() -> void:
 		check(main.DATA.MAPS.hollowecho.get("items", []).size() == 3, "the three supplies lie where the map says")
 		check(main._heritage_line("orri", main.npc_info.orri.data) != "", "Orri has a word for your family")
 		check(main.MOUNTAINS.has("hollowecho") and main.CLIFF == main.MOUNTAINS.hollowecho.rock, "the hills have their own grey-green stone")
+		# ---- Sunthread Commons (WB3.3), with the Echo Badge
+		main.badges.append("echo")
+		main._go("sunthread", Vector2i(1, 9), Vector2i.RIGHT)
+		tick(1.0)
+		check(main.map_name == "sunthread" and main.level_cap() == int(main.DATA.CAP_TABLE[6]), "six badges: into Sunthread Commons, with the cap the game data sets")
+		check(["mirel", "aldren", "pell", "nesla"].all(func(id): return main.npcs.any(func(n): return n.id == id and n.where == "sunthread")), "Mirel the mender, Aldren the runner, Pell passing through and Nesla the weaver")
+		check(not main._gate_open("sunthread"), "the road east stays shut until Warden Halen is beaten")
+		check(main.route(Vector2i(1, 9), Vector2i(24, 6)).size() > 0 and main.route(Vector2i(1, 9), Vector2i(27, 5)).size() > 0, "a clear path to Halen and to the shelter sign")
+		check(main.DATA.MAPS.sunthread.get("items", []).size() == 3 and main._heritage_line("nesla", main.npc_info.nesla.data) != "", "three supplies, and Nesla has a word for your family")
+		main.badges.erase("echo")
+		main._go("hollowecho", Vector2i(1, 9), Vector2i.RIGHT)
+		tick(1.0)
 		main.badges.erase("reed")
 		main._go("cloudglass", Vector2i(13, 12), Vector2i.UP)
 		tick(1.0)
