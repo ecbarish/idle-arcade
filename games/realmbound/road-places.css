@@ -1,0 +1,6 @@
+/* The road is the scene; its controls stay inside the game window. */
+.on-road .abar,.on-road .unit.target,.on-road .party,.on-road .petframe,.on-road .enccard,.on-road .lootwin,.on-road #catalogueSighting{display:none!important}
+.road-surroundings{position:absolute;right:12px;top:160px;z-index:6;background:#211d18;color:#f5ead7;border:1px solid #b49868;border-radius:8px;max-width:min(290px,calc(100% - 24px));font-size:calc(16px * var(--arc-text,1))}
+.road-surroundings summary{padding:10px;cursor:pointer}.road-surroundings div{padding:0 10px 10px;display:grid;gap:8px;max-height:42dvh;overflow:auto}.road-surroundings button{padding:9px;background:#3c3326;color:#ffedc9;border:1px solid #b39871;border-radius:5px;text-align:left;font:inherit}
+.on-road .scene .dlg{bottom:110px!important}.on-road .statusline{bottom:85px}
+@media(max-width:700px){.road-surroundings{top:164px;right:8px;max-width:200px}.on-road .scene .dlg{bottom:100px!important;max-height:calc(100% - 180px)}.on-road .statusline{bottom:85px}}

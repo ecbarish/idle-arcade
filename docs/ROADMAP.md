@@ -21,6 +21,16 @@ Branch: codex/wildbond-early-heritages.
 - Preserve base lines, trainer battles, badges, maps, save data and all unresolved mysteries. Classic has no heritage dispatcher; Claude wires the exported lines into Godot. Never edit Godot or its exporter.
 - Record every clue in the ledger. Add content/JSON checks and inspect the actual export from an isolated browser; all eight pages pass. README and Session log only, no versions.
 
+### T48: Realmbound, the walkable town road (RB1.3)
+- [x] Built by Codex, 2026-10-09, codex/realmbound-road-places; ready for review. All eight pages pass; no release bump.
+Why: give the journey a physical approach with a roadside inn and camp while retaining Realmbound's established combat and travel (DEVELOPMENT-PATH RB1.3; in-window plan).
+Read first: docs/plans/realmbound-in-window.md, docs/lore/realmbound.md, docs/VISION.md, docs/CREATIVE.md.
+Branch: codex/realmbound-road-places.
+- An optional Walk the road action in the world opens a connected walkable regional approach, with a sign to town, roadside inn interior, keeper and traveler camp. Arrows/WASD, tap and named walking destinations use shared/world.js. Story speaks inside the scene.
+- The town exit invokes existing travel; return resumes the same field state. No battles, dungeon/raid shortcuts, automatic gold/items or instant healing. Deliberate catch-your-breath uses the current rest rate; no progress ticks while reading.
+- Road state is transient, hero/account/zone-bound and cleared on boot; old saves remain unchanged. No Godot/shared engine/version edits. Files: new js/33-road-places.js and road-places.css; small scene/step/boot/index hooks; tests/realmbound-scenarios.cjs and documentation.
+- All eight pages pass; connected paths and transitions, callback safety, normal healing, no currency/quest windfalls and reload checks; inspect phone through ultrawide with screenshots. README and one Session log line.
+
 ### T47: Wildbond, Hollowecho build brief (WB3.5 part 1)
 - [x] Built 2026-10-09; runtime inventory verified; documentation-only handoff, no new clues or engine edits.
 Why: Claude is building the next Godot area; its existing people, clues and encounter data should be together without a new canon or engine rewrite.

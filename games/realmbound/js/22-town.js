@@ -101,7 +101,7 @@ const TOWN_WALK = World.walker({
   busy: () => !!RTALK || !!modalKind || (typeof realmNotebookOpen==='function' && realmNotebookOpen()), speed: () => 4.5,
   on: { person: n => townTalk(n), door: (x, y) => townDoor(TOWN.map.doors[x + ',' + y]), exit: townExit, sign: (x,y) => townSign(x,y) }
 });
-function townActive() { const h = H(); return !!(h && C && !h.dun && C.phase === 'intown' && PW > 0); }
+function townActive() { if(typeof realmRoadActive==='function'&&realmRoadActive())return false; const h = H(); return !!(h && C && !h.dun && C.phase === 'intown' && PW > 0); }
 function townEnter() {
   TOWN.inside = false; TOWN.storyGuest = null; const [x, y, d] = TOWN.map.start; TOWN_WALK.place(x, y, d); TOWN.auto = null;
   if (aiOn()) { C.townT = Math.max(C.townT || 0, 25); TOWN.auto = 'smith'; }

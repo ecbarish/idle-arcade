@@ -106,6 +106,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 - 2026-10-09, Codex: T49 Sunthread/Farwatch build briefs ready on codex/wildbond-final-area-briefs for Claude: complete current data, clues and staging; Halen/Rysa stale lore levels flagged. 73 live export/path checks and eight pages pass; no Godot/data/version edits.
 
 - 2026-10-09 Claude: Evan asked for four seasons and holiday decorations. Plan in docs/proposals/seasons-and-holidays.md (own calendar plus a real-calendar setting, four looks, seasonal creatures, a festival each season, Midwinter Hearth in December); path WB-S (WS1-WS6) and SF3.4.
+- 2026-10-09, Codex: T48/RB1.3 built on codex/realmbound-road-places: optional inn/camp approach with physical paths, portrait scenes and normal rest/travel. Eight pages pass; phone through ultrawide checks and frames recorded. PR for Claude; no Godot or versions.
+
 - 2026-10-09 Claude: Godot Wildbond WB2.2 part 2: tall trees with crowns in front of you (canopy layer and shader), never over signs or items; --stand=x,y picture flag; 234 checks; web preview rebuilt.
 - 2026-10-09 Claude: Godot Starfall SF2.2 failing and excelling (day judged at nightfall, people leave and return, bunting, board size, two travellers); 104 checks; web preview rebuilt. Fixed a 5%-flaky herbs check.
 - 2026-10-09 Claude: merged T46 (launcher previews) and T47 (Hollowecho brief). Godot Wildbond: Hollowecho Hills built (WB3.2: bell house, bells, survey cord, cave mouths, mist, Quiet tune), 232 checks; web preview rebuilt; arcade card and Come Play say six regions. Next: WB3.3 Sunthread (waiting for its brief), SF2.2, WB2.2 canopies.

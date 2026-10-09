@@ -81,3 +81,41 @@ preservation after reload. Prepared isolated saves were used; this is not an una
 Before records and after town, Trainer, Lesson Book, Stable, board and quest choices at all four widths:
 `docs/screenshots/realmbound-places/`. The carried Field Kit remains a bridge for equipment, friends, tools and
 the diary; this step replaces the specified service routes, not every future physical-world feature.
+
+## Part 3: the town road (T48, RB1.3)
+
+Walk the road opens an optional physical pause between the field and the current regional town. A connected
+28-by-16 approach has a readable road marker, the Lantern Rest inn, Courier Edda's camp and both exits. The inn
+has its own walkable room and Keeper Merran. Walk with arrows/WASD, tap a reachable tile, or open Look along the
+road and choose a named destination: these buttons walk the real shortest path rather than teleporting.
+
+The existing regional palette and town renderer supply ground, buildings, trees, hearth, shadows and warm light.
+The same approach layout is reused across the eight regions and both factions; this is a first physical stretch,
+not eight authored overworlds or a replacement for combat. The road sign and courier name the actual local hub.
+Original supporting faces Merran and Edda do not replace the existing town vendors or quest givers.
+
+Walking pauses the field encounter state. Back to the field resumes it; reaching town invokes the existing
+travel time, and walking out from town uses its original return journey. Entry is restricted to Focus between
+encounters, resting, or outside in town. It is unavailable during combat, loot, death, travel, Auto, dungeons or
+raids. No route skips an expedition requirement. The road is not persisted: boot/reload, a changed hero/account,
+zone or Auto mode clears it. Purchases still save through the normal account save.
+
+Merran and Edda speak in shared portrait scenes. Catch my breath deliberately begins the existing gradual rest;
+it does not instantly heal or revive anyone. Reading or opening a notebook stops that rest, and moving ends the
+road's rest permission. Once resting finishes, walking cannot start a fight. Merran sells one healing potion for
+two silver, the existing potion price; walking/entering/talking otherwise awards no money, items, XP or quests.
+Cancelled, stale and duplicate callbacks cannot pay twice or spend another hero's money. A suspended browser
+cannot invoke offline combat while this transient road scene is active. After a deliberate rest, returning to the
+field retains the resulting rest/seek state rather than undoing healing.
+
+The canvas receives focus on entry; movement, conversations, notebook, Settings and other focused controls
+retain their input ownership. Directions and choices remain inside the game window. Road geometry, room,
+callbacks and UI belong to js/33-road-places.js and road-places.css, with small scene, town and boot hooks.
+Movement advances on the game timer independently of rendering speed. No shared engine, Godot, web preview, game version, cache version or saved-data schema changes.
+
+Verification: 220 new scenarios cover paths in all eight regions for both factions, real door/person dispatch,
+travel, pauses, rest rate, payment, stale callbacks and legacy reload. All eight browser pages pass (Realmbound
+8,425 or 8,441 depending on generated NPC fixtures; Wildbond 1,606; Starfall 48; sound 21; offline 15; Diamond 122;
+Otherworld 1,895; runner safety 35). Browser walkthroughs use isolated prepared saves and real keys/clicks at
+375x812, 1366x768, 1920x1080 and 3440x1440; this is not an unassisted full campaign playtest.
+Before/after, inn, keeper and camp frames live in docs/screenshots/realmbound-road/.

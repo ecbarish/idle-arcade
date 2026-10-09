@@ -80,7 +80,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [x] WB3.2 [Claude] Hollowecho Hills. *Done 2026-10-09 from ChatGPT's brief (docs/lore/wildbond-hollowecho-brief.md): walkable with Veslin, Narro, Orri (byBadge and heritage lines from data), Warden Senna and her gate; the bell house with two swaying bells, the tool roll, the survey cord and chalk arrows, Senna's resting stones, cave mouths, grey-green hill stone, low mist, the Quiet tune. Not done: Undertone's reunion staging and the answering-bell moment (story beats, later); Senna's team levels left as the data has them (58-60; the lore paragraph says 60-63).*
 - [ ] WB3.3 [Claude] Sunthread Commons.
 - [ ] WB3.4 [Claude] Farwatch Reach.
-- [ ] WB3.5 [ChatGPT] (Hollowecho brief done, merged 2026-10-09, T47; Sunthread/Farwatch claimed: Codex, T49, codex/wildbond-final-area-briefs) For each area before Claude builds it: a short "area brief" in docs/lore/ (places, people,
+- [x] WB3.5 [ChatGPT] (Hollowecho T47, Sunthread and Farwatch T49: all merged 2026-10-09) For each area before Claude builds it: a short "area brief" in docs/lore/ (places, people,
   clues from T40, creatures, one memorable moment) so the Godot build has everything in one page.
 - [ ] WB3.6 [ChatGPT] Trainer teams and a pacing sim for areas 5-8 using the Godot rules (rules.gd matches the browser).
 - [ ] WB3.7 [Claude] The Unbound appear (WG5): first encounters, a choice to help or oppose; reputation begins.
@@ -155,7 +155,7 @@ creatures as monsters.
 **RB-M1: in the game window.**
 - [x] Part 1 (T38).
 - [x] RB1.2 [ChatGPT] Part 2: pages become places (T41). (merged 2026-10-09)
-- [ ] RB1.3 [ChatGPT] Part 3: the road between towns as a walkable stretch at key points (an inn on the road, a
+- [x] RB1.3 [ChatGPT] (done, merged 2026-10-09; T48) Part 3: the road between towns as a walkable stretch at key points (an inn on the road, a
   camp), keeping auto-combat where it already lives.
 - [ ] RB1.4 [ChatGPT] Phone pass for the new layout (L3 part 2).
 

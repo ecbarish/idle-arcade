@@ -425,3 +425,12 @@ become another claim to its crown. Whether the factions keep that road together 
 The road adventurers' hooks above now have playable three-moment arcs. These expand motives without fixing anyone's generated class, race or personality. A confidence leads to a choice and a remembered aftermath: both paths keep the adventurer, and neither is a hidden good/bad answer. The hall remembers the chosen account or custom; no new region, faction or physical hall prop is established. Full arc titles, choices and play rules: [Guild members' personal stories](../realmbound-member-stories.md); exact lines: games/realmbound/js/27-member-stories.js.
 
 The outcomes concern road records, hospitality, care, honest warnings, repairs, shared songs and making room for other voices. They do not replace generated personality dialogue or the existing supply favors. The guild's original low-mood departure rules remain unchanged.
+
+## Roadside hospitality (T48, 2026-10-09)
+
+The Lantern Rest is the small roadside wayhouse represented on the optional regional approach. Keeper Merran
+(human) offers a hearth, a bench and the same two-silver healing potion sold in town. Courier Edda (duskelf)
+carries letters between settlements and pauses at the travelers' fire. Both welcome either faction. Neither
+settles faction disputes or reveals a new force behind the Hollow Crown. The reusable road slice places these
+supporting encounters beside the current hub; it does not establish eight distinct simultaneous Merrans or a
+new mandatory journey. Their words are in games/realmbound/js/33-road-places.js.
