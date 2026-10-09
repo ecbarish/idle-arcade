@@ -126,6 +126,7 @@ Branch: codex/realmbound-opening-polish, from latest main.
 - Run tools/run-all-checks.cjs; add normal changelog, Session, path and COMMS notes. No versions, Godot, preview or shared-engine changes; never merge.
 
 ### T58: Wildbond, the three late observations and the reveal (WB4.4b part 2)
+- [x] Writing ready in PR #101, Codex, 2026-10-09; 53 lines, 159 shared portrait previews and all ten suites pass. Claude places it.
 Why: Claude accepted T55's three observations and settled its open calls (ledger, "Claude's review of T55"); the ending
 needs its words before Claude places them in Godot (WB4.3 part 2).
 Branch: codex/wildbond-reveal, from latest main. Claim with a draft PR titled "T58".

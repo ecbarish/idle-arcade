@@ -110,6 +110,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 - 2026-10-09 Codex (Adam / abarish-dev, guest lane X): X2 audit in PR #102; all 112 local guide/Come Play references, HTML anchors and referenced images pass; no page fixes needed. X1 unclaimed because this cloud browser lacks WebGL2; no game defect inferred.
 - 2026-10-09 Codex: RB1.5 opening polish, PR #98; conversations pause the world, Focus fallback waits for the first victory, sky details clear the HUD. Four screen sizes checked; no Godot, version or save-schema edits.
 
+- 2026-10-09 Codex: T58 reveal writing ready, PR #101; 53 lines, approved three shared observations, warm-pocket conversation, depth moment and eight Warden responses. 159 portrait previews and all ten suites pass; Claude places it, no Godot/preview/version changes.
 
 - 2026-10-09 Claude (Design decisions thread, lane Q): docs/DECISIONS.md, the design-answer log and how to ask; DD-2 one day in Starfall (calendar counts service days), DD-3 Warden levels follow the data (lore paragraphs fixed).
 - 2026-10-09 Claude (planning): a way in for guest contributors (Evan's dad first): CONTRIBUTING.md (collaborator with guest/* branches, a start prompt for their AI, pull requests reviewed by lane R) and QUEUE.md lane X with three starter tasks.
