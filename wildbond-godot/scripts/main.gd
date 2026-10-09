@@ -15,6 +15,7 @@ const Battle := preload("res://scripts/battle.gd")
 const Title := preload("res://scripts/title.gd")
 const Shop := preload("res://scripts/shop.gd")
 const Book := preload("res://scripts/book.gd")
+const Calendar := preload("res://scripts/calendar.gd")
 ## Larkhaven's doors in the Godot version: the inn (rest) and the shop counter. (The browser puts the shop where Maren's
 ## barn stands here; the tall barn only fits top right.)
 const DOORS := { Vector2i(4, 4): "inn", Vector2i(7, 10): "shop" }
@@ -150,6 +151,7 @@ var battle: Control
 @onready var place: Label = $UI/Place
 @onready var colour_layer: Node2D = $Painted/Figures
 var canopy: Node2D
+var cal := Calendar.new()                     # the turning year (WS1): seasons and festivals
 
 func _ready() -> void:
 	demo = "--demo" in OS.get_cmdline_user_args()
@@ -600,6 +602,7 @@ func _switch() -> void:
 # ---------------------------------------------------------------- the loop
 func _process(dt: float) -> void:
 	t += dt
+	cal.advance(dt)
 	_music_tick(dt)
 	_ambience_tick(dt)
 	fade_in = min(1.0, fade_in + dt * 0.7)
@@ -1022,6 +1025,7 @@ func _draw() -> void:
 		_draw_dragonflies()
 	if map_name == "farwatch":
 		_draw_shore_lights()
+	_season_air()
 	if map_name == "hollowecho":
 		_draw_bells()
 		_draw_mist()
@@ -1054,6 +1058,7 @@ func _draw_outdoor() -> void:
 	for y in rows.size():
 		for x in rows[0].length():
 			_draw_ground(x, y, rows[y][x])
+	_season_ground(rows)
 	# 2. fences and the signpost (drawn in code; they already looked right)
 	for y in rows.size():
 		for x in rows[0].length():
@@ -1122,7 +1127,8 @@ func _draw_canopy() -> void:
 					continue
 				var r := Rect2(_tree_at(x, y), Vector2(32, 32))
 				if r.end.y - 3.0 > feet and r.intersects(body):
-					canopy.draw_texture_rect_region(NATURE, r, Rect2(Vector2(_tree_cell(x, y)) * 16.0, Vector2(32, 32)), Color(1, 1, 1, 0.72))
+					var tint := _leaf_tint()
+					canopy.draw_texture_rect_region(NATURE, r, Rect2(Vector2(_tree_cell(x, y)) * 16.0, Vector2(32, 32)), Color(tint.r, tint.g, tint.b, 0.72))
 ## How much colour has come back at a point in the world (0 faded, 1 restored), as the fade shader computes it.
 func _restored_at(p: Vector2) -> float:
 	if INTERIORS.has(map_name) and spilled:
@@ -1190,7 +1196,7 @@ func _draw_barn() -> void:
 	for y in BARN.size():
 		for x in w:
 			var ch: String = BARN[y][x]
-			var o := Vector2(x, y) * TILE
+			var o: Vector2 = Vector2(x, y) * TILE
 			var n := (x * 7 + y * 13) % 11
 			if ch in ",h|tbdw":
 				_boards(o, x, y)
@@ -1434,8 +1440,8 @@ const NATURE := preload("res://assets/env/nature.png")
 const HOUSE := preload("res://assets/env/house.png")
 const WATER := preload("res://assets/env/water.png")
 const BARN_SPRITE := Rect2(400, 224, 64, 80)  # Maren's barn in house.png: measured pixel by pixel (4x5 tiles, door in the 2nd column)
-func _tex(tex: Texture2D, cell: Vector2i, size: Vector2i, at: Vector2) -> void:
-	draw_texture_rect_region(tex, Rect2(at, Vector2(size) * 16.0), Rect2(Vector2(cell) * 16.0, Vector2(size) * 16.0))
+func _tex(tex: Texture2D, cell: Vector2i, size: Vector2i, at: Vector2, mod := Color.WHITE) -> void:
+	draw_texture_rect_region(tex, Rect2(at, Vector2(size) * 16.0), Rect2(Vector2(cell) * 16.0, Vector2(size) * 16.0), mod)
 func _is_path(x: int, y: int) -> bool:
 	return tile_at(Vector2i(x, y)) in ".NSEW"
 func _draw_ground(x: int, y: int, ch: String) -> void:
@@ -1498,16 +1504,18 @@ func _draw_structures() -> void:
 		for x in rows[0].length():
 			var ch: String = rows[y][x]
 			if ch == "T":
-				_tex(NATURE, Vector2i(1, 10), Vector2i.ONE, Vector2(x, y) * TILE)        # a hedge bush under the treeline
+				_tex(NATURE, Vector2i(1, 10), Vector2i.ONE, Vector2(x, y) * TILE, _leaf_tint())   # a hedge bush under the treeline
 			elif ch in "r#" and not map_name in ["hollowecho", "sunthread", "farwatch"] and not doors.any(func(d): return x - d.x >= -1 and x - d.x <= 2 and y >= d.y - 2 and y <= d.y):
-				_tex(NATURE, Vector2i(0, 10), Vector2i.ONE, Vector2(x, y) * TILE)        # garden bushes beside each cottage
+				_tex(NATURE, Vector2i(0, 10), Vector2i.ONE, Vector2(x, y) * TILE, _leaf_tint())   # garden bushes beside each cottage
 	for d in doors:
 		if not (map_name == "larkhaven" and d == BARN_DOOR):
 			_tex(HOUSE, Vector2i(0, 0), Vector2i(4, 3), Vector2(d.x - 1, d.y - 2) * TILE)  # the whole cottage (4 tiles wide), its door on our door
+			_snow_on(Vector2(d.x - 1, d.y - 2) * TILE + Vector2(2, 1), 60)
 	for y in rows.size():                                                               # big trees, back to front
 		for x in rows[0].length():
 			if rows[y][x] == "T" and (x + y) % 2 == 0:       # staggered, half a tile off the grid, so the edge reads as woods
-				_tex(NATURE, _tree_cell(x, y), Vector2i(2, 2), _tree_at(x, y))   # edge rows sit low so they never hide the town
+				_tex(NATURE, _tree_cell(x, y), Vector2i(2, 2), _tree_at(x, y), _leaf_tint())   # edge rows sit low so they never hide the town
+				_season_crown(_tree_at(x, y), x + y * 7)
 	if map_name == "hollowecho":
 		_draw_bell_house(Vector2i(2, 1))
 	if map_name == "sunthread":
@@ -1518,6 +1526,7 @@ func _draw_structures() -> void:
 	# Maren's barn stands taller than the cottages and in front of the trees behind it
 	if map_name == "larkhaven":
 		draw_texture_rect_region(HOUSE, Rect2(Vector2(BARN_DOOR.x - 1, BARN_DOOR.y - 4) * TILE, BARN_SPRITE.size), BARN_SPRITE)
+		_snow_on(Vector2(BARN_DOOR.x - 1, BARN_DOOR.y - 4) * TILE + Vector2(4, 1), BARN_SPRITE.size.x - 8)
 
 # ---------------------------------------------------------------- Wren and the first battle
 func _beside_me() -> Vector2i:
@@ -1566,7 +1575,7 @@ func _draw_basin() -> void:
 	for y in rows.size():
 		for x in rows[0].length():
 			var ch: String = rows[y][x]
-			var o := Vector2(x, y) * TILE
+			var o: Vector2 = Vector2(x, y) * TILE
 			if ch == "~":
 				for k in 2:
 					var ph := fmod(t * 0.8 + k * 0.5 + x * 0.31 + y * 0.07, 1.0)
@@ -1666,6 +1675,7 @@ func _draw_bell_house(at: Vector2i) -> void:
 	for k in 5:
 		draw_rect(Rect2(o + Vector2(-3, 4 + k * 6), Vector2(w + 6, 1)), Color("44504a"))
 	draw_rect(Rect2(o + Vector2(-3, -2), Vector2(w + 6, 2)), Color("74847a"))
+	_snow_on(o + Vector2(-3, -2), w + 6)
 	draw_rect(Rect2(o + Vector2(w / 2 - 3, -9), Vector2(6, 8)), Figures.OUTLINE)            # a little bell cote on the ridge
 	draw_rect(Rect2(o + Vector2(w / 2 - 2, -8), Vector2(4, 6)), Color("d8a840"))
 ## Sunthread's meeting hall (WB3.3): a broad timber hall above the forecourt, a green turf roof with cloth pennants
@@ -1689,6 +1699,7 @@ func _draw_meeting_hall(at: Vector2i, w_tiles: int) -> void:
 	for k in 5:
 		draw_rect(Rect2(o + Vector2(-4, 4 + k * 6), Vector2(w + 8, 1)), Color("5a7230"))
 	draw_rect(Rect2(o + Vector2(-4, -2), Vector2(w + 8, 2)), Color("90ac5f"))
+	_snow_on(o + Vector2(-4, -2), w + 8)
 	var cols := [Color("e0483e"), Color("f2d24a"), Color("5b8def"), Color("59c38a")]
 	for k in 4:                                                                                  # pennants on the ridge
 		var p := o + Vector2(12 + k * (w - 24) / 3.0, -2)
@@ -1747,6 +1758,7 @@ func _draw_lookout(at: Vector2i) -> void:
 	draw_rect(Rect2(o + Vector2(-3, 0), Vector2(w + 6, 32)), Color("4e5a66"))                 # slate
 	for k in 5:
 		draw_rect(Rect2(o + Vector2(-3, 5 + k * 6), Vector2(w + 6, 1)), Color("3e4852"))
+	_snow_on(o + Vector2(-3, 0), w + 6)
 	var lamp := o + Vector2(w / 2 - 6, -12)
 	draw_rect(Rect2(lamp - Vector2(1, 1), Vector2(14, 14)), Figures.OUTLINE)                 # the lamp room
 	draw_rect(Rect2(lamp, Vector2(12, 12)), Color("9a9a90"))
@@ -1801,6 +1813,87 @@ func _draw_shore_lights() -> void:
 		draw_circle(c, 11.0, Color(1.0, 0.82, 0.45, glow))
 		draw_rect(Rect2(c - Vector2(3, 3), Vector2(6, 7)), Figures.OUTLINE)
 		draw_rect(Rect2(c - Vector2(2, 2), Vector2(4, 5)), Color("f4c860"))
+# ---------------------------------------------------------------- the four seasons, seen (WS2)
+## Leaves through the year: fresh in spring, as drawn in summer, turned in autumn, bare and grey-blue in winter.
+func _leaf_tint() -> Color:
+	match cal.season():
+		"spring": return Color(1.0, 1.0, 0.94)
+		"autumn": return Color(1.0, 0.66, 0.40)
+		"winter": return Color(0.80, 0.86, 0.92)
+	return Color.WHITE
+
+## Blossom on the crowns in spring, a cap of snow in winter.
+func _season_crown(at: Vector2, seed: int) -> void:
+	var sn := cal.season()
+	if sn == "spring":
+		for k in 7:
+			var p := at + Vector2(5 + (seed * 7 + k * 11) % 22, 3 + (seed * 3 + k * 5) % 14)
+			draw_rect(Rect2(p, Vector2(2, 2)), Color("f8c8d8") if k % 3 else Color("fff4f8"))
+	elif sn == "winter":
+		draw_rect(Rect2(at + Vector2(6, 1), Vector2(20, 4)), Color("f4f8fc"))
+		draw_rect(Rect2(at + Vector2(4, 4), Vector2(24, 3)), Color("e8eef6"))
+
+## Snow along a roof's top edge in winter, with a few icicles.
+func _snow_on(at: Vector2, w: float) -> void:
+	if cal.season() != "winter":
+		return
+	draw_rect(Rect2(at, Vector2(w, 4)), Color("f4f8fc"))
+	for k in int(w / 6.0):
+		draw_rect(Rect2(at + Vector2(k * 6 + 2, 4), Vector2(3, 1 + (k * 7) % 3)), Color("e8eef6"))
+
+## The ground through the year: snow over the grass and ice on still water in winter, fallen leaves on the paths in
+## autumn, a fresh green and scattered petals in spring. The faded world washes it out like everything else, so the
+## seasons show only faintly until the colour comes back.
+func _season_ground(rows: Array) -> void:
+	var sn := cal.season()
+	if sn == "summer":
+		return
+	var sea: bool = map_name in ["saltmarsh", "farwatch"]
+	for y in rows.size():
+		for x in rows[0].length():
+			var ch: String = rows[y][x]
+			var o: Vector2 = Vector2(x, y) * TILE
+			var h: int = (x * 7 + y * 13) % 9
+			if sn == "winter":
+				if ch in ",\"fT":
+					draw_rect(Rect2(o, Vector2(16, 16)), Color(0.95, 0.97, 1.0, 0.62))
+					if h == 2:
+						draw_rect(Rect2(o + Vector2(5, 6), Vector2(1, 1)), Color.WHITE)
+				elif ch == "~" and not sea:
+					draw_rect(Rect2(o, Vector2(16, 16)), Color(0.86, 0.93, 1.0, 0.62))         # the pond freezes over
+					if h < 3:
+						draw_line(o + Vector2(3, 4 + h), o + Vector2(12, 9 - h), Color(1, 1, 1, 0.7), 1.0)
+				elif ch in "._R" or _is_path(x, y):
+					draw_rect(Rect2(o, Vector2(16, 16)), Color(0.93, 0.95, 0.98, 0.36))
+			elif sn == "autumn":
+				if ch in ",\"f":
+					draw_rect(Rect2(o, Vector2(16, 16)), Color(0.85, 0.55, 0.2, 0.15))
+				if (ch in ",." or _is_path(x, y)) and h < 4:
+					for k in 2:
+						var p: Vector2 = o + Vector2(2 + (h * 5 + k * 7) % 12, 3 + (h * 3 + k * 6) % 10)
+						draw_rect(Rect2(p, Vector2(2, 1)), [Color("d8602a"), Color("e8a030"), Color("b8402a")][(h + k) % 3])
+			elif sn == "spring":
+				if ch in ",\"f":
+					draw_rect(Rect2(o, Vector2(16, 16)), Color(0.75, 1.0, 0.55, 0.07))
+					if h == 4:
+						draw_rect(Rect2(o + Vector2(9, 10), Vector2(1, 1)), Color("f8c8d8"))
+						draw_rect(Rect2(o + Vector2(4, 3), Vector2(1, 1)), Color("fff4a0"))
+
+## What drifts through the air: petals in spring, leaves in autumn, snow in winter (nothing in summer).
+func _season_air() -> void:
+	var sn := cal.season()
+	if sn == "summer" or indoors():
+		return
+	var view: Rect2 = get_canvas_transform().affine_inverse() * get_viewport_rect()
+	var n := 36 if sn == "winter" else 14
+	for k in n:
+		var fall := 9.0 if sn == "winter" else 6.0
+		var x: float = view.position.x + fmod(k * 97.3 + t * (4.0 + k % 5) + sin(t * 0.8 + k) * 6.0, view.size.x)
+		var y: float = view.position.y + fmod(k * 53.7 + t * fall * (1.0 + (k % 3) * 0.3), view.size.y)
+		match sn:
+			"winter": draw_rect(Rect2(Vector2(x, y), Vector2(1, 1) if k % 3 else Vector2(2, 2)), Color(1, 1, 1, 0.85))
+			"autumn": draw_rect(Rect2(Vector2(x, y), Vector2(2, 1) if int(t * 3.0 + k) % 2 else Vector2(1, 2)), [Color("d8602a"), Color("e8a030")][k % 2])
+			"spring": draw_rect(Rect2(Vector2(x, y), Vector2(2, 1)), Color("f8c8d8"))
 ## The hamlet's bells, hanging under the eaves and swaying a little; one answers the other.
 func _draw_bells() -> void:
 	for k in 2:
@@ -1994,6 +2087,9 @@ func _skip_opening() -> void:
 		badges = ["thorn", "tide", "ember", "beacon", "reed", "echo", "loom"].slice(0, at)
 		team[0].lvl = [5, 14, 24, 34, 46, 56, 62, 66][at]
 		team[0].hp = R.stats(team[0]).hp
+	for a in OS.get_cmdline_user_args():           # a season held for a picture: -- --skip-opening --at=larkhaven --season=winter
+		if a.begins_with("--season="):
+			cal.mode = a.substr(9)
 	if "--photo" in OS.get_cmdline_user_args():      # pictures of the world: nobody asks to evolve mid-shot
 		for c in team: c["hold"] = 999
 	for a in OS.get_cmdline_user_args():           # a picture inside a room: -- --skip-opening --at=larkhaven --room=inn
@@ -2294,7 +2390,7 @@ func save_game() -> void:
 	var d := { "v": 1, "saved": Time.get_datetime_string_from_system(), "look": look, "team": team, "ranch": ranch, "bag": bag,
 		"badges": badges, "seen": seen, "bonded": bonded, "items": got_items, "beaten": beaten,
 		"restore": restore.map(func(r): return { "where": r.where, "x": r.at.x, "y": r.at.y, "goal": r.goal }),
-		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned, "taught": taught, "letter": [letter_steps, letters],
+		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned, "taught": taught, "letter": [letter_steps, letters], "calendar": cal.to_dict(),
 		"map": map_name, "x": me.tile.x, "y": me.tile.y, "partner": partner.id if partner else "" }
 	var f := FileAccess.open(save_path, FileAccess.WRITE)
 	if f:
@@ -2344,6 +2440,7 @@ func _load_game() -> bool:
 	story_done = d.get("story", {})
 	story_retry = d.get("retry", {})
 	taught = Array(d.get("taught", []))
+	cal.from_dict(d.get("calendar", {}))
 	var lt: Array = d.get("letter", [LETTER_STEPS, 0])
 	letter_steps = int(lt[0])
 	letters = int(lt[1])
@@ -2397,6 +2494,7 @@ func _open_book() -> void:
 	book.team = team
 	book.ranch = ranch
 	book.where = where_next()
+	book.cal = cal
 	book.open()
 
 # ---------------------------------------------------------------- story moments while you explore (the browser's STORY)
@@ -3041,7 +3139,7 @@ func _draw_room() -> void:
 	for y in rows.size():
 		for x in w:
 			var ch: String = rows[y][x]
-			var o := Vector2(x, y) * TILE
+			var o: Vector2 = Vector2(x, y) * TILE
 			if ch == "X":
 				continue
 			if ch != "W":

@@ -243,6 +243,30 @@ func _run() -> void:
 	check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 14), "the north road leads to Thornwood, arriving where the map says")
 	check(main.partner.where == "thornwood", "your partner comes too")
 	# ---- a route trainer spots you, walks over and battles (Bram, from the game data)
+	# ---- the turning year (WS1, WS2)
+	var Cal := preload("res://scripts/calendar.gd")
+	var yr = Cal.new()
+	check(yr.season() == "spring" and yr.day() == 1 and yr.date_text() == "Early spring, day 1", "the world's year begins on the first day of spring")
+	yr.advance(Cal.DAY_SECONDS * Cal.DAYS + Cal.DAY_SECONDS * 22.5)
+	check(yr.season() == "summer" and yr.day() == 23 and yr.date_text() == "Late summer, day 23", "a season is thirty days of play, and the date is in full words")
+	yr.played = Cal.DAY_SECONDS * (Cal.DAYS * 3 + 24)
+	check(yr.season() == "winter" and yr.festival() == "midwinter", "late in winter: the Midwinter Hearth")
+	yr.mode = "real"
+	yr.today = { "month": 12, "day": 24 }
+	check(yr.season() == "winter" and yr.festival() == "midwinter", "on the real calendar, Christmas Eve falls in the Midwinter Hearth")
+	yr.today = { "month": 7, "day": 4 }
+	check(yr.season() == "summer" and yr.festival() == "", "July is summer, with no festival that day")
+	yr.south = true
+	check(yr.season() == "winter", "and winter, south of the equator")
+	yr.mode = "autumn"
+	check(yr.season() == "autumn" and yr.festival() == "" and yr.date_text() == "Always autumn", "a season held stays put")
+	var yr2 = Cal.new()
+	yr2.from_dict(yr.to_dict())
+	check(yr2.mode == "autumn" and yr2.south, "the calendar saves and loads")
+	var keep_mode: String = main.cal.mode
+	main.cal.mode = "winter"
+	check(main._leaf_tint() != Color.WHITE and main.cal.season() == "winter", "winter turns the leaves")
+	main.cal.mode = keep_mode
 	check(main._tree_at(8, 4).y == 3.0 * main.TILE and main._tree_at(12, 14).y > 13.5 * main.TILE, "trees beside open ground stand tall, but never over the first signpost")
 	check(main.canopy != null and main.canopy.material is ShaderMaterial, "tree tops that pass in front of you are washed out like the world around them")
 	check(main.npcs.filter(func(n): return n.where == "thornwood").size() == 3, "Thornwood has Bram, Lise and Warden Isolde")

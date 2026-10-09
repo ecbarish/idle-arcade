@@ -20,7 +20,8 @@ var seen: Dictionary = {}
 var bonded: Dictionary = {}
 var team: Array = []
 var ranch: Array = []
-var where := ""                                # where to go next, in Maren's words (main.gd where_next)
+var where := ""
+var cal: RefCounted = null                     # the calendar (calendar.gd): the date at the foot of the left page; C changes it                                # where to go next, in Maren's words (main.gd where_next)
 var tab := 0                                   # 0 Wilddex, 1 Team
 var sel := 0
 var t := 0.0
@@ -61,6 +62,7 @@ func _input(e: InputEvent) -> void:
 			KEY_TAB, KEY_J, KEY_ESCAPE: close()
 			KEY_Q, KEY_1: tab = 0
 			KEY_E, KEY_2: tab = 1
+			KEY_C: if cal: cal.next_mode()
 			KEY_LEFT, KEY_A: sel = maxi(0, sel - 1)
 			KEY_RIGHT, KEY_D: sel = mini(ids.size() - 1, sel + 1)
 			KEY_UP, KEY_W: sel = maxi(0, sel - COLS)
@@ -102,12 +104,12 @@ func _draw() -> void:
 		var r := Rect2(30 + i * 72, 17, 66 if i == 0 else 56, 12)
 		draw_rect(r, INK if tab == i else Color("e4d6b4"))
 		_text(["Wilddex", "Team"][i], r.position + Vector2(0, 9), 7, Color("f4e9cd") if tab == i else INK, r.size.x, HORIZONTAL_ALIGNMENT_CENTER)
-	_text("%d seen, %d bonded" % [seen.size(), bonded.size()], Vector2(193, 27), 6, FAINT, 160, HORIZONTAL_ALIGNMENT_CENTER)
+	_text(_date() + "   %d seen, %d bonded" % [seen.size(), bonded.size()], Vector2(193, 27), 6, FAINT, 160, HORIZONTAL_ALIGNMENT_CENTER)
 	if tab == 0:
 		_draw_dex()
 	else:
 		_draw_team()
-	_text("Tab or J to close   Q / E: pages", Vector2(193, 200), 6, FAINT, 163, HORIZONTAL_ALIGNMENT_CENTER)
+	_text("Tab or J to close   Q / E: pages   C: calendar", Vector2(193, 200), 6, FAINT, 163, HORIZONTAL_ALIGNMENT_CENTER)
 
 func _draw_dex() -> void:
 	var start := _page_start()
@@ -182,3 +184,13 @@ func _draw_team() -> void:
 	if where != "":
 		_text("Where next", Vector2(193, 158), 8, INK, 163, HORIZONTAL_ALIGNMENT_CENTER)
 		draw_multiline_string(font, Vector2(202, 170), "Maren: \"%s\"" % where, HORIZONTAL_ALIGNMENT_LEFT, 146, 6, 4, Color("6a5a3a"))
+
+## The date, or the festival when there is one (the real calendar says so; C cycles the world's own, the real one and
+## each season held).
+func _date() -> String:
+	if cal == null:
+		return ""
+	var fest: String = cal.festival()
+	if fest != "":
+		return cal.FESTIVALS[fest].name.capitalize() if not cal.FESTIVALS[fest].name.begins_with("the ") else "The " + cal.FESTIVALS[fest].name.substr(4)
+	return cal.date_text() + (" (real)" if cal.mode == "real" else "")

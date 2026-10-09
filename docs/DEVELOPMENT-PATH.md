@@ -86,10 +86,10 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB3.7 [Claude] The Unbound appear (WG5): first encounters, a choice to help or oppose; reputation begins.
 
 **WB-S: the turning year (Evan asked 2026-10-09; can run alongside WB-M3; docs/proposals/seasons-and-holidays.md).**
-- [ ] WS1 [Claude] The calendar: an in-game date that moves while you play (a season is about 2-3 hours of play),
+- [x] WS1 [Claude] (done 2026-10-09: scripts/calendar.gd, shared rules for Starfall too; the date and festival in the field book's header; C cycles the world's calendar, the real one and each season held; saved) The calendar: an in-game date that moves while you play (a season is about 2-3 hours of play),
   shown in the field book; settings for "follow the real calendar" (December brings the winter festival) and
   "hold one season". Saved.
-- [ ] WS2 [Claude] Four looks for every area: spring blossom, summer as now, autumn leaves, winter snow (tints and a
+- [x] WS2 [Claude] (done 2026-10-09: leaves tinted through the year, blossom and snow caps on crowns, snow on roofs, snow and frozen ponds, fallen leaves on paths, petals, leaves and snow in the air; the faded world washes it all out until colour returns; --season= picture flag) Four looks for every area: spring blossom, summer as now, autumn leaves, winter snow (tints and a
   few drawn extras over the same maps); faded places show the season faintly until colour returns.
 - [ ] WS3 [ChatGPT] Seasonal data in the browser game, exported to Godot: wild-encounter weight shifts and a few
   seasonal species (each also rare out of season), a seasonal line for each townsperson; check the faded-seasons
