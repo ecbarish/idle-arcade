@@ -48,6 +48,7 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 |---|---|---|---|
 | SF3.3-outline | Four Starfall seasonal chapters (T57) | S | ready: PR #84, Codex, 2026-10-09 | Design/writing handoff in village plan; no Godot edits |
 | WB3.6-pacing | Final-four-area and league pacing (T56) | S | ready: PR #83, Codex, 2026-10-09 | Diagnostic copies of current Godot rules/battles; report before tuning |
+| WB4.4b-reveal | Three observations and the final truth (T58) | M | claimed: Codex, 2026-10-09, codex/wildbond-reveal | Approved account and observations; data only for Claude to place |
 | WB4.4b-audit | Clue fit and three late observations (T55) | S | ready: PR #82, Codex, 2026-10-09 | Writer doc first; no reveal text before Claude review |
 
 ## How to use this list
