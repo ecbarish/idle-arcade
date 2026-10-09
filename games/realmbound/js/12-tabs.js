@@ -10,11 +10,11 @@ quests:{
     let o=`<h3>Quest log ${act.length}/3</h3><p class="sub">Quests give the most experience. Your hero hunts whatever the first unfinished quest needs.</p>`;
     o+=act.length?act.map(q=>{const st=qState(q),rw=qReward(q);return `<div class="rowl" style="align-items:flex-start"><div class="l"><div class="qtitle ${st==='ready'?'done':''}">${q.name}${q.elite?' <span class="pill" style="color:var(--gold)">Elite</span>':''}</div>
       <div class="prog" id="qp-${q.id}"></div><div class="meta">${giver(q)} · ${ZONES[q.zone].name} · ${moneyStr(qMoney(q))} · ${fmtI(qXP(q))} XP</div>
-      ${st==='ready'?`<div class="meta" style="margin-top:4px">Choose a reward:</div>${rw.map((it,i)=>`<div style="margin-top:3px"><button class="btn sm" data-act="turnin" data-arg="${q.id}:${i}">Take</button> ${itemSpan(it)}</div>`).join('')}`:`<div class="meta">Reward choice: ${rw.map(itemSpan).join(' or ')}</div>`}</div>
-      <div class="r">${st!=='ready'?`<button class="btn sm alt" data-act="abandon" data-arg="${q.id}">Abandon</button>`:''}</div></div>`;}).join(''):'<p class="meta">No quests yet. Pick some up below.</p>';
+      ${st==='ready'?`<div class="meta" style="margin-top:4px">Choose a reward:</div>${rw.map((it,i)=>`<div style="margin-top:3px"><button class="btn sm" data-act="turnin" data-arg="${q.id}:${i}">Return to ${giver(q)}</button> ${itemSpan(it)}</div>`).join('')}`:`<div class="meta">Reward choice: ${rw.map(itemSpan).join(' or ')}</div>`}</div>
+      <div class="r">${st!=='ready'?`<button class="btn sm alt" data-act="abandon" data-arg="${q.id}">Abandon</button>`:''}</div></div>`;}).join(''):'<p class="meta">No requests in your Journal yet. Meet the people below in town.</p>';
     o+=`<h4>Available at ${hubName()}</h4>`;
     o+=avail.length?avail.map(q=>`<div class="rowl" style="align-items:flex-start"><div class="l"><div class="qtitle">[${q.lvl}] ${q.name}${q.elite?' <span class="pill" style="color:var(--gold)">Elite</span>':''}</div><div class="qtext">"${q.text}"</div><div class="meta">${giver(q)} · ${q.type==='kill'?`Slay ${q.n} ${ZONES[q.zone].mobs.find(m=>m.id===q.mob).name}`:`Collect ${q.n} ${ZONES[q.zone].mobs.find(m=>m.id===q.mob).drop}`}</div></div>
-      <div class="r"><button class="btn sm" data-act="accept" data-arg="${q.id}">Accept</button></div></div>`).join(''):`<p class="meta">No more quests here at your level.${next?' '+ZONES[next].name+' has work for you.':''}</p>`;
+      <div class="r"><button class="btn sm" data-act="accept" data-arg="${q.id}">Meet ${giver(q)}</button></div></div>`).join(''):`<p class="meta">No more quests here at your level.${next?' '+ZONES[next].name+' has work for you.':''}</p>`;
     // attunement quests waiting on dungeon clears say what they need (T23's needDun)
     const waiting=QUESTS[h.zone].filter(q=>q.needDun&&!h.quests.done[q.id]&&h.lvl>=q.lvl-2&&(!q.req||h.quests.done[q.req])&&q.needDun.some(id=>dungeonStats(id).clears<=0));
     if(waiting.length)o+=waiting.map(q=>`<div class="rowl"><div class="l"><div class="qtitle">[${q.lvl}] ${q.name} <span class="pill" style="color:var(--gold)">Attunement</span></div><div class="meta">${giver(q)} will offer this once you have cleared ${q.needDun.filter(id=>dungeonStats(id).clears<=0).map(id=>DUNGEONS[id].name).join(' and ')} at least once.</div></div></div>`).join('');
@@ -183,4 +183,3 @@ journal:{
 }};
 function renderTab(force){const t=TABS[S.tab]||TABS.quests,k=S.tab+':'+t.key();if(force||k!==curKey){curKey=k;$('#tabbody').innerHTML=t.build();}t.update();
   document.querySelectorAll('.tabs [role=tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.arg===S.tab?'true':'false'));}
-

@@ -36,3 +36,14 @@ html,body{height:100%;overflow:hidden}
 
 
 @media(min-width:1700px){.brand h1{font-size:30px}.brand,.who,#fieldOptions{font-size:18px}#fieldDock .btn{font-size:18px}.unit .uname{font-size:18px}.unit .bar{height:18px}.unit .bar span{font-size:13px}.zonebar .zsub{font-size:16px}.abar .modehint{font-size:13px}.abar .modebox{min-width:155px}.abar .seg{font-size:17px}.statusline{font-size:18px}}
+
+/* T41: conversations and place-bound services stay easy to read and tap. */
+.scene .dlg .dlg-choices button,.menu.place-book .btn{min-height:44px}
+.menu.place-book .tal{gap:12px}
+@media(min-width:1700px){
+ .scene .dlg .dlg-say{font-size:20px;line-height:1.45}
+ .scene .dlg .dlg-who{font-size:24px}
+ .scene .dlg .dlg-role{font-size:16px}
+ .scene .dlg .dlg-choices button{font-size:18px}
+ .scene .dlg .dlg-face{width:80px;height:80px}
+}

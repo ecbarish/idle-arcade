@@ -103,6 +103,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Codex: T41 ready in PR #67: walk-in Trainer/Stable, physical Guild board/chest/member conversations, all quest givers placed and Journal routes to them. All eight pages pass (Realmbound 8,029); real purchases/jobs/quest rewards and exact reload at all four widths. Old saves, prices and Godot/version files preserved; D0 local helper runner separately ready in PR #66.
+
 - 2026-10-08 Claude (late night): task lists rewritten around everything learned (PROJECTS "Read first", QUEUE goal, START-HERE). Merged
   ChatGPT's seven stacked PRs (T36-T40, the Ashen Throne, its plan sync): Diamond Career v0.4.0, Realmbound v1.6.0, Otherworld v0.3.0,
   Wildbond v1.8.0; all eight pages pass (Realmbound 7738, Wildbond 1530, Otherworld 1757). Lane A refilled (T41-T44). Tested the local
