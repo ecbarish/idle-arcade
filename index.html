@@ -75,15 +75,22 @@ a{color:inherit}
 .erase{background:var(--neon);color:#2a0012;border:0}
 .keep{background:var(--bg2);color:var(--fg);border:1px solid var(--line)}
 
+/* Sections by kind of game (AR2.12): what each group is like, so similar games sit together */
+.kinds{display:flex;flex-direction:column;gap:30px}
+.kind{display:flex;flex-direction:column;gap:12px;scroll-margin-top:12px}
+.kind h2{font-family:var(--f-sign);font-weight:400;font-size:22px;margin:0;color:var(--marquee);letter-spacing:.02em}
+.kind .like{margin:0;color:var(--muted);max-width:75ch}
+.howto{font-size:13px;color:var(--fg);background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.howto p{margin:0}.howto b{color:var(--marquee);font-weight:600}
 .note{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;border-top:1px solid var(--line);padding-top:22px;color:var(--muted);font-size:14px}
 .note h2{font-family:var(--f-sign);font-weight:400;font-size:16px;color:var(--fg);margin:0 0 4px;letter-spacing:.02em}
 .note p{margin:0;max-width:52ch}
-/* The launcher (L8): the arcade as a place, in two styles players vote on (launcher/launcher.js) */
+/* The launcher (L8, trimmed by AR2.12): the arcade hall (launcher/launcher.js) */
 .launcher{display:flex;flex-direction:column;gap:10px}
 .launch-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
-.launch-modes{display:flex;gap:6px;flex-wrap:wrap}
-.launch-modes button{font:inherit;font-size:14px;min-height:44px;padding:6px 14px;border-radius:9px;border:1px solid var(--line);background:var(--bg2);color:var(--fg);cursor:pointer}
-.launch-modes button[aria-pressed="true"]{background:var(--marquee);color:#2a1d00;border-color:var(--marquee);font-weight:700}
+.kinds-nav{display:flex;gap:6px;flex-wrap:wrap}
+.kinds-nav a{font-size:14px;min-height:44px;display:inline-flex;align-items:center;padding:6px 14px;border-radius:9px;border:1px solid var(--line);background:var(--bg2);color:var(--fg);text-decoration:none}
+.kinds-nav a:hover{border-color:var(--marquee)}
 .launch-hint{color:var(--muted);font-size:14px}
 .launch-view{position:relative;aspect-ratio:21/9;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#0b1030}
 .launch-view canvas{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:pixelated}
@@ -91,21 +98,20 @@ a{color:inherit}
 .launch-hit{position:absolute;top:8%;bottom:4%;display:block;border-radius:10px}
 .launch-hit:focus-visible{outline:3px solid var(--marquee);outline-offset:-3px}
 .launch-hit.soon{cursor:default}
-#launchVote{--vote-line:var(--line);--vote-bg:var(--bg2);--vote-on:var(--marquee)}
 @media (max-width:720px){.launch-view{aspect-ratio:4/3}}
 /* Big screens (L11): more of the shelf at once, bigger covers */
 @media (min-width:1700px){.wrap{max-width:min(2200px,92vw)}.shelf{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}}
 @media (min-width:2400px){.wrap{max-width:min(2900px,92vw)}.shelf{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}.tag{font-size:18px;max-width:80ch}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-body{font-size:calc(16px * var(--arc-text,1))}.launch-bar,.launch-modes button,.cab .desc,.cab .play,.header-tools a{font-size:calc(14px * var(--arc-text,1))}
+body{font-size:calc(16px * var(--arc-text,1))}.launch-bar,.kinds-nav a,.cab .desc,.cab .play,.header-tools a{font-size:calc(14px * var(--arc-text,1))}
 
 /* Actual recorded frames mark the new versions; Classic keeps its animated covers. */
 .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:pixelated}
 .preview-card .cover{height:auto;aspect-ratio:16/9}
 .preview-card .cover .title{inset:auto 0 0;padding:16px 12px 10px;background:linear-gradient(transparent,#12101deb);font-size:24px;text-shadow:0 2px 3px #000}
 .preview-card .status{background:#233a32;color:#bff1cc;border:1px solid #608871}
-.preview-controls,.preview-load,.preview-classic{font-size:calc(14px * var(--arc-text,1));line-height:1.5}
+.preview-load,.preview-classic{font-size:calc(14px * var(--arc-text,1));line-height:1.5}
 .preview-load{color:#c4b9d8}.preview-classic a{color:#ffd27a;text-underline-offset:3px}
 </style>
 <link rel="stylesheet" href="shared/accessibility.css">
@@ -115,17 +121,16 @@ body{font-size:calc(16px * var(--arc-text,1))}.launch-bar,.launch-modes button,.
   <header class="marquee">
     <h1 class="sign">Idle <span>Arcade</span></h1>
     <p class="tag">A stable of idle and progression games. Each one saves on its own, so you can jump between them and pick up where you left off. New here? Meet <a href="promo.html" style="color:var(--marquee)">Realmbound →</a> or <a href="promo-wildbond.html" style="color:var(--ok)">Wildbond →</a></p>
-    <div class="header-tools"><a class="playtest-link" href="playtest.html">What to try →</a><a class="credits-link" href="credits.html">Credits</a><button class="install-btn" id="installArcade" hidden>Install arcade</button><span class="offline-status" id="offlineStatus" role="status" aria-live="polite"></span><span class="version-label">v1.4.0</span><div class="feedback-container"><button class="fb-btn" aria-haspopup="true" aria-expanded="false">Feedback</button></div></div>
+    <div class="header-tools"><a class="playtest-link" href="playtest.html">What to try →</a><a class="credits-link" href="credits.html">Credits</a><button class="install-btn" id="installArcade" hidden>Install arcade</button><span class="offline-status" id="offlineStatus" role="status" aria-live="polite"></span><span class="version-label">v1.5.0</span><div class="feedback-container"><button class="fb-btn" aria-haspopup="true" aria-expanded="false">Feedback</button></div></div>
     <details class="app-help"><summary>Play offline or add to your home screen</summary><p>Open this page online and wait for “Ready for offline play.” You can then open the arcade and its Classic browser games without internet. The new Wildbond and Starfall previews need internet on their first visit. Use Install arcade when it appears, or your browser’s Install / Add to Home Screen menu. Your saves stay in this browser on this device. Without internet, lettering may use device fonts and Wildbond may use its HD-2D view while the 3D renderer is unavailable.</p></details>
   </header>
 
-  <section class="launcher" id="launcher" aria-label="Choose a game" data-mode="scene">
-    <div class="launch-bar"><div class="launch-modes" role="group" aria-label="Homepage style"><button type="button" data-mode="scene" aria-pressed="true">The living world</button><button type="button" data-mode="road" aria-pressed="false">The road</button><button type="button" data-mode="hall" aria-pressed="false">The arcade hall</button></div><span class="launch-hint" id="launchHint" aria-live="polite">Choose a place to play</span></div>
+  <section class="launcher" id="launcher" aria-label="Choose a game">
+    <div class="launch-bar"><span class="launch-hint" id="launchHint" aria-live="polite">Walk with ← → or tap a cabinet</span><nav class="kinds-nav" id="kindsNav" aria-label="Kinds of game"></nav></div>
     <div class="launch-view"><canvas id="launchCv" aria-hidden="true"></canvas><div class="launch-hits" id="launchHits"></div></div>
-    <div id="launchVote"></div>
   </section>
 
-  <main class="shelf" id="shelf"></main>
+  <main class="kinds" id="shelf"></main>
 
   <section class="note">
     <div><h2>Your saves</h2><p>Progress is stored in this browser on this device, with automatic backups. Classic browser games have a <b>Your save</b> box to move your journey to another computer. The new previews keep separate saves and do not import Classic journeys.</p></div>
@@ -140,13 +145,11 @@ body{font-size:calc(16px * var(--arc-text,1))}.launch-bar,.launch-modes button,.
 <script src="shared/feedback.js"></script>
 <script src="shared/ambience.js"></script>
 <script src="shared/light.js"></script>
-<script src="shared/votes-config.js"></script>
-<script src="shared/votes.js"></script>
 <script src="launcher/games.js"></script>
 <script>
 (function(){
 'use strict';
-const VERSION = '1.4.0'; // the arcade's version (L9)
+const VERSION = '1.5.0'; // the arcade's version (L9)
 setupFeedback('The arcade homepage', VERSION, () => '');
 const GAMES=window.ArcadeGames;
 const ago=t=>{const s=(Date.now()-t)/1000;if(s<90)return'just now';if(s<3600)return Math.round(s/60)+' min ago';if(s<86400)return Math.round(s/3600)+' h ago';return Math.round(s/86400)+' days ago';};
@@ -155,15 +158,20 @@ const ago=t=>{const s=(Date.now()-t)/1000;if(s<90)return'just now';if(s<3600)ret
 const SAVE_KEYS={'baseball':'diamond-manager-save-v1','otherworld':'otherworld-save-v1','primordial':'primordial-save-v1','starfall-guild':'starfall-guild-save-v1','realmbound':'realmbound-save-v1','wildbond':'wildbond-save-v1'};
 const idx=Arcade.readIndex();
 const shelf=document.getElementById('shelf');
-shelf.innerHTML=GAMES.map(g=>{
+const card=g=>{
   const p=g.preview?null:idx[g.id];
   const prog=g.preview?'<div class="none">Preview saves stay inside this game; Classic progress is separate.</div>':g.href?(p?`<div class="sum">${p.summary}</div><div class="det">${p.detail} · played ${ago(p.last)}</div>`:'<div class="none">Not started yet.</div>'):'';
   const btn=g.href?`<a class="play ${p?'':'alt'}" href="${g.href}">${g.preview?'Play the preview':p?'Continue':'Play'}</a>`:`<div class="soon">Being designed now</div>`;
   const reset=p&&SAVE_KEYS[g.id]?`<div class="reset" id="rs-${g.id}"><button class="resetlink" data-reset="${g.id}">Reset progress</button></div>`:'';
   return `<article class="cab${g.preview?' preview-card':''}" data-game="${g.id}"><div class="cover"><canvas data-cover="${g.cover}" aria-hidden="true"></canvas>${g.image?`<img src="${g.image}" alt="${g.alt}" loading="lazy" decoding="async">`:""}<div class="title ${g.tcls}">${g.title}</div></div>
     <div class="body"><span class="status ${g.status[1]}">${g.status[0]}</span><p class="blurb">${g.blurb}</p>
-    <div class="tags">${g.tags.map(t=>`<span>${t}</span>`).join('')}</div>${g.href?`<div class="prog">${prog}</div>`:''}${btn}${g.guide?`<p><a href="${g.guide}">Guide · the Sundered Reach →</a></p>`:""}${g.preview?`<p class="preview-controls">${g.controls}</p><p class="preview-load">${g.load}</p><p class="preview-classic"><a href="${GAMES.find(other=>other.id===g.classic).href}">Play ${GAMES.find(other=>other.id===g.classic).title} →</a></p>`:""}${reset}</div></article>`;
-}).join('');
+    <div class="tags">${g.tags.map(t=>`<span>${t}</span>`).join('')}</div><div class="howto"><p><b>What you do:</b> ${g.goal}</p><p><b>Controls:</b> ${g.controls}</p></div>${g.href?`<div class="prog">${prog}</div>`:''}${btn}${g.guide?`<p><a href="${g.guide}">Guide · the Sundered Reach →</a></p>`:""}${g.preview?`<p class="preview-load">${g.load}</p><p class="preview-classic"><a href="${GAMES.find(other=>other.id===g.classic).href}">Play ${GAMES.find(other=>other.id===g.classic).title} →</a></p>`:""}${reset}</div></article>`;
+};
+/* Sections by kind (Evan, 2026-10-09): each says what its games are like, so similar games sit side by side */
+const KINDS=window.ArcadeKinds.filter(k=>GAMES.some(g=>g.kind===k.id));
+shelf.innerHTML=KINDS.map(k=>`<section class="kind" id="kind-${k.id}" aria-labelledby="kh-${k.id}"><h2 id="kh-${k.id}">${k.name}</h2><p class="like">${k.like}</p>
+  <div class="shelf">${GAMES.filter(g=>g.kind===k.id).map(card).join('')}</div></section>`).join('');
+document.getElementById('kindsNav').innerHTML=KINDS.map(k=>`<a href="#kind-${k.id}">${k.name}</a>`).join('');
 
 // An unavailable screenshot leaves the existing illustrated cover visible.
 shelf.querySelectorAll('.cover img').forEach(img=>{
