@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Local helper (2026-10-08): queued local tasks use OpenCode, attach the project primer and lessons, and stop for failed tools or incomplete answers. Reports and edits require review; source in tools/local-ai/.
+
 - Otherworld v0.3.0 (2026-10-08): the Ashen Throne opens: Kael, a fallen house, three costly gifts, five final outcomes plus a death route, Return's remembered dawns and cross-world knowledge. The guide now covers all three worlds.
 
 - Wildbond v1.8.0 (2026-10-08): four later-road witnesses, fair clues in signs and Warden lines, and small mysteries answered after each badge. Heritage recognition is ready as exported data for the Godot areas.
