@@ -907,10 +907,10 @@ func _run() -> void:
 	var rx := RegEx.create_from_string("(?:sfx\\.play|_sfx)\\(\"([a-z]+)\"")
 	for f in ["main", "battle", "shop"]:
 		for m in rx.search_all(FileAccess.get_file_as_string("res://scripts/%s.gd" % f)):
-			if not ResourceLoader.exists("res://assets/sfx/%s.wav" % m.get_string(1)):
+			if not Sfx.has(m.get_string(1)):
 				missing.append(m.get_string(1))
 	for el in main.battle.EL_FX:
-		if not ResourceLoader.exists("res://assets/sfx/%s.wav" % main.battle.EL_FX[el][0]):
+		if not Sfx.has(main.battle.EL_FX[el][0]):
 			missing.append(main.battle.EL_FX[el][0])
 	check(missing.is_empty(), "every sound effect has a file, each element's hit included (missing: %s)" % ", ".join(missing))
 	check(main.battle.sfx == main.sfx and main.shop.sfx == main.sfx, "the battle and the shop share the game's sound effects")

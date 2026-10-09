@@ -537,7 +537,7 @@ func _run() -> void:
 	var missing: Array[String] = []
 	var rx := RegEx.create_from_string("sfx\\.play\\(\"([a-z]+)\"")
 	for m in rx.search_all(src):
-		if not ResourceLoader.exists("res://assets/sfx/%s.wav" % m.get_string(1)):
+		if not Sfx.has(m.get_string(1)):
 			missing.append(m.get_string(1))
 	check(missing.is_empty(), "every sound effect the town plays has a file (missing: %s)" % ", ".join(missing))
 	var heard: int = main.sfx.count

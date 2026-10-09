@@ -1,8 +1,9 @@
 class_name Sfx
 extends Node
-## Short sound effects. play("coin") plays res://assets/sfx/coin.wav (docs/research/assets.md lists every name and
-## where it came from). A name with no file stays silent, so a sound can be swapped, or replaced with our own, by
-## dropping in a file of the same name, and removing one never breaks the game. N turns sound effects on or off.
+## Short sound effects. play("coin") plays res://assets/sfx/coin.wav or coin.ogg (docs/research/assets.md lists every
+## name and where it came from). Very short sounds are WAV; anything near a second or longer is OGG. A name with no file
+## stays silent, so a sound can be swapped, or replaced with our own, by dropping in a file of the same name, and
+## removing one never breaks the game. N turns sound effects on or off.
 const VOICES := 6                    # how many sounds can overlap
 var on := true
 var volume_db := -6.0                # a little under the music
@@ -15,6 +16,8 @@ var _next := 0
 func _ready() -> void:
 	for i in VOICES:
 		var p := AudioStreamPlayer.new()
+		if AudioServer.get_bus_index("Effects") >= 0:
+			p.bus = "Effects"            # the settings menu's Effects slider, once that bus exists (WB6.2)
 		add_child(p)
 		_players.append(p)
 
@@ -36,6 +39,13 @@ func play(sound: String, louder_db := 0.0, vary := 0.05) -> void:
 
 func _stream(sound: String) -> AudioStream:
 	if not _cache.has(sound):
-		var path := "res://assets/sfx/%s.wav" % sound
-		_cache[sound] = load(path) if ResourceLoader.exists(path) else null
+		_cache[sound] = null
+		for ext in ["wav", "ogg"]:
+			var path := "res://assets/sfx/%s.%s" % [sound, ext]
+			if ResourceLoader.exists(path):
+				_cache[sound] = load(path)
 	return _cache[sound]
+
+## True when a sound by this name has a file (the checks use it).
+static func has(sound: String) -> bool:
+	return ResourceLoader.exists("res://assets/sfx/%s.wav" % sound) or ResourceLoader.exists("res://assets/sfx/%s.ogg" % sound)
