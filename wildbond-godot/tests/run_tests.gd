@@ -107,6 +107,10 @@ func _run() -> void:
 	check(d3.d == 10, "Vine Lash with a 1.3 boost: 10 (%s)" % d3)
 	check(d4.d == 6 and d4.crit, "a critical Bite: 6 (%s)" % d4)
 	check(R.xp_need(5) == 187 and R.xp_need(13) == 1426, "XP needed per level matches")
+	var early: float = R.xp_need(10) / R.win_xp(1, 10, 10, false, 0.13)
+	var late: float = R.xp_need(55) / R.win_xp(1, 55, 55, false, 0.13)
+	check(absf(early - late) < 0.5 and early > 10.0 and early < 14.0, "pacing (WB3.6b): a level costs about the same number of even wins at level 10 (%.1f) and level 55 (%.1f)" % [early, late])
+	check(R.win_xp(1, 40, 20, false, 0.13) == R.win_xp(1, 23, 20, false, 0.13) and R.win_xp(1, 15, 20, false, 0.13) < R.win_xp(1, 20, 20, false, 0.13) and R.win_xp(1, 20, 20, true, 0.13) > R.win_xp(1, 20, 20, false, 0.13), "stronger foes are worth up to three levels more, weaker ones less, trainers more")
 	check(R.moves_of(a) == ["bite", "emberSnap"], "moves at level 5")
 	var a12 := a.duplicate(true)
 	a12.lvl = 12

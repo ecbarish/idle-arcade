@@ -74,6 +74,8 @@ Successful cases arrive at Halen at 65/65/65 and Rysa at 70/70/70. All six leagu
 
 The scale deserves human review: Classic's 0.13 XP multiplier and its level-powered XP curve were designed around a different battle/control rhythm. Matching all aces costs about 10,300 additional wins across the four areas under this cautious policy. It is evidence against compulsory level chasing, not a proposal to increase every opponent or declare that the whole game takes a specified number of hours.
 
+
+**Pacing changed 2026-10-09 (Claude, WB3.6b):** XP for a win is now `rules.gd` `win_xp`: a share of the XP needed at the fight's level (foe level capped at yours + 3), so a level costs about 12 even-level wild wins (trainers 1.6 times as much XP) at every stage. Rerun this diagnostic with the new hashes to see the late route's levels.
 ## Reproducible cooldown finding for Claude
 
 **Fixed 2026-10-09 (Claude, PR #91):** when an ally's turn comes with every move resting, it no longer opens the menu. It says it "catches its breath", holds its turn while battle time runs (so cooldowns tick), and the menu opens as soon as one move is ready. A permanent Godot check covers it ("every move resting"). Rerun the diagnostic with the new battle.gd hash before balancing.
