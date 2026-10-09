@@ -103,6 +103,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-08 Codex: local runner follow-up PR #68 preserves wildcard-first runtime permission order; 19 parser/policy checks pass. Installed without restarting Claude's benchmark/model runs. T41 remains separately ready in PR #67; no game/version/Godot changes in #68.
+
 - 2026-10-08 Codex: D0 queue runner ready in PR #66: OpenCode with local Ollama, Claude's primer/lessons attached, selectable model, strict error/completion handling. Nine runner regressions and actual read-only queue lookup pass; all eight browser pages pass. Broader model audit remains unapproved; no game/Godot/version changes.
 
 - 2026-10-08 Claude (late night): task lists rewritten around everything learned (PROJECTS "Read first", QUEUE goal, START-HERE). Merged

@@ -1,3 +1,12 @@
+# OpenCode uses last matching rule. Emit the catch-all before explicit tool rules.
+function Get-LocalAgentPermission {
+ param([switch]$ReadOnly)
+ return [ordered]@{
+  '*'='deny'; read='allow'; glob='allow'; grep='allow'
+  edit=if($ReadOnly){'deny'}else{'allow'}
+  bash='deny'; external_directory='deny'; task='deny'; webfetch='deny'; websearch='deny'
+ }
+}
 # Parse OpenCode JSONL only after its process exits successfully.
 function Get-LocalAgentReport {
  param([Parameter(Mandatory)][AllowEmptyCollection()][object[]]$Events)

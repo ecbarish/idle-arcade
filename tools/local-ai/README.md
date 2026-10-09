@@ -16,7 +16,7 @@ Do not overwrite Claude's primer, lessons, model settings or benchmark files. At
 - `-Mode StopModel`: unload only the selected model.
 
 Local inference uses only the Ollama provider; no cloud fallback, sharing or automatic updates. Both task modes
-deny shell, web, subagents and external-directory tools. Edit mode permits file edits in the helper clone;
+deny shell, web, subagents and external-directory tools. Runtime overrides use an ordered policy: catch-all denial precedes explicit tool rules, matching OpenCode precedence. Edit mode permits file edits in the helper clone;
 read-only denies them. These are OpenCode tool permissions, not an OS sandbox. The root config denies shell
 commands too: the temporary benchmark's `node check.cjs` allowance does not carry into normal queued work.
 

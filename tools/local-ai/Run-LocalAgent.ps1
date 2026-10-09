@@ -59,7 +59,7 @@ This is Evan's separate LOCAL HELPER workspace, not Claude's workspace. Do ONLY 
   $taskPsi.UseShellExecute=$false;$taskPsi.CreateNoWindow=$true
   $taskPsi.RedirectStandardInput=$true;$taskPsi.RedirectStandardOutput=$true;$taskPsi.RedirectStandardError=$true
   $taskPsi.Environment['OPENCODE_CONFIG']=Join-Path $taskRoot 'opencode-local.json'
-  $taskPermission=@{'*'='deny';read='allow';glob='allow';grep='allow';edit=if($taskIsReadOnly){'deny'}else{'allow'};bash='deny';external_directory='deny';task='deny';webfetch='deny';websearch='deny'}
+  $taskPermission=Get-LocalAgentPermission -ReadOnly:$taskIsReadOnly
   $taskShow=Invoke-RestMethod 'http://127.0.0.1:11434/api/show' -Method Post -ContentType 'application/json' -Body (@{model=$taskTools.model}|ConvertTo-Json -Compress)
   $taskContext=16384
   if($taskShow.parameters -match '(?m)^num_ctx\s+(\d+)'){$taskContext=[int]$Matches[1]}

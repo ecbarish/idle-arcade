@@ -23,4 +23,14 @@ Assert-Reject 'tool error despite final apology' @([pscustomobject]@{type='tool_
 $taskTokens=$null;$taskErrors=$null
 [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PSScriptRoot 'Run-LocalAgent.ps1'),[ref]$taskTokens,[ref]$taskErrors)|Out-Null
 if($taskErrors.Count){throw ($taskErrors|Out-String)};$taskCount++
+foreach($taskReadOnly in @($false,$true)){
+ $taskSerialized=Get-LocalAgentPermission -ReadOnly:$taskReadOnly | ConvertTo-Json -Compress
+ $taskPolicy=$taskSerialized | ConvertFrom-Json -AsHashtable
+ if(@($taskPolicy.Keys)[0] -ne '*'){throw 'FAIL: catch-all denial must precede explicit rules'};$taskCount++
+ if($taskPolicy['*'] -ne 'deny'){throw 'FAIL: unspecified tools must be denied'};$taskCount++
+ if($taskPolicy.read -ne 'allow' -or $taskPolicy.glob -ne 'allow' -or $taskPolicy.grep -ne 'allow'){throw 'FAIL: read tools must work after catch-all denial'};$taskCount++
+ $taskExpectedEdit=if($taskReadOnly){'deny'}else{'allow'}
+ if($taskPolicy.edit -ne $taskExpectedEdit){throw 'FAIL: wrong edit permission for task mode'};$taskCount++
+ foreach($taskTool in @('bash','external_directory','task','webfetch','websearch')){if($taskPolicy[$taskTool] -ne 'deny'){throw "FAIL: $taskTool must stay denied"}};$taskCount++
+}
 Write-Host "PASS: $taskCount runner checks."
