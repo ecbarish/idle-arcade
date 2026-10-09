@@ -123,7 +123,7 @@ function rosterTab(){
   const c=you(), line=c.lineup.map(id=>pl(c,id)), bench=batters(c).filter(p=>!c.lineup.includes(p.id));
   return '<p>Payroll <b>'+money(payroll(c))+'</b> of the owner\'s budget of <b>'+money(c.budget)+'</b>. Roster '+c.players.length+' of '+DM.rosterMax+'. Ratings run from 0 to 99; overall is shown in bold.</p>'+
    '<h3>Batting order</h3><p class="small">The top of the order bats most. Contact makes hits, Power makes extra bases and home runs, Eye draws walks, Glove stops the other side\'s hits.</p><div class="scroll-x"><table class="tbl"><tr><th>#</th><th>Batter</th><th>Pos</th><th>Age</th><th>Overall</th><th>Contact</th><th>Power</th><th>Eye</th><th>Glove</th><th class="hide-sm">This season</th><th>Order</th><th>Contract</th><th></th></tr>'+
-   line.map((p,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(p.name)+'</td><td>'+p.pos+'</td><td>'+p.age+'</td><td class="ovr">'+overall(p)+' <span class="small">'+word(overall(p))+'</span></td>'+ratingCells(p)+'<span class="hide-sm">'+seasonCell(p)+'</span><td><button data-up="'+i+'" aria-label="Move '+esc(p.name)+' up" '+(i?'':'disabled')+'>▲</button><button data-down="'+i+'" aria-label="Move '+esc(p.name)+' down" '+(i<8?'':'disabled')+'>▼</button></td>'+contractCell(p)+'</tr>').join('')+
+   line.map((p,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(p.name)+'</td><td>'+p.pos+'</td><td>'+p.age+'</td><td class="ovr">'+overall(p)+' <span class="small">'+word(overall(p))+'</span></td>'+ratingCells(p)+seasonCell(p)+'<td><button data-up="'+i+'" aria-label="Move '+esc(p.name)+' up" '+(i?'':'disabled')+'>▲</button><button data-down="'+i+'" aria-label="Move '+esc(p.name)+' down" '+(i<8?'':'disabled')+'>▼</button></td>'+contractCell(p)+'</tr>').join('')+
    bench.map(p=>'<tr><td>Bench</td><td>'+esc(p.name)+'</td><td>'+p.pos+'</td><td>'+p.age+'</td><td class="ovr">'+overall(p)+' <span class="small">'+word(overall(p))+'</span></td>'+ratingCells(p)+seasonCell(p)+'<td><button data-start="'+p.id+'">Start for №9</button></td>'+contractCell(p)+'</tr>').join('')+'</table></div>'+
    '<p><button data-auto>Let Iona set the order</button></p>'+
    '<h3>Pitchers</h3><p class="small">The five best pitchers start in turn. Stuff gets strikeouts, Control avoids walks, Stamina keeps a starter in the game longer before the bullpen takes over.</p><div class="scroll-x"><table class="tbl"><tr><th>Pitcher</th><th>Age</th><th>Overall</th><th>Stuff</th><th>Control</th><th>Stamina</th><th>Contract</th><th></th></tr>'+
@@ -156,6 +156,20 @@ function leagueTab(){
    (L.log.length?'<h3>Trades</h3><ul>'+L.log.slice(-8).map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul>':'');
 }
 
+/* Confirmation stays inside the game, with the cost visible before choosing. */
+function confirmRelease(p) {
+  const dialog = $('#decision-dialog');
+  $('#decision-text').textContent = 'Let ' + p.name + ' go? ' + (p.years > 0 ? 'The club pays ' + money(Math.round(p.salary / 2)) + ' to end the contract.' : 'The contract is ending, so there is no release fee.');
+  return new Promise(resolve => {
+    const finish = yes => { dialog.close(); dialog.removeEventListener('cancel', cancel); $('#decision-yes').onclick = null; $('#decision-no').onclick = null; resolve(yes); };
+    const cancel = e => { e.preventDefault(); finish(false); };
+    $('#decision-yes').onclick = () => finish(true);
+    $('#decision-no').onclick = () => finish(false);
+    dialog.addEventListener('cancel', cancel);
+    dialog.showModal(); $('#decision-no').focus();
+  });
+}
+
 /* ---------- Input ---------- */
 function act(id){
   if(id==='a-play'||id==='a-sim'){ const g=playDay(L); save(); watch(g,id==='a-sim'); }
@@ -166,9 +180,9 @@ function act(id){
   else if(id==='a-office'||id==='n-office'){ openOffice(id==='n-office'?'roster':null); }
   else if(id==='a-season'){ if(startSeason(L)){ save(); $('#feed').replaceChildren(); render(); } }
   else if(id==='n-ok'){ showOffseasonOrNext(); }
-  else if(id==='n-yes'||id==='n-no'){ const r=answerOffer(L,id==='n-yes'); save(); if(r)alert(r); showOffseasonOrNext(); }
+  else if(id==='n-yes'||id==='n-no'){ const r=answerOffer(L,id==='n-yes'); save(); if(r) return note('<div class="who">Iona Vale</div><p>'+esc(r)+'</p>', '<button class="primary" id="n-ok">Back to the field</button>'); showOffseasonOrNext(); }
 }
-document.addEventListener('click',e=>{
+document.addEventListener('click',async e=>{
   const b=e.target.closest('button'); if(!b||b.disabled) return;
   if(b.id&&(b.id.startsWith('a-')||b.id.startsWith('n-'))) return act(b.id);
   if(b.id==='close-office') return closeOffice();
@@ -178,7 +192,7 @@ document.addEventListener('click',e=>{
   else if(b.dataset.start){ const l=c.lineup.slice(); l[8]=Number(b.dataset.start); c.lineup=l; setLineup(c,l); r=''; }
   else if(b.dataset.auto!==undefined){ autoLineup(c); r='✓ Iona set the order: best on-base hitters first, power in the middle.'; }
   else if(b.dataset.resign){ const p=pl(c,Number(b.dataset.resign)); r=resign(L,Number(b.dataset.resign))||'✓ '+p.name+' signed again.'; }
-  else if(b.dataset.release){ const p=pl(c,Number(b.dataset.release)); if(!confirm('Let '+p.name+' go?'))return; r=release(L,Number(b.dataset.release))||'✓ '+p.name+' has left the club.'; }
+  else if(b.dataset.release){ const p=pl(c,Number(b.dataset.release)); if(!await confirmRelease(p))return; r=release(L,Number(b.dataset.release))||'✓ '+p.name+' has left the club.'; }
   else if(b.dataset.sign){ const p=L.freeAgents.find(x=>x.id===Number(b.dataset.sign)); r=signFree(L,Number(b.dataset.sign))||'✓ '+p.name+' joins the Lanterns.'; }
   else if(b.dataset.upPark){ r=buyUpgrade(L,b.dataset.upPark)||'✓ The '+DM.upgrades[b.dataset.upPark].name.toLowerCase()+' are built.'; }
   else if(b.id==='trade-ask'){ trade.answer=judgeTrade(L,trade.club,trade.give,trade.get).why; r=''; }
