@@ -23,6 +23,8 @@ func capture() -> void:
 	main.fade_rect.color.a = 0.0
 	main.title.visible = false
 	main.howto.visible = false
+	root.borderless = true
+	root.min_size = Vector2i(1, 1)
 	root.position = Vector2i.ZERO
 	main.battle.set_process(false)
 	for size in [Vector2i(375, 812), Vector2i(667, 375), Vector2i(1366, 768), Vector2i(1920, 1080), Vector2i(3440, 1440)]:
@@ -33,7 +35,7 @@ func capture() -> void:
 		await process_frame
 		await process_frame
 		await RenderingServer.frame_post_draw
-		DisplayServer.screen_get_image().get_region(Rect2i(DisplayServer.window_get_position(), DisplayServer.window_get_size())).save_png("res://frames/wd3/practice-%dx%d.png" % [size.x, size.y])
+		save_window("practice", size)
 		main.lessons.visible = false
 		main.battle.open("trainer", [a], [b], "Warden Nerys")
 		main.battle.wait_u = main.battle.allies[0]
@@ -45,7 +47,18 @@ func capture() -> void:
 		await process_frame
 		await process_frame
 		await RenderingServer.frame_post_draw
-		DisplayServer.screen_get_image().get_region(Rect2i(DisplayServer.window_get_position(), DisplayServer.window_get_size())).save_png("res://frames/wd3/battle-%dx%d.png" % [size.x, size.y])
+		save_window("battle", size)
 	main.queue_free()
 	await process_frame
 	quit()
+
+func save_window(label: String, requested: Vector2i) -> void:
+	var position := DisplayServer.window_get_position()
+	var size := DisplayServer.window_get_size()
+	var output: Array = []
+	var filename := ProjectSettings.globalize_path("res://frames/wd3/%s-%dx%d.png" % [label, requested.x, requested.y])
+	var status := OS.execute("import", ["-window", "root", "-crop", "%dx%d+%d+%d" % [size.x, size.y, position.x, position.y], "+repage", filename], output, true)
+	print("WD3 screen: %s requested %s actual %s: %s" % [label, requested, size, output])
+	if status != 0 or size != requested:
+		push_error("Full-window capture failed")
+		quit(2)

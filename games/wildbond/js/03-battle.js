@@ -38,9 +38,9 @@ function chooseTurn(m) {
   B.wait = null; B.lastInput = B.t; u.atb = 0; act(u, m); Cr.addBond(u.c, 0.3);
 }
 function moveInfo(m) {
-  const mv = MOVES[m], extra=mv.breakGuard?'; breaks guard':mv.pierce?'; ignores guard':mv.status?'; leaves the foe '+BattleEffects.label[mv.status].toLowerCase():mv.combo?'; stronger on '+BattleEffects.label[mv.combo].toLowerCase()+' foes':'', el = mv.el ? mv.el + ' ' : '', how = mv.spec ? 'special (uses Wits)' : 'physical (uses Power)';
+  const mv = MOVES[m], extra=mv.breakGuard?'; breaks guard':mv.pierce?'; ignores guard':mv.status?'; '+{soaked:'sets up Steam Burst',scorched:'burns; weakens physical hits',rooted:'slows turns; sets up rooted follow-ups',sleep:'pauses turns until hit or waking',marked:'the next hit lands 25% harder'}[mv.status]:mv.combo?'; stronger on '+BattleEffects.label[mv.combo].toLowerCase()+' foes':'', el = mv.el ? mv.el + ' ' : '', how = mv.spec ? 'special (uses Wits)' : 'physical (uses Power)';
   return { hit: `${el}${how} attack, power ${mv.pow}${extra}`, aoe: `${el}hits every foe, power ${mv.pow}`, dot: `${el}poisons a foe over time`, buff: 'your team hits harder for a while',
-    haste: 'your team acts faster for a while', guard: 'your team braces against damage', slow: 'slows a foe down', heal: 'heals your most hurt ally'+(mv.cleanse?'; clears harmful effects':'') }[mv.kind] || '';
+    haste: 'your team acts faster for a while', guard: 'your team braces against damage'+(mv.cleanse?'; clears harmful effects':''), slow: 'slows a foe down', heal: 'heals your most hurt ally'+(mv.cleanse?'; clears harmful effects':'') }[mv.kind] || '';
 }
 
 function advantage(el, target) {

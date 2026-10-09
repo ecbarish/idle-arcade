@@ -18,9 +18,10 @@ jobs:
           unzip -q godot.zip -d "$RUNNER_TEMP/godot"
           echo "GODOT=$RUNNER_TEMP/godot/Godot_v4.7.2-stable_linux.x86_64" >> "$GITHUB_ENV"
           sudo apt-get update -qq
-          sudo apt-get install -y xvfb libgl1-mesa-dri
+          sudo apt-get install -y xvfb libgl1-mesa-dri imagemagick
       - name: Import and render the actual screens
         run: |
+          set -euo pipefail
           timeout 120 "$GODOT" --headless --path wildbond-godot --editor --import --quit
           timeout 180 "$GODOT" --headless --path wildbond-godot --script res://tests/run_tests.gd | tee wd3-godot.log
           timeout 120 xvfb-run -a -s "-screen 0 3600x1600x24" "$GODOT" --path wildbond-godot --audio-driver Dummy --rendering-method gl_compatibility --script res://tests/battle_choices_screens.gd

@@ -55,7 +55,7 @@ static func run(main: Node, check: Callable) -> void:
 	check.call(E.tick(u, 1.0) == maxi(1, roundi(u.st.hp * 0.02)), "WD3: burn ticks at two percent")
 	E.cleanse(u)
 	v.buff.guard = 3.0
-	var ordinary := R.damage(u, v, {"kind": "hit", "pow": 65}, 1.0, 1.0, 1.0).d
+	var ordinary: int = R.damage(u, v, {"kind": "hit", "pow": 65}, 1.0, 1.0, 1.0).d
 	check.call(R.damage(u, v, R.DATA.MOVES.rootCharge, 1.0, 1.0, 1.0).d > ordinary, "WD3: boar charge bypasses guard")
 	E.after_hit(v, R.DATA.MOVES.rootCharge)
 	check.call(v.buff.guard == 0, "WD3: boar charge breaks guard")

@@ -386,7 +386,7 @@ static func move_info(m: String) -> String:
 	var extra := ""
 	if mv.get("breakGuard", false): extra = "; breaks guard"
 	elif mv.get("pierce", false): extra = "; ignores guard"
-	elif mv.has("status"): extra = "; leaves the foe " + Effects.LABEL[str(mv.status)].to_lower()
+	elif mv.has("status"): extra = "; " + {"soaked": "sets up Steam Burst", "scorched": "burns; weakens physical hits", "rooted": "slows turns; sets up rooted follow-ups", "sleep": "pauses turns until hit or waking", "marked": "the next hit lands 25% harder"}[str(mv.status)]
 	elif mv.has("combo"): extra = "; stronger on " + Effects.LABEL[str(mv.combo)].to_lower() + " foes"
 	var el: String = (mv.el + " ") if mv.get("el") != null else ""
 	var how := "special (uses Wits)" if mv.get("spec", 0) == 1 else "physical (uses Power)"
@@ -396,7 +396,7 @@ static func move_info(m: String) -> String:
 		"dot": return "%spoisons a foe over time" % el
 		"buff": return "your team hits harder for a while"
 		"haste": return "your team acts faster for a while"
-		"guard": return "your team braces against damage"
+		"guard": return "your team braces against damage" + ("; clears harmful effects" if mv.get("cleanse", false) else "")
 		"slow": return "slows a foe down"
 		"heal": return "heals your most hurt ally" + ("; clears harmful effects" if mv.get("cleanse", false) else "")
 	return ""
