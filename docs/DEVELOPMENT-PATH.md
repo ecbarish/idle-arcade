@@ -253,7 +253,7 @@ browser (E4). (claimed: Grok, 2026-10-09, grok/studio-text-browser; Lane C task 
   first, then festivals, interiors, the ranch; one system per commit, checks passing.
 - [ ] AR2.11 [any] Hearing from players (GR-9): a "Tell us" in every game's settings that opens a prefilled GitHub
   issue; a 10-minute playtest script on Come Play.
-- [ ] AR2.12 [any] The front door (GR-12): the hub leads with the Godot games, Starfall Guild and Primordial move to
+- [x] AR2.12 [any] The front door (done 2026-10-09, Claude, PR #109: the hall only, sections by kind, how to play on every card) (GR-12): the hub leads with the Godot games, Starfall Guild and Primordial move to
   Classic, the old homepage vote closes; START-HERE versions corrected (Claude).
 **AR-M3: the walk-in arcade and friends.**
 - [ ] AR3.1 [Claude] Walk-in arcade steps 1-2 (V11).
@@ -304,6 +304,12 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, AR2.12 the front door (Claude, website thread):** three homepage styles split the effort and the
+  living world could only fit four or five games, so a style that holds every game wins: the arcade hall is now the
+  only one (Evan's call). Players could not tell what a game was or how to control it, so every card now says what you
+  do and the controls, and the games sit in sections by kind (games.js `ArcadeKinds`); a new game needs a `kind`,
+  `goal` and `controls` (tools/launcher-checks.cjs counts them). Canvas text inherits `textAlign` from earlier draws:
+  set it in every label helper.
 - **2026-10-09, WD2 part 1 (Claude, Wildbond builder):** new shapes are cheapest where a description already asks for
   one (a "wyrm", roots, a shell, dusk drifting), and a Godot-side table (figures.gd `SHAPE_FOR`) lets them land without
   touching the browser's shared families. A pixel shape needs a look at 2x before shipping: the first moth read as a box.

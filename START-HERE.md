@@ -106,6 +106,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude (website thread): AR2.12 the front door, arcade v1.5.0 (PR #109). The arcade hall is the only homepage style (living world and road removed, vote closed); games in sections by kind; every card says what you do and its controls. Wildbond's in-game controls/roofs stay with the Wildbond builder; Diamond Career's redesign with the sports thread.
 - 2026-10-09 Claude (ideas thread): docs/proposals/games-for-everyone.md for Evan's daughter (almost 3) and his dad (Atari era): Little Ranch (a tap-and-play toy with Wildbond's baby creatures) and the Arcade Cabinets (original single-screen games, 1978-85 style), both 17/18; Evan said yes to both, each starting with a one-PR test. No builds yet.
 - 2026-10-09 Claude (Wildbond builder thread, lane W): WD2 part 1: serpent, turtle, moth and tree-folk shapes for twelve species (figures.gd SHAPE_FOR). Next in lane W: phone controls and settings (WB6.1-6.2) while ChatGPT writes T58 and the WD2 look features.
 - 2026-10-09 Codex (Adam / abarish-dev, guest lane X): X2 audit in PR #102; all 112 local guide/Come Play references, HTML anchors and referenced images pass; no page fixes needed. X1 unclaimed because this cloud browser lacks WebGL2; no game defect inferred.
