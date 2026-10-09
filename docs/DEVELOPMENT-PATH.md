@@ -73,7 +73,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [x] WB2.5 [Claude] Maren's letter and the field book's "where next" hint (WG8): done 2026-10-08.
 - [x] WB2.6 [ChatGPT] (done, merged 2026-10-09; T45) Lore: a heritage line for every Warden and townsperson in areas 1-4 (data in the browser game,
   exported to Godot), recorded in the thread ledger.
-- [ ] WB2.7 [Claude] Bring T37's fourteen creatures into Godot (bodies, export) (WG9).
+- [x] WB2.7 [Claude] Bring T37's fourteen creatures into Godot (WG9): done 2026-10-09 (exported; all use existing body types; 107 species).
 
 **WB-M3: the rest of the valley (areas 5-8).**
 - [ ] WB3.1 [Claude] Stillreed Basin in Godot (map, ferry, trainers, Warden), with its own furniture, sound and music.

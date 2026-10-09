@@ -1854,6 +1854,10 @@ func _talk_here() -> bool:
 		if n.where == map_name and (me.tile - n.tile).length() <= 1.01:
 			var info: Dictionary = npc_info[n.id]
 			n.face = me.tile - n.tile
+			var known := _heritage_line(n.id, info.data)
+			if known != "" and not story_done.has("her:" + n.id):
+				story_done["her:" + n.id] = true       # they recognise your family, once (T45 lines, from the game data)
+				say(n.id, _fill(known))
 			if info.warden and info.beaten:
 				say(n.id, _fill(DATA.MAPS[map_name].get("wardenDone", "The gate is yours, {name}.")))
 			elif not info.warden and not info.data.has("trainer"):
@@ -1861,10 +1865,6 @@ func _talk_here() -> bool:
 				for b in badges:                       # what folk say changes with your badges (byBadge)
 					if info.data.get("byBadge", {}).has(b):
 						talk = info.data.byBadge[b]
-				var known: String = HERITAGE_TALK.get(n.id, {}).get(heritage(), "")
-				if known != "" and not story_done.has("her:" + n.id):
-					story_done["her:" + n.id] = true   # they recognise your family, once
-					say(n.id, _fill(known))
 				for l in talk:
 					say(l[0], _fill(l[1]))
 			elif info.beaten:
@@ -2721,3 +2721,11 @@ func _draw_room() -> void:
 	draw_rect(Rect2(bo - Vector2(1, 1), Vector2(50, 10)), Figures.OUTLINE)
 	draw_rect(Rect2(bo, Vector2(48, 8)), Color("2e3a32"))
 	draw_string(ThemeDB.fallback_font, bo + Vector2(0, 7), "Inn" if map_name == "inn" else "Goods", HORIZONTAL_ALIGNMENT_CENTER, 48, 6, Color("e8e4d8"))
+
+## What someone says the first time they see which family you're from: the game data's line for each person (byHeritage,
+## written by ChatGPT for T45), or the hand-written ones here for anyone the data doesn't cover.
+func _heritage_line(id: String, data: Dictionary) -> String:
+	var by: Dictionary = data.get("byHeritage", {})
+	if by.has(heritage()) and not (by[heritage()] as Array).is_empty():
+		return str(by[heritage()][0][1])
+	return str(HERITAGE_TALK.get(id, {}).get(heritage(), ""))

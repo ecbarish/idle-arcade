@@ -348,7 +348,7 @@ func _run() -> void:
 		ev2.keycode = KEY_ENTER
 		ev2.physical_keycode = KEY_ENTER
 		main._unhandled_input(ev2)
-		check(not main.lines.is_empty() and main.lines.size() == main.DATA.STORY.filter(func(b): return b.id == "warden")[0].lines.size(), "Isolde's scene from the game data")
+		check(not main.lines.is_empty() and main.lines.size() - main.DATA.STORY.filter(func(b): return b.id == "warden")[0].lines.size() in [0, 1], "Isolde's scene from the game data (after she recognises your family)")
 		talk_through()
 		check(main.battle.visible and main.battle.foes.size() == 3 and main.battle.trainer == "Warden Isolde", "the Warden battle: three creatures")
 		for u in main.battle.foes: u.c.hp = 0
@@ -713,7 +713,7 @@ func _run() -> void:
 	check(walk_to(Vector2i(20, 7)), "back over to Pip")
 	main.me.face = Vector2i.RIGHT
 	main._talk_here()
-	check(not main.lines.is_empty() and "farms" in main.lines[0].text, "Pip recognises a farm family, the first time")
+	check(not main.lines.is_empty() and main.lines[0].text == main._fill(main._heritage_line("pip", main.npc_info.pip.data)) and main.npc_info.pip.data.has("byHeritage"), "Pip recognises a farm family, the first time, in the line written for him (%s)" % [main.lines[0].text.left(50) if not main.lines.is_empty() else ""])
 	talk_through()
 	main._talk_here()
 	check(not main.lines.is_empty() and not ("farms" in main.lines[0].text), "and only the first time")

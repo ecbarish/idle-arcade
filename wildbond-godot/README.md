@@ -70,6 +70,8 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   Pieces you take off go in your satchel for another creature.
 - **The inn and the shop are rooms:** walk in through their doors in Larkhaven. **Old Ned** at the inn's counter rests
   your team; **Juniper** behind hers sets out lures and berries. Walk back out through the door.
+- **Your family is recognised** by everyone on the early roads (townsfolk, trainers and Wardens), once each, in lines
+  written for each heritage (from the browser game's data, T45). The Wilddex has 107 creatures.
 - **Battle effects:** each element's hit has its own animated effect (flames, water, leaves, rock, lightning, a dark burst,
   a golden shimmer), from the free Ninja Adventure pack.
 - **Maren's letters:** every so often on the road a runner brings a letter from Maren: news of your ranch creatures
