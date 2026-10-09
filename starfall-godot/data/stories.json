@@ -1,0 +1,88 @@
+{
+  "_about": "Members' stories (SF2.1). Each adventurer's arc is a list of beats. A beat is ready when they have finished 'after_jobs' jobs, their spirits are at least 4, and any building in 'needs' stands. They ask for a word ('!' over their head); you talk to them, hear 'lines', and choose. Each option: 'text' (what you say), 'lines' (what follows), 'morale' (change), 'coins' (change, optional), 'trait' (kept for good, optional). Traits: steady (+5% on every job), bold (takes jobs a step harder), mapper (+10% reward on their jobs), healer (rests twice as fast). Words players see follow docs/CREATIVE.md 'Writing for players'.",
+  "Aki": [
+    { "after_jobs": 2,
+      "lines": [
+        ["Aki", "Guildmaster. Can I ask you something? My sister's a captain of the guard in Harrowgate."],
+        ["Aki", "When I left, she said I'd be back within the month with my tail between my legs. I keep thinking about it on the road."],
+        ["Aki", "Should I go after the hard jobs? Show her?"]
+      ],
+      "options": [
+        { "text": "Prove her wrong, but come home every time.",
+          "lines": [["Aki", "Every time. Right. Slow and sure, then. She hates it when I'm careful; that'll annoy her more."]],
+          "morale": 1, "trait": "steady" },
+        { "text": "You don't owe her anything. Go where you want.",
+          "lines": [["Aki", "Where I want. Ha! Then I want the barrow. Not today. Soon."]],
+          "morale": 2, "trait": "bold" }
+      ] },
+    { "after_jobs": 6,
+      "lines": [
+        ["Aki", "A letter came with the carter. My sister's riding through Starfall on her way north. Tomorrow."],
+        ["Aki", "I don't know what to say to her. What if she laughs at the place?"]
+      ],
+      "options": [
+        { "text": "Bring her to the inn. Bryn will feed you both.",
+          "lines": [["", "That evening, two swordsmen argue cheerfully over Bryn's stew until the lanterns are low."], ["Aki", "She said the town has good bones. From her, that's a parade."]],
+          "morale": 2 },
+        { "text": "This is yours to handle. You'll know what to say.",
+          "lines": [["Aki", "...Yeah. Yeah, I will. Thanks for not making it a thing, guildmaster."]],
+          "morale": 1 }
+      ] }
+  ],
+  "Ren": [
+    { "after_jobs": 2,
+      "lines": [
+        ["Ren", "I froze out there. The spell just... wasn't there. Aki had to drag me back behind the wagon."],
+        ["Ren", "Maybe I'm not made for this. Maybe I should go back to copying books."]
+      ],
+      "options": [
+        { "text": "Everyone freezes once. Come back out tomorrow.",
+          "lines": [["Ren", "Tomorrow. All right. I'll practise the opening words until I can say them asleep."]],
+          "morale": 1, "trait": "steady" },
+        { "text": "Take a few days. The board will still be here.",
+          "lines": [["Ren", "A few days. I'd like that. I'll read, and walk, and come back when my hands stop shaking."]],
+          "morale": 2 }
+      ] },
+    { "after_jobs": 5,
+      "lines": [
+        ["Ren", "Look at this. An old survey map, from a peddler's cart. The roads past the gate, the creeks, the quarry."],
+        ["Ren", "Half of it's wrong now. If I had twenty coins for ink and good paper, I could chart it properly. Every job would go quicker."]
+      ],
+      "options": [
+        { "text": "Here's twenty coins. Chart it.",
+          "lines": [["Ren", "Thank you! I'll have the creek road by the end of the week. You'll see."]],
+          "morale": 2, "coins": -20, "trait": "mapper" },
+        { "text": "The guild can't spare it right now.",
+          "lines": [["Ren", "No, of course. I'll do what I can with charcoal."]],
+          "morale": -1 }
+      ] }
+  ],
+  "Yuna": [
+    { "after_jobs": 2,
+      "lines": [
+        ["Yuna", "Guildmaster, I gave my share of the boar job to the farmer's family. Their winter stores are thin."],
+        ["Yuna", "Could the guild give something too? Even a little?"]
+      ],
+      "options": [
+        { "text": "Give them fifteen coins from the guild.",
+          "lines": [["Yuna", "Thank you. They'll remember who helped. So will I."]],
+          "morale": 2, "coins": -15 },
+        { "text": "The guild needs every coin to keep going.",
+          "lines": [["Yuna", "I understand. I don't like it, but I understand."]],
+          "morale": -1 }
+      ] },
+    { "after_jobs": 5, "needs": "healer",
+      "lines": [
+        ["Yuna", "Ama has been letting me watch her work. She knows things about mending that no temple ever taught me."],
+        ["Yuna", "She's offered to teach me properly, in the evenings. I'd be tired for a while."]
+      ],
+      "options": [
+        { "text": "Learn everything she'll teach you.",
+          "lines": [["Yuna", "I will. And I'll teach the others how to rest. Ama says we're all terrible at it."]],
+          "morale": 1, "trait": "healer" },
+        { "text": "Your jobs come first for now.",
+          "lines": [["Yuna", "All right. Maybe in the spring."]],
+          "morale": -1 }
+      ] }
+  ]
+}

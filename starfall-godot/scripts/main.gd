@@ -183,6 +183,7 @@ const LOOKS := {
 }
 
 func _ready() -> void:
+	_load_stories()
 	rng.randomize()
 	ama.where = "gone"
 	ama.look = { "skin": "c88a64", "hair": "f2f0ec", "shirt": "5d9a3e", "apron": "f4f0e8", "legs": "3e5a34", "style": "bun", "body": "narrow" }
@@ -204,6 +205,20 @@ func _ready() -> void:
 		built = { "west": { "what": "healer", "left": 0.0 }, "east": { "what": "yard", "left": 8.0 } }
 		_place_ama()
 		lines.clear()
+	if "--story" in OS.get_cmdline_user_args():       # Ren wants a word, and you're mid-conversation: -- --no-save --story
+		for h in heroes:
+			if h.a.name == "Ren":
+				h.a.jobs_done = 2
+				h.a.morale = 6
+			if h.a.name == "Yuna":
+				h.a.jobs_done = 2
+				h.a.morale = 6
+		lines.clear()
+		var ren: Mover = heroes[1]
+		(func():
+			me.tile = ren.tile + Vector2i.DOWN
+			me.pos = Vector2(me.tile) * TILE
+			story_pick = { "h": ren, "opts": stories.Ren[0].options }).call_deferred()
 	if "--market" in OS.get_cmdline_user_args():      # the grown town, smithy and apothecary: -- --no-save --market
 		rank = 2
 		built = { "west": { "what": "healer", "left": 0.0 }, "east": { "what": "yard", "left": 0.0 },
@@ -225,7 +240,7 @@ func _new_town() -> void:
 		var m := Mover.new("hero%d" % i, TOWN_AREA.position + Vector2i(i * 3 + 1, i % 2))
 		var c: Dictionary = CLASSES[s[1]]
 		var mx := int(c.hp * (1.0 + 0.2 * (s[2] - 1)))
-		m.a = { "name": s[0], "cls": s[1], "lvl": s[2], "xp": 0, "hp": mx, "max": mx, "morale": 6, "state": "town", "job": "", "timer": 2.0 + i * 3.0, "hair": HAIR[(i * 4 + 1) % HAIR.size()], "purse": 20, "gear": 0, "fine": false, "tonic": false }
+		m.a = { "name": s[0], "cls": s[1], "lvl": s[2], "xp": 0, "hp": mx, "max": mx, "morale": 6, "state": "town", "job": "", "timer": 2.0 + i * 3.0, "hair": HAIR[(i * 4 + 1) % HAIR.size()], "purse": 20, "gear": 0, "fine": false, "tonic": false, "beat": 0, "jobs_done": 0, "traits": [], "asked": false }
 		_dress(m)
 		heroes.append(m)
 	_new_notices()
@@ -462,6 +477,10 @@ func use() -> bool:
 	return false
 
 func _unhandled_input(e: InputEvent) -> void:
+	if not story_pick.is_empty():
+		_story_input(e)
+		get_viewport().set_input_as_handled()
+		return
 	if e is InputEventKey and e.pressed and not e.echo and e.physical_keycode == KEY_M:
 		music_on = not music_on                  # M: music on or off
 		get_viewport().set_input_as_handled()
@@ -525,6 +544,9 @@ func _hero(h: Mover, dt: float) -> void:
 			if a.timer > 0.0 or not h.path.is_empty():
 				return
 			a.timer = rng.randf_range(2.5, 5.0)
+			if story_ready(h) and not a.get("asked", false):
+				a.asked = true
+				bark(h, "Guildmaster, have you got a minute?")
 			var job := _pick_job(h)
 			if job != "":
 				a.job = job
@@ -620,7 +642,7 @@ func _hero(h: Mover, dt: float) -> void:
 			var at_healer: bool = h.where == "healer"
 			if a.timer <= 0.0:
 				a.timer = 1.5                        # a little better every moment in bed; twice as fast in Ama's care
-				a.hp = mini(int(a.max), int(a.hp) + int(ceil(float(a.max) * (0.1 if at_healer else 0.05))))
+				a.hp = mini(int(a.max), int(a.hp) + int(ceil(float(a.max) * (0.1 if at_healer else 0.05) * (2.0 if "healer" in a.get("traits", []) else 1.0))))
 			if int(a.hp) >= int(a.max):
 				var out: Vector2i = _step_of(finished("healer")) if at_healer else INN_STEP
 				h.where = "town"
@@ -648,7 +670,7 @@ func _pick_job(h: Mover) -> String:
 	var a: Dictionary = h.a
 	if float(a.hp) < float(a.max) * 0.7 or int(a.morale) < 3:
 		return ""
-	var nerve := int(a.lvl) + (1 if int(a.morale) >= 8 else 0)
+	var nerve := int(a.lvl) + (1 if int(a.morale) >= 8 else 0) + (1 if "bold" in a.get("traits", []) else 0)
 	var best := ""
 	var best_reward := -1
 	for id in posted:
@@ -673,13 +695,15 @@ func _come_home(h: Mover) -> void:
 	var gear := int(a.get("gear", 0))
 	var tonic: bool = a.get("tonic", false)
 	var chance := clampf(0.55 + (int(a.lvl) - danger) * 0.18 + (int(a.morale) - 5) * 0.03 + gear * 0.06
-		+ (0.03 if a.get("fine", false) else 0.0) + (0.05 if tonic else 0.0), 0.08, 0.95)
+		+ (0.03 if a.get("fine", false) else 0.0) + (0.05 if tonic else 0.0) + (0.05 if "steady" in a.get("traits", []) else 0.0), 0.08, 0.95)
 	var won := rng.randf() < chance
 	var hurt := int(float(a.max) * danger * rng.randf_range(0.08, 0.2) * (1.0 if won else 1.8) * (1.0 - 0.1 * gear) * (0.5 if tonic else 1.0))
 	a.hp = maxi(1, int(a.hp) - hurt)
 	a.tonic = false
+	var reward := int(round(int(j.reward) * (1.1 if "mapper" in a.get("traits", []) else 1.0)))   # Ren's map knows the shortcuts
 	if won:
-		a.purse = int(a.get("purse", 0)) + int(j.reward) - int(round(int(j.reward) * 0.3))   # their share is theirs to spend
+		a.purse = int(a.get("purse", 0)) + reward - int(round(reward * 0.3))   # their share is theirs to spend
+		a.jobs_done = int(a.get("jobs_done", 0)) + 1
 		if j.id in HERB_JOBS:
 			herbs += 1 + rng.randi() % 2                 # they pick what grows out there on the way home
 	h.where = "town"
@@ -687,7 +711,7 @@ func _come_home(h: Mover) -> void:
 	h.pos = Vector2(h.tile) * TILE
 	h.path.clear()
 	if won:
-		var cut := int(round(int(j.reward) * 0.3))      # the guild's share of the reward
+		var cut := int(round(reward * 0.3))             # the guild's share of the reward
 		coins += cut
 		today.done += 1
 		today.earned += cut
@@ -1073,7 +1097,7 @@ func _check_rank() -> void:
 		var m := Mover.new("hero%d" % heroes.size(), GATE + Vector2i.LEFT)
 		var c: Dictionary = CLASSES[s[1]]
 		var mx := int(c.hp * (1.0 + 0.2 * (s[2] - 1)))
-		m.a = { "name": s[0], "cls": s[1], "lvl": s[2], "xp": 0, "hp": mx, "max": mx, "morale": 7, "state": "town", "job": "", "timer": 3.0, "hair": HAIR[(heroes.size() * 4 + 1) % HAIR.size()], "purse": 30, "gear": 0, "fine": false, "tonic": false }
+		m.a = { "name": s[0], "cls": s[1], "lvl": s[2], "xp": 0, "hp": mx, "max": mx, "morale": 7, "state": "town", "job": "", "timer": 3.0, "hair": HAIR[(heroes.size() * 4 + 1) % HAIR.size()], "purse": 30, "gear": 0, "fine": false, "tonic": false, "beat": 0, "jobs_done": 0, "traits": [], "asked": false }
 		_dress(m)
 		heroes.append(m)
 		bark(m, "Is this the guild? I heard there's honest work here.")
@@ -1107,6 +1131,9 @@ func talk_bryn() -> void:
 func talk_hero(h: Mover) -> void:
 	var a: Dictionary = h.a
 	h.face = me.tile - h.tile
+	if story_ready(h):
+		_story_talk(h)
+		return
 	var cls: String = CLASSES[a.cls].name
 	var mood := "keen for work" if int(a.morale) >= 7 else ("steady" if int(a.morale) >= 4 else "low on heart")
 	var body := "fit and well" if float(a.hp) >= float(a.max) * 0.95 else ("a bit bruised" if not badly_hurt(h) else "badly hurt")
@@ -1251,6 +1278,12 @@ func _draw() -> void:
 		var look := _look(m)
 		var walking := not m.path.is_empty()
 		Figures.person(self, m.pos + Vector2(2, -5), m.face, walking, int(m.step_t * 8.0) % 4, fmod(t + i * 1.7, 3.3) < 0.12, look)
+		if not m.a.is_empty() and story_ready(m):                     # they want a word: a "!" over their head
+			var bob := sin(t * 4.0) * 1.5
+			draw_rect(Rect2(m.pos + Vector2(5, -17 + bob), Vector2(6, 9)), Figures.OUTLINE)
+			draw_rect(Rect2(m.pos + Vector2(6, -16 + bob), Vector2(4, 7)), Color("f2d24a"))
+			draw_rect(Rect2(m.pos + Vector2(7, -15 + bob), Vector2(2, 3)), Color("8a3a2a"))
+			draw_rect(Rect2(m.pos + Vector2(7, -11 + bob), Vector2(2, 1)), Color("8a3a2a"))
 		if not m.a.is_empty() and badly_hurt(m):
 			draw_rect(Rect2(m.pos + Vector2(4, -3), Vector2(8, 2)), Color("f4f0e8"))      # a bandage round the head
 	_lit_windows()
@@ -1474,6 +1507,9 @@ func _draw_board_view() -> void:
 		board_view.draw_rect(r, Color(0.99, 0.97, 0.92, 0.92))
 		board_view.draw_rect(r, Color(0.23, 0.17, 0.12), false, 1.0)
 		board_view.draw_string(font, r.position + Vector2(4, 8), b.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 7, Color(0.17, 0.13, 0.1))
+	if not story_pick.is_empty():
+		_draw_story(font)
+		return
 	if not forge.is_empty():
 		_draw_forge(font, to_screen)
 	if shelf_open:
@@ -1595,6 +1631,10 @@ func _load() -> bool:
 		a.gear = int(a.get("gear", 0))
 		a.fine = bool(a.get("fine", false))
 		a.tonic = bool(a.get("tonic", false))
+		a.beat = int(a.get("beat", 0))
+		a.jobs_done = int(a.get("jobs_done", 0))
+		a.traits = Array(a.get("traits", []))
+		a.asked = false
 		var m := Mover.new("hero%d" % i, TOWN_AREA.position + Vector2i(i * 3 + 1, i % 2))
 		m.a = a
 		# whoever was out or queuing comes home to rest; everyone else is in town
@@ -1802,3 +1842,83 @@ func _music_tick(dt: float) -> void:
 				music.stop()
 	elif music.playing:
 		music.volume_db = move_toward(music.volume_db, MUSIC_VOL, dt * 30.0)
+
+# ---------------------------------------------------------------- members' stories (SF2.1; data/stories.json)
+## Each adventurer has a short arc. When a beat is ready (enough jobs done, spirits up, any building it needs stands),
+## they ask for a word and a "!" shows over them. Talk to them, hear them out, and choose; what you choose stays with
+## them (spirits, sometimes coins, sometimes a trait for good). ChatGPT can write more arcs into the data file.
+var stories: Dictionary = {}
+var story_pick: Dictionary = {}                # the open choice: { h, opts }
+var story_note := ""
+
+func _load_stories() -> void:
+	var d = JSON.parse_string(FileAccess.get_file_as_string("res://data/stories.json")) if FileAccess.file_exists("res://data/stories.json") else null
+	stories = d if d is Dictionary else {}
+
+func story_ready(h: Mover) -> bool:
+	var a: Dictionary = h.a
+	var arc: Array = stories.get(a.name, [])
+	var b := int(a.get("beat", 0))
+	if b >= arc.size() or int(a.morale) < 4 or a.state != "town":
+		return false
+	var beat: Dictionary = arc[b]
+	if int(a.get("jobs_done", 0)) < int(beat.get("after_jobs", 0)):
+		return false
+	return not beat.has("needs") or finished(str(beat.needs)) != ""
+
+func _story_talk(h: Mover) -> void:
+	var beat: Dictionary = stories[h.a.name][int(h.a.beat)]
+	for l in beat.lines:
+		say(str(l[0]), str(l[1]))
+	then_do = func():
+		story_pick = { "h": h, "opts": beat.options }
+		story_note = ""
+		board_sel = 0
+
+func story_choose(i: int) -> void:
+	if story_pick.is_empty() or i >= story_pick.opts.size():
+		return
+	var h: Mover = story_pick.h
+	var o: Dictionary = story_pick.opts[i]
+	if int(o.get("coins", 0)) < 0 and coins < -int(o.coins):
+		story_note = "The guild doesn't have %d coins right now." % -int(o.coins)
+		return
+	story_pick = {}
+	var a: Dictionary = h.a
+	coins += int(o.get("coins", 0))
+	a.morale = clampi(int(a.morale) + int(o.get("morale", 0)), 0, 10)
+	if o.has("trait") and not str(o.trait) in a.traits:
+		a.traits.append(str(o.trait))
+	for l in o.get("lines", []):
+		say(str(l[0]), str(l[1]))
+	a.beat = int(a.beat) + 1
+	a.asked = false
+
+func _story_input(e: InputEvent) -> void:
+	var n: int = story_pick.opts.size()
+	if e is InputEventKey and e.pressed and not e.echo:
+		match e.keycode:
+			KEY_UP, KEY_W, KEY_LEFT, KEY_A: board_sel = (board_sel + n - 1) % n
+			KEY_DOWN, KEY_S, KEY_RIGHT, KEY_D, KEY_TAB: board_sel = (board_sel + 1) % n
+			KEY_ENTER, KEY_KP_ENTER, KEY_SPACE, KEY_E: story_choose(board_sel)
+	elif e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
+		var p: Vector2 = board_view.get_local_mouse_position()
+		for i in n:
+			if _story_rect(i).has_point(p):
+				story_choose(i)
+
+func _story_rect(i: int) -> Rect2:
+	return Rect2(40, 150 + i * 24, 304, 20)
+
+## The choice, drawn low over the town (you still see the person you're talking to).
+func _draw_story(font: Font) -> void:
+	var h: Mover = story_pick.h
+	board_view.draw_rect(Rect2(32, 132, 320, 80), Color(0.12, 0.09, 0.07, 0.94))
+	board_view.draw_rect(Rect2(32, 132, 320, 80), Color("d8b878"), false, 1.0)
+	board_view.draw_string(font, Vector2(40, 145), "What do you say to %s?" % h.a.name, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color("f4e9cd"))
+	for i in story_pick.opts.size():
+		var r := _story_rect(i)
+		board_view.draw_rect(r, Color("f4e9cd") if board_sel == i else Color("5a4636"))
+		board_view.draw_string(font, r.position + Vector2(6, 13), str(story_pick.opts[i].text), HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 12, 7, Color("3e2c20") if board_sel == i else Color("f4e9cd"))
+	if story_note != "":
+		board_view.draw_string(font, Vector2(40, 209), story_note, HORIZONTAL_ALIGNMENT_LEFT, -1, 6, Color("f2a080"))

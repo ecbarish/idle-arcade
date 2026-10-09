@@ -386,6 +386,50 @@ func _run() -> void:
 	b_ap.a.state = "town"
 	b_ap.a.lvl = 2
 	check(main.herbs > herbs0, "jobs by the creek and the woods bring herbs home")
+	# ---- members' stories: a word when they're ready, a choice that stays with them
+	check(main.stories.has("Aki") and main.stories.has("Ren") and main.stories.has("Yuna"), "every first adventurer has a story")
+	var sh: Variant = hero("Ren")
+	sh.where = "town"
+	sh.a.state = "town"
+	sh.a.morale = 6
+	sh.a.beat = 0
+	sh.a.jobs_done = 0
+	sh.a.traits = []
+	check(not main.story_ready(sh), "no word yet before they've done a couple of jobs")
+	sh.a.jobs_done = 2
+	check(main.story_ready(sh), "after two jobs, Ren wants a word")
+	sh.a.morale = 2
+	check(not main.story_ready(sh), "not while their spirits are low")
+	sh.a.morale = 6
+	talk_through()
+	main.talk_hero(sh)
+	check(main.lines.any(func(l): return l.who == "Ren" and "froze" in l.text), "Ren tells you what happened out there")
+	talk_through()
+	check(not main.story_pick.is_empty() and main.story_pick.opts.size() == 2, "then you choose what to say")
+	main.story_choose(0)
+	check(main.story_pick.is_empty() and "steady" in sh.a.traits and int(sh.a.beat) == 1 and int(sh.a.morale) == 7, "your answer stays with him: steadier on every job")
+	talk_through()
+	sh.a.jobs_done = 5
+	main.coins = 5
+	main.talk_hero(sh)
+	talk_through()
+	main.story_choose(0)
+	check(not main.story_pick.is_empty() and "20 coins" in main.story_note, "you can't give coins the guild doesn't have")
+	main.coins = 100
+	main.story_choose(0)
+	check(main.coins == 80 and "mapper" in sh.a.traits, "twenty coins for ink and paper: Ren charts the roads")
+	talk_through()
+	var yh: Variant = hero("Yuna")
+	yh.where = "town"
+	yh.a.state = "town"
+	yh.a.morale = 6
+	yh.a.beat = 1
+	yh.a.jobs_done = 9
+	var keep_built: Dictionary = main.built.duplicate(true)
+	main.built.erase("west")
+	check(not main.story_ready(yh), "Yuna's lesson with Ama needs the Healer's Hut")
+	main.built = keep_built
+	check(main.story_ready(yh), "with the hut standing, she's ready to ask")
 	# ---- saving the town and loading it back (a test file, never the real one)
 	main.no_save = false
 	main.save_path = "user://test_town.json"

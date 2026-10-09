@@ -117,10 +117,10 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, detail, web preview.
 
 **SF-M2: people and stakes.**
-- [ ] SF2.1 [Claude] Members' stories (SV1).
+- [x] SF2.1 [Claude] Members' stories (SV1): done 2026-10-08 (two beats each for Aki, Ren and Yuna; data/stories.json).
 - [ ] SF2.2 [Claude] Failing and excelling, visible (SV3).
 - [ ] SF2.3 [Claude] The tavern you serve at, and placement that matters a little (SV4).
-- [ ] SF2.4 [ChatGPT] Story text for SF2.1: three short arcs per adventurer (choices that can go either way), in a
+- [ ] SF2.4 [ChatGPT] Story text for SF2.1 (the system is built; extend `starfall-godot/data/stories.json`: arcs for Kaito, Hana and Sora, and a third beat for Aki, Ren and Yuna; keep its format and the four traits): three short arcs per adventurer (choices that can go either way), in a
   data file Claude wires in (`starfall-godot/data/stories.json`; ChatGPT may write that one data file).
 - [ ] SF2.5 [Claude] Hire the apothecary's apprentice once you've brewed enough (the same "master it, then hire" rule).
 
