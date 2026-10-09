@@ -105,7 +105,7 @@ Garrick, the Apothecary with prices, ranks and newcomers, music, saving. Checks:
 
 | ID | Project | Size | Status | Notes |
 |---|---|---|---|---|
-| LH0 | Local helper queue runner (Lane D0) | S | claimed: Codex, 2026-10-08, `codex/local-helper-runner` | OpenCode with local Ollama; review required; docs/research/local-ai-helper.md |
+| LH0 | Local helper queue runner (Lane D0) | S | done, merged 2026-10-08 (PR #66) | OpenCode with local Ollama; review required; docs/research/local-ai-helper.md |
 
 ## Showing the games
 

@@ -124,7 +124,7 @@ is merged without review. Queue tasks in `C:\Users\evanb\Local-AI\queue\` (one J
 
 | # | Task | Status | Notes |
 |---|---|---|---|
-| D0 | **Make the queue runner work**: switch Run-LocalAgent.ps1 from Codex to OpenCode (`opencode run`, OPENCODE_CONFIG) | claimed: Codex, 2026-10-08, `codex/local-helper-runner` | The model can't drive Codex's tools; OpenCode works |
+| D0 | **Make the queue runner work**: switch Run-LocalAgent.ps1 from Codex to OpenCode (`opencode run`, OPENCODE_CONFIG) | done, merged 2026-10-08 (PR #66) | The model can't drive Codex's tools; OpenCode works |
 | D1 | List every player-facing string in games/otherworld/js/ that breaks docs/CREATIVE.md "Writing for players" (lowercase names, rule words in story text) | open (read-only) | Claude or ChatGPT checks the list |
 | D2 | Draft ten dex lines for the newest catalogue creatures in the house style, for review | open (read-only; output in its log) | A person picks and edits |
 | D3 | Check every link and image in guides/ and playtest.html points to a file that exists | open (read-only) | |
