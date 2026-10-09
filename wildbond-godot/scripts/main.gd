@@ -20,6 +20,7 @@ const Calendar := preload("res://scripts/calendar.gd")
 ## barn stands here; the tall barn only fits top right.)
 const DOORS := { Vector2i(4, 4): "inn", Vector2i(7, 10): "shop" }
 const R := preload("res://scripts/rules.gd")
+const SafeSave := preload("res://scripts/safe_save.gd")
 const TILE := 16
 const BARN_SOLID := "XWh|tbw"                # inside the barn: the dark, walls, hay, stall boards, the trough, sacks, the workbench
 const BARN := [                              # inside Maren's barn: three stalls, hay, feed sacks, a trough, the door at the bottom
@@ -231,7 +232,7 @@ func _ready() -> void:
 		return
 	if demo:
 		no_save = true
-	if not no_save and FileAccess.file_exists(save_path):
+	if not no_save and SafeSave.exists(save_path):
 		var s := _save_summary()
 		if s != "":
 			title.open(s)                            # a journey is saved: continue it, or start a new one
@@ -2776,15 +2777,11 @@ func save_game() -> void:
 		"restore": restore.map(func(r): return { "where": r.where, "x": r.at.x, "y": r.at.y, "goal": r.goal }),
 		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned, "taught": taught, "letter": [letter_steps, letters], "calendar": cal.to_dict(), "festival": { "done": fest_done, "keep": keepsakes, "flowers": flowers }, "league": league_room,
 		"map": map_name, "x": me.tile.x, "y": me.tile.y, "partner": partner.id if partner else "" }
-	var f := FileAccess.open(save_path, FileAccess.WRITE)
-	if f:
-		f.store_string(JSON.stringify(d))
+	SafeSave.write(save_path, d)                 # a spare file first, the last good save kept as a backup
 
 func _read_save() -> Dictionary:
-	var d = JSON.parse_string(FileAccess.get_file_as_string(save_path)) if FileAccess.file_exists(save_path) else null
-	if d is Dictionary and int(d.get("v", 0)) == 1 and d.get("team") is Array and not d.team.is_empty():
-		return d
-	return {}
+	return SafeSave.read(save_path, func(d: Dictionary) -> bool:
+		return int(d.get("v", 0)) == 1 and d.get("team") is Array and not d.team.is_empty())
 
 func _save_summary() -> String:
 	var d := _read_save()
@@ -3473,6 +3470,12 @@ func _music_key() -> String:
 		return "larkhaven" if spilled else "faded"
 	return map_name
 
+## Places that share a tune play the same file, so the game carries each track once (a smaller web download).
+const SAME_TUNE := { "sunthread": "saltmarsh", "farwatch": "barn" }   # Sunny, and Peaceful
+
+func music_path(key: String) -> String:
+	return "res://assets/music/%s.ogg" % SAME_TUNE.get(key, key)
+
 func _music_tick(dt: float) -> void:
 	if music == null:
 		music = AudioStreamPlayer.new()
@@ -3483,7 +3486,7 @@ func _music_tick(dt: float) -> void:
 		music.volume_db = move_toward(music.volume_db, -60.0, dt * 90.0)   # fade the old tune out...
 		if music.volume_db <= -59.0 or not music.playing:
 			music_now = want
-			var path := "res://assets/music/%s.ogg" % want
+			var path := music_path(want)
 			if want != "" and ResourceLoader.exists(path):
 				var s: AudioStream = load(path)
 				if s is AudioStreamOggVorbis:
@@ -3506,15 +3509,17 @@ func _ambience_tick(dt: float) -> void:
 	if ambience == null:
 		ambience = AudioStreamPlayer.new()
 		ambience.volume_db = -60.0
-		ambience.finished.connect(func(): if ambience_now != "": ambience.play())   # loop
 		add_child(ambience)
-	var want := map_name if music_on and not (battle and battle.visible) and ResourceLoader.exists("res://assets/ambience/%s.wav" % map_name) else ""
+	var want := map_name if music_on and not (battle and battle.visible) and ResourceLoader.exists("res://assets/ambience/%s.ogg" % map_name) else ""
 	if want != ambience_now:
 		ambience.volume_db = move_toward(ambience.volume_db, -60.0, dt * 80.0)
 		if ambience.volume_db <= -59.0 or not ambience.playing:
 			ambience_now = want
 			if want != "":
-				ambience.stream = load("res://assets/ambience/%s.wav" % want)
+				var s: AudioStream = load("res://assets/ambience/%s.ogg" % want)
+				if s is AudioStreamOggVorbis:
+					(s as AudioStreamOggVorbis).loop = true
+				ambience.stream = s
 				ambience.play()
 			else:
 				ambience.stop()

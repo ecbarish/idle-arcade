@@ -19,8 +19,9 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
   `python -m http.server 8765`) in the repo folder and open http://localhost:8765/. **Godot games** (`wildbond-godot/`,
   `starfall-godot/`, Claude's): Godot 4.7.2 in `C:\Users\evanb\Godot`; their web previews live in `play/` (see play/README.md).
 - **Tests must stay all-pass:** the eight browser pages in `tests/` (run, wildbond, starfall, sound, offline, diamond,
-  otherworld, runner-safety; click **Run checks**) and, for the Godot games, `tests/run_tests.gd` in each project. Add
-  checks for what you build. After merging, `git grep -n "^<<<<<<< "` must find nothing.
+  otherworld, runner-safety; click **Run checks**) and, for the Godot games, `tests/run_tests.gd` in each project.
+  **`node tools/run-all-checks.cjs` runs all ten at once**, and GitHub runs it on every push and pull request: never
+  merge a red cross. Add checks for what you build. How we build (saves, sound formats, Godot structure): docs/learning/. After merging, `git grep -n "^<<<<<<< "` must find nothing.
 - **Old saves must keep loading.** New save fields need defaults (Wildbond `fresh()`/`load()`, Realmbound `migrate()`).
 - **Small playable steps,** each with a line in README.md's changelog.
 - **Save your work to GitHub at the end of every step** (commit and push). Never leave finished work only on one
@@ -106,6 +107,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 ## Session log (newest first; one or two lines each)
 
 - 2026-10-09 Claude: docs/PRIORITIES.md, focus slots and a scorecard for every idea; DEVELOPMENT-PATH's ticket factory now takes work in focus order. Flagship Wildbond (Godot, confirmed by Evan), second Starfall, ChatGPT's own Realmbound.
+- 2026-10-09 Claude (craft review, branch claude/project-thread-2h7yfo): new docs/learning/ (glossary, Godot practices, saves and testing, web and shipping); safe saves in both Godot games (277 and 119 checks); Wildbond ambience to OGG and shared tunes (web pack 25.3 to 20.0 MB, both previews re-exported); `.import` files committed; `.gitattributes`; `node tools/run-all-checks.cjs` runs all ten suites (all pass) and GitHub runs it on every push and PR. DEVELOPMENT-PATH Part 4 now logs lessons; AR2.7 (build previews on GitHub) waits on Evan.
 - 2026-10-09 Claude: Evan chose Wildbond's final truth (recorded in the thread ledger; WB4.4b to ChatGPT). Godot Starfall SF2.3 the Tavern (pouring, Tamsin, shutting, placement bonuses), 116 checks, web preview rebuilt.
 - 2026-10-09 Claude: merged T53 (finale handoff) and T54 (Champion returns); placed in Godot: the homecoming at the league gate and every Warden's welcome; 273 checks; browser Wildbond 2290; web preview rebuilt. Question for Evan: the final truth (docs/proposals/wildbond-final-reveals.md).
 - 2026-10-09, Codex: T54 ready in PR #81, stacked after #80: leagueAfter and eight Warden byStory.leagueEnding arrays, 22 lines. 69 new checks, 101 source/export/staging/layout checks, 88 full-card previews and eight suites pass. Classic dispatch/Godot/versions untouched.
