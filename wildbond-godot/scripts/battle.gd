@@ -11,6 +11,13 @@ const R := preload("res://scripts/rules.gd")
 const INK := Color("2a2230")
 const PAPER := Color("f8f2e4")
 const EL_COL := { "Ember": Color("e0602a"), "Tide": Color("3a8fd8"), "Grove": Color("5d9a3e") }
+## Each element's hit has its own animated effect (Ninja Adventure FX, CC0; assets/fx): [file, frame width, frames, tint].
+const EL_FX := { "Ember": ["ember", 25, 8, Color.WHITE], "Tide": ["tide", 40, 11, Color.WHITE], "Grove": ["grove", 30, 8, Color.WHITE],
+	"Stone": ["stone", 30, 14, Color.WHITE], "Gale": ["gale", 20, 8, Color.WHITE], "Shade": ["shade", 40, 9, Color("b080e8")],
+	"Radiant": ["radiant", 32, 10, Color("ffe08a")] }
+const FX_FRAME := 0.055
+var fx_tex: Dictionary = {}
+var fx: Array = []                             # element effects playing: { u, el, age }
 const SPEED := 2.5                            # battle time runs faster than real time between turns (outcomes are unchanged)
 const MENU := ["Fight", "Guard", "Orders", "Bond", "Bag", "Run"]
 ## Tamer orders (docs/proposals/creature-catalogue-and-evolution.md §4): Rally for everyone, one from your family
@@ -120,6 +127,8 @@ func _process(dt: float) -> void:
 	for f in floats: f.age += dt
 	floats = floats.filter(func(f): return f.age < 1.0)
 	for s in sparks: s.age += dt
+	for e in fx: e.age += dt
+	fx = fx.filter(func(e): return e.age < FX_FRAME * EL_FX[e.el][2])
 	sparks = sparks.filter(func(s): return s.age < 0.6)
 	match state:
 		"fog_in":
@@ -287,6 +296,8 @@ func _hurt(u: Dictionary, d: int, crit: bool, el) -> void:
 	floats.append({ "u": u, "txt": "-%d" % d, "col": Color("ffd23a") if crit else Color("ffffff"), "age": 0.0 })
 	if el != null:
 		sparks.append({ "u": u, "col": EL_COL.get(el, Color.WHITE), "age": 0.0 })
+		if EL_FX.has(el):
+			fx.append({ "u": u, "el": el, "age": 0.0 })
 	if u.c.hp <= 0:
 		say("%s fainted!" % nm(u))
 
@@ -636,6 +647,15 @@ func _draw() -> void:
 		draw_set_transform(at - Vector2(9, 12) * sc, 0, Vector2(sc, sc))
 		Figures.creature(self, Vector2.ZERO, u.side == "a", pose, look)
 		draw_set_transform(Vector2.ZERO)
+	for e in fx:
+		var spec: Array = EL_FX[e.el]
+		if not fx_tex.has(spec[0]):
+			fx_tex[spec[0]] = load("res://assets/fx/%s.png" % spec[0])
+		var tex: Texture2D = fx_tex[spec[0]]
+		var fw: int = spec[1]
+		var frame: int = mini(int(e.age / FX_FRAME), int(spec[2]) - 1)
+		var size := Vector2(fw, tex.get_height())
+		draw_texture_rect_region(tex, Rect2(_spot(e.u) + Vector2(0, -14) - size * 0.75, size * 1.5), Rect2(Vector2(frame * fw, 0), size), spec[3])
 	for s in sparks:
 		var c: Vector2 = _spot(s.u) + Vector2(0, -16)
 		for k in 8:

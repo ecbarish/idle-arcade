@@ -68,6 +68,8 @@ Enter, Space, E or a click to continue a conversation and to bond. To edit it, r
   (quicker off the mark), and four charms that soften one element's moves (Ember-Glass Band, Shell, Bark and Slate
   Charms). Gear **shows on the creature** wherever you see it: walking with you, at the ranch, in battle, on its page.
   Pieces you take off go in your satchel for another creature.
+- **Battle effects:** each element's hit has its own animated effect (flames, water, leaves, rock, lightning, a dark burst,
+  a golden shimmer), from the free Ninja Adventure pack.
 - **Maren's letters:** every so often on the road a runner brings a letter from Maren: news of your ranch creatures
   (who miss you a little, and trust you more), the egg, and where to go next. The field book's ranch page says
   **Where next** in her words too.
