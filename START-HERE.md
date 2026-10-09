@@ -106,6 +106,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude (Wildbond builder thread, lane W): Evan's playtest notes, part 1: How to play page (howto.gd: title button, before a new journey, book Settings), no walking on roofs (main.gd buildings()/_under_roof); 310 checks. Wildbond's own look is a question to Evan (decision card in the Wildbond builder thread).
+- 2026-10-09 Claude (Wildbond builder thread, lane W): WB6.1-6.2: named controls (controls.gd), phone pad (touch_pad.gd), sound buses and a Settings page in the book (settings.gd); 305 checks; web preview pack rebuilt. Next in lane W: WB4.3 part 2 (place ChatGPT's T58 reveal once PR #101 merges), then WB5.1 (the Spire).
 - 2026-10-09 Claude (sports thread): Evan asked for a baseball game you manage instead of bat (and a Retro Bowl-style football game). DM1 built: games/diamond-manager/ (v0.1.0) replaces Diamond Career on the shelf and Come Play; 18 checks in tests/diamond-manager.html. Road for any assistant: docs/plans/sports-management.md (DM2-DM8, Lantern Bowl LB0-LB5). PR #110.
 - 2026-10-09 Claude (ideas thread): docs/proposals/games-for-everyone.md for Evan's daughter (almost 3) and his dad (Atari era): Little Ranch (a tap-and-play toy with Wildbond's baby creatures) and the Arcade Cabinets (original single-screen games, 1978-85 style), both 17/18; Evan said yes to both, each starting with a one-PR test. No builds yet.
 - 2026-10-09 Claude (Wildbond builder thread, lane W): WD2 part 1: serpent, turtle, moth and tree-folk shapes for twelve species (figures.gd SHAPE_FOR). Next in lane W: phone controls and settings (WB6.1-6.2) while ChatGPT writes T58 and the WD2 look features.
