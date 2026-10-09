@@ -569,6 +569,10 @@ func _input(e: InputEvent) -> void:
 		"orders":
 			var ol := known_orders()
 			if click:
+				if p.y >= 145 and p.y < 161 and ol.size() > 4:
+					if p.x < 92: order_i = maxi(0, (order_i / 4 - 1) * 4)
+					elif p.x < 180: order_i = mini(ol.size() - 1, (order_i / 4 + 1) * 4)
+					return
 				var hit := false
 				for i in ol.size():
 					if i / 4 == order_i / 4 and _move_rect(i % 4).has_point(p):
@@ -783,6 +787,11 @@ func _draw() -> void:
 				" Resting." if wait_u.cds.get(mv[move_i], 0.0) > 0 else ""], HORIZONTAL_ALIGNMENT_LEFT, info_r.size.x - 8, 7, -1, INK)
 		"orders":
 			var ol := known_orders()
+			if ol.size() > 4:
+				for button in [[12, "Previous"], [100, "Next"]]:
+					draw_rect(Rect2(button[0], 145, 80, 16), INK)
+					_text(button[1], Vector2(button[0] + 5, 156), 7, PAPER)
+				_text("Orders %d/%d" % [order_i / 4 + 1, ceili(ol.size() / 4.0)], Vector2(208, 157), 7, INK)
 			for i in range((order_i / 4) * 4, mini(ol.size(), (order_i / 4) * 4 + 4)):
 				var r := _move_rect(i % 4)
 				var on := i == order_i

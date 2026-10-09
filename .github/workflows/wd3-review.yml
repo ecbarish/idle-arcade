@@ -3,6 +3,9 @@ on:
   pull_request:
     paths: ['wildbond-godot/**', '.github/workflows/wd3-review.yml']
   workflow_dispatch:
+concurrency:
+  group: wd3-review-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   screenshots:
     runs-on: ubuntu-latest
@@ -19,8 +22,12 @@ jobs:
       - name: Import and render the actual screens
         run: |
           timeout 120 "$GODOT" --headless --path wildbond-godot --editor --import --quit
-          timeout 120 xvfb-run -a "$GODOT" --path wildbond-godot --rendering-method gl_compatibility --script res://tests/battle_choices_screens.gd
+          timeout 180 "$GODOT" --headless --path wildbond-godot --script res://tests/run_tests.gd | tee wd3-godot.log
+          timeout 120 xvfb-run -a -s "-screen 0 3600x1600x24" "$GODOT" --path wildbond-godot --audio-driver Dummy --rendering-method gl_compatibility --script res://tests/battle_choices_screens.gd
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: wd3-screens
-          path: wildbond-godot/frames/wd3/*.png
+          path: |
+            wildbond-godot/frames/wd3/*.png
+            wd3-godot.log

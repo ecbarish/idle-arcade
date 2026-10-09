@@ -71,3 +71,35 @@ static func run(main: Node, check: Callable) -> void:
 	main.lessons.open([a])
 	check.call(main.lessons.visible and main.lessons.team[0] == a, "WD3: practice opens without a new creature copy")
 	main.lessons.visible = false
+
+	# Run the actual ATB controller, including cooldowns, healing, setup and telegraphs.
+	var completed := 0
+	for encounter in R.DATA.STORY:
+		if not str(encounter.get("trainer", "")).begins_with("Warden "): continue
+		for seed_value in range(4):
+			rng.seed = 12500 + seed_value
+			var team: Array = []
+			var foes: Array = []
+			for member in encounter.team:
+				team.append(R.make(member[0], int(member[1]), {}, rng))
+				foes.append(R.make(member[0], int(member[1]), {}, rng))
+			var battle: Node = main.battle
+			battle.rng.seed = 12500 + seed_value
+			battle.open("trainer", team, foes, encounter.trainer)
+			var used: Dictionary = {}
+			var steps := 0
+			while battle.result == "" and steps < 20000:
+				steps += 1
+				if battle.state in ["choose", "moves"]:
+					var move := R.tactical_move(battle.wait_u, battle.living("a"), battle.living("f"), "adaptive")
+					if move != "":
+						used[move] = true
+						battle._use_move(move)
+				battle._process(0.05)
+			check.call(battle.result in ["won", "lost"], "WD3: %s seed %d finishes without stalling (%d ticks)" % [encounter.trainer, seed_value, steps])
+			check.call(used.size() >= 3, "WD3: %s seed %d finds at least three useful moves (%s)" % [encounter.trainer, seed_value, used.keys()])
+			if battle.result != "": completed += 1
+			print("WD3 pacing: %s seed %d, %s, %.1fs, %d different moves" % [encounter.trainer, seed_value, battle.result, steps * 0.05, used.size()])
+			battle.visible = false
+			battle.state = "off"
+	check.call(completed == 32, "WD3: all thirty-two Warden pacing runs complete")
