@@ -106,6 +106,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Claude (Wildbond builder thread, lane W): WB6.1-6.2: named controls (controls.gd), phone pad (touch_pad.gd), sound buses and a Settings page in the book (settings.gd); 305 checks; web preview pack rebuilt. Next in lane W: WB4.3 part 2 (place ChatGPT's T58 reveal once PR #101 merges), then WB5.1 (the Spire).
 - 2026-10-09 Claude (Wildbond builder thread, lane W): WD2 part 1: serpent, turtle, moth and tree-folk shapes for twelve species (figures.gd SHAPE_FOR). Next in lane W: phone controls and settings (WB6.1-6.2) while ChatGPT writes T58 and the WD2 look features.
 - 2026-10-09 Claude (Design decisions thread, lane Q): docs/DECISIONS.md, the design-answer log and how to ask; DD-2 one day in Starfall (calendar counts service days), DD-3 Warden levels follow the data (lore paragraphs fixed).
 - 2026-10-09 Claude (planning): a way in for guest contributors (Evan's dad first): CONTRIBUTING.md (collaborator with guest/* branches, a start prompt for their AI, pull requests reviewed by lane R) and QUEUE.md lane X with three starter tasks.

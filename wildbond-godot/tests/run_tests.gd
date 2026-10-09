@@ -28,6 +28,7 @@ func _initialize() -> void:
 	main = load("res://scenes/main.tscn").instantiate()
 	main.no_save = true                           # never touch a real saved journey
 	main.demo = false
+	main.settings.keep = false                    # nor read or write this computer's settings
 	root.add_child(main)
 	_run.call_deferred()
 
@@ -651,12 +652,80 @@ func _run() -> void:
 	var evj := InputEventKey.new()
 	evj.pressed = true
 	evj.keycode = KEY_J
+	evj.physical_keycode = KEY_J
 	main._unhandled_input(evj)
 	check(main.book.visible and main.book.seen.size() >= 3 and main.book.team == main.team, "J opens the field book: your Wilddex and team")
 	check(main.book.bag == main.bag and main.book.badges.size() == main.badges.size(), "the book's Satchel page holds your coins, lures, berries and badges (WD1: the numbers live here)")
 	main.book.close()
 	tick(0.05)
 	check(main.satchel.visible and not ("text" in main.satchel), "on the screen, only the satchel itself: no line of numbers")
+	# ---- phone controls and settings (WB6.1-6.2)
+	check(InputMap.has_action("move_up") and InputMap.has_action("interact") and InputMap.has_action("open_book"), "every control has a name, for keys, gamepads and the phone pad (WB6.1)")
+	var kw := InputEventKey.new()
+	kw.pressed = true
+	kw.physical_keycode = KEY_W
+	check(Controls.dir(kw) == Vector2i.UP, "W walks up, wherever W sits on the keyboard")
+	var joy := InputEventJoypadButton.new()
+	joy.pressed = true
+	joy.button_index = JOY_BUTTON_A
+	check(Controls.pressed(joy, "interact"), "a gamepad's A button talks")
+	check(not main.touch.visible, "on a computer with no touch screen, no phone pad")
+	main.settings.values.buttons = 1                           # Phone buttons: Always
+	tick(0.05)
+	check(main.touch.visible and main.touch.pad_on and Controls.touch, "the phone pad shows while you walk (Phone buttons: Always)")
+	var thumb := InputEventScreenTouch.new()
+	thumb.index = 0
+	thumb.pressed = true
+	thumb.position = main.touch.PAD + Vector2(0, -12)
+	main.touch._input(thumb)
+	check(Input.is_action_pressed("move_up") and Controls.held_dir() == Vector2i.UP, "a thumb on the pad's top arrow walks up")
+	var lift := InputEventScreenTouch.new()
+	lift.index = 0
+	lift.position = thumb.position
+	main.touch._input(lift)
+	check(Controls.held_dir() == Vector2i.ZERO, "and lifting it stops")
+	var folk: Array = main.npcs.filter(func(n): return n.where == main.map_name)
+	if not folk.is_empty():
+		var was: Vector2i = main.me.tile
+		main.me.tile = folk[0].tile + Vector2i.DOWN
+		check(main.action_word() == "Talk", "beside someone, the phone button says Talk")
+		main.me.tile = was
+	main.say("", "One.")
+	main.say("", "Two.")
+	tick(0.05)
+	check(main.action_word() == "" and not main.touch.btn_on, "while someone speaks, the button steps aside (a tap anywhere moves the talk on)")
+	var act := InputEventAction.new()
+	act.action = "interact"
+	act.pressed = true
+	main._unhandled_input(act)
+	check(main.lines.size() == 1, "and its press moves the talk on, just like Enter")
+	main.lines.clear()
+	main.settings.values.buttons = 2                           # Never
+	tick(0.05)
+	check(not main.touch.visible, "Phone buttons: Never hides them")
+	main.settings.values.buttons = 0
+	main._open_book()
+	main.book.tab = main.book.SETTINGS_TAB
+	main.book.row = 0
+	var kl := InputEventKey.new()
+	kl.pressed = true
+	kl.physical_keycode = KEY_LEFT
+	for i in 10:
+		main.book._input(kl)
+	check(main.settings.values.music == 0 and AudioServer.is_bus_mute(AudioServer.get_bus_index("Music")), "the book's Settings page turns the music right down (WB6.2)")
+	check(main.music.bus == "Music" and main.ambience.bus == "Ambience" and main.sfx._players[0].bus == "Effects", "music, ambience and effects each play through their own sound bus")
+	main.book.row = 3
+	main.book._settings_key(Vector2i.RIGHT)
+	main.book.row = 4
+	main.book._settings_key(Vector2i.RIGHT)
+	main.book._settings_key(Vector2i.RIGHT)
+	tick(0.05)
+	check(main.bubble_text.label_settings.font_size == 10 and main.battle.pace == 2.0, "Text size Large makes speech bigger; Battle pace Fastest halves the waiting")
+	main.settings.values = { "music": 10, "ambience": 10, "effects": 10, "text": 0, "pace": 0, "buttons": 0 }
+	main.settings.apply()
+	main.book.close()
+	tick(0.05)
+	check(main.bubble_text.label_settings.font_size == 8 and not AudioServer.is_bus_mute(AudioServer.get_bus_index("Music")), "and back to normal")
 	main._set_map(main.map_name)
 	tick(0.5)
 	var place_on: float = main.place.modulate.a

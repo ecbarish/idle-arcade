@@ -41,12 +41,12 @@ func _btn(i: int) -> Rect2:
 func _input(e: InputEvent) -> void:
 	if not visible:
 		return
-	if e is InputEventKey and e.pressed and not e.echo:
-		match e.keycode:
-			KEY_UP, KEY_W: sel = 0
-			KEY_DOWN, KEY_S: sel = 1
-			KEY_ENTER, KEY_KP_ENTER, KEY_SPACE, KEY_E: _pick(sel)
-			KEY_ESCAPE: confirm_new = false
+	var d := Controls.dir(e)                    # named actions (controls.gd): keys, a gamepad
+	if d != Vector2i.ZERO or Controls.pressed(e, "interact") or Controls.pressed(e, "back") or (e is InputEventKey and e.pressed):
+		if d.y < 0: sel = 0
+		elif d.y > 0: sel = 1
+		elif Controls.pressed(e, "interact"): _pick(sel)
+		elif Controls.pressed(e, "back"): confirm_new = false
 		get_viewport().set_input_as_handled()
 		queue_redraw()
 	elif e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
