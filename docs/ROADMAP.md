@@ -59,6 +59,14 @@ Branch: codex/wildbond-seasonal-data, from latest main.
 - Document export schema and integration rules, check faded-season presentation against decided canon without revealing an undecided cause. Classic behavior, encounters, levels, rewards, saves and versions unchanged; no Godot or exporter edit.
 - Files: games/wildbond/js/00-data.js, js/11-maps.js, tests/wildbond-checks.js, docs/lore/wildbond-seasons.md and thread ledger, normal claim/README/Session/message-board notes. Actual 39-table export and all eight browser suites pass.
 
+### T51: Wildbond festival writing (WS6)
+Why: Claude's four Larkhaven decorations need traditions, voices and keepsake names, using his current calendar IDs.
+Read first: seasons-and-holidays proposal, COMMS, T50 schema, thread ledger, CREATIVE and current Larkhaven data.
+Branch: codex/wildbond-festival-writing, stacked after T50/#77.
+- Four short traditions in docs/lore/wildbond-festivals.md; plain-JSON MAPS.larkhaven.festivals keyed planting/longlight/lanterns/midwinter. Include names, season, proposed-activity invite/completion text and cosmetic keepsake names/descriptions. No dates duplicated from the calendar.
+- Larkhaven's Maren and Pip each get byFestival lines in the bySeason shape; preserve their base, badge, heritage and seasonal lines. No required clue or revelation exclusive to a date; ledger notes all added lore.
+- Data/writing only in 11-maps.js and checks/lore/handoff docs; no engine, Godot, exporter, gameplay/save/version changes. Actual export, base preservation, readable scene previews and all eight suites pass.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a
