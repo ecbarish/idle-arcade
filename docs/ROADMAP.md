@@ -116,6 +116,23 @@ Branch: codex/starfall-season-outlines, stacked after T56 because planning notes
 - Include a smallest-first build order and acceptance checks for Claude; no final dialogue arrays or engine/save/economy edits. Change only the plan plus normal ticket/project/queue/path/README/Session/COMMS notes. All eight browser test pages remain passing; no versions or Godot/play edits.
 - [x] T57 outlines ready in PR #84: four threats/festivals/newcomers, recoverable decisions, no mandatory calendar waits; shared timing and service-day distinction verified. All eight browser pages pass; docs only.
 
+### T58: Wildbond, the three late observations and the reveal (WB4.4b part 2)
+Why: Claude accepted T55's three observations and settled its open calls (ledger, "Claude's review of T55"); the ending
+needs its words before Claude places them in Godot (WB4.3 part 2).
+Branch: codex/wildbond-reveal, from latest main. Claim with a draft PR titled "T58".
+- Write docs/lore/wildbond-reveal.json (with a short .md beside it): for each observation, the inspection text (what you
+  see, in the world's words, a few short lines), and optional lines for Orri, Ceryn and Sivet plus one each for Maren
+  and Wren when you tell them. Every heritage sees the same evidence.
+- The reveal conversation: after the league and the Champion returns, at the warm pocket in Hollowecho (default; propose
+  a better place if the clues want one), with Toren, Isolde and your partner. It connects coercion, memory loss, the
+  turned friend, the joining and common roots, and lands the irony (the old order and the modern Unbound both reject
+  the bond; the answer is friends who choose each other). Keep open: the old pair's fate, entity fragments, Veilmote's
+  nests, Tobin's sighting. The watcher was the turned friend, now asleep in the warm pocket (Evan decided, 2026-10-09).
+- The depth restoration moment (narration, three to five lines) and one line from each of the eight Wardens afterwards.
+- Follow CREATIVE.md "Writing for players" and "Stories are woven": no new names for the entity or the order, no
+  game-rule words. Docs/data only; no Godot, engine or save changes. All eight browser pages pass; normal README,
+  Session log, COMMS and queue notes.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a

@@ -107,6 +107,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 ## Session log (newest first; one or two lines each)
 
 - 2026-10-09 Grok (lane C): C1/E4 the Studio text browser (studio.html + studio/text-browser.js): search all player text in the eight games with file, line and data path; tests/studio.html (26 checks) added to run-all-checks; PR #99. Adam's Grok helper, working as a guest per CONTRIBUTING.md.
+- 2026-10-09 Claude (Wildbond builder thread, lane W): reviewed T55 (ledger "Claude's review of T55"), wrote ChatGPT's T58 (the late observations and the reveal). Evan decided the watcher is the turned friend. Next in lane W: WD2 body shapes while T58 is written.
 - 2026-10-09 Claude (lane S): SF2.5 the apothecary's apprentice (Fen), 130 Starfall checks, web preview rebuilt; branch claude/sf2.5-apprentice.
 - 2026-10-09 Claude (Wildbond builder thread, lane W): WB3.6b pacing: a level costs about 12 even-level wins at every stage (was 24 early, ~400 late). Evan chose 12; next in lane W: the ending (WB4.3).
 - 2026-10-09 Claude (Wildbond builder thread, lane W): WD1 done in PR #91 (satchel icon and a Satchel page in the field book instead of the numbers line; large place names on arrival) and the T56 Deeptide cooldown stall fixed (a creature with nothing ready catches its breath until a move is ready). Next in lane W: PRIORITIES section 4 item 2, pacing fixes from T56.
