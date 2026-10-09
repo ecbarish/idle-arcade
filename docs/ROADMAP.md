@@ -84,6 +84,13 @@ Branch: codex/wildbond-finale-handoff, stacked after #79 for handoff/tracking do
 - Use current canon only. Record optional care-themed lines in the ledger. Do not invent the fading opponent, old pair, watcher identity or Unbound leader motive, or award depth restoration through a league win. A separate writer decision map records the unresolved reveals for later approval.
 - Data/docs only; no engine/exporter/Godot/play/save/version changes. Check source equality, exact IDs/order/teams/map connectivity, real export and optional dialogue readability; all eight browser pages pass. Normal README/Session/COMMS handoff.
 
+### T54: Wildbond Champion return conversations (WB4.4 content)
+Why: Claude's latest COMMS request, after WB4.1 shipped, asks for additive leagueAfter and post-Champion Warden speech that he can place inside the world.
+Branch: codex/wildbond-champion-returns, stacked after #80 for shared ledger/handoff docs.
+- Add SCENES.leagueAfter and STORY Warden entries' byStory.leagueEnding arrays in games/wildbond/js/00-data.js (Wardens are story actors, not static MAPS.npcs). Eight distinct short conversations; preserve all base, victory, badge and heritage lines. Append-only export fields; Classic behavior unchanged.
+- Gate staging with clear standing positions in docs/lore/wildbond-champion-returns.md, using T53's payoff map. No new culprit, pair/watcher identity, leader motive or claimed depth restoration. Record every echo in the ledger.
+- Add content checks in tests/wildbond-checks.js; verify source preservation, actual 39-table export and real portrait previews at four sizes. All eight pages pass. No Godot/engine/exporter/save/version changes; normal claim/README/Session/COMMS only.
+
 ## Priorities
 1. **Realmbound** is the flagship. Everything else is parked until it reaches level 60.
 2. **The creature system** is next: built once as a shared module, used by Realmbound pets/mounts and by a
