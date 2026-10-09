@@ -55,7 +55,8 @@ Two project threads feed this page: **New game ideas** (research and pitches) an
 of what we have). Anyone, Evan included, can add to either. The flow:
 
 1. **Idea:** one line in docs/ideas.md (or a message). Costs nothing; never lost.
-2. **Pitch:** for a new game, a one-page `docs/proposals/<game>-pitch.md`: the fantasy in one sentence, the core
+2. **Pitch:** new games are scored with the six-question card in
+   [proposals/new-game-ideas.md](proposals/new-game-ideas.md) (out of 18; a pitch at 15+). For a new game, a one-page `docs/proposals/<game>-pitch.md`: the fantasy in one sentence, the core
    loop, two or three reference games and what we do better, what it shares with our games (catalogue, engine,
    universe), the smallest playable first slice, and its scorecard. For an improvement, a scored line is enough.
 3. **Ranked:** the priorities owner (Claude) scores it and files it: improvements go into that game's milestone in
@@ -67,9 +68,9 @@ of what we have). Anyone, Evan included, can add to either. The flow:
 
 | Idea | Score | Pitch | Note |
 |---|---|---|---|
-| Card shop (CS1) | 15 | docs/proposals/showing-the-games.md | Uses the catalogue and Wildbond's elements; good "two birds" candidate after Wildbond 2.0 |
-| A second sport (DC4) | 12 | docs/plans/sports-careers.md | Waits until Diamond Career's career mode (DC-M2) proves the framework |
-| Main Street (MS1) | 11 | docs/research/decisions.md | |
+| Card shop, absorbing Main Street (CS1 + MS1) | 17/18 | docs/proposals/new-game-ideas.md | Recommended next new game once Evan says go; first step a one-PR Godot toy (counter, 20 cards, pricing, four customers, one Friday match). Uses the catalogue and Wildbond's elements |
+| A second sport: American football (DC4) | 15/18 | docs/proposals/new-game-ideas.md | Only if Evan picks a second sport; waits until Diamond Career's career mode (DC-M2) proves the framework |
+| "The Crossing", sailing between the worlds | 12/18 | docs/proposals/new-game-ideas.md | Waits |
 | Primordial beyond polish | 10 | docs/plans/primordial.md | Evan: lower priority |
 | Walk-in arcade (AR3.1) | 10 | docs/VISION.md | Evan: the games come first |
 
@@ -87,11 +88,13 @@ what a player *feels*, in this order:
 6. **Polish that runs alongside:** depth (WB2.2), variety (WB2.3), Larkhaven homes (WB2.4), winter weather (WS4).
 7. **Ship it:** import a browser save (WB6.3), a guide (WB6.4), trailer and builds (WB6.5).
 
-After-league life (contests, ranch jobs, roaming legendaries, baby forms) is WB-M5 and comes after 2.0 unless Evan
-moves it up.
+After-league life (contests, ranch jobs, roaming legendaries, baby forms, and now Saltmarsh fishing) is WB-M5 and comes
+after 2.0 unless Evan moves it up. First in WB-M5: **races and contests at the ranch** (WB5.2; scored 17/18 by the New
+game ideas thread), then **Saltmarsh fishing** (WB5.7, 16/18).
 
 **Starfall (second slot), in order:** SF2.5 the apprentice; SF3.1 seasons as chapters (with T57's outlines, PR #84);
-SF3.4 festivals on the shared calendar; then SF4.1 expeditions.
+SF3.4 festivals on the shared calendar; then SF4.1 expeditions, built as **first-person grid delves** (16/18; a
+one-PR prototype first, and the cheapest step toward first person, V10).
 
 **ChatGPT's order:** flagship support first (WB4.4b, pacing fixes data, WB3.6 trainer teams, WB5.6 catalogue only
 when asked), then Realmbound (RB1.4 phone pass, RB2.2 second raid tier, RB2.1 battlegrounds proposal), then
@@ -107,3 +110,7 @@ keep-alive writing for Diamond Career and Otherworld.
 
 - 2026-10-09 Claude: first version. Flagship Wildbond (Godot), second Starfall village, ChatGPT's own Realmbound;
   Diamond Career and Otherworld to keep-alive until Evan says otherwise. Asked Evan to confirm the focus.
+- 2026-10-09 Claude: folded in the New game ideas shortlist (PR #87): card shop absorbs Main Street and tops the
+  waiting list; ranch races and contests first in WB-M5, Saltmarsh fishing added (WB5.7); Starfall expeditions as
+  grid delves. Primordial and the walk-in arcade keep their places; farm sim, survivors-style, puzzle, survival
+  crafting and online/gacha ideas declined there.

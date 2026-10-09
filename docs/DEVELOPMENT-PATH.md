@@ -115,6 +115,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB5.4 [Claude] Roaming legendaries (W3 part 2).
 - [ ] WB5.5 blocked: needs Evan (baby forms, W9/W10; default: the proposal's recommendations).
 - [ ] WB5.6 [ChatGPT] Catalogue batch 3 and 4 (12-15 creatures each, data and lore).
+- [ ] WB5.7 [Claude] Fishing at Saltmarsh (from docs/proposals/new-game-ideas.md, scored 16/18; added 2026-10-09).
 
 **WB-M6: version 2.0, ready for everyone.**
 - [ ] WB6.1 [Claude] Phone controls (WG10).
@@ -150,7 +151,7 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
   visitor. Builds on the good-day bunting (SF2.2).
 **SF-M4: the wilds.**
 - [ ] SF4.1 [Claude] Expeditions you can see (SV5): the wilds past the gate, camps, catalogue
-creatures as monsters.
+creatures as monsters. Built as first-person grid delves (docs/proposals/new-game-ideas.md), one-PR prototype first.
 - [ ] SF4.2 [Claude] Phone controls and settings; Starfall guide [any]; trailer.
 
 ### Realmbound (browser)
