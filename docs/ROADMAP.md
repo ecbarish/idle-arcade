@@ -196,6 +196,7 @@ first). Branch `codex/otherworld-memories`.
   changes what they do across that life (no AI, authored rules). Words, not meters; checks in tests/otherworld.html.
 
 ### T43: The creature catalogue reaches Realmbound (data, then names on screen)
+- [x] Built by Codex in PR #70 (2026-10-08), stacked after T41/PR #67; ready for review, no version bump. See docs/lore/catalogue.md's T43 record.
 docs/lore/catalogue.md (T37's Reach beast mappings) and docs/proposals/creature-catalogue-and-evolution.md §1. Branch
 `codex/catalogue-realmbound`.
 - Complete the mapping for every Realmbound zone and dungeon beast. Where a mapping is clean, Realmbound shows the

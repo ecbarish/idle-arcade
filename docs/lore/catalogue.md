@@ -137,3 +137,46 @@ All eight browser pages pass: Wildbond 1,485; Realmbound 7,729 scenario checks; 
 Independent source comparison confirms all prior species fields and encounter weights unchanged. New encounter entries slightly dilute the old encounter percentages. No route trainers, Wardens, guardians, moves, save fields, art code or screen code were edited.
 
 The existing browser grow() applies one evolution per XP award. Normal level-by-level journeys and both breeding ancestry steps are checked. A very large single award crossing both thresholds changes only once; another level-up is needed for the final form (impossible if that award already reaches level 100). This data-only ticket does not rewrite grow(); Claude should address that edge in the engine separately if retaining long lines in the browser. Godot evolution is reviewed separately after its handoff.
+
+## Realmbound catalogue names in the world (T43, 2026-10-08)
+
+PR #70, Codex, stacked after T41/PR #67. The 31 zone correspondences above are now used as **additional species
+names**, with a hunter's one-sentence observation beneath the target. Local aliases stay on the target, canvas,
+quest and combat record. Grizzlemaw, Kraska, Coalmaw, Hushfang, Paleweft, Veskareth and Aurethyn remain individuals.
+No combat number, palette, family, drop, pet name, encounter chance, quest target or save field changes. Body reuse
+and a new renderer remain later work. The Ashwing lineage is not a ranch-bred hybrid.
+
+The same pass covers all 17 `kind:beast` dungeon entries, including bosses. People are excluded; existing raid
+identities remain outside this ticket. A mapping is explicit and requires the existing silhouette family to agree.
+
+| Dungeon | Local encounter | Catalogue species |
+|---|---|---|
+| Drowned Sanctum | Mother Murk | Bogbough |
+| Drowned Sanctum | Abyssal Lurkers | Bogsnap |
+| Drowned Sanctum | Ysh'Kara, the Tide Beneath | Ripplet, a great deep-water local form; keep the lizard body and tide title |
+| Cindervein Foundry | Slagscale Brood | Ashskip |
+| Cindervein Foundry | The Crucible Matron | Cinderstitch |
+| Silent Barrows | Cairnweft Brood | Moorweft |
+| Silent Barrows | Selnith, the Doorweaver | Pallweaver |
+| Rootrot Hollow | Rotgnaw Scavengers | Briarwatch |
+| Rootrot Hollow | Giltweb Brood | Cragskein |
+| Rootrot Hollow | Ossavine, the Tangled Span | Cragskein |
+| Rootrot Hollow | Ashwing Rootwardens | Ashskip |
+| Rootrot Hollow | Arveth, the Hoard Below | Ashskip |
+| Heartwood Vault | Veilweft Vault Brood | Cragskein |
+| Heartwood Vault | Hearttusk Rootbreakers | Thornback |
+| Heartwood Vault | Vaulkris, the Goldweb Veil | Cragskein |
+| Heartwood Vault | Ashwing Vaultwardens | Ashskip |
+| Heartwood Vault | Orethul, the Hoardfast | Ashskip |
+
+`shared/catalogue.js` is a generated, normalized name/family/element/color/lore snapshot of the current Wildbond
+browser data (104 entries as read from source). It contains no battle stats, move effects or game progression rules.
+Regenerate with `node tools/catalogue-export.cjs`; `--check` fails when the checked-in snapshot is stale. Wildbond's
+source remains the editing point in this first handoff; Godot files and tools/godot-export.ps1 are untouched.
+
+Checks prove all 48 beast correspondences, matching families, excluded humanoids, original aliases, unchanged
+encounter/quest/pet data and runtime numbers, legacy pet loading and no new save fields. All eight pages pass on
+this stack: Realmbound 8,205, Wildbond 1,530, Starfall 48, sound 21, offline 15, Diamond Career 122, Otherworld 1,757,
+runner safety 35. Actual wolf and Mother Murk scenes were checked at 375x812, 1366x768, 1920x1080 and 3440x1440;
+[before/after frames](../screenshots/realmbound-catalogue/) show names and readable observations inside the game.
+Prepared encounters validate the display; this is not an unassisted campaign playtest.

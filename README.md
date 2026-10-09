@@ -43,6 +43,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 - Otherworld (2026-10-08): all eleven soul memories open practical uses across worlds; six people remember help, harm and repaired trust within a life. Promised cart journeys, shared winter reserves and witnesses happen in portrait conversations. Old saves and Return retain their rules.
 ### 2026-10-08: Wildbond early-road heritage recognition (T45; data handoff)
 - Eleven existing early-road people and all four Wardens have a distinct line for each origin, with clues recorded in the thread ledger. The existing Godot export carries all 60 reactions; Classic conversations and gameplay stay intact. Claude wires the data into Godot; no release bump.
+- Realmbound (2026-10-08): shared creature species and short hunter observations appear beneath beast targets, covering all 31 zone beasts and 17 dungeon encounters. Local names, palettes, pets and combat stay the same; the normalized catalogue exports from Wildbond data.
+
 - Realmbound (2026-10-08): walk into the Trainer and Stable, arrange guild work at the board and supplies at the chest, and meet quest givers in town. Carried pages keep records; service choices happen over the world. Old saves and existing prices are preserved.
 
 - Local helper (2026-10-08): queued local tasks use OpenCode, attach the project primer and lessons, and stop for failed tools or incomplete answers. Reports and edits require review; source in tools/local-ai/.
