@@ -24,7 +24,7 @@ if none is free, use "When the road is empty" in QUEUE.md (pre-review a waiting 
 draft pull request from a branch named guest/<topic> whose title starts with the task's ID, before building.
 Never push to main. Keep to the
 files that task names. Run the checks the task names, then mark the pull request ready and explain in plain words
-what changed and how you tested it. Never merge, never bump version numbers, never touch other lanes' files.
+what changed and how you tested it. Never merge your own pull request (the backup merging rule in QUEUE.md is the only exception, for others' pull requests), never bump version numbers, never touch other lanes' files.
 Explain everything to me in plain words; I'm not a programmer.
 ```
 
@@ -35,6 +35,8 @@ Explain everything to me in plain words; I'm not a programmer.
 3. GitHub runs the automatic checks (a green tick means they passed).
 4. Evan's review assistant (lane R) reads the change, tests it and merges it when it's good, or leaves a comment
    saying what to change. Ask your AI to answer the comments and push the fixes to the same branch.
+   If no Claude reviewer has acted for 6 hours, your AI may merge **someone else's** green pull request under
+   "Backup merging" in docs/QUEUE.md; never its own.
 5. Once merged, the change is live at https://ecbarish.github.io/idle-arcade/ within a few minutes.
 
 ## 4. The few rules that matter

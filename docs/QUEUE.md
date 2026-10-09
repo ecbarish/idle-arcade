@@ -111,6 +111,21 @@ Godot deliverables from PRIORITIES.md section 4 in order (WD2 drawing, WD3 battl
 SF2.6-2.8 Starfall), never one the Wildbond builder or Starfall thread has open. Lane P refills this table as tasks
 merge.
 
+## Backup merging (Evan, 2026-10-09: yes)
+
+So pull requests never pile up while Claude and ChatGPT are both away: **Evan's dad's AIs may merge someone else's
+pull request** (never their own) when **all** of these hold:
+
+1. No Claude reviewer (lane R) has commented, reviewed or merged on it for **6 hours**.
+2. The GitHub "checks" tick is green on the latest commit and it merges without conflicts.
+3. It follows its rules: the tests its task names pass (Godot: `node tools/run-all-checks.cjs`), old saves load,
+   anything visual has a screenshot in the PR, the commit email is a GitHub noreply address.
+4. It is not marked draft and has no unanswered "changes requested" review.
+
+Merge with a merge commit, then leave one comment: "Backup merge: <what you checked>". Add a line to START-HERE's
+Session log. A Claude reviewer reads every backup merge on its next sweep and fixes or reverts anything wrong.
+Never merge a pull request that changes `.github/`, CONTRIBUTING.md or this section.
+
 ## When the road is empty, or everything is waiting on review
 
 Never sit idle. If every task above is claimed or waiting to merge, take one of these (no claim needed for 1 and 2;
