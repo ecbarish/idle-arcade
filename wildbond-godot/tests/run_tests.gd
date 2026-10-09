@@ -1125,6 +1125,19 @@ func _run() -> void:
 	tick(1.0)
 	talk_through()
 	check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 14), "WD4a: that old save lands at the same Thornwood coordinate, now in the settlement")
+	# WB5.1 adds only optional save fields: an older journey without them must still load cleanly
+	var pre_wb5: Dictionary = main._read_save()
+	pre_wb5.erase("spire")
+	pre_wb5.erase("rematches")
+	main.SafeSave.write(main.save_path, pre_wb5)
+	main.spire_floor = 9
+	main.spire_best = 12
+	main.spire_active = true
+	main.rematch_wins = { "isolde": 3 }
+	check(main._load_game(), "WB5.1: a pre-Spire save without post-game fields still loads")
+	tick(1.0)
+	talk_through()
+	check(main.spire_floor == 0 and main.spire_best == 0 and not main.spire_active and main.rematch_wins.is_empty(), "WB5.1: missing Spire/rematch fields get safe defaults")
 	main._go("larkhaven", Vector2i(10, 1), Vector2i.DOWN)
 	tick(1.0)
 	main.save_game()
