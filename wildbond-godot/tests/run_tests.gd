@@ -140,7 +140,7 @@ func _run() -> void:
 	main.spilled = true
 	check(main._music_key() == "larkhaven", "once the colour spills into town, a warm village tune")
 	main.spilled = false
-	check(["faded", "larkhaven", "barn", "thornwood", "saltmarsh", "emberfall", "cloudglass", "wild", "trainer"].all(func(k): return ResourceLoader.exists("res://assets/music/%s.ogg" % k)), "every tune is in the game")
+	check(["faded", "larkhaven", "barn", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "wild", "trainer"].all(func(k): return ResourceLoader.exists("res://assets/music/%s.ogg" % k)), "every tune is in the game")
 	check(["saltmarsh", "emberfall", "cloudglass"].all(func(k): return ResourceLoader.exists("res://assets/ambience/%s.wav" % k)), "waves on the coast and wind in the highlands and the pass")
 	# ---- the map: closed doors, the barn opens with the story
 	check(not main.walkable(Vector2i(4, 4)), "cottage doors stay shut")
@@ -415,6 +415,18 @@ func _run() -> void:
 		check(main.tile_at(Vector2i(13, 7)) == "j" and main.solid("j") and main.solid("q"), "the ferry skiff is moored at the landing and you can't walk through it")
 		check(not main.solid("b") and main.route(Vector2i(1, 8), Vector2i(20, 9)).size() > 0, "the footbridges carry you across the river")
 		check(ResourceLoader.exists("res://assets/music/stillreed.ogg") and ResourceLoader.exists("res://assets/ambience/stillreed.wav"), "the basin has its own tune and the sound of running water")
+		# ---- Hollowecho Hills (WB3.2), with the Reed Badge
+		main.badges.append("reed")
+		main._go("hollowecho", Vector2i(1, 9), Vector2i.RIGHT)
+		tick(1.0)
+		check(main.map_name == "hollowecho" and main.level_cap() == int(main.DATA.CAP_TABLE[5]), "five badges: into Hollowecho Hills, with the cap the game data sets")
+		check(["veslin", "narro", "orri"].all(func(id): return main.npcs.any(func(n): return n.id == id and n.where == "hollowecho")), "Veslin the bell keeper, Narro the surveyor and Orri the bell mender")
+		check(not main._gate_open("hollowecho"), "the gathering trail east stays shut until Warden Senna is beaten")
+		check(main.route(Vector2i(1, 9), Vector2i(23, 5)).size() > 0 and main.route(Vector2i(1, 9), Vector2i(7, 6)).size() > 0, "a clear path to the hamlet's sign and to Senna's cave")
+		check(main.DATA.MAPS.hollowecho.get("items", []).size() == 3, "the three supplies lie where the map says")
+		check(main._heritage_line("orri", main.npc_info.orri.data) != "", "Orri has a word for your family")
+		check(main.MOUNTAINS.has("hollowecho") and main.CLIFF == main.MOUNTAINS.hollowecho.rock, "the hills have their own grey-green stone")
+		main.badges.erase("reed")
 		main._go("cloudglass", Vector2i(13, 12), Vector2i.UP)
 		tick(1.0)
 		main.badges.erase("beacon")

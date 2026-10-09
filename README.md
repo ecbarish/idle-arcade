@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Godot Wildbond (2026-10-09): Hollowecho Hills, the sixth area: the bell keeper's stone house with two bells swaying under the eaves, the surveyor's cord and chalk arrows, cave mouths, resting stones by Warden Senna's cave, low mist and a quiet tune. 232 checks pass.
 - Wildbond build handoff (2026-10-09): [Hollowecho area brief](docs/lore/wildbond-hollowecho-brief.md) gathers the existing route, people, teams, creatures and woven clues for the Godot build. It separates proposed staging from canon and flags Senna's stale documented team levels; gameplay is unchanged.
 - Arcade (2026-10-09): the current Wildbond and Starfall previews have screenshot cards and direct doors on the launcher. Classic games and progress remain separate; first-load and save guidance is explicit. Keyboard road panning keeps focused doors visible. [Checks and scope](docs/launcher-previews.md).
 - Godot Wildbond (2026-10-09): Stillreed Basin, the fifth area, is open: wooden footbridges over the river, its trainers and Warden, the sound of running water and its own tune, the ferry skiff moored at the landing with a sign you can read, the current running down the river, cattails, windfall under the orchard and dragonflies. 225 checks pass.
