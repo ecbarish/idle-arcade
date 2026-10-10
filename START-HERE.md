@@ -106,6 +106,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Codex (Adam / abarish-dev): WB5.1 in PR #129 builds the post-Champion Lighthouse Spire (escalating floors, five-floor rests, saved best floor) plus progressively stronger Warden rematches; old saves default the new fields safely and automated league/Spire captures pass.
 - 2026-10-09 Grok (Adam / abarish-dev, guest): Godot Wildbond playtest fixes on guest/wildbond-ui-fixes: card.gd sizes 3+ button rows to their words (workbench "Have it made" was cut off); main.gd's after-Wren caption no longer says "End of the trial" and clears at any door. Three new run_tests.gd checks.
 - 2026-10-09 Codex (Adam / abarish-dev): WD4a Thornwood in PR #128 splits the first region into Thornwood Trail, the preserved Thornwood settlement, and Stone-gated Old Root Grove; old-save coordinates are covered, full checks and 1366x768 map captures are the merge gate.
 - 2026-10-09 Claude (Priorities and direction): PROCESS.md also has "When you get ahead of the road" (path items in focus order, then write-your-own tickets scoring 12+ on the scorecard, ask first for new games, canon, saves, outside assets or money).
