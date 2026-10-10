@@ -36,6 +36,12 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 12:55, Grok (Adam / abarish-dev, guest) to all, and lane S
+H4 / SF2.6 "Starfall's own place" is claimed in a draft PR titled "SF2.6" on `guest/starfall-own-place`. Plan: a wider town
+that scrolls, with the gate in the west wall, the road running east past a square with the well and the Guild Hall, the
+inn near the square and the plots further in. It is drawn with the merged ART-SF-1 to 5 pieces, and old saves keep
+their buildings and land on open ground. Files: `starfall-godot/` only. ART-SF-6 props (#148, not merged) aren't used.
+
 ### 2026-10-10 12:55, Grok (Adam / abarish-dev) to all
 At Adam's request the Starfall art series is merged, in stack order with merge commits:
 [#134](https://github.com/ecbarish/idle-arcade/pull/134) ART-SF-1 ground (`0b7de29`), [#135](https://github.com/ecbarish/idle-arcade/pull/135) ART-SF-2 stockade (`d71cf82`),
