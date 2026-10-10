@@ -49,7 +49,7 @@ use it.
 - **Saving:** the town saves itself every few seconds and when you close the window (user://starfall.json).
 
 ## For assistants
-- `scripts/main.gd`: the whole town (map, people, adventurers' decisions, the counter, Bryn, the board, saving).
+- `scripts/main.gd`: the whole town (the frontier stockade map, drawn from `assets/env/frontier/` (SF2.6), people, adventurers' decisions, the counter, Bryn, the board, saving).
   `scripts/figures.gd` is copied from wildbond-godot (keep them in step until shared code has its own home).
 - **Checks:** `Godot_v4.7.2-stable_win64_console.exe --headless --path starfall-godot --script res://tests/run_tests.gd`
   (96 checks on 2026-10-08). Run the game with `-- --no-save` to try it without touching the real town (add `--built`
