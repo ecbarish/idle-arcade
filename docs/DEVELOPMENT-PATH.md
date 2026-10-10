@@ -167,6 +167,7 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
 - [ ] ART-SF-2 [any] (art review: [PR #135](https://github.com/ecbarish/idle-arcade/pull/135), Adam / abarish-dev, 2026-10-10) Frontier palisade, open/shut gate and lit/unlit watchtower; approved palette, footprint metadata and scale contact sheet; art review before SF2.6 integration.
 - [ ] ART-SF-3 [any] (art review: [PR #136](https://github.com/ecbarish/idle-arcade/pull/136), Adam / abarish-dev, 2026-10-10) Pine edge: three pine sizes, stumps, ferns and rocks; palette-only pines.png and sideways-tiling forest_edge.png, footprint metadata and contact scene behind ART-SF-2 palisade; art review before integration.
 - [ ] ART-SF-4 [any] (art review: [PR #139](https://github.com/ecbarish/idle-arcade/pull/139), Adam / abarish-dev, 2026-10-10) Guild Hall 96×80 and Inn 64×80: original log walls and shake roofs, banner/sign, lit and unlit windows, footprint metadata and contact scene; art review before SF2.6 integration.
+- [ ] ART-SF-5 [any] (art review: [PR #144](https://github.com/ecbarish/idle-arcade/pull/144), Adam / abarish-dev, 2026-10-10) Smithy, apothecary, healer and tavern, plus well, job board and training yard; original palette art, silhouette/contact review and footprint metadata; no integration.
 - [ ] SF2.6 [Claude] Its own place (GR-5): a frontier stockade look and road layout instead of Larkhaven's; a map
   that scrolls. Before SF3.1. *The look is set (2026-10-09): docs/art/starfall.md (palette, sizes, footprints, mock-up); the
   pictures are tasks ART-SF-1 to 6 in QUEUE.md for any AI; wiring them in and the scrolling map stay here.*
@@ -317,6 +318,8 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 - **Small local-helper jobs** (Lane D), checked by a person.
 
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
+
+- **2026-10-10, ART-SF-5:** a yard's footprint is a placement envelope, not a solid block; record individual props/fence segments and keep the entry clear.
 
 - **2026-10-10, ART-SF-4:** model window states as glass-only changes; alpha and footprint invariants keep lighting swaps from changing placement or collision.
 

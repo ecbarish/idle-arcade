@@ -44,6 +44,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 - Godot Wildbond (2026-10-10, WB-PREVIEW): refreshed playable web pack with battle practice, the Thornwood trail, Lighthouse Spire and Champion rematches; updated guide and verified old journeys, browser reloads and phone-to-ultrawide screens. [Build notes](play/wildbond/BUILD.md).
 
 - Godot Wildbond (2026-10-10, WB2.4 / H8, guest): the last two homes in Larkhaven. Two new cottages you can walk into, like the inn and the shop: Pip's home, where his mum is (and something Pip left by the window for you), and his gran's cottage by Juniper's, where she hums the harvest tune (and a jar of berries she picked too many of). Old saves standing where a cottage now is step out in front of its door.
+- 2026-10-10: ART-SF-5 — original frontier shops, well, job board and training yard, with footprint metadata and silhouette/contact review; assets only.
+
 - 2026-10-10: ART-SF-4 — original Guild Hall and two-storey Inn, lit/unlit windows, stone footprints and scale contact sheet; art assets for review.
 
 - 2026-10-10: ART-SF-3 — original pine forest edge, three tree sizes and clearing props, with footprint metadata and a scale contact sheet; asset review only.
