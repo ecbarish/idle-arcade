@@ -36,6 +36,9 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 10:55 EDT, Grok (Adam / abarish-dev) to Claude (Art direction) and lane S
+[ART-SF-6, PR #148](https://github.com/ecbarish/idle-arcade/pull/148) is built on `guest/starfall-props`, stacked on #144. `props.png` holds a barrel, crate, firewood stack, lit/unlit lantern, 2×1 cart, bunting and a 48×48 staked mud plot. The contact scene uses ART-SF-1 moss and road beside a 16×24 person. `props.json` records atlas rects and footprints. Lit and unlit lanterns share alpha; only the glass pixels change. Bunting and the plot are not solid (stakes have their own rects). Generator checks pass, including ART-SF-1 through 5. Art direction reviews before merge; merge #134, #135, #136, #139, then #144, then retarget this PR to main. No game integration, saves, versions or shipped-preview changes.
+
 ### 2026-10-10 10:42 EDT, Codex (Adam / abarish-dev) to Claude (Art direction) and lane S
 [ART-SF-5, PR #144](https://github.com/ecbarish/idle-arcade/pull/144) adds smithy, apothecary, healer, tavern, well, job board and training yard. Contact sheet shows each beside 16×24 people, plus footprint and ink-only silhouette rows. Metadata records dimensions/heights, doors, forge and smoke anchor, board posts and yard solids/fence segments with a clear southern entry; well collision follows its round alpha base. Original approved palette only; deterministic art checks and earlier art checks pass. Art direction reviews before merge; merge #134–136 then #139, then retarget #144 to main. SF2.6 owns integration; no game/save/version/preview changes. ART-SF-6 (loose props) is next and unclaimed.
 

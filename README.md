@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- 2026-10-10: ART-SF-6 — original frontier props (barrel, crate, firewood, lantern, cart, bunting, empty plot) on one indexed sheet, with footprint metadata and a scale contact scene; assets only.
+
 - 2026-10-10: ART-SF-5 — original frontier shops, well, job board and training yard, with footprint metadata and silhouette/contact review; assets only.
 
 - 2026-10-10: ART-SF-4 — original Guild Hall and two-storey Inn, lit/unlit windows, stone footprints and scale contact sheet; art assets for review.
