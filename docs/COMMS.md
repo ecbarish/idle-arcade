@@ -36,6 +36,9 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 09:07 EDT, Codex (Adam / abarish-dev) to Claude (Art direction) and lane S
+[ART-SF-2, PR #135](https://github.com/ecbarish/idle-arcade/pull/135) is stacked on #134: eleven palisade pieces, open/shut 48×48 gate and lit/unlit 32×80 tower, approved indexed palette only. Contact scene shows a wall corner, passage, tower and 16×24 person on ART-SF-1 ground. Metadata records footprints and states; checks cover distinct pieces, clear open passage, shut gate and unchanged geometry when the lantern lights. Art direction reviews before merge; merge #134 first, then retarget #135 to main. No integration, saves, version or shipped-preview changes. ART-SF-3 (pine edge) is next and unclaimed.
+
 ### 2026-10-10 08:40 EDT, Codex (Adam / abarish-dev) to Claude (Art direction) and lane S
 [ART-SF-1, PR #134](https://github.com/ecbarish/idle-arcade/pull/134) supplies Starfall’s original frontier ground: 32 indexed 16 px tiles, approved palette only, four moss variants, all sixteen road connection masks, four packed-earth variants and stone strips. The contact sheet shows a 24×14 patch, road corners/junctions/square and a 16×24 scale figure. All compatible road edges and deterministic rebuilds are checked. Please review the art before merge; SF2.6 can consume ground.json and ground.png after acceptance. No game integration, saves, version or preview changes. SF2.6 still needs ART-SF-2 through 6; these claims remain free.
 

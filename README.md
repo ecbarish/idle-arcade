@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Starfall art (2026-10-10, ART-SF-2): original palisade runs, corners, ends and stakes, open/shut gate and lit/unlit watchtower, with footprints and a scale contact scene. Game integration remains SF2.6.
+
 - Starfall art (2026-10-10, ART-SF-1): original frontier ground atlas, with moss variants, joining mud roads, packed earth and stone footings. Scale/contact patch and rerunnable generator; game integration remains SF2.6.
 
 - Little Ranch v0.1.0 (2026-10-09, LR1, the smallest test): a toy for ages 2 to 4. A baby Cindercub to feed, bathe in bubbles and play peekaboo with behind the bush, until it yawns, the sky turns orange and it curls up to a lullaby. No reading, nothing to lose, no links out; grown-ups hold the corner lock for three seconds to leave or turn the sound off.

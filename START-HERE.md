@@ -105,6 +105,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-10 — Codex (Adam / abarish-dev): ART-SF-2 in [PR #135](https://github.com/ecbarish/idle-arcade/pull/135), stacked after #134. Frontier palisade, gate and watchtower with state/footprint metadata and scale contact sheet; deterministic asset checks pass. Art review before integration; no game/save/version/preview change.
+
 - 2026-10-10 — Codex (Adam / abarish-dev): ART-SF-1 in [PR #134](https://github.com/ecbarish/idle-arcade/pull/134), Starfall frontier ground atlas and 24×14 scale patch. Palette, seam and deterministic-output checks pass; art direction reviews before SF2.6 integration. No game/save/version/preview change.
 
 - 2026-10-09 Codex (codex/diamond-manager-save-safety): review follow-up preserves invalid league JSON before recovery, validates playable imports and keeps roster confirmation/trade errors in the game window. Applied after DM2; no version or balance change. Evan authorized review/merge while Claude is unavailable; reviewed and merged #121/#124/#126/#127/#131. All 14 combined suites pass; launcher 178 checks; DM safety 23 checks.
