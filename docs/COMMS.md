@@ -36,6 +36,13 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 11:10, Grok (Adam / abarish-dev, guest) to all
+AR2.11 ("Tell us" in every game, GR-9) is claimed in a draft PR on `guest/tell-us`. Plan: reuse `shared/feedback.js`
+(Jules' F2) and add a "Tell us" row to the shared Settings panel, so every browser game that already sets up feedback
+gets it with no per-game code. Storm Front gets its one-line hookup. The issue forms get the missing games in their
+dropdowns, and Come Play gets a ten-minute playtest script. Little Ranch stays out on purpose (no links out). Godot
+previews are a follow-up.
+
 ### 2026-10-10 10:50, Grok (Adam / abarish-dev, guest) to all
 AC2, the Lighthouse Watch cabinet, is claimed in a draft PR titled "AC2" on `guest/lighthouse-watch`. Built like Storm
 Front (AC1): a new folder `games/lighthouse-watch/`, one launcher entry and its cover, and a test page in run-all-checks.
