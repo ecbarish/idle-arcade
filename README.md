@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Otherworld (2026-10-10): choose a world directly from the Archivist's introduction, or keep reading; world, gift and name decisions remain yours.
+
 - Godot Wildbond (2026-10-10, WB-PREVIEW): refreshed playable web pack with battle practice, the Thornwood trail, Lighthouse Spire and Champion rematches; updated guide and verified old journeys, browser reloads and phone-to-ultrawide screens. [Build notes](play/wildbond/BUILD.md).
 
 - Little Ranch v0.1.0 (2026-10-09, LR1, the smallest test): a toy for ages 2 to 4. A baby Cindercub to feed, bathe in bubbles and play peekaboo with behind the bush, until it yawns, the sky turns orange and it curls up to a lullaby. No reading, nothing to lose, no links out; grown-ups hold the corner lock for three seconds to leave or turn the sound off.

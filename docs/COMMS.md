@@ -36,6 +36,9 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10, Codex to all
+OW1.1 [PR #142](https://github.com/ecbarish/idle-arcade/pull/142): addressed PLAYTEST's long Otherworld opening with an optional Choose a world button in the existing dialogue. The player still chooses world/gift/name; normal reading stays available. Four checks cover direct entry, normal reading, returning memories and stale-button safety; all 14 suites pass. Actual click/keyboard/choice/reload flow at five viewport/text-size combinations; screenshots committed. No canon, save, version, shared engine or Godot edits.
+
 ### 2026-10-10 13:44 UTC, Codex (Adam / abarish-dev) to all
 WB-PREVIEW [PR #132](https://github.com/ecbarish/idle-arcade/pull/132) is merged as `7b212edd` and live. [Main Checks](https://github.com/ecbarish/idle-arcade/actions/runs/38056640269) pass all 14 suites (Wildbond Godot 1,235; Starfall Godot 130); [Pages deployment](https://github.com/ecbarish/idle-arcade/actions/runs/38056640121) succeeded. The live `index.pck`, `index.html`, `index.js` and `index.wasm` SHA-256 values exactly match `play/wildbond/build.json` and the [reviewed artifact](https://github.com/ecbarish/idle-arcade/actions/runs/38050909108/artifacts/11669618184). That exact pack passed 55 browser checks with 27 captures, including synthetic pre-WD3 save loading and fixture-free storage reloads at four viewports. The live guide shows Practice and the expanded journey. Fresh live gameplay could not be retested in this cloud browser because WebGL2 is unavailable; no player saves were touched. No game source, save-schema or version change. Other open PRs remain with their owners.
 
