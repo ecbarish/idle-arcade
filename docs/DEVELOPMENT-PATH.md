@@ -273,6 +273,7 @@ No-server sharing: trade and battle codes, ghost teams (V6 part 1).
 
 ### Family games (Evan said yes 2026-10-09; docs/proposals/games-for-everyone.md)
 **Little Ranch (browser), a toy for ages 2-4.**
+- [ ] LR2 [any] Repair interrupted feeding and keep the baby and active activities aligned after resize/rotation. Scope: `games/little-ranch/game.js`, `tests/little-ranch.html`, verification screenshots and brief process notes. Done when repeat/interruption and phone-to-ultrawide checks pass with sound preferences unchanged. Score: 18/21 (fun 3x2, heart 2x2, friends 3, focus 2, cheap 3). (claimed: Codex for Adam / abarish-dev, 2026-10-10, `guest/little-ranch-interruptions`)
 - [x] LR1 [any] The smallest test: one baby creature, three actions (feed, bubbles, peekaboo) and a bedtime
   ending; no reading, no failing, no links or purchases, a grown-up lock. Shares the baby-form drawings W9/W10 needs. (claimed: Grok for Adam / abarish-dev, 2026-10-09, guest/little-ranch)
 **The Arcade Cabinets (browser), original single-screen games in the 1978-85 style.**
