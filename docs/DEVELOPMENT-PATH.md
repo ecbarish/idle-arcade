@@ -18,7 +18,7 @@ When your lane in docs/QUEUE.md has no `open` task, **do not stop and do not rep
    keep-alive games. Within a game, the earliest milestone first. Take an unticked deliverable **with your owner tag**
    (`[Claude]`, `[ChatGPT]`, `[any]`, `[local]`) and no `(claimed ...)` note. (This replaced "prefer the game with the
    fewest open PRs", which spread work so evenly that no game got finished.)
-3. **Claim it** as QUEUE.md "Claiming work" says (a draft pull request titled with the deliverable's ID, opened
+3. **Claim it** as docs/PROCESS.md says (a draft pull request titled with the deliverable's ID, opened
    before you build; the deliverable marked here `(claimed: <you>, <date>, <branch>)` in its first commit). Take only
    deliverables in your lane's files (QUEUE.md "Who works where"). Write the ticket into docs/ROADMAP.md with the
    template below when the work needs one.
@@ -122,10 +122,15 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WD3 [Claude, ChatGPT data] Battles with real choices (GR-2): about 60 moves, family signature moves, a few
   statuses, an order per Warden; tuned with WB3.6.
 - [ ] WD4 [Claude] Areas you can explore (GR-3): route, settlement and hidden pocket per area, return spots gated by
-  element. Thornwood first, one area per PR.
+  element. **WD4a Thornwood done 2026-10-09 in PR #128:** Thornwood Trail, the preserved settlement, and Stone-gated Old Root Grove. Remaining areas stay open, one area per PR.
+- [ ] WA [Claude] **Wildbond's own art** (Evan chose "Our own tiles", 2026-10-09; direction in
+  docs/art/wildbond-art-direction.md, which keeps a later 3D or first-person version in view). **Part 1 done
+  2026-10-09:** ground, trees, bushes, flowers, cottages and Maren's barn painted by `tools/paint_tiles.gd`; the pack's
+  floor, nature and house tiles removed. Water done too (no pack tiles left). Part 2: battle backdrops, the hand-drawn halls on the shared palette,
+  interiors. Part 3: battle effects and emotes.
 
 **WB-M5: life after the league.**
-- [ ] WB5.1 [Claude] The Lighthouse Spire and rematches.
+- [x] WB5.1 [Claude] The Lighthouse Spire and rematches. **Done 2026-10-09 in PR #129:** post-Champion Spire floors start at level 75 and keep climbing, full rest every fifth floor, best/current climb saved; defeated Wardens offer progressively stronger Champion rematches without duplicate badges.
 - [ ] WB5.2 [Claude] Contests and races at the ranch (W4).
 - [ ] WB5.3 [Claude] Ranch jobs: creatures help (W5/WG8).
 - [ ] WB5.4 [Claude] Roaming legendaries (W3 part 2).
@@ -138,6 +143,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
   (docs/learning/godot-practices.md rule 2), so on-screen buttons, a gamepad and rebinding all come free.
 - [x] WB6.2 [Claude] **Done 2026-10-09** (`settings.gd`, the book's Settings page). Settings in the game window (sound, music, text size,
   battle speed). Start with Music, Ambience and Effects sound buses (godot-practices.md rule 3).
+- [x] WB6.3 [Claude] **Done 2026-10-09** (`turn_card.gd`). A phone held upright gets a "Turn your phone sideways" card and the game holds still (Playtester, PR #111). Learned: with `canvas_items` stretch and `keep` aspect, portrait leaves a thin strip, so no portrait layout is worth building; pausing the tree with the card set to `PROCESS_MODE_ALWAYS` freezes battles and walks cleanly.
 - [ ] WB6.3 [Claude] Import a browser Wildbond save into the new version.
 - [ ] WB6.4 [any] A Wildbond guide (first steps, the element chart, the ranch), now that systems are settling.
 - [ ] WB6.5 [Claude] A Wildbond trailer and store-style page; Windows build and web build published.
@@ -315,6 +321,11 @@ line or two, with the page that holds the detail.
   do and the controls, and the games sit in sections by kind (games.js `ArcadeKinds`); a new game needs a `kind`,
   `goal` and `controls` (tools/launcher-checks.cjs counts them). Canvas text inherits `textAlign` from earlier draws:
   set it in every label helper.
+- **2026-10-09, Wildbond's own art, part 1 (Claude, Wildbond builder):** Wildbond and Starfall looked alike because
+  both drew the same free pack. Painting our own tiles in code, into the same cells the game already read, swapped the
+  whole look without touching the map code. Evan wants the art to grow toward 3D and first person, so the direction
+  (palette ramps, shapes with real sizes, footprints that match pictures) is written down in
+  docs/art/wildbond-art-direction.md before the art grows further.
 - **2026-10-09, Evan's playtest (Claude, Wildbond builder):** "see-through roofs": the barn's picture is taller than
   its footprint in the map data, so the row behind it was walkable and you walked across the roof. Now every
   building's picture is listed (`buildings()`) and its roof rows are closed, with a check. "Controls not clear": a How

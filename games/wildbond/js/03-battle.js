@@ -8,7 +8,7 @@ const ACT_AT = 2.2;
 function unit(c, side) {
   const st = stOf(c);
   if (c.hp === null || c.hp === undefined || c.hp > st.hp) c.hp = st.hp;
-  return { c, side, st, atb: Math.random() * 1.2, cds: {}, buff: {}, dots: [], anim: 0, hit: 0 };
+  return { c, side, st, atb: Math.random() * 1.2, cds: {}, buff: {}, dots: [], status: {}, wakeGrace: 0, anim: 0, hit: 0 };
 }
 function startBattle(kind, foes, opts) {
   opts = opts || {};
@@ -38,9 +38,9 @@ function chooseTurn(m) {
   B.wait = null; B.lastInput = B.t; u.atb = 0; act(u, m); Cr.addBond(u.c, 0.3);
 }
 function moveInfo(m) {
-  const mv = MOVES[m], el = mv.el ? mv.el + ' ' : '', how = mv.spec ? 'special (uses Wits)' : 'physical (uses Power)';
-  return { hit: `${el}${how} attack, power ${mv.pow}`, aoe: `${el}hits every foe, power ${mv.pow}`, dot: `${el}poisons a foe over time`, buff: 'your team hits harder for a while',
-    haste: 'your team acts faster for a while', guard: 'your team braces against damage', slow: 'slows a foe down', heal: 'heals your most hurt ally' }[mv.kind] || '';
+  const mv = MOVES[m], extra=mv.breakGuard?'; breaks guard':mv.pierce?'; ignores guard':mv.status?'; '+{soaked:'sets up Steam Burst',scorched:'burns; weakens physical hits',rooted:'slows turns; sets up rooted follow-ups',sleep:'pauses turns until hit or waking',marked:'the next hit lands 25% harder'}[mv.status]:mv.combo?'; stronger on '+BattleEffects.label[mv.combo].toLowerCase()+' foes':'', el = mv.el ? mv.el + ' ' : '', how = mv.spec ? 'special (uses Wits)' : 'physical (uses Power)';
+  return { hit: `${el}${how} attack, power ${mv.pow}${extra}`, aoe: `${el}hits every foe, power ${mv.pow}`, dot: `${el}poisons a foe over time`, buff: 'your team hits harder for a while',
+    haste: 'your team acts faster for a while', guard: 'your team braces against damage'+(mv.cleanse?'; clears harmful effects':''), slow: 'slows a foe down', heal: 'heals your most hurt ally'+(mv.cleanse?'; clears harmful effects':'') }[mv.kind] || '';
 }
 
 function advantage(el, target) {
@@ -54,12 +54,13 @@ function damage(att, def, mv, mult) {
   let d = ((2 * att.c.lvl / 5 + 2) * mv.pow * A / Math.max(1, D)) / 50 + 2;
   d *= (mv.el && mv.el === sp(att.c).el ? 1.2 : 1) * advantage(mv.el, def) * (0.85 + Math.random() * 0.15) * (mult || 1);
   if (att.buff.dmg > 0) d *= 1.25;
-  if (def.buff.guard > 0) d *= def.side === 'a' && def.buff.guardCmd ? 0.5 : 0.6;
+  d *= BattleEffects.modifier(att,def,mv);
+  if (def.buff.guard > 0 && !mv.pierce && !mv.breakGuard) d *= def.side === 'a' && def.buff.guardCmd ? 0.5 : 0.6;
   if (att.c.traits.includes('ferocious')) d *= 1.1; if (def.c.traits.includes('thick')) d *= 0.9;
   const crit = Math.random() < 0.06 + (att.c.traits.includes('keen') ? 0.08 : 0); if (crit) d *= 1.5;
   return { d: Math.max(1, Math.round(d)), crit, adv: advantage(mv.el, def) };
 }
-function hurt(u, d, crit, el) { u.c.hp = Math.max(0, u.c.hp - d); u.hit = 0.3; B.fx.push({ u, txt: '-' + d, col: crit ? '#ffd23a' : '#ffffff', age: 0 });
+function hurt(u, d, crit, el) { BattleEffects.wake(u); u.c.hp = Math.max(0, u.c.hp - d); u.hit = 0.3; B.fx.push({ u, txt: '-' + d, col: crit ? '#ffd23a' : '#ffffff', age: 0 });
   if (el !== undefined) burst(u, el && ELEMENTS[el] ? ELEMENTS[el].col : '#ffffff', 'hit', crit);
   if (crit) B.shake = 0.25; sfx(crit ? 'crit' : 'hit');
   if (u.c.hp <= 0) { u.downAt = B.t; bline(`${u.c.name} fainted!`, 'warn'); sfx('faint'); } }
@@ -77,10 +78,10 @@ function chooseMove(u) {
     if (k === 'slow' || k === 'dot') { if (Math.random() < 0.5) return m; } }
   if (u.side === 'f' && modeOn('hardcore')) { const m = hardcoreMove(u, moves); if (m) return m; }
   const dmg = moves.filter(m => ['hit', 'aoe'].includes(MOVES[m].kind)).sort((a, b) => MOVES[b].pow - MOVES[a].pow);
-  return dmg[0] || movesOf(u.c)[0];
+  return dmg[0] || moves[0];
 }
 function act(u, forced, mult) {
-  const m = forced || chooseMove(u), mv = MOVES[m], foes = living(u.side === 'a' ? 'f' : 'a'), allies = living(u.side);
+  const m = forced || chooseMove(u);if(!m)return;const mv = MOVES[m], foes = living(u.side === 'a' ? 'f' : 'a'), allies = living(u.side);
   if (!foes.length) return;
   u.cds[m] = mv.cd; u.anim = 0.25;
   const aim = u.focus && u.focus.c.hp > 0 ? u.focus : null; u.focus = null; // Hardcore foes go for your weakest
@@ -95,15 +96,15 @@ function act(u, forced, mult) {
 }
 function resolve(u, m, mv, foes, allies, target, mult) {
   switch (mv.kind) {
-    case 'hit': { const t = target(), r = damage(u, t, mv, mult); hurt(t, r.d, r.crit, mv.el);
+    case 'hit': { const t = target(), r = damage(u, t, mv, mult); hurt(t, r.d, r.crit, mv.el); BattleEffects.after(t,mv);if(mv.status&&BattleEffects.active(t,mv.status))bline(`${t.c.name} is ${BattleEffects.label[mv.status].toLowerCase()}.`,'sys');
       bline(`${u.c.name} used ${mv.name}${r.crit ? ', a critical hit' : ''} on ${t.c.name} for ${r.d}${r.adv > 1 ? '. It hits hard!' : r.adv < 1 ? '. Not very effective.' : '.'}`, u.side === 'a' ? 'ally' : 'foe'); break; }
-    case 'aoe': for (const t of foes) { const r = damage(u, t, mv, (mult || 1) * 0.75); hurt(t, r.d, r.crit, mv.el); } bline(`${u.c.name} used ${mv.name} on everyone!`, u.side === 'a' ? 'ally' : 'foe'); break;
+    case 'aoe': for (const t of foes) { const r = damage(u, t, mv, (mult || 1) * 0.75); hurt(t, r.d, r.crit, mv.el); BattleEffects.after(t,mv); } bline(`${u.c.name} used ${mv.name} on everyone!`, u.side === 'a' ? 'ally' : 'foe'); break;
     case 'dot': { const t = target(); t.dots.push({ per: Math.max(1, Math.round(damage(u, t, mv, mult).d / 2)), left: 4, tick: 1 }); bline(`${u.c.name} used ${mv.name}. ${t.c.name} is poisoned.`, u.side === 'a' ? 'ally' : 'foe'); break; }
     case 'buff': for (const a of allies) a.buff.dmg = 6; bline(`${u.c.name} used ${mv.name}! Its team hits harder.`, 'sys'); break;
-    case 'haste': for (const a of allies) a.buff.haste = 6; bline(`${u.c.name} used ${mv.name}! Its team speeds up.`, 'sys'); break;
-    case 'guard': for (const a of allies) a.buff.guard = 4; bline(`${u.c.name} used ${mv.name}! Its team braces.`, 'sys'); break;
-    case 'slow': { const t = target(); t.buff.slow = 5; bline(`${u.c.name} used ${mv.name}. ${t.c.name} slows down.`, 'sys'); break; }
-    case 'heal': { const low = allies.slice().sort((a, b) => a.c.hp / a.st.hp - b.c.hp / b.st.hp)[0]; const h = Math.round(low.st.hp * 0.25);
+    case 'haste': for (const a of allies) a.buff.haste = mv.duration||6; bline(`${u.c.name} used ${mv.name}! Its team speeds up.`, 'sys'); break;
+    case 'guard': for (const a of allies) { a.buff.guard = mv.duration||4;if(mv.cleanse)BattleEffects.cleanse(a); } bline(`${u.c.name} used ${mv.name}! Its team braces.`, 'sys'); break;
+    case 'slow': { const t = target(); t.buff.slow = mv.duration||5; bline(`${u.c.name} used ${mv.name}. ${t.c.name} slows down.`, 'sys'); break; }
+    case 'heal': { const low = allies.slice().sort((a, b) => a.c.hp / a.st.hp - b.c.hp / b.st.hp)[0]; const h = Math.round(low.st.hp * (mv.heal||.25));if(mv.cleanse)BattleEffects.cleanse(low);
       low.c.hp = Math.min(low.st.hp, low.c.hp + h); B.fx.push({ u: low, txt: '+' + h, col: '#7cf08a', age: 0 }); burst(low, '#7cf08a', 'heal'); sfx('heal'); bline(`${u.c.name} used ${mv.name}. ${low.c.name} recovers ${h}.`, 'sys'); break; }
   }
 }
@@ -157,16 +158,17 @@ function battleTick(h) {
   B.cmdT += h; if (B.cmdT >= 5) { B.cmdT = 0; B.cmd = Math.min(3, B.cmd + 1); }
   if (isAuto() && B.cmd >= 3) command('focus', true);
   if (B.tele) { B.tele.t -= h; if (B.tele.t <= 0) { const { u, m } = B.tele; B.tele = null;
-    if (u.c.hp > 0 && living('a').length) resolve(u, m, MOVES[m], living('a'), living('f'), () => (Math.random() < 0.65 ? living('a')[0] : pick(living('a'))) || living('a')[0]); } }
+    if (u.c.hp > 0 && !BattleEffects.active(u,'sleep') && living('a').length) resolve(u, m, MOVES[m], living('a'), living('f'), () => (Math.random() < 0.65 ? living('a')[0] : pick(living('a'))) || living('a')[0]); } }
   for (const u of [...B.allies, ...B.foes]) {
     if (u.c.hp <= 0) continue;
+    const burn=BattleEffects.tick(u,h);if(burn)hurt(u,burn,false);
     for (const k in u.cds) u.cds[k] = Math.max(0, u.cds[k] - h);
     for (const k of ['dmg', 'haste', 'guard', 'slow']) if (u.buff[k] > 0) { u.buff[k] -= h; if (u.buff[k] <= 0 && k === 'guard') u.buff.guardCmd = 0; }
     for (const d of u.dots) { d.tick -= h; if (d.tick <= 0) { d.tick = 1; d.left--; hurt(u, d.per); } } u.dots = u.dots.filter(d => d.left > 0);
     u.anim = Math.max(0, u.anim - h);
-    if (u.c.hp <= 0 || (B.tele && B.tele.u === u)) continue;
-    u.atb += h * (u.st.spd + 40) / 100 * (u.buff.haste > 0 ? 1.3 : 1) * (u.buff.slow > 0 ? 0.6 : 1) * (u.c.traits.includes('swift') ? 1.1 : 1);
-    if (u.atb >= ACT_AT) { if (u.side === 'a' && turnStyle() && !isAuto()) { u.atb = ACT_AT; B.wait = u; bline(`${u.c.name}'s turn. Choose a move.`, 'sys'); return; } u.atb = 0; act(u); }
+    if (u.c.hp <= 0 || BattleEffects.active(u,'sleep') || (B.tele && B.tele.u === u)) continue;
+    u.atb += h * (BattleEffects.active(u,'rooted')?.65:1) * (u.st.spd + 40) / 100 * (u.buff.haste > 0 ? 1.3 : 1) * (u.buff.slow > 0 ? 0.6 : 1) * (u.c.traits.includes('swift') ? 1.1 : 1);
+    if (u.atb >= ACT_AT) { if (u.side === 'a' && turnStyle() && !isAuto()) { u.atb = ACT_AT;if(!movesOf(u.c).some(m=>!(u.cds[m]>0)))continue; B.wait = u; bline(`${u.c.name}'s turn. Choose a move.`, 'sys'); return; } u.atb = 0; act(u); }
     if (!living('f').length) return endBattle('won');
     if (!living('a').length) return endBattle('lost');
   }

@@ -109,6 +109,7 @@ var place_t := 0.0                           # seconds since you arrived somewhe
 var title: Control
 var touch: Control                               # the phone pad (touch_pad.gd)
 var howto: Control                               # the How to play page (howto.gd)
+var turn_card: Control                             # covers the game while a phone is held upright
 var show_howto := true                           # it opens before a new journey (the checks turn it off)
 var howto_then_title := false                    # opened from the title page: go back to it after
 var settings := Settings.new()                   # sound, text size, battle pace, phone buttons (settings.gd, WB6.2)
@@ -120,9 +121,13 @@ var then_do := Callable()                    # runs when the current conversatio
 var npcs: Array[Mover] = []                  # people out in the world (from the game data): trainers, Wardens
 var npc_info := {}                           # id -> { data from the map, beaten, warden }
 var badges: Array = []
+var spire_floor := 0
+var spire_best := 0
+var spire_active := false
+var rematch_wins := {}                       # Warden id -> post-Champion rematch wins
 var spotter: Mover = null                    # a trainer who has seen you and is walking over
 var spot_t := 0.0
-const BUILT := ["larkhaven", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "league"]    # the maps the Godot version has so far
+const BUILT := ["larkhaven", "thornwood_route", "thornwood", "thornwood_grove", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "league", "spire"]    # the maps the Godot version has so far
 var starters: Array[Mover] = []
 var partner: Mover = null
 var map_name := "larkhaven"
@@ -184,6 +189,7 @@ func _ready() -> void:
 		DATA.SPECIES[k] = ej.data.species[k]
 	DATA["EVOS"] = ej.data.evos
 	R.DATA = DATA
+	R.prepare_move_choices()
 	pup.look = CREATURE_LOOKS.pup
 	pup.home = PADDOCK
 	_make_npcs()
@@ -213,6 +219,11 @@ func _ready() -> void:
 	$UI.add_child(card)
 	card.chosen.connect(_on_chosen)
 	card.picked.connect(_on_card_pick)
+	lessons = preload("res://scripts/move_lessons.gd").new()
+	$UI.add_child(lessons)
+	lessons.closed.connect(func():
+		save_game()
+		_open_bench())
 	sfx = Sfx.new()
 	add_child(sfx)
 	battle = Battle.new()
@@ -243,6 +254,11 @@ func _ready() -> void:
 	add_child(thumbs)
 	touch = TouchPad.new()
 	thumbs.add_child(touch)
+	var tip := CanvasLayer.new()                   # and "turn your phone sideways" above even that
+	tip.layer = 6
+	add_child(tip)
+	turn_card = preload("res://scripts/turn_card.gd").new()
+	tip.add_child(turn_card)
 	title = Title.new()
 	$UI.add_child(title)
 	title.chosen.connect(_on_title)
@@ -351,7 +367,7 @@ func _after_talk() -> void:
 			bonded[partner.id] = true
 			seen[rival_c.sp] = true
 			wren.path = route(wren.tile, Vector2i(10, 0))        # off to Thornwood, already running
-			caption.text = "End of the trial. Walk around Larkhaven with %s." % _partner_name()
+			caption.text = "%s walks with you now. The north road leads to Thornwood." % _partner_name()
 
 func _on_signed(look: Dictionary) -> void:
 	# the ink dries and colour runs into you: you are the one bright thing in the faded valley
@@ -562,6 +578,10 @@ func _check_doors() -> void:
 		var block := ""
 		if ex.is_empty():
 			block = "The road ends here for now."
+		elif ex.has("requiresElement") and not _team_has_element(str(ex.requiresElement)):
+			block = str(ex.get("locked", "One of your partners may be able to find a way through."))
+		elif ex.to == "spire" and not story_done.has("leagueEnding"):
+			block = str(ex.get("locked", "The Spire opens after the Champion ending."))
 		elif ex.has("locked") and (not _gate_open(map_name) or (ex.to == "league" and badges.size() < 8)):
 			block = ex.locked
 		elif ex.to not in BUILT:
@@ -574,7 +594,16 @@ func _check_doors() -> void:
 			if not solid(tile_at(back)):
 				me.path = [back]                       # step back from the edge
 			return
+		if map_name == "spire" and ex.to == "league":
+			spire_active = false
+			spire_floor = 0
 		_go(ex.to, Vector2i(int(ex.x), int(ex.y)), DIRS.get(ex.get("dir", "down"), Vector2i.DOWN))
+
+func _team_has_element(element: String) -> bool:
+	for creature in team:
+		if DATA.SPECIES.get(str(creature.get("sp", "")), {}).get("el", "") == element:
+			return true
+	return false
 
 const DIRS := { "up": Vector2i.UP, "down": Vector2i.DOWN, "left": Vector2i.LEFT, "right": Vector2i.RIGHT }
 var trans_at := Vector2i(-1, -1)
@@ -609,8 +638,8 @@ func _switch() -> void:
 		me.tile = BARN_DOOR + Vector2i.DOWN
 		me.face = Vector2i.DOWN
 	me.where = trans_to
-	if stage == "free" and trans_at.x >= 0:
-		caption.text = ""                            # out on the road: the trial's end note has done its job
+	if stage == "free":
+		caption.text = ""                            # through a door or out on the road: the after-Wren note has done its job
 	me.pos = Vector2(me.tile) * TILE
 	me.path.clear()
 	if partner:
@@ -699,7 +728,7 @@ func _process(dt: float) -> void:
 		maren.right = maren.face.x > 0
 		say("maren", "There you are! You must be the new tamer. I'm Maren. I keep the ranch.")
 		say("maren", "Before anything else: the ranch register. Every tamer in the valley signs it. Write yourself in, love.")
-	var free_to_walk: bool = stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and not shop.visible and not book.visible and trans_t < 0.0
+	var free_to_walk: bool = stage in ["to_barn", "barn_choose", "walk_out", "free"] and not lessons.visible and not card.visible and not battle.visible and not shop.visible and not book.visible and trans_t < 0.0
 	if lines.is_empty() and free_to_walk and me.path.is_empty() and me.pos.distance_to(Vector2(me.tile) * TILE) < 0.5:
 		var d := Controls.held_dir()                 # keys, a gamepad, or the phone pad (WB6.1)
 		if d != Vector2i.ZERO:
@@ -780,6 +809,7 @@ func _unhandled_input(e: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 	var want_book: bool = Controls.pressed(e, "open_book") or (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT and satchel.visible and satchel.get_global_rect().has_point(satchel.get_global_mouse_position()))
+	if lessons.visible: return
 	if want_book and stage == "free" and lines.is_empty() and not battle.visible and not shop.visible and not book.visible:
 		_open_book()
 		get_viewport().set_input_as_handled()
@@ -791,28 +821,28 @@ func _unhandled_input(e: InputEvent) -> void:
 		advance()
 	elif stage == "free" and not (e is InputEventMouseButton) and not battle.visible and _talk_here():
 		pass
-	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _festival_here():
+	elif stage == "free" and not (e is InputEventMouseButton) and not lessons.visible and not card.visible and _festival_here():
 		pass
-	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _near_trough():
+	elif stage == "free" and not (e is InputEventMouseButton) and not lessons.visible and not card.visible and _near_trough():
 		_feed()
-	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _near_stall():
+	elif stage == "free" and not (e is InputEventMouseButton) and not lessons.visible and not card.visible and _near_stall():
 		_breed_here()
-	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and _near_bench():
+	elif stage == "free" and not (e is InputEventMouseButton) and not lessons.visible and not card.visible and _near_bench():
 		_open_bench()
-	elif stage == "free" and not (e is InputEventMouseButton) and not card.visible and not shop.visible and _near_keeper() != "":
+	elif stage == "free" and not (e is InputEventMouseButton) and not lessons.visible and not card.visible and not shop.visible and _near_keeper() != "":
 		_keeper_talk(_near_keeper())
 	elif stage == "free" and maren.where == map_name and (me.tile - maren.tile).length() <= 1.01 and not (e is InputEventMouseButton and Vector2i((get_global_mouse_position() / TILE).floor()) != maren.tile):
 		_maren_heals()
 	elif e is InputEventMouseButton:
 		_tap(get_global_mouse_position())
-	elif stage == "barn_choose" and not card.visible:
+	elif stage == "barn_choose" and not lessons.visible and not card.visible:
 		var s := _starter_beside_me()
 		if s:
 			_meet(s)
 
 ## Click or tap: walk there (around anything in the way). Tap a creature in the barn to walk up and meet it.
 func _tap(at: Vector2) -> void:
-	if not (stage in ["to_barn", "barn_choose", "walk_out", "free"] and not card.visible and not battle.visible and not shop.visible and not book.visible and trans_t < 0.0):
+	if not (stage in ["to_barn", "barn_choose", "walk_out", "free"] and not lessons.visible and not card.visible and not battle.visible and not shop.visible and not book.visible and trans_t < 0.0):
 		return
 	var goal := Vector2i((at / TILE).floor())
 	meet_after = null
@@ -1483,14 +1513,15 @@ func _update_ui() -> void:
 	cmat.set_shader_parameter("points", pts)
 	cmat.set_shader_parameter("count", count)
 
-# ---------------------------------------------------------------- the environment (Ninja Adventure tilesets, CC0)
-# Evan (2026-10-08) liked the pack's structures and nature. Figures stay our own (figures.gd). Each tile or object
-# is picked by its cell in a 16x16 grid: floor.png (ground), nature.png (trees, bushes, flowers), house.png (houses).
-const FLOOR := preload("res://assets/env/floor.png")
-const NATURE := preload("res://assets/env/nature.png")
-const HOUSE := preload("res://assets/env/house.png")
+# ---------------------------------------------------------------- the environment: Wildbond's own tiles
+# Evan chose "Our own tiles" (2026-10-09) so Wildbond has a look of its own, apart from Starfall's pack, and an art
+# direction that can grow (docs/art/wildbond-art-direction.md). tools/paint_tiles.gd paints assets/env/wild/: ground,
+# trees, bushes, flowers, the cottage, Maren's barn and water, each picked by its cell in a 16x16 grid.
+const FLOOR := preload("res://assets/env/wild/floor.png")
+const NATURE := preload("res://assets/env/wild/nature.png")
+const HOUSE := preload("res://assets/env/wild/house.png")
 const NOTICE := preload("res://assets/emote/notice.png")   # the "!" over a trainer who has seen you (Ninja Adventure, CC0)
-const WATER := preload("res://assets/env/water.png")
+const WATER := preload("res://assets/env/wild/water.png")
 const BARN_SPRITE := Rect2(400, 224, 64, 80)  # Maren's barn in house.png: measured pixel by pixel (4x5 tiles, door in the 2nd column)
 func _tex(tex: Texture2D, cell: Vector2i, size: Vector2i, at: Vector2, mod := Color.WHITE) -> void:
 	draw_texture_rect_region(tex, Rect2(at, Vector2(size) * 16.0), Rect2(Vector2(cell) * 16.0, Vector2(size) * 16.0), mod)
@@ -1642,6 +1673,16 @@ func _on_battle(result: String) -> void:
 		var lid := battle_story.substr(7)
 		battle_story = ""
 		_after_league(lid, result)
+		return
+	if battle_story.begins_with("spire:"):
+		var floor := int(battle_story.substr(6))
+		battle_story = ""
+		_after_spire(floor, result)
+		return
+	if battle_story.begins_with("rematch:"):
+		var rematch_who := battle_story.substr(8)
+		battle_story = ""
+		_after_warden_rematch(rematch_who, result)
 		return
 	if battle_story.begins_with("trainer:"):
 		var who := battle_story.substr(8)
@@ -1998,6 +2039,8 @@ func _wild_table() -> Array:
 	var seasonal: Dictionary = DATA.MAPS[map_name].get("seasonal", {})
 	if seasonal.has(cal.season()):
 		return seasonal[cal.season()].wild
+	if DATA.MAPS[map_name].has("wild"):
+		return DATA.MAPS[map_name].wild
 	return DATA.BIOMES[DATA.MAPS[map_name].biome].wild
 
 func _maren_data() -> Dictionary:
@@ -2364,8 +2407,8 @@ func _draw_water(x: int, y: int, o: Vector2, n: int) -> void:
 		_tex(WATER, Vector2i(11, 3), Vector2i.ONE, o)                              # a lily pad on the pond
 	elif n == 7 and int(t * 1.5 + x) % 3 == 0:
 		_tex(WATER, Vector2i(11, 2), Vector2i.ONE, o)                              # a glint of light
-	var shore := Color("d8c088")
-	var edge := Color("4a6a8a")
+	var shore := Color("e0c896")                    # the art direction's sand and deep water (docs/art)
+	var edge := Color("2f5f7e")
 	if tile_at(Vector2i(x, y - 1)) not in ["~", "j", "q", "b"]:
 		draw_rect(Rect2(o, Vector2(16, 3)), shore); draw_rect(Rect2(o + Vector2(0, 3), Vector2(16, 1)), edge)
 	if tile_at(Vector2i(x, y + 1)) not in ["~", "j", "q", "b"]:
@@ -2484,7 +2527,7 @@ func _maren_heals() -> void:
 	_festival_invite()
 
 func _satchel_shown() -> bool:
-	return stage == "free" and not battle.visible and not book.visible and not shop.visible
+	return stage == "free" and not lessons.visible and not battle.visible and not book.visible and not shop.visible
 
 ## Each badge's colour, pinned to the satchel strap and shown in the field book (the element of its Warden's town).
 const BADGE_COL := { "thorn": Color("5d9a3e"), "tide": Color("3a8fd8"), "ember": Color("e0602a"), "beacon": Color("e8c84a"),
@@ -2735,6 +2778,110 @@ func _after_trainer(who: String, result: String) -> void:
 	else:
 		_after_wild("lost")
 
+# ---------------------------------------------------------------- post-Champion Spire and Warden rematches (WB5.1)
+func _postgame_open() -> bool:
+	return story_done.has("leagueEnding")
+
+func _grown_for_level(id: String, level: int) -> String:
+	var out := id
+	var guard := 0
+	while DATA.SPECIES.get(out, {}).has("evo") and level >= int(DATA.SPECIES[out].evo.at) and guard < 4:
+		out = str(DATA.SPECIES[out].evo.to)
+		guard += 1
+	return out
+
+func _spire_floor_data(floor: int) -> Dictionary:
+	var areas := ["thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch"]
+	var area: String = areas[(floor - 1) % areas.size()]
+	var level := mini(100, 74 + maxi(1, floor))
+	var pool: Array = DATA.BIOMES[DATA.MAPS[area].biome].wild.map(func(w): return str(w[0])).filter(func(id): return not bool(DATA.SPECIES[id].get("unique", false)))
+	var foes: Array = []
+	for i in 3:
+		foes.append(_grown_for_level(pool[(floor + i * 2) % pool.size()], level))
+	return { "area": area, "level": level, "team": foes }
+
+func _spire_talk(_n: Mover) -> void:
+	if not _postgame_open():
+		say("orla", "The light is for Champions. Finish your league journey first; then come back with the team that carried you.")
+		return
+	if not spire_active:
+		spire_floor = 0
+		spire_active = true
+		for c in team: c.hp = R.stats(c).hp
+		say("orla", "A climb begins rested. Every fifth floor has water and a quiet bench. Leave whenever your partners need the road again.")
+	else:
+		say("orla", "Floor %d is behind you. Your best is %d. Ready for the next question?" % [spire_floor, spire_best])
+	then_do = _spire_fight
+
+func _spire_fight() -> void:
+	if not spire_active or not _postgame_open() or map_name != "spire":
+		return
+	if team.filter(func(c): return c.hp > 0).is_empty():
+		spire_active = false
+		spire_floor = 0
+		say("orla", "That is enough for this climb. Your partners come first.")
+		return
+	var floor := spire_floor + 1
+	var data := _spire_floor_data(floor)
+	var foes: Array = []
+	for id in data.team:
+		foes.append(R.make(id, int(data.level), { "rar": mini(3, 1 + int(floor / 10)) }, rng))
+		seen[id] = true
+	battle_story = "spire:" + str(floor)
+	battle.max_level = 100
+	battle.open("trainer", team, foes, "Spire floor %d" % floor)
+
+func _after_spire(floor: int, result: String) -> void:
+	if not spire_active or floor != spire_floor + 1:
+		return
+	if result != "won":
+		spire_active = false
+		spire_floor = 0
+		for c in team: c.hp = R.stats(c).hp
+		say("orla", "That is enough for this climb. Your best floor is safe; your team gets the bench and the water.")
+		return
+	spire_floor = floor
+	spire_best = maxi(spire_best, floor)
+	var coins := 180 + floor * 20
+	bag.coins += coins
+	bag.lures += 2
+	say("", "Spire floor %d cleared: %d coins and 2 lures." % [floor, coins])
+	if floor % 5 == 0:
+		for c in team: c.hp = R.stats(c).hp
+		say("orla", "Five floors together. Water, a quiet bench, and a full rest before you choose whether to climb again.")
+	else:
+		say("orla", "Talk to me when your partners are ready for the next floor.")
+
+func _start_warden_rematch(n: Mover) -> void:
+	if team.filter(func(c): return c.hp > 0).is_empty():
+		say(n.id, "Your partners need rest before we ask anything more of them.")
+		return
+	var d: Dictionary = npc_info[n.id].data
+	var tier := int(rematch_wins.get(n.id, 0)) + 1
+	var team_data: Array = d.get("team", [])
+	var foes: Array = []
+	for t2 in team_data:
+		var level := mini(100, int(t2[1]) + 8 + (tier - 1) * 3)
+		var id := _grown_for_level(str(t2[0]), level)
+		foes.append(R.make(id, level, { "rar": mini(3, tier) }, rng))
+		seen[id] = true
+	say(n.id, "Champion. Our last battle taught us something. Let us see what changed since then.")
+	then_do = func():
+		battle_story = "rematch:" + n.id
+		battle.max_level = 100
+		battle.open("trainer", team, foes, "%s · rematch %d" % [DATA.CAST.get(n.id, {}).get("name", n.id.capitalize()), tier])
+
+func _after_warden_rematch(who: String, result: String) -> void:
+	if result != "won":
+		say(who, "Good. A rematch should give both teams something to carry home. Rest, then come find us again.")
+		return
+	var tier := int(rematch_wins.get(who, 0)) + 1
+	rematch_wins[who] = tier
+	var coins := 240 + tier * 60
+	bag.coins += coins
+	say(who, "Stronger than last time, and still listening. Come back when you want the next version of this battle.")
+	say("", "Warden rematch tier %d cleared: %d coins." % [tier, coins])
+
 ## Where to go next, in Maren's words, by the badges you hold (the field book shows it; her letters mention it).
 const WHERE_NEXT := [
 	"Warden Isolde keeps the Thorn Badge, up the north road in Thornwood. Show her what you and {starter} can do.",
@@ -2778,10 +2925,18 @@ func _letter_step() -> void:
 
 ## Orders people teach you (battle.gd ORDERS), after you've earned their badge. More teachers come with more areas.
 const TEACHERS := {
+	"thorn": { "order": "shelter", "name": "Shelter", "lines": ["Brace together before a heavy hit. Shelter buys your partner a moment."] },
+	"tide": { "order": "rain", "name": "Rain Call", "lines": ["Soak a foe, then let an Ember partner turn the water to steam."] },
+	"beacon": { "order": "tailwind", "name": "Tailwind", "lines": ["A quick partner can make room for the next. Tailwind lifts the whole team."] },
+	"reed": { "order": "snare", "name": "Hold the Line", "lines": ["Roots slow a foe. Give your partner time to choose the next step."] },
+	"echo": { "order": "expose", "name": "Spot the Gap", "lines": ["Watch for a gap. Expose a foe, then let your partner take the opening."] },
+	"loom": { "order": "mend", "name": "Shared Care", "lines": ["Let each partner catch its breath. Shared Care helps everyone recover."] },
+	"horizon": { "order": "renew", "name": "Fresh Start", "lines": ["When every plan is tangled, clear the harmful effects and start together."] },
 	"ember": { "order": "steady", "name": "Steady", "lines": [
 		"Before you go. Your creatures fight hard, but they panic when the poison takes or their legs go slow. I've watched it.",
 		"Speak low. Slow. Let them hear you're not afraid, and they won't be either. Up here we call it Steady. Use it." ] },
 }
+var lessons: Control
 var taught: Array = []                       # orders you've been taught (saved)
 
 ## Talking to someone beside you: a trainer you've beaten, a Warden, or a sign in front of you.
@@ -2797,9 +2952,14 @@ func _talk_here() -> bool:
 			if known != "" and not story_done.has("her:" + n.id):
 				story_done["her:" + n.id] = true       # they recognise your family, once (T45 lines, from the game data)
 				say(n.id, _fill(known))
-			if info.warden and info.beaten and story_done.has("leagueEnding") and info.data.get("byStory", {}).has("leagueEnding"):
-				for l in info.data.byStory.leagueEnding:      # every Warden welcomes the Champion back (T54)
+			if info.data.get("tower", "") == "keeper":
+				_spire_talk(n)
+			elif info.warden and info.beaten and story_done.has("leagueEnding") and not story_done.has("championGreeting:" + n.id) and info.data.get("byStory", {}).has("leagueEnding"):
+				story_done["championGreeting:" + n.id] = true
+				for l in info.data.byStory.leagueEnding:      # first return: the Champion welcome remains a conversation
 					say(l[0], _fill(l[1]))
+			elif info.warden and info.beaten and story_done.has("leagueEnding"):
+				_start_warden_rematch(n)
 			elif info.warden and info.beaten:
 				say(n.id, _fill(DATA.MAPS[map_name].get("wardenDone", "The gate is yours, {name}.")))
 			elif not info.warden and not info.data.has("trainer"):
@@ -2859,7 +3019,7 @@ func _notification(what: int) -> void:
 		save_game()
 
 func save_game() -> void:
-	if no_save or stage != "free" or battle.visible or not lines.is_empty() or trans_t >= 0.0:
+	if no_save or stage != "free" or battle.visible or lessons.visible or not lines.is_empty() or trans_t >= 0.0:
 		return
 	var look := {}
 	for k in my_look:
@@ -2872,6 +3032,7 @@ func save_game() -> void:
 		"badges": badges, "seen": seen, "bonded": bonded, "items": got_items, "beaten": beaten,
 		"restore": restore.map(func(r): return { "where": r.where, "x": r.at.x, "y": r.at.y, "goal": r.goal }),
 		"explored": explored_in, "story": story_done, "retry": story_retry, "egg": egg, "gear": gear_owned, "taught": taught, "letter": [letter_steps, letters], "calendar": cal.to_dict(), "festival": { "done": fest_done, "keep": keepsakes, "flowers": flowers }, "league": league_room,
+		"spire": { "floor": spire_floor, "best": spire_best, "active": spire_active }, "rematches": rematch_wins,
 		"map": map_name, "x": me.tile.x, "y": me.tile.y, "partner": partner.id if partner else "" }
 	SafeSave.write(save_path, d)                 # a spare file first, the last good save kept as a backup
 
@@ -2917,8 +3078,16 @@ func _load_game() -> bool:
 	story_done = d.get("story", {})
 	story_retry = d.get("retry", {})
 	taught = Array(d.get("taught", []))
+	for earned in badges:
+		if TEACHERS.has(earned) and not TEACHERS[earned].order in taught:
+			taught.append(TEACHERS[earned].order)
 	cal.from_dict(d.get("calendar", {}))
 	league_room = int(d.get("league", 0))
+	var sz: Dictionary = d.get("spire", {})
+	spire_floor = int(sz.get("floor", 0))
+	spire_best = int(sz.get("best", 0))
+	spire_active = bool(sz.get("active", false)) and story_done.has("leagueEnding")
+	rematch_wins = d.get("rematches", {})
 	var fz: Dictionary = d.get("festival", {})
 	fest_done = fz.get("done", {})
 	keepsakes = fz.get("keep", {})
@@ -3081,6 +3250,7 @@ const MOUNTAINS := {
 	"hollowecho": { "rock": Color("7d8576"), "turf": Color(0.40, 0.49, 0.38, 0.30) },
 	"farwatch": { "rock": Color("7a8a8c"), "turf": Color(0.45, 0.55, 0.54, 0.28) },
 	"league": { "rock": Color("a8a49a"), "turf": Color(0.55, 0.60, 0.58, 0.22) },
+	"spire": { "rock": Color("8a9698"), "turf": Color(0.48, 0.58, 0.58, 0.24) },
 }
 var CLIFF := Color("8a7464")
 var TURF := Color(0.65, 0.54, 0.41, 0.32)
@@ -3349,6 +3519,7 @@ func _open_bench() -> void:
 		story_done["bench"] = true
 		say("maren", "My old workbench! I make harnesses and charms for the ranch creatures. Shells from the coast, glass from Emberfall, a bell or two.")
 		say("maren", "Bring whoever walks with you, and they can try things on. Each piece does one thing well. I'll make what you need for a few coins.")
+		say("maren", "Or choose Practice to remember a different move. Bring up to four, keep an attack, and let the others rest here. You never forget them.")
 		then_do = _open_bench
 		return
 	var ids := R.GEAR.keys()
@@ -3363,14 +3534,16 @@ func _open_bench() -> void:
 	page.note = "%s. %s %s %s" % [g.name, g.text, wearing, "You have %d spare." % spare if spare > 0 else ""]
 	var act := "Take it off" if str(c.get("gear", "")) == id else ("Put it on" if int(gear_owned.get(id, 0)) > 0 else "Have it made (%d coins)" % int(g.cost))
 	card_mode = "bench"
-	card.open(c.sp, page, ["Previous", act, "Next", "Done"])
+	card.open(c.sp, page, ["Practice", act, "Next", "Done"])
 
 func _bench_pick(i: int) -> void:
 	var ids := R.GEAR.keys()
 	var id: String = ids[bench_i % ids.size()]
 	var c: Dictionary = team[0]
 	match i:
-		0: bench_i = (bench_i + ids.size() - 1) % ids.size()
+		0:
+			lessons.open(team)
+			return
 		2: bench_i = (bench_i + 1) % ids.size()
 		1:
 			if str(c.get("gear", "")) == id:
@@ -3509,7 +3682,7 @@ var evolving: Dictionary = {}
 var evolve_to := ""
 
 func _check_evolution() -> void:
-	if stage != "free" or not lines.is_empty() or battle.visible or card.visible or shop.visible or book.visible or trans_t >= 0.0:
+	if stage != "free" or not lines.is_empty() or lessons.visible or battle.visible or card.visible or shop.visible or book.visible or trans_t >= 0.0:
 		return
 	var ctx := { "place": str(DATA.MAPS.get(map_name, {}).get("biome", map_name)), "team": team.map(func(x): return x.sp) }
 	for c in team:
@@ -3557,7 +3730,7 @@ func _take_along(ri: int, ti: int) -> void:
 ## how things look (text size) or run (battle pace).
 func _thumbs_tick() -> void:
 	touch.mode = settings.buttons()
-	var menus := battle.visible or book.visible or shop.visible or card.visible or register.visible or title.visible or howto.visible
+	var menus := lessons.visible or battle.visible or book.visible or shop.visible or card.visible or register.visible or title.visible or howto.visible
 	touch.pad_on = not menus and lines.is_empty() and trans_t < 0.0 and stage in ["to_barn", "barn_choose", "walk_out", "free"]
 	touch.word = action_word()
 	touch.btn_on = not menus and trans_t < 0.0 and touch.word != ""
@@ -3617,7 +3790,7 @@ func _music_key() -> String:
 	return map_name
 
 ## Places that share a tune play the same file, so the game carries each track once (a smaller web download).
-const SAME_TUNE := { "sunthread": "saltmarsh", "farwatch": "barn" }   # Sunny, and Peaceful
+const SAME_TUNE := { "thornwood_route": "thornwood", "thornwood_grove": "thornwood", "sunthread": "saltmarsh", "farwatch": "barn", "spire": "barn" }   # one Thornwood theme across its connected maps; Sunny and Peaceful elsewhere
 
 func music_path(key: String) -> String:
 	return "res://assets/music/%s.ogg" % SAME_TUNE.get(key, key)
