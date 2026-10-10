@@ -98,6 +98,31 @@ async function persisted(page, test, label) {
   await shot(page, 'failed-persistence');
   throw new Error(label + ': last save ' + JSON.stringify(save));
 }
+async function persistedInBrowser(page, moves) {
+  for (let i = 0; i < 30; i++) {
+    await page.waitForTimeout(500);
+    const stored = await page.evaluate(() => new Promise((resolve, reject) => {
+      const request = indexedDB.open('/userfs');
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        const db = request.result;
+        const transaction = db.transaction('FILE_DATA', 'readonly');
+        const file = transaction.objectStore('FILE_DATA').get('/userfs/godot/app_userdata/Wildbond (Godot trial)/journey.json');
+        file.onerror = () => { db.close(); reject(file.error); };
+        file.onsuccess = () => {
+          const contents = file.result?.contents;
+          db.close();
+          resolve(contents ? JSON.parse(new TextDecoder().decode(contents)) : null);
+        };
+      };
+    }));
+    if (stored && JSON.stringify(stored.team[0].moves) === JSON.stringify(moves)) {
+      check(true, 'Godot persisted the chosen moves to browser storage before reload');
+      return;
+    }
+  }
+  throw new Error('Chosen moves did not reach browser storage within fifteen seconds');
+}
 async function continueJourney(page) {
   await press(page, 'Enter');
   await page.waitForTimeout(600);
@@ -141,6 +166,7 @@ async function continueJourney(page) {
       await press(page, 'Escape');
       const selected = await persisted(page, d => (d.team[0].moves || []).length === 4 && d.team[0].moves.includes('packHunt'), 'a fourth move chosen through web practice saves at ' + tag);
       check(selected.bag.coins === 321 && selected.team[0].lvl === 30, 'practice preserves money and level at ' + tag);
+      await persistedInBrowser(page, selected.team[0].moves);
       // Reload without fixture injection: this checks browser persistence, not a repeated preload.
       await page.unroute('**/play/wildbond/');
       await page.reload();
