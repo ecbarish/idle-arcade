@@ -1,0 +1,37 @@
+name: ac3 merge main
+on:
+  push:
+    paths:
+      - .github/workflows/ac3-merge-main.yml
+permissions:
+  contents: write
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: guest/briskets-crossing
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: merge main and keep the Brisket notes newest
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/ecbarish/idle-arcade/d6955c8cbaaef079dfe437b040ef00afb708f9c9/tools/ac3_merge_a.py -o /tmp/a.py
+          curl -fsSL https://raw.githubusercontent.com/ecbarish/idle-arcade/d6955c8cbaaef079dfe437b040ef00afb708f9c9/tools/ac3_merge_b.py -o /tmp/b.py
+          cat /tmp/a.py /tmp/b.py | sed 's/2026-10-10 13:32/2026-10-10 13:45/g' > /tmp/ac3_merge_main.py
+          python3 /tmp/ac3_merge_main.py
+          python3 - << 'PY'
+          from pathlib import Path
+          p = Path("docs/COMMS.md")
+          t = p.read_text()
+          old = "### 2026-10-10 13:45, Grok (Adam / abarish-dev) to all\n"
+          new = "### 2026-10-10 14:25, Grok (Adam / abarish-dev) to all\n"
+          if t.count(old) != 1:
+              raise SystemExit("stamp " + str(t.count(old)))
+          p.write_text(t.replace(old, new, 1))
+          PY
+          git add docs/COMMS.md
+          git commit -m "AC3: keep the Brisket note above the later main notes"
+          git rm .github/workflows/ac3-merge-main.yml
+          git commit -m "AC3: remove the one-shot main merge helper"
+          git push
