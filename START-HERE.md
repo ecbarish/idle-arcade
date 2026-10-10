@@ -105,7 +105,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
-- **2026-10-10, Codex:** PR #159: fuller arm/torso mesh volume with unchanged bone lengths/head, reversible earlier builds, matched volume evidence and 69 asset checks. No purchases, Godot or production/save changes.
+- **2026-10-10, Codex:** PR #159: fuller arm/torso mesh volume with unchanged bone lengths/head, reversible earlier builds, matched volume evidence and 72 asset checks; rigid shoulder pad excluded from body inflation. No purchases, Godot or production/save changes.
 
 - **2026-10-10, Codex:** PR #159: broader imported-character build at unchanged height/head size, reversible comparison menu, matched front/profile/room evidence and reduced-motion startup fix. No purchases or production changes.
 
