@@ -15,11 +15,12 @@ Road mask 0 is a closed clearing; 15 is a crossing. Matching ports have pixel-id
 
 `ground.json` provides every source rectangle and the road bits. Ground is walkable, height zero. Stone strips are decorative overlays; building collision must be set from the building's footprint in SF2.6, not by treating a complete ground tile as a wall.
 
-The review patch is [24×14 tiles at native resolution](../../../../../docs/art/starfall/ground-patch-1x.png). The [contact sheet](../../../../../docs/art/starfall/ground-contact.png) shows a road bend, junction, crossing, square, joined stone footing and a 16×24 scale person. The person is a review marker, not a new character asset. These are atlas/layout previews, not screenshots of a wired-in game.
+The review patch is [24×14 tiles at native resolution](../../../../docs/art/starfall/ground-patch-1x.png). The [contact sheet](../../../../docs/art/starfall/ground-contact.png) shows a road bend, junction, crossing, square, joined stone footing and a 16×24 scale person. The person is a review marker, not a new character asset. These are atlas/layout previews, not screenshots of a wired-in game.
 
-Regenerate or verify from any directory:
+Regenerate or verify from the repository root:
 
     python tools/art/starfall_ground.py
     python tools/art/starfall_ground.py --check
 
 Verification checks the approved palette, all matching road-edge combinations and byte-identical generated output. The patch mixes moss variants without visible tile boundaries. Art-direction acceptance is required before merge; wiring, camera, buildings and the frontier layout belong to SF2.6. These files do not alter the current game, saves or web build.
+
