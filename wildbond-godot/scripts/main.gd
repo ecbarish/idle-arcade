@@ -363,7 +363,7 @@ func _after_talk() -> void:
 			bonded[partner.id] = true
 			seen[rival_c.sp] = true
 			wren.path = route(wren.tile, Vector2i(10, 0))        # off to Thornwood, already running
-			caption.text = "End of the trial. Walk around Larkhaven with %s." % _partner_name()
+			caption.text = "%s walks with you now. The north road leads to Thornwood." % _partner_name()
 
 func _on_signed(look: Dictionary) -> void:
 	# the ink dries and colour runs into you: you are the one bright thing in the faded valley
@@ -629,8 +629,8 @@ func _switch() -> void:
 		me.tile = BARN_DOOR + Vector2i.DOWN
 		me.face = Vector2i.DOWN
 	me.where = trans_to
-	if stage == "free" and trans_at.x >= 0:
-		caption.text = ""                            # out on the road: the trial's end note has done its job
+	if stage == "free":
+		caption.text = ""                            # through a door or out on the road: the after-Wren note has done its job
 	me.pos = Vector2(me.tile) * TILE
 	me.path.clear()
 	if partner:

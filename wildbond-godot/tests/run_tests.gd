@@ -236,6 +236,7 @@ func _run() -> void:
 	check(main.team[0].hp == main.R.stats(main.team[0]).hp, "Maren patches your team up")
 	talk_through()
 	check(main.stage == "free", "after Wren you're free")
+	check(main.caption.text != "" and not "trial" in main.caption.text.to_lower() and main._partner_name() in main.caption.text, "the note after Wren says who walks with you, not that the trial has ended (%s)" % main.caption.text)
 	var before: Vector2i = main.me.tile
 	for d in [Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP]:
 		if main.walkable(main.me.tile + d):
@@ -248,6 +249,7 @@ func _run() -> void:
 	main._step(Vector2i.UP)
 	tick(1.0)
 	check(main.map_name == "thornwood_route" and main.me.tile == Vector2i(13, 16), "the north road opens onto Thornwood Trail, arriving where the route says")
+	check(main.caption.text == "", "out on the road, the note after Wren is gone")
 	check(main.partner.where == "thornwood_route", "your partner comes onto the trail too")
 	check(main.DATA.MAPS.thornwood_route.exits.N.to == "thornwood" and main.DATA.MAPS.thornwood.exits.S.to == "thornwood_route", "WD4a: the trail and Thornwood settlement are separate connected maps")
 	check(main.DATA.MAPS.thornwood_route.exits.E.requiresElement == "Stone" and main.DATA.MAPS.has("thornwood_grove"), "WD4a: Old Root Grove is a return spot behind a Stone-partner gate")
@@ -905,6 +907,21 @@ func _run() -> void:
 	check(main.lines.size() >= 2 and main.lines[0].who == "maren", "the first time, Maren explains her workbench")
 	talk_through()
 	check(main.card.visible and main.card_mode == "bench" and main.card.buttons.size() == 4, "then whoever walks with you tries gear on (%s)" % [main.card.buttons])
+	var coins_was: int = int(main.bag.coins)
+	main.bag.coins = 0
+	var cut: Array = []
+	for gi in main.R.GEAR.size():                  # every piece, with "Have it made (N coins)" showing: no button's words cut off
+		main.bench_i = gi
+		main._open_bench()
+		for bi in main.card.buttons.size():
+			if main.card._label_w(bi, main.card._btn_size()) > main.card._btn(bi).size.x - 2.0:
+				cut.append(main.card.buttons[bi])
+		var last: Rect2 = main.card._btn(main.card.buttons.size() - 1)
+		if last.end.x > 353.0:
+			cut.append("row runs off the page")
+	check(cut.is_empty(), "every workbench button's words fit inside it (%s)" % [cut])
+	main.bag.coins = coins_was
+	main.bench_i = 0
 	main.card.visible = false
 	main.bench_i = main.R.GEAR.keys().find("harness")
 	main._open_bench()
