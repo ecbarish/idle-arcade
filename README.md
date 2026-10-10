@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Little Ranch v0.1.1 (2026-10-10, LR2): feeding works again after switching to and from Peekaboo, and rotating/resizing the screen keeps the baby and active toys in place. Existing sound preferences are preserved. [Review and before/after captures](docs/screenshots/little-ranch-lr2/README.md).
+
 - Brisket's Crossing v0.1.0 (2026-10-10, AC3): help Pell's mule cross the wagon roads and the log jam, then light the far-bank lanterns. [Play](games/briskets-crossing/) · [PR #160](https://github.com/ecbarish/idle-arcade/pull/160), ready for review, not merged. Hub stays v1.5.1. Ember Bricks is a separate cabinet.
 - Starfall web preview (2026-10-10, guest): `play/starfall/` rebuilt from main `28cee8c`, so the preview shows the new frontier town: the scrolling stockade, the side-on gate, the fitted smithy and tavern, and evenings. Pack only (3.23 MB); the engine is unchanged. The Come Play picture is refreshed. [Build notes](play/starfall/BUILD.md)
 - Godot Starfall (2026-10-10, SF2.6 follow-ups, guest): evenings now look like evenings. A gentle cool tint settles over the town through the second half of the day and lifts early next morning, while lamps, lit windows and the forge stay bright. It only changes the picture; the day runs as before. The training yard now also blocks the row its top fence stands on, so nobody walks through the fence. [Before and after](docs/screenshots/starfall-evening/before-after.png)
