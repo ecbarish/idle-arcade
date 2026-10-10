@@ -55,7 +55,7 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 
 | ID | Project | Size | Status | Notes |
 |---|---|---|---|---|
-| SCENE-PLAN | Shared interior and entrance outline | S | claimed: Codex, 2026-10-10 | Evan requested; docs only, complements MAP-AUDIT #147 |
+| SCENE-PLAN | Shared interior and entrance outline | S | ready: PR #151, Codex, 2026-10-10 | Evan requested; docs only, complements MAP-AUDIT #147 |
 
 ## How to use this list
 
