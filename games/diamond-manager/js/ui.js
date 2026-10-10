@@ -100,7 +100,7 @@ function showOffseasonOrNext(){
 function desc(p){ return (p.pitcher?'pitcher':p.pos)+', overall '+overall(p)+', age '+p.age+', '+money(p.salary)+' a season'; }
 function introNote(){
   note('<div class="who">Iona Vale, field manager</div><h2>Welcome to Lamplight Field</h2><p>The owner hired you as general manager of the Brackenport Lanterns, the worst club in the league. I run the dugout; you build the team.</p>'+
-    '<ul><li><b>Play ball</b> to watch our next game. Speed it up or skip to the final score whenever you like.</li><li><b>Front office</b> is where you set the batting order, trade with the other five clubs, sign free agents and spend the gate money on the ballpark.</li><li>Every player has ratings from 0 to 99. Better ratings win more games. Thirty games make a season; the top two meet in a final.</li></ul>'+
+    '<ul><li><b>Play ball</b> to watch our next game. Speed it up or skip to the final score whenever you like.</li><li><b>Front office</b> is where you set the batting order, trade with the other five clubs, sign free agents and spend the gate money on the ballpark.</li><li>The owner\'s budget is '+money(you().budget)+' and the payroll is '+money(payroll(you()))+', so there is room for '+money(you().budget-payroll(you()))+' of new players. The <b>Free agents</b> page is the quickest way to get better.</li><li>Every player has ratings from 0 to 99. Better ratings win more games. Thirty games make a season; the top two meet in a final.</li></ul>'+
     '<p class="small">Keys: Space plays the next game or continues, F opens the front office, Escape closes it.</p>',
     '<button class="primary" id="n-ok">Let\'s play ball</button>');
   L.intro=false; save();
