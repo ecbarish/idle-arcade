@@ -164,6 +164,7 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
   data file Claude wires in (`starfall-godot/data/stories.json`; ChatGPT may write that one data file).
 - [ ] ART-SF-1 [any] (art review: [PR #134](https://github.com/ecbarish/idle-arcade/pull/134), Adam / abarish-dev, 2026-10-10) Starfall frontier ground: 16 px moss variants, joining mud roads, packed-earth square and stone footing; palette-only atlas plus scale/contact patch; art review before SF2.6 integration.
 - [ ] ART-SF-2 [any] (art review: [PR #135](https://github.com/ecbarish/idle-arcade/pull/135), Adam / abarish-dev, 2026-10-10) Frontier palisade, open/shut gate and lit/unlit watchtower; approved palette, footprint metadata and scale contact sheet; art review before SF2.6 integration.
+- [ ] ART-SF-3 [any] (claimed: Adam / abarish-dev, 2026-10-10) Pine edge: three pine sizes, stumps, ferns and rocks; palette-only pines.png and sideways-tiling forest_edge.png, footprint metadata and contact scene behind ART-SF-2 palisade; art review before integration.
 - [ ] SF2.6 [Claude] Its own place (GR-5): a frontier stockade look and road layout instead of Larkhaven's; a map
   that scrolls. Before SF3.1. *The look is set (2026-10-09): docs/art/starfall.md (palette, sizes, footprints, mock-up); the
   pictures are tasks ART-SF-1 to 6 in QUEUE.md for any AI; wiring them in and the scrolling map stay here.*
