@@ -106,7 +106,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 ## Session log (newest first; one or two lines each)
 
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): Starfall evening tint and yard footprint (SF2.6 follow-ups, guest/starfall-evening-yard). Starfall Godot 152/0.
-- 2026-10-10 — Codex (Adam / abarish-dev): AC2.1 in [PR #163](https://github.com/ecbarish/idle-arcade/pull/163), Lighthouse Watch display/control polish: uniform square fit, accurate resized taps, 87 cabinet checks and nine touch/DPR cases; before/after captures. No balance/save/version change; ready for review, not merged.
+- 2026-10-10 — Codex (Adam / abarish-dev): AC2.1 in [PR #163](https://github.com/ecbarish/idle-arcade/pull/163), Lighthouse Watch display/control polish: uniform square fit, accurate resized taps, 87 cabinet checks and nine touch/DPR cases; before/after captures. Release v0.1.1 prepared at Adam's request; balance/save format unchanged. CI and merge self-check required before merging.
 
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): at Adam's request merged #162 (ART-SF-7: side-on west gate, 2-tile smithy and tavern, `a4afc54`) after a self-check (checks green; fit --check PASS; Starfall Godot 149/0; full suite 16/16 with Godot). Still open: Starfall's evening tint; play/starfall re-export.
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): ART-SF-7 in [PR #162](https://github.com/ecbarish/idle-arcade/pull/162): new `tools/art/starfall_fit.py` (--check) draws a side-on west gate and 2-tile smithy and tavern, now wired into Starfall. Starfall Godot 149/0. Not merged; Adam decides.

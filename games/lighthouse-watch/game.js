@@ -1,6 +1,6 @@
 /* Lighthouse Watch: original Saltmarsh lighthouse art, shared arcade sound and settings. */
 (function(){'use strict';
- const M=WatchModel,$=id=>document.getElementById(id),canvas=$('sea'),ctx=canvas.getContext('2d'),KEY='lighthouse-watch-save-v1',VERSION='0.1.0';
+ const M=WatchModel,$=id=>document.getElementById(id),canvas=$('sea'),ctx=canvas.getContext('2d'),KEY='lighthouse-watch-save-v1',VERSION='0.1.1';
  Arcade.validators[KEY]=o=>!!o&&o.v===1&&o.game==='lighthouse-watch'&&Array.isArray(o.scores);
  const raw=Arcade.load(KEY),valid=Arcade.validators[KEY](raw),save={v:1,game:'lighthouse-watch',scores:M.scores(valid?raw.scores:[]),sound:valid&&[0,1,2].includes(raw.sound)?raw.sound:0,scanlines:!!(valid&&raw.scanlines===true)};
  let state=null,demo=M.create(1,31),last=0,queuedFire=false,tapAt=null,padPause=false,padMove=false,entry=0,entries=[],uiPhase='title';
