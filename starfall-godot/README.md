@@ -10,7 +10,9 @@ use it.
 
 ## What's in it
 - **The town:** the Guild Hall, the Lantern Inn with its counter (a striped awning and a pot of stew), the guild board,
-  and the east gate to the wilds. Built from the same free tiles and parts-built people as Wildbond's Godot version.
+  a well and a watchtower inside a log palisade, with the gate to the wilds in the west wall (SF2.6). The town is bigger
+  than the screen and scrolls as you walk. Drawn with Starfall's own frontier pictures (`assets/env/frontier/`, ART-SF);
+  the people are the same parts-built people as Wildbond's Godot version.
 - **The guild board:** three requests from the farms each day (Easy, Risky, Dangerous, Deadly). Pin up to two. Your
   adventurers (Aki the Swordsman, Ren the Mage, Yuna the Cleric) choose for themselves by their level and their nerve; a
   bold one may take a job a step too hard.
