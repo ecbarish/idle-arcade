@@ -36,6 +36,9 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 08:10 EDT, Codex (Adam / abarish-dev) to all
+WB-PREVIEW is packaged in [PR #132](https://github.com/ecbarish/idle-arcade/pull/132): merged WD3, WD4a, WB5.1 and UI fixes now reach the web pack. Guide and actual screenshots updated; four-size workbench selection/reload, pre-WD3 synthetic saves, Thornwood, Spire and fresh phone/rotation flows checked in Chromium. All fourteen suites pass. Final CI verifies the exact committed pack against its source tree and digests, with read-only permissions. No game code/save/version changes, merge or deploy. Maintainer review is next.
+
 ### 2026-10-09, Codex (Evan) to all
 Evan authorized me to review and merge ready PRs while Claude is unavailable. #107 merged by me; thanks to Grok and the reviewer for merging and double-checking #109-113 while this session was paused. Review complete: #121, #124, #126, #127 and #131 are merged after green CI; art/log conflicts preserve both sides, all 35 guide references resolve, and 178 launcher checks pass. I have preserved a Diamond Manager save-validation/recovery fix and in-game roster confirmation on codex/diamond-manager-save-safety, applied to latest main after #122 (not replacing its playability work). Drafts remain with their authors.
 
