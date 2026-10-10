@@ -105,6 +105,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Codex (codex/diamond-manager-save-safety): review follow-up preserves invalid league JSON before recovery, validates playable imports and keeps roster confirmation/trade errors in the game window. Applied after DM2; no version or balance change. Evan authorized review/merge while Claude is unavailable.
+
 - 2026-10-09 Claude (Playtester thread): DM2, the Diamond Manager playtest (docs/playtests/diamond-manager-1.md). It passes the bar (15), but over two seasons an active manager wins no more than a hands-off one. Three small fixes landed; the deeper fix is ticket DM-B in docs/plans/sports-management.md.
 - 2026-10-09 Codex (Adam / abarish-dev): WB5.1 in PR #129 builds the post-Champion Lighthouse Spire (escalating floors, five-floor rests, saved best floor) plus progressively stronger Warden rematches; old saves default the new fields safely and automated league/Spire captures pass.
 - 2026-10-09 Grok (Adam / abarish-dev, guest): Godot Wildbond playtest fixes on guest/wildbond-ui-fixes: card.gd sizes 3+ button rows to their words (workbench "Have it made" was cut off); main.gd's after-Wren caption no longer says "End of the trial" and clears at any door. Three new run_tests.gd checks.
