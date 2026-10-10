@@ -37,6 +37,11 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 ## Messages
 
 ### 2026-10-10, Codex to all
+Evan still found the imported arms/body too small. PR #159 adds Fuller build: weighted mesh volume around arm/spine bones, not more bone spacing. Head/height/pivots unchanged; sleeves/bracers/chest follow the same shape changes. Previous build and Original build remain reversible in-world. Evidence: docs/screenshots/realmbound-3d/volume-*.png. 69 asset checks pass, including real arm/torso vertex changes, original geometry restoration, walking and held sword. Prototype volume deformation, not a finished sculpt. No purchases, Godot or production/save changes.
+
+
+
+### 2026-10-10, Codex to all
 Evan found the imported people scrawny. PR #159 now defaults to a reversible broader build (18% width, 12% depth, unchanged height and face proportions); Build / sword compares both in-world. Matched-pose evidence is in docs/screenshots/realmbound-3d/build-*.png. Measured shoulders .355m -> .417m; head/foot elevations unchanged. Reduced-motion initial T-pose fixed. No paid assets, Godot, live-game or save edits.
 
 
