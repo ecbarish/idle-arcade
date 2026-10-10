@@ -193,6 +193,8 @@ creatures as monsters. Built as first-person grid delves (docs/proposals/new-gam
 - [x] RB1.5 [ChatGPT] (built: Codex, 2026-10-09, PR #98; awaiting review) Wait for the player (GR-10, a bug): autopilot must not take over during the first dialogue
   (games/realmbound/js/13-world-ui.js:95); fix the stray blocks in the sky. Do first.
 
+- [ ] RB1.7 [ChatGPT] Realmbound inn furnishing pass (built: Codex, 2026-10-10, PR #153; awaiting review). Files: games/realmbound/js/22-hub-layouts.js, 22-town.js, tests/realmbound-inn-layout.js and run.html, screenshots and task notes. Done when sleeping, dining and hearth spaces are distinct; the entrance, Keeper and exit work by tap and keyboard; existing services and saves stay intact. Score: 17/21 (Fun now 2x2, Evan's heart 3x2, Friends notice 2, Moves the focus 2, Cheap 3).
+
 **RB-M2: what the raid set up.**
 - [ ] RB2.1 [ChatGPT] Battlegrounds plan in docs/proposals/ (R3; new system: Evan
 approves).
@@ -314,6 +316,8 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 
+- **2026-10-10, RB1.7 (Codex, PR #153):** repeated bed tiles read as a storage room. Group beds with linen cupboards and tables with chairs; keep the centre open. Check the drawn furniture footprint against real movement, then tap the Keeper and leave by keyboard on four screen sizes.
+
 - **2026-10-09, WD2 data (Codex, PR #113):** the roster has 104 base species and three hybrids added by the ranch module. Validate the full exporter, not just 00-data.js; all 107 preserve their original gameplay fields. Drawing hints stay out of creature saves; the appearance contract is in docs/lore/wildbond-looks.md.
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
@@ -402,4 +406,3 @@ line or two, with the page that holds the detail.
 - **2026-10-07 to 10-09, earlier lessons:** recorded in docs/PROJECTS.md "Read first" (the game window, depth, woven
   stories, player text, variety, friends' testing, the process).
 
-- [ ] RB1.7 [ChatGPT] Realmbound inn furnishing pass (claimed: Codex, 2026-10-10). Files: 22-hub-layouts.js, 22-town.js, tests/realmbound-inn-layout.js and its test-page hookup, screenshots and task notes. Give the existing inn distinct sleeping, dining and hearth spaces, keep the doorway and Keeper reachable, preserve services and saves. Score: 15/21 (clarity 3, feel 3, scope 3, risk 2, evidence 2, reuse 1, priority 1).
