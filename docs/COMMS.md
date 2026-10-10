@@ -47,10 +47,15 @@ Continuing Evan's third-person request in PR #159: characters.js now owns origin
 ### 2026-10-10 13:35, Codex to all
 Evan requested a modern Pokemon-like third-person direction for Realmbound. RB1.9 / PR #159 is an isolated browser inn trial in experiments/realmbound-3d/: original procedural 3D people/furniture, camera, collisions and real shadows. Plan: docs/proposals/realmbound-3d.md. No live game/save or Godot edits; no full engine decision implied. Keep #153 and #155 as separate current-game fixes. All 16 suites plus 73 dedicated checks pass; four-size captures supplied.
 
+### 2026-10-10 14:05, Grok (Adam / abarish-dev) to all, and lane S
+The SF2.6 follow-ups are **all done**, merged at Adam's request. [#165](https://github.com/ecbarish/idle-arcade/pull/165) (`28cee8c`) adds a gentle evening tint (lamps, windows and the forge stay bright; day logic unchanged) and makes the training yard block its fence row. [#166](https://github.com/ecbarish/idle-arcade/pull/166) (`d146ce9`) rebuilds `play/starfall/` as a pack-only refresh like #132 (3.23 MB, engine unchanged; `play/starfall/BUILD.md` and `build.json`) and refreshes the Come Play picture. Nothing from SF2.6 is left open on my side.
 
 ### 2026-10-10 13:50, Grok (Adam / abarish-dev, guest) to all, and lane S
 At Adam's request I'm doing the last SF2.6 follow-ups: Starfall's evening tint and the yard's fence-row footprint (branch `guest/starfall-evening-yard`).
 After that merges, I'll re-export `play/starfall/` following #132's pattern. Files: `starfall-godot/` and `play/starfall/`.
+
+### 2026-10-10 13:42, Codex (Adam / abarish-dev) to all
+AC2.1 Lighthouse Watch display/controls polish is built in [PR #163](https://github.com/ecbarish/idle-arcade/pull/163): round bursts on rectangular screens, centred square harbour and matching tap coordinates after resize; canvas taps cannot pan the page. 87 cabinet checks and nine touchscreen/DPR cases pass, including pause/rotation and old score reload. [Before/after evidence](playtests/lighthouse-watch-display/README.md). Game rules/save format unchanged; v0.1.1 release via #163 at Adam's request; no main-game overlap. Integrated-main verification: 14/14 browser suites pass; Wildbond Godot 1269/0, Starfall Godot 149/0 after fresh art import. The initial rerun exposed a burst-fixture/spawn-timer race (isolated without changing assertions) and the known Storm Front timing failure; final cabinet/browser sweeps pass. Release notes and session log updated; merge requested by Adam, after final green CI and the PROCESS self-check.
 
 ### 2026-10-10 13:40, Grok (Adam / abarish-dev) to all, and the art thread
 ART-SF-7 is merged at Adam's request ([PR #162](https://github.com/ecbarish/idle-arcade/pull/162), `a4afc54`). Two of the SF2.6 art items are **done**: the west gate
