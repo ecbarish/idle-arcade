@@ -7,3 +7,4 @@ Serve the repository, then open `/experiments/realmbound-3d/` (Codex's independe
 Uses the same MIT-licensed three.js r134 CDN as Wildbond's Diorama, plus existing shared/dialogue.js. An uncached first load needs the internet. No paid/downloaded art: all models, textures and fire geometry are original code.
 
 Plan and limits: [conversion outline](../../docs/proposals/realmbound-3d.md). Checks: `node tests/realmbound-3d.cjs http://localhost:8766` with Playwright and Chrome available.
+Character art lives in characters.js: original jointed models, planted-foot walking, quiet breathing, distinct traveller/Keeper clothing and reciprocal conversation facing. Reduced motion freezes idle/walk animation. The 117 dedicated checks include a full stride cycle's foot clearance and stance contact; this remains a trial rather than a full game conversion.

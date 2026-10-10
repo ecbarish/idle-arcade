@@ -13,7 +13,7 @@ The previous picture was perspective-drawn 2D. It suggests depth but is not most
 `experiments/realmbound-3d/` is a separate, walkable Lantern Rest art/control trial. Start the local server and visit that path. It never loads or writes player saves, and changes no live Realmbound scripts.
 
 - A 14x12-metre room with 3.2-metre walls. People are about 1.75 metres tall, beds 2.1 metres long. The clear centre aisle, two beds, tables, chairs, shelves and barrels have consistent physical dimensions.
-- Actual 3D people with front/rear views determined by mesh orientation, moving arms/legs, a backpack and visible facial geometry. These are original procedural placeholder models, not finished production character art or skeletal animation.
+- Actual 3D people with front/rear views determined by mesh orientation, jointed elbows/knees, grounded walking, tailored clothing, boots, a pack, layered hair and smaller facial features. Merran has grey hair, a beard and an apron; both people turn toward each other during conversation, with a restrained hand gesture. These are original rigid-joint procedural models, not finished production character art or skinned skeletal animation.
 - Camera-relative movement; a following camera, drag orbit, wheel zoom and reset. Camera rays and room bounds prevent walls obstructing the hero. Portrait mode uses a wider field of view.
 - Furniture and people have solid footprints. Approaching the existing Keeper, Merran, opens the shared portrait dialogue with his existing Lantern Rest welcome. No simulated rewards or progress.
 - An entrance/exit to a small outdoor landing. This is a presentation test, not a new canonical area.
@@ -29,7 +29,7 @@ Three.js supports the necessary perspective rendering and shadow maps ([renderer
 | Step | Deliverable | Keep / check |
 |---|---|---|
 | 1, now | Isolated inn/control trial | Review the camera, scale, readable floor paths and phone controls by playing. No production cutover. |
-| 2 | Character/art contract | Pick a recognisable Realmbound body style and palette; authored or rigged animation for idle, turn, walk, talk and combat. Validate front/back/profile views and grounded feet. Procedural shapes are placeholders. |
+| 2, first pass built | Character/art contract | Pick a recognisable Realmbound body style and palette; authored or rigged animation for idle, turn, walk, talk and combat. Validate front/back/profile views and grounded feet. Procedural shapes are placeholders. |
 | 3 | One town and road | Convert existing map data to spatial objects with height/footprint definitions. Keep authored services, NPC positions, entrances and names; test every door and route. Add camera occlusion handling for buildings/trees. |
 | 4 | Existing gameplay in that scene | Connect the current hero, inventory, quests, services and dialogue to the view adapter. Keep rules/saves separate from rendering; use actual saved fields and defaults, not a second copy of progression. |
 | 5 | One combat and dungeon slice | Show existing combat decisions and encounter state in 3D with readable effects, enemies and UI inside the game window. Play the opening to a first dungeon before extending the whole world. |
@@ -41,10 +41,17 @@ Before anyone connects the trial to production, check open PRs and COMMS. RB1.7 
 
 ## Evidence
 
-`node tests/realmbound-3d.cjs http://localhost:8766` runs 73 checks in isolated browser contexts. Covers 375x812, 1366x768, 1920x1080 and 3440x1440, real keyboard and touch input, collisions, camera bounds, shared dialogue, entry/exit, unchanged sentinel saves, animation, drag orbit, wheel zoom and library-load failure. Captures live in docs/screenshots/realmbound-3d/. All 16 existing suites pass using `node tools/run-all-checks.cjs`.
+`node tests/realmbound-3d.cjs http://localhost:8766` runs 117 checks in isolated browser contexts. Covers 375x812, 1366x768, 1920x1080 and 3440x1440, real keyboard and touch input, collisions, camera bounds, shared dialogue, entry/exit, unchanged sentinel saves, animation, drag orbit, wheel zoom and library-load failure. Additional rig checks sample 16 stride phases for planted feet and floor clearance, and verify reduced-motion freeze, no marching against collisions reciprocal conversation facing, and no horizontal sliding during straight stance steps. Captures live in docs/screenshots/realmbound-3d/. All 16 existing suites pass using `node tools/run-all-checks.cjs`.
 
 Headless browser checks are not a hardware performance guarantee. Judge camera comfort, art quality and motion by playing on Evan's actual desktop and phone. Known limits: simple procedural models/fire, an open-roof room, no full game integration, no audio in the trial, no pinch zoom, and no gamepad controls yet.
 
 ## An idea
 
 Keep the camera calm during conversation: turn the hero toward the speaker and use a small framing shift only when motion preferences allow. Make interiors feel inhabited through posture, props and a few purposeful animations before adding more rooms.
+## Character contract, first pass
+
+Original traveller and Keeper silhouettes use the same approximately 1.75-metre body: a readable coat, collar/scarf, belt, boots and a smaller face. The traveller carries a strapped leather pack; the Keeper wears an apron. Body geometry is built in characters.js, independent of room construction and controls. Elbows and knees are transform joints; two-bone leg placement keeps the stance foot near the floor and lifts the swing foot. Walk phase follows distance actually travelled, so collision cannot produce marching in place. Breathing moves the upper body only; reduced motion freezes it and the walk pose. Conversation uses the existing portrait scene, turns both characters and raises one hand gently, without changing the camera.
+
+The material helper interprets authored palette colours as sRGB before lighting, preventing the earlier pale look. More body types, expressions, race/class silhouettes, skinned meshes and production animation remain future work. The earlier trial front/back screenshots are preserved as before-characters-* for an honest comparison.
+
+Latest-main validation: the first Starfall run could not preload the newly merged frontier art in this clone's stale import cache. A headless editor import refreshed the local cache without source changes; the Starfall rerun passed all 152 checks. The other 15 suites passed on the same source state.

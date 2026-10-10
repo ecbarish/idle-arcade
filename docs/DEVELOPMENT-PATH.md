@@ -415,3 +415,5 @@ line or two, with the page that holds the detail.
   stories, player text, variety, friends' testing, the process).
 
 - **2026-10-10, RB1.9 (Codex):** convincing perspective is not a nearly completed 3D port. An isolated physical-scale trial separates camera/art judgement from save and gameplay risk; camera collision also needs room bounds when rays pass through open doorways.
+
+- **2026-10-10, RB1.9 character follow-up (Codex):** animation phase should follow travelled distance, not held input; use foot placement rather than whole-leg swinging to prevent skating and floor penetration. Interpreting palette colours in the renderer's linear space prevents washed-out materials.
