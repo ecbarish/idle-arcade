@@ -41,7 +41,7 @@
  box(porch,0,-.14,0,22,.25,22,mat('#68816a'));box(porch,0,-.02,0,3,.06,15,mat('#c4b391'));outsideWalls.push(box(porch,0,1.6,-5,14,3.2,.5,mat('#c4ad8b'),true));box(porch,0,1.1,-4.7,1.6,2.2,.1,darkWood);box(porch,0,3.45,-5,15,.3,2,darkWood);
  for(const x of [-7,7])for(const z of [-2,3,7]){cylinder(porch,x,.9,z,.18,.25,1.8,darkWood);sphere(porch,x,2.4,z,1,mat('#365e49'),1,1.25,1);solids.push({x,z,w:1.8,d:1.8,outside:true});}
  const hemi=new T.HemisphereLight('#dceaf5','#77543a',.9);scene.add(hemi);const sun=new T.DirectionalLight('#ffebc5',.9);sun.position.set(-5,9,4);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-12,right:12,top:12,bottom:-12,near:1,far:30});sun.shadow.bias=-.0005;sun.shadow.normalBias=.04;scene.add(sun);
- const hero=RealmTrialCharacters.create();hero.position.set(0,0,1.5);hero.rotation.y=Math.PI;scene.add(hero);const keeper=RealmTrialCharacters.create({keeper:true});keeper.position.set(-2,0,-2.5);keeper.rotation.y=.45;room.add(keeper);solids.push({x:-2,z:-2.5,w:.75,d:.75,outside:false});
+ const hero=RealmTrialCharacters.create();RealmTrialGear.prepare(hero);hero.position.set(0,0,1.5);hero.rotation.y=Math.PI;scene.add(hero);const keeper=RealmTrialCharacters.create({keeper:true});keeper.position.set(-2,0,-2.5);keeper.rotation.y=.45;room.add(keeper);solids.push({x:-2,z:-2.5,w:.75,d:.75,outside:false});
  const D=Dialogue.create({host,theme:'realmbound',get:()=>state.dialogue,set:v=>state.dialogue=v,cast:()=>({name:'Merran',title:'Keeper of the Lantern Rest',skin:'#e7b68f',hairCol:'#8c8980',shirt:'#56705b',beard:true}),auto:()=>false});
  let noticeUntil=0;function notice(text){document.querySelector('#notice').textContent=text;noticeUntil=performance.now()+4000;}
  function isBlocked(x,z){const max=state.outside?10:6.65,depth=state.outside?10:5.65;if(Math.abs(x)>max||Math.abs(z)>depth)return true;return solids.some(b=>b.outside===state.outside&&Math.abs(x-b.x)<b.w/2+.22&&Math.abs(z-b.z)<b.d/2+.22);}
@@ -65,5 +65,7 @@
  }
  function frame(){const dt=Math.min(clock.getDelta(),.035);update(dt,clock.elapsedTime);renderer.render(scene,camera);requestAnimationFrame(frame);}document.querySelector('#loading').hidden=true;scene.background.set('#51443a');scene.fog.color.copy(scene.background);frame();
  canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();document.querySelector('#loading').hidden=false;document.querySelector('#loading').textContent='3D graphics paused. Reload the trial to resume.';});
+ function outfits(){if(state.dialogue)return;keys.clear();D.play([['Merran','Try a travelling kit. These outfits are only for this art trial; your adventure and belongings stay as they are.']],i=>{if(i===undefined)return;const preset=RealmTrialGear.presets[i];RealmTrialGear.apply(hero,preset.gear);notice(preset.name+' — trial preview only.');},{choices:RealmTrialGear.presets.map(p=>p.name)});}
+ document.querySelector('#outfits').onclick=outfits;
  window.__rb3d={dialogue:D,state,hero,keeper,camera,renderer,scene,solids,isBlocked,interact,resetView,update,dimensions:{hero:1.75,bed:2.1,wall:3.2,room:[14,12]},teleport(x,z){hero.position.set(x,0,z);}};
 })();

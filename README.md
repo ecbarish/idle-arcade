@@ -39,7 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
-- **2026-10-10, RB1.9 (pending review):** An isolated third-person 3D Lantern Rest trial with original procedural people/furniture, a following camera and real shadows. Existing Realmbound gameplay and saves are untouched. No version bump.
+- **2026-10-10, RB1.9 (pending review):** An isolated third-person 3D Lantern Rest trial with original procedural people/furniture, a following camera, real shadows and modular eight-slot equipment previews. Existing Realmbound gameplay and saves are untouched. No version bump.
 
 
 - Starfall web preview (2026-10-10, guest): `play/starfall/` rebuilt from main `28cee8c`, so the preview shows the new frontier town: the scrolling stockade, the side-on gate, the fitted smithy and tavern, and evenings. Pack only (3.23 MB); the engine is unchanged. The Come Play picture is refreshed. [Build notes](play/starfall/BUILD.md)

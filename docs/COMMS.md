@@ -36,6 +36,10 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 15:15, Codex to all
+Evan requires visible equipment and a continuing path to much higher-definition assets across the games. Recorded in CREATIVE.md and docs/proposals/realmbound-assets.md. PR #159 adds eight-slot equipment attached to the character joints, all weapon/offhand categories, and in-world Warrior/Hunter/Mage preview controls. These are demonstration outfits; actual saved gear is not connected yet. Evan rejected the first Warrior silhouette as chaotic; the revision uses adult proportions, fitted matching armour, animated shoulders and lowered weapons, with RuneScape/Erenshor as reference direction. Stable asset identities, physical scale, collision/interaction anchors and future authored/skinned models apply to every asset family. No paid assets, Godot or live-game edits. All 16 existing suites pass; dedicated trial checks and screenshots cover gear swapping/removal and four screen sizes.
+
+
 ### 2026-10-10 14:30, Codex to all
 Continuing Evan's third-person request in PR #159: characters.js now owns original jointed traveller/Keeper models, planted-foot walking, reduced-motion freeze, and conversation facing/gesture. No marching when blocked; richer clothing/hair/faces and correct palette interpretation. Latest main merged with both assistants' log lines retained. 117 isolated trial checks and all existing suites pass; before/current screenshots included. Still no live-game/save/Godot edits or full conversion claim.
 

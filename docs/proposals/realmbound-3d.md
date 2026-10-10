@@ -41,7 +41,7 @@ Before anyone connects the trial to production, check open PRs and COMMS. RB1.7 
 
 ## Evidence
 
-`node tests/realmbound-3d.cjs http://localhost:8766` runs 117 checks in isolated browser contexts. Covers 375x812, 1366x768, 1920x1080 and 3440x1440, real keyboard and touch input, collisions, camera bounds, shared dialogue, entry/exit, unchanged sentinel saves, animation, drag orbit, wheel zoom and library-load failure. Additional rig checks sample 16 stride phases for planted feet and floor clearance, and verify reduced-motion freeze, no marching against collisions reciprocal conversation facing, and no horizontal sliding during straight stance steps. Captures live in docs/screenshots/realmbound-3d/. All 16 existing suites pass using `node tools/run-all-checks.cjs`.
+`node tests/realmbound-3d.cjs http://localhost:8766` runs 146 checks in isolated browser contexts. Covers 375x812, 1366x768, 1920x1080 and 3440x1440, real keyboard and touch input, collisions, camera bounds, shared dialogue, entry/exit, unchanged sentinel saves, animation, drag orbit, wheel zoom and library-load failure. Additional rig checks sample 16 stride phases for planted feet and floor clearance, and verify reduced-motion freeze, no marching against collisions reciprocal conversation facing, and no horizontal sliding during straight stance steps. Captures live in docs/screenshots/realmbound-3d/. All 16 existing suites pass using `node tools/run-all-checks.cjs`.
 
 Headless browser checks are not a hardware performance guarantee. Judge camera comfort, art quality and motion by playing on Evan's actual desktop and phone. Known limits: simple procedural models/fire, an open-roof room, no full game integration, no audio in the trial, no pinch zoom, and no gamepad controls yet.
 
@@ -55,3 +55,8 @@ Original traveller and Keeper silhouettes use the same approximately 1.75-metre 
 The material helper interprets authored palette colours as sRGB before lighting, preventing the earlier pale look. More body types, expressions, race/class silhouettes, skinned meshes and production animation remain future work. The earlier trial front/back screenshots are preserved as before-characters-* for an honest comparison.
 
 Latest-main validation: the first Starfall run could not preload the newly merged frontier art in this clone's stale import cache. A headless editor import refreshed the local cache without source changes; the Starfall rerun passed all 152 checks. The other 15 suites passed on the same source state.
+
+
+## Visible gear, Evan's next requirement
+
+The isolated trial now has a modular eight-slot equipment renderer and an Outfits menu inside the game window. It accepts the existing gear schema but previews demonstration loadouts only; saved equipment is not yet connected. The [asset contract](realmbound-assets.md) records the long-term direction for people, clothing, weapons, buildings, creatures, props and effects, with a tested replacement path and later performance/production-art stages.
