@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Starfall art (2026-10-10, ART-SF-1): original frontier ground atlas, with moss variants, joining mud roads, packed earth and stone footings. Scale/contact patch and rerunnable generator; game integration remains SF2.6.
+
 - Little Ranch v0.1.0 (2026-10-09, LR1, the smallest test): a toy for ages 2 to 4. A baby Cindercub to feed, bathe in bubbles and play peekaboo with behind the bush, until it yawns, the sky turns orange and it curls up to a lullaby. No reading, nothing to lose, no links out; grown-ups hold the corner lock for three seconds to leave or turn the sound off.
 - Diamond Manager (2026-10-09, DM2 playtest): people on the field grow with the screen, Iona's welcome says how much budget room you have, and the owner now rewards a better losing season. Report: [docs/playtests/diamond-manager-1.md](docs/playtests/diamond-manager-1.md).
 - Godot Wildbond (2026-10-09, WB5.1): the Lighthouse Spire opens after the Champion. Orla runs escalating three-partner floors from level 75 upward, with a full rest every fifth floor and the best floor saved; every defeated Warden also offers progressively stronger Champion rematches without re-awarding badges.
