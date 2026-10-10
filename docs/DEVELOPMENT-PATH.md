@@ -229,6 +229,7 @@ Plan: [plans/sports-management.md](plans/sports-management.md) "Game 3". Reuses 
 **OW-M1: three lives (done through v0.3.0).**
 - [x] The Between, Asterhold with Lanthorn, Hearthmere, the Ashen Throne.
 **OW-M2: memories and a systemic world.**
+- [ ] OW1.1 [ChatGPT] (claimed: Codex, 2026-10-10, codex/otherworld-opening-choice) Visible Choose a world option in the Between introduction (PLAYTEST pass 1); games/otherworld/js/01-game.js, style.css and existing checks only; uses existing dialogue skip, preserves all choices/memories/saves; phone and desktop screenshots, all suites pass. Score 16/21 (fun 2x2, heart 2x2, friends 3, focus 2, cheap 3).
 - [x] OW2.1 [ChatGPT] Memories that matter across lives (T42). (merged 2026-10-09)
 - [ ] OW2.2 [ChatGPT] Skills that grow through use (O1 in docs/plans/otherworld.md).
 - [ ] OW2.3 [ChatGPT] People
