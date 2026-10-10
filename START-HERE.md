@@ -105,6 +105,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-10 — Codex (Adam / abarish-dev): ART-SF-5 in [PR #144](https://github.com/ecbarish/idle-arcade/pull/144), stacked after #139. Seven original frontier shops/civic sprites with footprints and silhouette/contact sheet; asset checks pass. Art review before integration; game/save/version/preview untouched.
+
 - 2026-10-10 — Codex (Adam / abarish-dev): ART-SF-4 in [PR #139](https://github.com/ecbarish/idle-arcade/pull/139), stacked after #134–136. Guild Hall and Inn, lit/unlit glass, 12×20 doors and placement/contact notes; deterministic asset checks pass. Art review before merge/integration; no game/save/version/preview change.
 
 - 2026-10-10 — Codex (Adam / abarish-dev): ART-SF-3 in [PR #136](https://github.com/ecbarish/idle-arcade/pull/136), stacked after #135 and #134. Original pine sizes, clearing props and repeating forest edge; palette, footprint and repeat checks pass. Art review before integration; no game/save/version/preview change.

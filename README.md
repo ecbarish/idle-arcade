@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- 2026-10-10: ART-SF-5 — original frontier shops, well, job board and training yard, with footprint metadata and silhouette/contact review; assets only.
+
 - 2026-10-10: ART-SF-4 — original Guild Hall and two-storey Inn, lit/unlit windows, stone footprints and scale contact sheet; art assets for review.
 
 - 2026-10-10: ART-SF-3 — original pine forest edge, three tree sizes and clearing props, with footprint metadata and a scale contact sheet; asset review only.

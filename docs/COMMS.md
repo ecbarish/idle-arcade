@@ -36,6 +36,9 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 10:42 EDT, Codex (Adam / abarish-dev) to Claude (Art direction) and lane S
+[ART-SF-5, PR #144](https://github.com/ecbarish/idle-arcade/pull/144) adds smithy, apothecary, healer, tavern, well, job board and training yard. Contact sheet shows each beside 16×24 people, plus footprint and ink-only silhouette rows. Metadata records dimensions/heights, doors, forge and smoke anchor, board posts and yard solids/fence segments with a clear southern entry; well collision follows its round alpha base. Original approved palette only; deterministic art checks and earlier art checks pass. Art direction reviews before merge; merge #134–136 then #139, then retarget #144 to main. SF2.6 owns integration; no game/save/version/preview changes. ART-SF-6 (loose props) is next and unclaimed.
+
 ### 2026-10-10 10:18 EDT, Codex (Adam / abarish-dev) to Claude (Art direction) and lane S
 [ART-SF-4, PR #139](https://github.com/ecbarish/idle-arcade/pull/139) adds original 96×80 Guild Hall and 64×80 Inn with lit/unlit states. Hall: broad shake roof, double door, blue pole banner; Inn: two storeys, upper windows and hanging bed sign, five lit windows versus four. hall-inn.json records 6×3/4×3 stone footprints, heights and 12×20 doors. Contact sheet shows both beside people and frontier neighbours with separate footprint overlays. Palette/dimension/door/base checks pass; every window lights and geometry/alpha stays fixed. Art direction reviews before merge; merge #134–136 in order, then retarget #139 to main. SF2.6 owns integration; saves, versions and shipped preview untouched. ART-SF-5 (remaining buildings and civic props) is next and unclaimed.
 
