@@ -5,7 +5,7 @@
 window.ArcadeKinds=[
   {id:'adventure',name:'Adventures',like:'Explore a world on foot, meet people, fight and grow stronger. Wildbond is about catching and raising creatures; Realmbound is a classic MMO with quests and a guild.'},
   {id:'build',name:'Build and manage',like:'Run a place and the people in it: post jobs, earn coin, upgrade buildings and hire helpers who take work off your hands.'},
-  {id:'sports',name:'Sports',like:'Sporting careers and teams. Diamond Career is an early baseball test; more sports and running a whole team are being planned.'},
+  {id:'sports',name:'Sports',like:'Run a team: ratings, trades, contracts and a ballpark to grow. Diamond Manager is baseball; football and hockey are planned.'},
   {id:'story',name:'Stories',like:'Read, choose and live with what you chose. Lives branch toward different endings.'},
   {id:'different',name:'Something different',like:'Small experiments that do not fit the others. Primordial is an idle game about evolving life from one cell.'},
 ];
@@ -15,6 +15,11 @@ window.ArcadeGames=[
    tags:['Arcade cabinet','High scores','Two-player turns'],cover:'storm',kind:'different',
    goal:'Clear the clouds before they reach the harbour, and put your initials on the local high-score board.',
    controls:'Arrows or A/D move · Space fires · P pauses. Touch buttons and USB gamepads work too. Two players take turns on one device.'},
+  {id:'little-ranch',title:'Little Ranch',tcls:'t-wildbond',status:['Test version','s-proto'],href:'games/little-ranch/index.html',
+   blurb:'A toy for ages 2 to 4. Feed a baby Cindercub, give it a bubbly bath and play peekaboo behind the bush, until it yawns and curls up for bed.',
+   tags:['Ages 2 to 4','No reading','Nothing to lose'],cover:'ranch',kind:'different',
+   goal:'Sit with a little one and tap: the bowl, the sponge, the bush and the baby. The visit ends with a lullaby at bedtime.',
+   controls:'Taps or the mouse; drag the sponge for bubbles. Grown-ups: hold the lock in the corner for three seconds to leave or turn the sound off.'},
   {id:'wildbond-preview',title:'Wildbond',tcls:'t-wildbond',status:['New version · Early preview','s-proto'],href:'play/wildbond/',
    blurb:'Walk into faded Larkhaven, choose a partner and bring colour back with your first bond. Explore all eight regions and take on the league: four courts and the Champion, meet their Wardens, and care for creatures at the ranch.',
    tags:['On foot','Eight regions and the league','Ranch & nursery'],cover:'wildbond',preview:true,classic:'wildbond',image:'images/play/wb-barn.png',
