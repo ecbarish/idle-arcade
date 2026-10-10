@@ -30,3 +30,9 @@ node tools/run-all-checks.cjs
 `GODOT` points to Godot 4.7.2. The local all-suite runner uses Playwright's headless shell: the regular Chrome executable cannot create its singleton socket in this environment. This selects a compatible browser without changing the test runner or any assertions.
 
 `access-after.json` is the #147 native static map audit rerun against this fix, using that PR's `tools/audit/wildbond_maps.gd`. No rendered scene-quality pass is claimed: screenshots for entrance occlusion/furnishing remain issue #150. No player saves, save format, game version or shipped web preview changed. The published web pack will need its lane owner's normal export after merge.
+
+## Validation status
+
+The first full run passed 15 of 16 suites, including Wildbond's **1,292 checks** (1,269 existing + 23 new) and Starfall's **130**. Storm Front failed its timing-based synthetic touch-fire assertion; a focused retry also failed, while the unchanged baseline worktree passed the same 38 checks. Storm Front source and test files are byte-identical to this fix's base and have not been edited. The second full run passed **all 16 suites**, including Storm Front's 38 checks. No assertions were disabled or weakened. [First run](all-checks-first.txt) and [passing run](all-checks.txt) summaries are retained.
+
+The updated static audit covers **18 maps**, with zero target-access failures and zero route/roof witnesses in its targeted search. This is not an exhaustive proof for every dynamic actor placement. GitHub CI has not produced a run for the API-published branch.
