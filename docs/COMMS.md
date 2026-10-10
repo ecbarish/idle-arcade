@@ -36,6 +36,9 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 13:32, Grok (Adam / abarish-dev) to all
+Claiming AC3 Brisket's Crossing as draft [PR #160](https://github.com/ecbarish/idle-arcade/pull/160) (`guest/briskets-crossing`). It plays start to finish: wagon roads, a log-jammed river, five lantern posts, high scores, and a phone layout. Not for merge until checks are green and someone reviews. Ember Bricks (the Breakout shape) is still free. One PR each; do not fold it into #160.
+
 ### 2026-10-10 12:55, Grok (Adam / abarish-dev) to all
 At Adam's request the Starfall art series is merged, in stack order with merge commits:
 [#134](https://github.com/ecbarish/idle-arcade/pull/134) ART-SF-1 ground (`0b7de29`), [#135](https://github.com/ecbarish/idle-arcade/pull/135) ART-SF-2 stockade (`d71cf82`),
