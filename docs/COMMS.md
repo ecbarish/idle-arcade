@@ -40,6 +40,36 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 Evan requested a modern Pokemon-like third-person direction for Realmbound. RB1.9 / PR #159 is an isolated browser inn trial in experiments/realmbound-3d/: original procedural 3D people/furniture, camera, collisions and real shadows. Plan: docs/proposals/realmbound-3d.md. No live game/save or Godot edits; no full engine decision implied. Keep #153 and #155 as separate current-game fixes. All 16 suites plus 73 dedicated checks pass; four-size captures supplied.
 
 
+### 2026-10-10 13:50, Grok (Adam / abarish-dev, guest) to all, and lane S
+At Adam's request I'm doing the last SF2.6 follow-ups: Starfall's evening tint and the yard's fence-row footprint (branch `guest/starfall-evening-yard`).
+After that merges, I'll re-export `play/starfall/` following #132's pattern. Files: `starfall-godot/` and `play/starfall/`.
+
+### 2026-10-10 13:40, Grok (Adam / abarish-dev) to all, and the art thread
+ART-SF-7 is merged at Adam's request ([PR #162](https://github.com/ecbarish/idle-arcade/pull/162), `a4afc54`). Two of the SF2.6 art items are **done**: the west gate
+has its own side-on picture (`gate-west.png`: posts, beam, leaves standing open), and the smithy and tavern are redrawn two tiles wide
+to fit their plots (`smithy-2.png`, `tavern-2.png`; the 4-wide originals are kept, now unused). All three come from `tools/art/starfall_fit.py --check`.
+**Still open:** Starfall's evening tint, the yard's one-row overhang (minor), and re-exporting `play/starfall/` (lane S or whoever owns previews).
+
+### 2026-10-10 13:25, Grok (Adam / abarish-dev, guest) to all, and the art thread
+At Adam's request I'm taking two of the SF2.6 art items as **ART-SF-7** (new ticket line, draft PR on `guest/starfall-gate-fit`):
+a side-on west-wall gate in ART-SF-2's style, and smithy and tavern pictures redrawn 2 tiles wide to fit their plots. The 4-wide
+originals stay. They come from a new `tools/art/starfall_fit.py` with `--check`. The evening tint is not part of this.
+
+### 2026-10-10 13:20, Grok (Adam / abarish-dev) to all
+SF2.6 "Starfall's own place" is merged at Adam's request ([PR #157](https://github.com/ecbarish/idle-arcade/pull/157), `5db4331`). The town is a
+44×18 frontier stockade that scrolls, drawn with ART-SF-1 to 5, and old saves land on open ground with their buildings
+kept. Open items for the **art thread**: (1) a side-on gate picture for the west wall (the 3×1 gate is for a wall
+running left to right, so the west gate is a palisade gap with end caps for now); (2) the smithy and tavern pictures are 4 tiles wide
+on 2-tile plots (they block their full width; still reachable), and the yard rises a row above its plot; (3) an evening
+tint (only windows and lanterns change now). The web preview `play/starfall/` is **not re-exported**: lane S, or
+whoever owns previews, please rebuild it when it suits you.
+
+### 2026-10-10 12:55, Grok (Adam / abarish-dev, guest) to all, and lane S
+H4 / SF2.6 "Starfall's own place" is claimed in a draft PR titled "SF2.6" on `guest/starfall-own-place`. Plan: a wider town
+that scrolls, with the gate in the west wall, the road running east past a square with the well and the Guild Hall, the
+inn near the square and the plots further in. It is drawn with the merged ART-SF-1 to 5 pieces, and old saves keep
+their buildings and land on open ground. Files: `starfall-godot/` only. ART-SF-6 props (#148, not merged) aren't used.
+
 ### 2026-10-10 12:55, Grok (Adam / abarish-dev) to all
 At Adam's request the Starfall art series is merged, in stack order with merge commits:
 [#134](https://github.com/ecbarish/idle-arcade/pull/134) ART-SF-1 ground (`0b7de29`), [#135](https://github.com/ecbarish/idle-arcade/pull/135) ART-SF-2 stockade (`d71cf82`),
