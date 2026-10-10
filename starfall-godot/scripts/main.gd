@@ -16,11 +16,13 @@ const F_HALL := [preload("res://assets/env/frontier/guild_hall.png"), preload("r
 const F_INN := [preload("res://assets/env/frontier/inn.png"), preload("res://assets/env/frontier/inn-lit.png")]
 const F_WELL := preload("res://assets/env/frontier/well.png")
 const F_BOARD := preload("res://assets/env/frontier/board.png")
-const F_BUILT := { "smithy": preload("res://assets/env/frontier/smithy.png"), "tavern": preload("res://assets/env/frontier/tavern.png"),
+const F_GATE := preload("res://assets/env/frontier/gate-west.png")     # ART-SF-7: the gate seen side-on, for the west wall
+## (ART-SF-7: the smithy and tavern drawn two tiles wide to fit a plot; the 4-wide smithy.png and tavern.png stay unused)
+const F_BUILT := { "smithy": preload("res://assets/env/frontier/smithy-2.png"), "tavern": preload("res://assets/env/frontier/tavern-2.png"),
 	"apothecary": preload("res://assets/env/frontier/apothecary.png"), "healer": preload("res://assets/env/frontier/healer.png"),
 	"yard": preload("res://assets/env/frontier/yard.png") }
 ## How many tiles wide each finished building stands (its art's footprint); all are two tiles deep on their plot.
-const BUILT_W := { "smithy": 4, "tavern": 4, "apothecary": 2, "healer": 3, "yard": 4 }
+const BUILT_W := { "smithy": 2, "tavern": 2, "apothecary": 2, "healer": 3, "yard": 4 }
 ## palisade.png pieces by which neighbours they join (north 1, east 2, south 4, west 8): rects from stockade.json
 const PALISADE := { 10: Rect2(0, 0, 16, 32), 5: Rect2(16, 0, 16, 32), 3: Rect2(32, 0, 16, 32), 6: Rect2(48, 0, 16, 32),
 	12: Rect2(0, 32, 16, 32), 9: Rect2(16, 32, 16, 32), 2: Rect2(32, 32, 16, 32), 8: Rect2(48, 32, 16, 32),
@@ -31,7 +33,7 @@ const STUMP := Rect2(16, 64, 16, 16)
 const FERN := Rect2(32, 64, 16, 16)
 
 # the town (SF2.6, a frontier stockade, drawn with the ART-SF pieces in assets/env/frontier): T the pine forest outside,
-# P the palisade, S stakes where the wall will go next, E the gate in the west wall, . the mud road, q the packed-earth
+# P the palisade, S stakes where the wall will go next, G the gate's posts and E the way through them (west wall), . the mud road, q the packed-earth
 # square, , moss, k ferns, u stumps, r roof and # wall (a building's footprint), D door, c the inn's counter, B the guild
 # board, W the well, w the watchtower. The map is wider and taller than the screen; the camera follows you (it scrolls).
 const MAP := [
@@ -43,9 +45,9 @@ const MAP := [
 	"TP,,,,,,,###D##,,,rrrr,,,,,,,,,,,,,,,,,,,STT",
 	"TP,ww,,qqqqqqqqqq,##D#,,,,,,,,,,,,,,,,,,,STT",
 	"TP,ww,,BBqqqqqqqq,,,.,,,,,,,,,,,,,,,,k,,,STT",
-	"TP,,,,,qqqqqqqqqq,,c.,,,,,,,,,,,,,,,,,,,,STT",
+	"TG,,,,,qqqqqqqqqq,,c.,,,,,,,,,,,,,,,,,,,,STT",
 	"TE.......................................STT",
-	"TP,,,,,qqqqqqqqqq,,,,,,,,,,,,,,,,,,,,,,,,STT",
+	"TG,,,,,qqqqqqqqqq,,,,,,,,,,,,,,,,,,,,,,,,STT",
 	"TP,,,,,qqqqqqqqqq,,,,,,,,,,,,,,,,,,,,,,,,STT",
 	"TP,,,,,qqqqWWqqqq,,,,,,,,,,,,,,,,,,,,,,,,STT",
 	"TP,k,u,qqqqqqqqqq,,,,,k,,,,,,,k,,,,,,,,u,STT",
@@ -54,7 +56,7 @@ const MAP := [
 	"TPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPSTT",
 	"TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
 ]
-const SOLID := "TPSrc#BDWwu"
+const SOLID := "TPSGrc#BDWwu"
 const INN_DOOR := Vector2i(20, 6)
 const HALL_DOOR := Vector2i(12, 5)
 const COUNTER := Vector2i(19, 8)
@@ -1724,9 +1726,11 @@ func _draw() -> void:
 		for x in MAP[0].length():
 			var ch: String = MAP[y][x]
 			if ch == "P":
-				var m := (1 if tile_at(Vector2i(x, y - 1)) == "P" else 0) | (2 if tile_at(Vector2i(x + 1, y)) == "P" else 0) \
-					| (4 if tile_at(Vector2i(x, y + 1)) == "P" else 0) | (8 if tile_at(Vector2i(x - 1, y)) == "P" else 0)
+				var m := (1 if tile_at(Vector2i(x, y - 1)) in "PG" else 0) | (2 if tile_at(Vector2i(x + 1, y)) == "P" else 0) \
+					| (4 if tile_at(Vector2i(x, y + 1)) in "PG" else 0) | (8 if tile_at(Vector2i(x - 1, y)) == "P" else 0)
 				draw_texture_rect_region(F_PALISADE, Rect2(Vector2(x, y - 1) * TILE, Vector2(16, 32)), PALISADE.get(m, PALISADE[10]))
+			elif ch == "G" and tile_at(Vector2i(x, y + 1)) == "E":
+				draw_texture(F_GATE, Vector2(x, y - 2) * TILE)    # posts, beam and the open leaves (footprint: this tile to y + 2)
 			elif ch == "S":
 				draw_texture_rect_region(F_PALISADE, Rect2(Vector2(x, y - 1) * TILE, Vector2(16, 32)), PALISADE[0])
 			elif ch == "u":
@@ -1832,13 +1836,13 @@ func _draw_built(_k: String, what: String, o: Vector2) -> void:
 			draw_rect(Rect2(a + Vector2(10, 7), Vector2(5, 1)), Color("9198a0"))
 			draw_rect(Rect2(a + Vector2(9, 13), Vector2(7, 2)), Color("3e3833"))
 			var glow := 0.75 + 0.25 * sin(t * 5.0)
-			draw_rect(Rect2(at + Vector2(13, 40), Vector2(8, 5)), Color(1.0, 0.45 * glow + 0.2, 0.1, 0.8))
+			draw_rect(Rect2(at + Vector2(8, 41), Vector2(7, 5)), Color(1.0, 0.45 * glow + 0.2, 0.1, 0.8))
 			for i in 3:
 				var ph := fmod(t * (0.6 if forge.is_empty() and smith_t == 0.0 else 1.2) + i * 0.33, 1.0)
-				draw_circle(at + Vector2(52 + sin(t + i) * 2.0, -ph * 14.0), 2.0 + ph * 3.0, Color(0.72, 0.71, 0.67, 0.5 * (1.0 - ph)))
+				draw_circle(at + Vector2(24 + sin(t + i) * 2.0, -ph * 14.0), 2.0 + ph * 3.0, Color(0.72, 0.71, 0.67, 0.5 * (1.0 - ph)))
 		"tavern":
 			if tavern_shut:                      # boarded up until you open it again
-				var d := at + Vector2(27, 30)
+				var d := at + Vector2(10, 30)
 				draw_line(d, d + Vector2(12, 20), Color("4a3122"), 2.0)
 				draw_line(d + Vector2(12, 0), d + Vector2(0, 20), Color("4a3122"), 2.0)
 		"apothecary":

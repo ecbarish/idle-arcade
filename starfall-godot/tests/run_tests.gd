@@ -643,7 +643,7 @@ func _own_place() -> void:
 	var h: int = main.MAP.size() * main.TILE
 	var screen := Vector2(384, 216)
 	check(w > screen.x and h > screen.y and main.cam.limit_right == w and main.cam.limit_bottom == h, "the town is bigger than the screen and the camera scrolls over all of it (%dx%d)" % [w, h])
-	check(main.tile_at(main.GATE) == "E" and main.GATE.x == 1 and main.tile_at(main.GATE + Vector2i.UP) == "P", "the gate is a gap in the west wall of the palisade")
+	check(main.tile_at(main.GATE) == "E" and main.GATE.x == 1 and main.tile_at(main.GATE + Vector2i.UP) == "G" and main.tile_at(main.GATE + Vector2i.DOWN) == "G" and main.solid(main.GATE + Vector2i.UP), "the gate stands in the west wall: two posts with the way out between them")
 	var walled := true
 	for y in main.MAP.size():
 		for x in main.MAP[0].length():
@@ -653,6 +653,8 @@ func _own_place() -> void:
 	check(walled, "a palisade (and stakes where it will grow) all the way round; the only way out is the gate")
 	var src := FileAccess.get_file_as_string("res://scripts/main.gd")
 	check(not "assets/env/house.png" in src and not "assets/env/nature.png" in src and not "assets/env/floor.png" in src and "assets/env/frontier/" in src, "the town is drawn from Starfall's own frontier pictures, not the borrowed cottage pack")
+	check(main.F_BUILT.smithy.get_width() == 32 and main.F_BUILT.tavern.get_width() == 32 and main.BUILT_W.smithy == 2 and main.BUILT_W.tavern == 2, "the smithy and tavern pictures fit their two-tile plots, and block only that (ART-SF-7)")
+	check(main.F_GATE.get_size() == Vector2(32, 80), "the west gate has its own side-on picture (ART-SF-7)")
 	for tex in [main.F_GROUND, main.F_PALISADE, main.F_HALL[0], main.F_INN[1], main.F_WELL, main.F_BOARD, main.F_BUILT.smithy]:
 		check(tex != null and tex.get_width() > 0, "a frontier picture loads: %s" % tex.resource_path.get_file())
 	var keep_built: Dictionary = main.built

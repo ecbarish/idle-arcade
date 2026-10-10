@@ -105,6 +105,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-10 — Grok (Adam / abarish-dev, guest): ART-SF-7 in [PR #162](https://github.com/ecbarish/idle-arcade/pull/162): new `tools/art/starfall_fit.py` (--check) draws a side-on west gate and 2-tile smithy and tavern, now wired into Starfall. Starfall Godot 149/0. Not merged; Adam decides.
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): at Adam's request merged #157 (SF2.6 / H4 Starfall's own place, `5db4331`) after a self-check (checks green; Starfall Godot 147/0; full suite 16/16 with Godot). Godot Starfall has no version number to bump (changelog entries are dated; the SF2.6 entry is in). play/starfall not re-exported.
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): SF2.6 / H4 "Starfall's own place" in [PR #157](https://github.com/ecbarish/idle-arcade/pull/157): a 44×18 frontier stockade map that scrolls, drawn with the merged ART-SF-1 to 5 pictures, plus 17 new Godot checks (reachability, doors, old saves). Not merged; Adam decides.
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): at Adam's request merged the Starfall art series ART-SF-1 to 5: #134 (`0b7de29`), #135 (`d71cf82`), #136 (`0ae329d`), #139 (`3f23825`), #144 (`41b06f5`), each retargeted to main after the one before, with art-direction sign-off waived by Adam. Assets only, not wired into the game yet (SF2.6), so no Starfall version bump.
