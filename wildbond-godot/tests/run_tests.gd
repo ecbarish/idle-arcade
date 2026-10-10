@@ -725,6 +725,30 @@ func _run() -> void:
 		main.me.face = Vector2i.RIGHT
 		check(main._talk_here() and main.lines[0].who == "pip" and main.lines.any(func(l): return "YELLOW" in l.text), "Pip has noticed the colour since your Thorn Badge")
 		talk_through()
+		# ---- WB2.4: the last two homes, Pip's family home and his gran's cottage
+		for home in [["pip_home", "pip_mum"], ["gran_home", "pip_gran"]]:
+			var room: Dictionary = main.INTERIORS[home[0]]
+			check(main.tile_at(room.door) == "D" and main.DOORS.get(room.door) == home[0], "%s has a door on the Larkhaven map" % room.name)
+			check(walk_to(room.door + Vector2i.DOWN), "you can walk up to the door of %s" % room.name)
+			main._step(Vector2i.UP)
+			check(wait_map(home[0]) and main.place.text == room.name, "walking into its door takes you inside %s" % room.name)
+			check(main.keepers.any(func(k): return k.id == home[1] and k.where == home[0]), "someone lives there (%s)" % home[1])
+			check(walk_to(room.keeper_at + Vector2i(0, 1)) and main._near_keeper() == home[1], "you can walk up to them")
+			main._keeper_talk(home[1])
+			check(main.lines.any(func(l): return l.who == home[1]), "and they talk with you")
+			talk_through()
+			var bag_before: Dictionary = main.bag.duplicate()
+			check(walk_to(room.find.at) and main.got_items.has(room.find.id), "something to find in %s" % room.name)
+			check(room.find.give.keys().all(func(k): return int(main.bag[k]) == int(bag_before.get(k, 0)) + int(room.find.give[k])), "it goes in your satchel")
+			check(main.lines.any(func(l): return l.who == home[1]), "and they say a word about it")
+			talk_through()
+			main._go(home[0], room.find.at + Vector2i.LEFT, Vector2i.RIGHT)
+			tick(1.0)
+			var bag_again: Dictionary = main.bag.duplicate()
+			check(walk_to(room.find.at) and main.bag == bag_again, "it's only found once")
+			check(walk_to(room.exit) and wait_map("larkhaven") and main.me.tile == room.door + Vector2i.DOWN, "out of %s, back in the street in front of its door (me %s)" % [room.name, main.me.tile])
+			check(main.caption.text == "" or not "trial" in main.caption.text.to_lower(), "no stale note outside")
+		check(main.buildings().size() == 5, "Larkhaven has five buildings now: the inn, the shop, the barn and two homes")
 	# ---- the field book
 	talk_through()
 	var evj := InputEventKey.new()
@@ -1142,6 +1166,23 @@ func _run() -> void:
 	tick(1.0)
 	talk_through()
 	check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 14), "WD4a: that old save lands at the same Thornwood coordinate, now in the settlement")
+	# WB2.4 adds two cottages to Larkhaven: an old save standing where one now is steps out in front of its door
+	var pre_homes: Dictionary = main._read_save()
+	pre_homes["map"] = "larkhaven"
+	pre_homes["x"] = 13
+	pre_homes["y"] = 3
+	main.SafeSave.write(main.save_path, pre_homes)
+	check(main._load_game(), "WB2.4: a save from before the homes still loads")
+	tick(1.0)
+	talk_through()
+	check(main.map_name == "larkhaven" and main.me.tile == Vector2i(13, 5) and main.walkable(main.me.tile + Vector2i.DOWN), "WB2.4: standing where Pip's home now is, you're put in front of its door (me %s)" % [main.me.tile])
+	pre_homes["x"] = 11
+	pre_homes["y"] = 7
+	main.SafeSave.write(main.save_path, pre_homes)
+	main._load_game()
+	tick(1.0)
+	talk_through()
+	check(main.me.tile == Vector2i(11, 7), "WB2.4: anywhere else in Larkhaven, an old save lands exactly where it was")
 	# WB5.1 adds only optional save fields: an older journey without them must still load cleanly
 	var pre_wb5: Dictionary = main._read_save()
 	pre_wb5.erase("spire")

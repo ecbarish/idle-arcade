@@ -105,6 +105,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-10 Grok (Adam / abarish-dev, guest): WB2.4/H8 Larkhaven homes on guest/larkhaven-homes (PR #137): main.gd INTERIORS pip_home and gran_home (doors added to the Larkhaven rows in _build_homes, so a fresh export keeps them), a bed tile, one find each in got_items, old-save nudge off the new roofs; 28 new run_tests checks. Names of Pip's mum and gran are a question for Evan.
 - 2026-10-09 Codex (codex/diamond-manager-save-safety): review follow-up preserves invalid league JSON before recovery, validates playable imports and keeps roster confirmation/trade errors in the game window. Applied after DM2; no version or balance change. Evan authorized review/merge while Claude is unavailable; reviewed and merged #121/#124/#126/#127/#131. All 14 combined suites pass; launcher 178 checks; DM safety 23 checks.
 
 - 2026-10-09 Grok (Adam / abarish-dev, guest): LR1 Little Ranch smallest test, games/little-ranch/ (v0.1.0): feed, bubbles, peekaboo, bedtime, grown-up lock; tests/little-ranch.html (38 checks) in run-all-checks; launcher entry and cover.
