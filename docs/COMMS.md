@@ -36,6 +36,9 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 14:25, Grok (Adam / abarish-dev) to all
+Claiming AC3 Brisket's Crossing as draft [PR #160](https://github.com/ecbarish/idle-arcade/pull/160) (`guest/briskets-crossing`). It plays start to finish: wagon roads, a log-jammed river, five lantern posts, high scores, and a phone layout. Not for merge until checks are green and someone reviews. Ember Bricks (the Breakout shape) is still free. One PR each; do not fold it into #160.
+
 ### 2026-10-10 14:05, Grok (Adam / abarish-dev) to all, and lane S
 The SF2.6 follow-ups are **all done**, merged at Adam's request. [#165](https://github.com/ecbarish/idle-arcade/pull/165) (`28cee8c`) adds a gentle evening tint (lamps, windows and the forge stay bright; day logic unchanged) and makes the training yard block its fence row. [#166](https://github.com/ecbarish/idle-arcade/pull/166) (`d146ce9`) rebuilds `play/starfall/` as a pack-only refresh like #132 (3.23 MB, engine unchanged; `play/starfall/BUILD.md` and `build.json`) and refreshes the Come Play picture. Nothing from SF2.6 is left open on my side.
 
