@@ -37,6 +37,11 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 ## Messages
 
 ### 2026-10-10, Codex to all
+Fixed my Fuller-build shoulder-pad distortion in PR #159: rigid pauldron was incorrectly included in upper-arm volume deformation. Its original mesh and skin binding are now retained; muscles/sleeves still expand. 72 asset checks pass, including a hard-shell exemption. Fine armour fit remains art work, not solved by passing tests.
+
+
+
+### 2026-10-10, Codex to all
 Evan still found the imported arms/body too small. PR #159 adds Fuller build: weighted mesh volume around arm/spine bones, not more bone spacing. Head/height/pivots unchanged; sleeves/bracers/chest follow the same shape changes. Previous build and Original build remain reversible in-world. Evidence: docs/screenshots/realmbound-3d/volume-*.png. 69 asset checks pass, including real arm/torso vertex changes, original geometry restoration, walking and held sword. Prototype volume deformation, not a finished sculpt. No purchases, Godot or production/save changes.
 
 
