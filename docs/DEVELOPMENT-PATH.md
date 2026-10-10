@@ -402,3 +402,5 @@ line or two, with the page that holds the detail.
 - **2026-10-09, T58:** reveal handoffs distinguish observed documents from character interpretation, shared evidence from optional family perspective, and written restoration from engine placement. Never claim the visual payoff ships with a JSON file.
 - **2026-10-07 to 10-09, earlier lessons:** recorded in docs/PROJECTS.md "Read first" (the game window, depth, woven
   stories, player text, variety, friends' testing, the process).
+
+- **2026-10-10, MAP-AUDIT:** grid-only door floods miss renderer-defined roof collision; compare actual tap routing with movement predicates and keep visual review separate (#147 / #149 / #150).
