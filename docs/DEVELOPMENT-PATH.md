@@ -139,7 +139,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB5.7 [Claude] Fishing at Saltmarsh (from docs/proposals/new-game-ideas.md, scored 16/18; added 2026-10-09).
 
 **WB-M6: version 2.0, ready for everyone.**
-- [ ] WB-PREVIEW [any] (review: [PR #132](https://github.com/ecbarish/idle-arcade/pull/132), Adam / abarish-dev, 2026-10-10, `guest/wildbond-preview-integration`) Refresh the `play/wildbond` pack to include WD3, WD4a, WB5.1 and the UI fixes. Scope: `play/wildbond`, release/guide notes and verification screenshots. Done when the full tests pass and the web build is verified playable.
+- [x] WB-PREVIEW [any] **Done 2026-10-10:** merged and deployed; all 14 main suites pass, exact committed pack passed 55 browser checks with 27 captures and synthetic pre-WD3 saves, and all four live-file hashes match the reviewed build. (merged: [PR #132](https://github.com/ecbarish/idle-arcade/pull/132), Adam / abarish-dev, 2026-10-10, `guest/wildbond-preview-integration`) Refresh the `play/wildbond` pack to include WD3, WD4a, WB5.1 and the UI fixes. Scope: `play/wildbond`, release/guide notes and verification screenshots. Done when the full tests pass and the web build is verified playable.
 - [x] WB6.1 [Claude] Phone controls (WG10). **Done 2026-10-09:** named actions in `controls.gd`, the phone pad in `touch_pad.gd`, gamepads. Start by moving every key to named Input Map actions
   (docs/learning/godot-practices.md rule 2), so on-screen buttons, a gamepad and rebinding all come free.
 - [x] WB6.2 [Claude] **Done 2026-10-09** (`settings.gd`, the book's Settings page). Settings in the game window (sound, music, text size,
