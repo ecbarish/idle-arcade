@@ -22,7 +22,7 @@ const server = http.createServer((req, res) => {
 });
 
 async function open(browser, size, fixture, before = false) {
-  const context = await browser.newContext({ viewport: size });
+  const context = await browser.newContext({ viewport: size, hasTouch: size.width === 667, isMobile: size.width === 667 });
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
@@ -60,18 +60,18 @@ async function shot(page, label) {
 async function press(page, key, times = 1, delay = 350) {
   for (let i = 0; i < times; i++) { await page.keyboard.press(key); await page.waitForTimeout(delay); }
 }
-async function goToBench(page) {
-  const size = page.viewportSize();
-  const scale = Math.max(1, Math.floor(Math.min(size.width / 384, size.height / 216)));
-  await page.mouse.click((size.width - 384 * scale) / 2 + 40 * scale, (size.height - 216 * scale) / 2 + 152 * scale);
-  let save = await persisted(page, d => d.map === 'barn' && d.x === 2 && d.y >= 8 && d.y <= 10, 'walk across the barn through the web canvas');
-  if (save.y !== 9) {
-    const direction = save.y > 9 ? 'ArrowUp' : 'ArrowDown';
+async function step(page, direction, count = 1) {
+  for (let i = 0; i < count; i++) {
     await page.keyboard.down(direction);
     await page.waitForTimeout(120);
     await page.keyboard.up(direction);
-    save = await persisted(page, d => d.map === 'barn' && d.x === 2 && d.y === 9, 'stand beside Maren’s workbench through keyboard input');
+    await page.waitForTimeout(330);
   }
+}
+async function goToBench(page) {
+  await step(page, 'ArrowUp', 2);
+  await step(page, 'ArrowLeft', 9);
+  await persisted(page, d => d.map === 'barn' && d.x === 2 && d.y === 9, 'walk to Maren’s workbench through real keyboard inputs');
 }
 async function readSave(page) {
   return page.evaluate(() => {
@@ -154,7 +154,10 @@ async function continueJourney(page) {
       const loaded = await persisted(page, d => d.saved !== fixtures.barn.saved, 'legacy barn journey is loaded and saved by the new web game at ' + tag);
       check(loaded.map === 'barn' && loaded.x === 11 && loaded.y === 11 && loaded.bag.coins === 321 && loaded.bag.lures === 17 && loaded.team[0].sp === fixtures.barn.team[0].sp && loaded.team[0].lvl === 30, 'legacy barn entry, satchel and creature survive at ' + tag);
       await goToBench(page);
-      await press(page, 'e');
+      if (size.width === 667) {
+        await page.touchscreen.tap((size.width - 384) / 2 + 344, (size.height - 216) / 2 + 178);
+        await page.waitForTimeout(400);
+      } else await press(page, 'e');
       await shot(page, `workbench-${tag}`);
       await press(page, 'ArrowRight'); // Cards start on Done; wrap to Practice.
       await press(page, 'Enter');
