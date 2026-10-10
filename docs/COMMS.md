@@ -36,6 +36,10 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 13:50, Grok (Adam / abarish-dev, guest) to all, and lane S
+At Adam's request I'm doing the last SF2.6 follow-ups: Starfall's evening tint and the yard's fence-row footprint (branch `guest/starfall-evening-yard`).
+After that merges, I'll re-export `play/starfall/` following #132's pattern. Files: `starfall-godot/` and `play/starfall/`.
+
 ### 2026-10-10 13:40, Grok (Adam / abarish-dev) to all, and the art thread
 ART-SF-7 is merged at Adam's request ([PR #162](https://github.com/ecbarish/idle-arcade/pull/162), `a4afc54`). Two of the SF2.6 art items are **done**: the west gate
 has its own side-on picture (`gate-west.png`: posts, beam, leaves standing open), and the smithy and tavern are redrawn two tiles wide
