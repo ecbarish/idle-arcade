@@ -1,0 +1,91 @@
+name: Wildbond web preview review
+on:
+  pull_request:
+    paths: ['tools/wildbond-preview-*', '.github/workflows/wildbond-preview.yml', 'play/wildbond/**']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: wildbond-preview-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  web-review:
+    if: github.event_name == 'pull_request' && github.event.pull_request.number == 132 && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'guest/wildbond-preview-integration'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install the exporter and browser
+        run: |
+          set -euo pipefail
+          curl --fail --retry 2 --connect-timeout 15 --max-time 120 -sSLo "$RUNNER_TEMP/godot.zip" https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+          unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/godot"
+          echo "GODOT=$RUNNER_TEMP/godot/Godot_v4.7.2-stable_linux.x86_64" >> "$GITHUB_ENV"
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Build only the game pack, retaining the existing engine
+        run: |
+          set -euo pipefail
+          timeout 120 "$GODOT" --headless --path wildbond-godot --editor --import --quit
+          mkdir -p preview-review
+          sha256sum play/wildbond/index.wasm play/wildbond/index.js > preview-review/engine-before.sha256
+          cp play/wildbond/index.pck "$RUNNER_TEMP/wildbond-before.pck"
+          timeout 120 "$GODOT" --headless --path wildbond-godot --export-pack Web ../play/wildbond/index.pck
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p = Path('play/wildbond/index.html')
+          s = p.read_text()
+          s, n = re.subn(r'("index.pck"\s*:\s*)\d+', lambda m: m[1] + str(Path('play/wildbond/index.pck').stat().st_size), s)
+          assert n == 1, 'Expected one pack size in the generated shell'
+          p.write_text(s)
+          PY
+          sha256sum -c preview-review/engine-before.sha256
+      - name: Generate saves with the real pre-WD3 writer
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 origin 26bd1a6f5a3d8c3f7d4160c940b4de0641dd2dcf
+          git worktree add "$RUNNER_TEMP/wildbond-legacy" FETCH_HEAD
+          cp tools/wildbond-preview-fixtures.gd "$RUNNER_TEMP/wildbond-legacy/wildbond-godot/tests/preview-fixtures.gd"
+          timeout 120 "$GODOT" --headless --path "$RUNNER_TEMP/wildbond-legacy/wildbond-godot" --editor --import --quit
+          timeout 60 "$GODOT" --headless --path "$RUNNER_TEMP/wildbond-legacy/wildbond-godot" --script res://tests/preview-fixtures.gd
+          cp -r "$RUNNER_TEMP/wildbond-legacy/wildbond-godot/frames/preview-fixtures" preview-review/fixtures
+      - name: Play the exported web pack, load legacy saves, and capture it
+        env:
+          BEFORE_PACK: ${{ runner.temp }}/wildbond-before.pck
+        run: node tools/wildbond-preview-checks.cjs
+      - name: Store verified pack and screenshots as unreferenced Git blobs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          python - <<'PY'
+          import base64, hashlib, json, os, urllib.request
+          from pathlib import Path
+          files = [Path('play/wildbond/index.pck'), Path('play/wildbond/index.html')]
+          files += sorted(Path('preview-review/screens').glob('*.png'))
+          manifest = []
+          for p in files:
+              data = p.read_bytes()
+              request = urllib.request.Request('https://api.github.com/repos/' + os.environ['REPOSITORY'] + '/git/blobs', data=json.dumps({'content': base64.b64encode(data).decode(), 'encoding': 'base64'}).encode(), headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json'}, method='POST')
+              with urllib.request.urlopen(request, timeout=120) as response:
+                  blob = json.load(response)
+              entry = {'path': str(p), 'sha': blob['sha'], 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+              manifest.append(entry)
+              print('PREVIEW_BLOB ' + json.dumps(entry))
+          Path('preview-review/blobs.json').write_text(json.dumps(manifest, indent=2) + '\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wildbond-web-review
+          path: |
+            preview-review/
+            play/wildbond/index.pck
+            play/wildbond/index.html

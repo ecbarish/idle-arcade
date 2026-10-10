@@ -21,6 +21,20 @@ function diamondManagerChecks(){
   check('Releasing mid-contract costs half a season; expiring costs nothing',()=>{const L=d.newLeague(2),c=L.clubs[0];c.players.push(clone(c.players[0]));const p=c.players[c.players.length-1];p.id=9999;p.years=2;p.salary=400;L.cash=1000;assert(d.release(L,9999)===''&&L.cash===800,'paid');return true;});
   check('Every fifth day another club may offer a trade, and declining changes nothing',()=>{const L=d.newLeague(14);let seen=0;for(let i=0;i<30&&L.phase==='season';i++){d.playDay(L);if(L.offer){seen++;const before=JSON.stringify(L.clubs);d.answerOffer(L,false);assert(JSON.stringify(L.clubs)===before,'declined');}}return seen>0;});
   check('Two seasons in a row keep legal rosters for every club',()=>{const L=season(d.newLeague(41));L.clubs[0].budget=1e6;for(const p of L.clubs[0].players.filter(p=>p.years<=0))d.resign(L,p.id);assert(d.startSeason(L),'second season');season(L);return L.clubs.slice(1).every(c=>d.rosterOk(c))&&L.history.length===2;});
+  check('The owner raises the budget for a better losing season, not for a worse one',()=>{const L=season(d.newLeague(51)),c=L.clubs[0];c.budget=1e6;for(const p of c.players.filter(p=>p.years<=0))d.resign(L,p.id);c.budget=7500;assert(d.startSeason(L),'second season');season(L);const h=L.history;const r=L.report.raise;const winning=h[1].w>h[1].l,better=h[1].w>h[0].w;if(h[1].final)return r>=600;if(winning)return r===300;return better?r===200:r===0;});
   check('Saves round-trip, and a different game\'s save becomes a new league',()=>{const L=d.newLeague(3);d.playDay(L);const back=d.migrateLeague(clone(L));return JSON.stringify(back.clubs)===JSON.stringify(L.clubs)&&d.validLeague(back)&&!d.validLeague({game:'diamond-career'})&&d.migrateLeague({game:'wildbond'}).season===1;});
+  check('Structurally damaged imports are refused without throwing',()=>{
+    const changes=[L=>L.clubs[0]={},L=>L.clubs[0].lineup[1]=L.clubs[0].lineup[0],L=>L.clubs[0].players[0].contact=null,L=>L.day=30,L=>L.schedule[0][0]=[0,0],L=>L.upgrades.seats=99,L=>L.speed=0,L=>L.freeAgents.push(clone(L.clubs[0].players[0]))];
+    for(const change of changes){const L=d.newLeague(7);change(L);assert(!d.validLeague(L),'invalid import accepted');}return true;
+  });
+  check('Damage recovery preserves the raw save and loads the newest playable backup',()=>{
+    const good=d.newLeague(7),raw=JSON.stringify({game:'diamond-manager',clubs:[{},{},{},{},{},{}],schedule:[]}),items=new Map([[d.DM.key,raw]]);
+    const storage={getItem:k=>items.get(k)||null,setItem:(k,v)=>items.set(k,v)};
+    const back=d.loadLeague(storage,[{data:'{broken'},{data:JSON.stringify(good)}]);
+    assert(JSON.stringify(back)===JSON.stringify(good),'recovered');assert(items.get(d.DM.key)===raw,'original not overwritten');
+    return [...items].some(([k,v])=>k.startsWith('arcade-backup:')&&JSON.parse(v).data===raw);
+  });
+  check('A full season remains a valid save at every phase',()=>{const L=d.newLeague(2);while(L.phase==='season'){d.playDay(L);assert(d.validLeague(L),'season');}while(L.phase==='final'){d.playFinalGame(L);assert(d.validLeague(L),'final/offseason');}return true;});
+  check('Blocked browser storage still permits a new league',()=>d.loadLeague({getItem(){throw Error('blocked');}},[])===null);
   return out;
 }
