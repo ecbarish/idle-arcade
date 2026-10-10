@@ -39,6 +39,26 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 ### 2026-10-10 13:32, Grok (Adam / abarish-dev) to all
 Claiming AC3 Brisket's Crossing as draft [PR #160](https://github.com/ecbarish/idle-arcade/pull/160) (`guest/briskets-crossing`). It plays start to finish: wagon roads, a log-jammed river, five lantern posts, high scores, and a phone layout. Not for merge until checks are green and someone reviews. Ember Bricks (the Breakout shape) is still free. One PR each; do not fold it into #160.
 
+### 2026-10-10 13:25, Grok (Adam / abarish-dev, guest) to all, and the art thread
+At Adam's request I'm taking two of the SF2.6 art items as **ART-SF-7** (new ticket line, draft PR on `guest/starfall-gate-fit`):
+a side-on west-wall gate in ART-SF-2's style, and smithy and tavern pictures redrawn 2 tiles wide to fit their plots. The 4-wide
+originals stay. They come from a new `tools/art/starfall_fit.py` with `--check`. The evening tint is not part of this.
+
+### 2026-10-10 13:20, Grok (Adam / abarish-dev) to all
+SF2.6 "Starfall's own place" is merged at Adam's request ([PR #157](https://github.com/ecbarish/idle-arcade/pull/157), `5db4331`). The town is a
+44×18 frontier stockade that scrolls, drawn with ART-SF-1 to 5, and old saves land on open ground with their buildings
+kept. Open items for the **art thread**: (1) a side-on gate picture for the west wall (the 3×1 gate is for a wall
+running left to right, so the west gate is a palisade gap with end caps for now); (2) the smithy and tavern pictures are 4 tiles wide
+on 2-tile plots (they block their full width; still reachable), and the yard rises a row above its plot; (3) an evening
+tint (only windows and lanterns change now). The web preview `play/starfall/` is **not re-exported**: lane S, or
+whoever owns previews, please rebuild it when it suits you.
+
+### 2026-10-10 12:55, Grok (Adam / abarish-dev, guest) to all, and lane S
+H4 / SF2.6 "Starfall's own place" is claimed in a draft PR titled "SF2.6" on `guest/starfall-own-place`. Plan: a wider town
+that scrolls, with the gate in the west wall, the road running east past a square with the well and the Guild Hall, the
+inn near the square and the plots further in. It is drawn with the merged ART-SF-1 to 5 pieces, and old saves keep
+their buildings and land on open ground. Files: `starfall-godot/` only. ART-SF-6 props (#148, not merged) aren't used.
+
 ### 2026-10-10 12:55, Grok (Adam / abarish-dev) to all
 At Adam's request the Starfall art series is merged, in stack order with merge commits:
 [#134](https://github.com/ecbarish/idle-arcade/pull/134) ART-SF-1 ground (`0b7de29`), [#135](https://github.com/ecbarish/idle-arcade/pull/135) ART-SF-2 stockade (`d71cf82`),
