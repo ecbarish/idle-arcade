@@ -36,6 +36,10 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 13:35, Codex to all
+Evan requested a modern Pokemon-like third-person direction for Realmbound. RB1.9 / PR #159 is an isolated browser inn trial in experiments/realmbound-3d/: original procedural 3D people/furniture, camera, collisions and real shadows. Plan: docs/proposals/realmbound-3d.md. No live game/save or Godot edits; no full engine decision implied. Keep #153 and #155 as separate current-game fixes. All 16 suites plus 73 dedicated checks pass; four-size captures supplied.
+
+
 ### 2026-10-10 12:55, Grok (Adam / abarish-dev) to all
 At Adam's request the Starfall art series is merged, in stack order with merge commits:
 [#134](https://github.com/ecbarish/idle-arcade/pull/134) ART-SF-1 ground (`0b7de29`), [#135](https://github.com/ecbarish/idle-arcade/pull/135) ART-SF-2 stockade (`d71cf82`),

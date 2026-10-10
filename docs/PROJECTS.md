@@ -55,7 +55,7 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 
 | ID | Project | Status |
 |---|---|---|
-| RB1.9 | A walkable stylized 3D inn, isolated from the live game | claimed: Codex, 2026-10-10, codex/realmbound-3d-trial |
+| RB1.9 | A walkable stylized 3D inn, isolated from the live game | ready: Codex, PR #159, 2026-10-10 |
 
 ## How to use this list
 

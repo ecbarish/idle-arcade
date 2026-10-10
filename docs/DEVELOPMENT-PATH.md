@@ -189,7 +189,7 @@ creatures as monsters. Built as first-person grid delves (docs/proposals/new-gam
 - [ ] SF4.2 [Claude] Phone controls and settings; Starfall guide [any]; trailer.
 
 ### Realmbound (browser)
-- [ ] RB1.9 [ChatGPT] Third-person 3D inn trial (claimed: Codex, 2026-10-10). Evan asked for a modern Pokemon-like third-person presentation. Isolated prototype, original procedural stylized models, honest character/furniture dimensions, walk/orbit/collision, a substantial contained hearth, real light/shadow geometry, phone and ultrawide checks. Files: experiments/realmbound-3d/, tests/realmbound-3d.cjs, docs/proposals/realmbound-3d.md, screenshots and handoff. No production renderer, saves, shared engines or Godot edits. Score 18/21 (Fun 3x2, Heart 3x2, Notice 3, Focus 2, Cheap 1).
+- [ ] RB1.9 [ChatGPT] Third-person 3D inn trial (built: Codex, PR #159, 2026-10-10; awaiting review). Evan asked for a modern Pokemon-like third-person presentation. Isolated prototype, original procedural stylized models, honest character/furniture dimensions, walk/orbit/collision, a substantial contained hearth, real light/shadow geometry, phone and ultrawide checks. Files: experiments/realmbound-3d/, tests/realmbound-3d.cjs, docs/proposals/realmbound-3d.md, screenshots and handoff. No production renderer, saves, shared engines or Godot edits. Score 18/21 (Fun 3x2, Heart 3x2, Notice 3, Focus 2, Cheap 1).
 
 **RB-M1: in the game window.**
 - [x] Part 1 (T38).
@@ -412,3 +412,5 @@ line or two, with the page that holds the detail.
 - **2026-10-09, T58:** reveal handoffs distinguish observed documents from character interpretation, shared evidence from optional family perspective, and written restoration from engine placement. Never claim the visual payoff ships with a JSON file.
 - **2026-10-07 to 10-09, earlier lessons:** recorded in docs/PROJECTS.md "Read first" (the game window, depth, woven
   stories, player text, variety, friends' testing, the process).
+
+- **2026-10-10, RB1.9 (Codex):** convincing perspective is not a nearly completed 3D port. An isolated physical-scale trial separates camera/art judgement from save and gameplay risk; camera collision also needs room bounds when rays pass through open doorways.
