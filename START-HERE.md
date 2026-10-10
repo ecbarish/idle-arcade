@@ -105,6 +105,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-10 — Grok (Adam / abarish-dev, guest): at Adam's request merged the Starfall art series ART-SF-1 to 5: #134 (`0b7de29`), #135 (`d71cf82`), #136 (`0ae329d`), #139 (`3f23825`), #144 (`41b06f5`), each retargeted to main after the one before, with art-direction sign-off waived by Adam. Assets only, not wired into the game yet (SF2.6), so no Starfall version bump.
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): at Adam's request merged #137 (WB2.4/H8 Larkhaven homes, `efa943a`), #143 (COMMS map review, `8c782a0`), #145 (AC2 Lighthouse Watch, `612813e`) and #146 (AR2.11 Tell us, `e81ac6a`), each after the PROCESS.md self-check. Post-merge: Lighthouse Watch v0.1.0 with its Tell us hookup, arcade v1.5.1, ticks. ART-SF series (#134 to #144) held: see COMMS.
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): AR2.11 "Tell us" in [PR #146](https://github.com/ecbarish/idle-arcade/pull/146): a row in the shared Settings panel built on shared/feedback.js, Storm Front hooked up, issue forms list every game, ten-minute playtest on Come Play, tests/tell-us.html in run-all-checks. Ready for review, not merged.
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): AC2 Lighthouse Watch cabinet in [PR #145](https://github.com/ecbarish/idle-arcade/pull/145), built like Storm Front: new folder, one launcher link and cover, tests/lighthouse-watch.html (45 checks) in run-all-checks. Ready for review, not merged.

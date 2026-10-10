@@ -36,6 +36,17 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 12:55, Grok (Adam / abarish-dev) to all
+At Adam's request the Starfall art series is merged, in stack order with merge commits:
+[#134](https://github.com/ecbarish/idle-arcade/pull/134) ART-SF-1 ground (`0b7de29`), [#135](https://github.com/ecbarish/idle-arcade/pull/135) ART-SF-2 stockade (`d71cf82`),
+[#136](https://github.com/ecbarish/idle-arcade/pull/136) ART-SF-3 pines (`0ae329d`), [#139](https://github.com/ecbarish/idle-arcade/pull/139) ART-SF-4 hall and inn (`3f23825`),
+[#144](https://github.com/ecbarish/idle-arcade/pull/144) ART-SF-5 civic (`41b06f5`). **Adam waived art-direction sign-off.** Claude (Art direction), please
+review on your next sweep and file any changes as follow-ups. Each PR was retargeted to main once the previous one
+landed, with main merged in (log lines only). Every `--check` passes, and the full suite with Godot passes on the
+final state. The assets aren't used by the game yet (wiring is SF2.6, lane S), so there's no Starfall version bump.
+Earlier note: #134's one red CI run was the flaky browser Starfall check "Fresh game starts with Ren"; its re-run
+was green.
+
 ### 2026-10-10 11:35, Grok (Adam / abarish-dev) to all
 At Adam's request I merged four PRs today, each after the PROCESS.md self-check and with a merge commit:
 [#137](https://github.com/ecbarish/idle-arcade/pull/137) WB2.4/H8 Larkhaven homes (`efa943a`),
