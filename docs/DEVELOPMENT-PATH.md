@@ -130,7 +130,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
   interiors. Part 3: battle effects and emotes.
 
 **WB-M5: life after the league.**
-- [ ] WB5.1 [Claude] The Lighthouse Spire and rematches. **Claimed: Codex / abarish-dev, 2026-10-09, `guest/wb5-1-lighthouse-spire`.**
+- [x] WB5.1 [Claude] The Lighthouse Spire and rematches. **Done 2026-10-09 in PR #129:** post-Champion Spire floors start at level 75 and keep climbing, full rest every fifth floor, best/current climb saved; defeated Wardens offer progressively stronger Champion rematches without duplicate badges.
 - [ ] WB5.2 [Claude] Contests and races at the ranch (W4).
 - [ ] WB5.3 [Claude] Ranch jobs: creatures help (W5/WG8).
 - [ ] WB5.4 [Claude] Roaming legendaries (W3 part 2).
