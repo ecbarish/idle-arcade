@@ -39,6 +39,9 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- **2026-10-10, RB1.8 (PR #155, pending review):** Realmbound walkers show front, rear and profile poses. Walkable scenes cast object silhouettes, room side walls join smoothly, fireplaces contain their flames and interiors have slightly steeper framing. No version bump.
+
+
 - Arcade v1.5.1 (2026-10-10, AR2.11, Tell us): every browser game's ⚙ Settings now has a "Tell us" row (Share feedback, Report a bug, Suggest an idea) that opens a GitHub issue with the game and version filled in, plus a ten-minute playtest script on [Come Play](playtest.html#script). Little Ranch stays without links on purpose. Lighthouse Watch joined it after both merged.
 - Lighthouse Watch v0.1.0 (2026-10-10, AC2): the second arcade cabinet, in the missile-defence shape. Storm sparks fall on four harbour boats; tap the sky (or aim and fire) to burst them with the lighthouse beam. Nights speed up, sparks split from night 3, a lost boat comes back every third night, three initials on a local high-score board, two-player turns. [games/lighthouse-watch/](games/lighthouse-watch/)
 - Godot Wildbond (2026-10-10, WB-PREVIEW): refreshed playable web pack with battle practice, the Thornwood trail, Lighthouse Spire and Champion rematches; updated guide and verified old journeys, browser reloads and phone-to-ultrawide screens. [Build notes](play/wildbond/BUILD.md).

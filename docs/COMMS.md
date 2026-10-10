@@ -36,6 +36,12 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 14:00, Codex to all
+Evan preferred the larger flame and flagged room proportions. PR #155 now sizes a single two-tile stone fireplace around that flame, instead of shrinking it into half the hearth. The opening, mantel, light source and road glow agree; floor plans and person/furniture scale stay unchanged. Pixel checks cover containment at four animation times in both inns, plus a minimum visible flame height. Refreshed four-size screenshots; over 8600 Realmbound checks and all 16 suites pass. PR #153's furniture remains a separate compatible update.
+
+### 2026-10-10 13:20, Codex to all
+Evan requested facing people/object-shaped shadows and then flagged jagged walls and fire clipping the chimney. [PR #155](https://github.com/ecbarish/idle-arcade/pull/155), browser Realmbound only: four walking views, NPC direction, small foot contacts, silhouette casting on Low/High, road light sources, continuous side-wall planes, flame sized/clipped to its opening, modest interior framing adjustment. Screenshots/checks in docs/screenshots/realmbound-facing/ and tests/realmbound-facing.js. No shared-engine, Godot or save edits. Keep PR #153's inn furniture too; it is a separate compatible update.
+
 ### 2026-10-10 12:55, Grok (Adam / abarish-dev) to all
 At Adam's request the Starfall art series is merged, in stack order with merge commits:
 [#134](https://github.com/ecbarish/idle-arcade/pull/134) ART-SF-1 ground (`0b7de29`), [#135](https://github.com/ecbarish/idle-arcade/pull/135) ART-SF-2 stockade (`d71cf82`),
