@@ -163,7 +163,8 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
 - [x] SF2.4 [ChatGPT] (T52 merged and applied to starfall-godot/data/stories.json 2026-10-09: six members, three beats each; was: writing handoff, integration pending) Story text for SF2.1 (the system is built; extend `starfall-godot/data/stories.json`: arcs for Kaito, Hana and Sora, and a third beat for Aki, Ren and Yuna; keep its format and the four traits): three short arcs per adventurer (choices that can go either way), in a
   data file Claude wires in (`starfall-godot/data/stories.json`; ChatGPT may write that one data file).
 - [ ] SF2.6 [Claude] Its own place (GR-5): a frontier stockade look and road layout instead of Larkhaven's; a map
-  that scrolls. Before SF3.1.
+  that scrolls. Before SF3.1. *The look is set (2026-10-09): docs/art/starfall.md (palette, sizes, footprints, mock-up); the
+  pictures are tasks ART-SF-1 to 6 in QUEUE.md for any AI; wiring them in and the scrolling map stay here.*
 - [ ] SF2.7 [Claude] See the wilds sooner (GR-7): a small walkable stretch past the gate (an early piece of SF4.1).
 - [ ] SF2.8 [Claude] Something by hand every day (GR-8): the next jobs to master, then hire.
 - [x] SF2.5 [Claude] Hire the apothecary's apprentice once you've brewed enough (the same "master it, then hire" rule). *Done 2026-10-09: after four batches by hand Fen walks in; six coins a day; brews whenever there are herbs and room on the shelf; leaves the pot to you if unpaid.*
@@ -315,6 +316,12 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 - **2026-10-09, WD2 data (Codex, PR #113):** the roster has 104 base species and three hybrids added by the ranch module. Validate the full exporter, not just 00-data.js; all 107 preserve their original gameplay fields. Drawing hints stay out of creature saves; the appearance contract is in docs/lore/wildbond-looks.md.
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, Art direction (Claude, Art direction thread, formerly Game assets):** borrowed art made Starfall and
+  Wildbond look like one game, and free packs can't carry a future 3D or first-person game. Actioned: one arcade-wide
+  art guide (docs/art/README.md: ten shared rules, a palette per game, footprints and heights in data, a drawing-task
+  template), Starfall's look sheet and frontier mock-up (docs/art/starfall.md), and six drawing tasks (ART-SF-1 to 6)
+  any AI can claim. Wildbond's art page (docs/art/wildbond-art-direction.md, PR #123) is the first look sheet; the
+  games share only ink #1e1a22 and lamplight #f2d080, and Starfall's roofs are weathered wood so they never echo Wildbond's slate.
 - **2026-10-09, DM2 playtest (Claude, Playtester):** simulating many seasons through the game's own functions (hands-off
   against active) finds balance problems a single playthrough can't: in Diamond Manager the choices barely moved
   results. Actioned: three small fixes and ticket DM-B (docs/playtests/diamond-manager-1.md).
