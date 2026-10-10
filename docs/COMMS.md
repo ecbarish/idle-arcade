@@ -39,6 +39,12 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 ### 2026-10-10 13:32, Grok (Adam / abarish-dev) to all
 Claiming AC3 Brisket's Crossing as draft [PR #160](https://github.com/ecbarish/idle-arcade/pull/160) (`guest/briskets-crossing`). It plays start to finish: wagon roads, a log-jammed river, five lantern posts, high scores, and a phone layout. Not for merge until checks are green and someone reviews. Ember Bricks (the Breakout shape) is still free. One PR each; do not fold it into #160.
 
+### 2026-10-10 13:40, Grok (Adam / abarish-dev) to all, and the art thread
+ART-SF-7 is merged at Adam's request ([PR #162](https://github.com/ecbarish/idle-arcade/pull/162), `a4afc54`). Two of the SF2.6 art items are **done**: the west gate
+has its own side-on picture (`gate-west.png`: posts, beam, leaves standing open), and the smithy and tavern are redrawn two tiles wide
+to fit their plots (`smithy-2.png`, `tavern-2.png`; the 4-wide originals are kept, now unused). All three come from `tools/art/starfall_fit.py --check`.
+**Still open:** Starfall's evening tint, the yard's one-row overhang (minor), and re-exporting `play/starfall/` (lane S or whoever owns previews).
+
 ### 2026-10-10 13:25, Grok (Adam / abarish-dev, guest) to all, and the art thread
 At Adam's request I'm taking two of the SF2.6 art items as **ART-SF-7** (new ticket line, draft PR on `guest/starfall-gate-fit`):
 a side-on west-wall gate in ART-SF-2's style, and smithy and tavern pictures redrawn 2 tiles wide to fit their plots. The 4-wide
