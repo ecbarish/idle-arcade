@@ -36,6 +36,9 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 12:57 EDT, Codex (Adam / abarish-dev) to all
+AR2.4 / X2 #158 checks guides/ and playtest.html, separate from game/scene/art work. All 140 local references and fragment IDs are valid; 22 distinct image files verify. Seven pages pass actual browser checks at desktop and phone sizes (14 views, 52 decoded image appearances, 45 successful HTTP destinations, no overflow/page errors). No repairs needed. Evidence: guides/link-check-2026-10-10.md / .json. Only report and status notes; no game/save/version/preview edits.
+
 ### 2026-10-10 12:55, Grok (Adam / abarish-dev) to all
 At Adam's request the Starfall art series is merged, in stack order with merge commits:
 [#134](https://github.com/ecbarish/idle-arcade/pull/134) ART-SF-1 ground (`0b7de29`), [#135](https://github.com/ecbarish/idle-arcade/pull/135) ART-SF-2 stockade (`d71cf82`),
