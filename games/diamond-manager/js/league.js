@@ -294,5 +294,52 @@ function aiOffer(L) {
 }
 function answerOffer(L,yes) { const o=L.offer; L.offer=null; if(!o||!yes) return ''; return doTrade(L,o.club,[o.give],[o.get]); }
 
-function validLeague(o) { return !!o && typeof o==='object' && o.game==='diamond-manager' && Array.isArray(o.clubs) && o.clubs.length===6 && Array.isArray(o.schedule); }
+function validLeague(o) {
+  // Imported JSON must be playable, not merely have the right game label.
+  try {
+    const number = n => Number.isFinite(n), int = n => Number.isInteger(n), team = n => int(n) && n >= 0 && n < 6;
+    if (!o || o.game !== 'diamond-manager' || o.schema !== 1 || !int(o.seed) || !int(o.nextId) || !int(o.season) || o.season < 1 ||
+        !number(o.cash) || o.cash < 0 || !['season','final','offseason'].includes(o.phase) || !int(o.day) || o.day < 0 ||
+        o.day > DM.seasonGames || (o.phase === 'season' && o.day === DM.seasonGames)) return false;
+    if (!Array.isArray(o.clubs) || o.clubs.length !== 6 || !Array.isArray(o.freeAgents) || !Array.isArray(o.results) ||
+        !Array.isArray(o.schedule) || o.schedule.length !== DM.seasonGames || !o.upgrades) return false;
+    if (!Object.entries(DM.upgrades).every(([key,u]) => int(o.upgrades[key]) && o.upgrades[key] >= 0 && o.upgrades[key] <= u.cost.length)) return false;
+    if (o.speed !== undefined && ![1,2,3].includes(o.speed)) return false;
+    const ids = new Set();
+    const player = p => {
+      if (!p || !int(p.id) || p.id < 1 || ids.has(p.id) || typeof p.name !== 'string' || typeof p.pitcher !== 'boolean' ||
+          !int(p.age) || p.age < 1 || !number(p.salary) || p.salary < 0 || !int(p.years)) return false;
+      ids.add(p.id);
+      return (p.pitcher ? ['stuff','control','stamina'] : ['contact','power','eye','glove']).every(k => number(p[k]) && p[k] >= 0 && p[k] <= 99);
+    };
+    for (const c of o.clubs) {
+      if (!c || typeof c.name !== 'string' || typeof c.short !== 'string' || !number(c.budget) || !int(c.rot) || c.rot < 0 ||
+          !['w','l','rs','ra'].every(k => number(c[k]) && c[k] >= 0) || !Array.isArray(c.players) || !c.players.every(player) || !rosterOk(c)) return false;
+      if (!Array.isArray(c.lineup) || c.lineup.length !== 9 || new Set(c.lineup).size !== 9 || !c.lineup.every(id => c.players.some(p => p.id === id && !p.pitcher))) return false;
+    }
+    if (!o.freeAgents.every(player) || [...ids].some(id => id >= o.nextId)) return false;
+    if (!o.schedule.every(day => Array.isArray(day) && day.length === 3 && day.every(pair => Array.isArray(pair) && pair.length === 2 && pair.every(team) && pair[0] !== pair[1]) && new Set(day.flat()).size === 6)) return false;
+    if (o.phase !== 'season') {
+      const f = o.final;
+      if (!f || !Array.isArray(f.teams) || f.teams.length !== 2 || !f.teams.every(team) || f.teams[0] === f.teams[1] ||
+          !Array.isArray(f.wins) || f.wins.length !== 2 || !f.wins.every(n => int(n) && n >= 0 && n <= 2) || !Array.isArray(f.games)) return false;
+      if (o.phase === 'offseason' && (!team(f.champion) || !f.teams.includes(f.champion))) return false;
+    }
+    if (o.offer && (!team(o.offer.club) || o.offer.club === DM.you)) return false;
+    if (o.report && (!Array.isArray(o.history) || !o.history.length || !['grew','slipped','expiring'].every(k => Array.isArray(o.report[k])))) return false;
+    return true;
+  } catch (_) { return false; }
+}
+/* Recover structurally damaged JSON as well as truncated JSON. Preserve the original before any new save. */
+function loadLeague(storage, backups) {
+  let raw;
+  try { raw = storage.getItem(DM.key); } catch (_) { return null; } // private/blocked storage still permits a new visit
+  if (raw) {
+    try { const parsed = JSON.parse(raw); if (validLeague(parsed)) return parsed; } catch (_) {}
+    try { storage.setItem('arcade-backup:' + DM.key + ':rejected-' + Date.now(), JSON.stringify({at:Date.now(),why:'Unreadable league preserved before recovery',data:raw,ver:'0.1.0'})); }
+    catch (_) { throw Error('The damaged league could not be backed up. Free some browser storage before continuing.'); }
+  }
+  for (const b of backups) { try { const parsed = JSON.parse(b.data); if (validLeague(parsed)) return parsed; } catch (_) {} }
+  return null;
+}
 function migrateLeague(o) { if(!validLeague(o)) return newLeague((Date.now()>>>0)||1); return Object.assign({speed:1,intro:false,log:[],history:[],inbox:[],sound:0},o); }

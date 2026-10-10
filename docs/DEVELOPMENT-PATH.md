@@ -145,7 +145,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
   battle speed). Start with Music, Ambience and Effects sound buses (godot-practices.md rule 3).
 - [x] WB6.3 [Claude] **Done 2026-10-09** (`turn_card.gd`). A phone held upright gets a "Turn your phone sideways" card and the game holds still (Playtester, PR #111). Learned: with `canvas_items` stretch and `keep` aspect, portrait leaves a thin strip, so no portrait layout is worth building; pausing the tree with the card set to `PROCESS_MODE_ALWAYS` freezes battles and walks cleanly.
 - [ ] WB6.3 [Claude] Import a browser Wildbond save into the new version.
-- [ ] WB6.4 [any] A Wildbond guide (first steps, the element chart, the ranch), now that systems are settling. (claimed: Grok for Adam / abarish-dev, 2026-10-09, guest/wildbond-guide)
+- [x] WB6.4 [any] A Wildbond guide (first steps, the element chart, the ranch), now that systems are settling. (merged: PR #127, 2026-10-09)
 - [ ] WB6.5 [Claude] A Wildbond trailer and store-style page; Windows build and web build published.
 - [ ] WB6.6 blocked: needs Evan (what "launch" means; START-HERE question 1).
 
@@ -272,7 +272,7 @@ No-server sharing: trade and battle codes, ghost teams (V6 part 1).
 
 ### Family games (Evan said yes 2026-10-09; docs/proposals/games-for-everyone.md)
 **Little Ranch (browser), a toy for ages 2-4.**
-- [ ] LR1 [any] The smallest test: one baby creature, three actions (feed, bubbles, peekaboo) and a bedtime
+- [x] LR1 [any] The smallest test: one baby creature, three actions (feed, bubbles, peekaboo) and a bedtime
   ending; no reading, no failing, no links or purchases, a grown-up lock. Shares the baby-form drawings W9/W10 needs. (claimed: Grok for Adam / abarish-dev, 2026-10-09, guest/little-ranch)
 **The Arcade Cabinets (browser), original single-screen games in the 1978-85 style.**
 - [x] AC1 [any] Storm Front (the Space Invaders shape, Evan's pick): one cabinet, original name and art, one PR. (built: Codex for Adam / abarish-dev, guest/storm-front, PR #119; awaiting review)

@@ -105,6 +105,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-09 Codex (codex/diamond-manager-save-safety): review follow-up preserves invalid league JSON before recovery, validates playable imports and keeps roster confirmation/trade errors in the game window. Applied after DM2; no version or balance change. Evan authorized review/merge while Claude is unavailable; reviewed and merged #121/#124/#126/#127/#131. All 14 combined suites pass; launcher 178 checks; DM safety 23 checks.
+
 - 2026-10-09 Grok (Adam / abarish-dev, guest): LR1 Little Ranch smallest test, games/little-ranch/ (v0.1.0): feed, bubbles, peekaboo, bedtime, grown-up lock; tests/little-ranch.html (38 checks) in run-all-checks; launcher entry and cover.
 - 2026-10-09 Claude (Art direction thread, was Game assets): one arcade-wide art guide (docs/art/README.md), Starfall's look sheet, palette and frontier mock-up (docs/art/starfall.md), and drawing tasks ART-SF-1 to 6 in QUEUE.md "Art tasks" for any AI. Wildbond's page (PR #123) is linked as the first sheet. Next: review ART-SF PRs; then sheets for the browser games as they move into the game window.
 - 2026-10-09 Claude (Playtester thread): DM2, the Diamond Manager playtest (docs/playtests/diamond-manager-1.md). It passes the bar (15), but over two seasons an active manager wins no more than a hands-off one. Three small fixes landed; the deeper fix is ticket DM-B in docs/plans/sports-management.md.
