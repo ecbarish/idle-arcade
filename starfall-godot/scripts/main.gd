@@ -21,12 +21,16 @@ const F_GATE := preload("res://assets/env/frontier/gate-west.png")     # ART-SF-
 const F_BUILT := { "smithy": preload("res://assets/env/frontier/smithy-2.png"), "tavern": preload("res://assets/env/frontier/tavern-2.png"),
 	"apothecary": preload("res://assets/env/frontier/apothecary.png"), "healer": preload("res://assets/env/frontier/healer.png"),
 	"yard": preload("res://assets/env/frontier/yard.png") }
-## How many tiles wide each finished building stands (its art's footprint); all are two tiles deep on their plot.
+## How many tiles wide each finished building stands (its art's footprint); all are two tiles deep on their plot except
+## the training yard, whose fenced picture is three deep: its top row is the row above the plot, and it blocks that too.
+const BUILT_H := { "yard": 3 }
 const BUILT_W := { "smithy": 2, "tavern": 2, "apothecary": 2, "healer": 3, "yard": 4 }
 ## palisade.png pieces by which neighbours they join (north 1, east 2, south 4, west 8): rects from stockade.json
 const PALISADE := { 10: Rect2(0, 0, 16, 32), 5: Rect2(16, 0, 16, 32), 3: Rect2(32, 0, 16, 32), 6: Rect2(48, 0, 16, 32),
 	12: Rect2(0, 32, 16, 32), 9: Rect2(16, 32, 16, 32), 2: Rect2(32, 32, 16, 32), 8: Rect2(48, 32, 16, 32),
 	1: Rect2(0, 64, 16, 32), 4: Rect2(16, 64, 16, 32), 0: Rect2(32, 64, 16, 32) }
+const HALL_GLASS := [Vector2(15, 56), Vector2(29, 56), Vector2(61, 56), Vector2(75, 56)]   # glass_rects in hall-inn.json
+const INN_GLASS := [Vector2(11, 36), Vector2(29, 36), Vector2(47, 36), Vector2(11, 60), Vector2(45, 60)]
 const PINE_48 := Rect2(64, 0, 32, 48)
 const PINE_32 := Rect2(32, 16, 24, 32)
 const STUMP := Rect2(16, 64, 16, 16)
@@ -335,9 +339,15 @@ func solid(p: Vector2i) -> bool:
 	if (plot_at(p) != "" and built.has(plot_at(p))) or _prop_at(p) != "":
 		return true
 	for k in built:                              # a finished building stands on its art's full footprint (SF2.6)
-		if _plot_done(k) and PLOTS.has(k) and Rect2i(PLOTS[k], Vector2i(int(BUILT_W.get(built[k].what, 2)), 2)).has_point(p):
+		if _plot_done(k) and PLOTS.has(k) and built_rect(k).has_point(p):
 			return true
 	return false
+
+## The ground a finished building stands on: its art's footprint, bottom-left on the plot's bottom-left.
+func built_rect(k: String) -> Rect2i:
+	var w := int(BUILT_W.get(built[k].what, 2))
+	var h := int(BUILT_H.get(built[k].what, 2))
+	return Rect2i(PLOTS[k] + Vector2i(0, 2 - h), Vector2i(w, h))
 
 ## The plot a tile belongs to ("" if none).
 func plot_at(p: Vector2i) -> String:
@@ -1738,10 +1748,22 @@ func _draw() -> void:
 			elif ch == "k":
 				draw_texture_rect_region(F_PINES, Rect2(Vector2(x, y) * TILE, Vector2(16, 16)), FERN)
 	var lit := 1 if evening() else 0
-	draw_texture(F_TOWER[lit], Vector2(3, 8 - 5) * TILE)                      # the watchtower by the gate (footprint 2x2 at 3,6)
-	draw_texture(F_HALL[lit], Vector2(HALL_DOOR.x - 3, HALL_DOOR.y - 4) * TILE)   # the Guild Hall faces the square
+	_glow.clear()
+	var tower_at := Vector2(3, 8 - 5) * TILE
+	draw_texture(F_TOWER[lit], tower_at)                                        # the watchtower by the gate (footprint 2x2 at 3,6)
+	var hall_at := Vector2(HALL_DOOR.x - 3, HALL_DOOR.y - 4) * TILE
+	draw_texture(F_HALL[lit], hall_at)                                          # the Guild Hall faces the square
 	var resting := heroes.any(func(h): return h.where == "inside")
-	draw_texture(F_INN[1 if lit == 1 or resting else 0], Vector2(INN_DOOR.x - 2, INN_DOOR.y - 4) * TILE)
+	var inn_lit := 1 if lit == 1 or resting else 0
+	var inn_at := Vector2(INN_DOOR.x - 2, INN_DOOR.y - 4) * TILE
+	draw_texture(F_INN[inn_lit], inn_at)
+	if lit == 1:                                 # lamps and windows stay bright under the evening tint (drawn again over it)
+		_glow.append([F_TOWER[1], Rect2(13, 16, 5, 7), tower_at])
+		for g in HALL_GLASS:
+			_glow.append([F_HALL[1], Rect2(g, Vector2(6, 6)), hall_at])
+	if inn_lit == 1:
+		for g in INN_GLASS:
+			_glow.append([F_INN[1], Rect2(g, Vector2(6, 6)), inn_at])
 	draw_texture(F_WELL, Vector2(11, 12 - 1) * TILE)
 	for k in PLOTS:
 		_draw_plot(k)
@@ -1766,6 +1788,7 @@ func _draw() -> void:
 			draw_texture(_emote(feel), m.pos + Vector2(1, -19 + sin(t * 4.0) * 1.0))
 		if not m.a.is_empty() and badly_hurt(m):
 			draw_rect(Rect2(m.pos + Vector2(4, -3), Vector2(8, 2)), Color("f4f0e8"))      # a bandage round the head
+	_evening_tint()
 	_lit_windows()
 	if good_days >= 2:
 		_bunting_draw()
@@ -1837,6 +1860,7 @@ func _draw_built(_k: String, what: String, o: Vector2) -> void:
 			draw_rect(Rect2(a + Vector2(9, 13), Vector2(7, 2)), Color("3e3833"))
 			var glow := 0.75 + 0.25 * sin(t * 5.0)
 			draw_rect(Rect2(at + Vector2(8, 41), Vector2(7, 5)), Color(1.0, 0.45 * glow + 0.2, 0.1, 0.8))
+			_glow.append([Rect2(at + Vector2(8, 41), Vector2(7, 5)), Color(1.0, 0.45 * glow + 0.2, 0.1, 0.8)])
 			for i in 3:
 				var ph := fmod(t * (0.6 if forge.is_empty() and smith_t == 0.0 else 1.2) + i * 0.33, 1.0)
 				draw_circle(at + Vector2(24 + sin(t + i) * 2.0, -ph * 14.0), 2.0 + ph * 3.0, Color(0.72, 0.71, 0.67, 0.5 * (1.0 - ph)))
@@ -1887,6 +1911,30 @@ func _inn_sign() -> void:
 
 func _gate_draw() -> void:
 	pass                                         # the gate is the gap in the west wall, capped by the palisade's ends
+
+## Evening (SF2.6 follow-up): a gentle cool tint over the town as the day ends, per docs/art/starfall.md's "cool
+## daylight; warm lamplight ... brighter at night". It only changes the picture, never the day: it fades in over the
+## second half of the day and out again early next morning. Lamps, lit windows and the forge are drawn again on top.
+const DUSK_COLOUR := Color(0.07, 0.1, 0.2)
+const DUSK_MAX := 0.36
+var _glow: Array = []                            # [texture, source rect, where] or [Rect2, Color]: light drawn over the tint
+
+func dusk() -> float:
+	var f := day_t / DAY_SECONDS
+	if f < 0.06 and day > 1:
+		return 1.0 - f / 0.06                    # night lifting in the first moments of a new day
+	return clampf((f - 0.5) / 0.3, 0.0, 1.0)
+
+func _evening_tint() -> void:
+	var a := DUSK_MAX * dusk()
+	if a <= 0.0:
+		return
+	draw_rect(Rect2(Vector2(-64, -64), Vector2(MAP[0].length(), MAP.size()) * TILE + Vector2(128, 128)), Color(DUSK_COLOUR, a))
+	for g in _glow:
+		if g[0] is Texture2D:
+			draw_texture_rect_region(g[0], Rect2(g[2] + g[1].position, g[1].size), g[1])
+		else:
+			draw_rect(g[0], g[1])
 
 func _lit_windows() -> void:
 	# a sleepy "z" at an upstairs window of the inn for each adventurer resting there
