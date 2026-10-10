@@ -7,7 +7,7 @@
    the corner button for three seconds). Art and sounds are drawn and made in code. Only the sound choice is stored
    (little-ranch-settings-v1); there is no save. Checks: tests/little-ranch.html. */
 (function () {
-  const VERSION = '0.1.0', PREF = 'little-ranch-settings-v1', BEDTIME_ACTS = 12, BEDTIME_SECS = 360, HOLD_MS = 3000;
+  const VERSION = '0.1.1', PREF = 'little-ranch-settings-v1', BEDTIME_ACTS = 12, BEDTIME_SECS = 360, HOLD_MS = 3000;
   const cv = document.getElementById('ranch'), cx = cv.getContext('2d');
   const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v)), lerp = (a, b, k) => a + (b - a) * k;

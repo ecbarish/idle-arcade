@@ -22,4 +22,4 @@ The two rotation captures below are the same resize route, with the old implemen
 
 ## Boundaries
 
-No game-version or save-key change, new art, new game rules, merge or deployment. Tests ran in GitHub Actions Chromium because local Chromium cannot create its required socket in this executor. Sound audibility and real-device touch latency were not evaluated. The required all-suite check must also pass on the final documentation/screenshot commit before review readiness.
+The repaired implementation introduced no save-key change, new art or new game rules. After Adam approved publication, the release version and matching test assertion advance from 0.1.0 to 0.1.1. The PR description links the final-head checks and deployment outcome. Tests ran in GitHub Actions Chromium because local Chromium cannot create its required socket in this executor. Sound audibility and real-device touch latency were not evaluated. The required all-suite check must also pass on the final documentation/screenshot commit before review readiness.
