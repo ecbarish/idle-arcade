@@ -105,6 +105,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-10 — Grok (Adam / abarish-dev, guest): AC2 Lighthouse Watch cabinet in [PR #145](https://github.com/ecbarish/idle-arcade/pull/145), built like Storm Front: new folder, one launcher link and cover, tests/lighthouse-watch.html (45 checks) in run-all-checks. Ready for review, not merged.
 - 2026-10-10 — Codex (Adam / abarish-dev): WB-PREVIEW [PR #132](https://github.com/ecbarish/idle-arcade/pull/132) merged as `7b212edd` and deployed. Main [Checks](https://github.com/ecbarish/idle-arcade/actions/runs/38056640269) pass all 14 suites; [Pages](https://github.com/ecbarish/idle-arcade/actions/runs/38056640121) succeeded. Live pack, shell and engine hashes match the browser-reviewed build (55 checks, 27 captures, synthetic pre-WD3 saves); fresh live gameplay could not be retested here because cloud WebGL2 is unavailable. No game/save/version change.
 
 - 2026-10-10 — Codex (Adam / abarish-dev): WB-PREVIEW in [PR #132](https://github.com/ecbarish/idle-arcade/pull/132) refreshes the Wildbond web pack from merged main, updates its guide and records exact-build browser/old-save verification. Ready for maintainer review after CI; no merge, deploy or version bump.
