@@ -34,20 +34,10 @@ commit.
 changelog (your entry at the top), COMMS (your message), and ticking your own deliverable in DEVELOPMENT-PATH. Anything
 more in another lane's files: ask that lane in COMMS, or keep it to a few lines and say so in your PR.
 
-## Claiming work (the same for every assistant and thread)
+## Claiming, submitting and merging: see [PROCESS.md](PROCESS.md)
 
-A claim must be visible to everyone **before** any work, and only open pull requests and branches are visible to all
-at once (a claim written on your branch isn't on main yet). So:
-
-1. **Check it's free:** the deliverable's ID (for example `WD1`) appears in no open pull request title and no
-   `(claimed ...)` note on main. (`git fetch` and look at the open PR list.)
-2. **Claim it:** first commit on your branch marks the deliverable in DEVELOPMENT-PATH `(claimed: <who>, <date>,
-   <branch>)`; push and **open a draft pull request at once whose title starts with the ID** ("WD1: numbers off the
-   screen"). That draft PR is the claim. `<who>` is `Codex` or `Claude (<thread name>)`.
-3. **One deliverable per claim**, and claim the next only when the first is in review.
-4. **Release it** if you stop: close the draft PR with a one-line comment ("released: <why>"), or hand it over in
-   COMMS. A claim with no new commits for **two days** is stale: anyone may take it after one comment on its PR.
-5. **Two claims on the same ID:** the older pull request keeps it; the newer one moves to another deliverable.
+One page for every AI and thread: pick, claim with a draft pull request **before** building, build, submit (mark it
+ready), and merging: any AI may do any step, including merging its own pull request straight away, after a written self-check.
 
 ## Heavy lifting (for the AIs with the most usage: Evan's dad's AIs first; Evan, 2026-10-09)
 
@@ -55,7 +45,7 @@ Evan: "my dad's AIs have much more usage available, so we can steer them to a lo
 running out of usage for this week." These are the **big builds**, in the order that matters most. They are Godot
 work: follow the Godot rules under "The road ahead" (all checks green, old saves load, screenshots, a reviewer
 merges). Before starting, check the open pull request list: the Wildbond builder thread is on the ending (WB4.3) and
-creature drawing (WD2), and #107 is phone controls and settings (WB6.1-6.2); don't take those. One task per pull
+creature drawing (WD2), and phone controls and settings (WB6.1-6.2) shipped in #107; don't take those. One task per pull
 request; split a big one into steps ("WD4a: Thornwood's route") and open the next when the first is in review.
 
 | # | Big build (path ID) | Read first | Files | Done when |
@@ -67,6 +57,14 @@ request; split a big one into steps ("WD4a: Thornwood's route") and open the nex
 | H5 | **See the wilds sooner** (SF2.7), then **something by hand every day** (SF2.8) | GR-7, GR-8 | `starfall-godot/` | A small walkable stretch past the gate; the next jobs to master, then hire (the "master it, then hire" rule) |
 | H6 | **The rest of the areas you can explore** (WD4b onward) | as H2 | as H2 | One area per pull request, in journey order |
 | H7 | **The Unbound appear** (WB3.7) | docs/lore/wildbond-threads.md (check every line against it), docs/proposals/reputation-and-consequence.md | `wildbond-godot/` | First encounters and a choice to help or oppose; reputation begins; no new canon without the Design decisions thread (docs/DECISIONS.md) |
+| H8 | **The last two homes in Larkhaven** (WB2.4, homes left) | DEVELOPMENT-PATH WB2.4; the inn and shop interiors as the pattern | `wildbond-godot/` interior scenes | Two homes you can walk into, each with a person who lives there and something to find; screenshots |
+| H9 | **Bring a browser save across** (WB6.3) | DEVELOPMENT-PATH WB6.3; browser Wildbond's save format (`games/wildbond/`) | `wildbond-godot/` save code | A browser Wildbond save loads into the Godot game with its creatures and progress; a check with a sample save |
+| H10 | **Ranch jobs** (WB5.3) | docs/proposals/ (ranch jobs, W5/WG8); the "master it, then hire" rule | `wildbond-godot/` ranch | Creatures take jobs you've done by hand yourself; active play stays worth at least as much; checks |
+| H11 | **Starfall's first season** (SF3.1, after SF2.6-2.8) | docs/plans/starfall-village.md | `starfall-godot/` | The first season as a chapter, ending in a festival; old saves load; screenshots |
+
+**Keep this list at least 10 open builds deep.** Lane P refills it from PRIORITIES.md whenever a build merges or is
+claimed; any Claude thread that notices it under 10 adds the next items from PRIORITIES.md section 4 and the Starfall
+order.
 
 Browser work for any AI is in "The road ahead" below. Claude's own threads keep to planning, reviews, the ending
 and the creature drawing while Claude's usage is low.
@@ -98,8 +96,8 @@ then tasks here.
 
 Evan: "we are nearing our cap on Claude, so if we lay out a strong road in front of us we can use our other helpers
 to push us along." These tasks need **no Godot** and are open to **any** AI (ChatGPT/Codex, Evan's dad's AIs,
-Claude). (Done and removed: RB1.5, Codex, PR #98.) Take the first one no open pull request names, claim it ("Claiming work" above), build it, open the PR;
-lane R (or Evan) merges. Each line names its spec; read it first.
+Claude). (Done and removed: RB1.5, Codex, PR #98.) Take the first one no open pull request names, claim it (docs/PROCESS.md), build it, open the PR;
+any AI merges after the self-check in docs/PROCESS.md. Each line names its spec; read it first.
 
 | # | Task (path ID) | Spec | Files | Done when |
 |---|---|---|---|---|
@@ -121,10 +119,40 @@ lane R (or Evan) merges. Each line names its spec; read it first.
 above (the Wildbond builder and Starfall threads check the open PR list too); keep to the files the deliverable needs;
 install Godot 4.7.2 (`docs/learning/`, or let GitHub do it) and run `node tools/run-all-checks.cjs`, which runs both
 Godot suites; **old saves must load** (add a check); add checks for what you build; for anything visual, put a
-screenshot in the PR; the GitHub "checks" tick must be green, and lane R (a Claude reviewer) or Evan merges. Take
+screenshot in the PR; the GitHub "checks" tick must be green, and any AI merges after the self-check in docs/PROCESS.md. Take
 Godot deliverables from PRIORITIES.md section 4 in order (WD2 drawing, WD3 battles, WB6.1-6.2 phone and settings,
 SF2.6-2.8 Starfall), never one the Wildbond builder or Starfall thread has open. Lane P refills this table as tasks
 merge.
+
+## When the road is empty, or everything is waiting on review
+
+(Past the end of the road with something that fits? docs/PROCESS.md "When you get ahead of the road" says how to write
+and claim your own next task.)
+
+Never sit idle. If every task above is claimed or waiting to merge, take one of these (no claim needed for 1 and 2;
+claim 3-5 with a draft PR titled `FB-<n>: ...`):
+
+1. **Review a waiting pull request** that isn't yours: run its checks and tests, play the change, and leave a
+   comment saying what you tried and what you found (a pre-review, as Grok did on #112). This makes merging fast.
+2. **Playtest a game** with docs/PLAYTEST.md's scorecard and open a GitHub issue per real problem (game, version, steps).
+3. **Fix an open bug issue** (label `bug`), smallest first.
+4. **Add tests** where a game has few: a check for something already built, in that game's test page or Godot suite.
+5. **Polish player-facing text** in a game (docs/CREATIVE.md "Writing for players"): spelling, capitals, the
+   world's words.
+
+## Saving Claude's usage (Evan, 2026-10-09: "we need to be more efficient with our token usage")
+
+Claude's weekly usage is the scarcest thing in the project. Claude threads:
+
+- **Batch:** one sweep reviews and merges every waiting PR at once, rather than one PR per wake. Fewer, longer sessions
+  beat many short ones.
+- **No status-only replies:** report only results, blockers and decisions Evan must make; progress goes in the thread's
+  status line, not a message.
+- **Plan short:** tickets and plans as tables and short specs, not essays; read only the files a task needs.
+- **Hand off building:** big builds go to the Heavy lifting list for the AIs with more usage; Claude threads review,
+  plan and keep the hardest Wildbond pieces.
+- **Lean on others' pre-reviews:** when a helper has already run the checks and played the change, verify the
+  essentials rather than redo everything.
 
 ## The loop (every assistant)
 
@@ -133,7 +161,7 @@ merge.
    work" says: a draft pull request titled with the deliverable's ID, opened before you build.
 3. Build it on its own branch (`codex/<topic>`, `grok/<topic>`, `claude/<topic>`), with checks; all eight test pages pass
    (`tests/run.html`, `wildbond.html`, `starfall.html`, `sound.html`, `offline.html`, `diamond.html`, `otherworld.html`, `runner-safety.html`; Claude also runs the Godot checks).
-4. Open a pull request (Codex and Grok never merge their own). In the PR: what you built, the files you touched,
+4. Open a pull request (then self-check and merge it yourself, docs/PROCESS.md). In the PR: what you built, the files you touched,
    before/after screenshots for anything visual, and an "An idea" section if you have one.
 5. **Go straight to the next task in your lane.** Don't wait for the review.
    - If the next task needs files your open PR touches, branch from that PR's branch and say so in the new PR.
@@ -260,7 +288,7 @@ index.html or style.css until those phases are merged.
 Evan chose (2026-10-09) to add guests as collaborators: they push `guest/*` branches to this repo, never `main`.
 
 Self-contained tasks for someone new, each away from what the other lanes are building. Claim like everyone else (a
-draft pull request titled with the ID). Lane R reviews and merges; guests never merge. Lane P keeps this list stocked.
+draft pull request titled with the ID). Any AI merges after the self-check in docs/PROCESS.md. Lane P keeps this list stocked.
 
 | # | Task | Status | Notes |
 |---|---|---|---|

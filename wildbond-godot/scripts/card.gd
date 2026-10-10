@@ -74,8 +74,33 @@ func _input(e: InputEvent) -> void:
 func _btn(i: int) -> Rect2:
 	if _count() == 2:
 		return Rect2(196 + i * 82, 182, 76, 16)
-	var w := (160.0 - 4.0 * (_count() - 1)) / _count()       # more choices share the same row
-	return Rect2(192 + i * (w + 4), 182, w, 16)
+	# more choices share the same 160-pixel row, each as wide as its words need ("Have it made (90 coins)" next to "Next")
+	var size := _btn_size()
+	var need: Array = []
+	var total := 0.0
+	for k in _count():
+		need.append(_label_w(k, size) + 6.0)
+		total += need[k]
+	var room := 160.0 - 4.0 * (_count() - 1)
+	var x := 192.0
+	for k in i:
+		x += need[k] * room / total + 4.0
+	return Rect2(x, 182, need[i] * room / total, 16)
+
+func _label(i: int) -> String:
+	return buttons[i] if not buttons.is_empty() else (("Choose " + info.name) if i == 0 else "Not yet")
+
+func _label_w(i: int, size: int) -> float:
+	return font.get_string_size(_label(i), HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+
+## The button text size: 8 for two choices, 7 for a row of them, 6 when the row's words don't fit at 7.
+func _btn_size() -> int:
+	if _count() <= 2:
+		return 8
+	var total := 0.0
+	for k in _count():
+		total += _label_w(k, 7) + 6.0
+	return 7 if total <= 160.0 - 4.0 * (_count() - 1) else 6
 
 func _process(dt: float) -> void:
 	if visible:
@@ -138,5 +163,4 @@ func _draw() -> void:
 		draw_rect(r, INK if on else Color("7a5a3a"))
 		if on:
 			draw_rect(Rect2(r.position - Vector2(1, 1), r.size + Vector2(2, 2)), Color("f2d24a"), false, 1.0)
-		var label: String = buttons[i] if not buttons.is_empty() else (("Choose " + info.name) if i == 0 else "Not yet")
-		_text(label, r.position + Vector2(0, 11), 8 if _count() <= 2 else 7, Color("f4e9cd"), r.size.x)
+		_text(_label(i), r.position + Vector2(0, 11), _btn_size(), Color("f4e9cd"), r.size.x)

@@ -116,6 +116,7 @@ func _run() -> void:
 	check(R.moves_of(a) == ["bite", "emberSnap"], "moves at level 5")
 	var a12 := a.duplicate(true)
 	a12.lvl = 12
+	a12.erase("moves") # a pre-WD3 save keeps its original four
 	check(R.moves_of(a12) == ["bite", "emberSnap", "howl", "flameRush"], "moves at level 12")
 	var g := a.duplicate(true)
 	g.lvl = 13
@@ -146,7 +147,7 @@ func _run() -> void:
 	main.spilled = true
 	check(main._music_key() == "larkhaven", "once the colour spills into town, a warm village tune")
 	main.spilled = false
-	check(["faded", "larkhaven", "barn", "thornwood", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "wild", "trainer"].all(func(k): return ResourceLoader.exists(main.music_path(k))), "every tune is in the game")
+	check(["faded", "larkhaven", "barn", "thornwood_route", "thornwood", "thornwood_grove", "saltmarsh", "emberfall", "cloudglass", "stillreed", "hollowecho", "sunthread", "farwatch", "wild", "trainer"].all(func(k): return ResourceLoader.exists(main.music_path(k))), "every tune is in the game, including both new Thornwood maps sharing Thornwood's theme")
 	check(["saltmarsh", "emberfall", "cloudglass"].all(func(k): return ResourceLoader.exists("res://assets/ambience/%s.ogg" % k)), "waves on the coast and wind in the highlands and the pass")
 	# ---- the map: closed doors, the barn opens with the story
 	check(not main.walkable(Vector2i(4, 4)), "cottage doors stay shut")
@@ -235,6 +236,7 @@ func _run() -> void:
 	check(main.team[0].hp == main.R.stats(main.team[0]).hp, "Maren patches your team up")
 	talk_through()
 	check(main.stage == "free", "after Wren you're free")
+	check(main.caption.text != "" and not "trial" in main.caption.text.to_lower() and main._partner_name() in main.caption.text, "the note after Wren says who walks with you, not that the trial has ended (%s)" % main.caption.text)
 	var before: Vector2i = main.me.tile
 	for d in [Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP]:
 		if main.walkable(main.me.tile + d):
@@ -246,8 +248,11 @@ func _run() -> void:
 	check(walk_to(Vector2i(10, 1)), "you can walk up to the road north")
 	main._step(Vector2i.UP)
 	tick(1.0)
-	check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 14), "the north road leads to Thornwood, arriving where the map says")
-	check(main.partner.where == "thornwood", "your partner comes too")
+	check(main.map_name == "thornwood_route" and main.me.tile == Vector2i(13, 16), "the north road opens onto Thornwood Trail, arriving where the route says")
+	check(main.caption.text == "", "out on the road, the note after Wren is gone")
+	check(main.partner.where == "thornwood_route", "your partner comes onto the trail too")
+	check(main.DATA.MAPS.thornwood_route.exits.N.to == "thornwood" and main.DATA.MAPS.thornwood.exits.S.to == "thornwood_route", "WD4a: the trail and Thornwood settlement are separate connected maps")
+	check(main.DATA.MAPS.thornwood_route.exits.E.requiresElement == "Stone" and main.DATA.MAPS.has("thornwood_grove"), "WD4a: Old Root Grove is a return spot behind a Stone-partner gate")
 	# ---- a route trainer spots you, walks over and battles (Bram, from the game data)
 	# ---- the turning year (WS1, WS2)
 	var Cal := preload("res://scripts/calendar.gd")
@@ -304,9 +309,12 @@ func _run() -> void:
 	main.cal.mode = "winter"
 	check(main._leaf_tint() != Color.WHITE and main.cal.season() == "winter", "winter turns the leaves")
 	main.cal.mode = keep_mode
+	var wd4a_map_after_calendar: String = main.map_name
+	main.map_name = "thornwood"                  # this legacy geometry check belongs to the original settlement map
 	check(main._tree_at(8, 4).y == 3.0 * main.TILE and main._tree_at(12, 14).y > 13.5 * main.TILE, "trees beside open ground stand tall, but never over the first signpost")
+	main.map_name = wd4a_map_after_calendar
 	check(main.canopy != null and main.canopy.material is ShaderMaterial, "tree tops that pass in front of you are washed out like the world around them")
-	check(main.npcs.filter(func(n): return n.where == "thornwood").size() == 3, "Thornwood has Bram, Lise and Warden Isolde")
+	check(main.npcs.filter(func(n): return n.where in ["thornwood_route", "thornwood"]).size() == 3 and main.npc_info.has("bram") and main.npc_info.has("lise") and main.npc_info.has("isolde"), "WD4a: Bram is on the trail; Lise and Warden Isolde are in the settlement")
 	main.npc_info.lise.beaten = true                # keep Lise out of the way for these checks
 	main.walk_to = main.route(main.me.tile, Vector2i(14, 10))
 	for i in 200:
@@ -333,7 +341,7 @@ func _run() -> void:
 	# ---- story moments while you explore: Wren's rematch on the trail, then the guardian of Thornwood
 	main.explored_in["thornwood"] = 11
 	main._explore()
-	check(main.wren.where == "thornwood" and not main.lines.is_empty() and main.lines.any(func(l): return l.who == "wren"), "after 12 explorations Wren catches you up on the trail")
+	check(main.wren.where == "thornwood_route" and not main.lines.is_empty() and main.lines.any(func(l): return l.who == "wren"), "after 12 explorations Wren catches you up on the expanded trail")
 	talk_through()
 	check(main.battle.visible and main.battle.foes.size() == 2 and main.battle.foes.any(func(u): return u.c.sp == main.rival_c.sp), "Wren's team: a Glimmerwing and the partner Wren chose")
 	for u in main.battle.foes: u.c.hp = 0
@@ -358,6 +366,30 @@ func _run() -> void:
 	check(not main.story_done.has("elder") and int(main.story_retry.get("elder", 0)) == 26, "knocked out, it slips away and can be met again after six more explorations")
 	talk_through()
 	for c in main.team: c.hp = main.R.stats(c).hp
+	# ---- WD4a: a place to return to with the right partner
+	check(walk_to(Vector2i(28, 10)), "WD4a: the east spur reaches the stone shelf above Old Root Grove")
+	main._step(Vector2i.RIGHT)
+	tick(0.8)
+	check(main.map_name == "thornwood_route" and not main.lines.is_empty() and "Stone partner" in str(main.lines[0].text), "without a Stone partner, the hidden grove stays out of reach")
+	talk_through()
+	var stone_helper: Dictionary = main.R.make("pebblepaw", 8, { "rar": 1 }, main.rng)
+	main.team.append(stone_helper)
+	check(main._team_has_element("Stone"), "a Stone creature in the team satisfies the return gate")
+	check(walk_to(Vector2i(28, 10)), "back to the stone shelf with Pebblepaw")
+	main._step(Vector2i.RIGHT)
+	tick(0.8)
+	check(main.map_name == "thornwood_grove" and main.me.tile == Vector2i(1, 8), "the Stone partner opens Old Root Grove")
+	check(main._wild_table().any(func(w): return w[0] == "sunspark" and int(w[1]) == 12), "the hidden pocket makes rare Sunspark substantially easier to find")
+	check(main.DATA.MAPS.thornwood_grove.signs["17,6"].contains("antler"), "the hidden pocket has a small Elderhorn clue already consistent with Thornwood's story")
+	main._go("thornwood_route", Vector2i(28, 10), Vector2i.LEFT)
+	tick(0.8)
+	main.team.erase(stone_helper)
+	check(main.map_name == "thornwood_route", "you can return from the hidden grove to the trail")
+	# the north end of the trail reaches Thornwood's settlement; old saves keep the original 'thornwood' map id
+	check(walk_to(Vector2i(13, 1)), "the trail continues north to the settlement")
+	main._step(Vector2i.UP)
+	tick(0.8)
+	check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 14), "WD4a: the original Thornwood map is now the settlement, preserving old-save map ids and coordinates")
 	var lures0: int = main.bag.lures
 	check(walk_to(Vector2i(27, 10)), "you can walk to the lures lying in the grass")
 	check(main.bag.lures == lures0 + 3 and main.got_items.has("tw2"), "picking up 3 lures (%d)" % main.bag.lures)
@@ -539,6 +571,32 @@ func _run() -> void:
 		check(main.story_done.has("leagueEnding") and main.lines.size() >= 9, "the Champion, and the homecoming at the gate")
 		check(main.guests.size() == 2 and main.guests.all(func(g): return g.where == "league") and main.npcs.any(func(n): return n.id == "avenne" and n.tile == Vector2i(5, 14)), "Maren and Isolde come to the gate, and Avenne walks down to meet them")
 		check(main.lines.any(func(l): return "smallest paws" in str(l.text)), "then everyone quiets for water and rest (ChatGPT's homecoming lines)")
+		# ---- WB5.1: the Lighthouse Spire opens after the Champion
+		main.lines.clear()
+		main._go("spire", Vector2i(17, 14), Vector2i.LEFT)
+		tick(1.0)
+		check(main.map_name == "spire" and main.npcs.any(func(n): return n.id == "orla" and n.where == "spire"), "WB5.1: the Champion can enter the Lighthouse Spire and Orla is waiting")
+		var orla = main.npcs.filter(func(n): return n.id == "orla")[0]
+		main.me.tile = orla.tile + Vector2i.RIGHT
+		main.me.pos = Vector2(main.me.tile) * main.TILE
+		main.lines.clear()
+		check(main._talk_here() and main.lines.any(func(l): return "climb begins rested" in str(l.text)), "Orla explains the Spire climb and its five-floor rests")
+		talk_through()
+		check(main.battle.visible and main.battle_story == "spire:1" and main.battle.foes.size() == 3 and main.battle.foes.all(func(u): return int(u.c.lvl) == 75), "floor 1 is a three-partner level-75 Spire battle")
+		var spire_coins: int = main.bag.coins
+		main.battle.visible = false
+		main._on_battle("won")
+		check(main.spire_floor == 1 and main.spire_best == 1 and main.bag.coins > spire_coins, "winning remembers the current and best floor and pays the floor reward")
+		main.lines.clear()
+		main.spire_floor = 4
+		for creature in main.team: creature.hp = 1
+		main._spire_fight()
+		check(main.battle_story == "spire:5", "the next fight can reach the fifth-floor rest")
+		main.battle.visible = false
+		main._on_battle("won")
+		check(main.spire_floor == 5 and main.team.all(func(creature): return creature.hp == main.R.stats(creature).hp), "every fifth floor fully rests the team")
+		main.spire_active = false
+		main.spire_floor = 0
 		var isolde_info: Dictionary = main.npc_info.isolde
 		var was_beaten: bool = isolde_info.beaten
 		isolde_info.beaten = true
@@ -552,6 +610,17 @@ func _run() -> void:
 		main.lines.clear()
 		main._talk_here()
 		check(main.lines.any(func(l): return "Champion" in str(l.text)), "back in Thornwood, Isolde welcomes the Champion")
+		talk_through()
+		var badge_count_before_rematch: int = main.badges.size()
+		main.lines.clear()
+		main._talk_here()
+		check(main.lines.any(func(l): return "last battle taught us" in str(l.text)), "a second Champion visit offers Isolde's stronger rematch")
+		talk_through()
+		check(main.battle.visible and main.battle_story == "rematch:isolde" and main.battle.foes.all(func(u): return int(u.c.lvl) >= 19), "the Warden rematch uses a stronger version of the original team")
+		main.battle.visible = false
+		main._on_battle("won")
+		check(int(main.rematch_wins.get("isolde", 0)) == 1 and main.badges.size() == badge_count_before_rematch, "winning a rematch advances its tier without awarding another badge")
+		talk_through()
 		isolde_info.beaten = was_beaten
 		check(main.guests.is_empty(), "and the guests have gone home from the league gate")
 		main._go("league", Vector2i(3, 16), Vector2i.UP)
@@ -593,10 +662,18 @@ func _run() -> void:
 		check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 1), "and back into Thornwood by the gate")
 		talk_through()
 	# ---- Maren heals your team
-	if main.map_name != "larkhaven":
-		check(walk_to(Vector2i(13, 15)) or main.map_name == "larkhaven", "back down the road")
+	if main.map_name == "thornwood":
+		check(walk_to(Vector2i(13, 15)), "back down through the Thornwood settlement")
 		main._step(Vector2i.DOWN)
 		tick(1.0)
+		check(main.map_name == "thornwood_route" and main.me.tile == Vector2i(13, 1), "WD4a: south from the settlement returns to Thornwood Trail")
+		talk_through()
+	if main.map_name == "thornwood_route":
+		check(walk_to(Vector2i(13, 16)), "follow the expanded trail back toward Larkhaven")
+		main._step(Vector2i.DOWN)
+		tick(1.0)
+	elif main.map_name != "larkhaven":
+		check(false, "unexpected map on the way home: %s" % main.map_name)
 	talk_through()
 	check(main.map_name == "larkhaven", "home to Larkhaven")
 	for c in main.team: c.hp = 1
@@ -727,6 +804,11 @@ func _run() -> void:
 	main.book.close()
 	tick(0.05)
 	check(main.bubble_text.label_settings.font_size == 8 and not AudioServer.is_bus_mute(AudioServer.get_bus_index("Music")), "and back to normal")
+	check(main.FLOOR.resource_path.contains("/wild/") and main.NATURE.resource_path.contains("/wild/") and main.HOUSE.resource_path.contains("/wild/") and main.WATER.resource_path.contains("/wild/"), "the ground, trees, houses and water are Wildbond's own tiles (assets/env/wild), not the pack Starfall uses")
+	main.turn_card.check(Vector2(390, 844))
+	check(main.turn_card.visible and main.get_tree().paused, "a phone held upright gets the \"turn your phone sideways\" card, and the game holds still")
+	main.turn_card.check(Vector2(844, 390))
+	check(not main.turn_card.visible and not main.get_tree().paused, "turned sideways, the card goes and the game carries on")
 	# ---- How to play, and solid roofs (Evan's feedback, 2026-10-09)
 	main.touch.touched = false                    # (the pad checks above touched the screen)
 	tick(0.05)
@@ -862,6 +944,21 @@ func _run() -> void:
 	check(main.lines.size() >= 2 and main.lines[0].who == "maren", "the first time, Maren explains her workbench")
 	talk_through()
 	check(main.card.visible and main.card_mode == "bench" and main.card.buttons.size() == 4, "then whoever walks with you tries gear on (%s)" % [main.card.buttons])
+	var coins_was: int = int(main.bag.coins)
+	main.bag.coins = 0
+	var cut: Array = []
+	for gi in main.R.GEAR.size():                  # every piece, with "Have it made (N coins)" showing: no button's words cut off
+		main.bench_i = gi
+		main._open_bench()
+		for bi in main.card.buttons.size():
+			if main.card._label_w(bi, main.card._btn_size()) > main.card._btn(bi).size.x - 2.0:
+				cut.append(main.card.buttons[bi])
+		var last: Rect2 = main.card._btn(main.card.buttons.size() - 1)
+		if last.end.x > 353.0:
+			cut.append("row runs off the page")
+	check(cut.is_empty(), "every workbench button's words fit inside it (%s)" % [cut])
+	main.bag.coins = coins_was
+	main.bench_i = 0
 	main.card.visible = false
 	main.bench_i = main.R.GEAR.keys().find("harness")
 	main._open_bench()
@@ -1035,6 +1132,32 @@ func _run() -> void:
 	check(main._gate_open("thornwood") and main.npc_info.bram.beaten, "beaten trainers and the open gate are remembered")
 	check(main.ranch_movers.size() == main.ranch.size(), "the ranch creatures are back in the paddock after loading (%d)" % main.ranch.size())
 	check(main._save_summary().begins_with(str(main.my_look.name)), "the start page sums it up: %s" % main._save_summary())
+	# WD4a keeps the original thornwood map id, so a pre-expansion save opens in the settlement instead of being displaced
+	var pre_wd4a: Dictionary = main._read_save()
+	pre_wd4a["map"] = "thornwood"
+	pre_wd4a["x"] = 13
+	pre_wd4a["y"] = 14
+	main.SafeSave.write(main.save_path, pre_wd4a)
+	check(main._load_game(), "WD4a: a pre-expansion save whose map is thornwood still loads")
+	tick(1.0)
+	talk_through()
+	check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 14), "WD4a: that old save lands at the same Thornwood coordinate, now in the settlement")
+	# WB5.1 adds only optional save fields: an older journey without them must still load cleanly
+	var pre_wb5: Dictionary = main._read_save()
+	pre_wb5.erase("spire")
+	pre_wb5.erase("rematches")
+	main.SafeSave.write(main.save_path, pre_wb5)
+	main.spire_floor = 9
+	main.spire_best = 12
+	main.spire_active = true
+	main.rematch_wins = { "isolde": 3 }
+	check(main._load_game(), "WB5.1: a pre-Spire save without post-game fields still loads")
+	tick(1.0)
+	talk_through()
+	check(main.spire_floor == 0 and main.spire_best == 0 and not main.spire_active and main.rematch_wins.is_empty(), "WB5.1: missing Spire/rematch fields get safe defaults")
+	main._go("larkhaven", Vector2i(10, 1), Vector2i.DOWN)
+	tick(1.0)
+	main.save_game()
 	# a save cut off half-way (a crash, a closed tab) never costs the journey: the backup is read instead
 	main.save_game()
 	check(FileAccess.file_exists(main.save_path + ".bak") and not FileAccess.file_exists(main.save_path + ".tmp"), "the last good save is kept as a backup")
@@ -1074,6 +1197,7 @@ func _run() -> void:
 	check(main.sfx.last == "hit", "a plain hit thumps")
 	main.battle.visible = false
 	main.battle.state = ""
+	preload("res://tests/battle_choices.gd").run(main, check)
 	# ---- the done line
 	print("Wildbond Godot checks: %d passed, %d failed" % [passed, failed])
 	quit(1 if failed > 0 else 0)

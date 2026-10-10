@@ -155,3 +155,7 @@ body.faded #scene,body.faded canvas.pic{filter:saturate(.6) sepia(.1) brightness
 /* creature cards: role, full stat names, move details */
 .role{font-size:13px;margin:4px 0}.role b{color:var(--leaf)}
 .cmoves{font-size:13px;color:var(--muted);margin:4px 0}.cmoves summary{cursor:pointer}.cmoves div{margin:2px 0 2px 12px}
+
+/* WD3: move choices belong beside the ranch plans. */
+.practice{border:1px solid var(--line);border-radius:12px;margin:12px 0;padding:10px}
+.practice legend{font-weight:700;padding:0 4px}
