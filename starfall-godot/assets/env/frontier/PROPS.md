@@ -38,3 +38,5 @@ the single hex file.
 Stacked after #134–136, #139 and #144. Merge those in order, then retarget this PR to
 main. Art direction reviews before merge. SF2.6 owns integration. No game code, saves,
 versions or shipped previews change here.
+
+The claim is recorded in the README changelog, the START-HERE session log, COMMS, and DEVELOPMENT-PATH (the ART-SF-6 checkbox and a Part 4 line).
