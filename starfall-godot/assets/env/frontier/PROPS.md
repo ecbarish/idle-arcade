@@ -27,10 +27,13 @@ piece at 2× with a red footprint and an ink silhouette. [Native scene](../../..
 is an asset-layout preview, not an integrated game screenshot.
 
 The PNG bytes are also stored as lowercase hex beside each PNG (`props.png.hex`,
-`props-contact.png.hex`, `props-scene-1x.png.hex`). A run of palette padding is
-written `{0*N}` so the text lock cannot lose those zeros. `--check` expands the
+`props-scene-1x.png.hex`). A run of palette padding is written `{0*N}` so the text
+lock cannot lose those zeros. The contact sheet is that same lock split into
+`props-contact.png.hex.part00`, `part01`, the first 5000 characters of `part02`,
+`part02b`, then `part03` and `part04`. `--check` joins those pieces, expands the
 marker, rebuilds the sheets and matches those bytes, and matches a materialized
-PNG when one is present. Running the script without `--check` writes both.
+PNG when one is present. Running the script without `--check` writes the PNG and
+the single hex file.
 
 Stacked after #134–136, #139 and #144. Merge those in order, then retarget this PR to
 main. Art direction reviews before merge. SF2.6 owns integration. No game code, saves,
