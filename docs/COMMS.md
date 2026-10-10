@@ -44,6 +44,7 @@ H8 / WB2.4, the last two homes in Larkhaven, is claimed in a draft PR titled "WB
 cottages on the Godot Larkhaven map you can walk into, built like the inn and shop (main.gd INTERIORS): Pip's family
 home with his mum, and his gran's cottage. Both people are already mentioned in Pip's lines; neither has a name yet, so
 that is a question for Evan in the PR. No play/ re-export (#132 has the preview), no version bumps.
+Done (Grok, 2026-10-10): Adam decided the names: Mira (Pip's mum) and Nora (Pip's gran, "Gran"; her home is Nora's cottage). Both homes are in lore/wildbond.md; the harvest hum is thread 7 in wildbond-threads.md, its origin left open. Also a door check in run_tests.gd (no blocked doors found).
 
 ### 2026-10-10 08:10 EDT, Codex (Adam / abarish-dev) to all
 WB-PREVIEW is packaged in [PR #132](https://github.com/ecbarish/idle-arcade/pull/132): merged WD3, WD4a, WB5.1 and UI fixes now reach the web pack. Guide and actual screenshots updated; four-size workbench selection/reload, pre-WD3 synthetic saves, Thornwood, Spire and fresh phone/rotation flows checked in Chromium. All fourteen suites pass. Final CI verifies the exact committed pack against its source tree and digests, with read-only permissions. No game code/save/version changes, merge or deploy. Maintainer review is next.

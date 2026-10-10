@@ -480,7 +480,7 @@ const INTERIORS := {
 			"XXXXXXXXXXXXXXXXXXXXXXXX",
 			"XXXXXXXXXXXXXXXXXXXXXXXX",
 		] },
-	# Pip's family home, top of the lane by the signpost: his mum at home, and something Pip left by the window for you
+	# Pip's family home, top of the lane by the signpost: his mum Mira at home, and something Pip left by the window for you
 	"pip_home": { "name": "Pip's home", "door": Vector2i(13, 4), "exit": Vector2i(11, 11), "keeper": "pip_mum", "keeper_at": Vector2i(12, 4),
 		"find": { "id": "home_pip", "at": Vector2i(15, 8), "give": { "lures": 2 }, "who": "pip_mum",
 			"line": "Pip left those by the window for you. He says Champions share. Don't tell him I told you he was saving them." },
@@ -500,8 +500,8 @@ const INTERIORS := {
 			"XXXXXXXXXXXXXXXXXXXXXXXX",
 			"XXXXXXXXXXXXXXXXXXXXXXXX",
 		] },
-	# Pip's gran's cottage, beside Juniper's: she keeps the harvest hum, and a jar of berries she picked too many of
-	"gran_home": { "name": "Gran's cottage", "door": Vector2i(2, 10), "exit": Vector2i(11, 11), "keeper": "pip_gran", "keeper_at": Vector2i(9, 4),
+	# Nora's cottage (Pip's gran), beside Juniper's: she keeps the harvest hum, and a jar of berries she picked too many of
+	"gran_home": { "name": "Nora's cottage", "door": Vector2i(2, 10), "exit": Vector2i(11, 11), "keeper": "pip_gran", "keeper_at": Vector2i(9, 4),
 		"find": { "id": "home_gran", "at": Vector2i(14, 9), "give": { "berries": 3 }, "who": "pip_gran",
 			"line": "Take those berries for your partner, dear. I picked far too many again." },
 		"rows": [
@@ -553,9 +553,9 @@ const KEEPER_LOOKS := {
 		"legs": Color("4a3e34"), "shoes": Color("3a2a1e"), "style": "short", "body": "broad" },
 	"juniper": { "name": "Juniper", "skin": Color("c88a64"), "hair": Color("3a2a22"), "shirt": Color("4a7a5a"), "apron": Color("d8c8a4"),
 		"legs": Color("3a3040"), "shoes": Color("2a2228"), "style": "bun", "body": "narrow" },
-	"pip_mum": { "name": "Pip's mum", "skin": Color("e0a878"), "hair": Color("8a5a2a"), "shirt": Color("a85a4a"), "apron": Color("e8dcc4"),
+	"pip_mum": { "name": "Mira", "skin": Color("e0a878"), "hair": Color("8a5a2a"), "shirt": Color("a85a4a"), "apron": Color("e8dcc4"),
 		"legs": Color("4a4048"), "shoes": Color("3a2a22"), "style": "ponytail", "body": "narrow" },
-	"pip_gran": { "name": "Pip's gran", "skin": Color("e0a878"), "hair": Color("e4e0d8"), "shirt": Color("6a7a9a"), "apron": Color("e8dcc4"),
+	"pip_gran": { "name": "Nora", "skin": Color("e0a878"), "hair": Color("e4e0d8"), "shirt": Color("6a7a9a"), "apron": Color("e8dcc4"),
 		"legs": Color("4a4048"), "shoes": Color("3a2a22"), "style": "bun", "body": "narrow" },
 }
 
@@ -578,6 +578,9 @@ func _keeper_talk(who: String) -> void:
 			"Maren says you're doing her proud. Don't tell her I told you."][int(t) % 3])
 		say("", "You rest a while at the Larkhaven Inn. Your team is fully healed.")
 	elif who == "pip_mum":
+		if not story_done.has("met:pip_mum"):           # the first visit: she says who she is (story_done is already saved)
+			story_done["met:pip_mum"] = true
+			say("pip_mum", "Oh, hello! I'm Mira, Pip's mum. Come in, come in. Mind the boots.")
 		if badges.has("thorn"):
 			say("pip_mum", "Pip keeps telling me everything's brighter. Nonsense, of course.")
 			say("", "She smooths her good scarf as she says it.")
@@ -585,6 +588,9 @@ func _keeper_talk(who: String) -> void:
 			say("pip_mum", ["Pip's out by the paddock again, I expect. He says he'll be Champion before Wren. I say he'll be in for supper.",
 				"Mind the step, love. Pip leaves his boots wherever his feet stop."][int(t) % 2])
 	elif who == "pip_gran":
+		if not story_done.has("met:pip_gran"):
+			story_done["met:pip_gran"] = true
+			say("pip_gran", "I'm Nora, dear. Pip's gran. Everyone calls me Gran, Pip included, so you might as well.")
 		say("pip_gran", "Sit a moment. Do you know the harvest hum? Pip thinks I made up the last bit. I didn't. My mother hummed it just the same.")
 		say("", "She hums it for you, slowly, while the kettle warms.")
 	else:

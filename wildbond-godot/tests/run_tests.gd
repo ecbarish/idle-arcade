@@ -736,6 +736,10 @@ func _run() -> void:
 			check(walk_to(room.keeper_at + Vector2i(0, 1)) and main._near_keeper() == home[1], "you can walk up to them")
 			main._keeper_talk(home[1])
 			check(main.lines.any(func(l): return l.who == home[1]), "and they talk with you")
+			check(main.lines.any(func(l): return main.KEEPER_LOOKS[home[1]].name in l.text) and main.story_done.has("met:" + home[1]), "the first time, %s says who she is" % main.KEEPER_LOOKS[home[1]].name)
+			talk_through()
+			main._keeper_talk(home[1])
+			check(not main.lines.any(func(l): return ("I'm " + main.KEEPER_LOOKS[home[1]].name) in l.text), "and doesn't introduce herself again")
 			talk_through()
 			var bag_before: Dictionary = main.bag.duplicate()
 			check(walk_to(room.find.at) and main.got_items.has(room.find.id), "something to find in %s" % room.name)
@@ -748,6 +752,7 @@ func _run() -> void:
 			check(walk_to(room.find.at) and main.bag == bag_again, "it's only found once")
 			check(walk_to(room.exit) and wait_map("larkhaven") and main.me.tile == room.door + Vector2i.DOWN, "out of %s, back in the street in front of its door (me %s)" % [room.name, main.me.tile])
 			check(main.caption.text == "" or not "trial" in main.caption.text.to_lower(), "no stale note outside")
+		check(main.KEEPER_LOOKS.pip_mum.name == "Mira" and main.KEEPER_LOOKS.pip_gran.name == "Nora" and main.INTERIORS.gran_home.name == "Nora's cottage", "the homes' people have their names: Mira (Pip's mum) and Nora (his gran)")
 		check(main.buildings().size() == 5, "Larkhaven has five buildings now: the inn, the shop, the barn and two homes")
 	# ---- the field book
 	talk_through()
@@ -1239,6 +1244,80 @@ func _run() -> void:
 	main.battle.visible = false
 	main.battle.state = ""
 	preload("res://tests/battle_choices.gd").run(main, check)
+	# ---- every door and road out has a tile in front of it you can stand on and reach (Adam, 2026-10-10)
+	var blocked := door_problems()
+	for problem in blocked:
+		print("  door check: " + problem)
+	check(blocked.is_empty(), "every door, doorway and road out has an open, reachable tile in front of it (%d problems)" % blocked.size())
 	# ---- the done line
 	print("Wildbond Godot checks: %d passed, %d failed" % [passed, failed])
 	quit(1 if failed > 0 else 0)
+
+
+## Doors that work: on every map (outdoors, the barn, the rooms), the tile in front of each door, doorway and road out
+## must be open (not solid, not a roof, nobody standing there) and reachable on foot from where you arrive.
+func door_problems() -> Array:
+	var out: Array = []
+	var keep_map: String = main.map_name
+	var maps: Array = main.BUILT.duplicate() + ["barn"] + main.INTERIORS.keys()
+	var inward := { "N": Vector2i.DOWN, "S": Vector2i.UP, "E": Vector2i.LEFT, "W": Vector2i.RIGHT }
+	for n in maps:
+		main._set_map(n)
+		var rows: Array = main.cur_map()
+		var people: Dictionary = {}
+		for m in main.npcs + main.keepers:
+			if m.where == n:
+				people[m.tile] = m.id
+		var open := func(p: Vector2i) -> bool:
+			return p.y >= 0 and p.y < rows.size() and p.x >= 0 and p.x < rows[0].length() and not main.solid(main.tile_at(p)) and not main._under_roof(p) and main.tile_at(p) != "D" and not people.has(p)
+		var fronts: Array = []                            # [what, tile in front]
+		for y in rows.size():
+			for x in rows[0].length():
+				var p := Vector2i(x, y)
+				var ch: String = rows[y][x]
+				if indoorsish(n) and (ch == "d" or (n == "barn" and p == main.BARN_EXIT)):
+					fronts.append(["the way out at %s" % p, p + Vector2i.UP])
+				elif not indoorsish(n) and ch == "D":
+					var used: bool = n == "larkhaven" and (main.DOORS.has(p) or p == main.BARN_DOOR)
+					fronts.append([("door %s" if used else "shut door %s") % p, p + Vector2i.DOWN])
+				elif not indoorsish(n) and inward.has(ch) and main.DATA.MAPS[n].get("exits", {}).has(ch):
+					fronts.append(["road %s at %s" % [ch, p], p + inward[ch]])
+		# where you can walk from: where you arrive on this map
+		var starts: Array = []
+		if indoorsish(n):
+			starts.append((main.BARN_EXIT if n == "barn" else main.INTERIORS[n].exit) + Vector2i.UP)
+		else:
+			var st: Array = main.DATA.MAPS[n].get("start", [])
+			if st.size() >= 2:
+				starts.append(Vector2i(int(st[0]), int(st[1])))
+			for other in main.BUILT:
+				for k in main.DATA.MAPS[other].get("exits", {}):
+					var ex: Dictionary = main.DATA.MAPS[other].exits[k]
+					if ex.get("to", "") == n:
+						var at := Vector2i(int(ex.x), int(ex.y))
+						if not open.call(at) and main.tile_at(at) not in inward:
+							out.append("%s: you arrive from %s on %s, which isn't open (%s)" % [n, other, at, main.tile_at(at)])
+						starts.append(at)
+		var seen := {}
+		var queue: Array = starts.duplicate()
+		for q in queue:
+			seen[q] = true
+		while not queue.is_empty():
+			var c: Vector2i = queue.pop_front()
+			for d in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
+				var nb: Vector2i = c + d
+				if not seen.has(nb) and (open.call(nb) or main.tile_at(nb) in inward):
+					seen[nb] = true
+					queue.append(nb)
+		for f in fronts:
+			var front: Vector2i = f[1]
+			if not open.call(front):
+				var why: String = ("%s stands there" % people[front]) if people.has(front) else ("a roof" if main._under_roof(front) else "'%s'" % main.tile_at(front))
+				out.append("%s: %s is blocked in front (%s: %s)" % [n, f[0], front, why])
+			elif not seen.has(front):
+				out.append("%s: %s can't be reached on foot (front %s)" % [n, f[0], front])
+	main._set_map(keep_map)
+	return out
+
+func indoorsish(n: String) -> bool:
+	return n == "barn" or main.INTERIORS.has(n)
