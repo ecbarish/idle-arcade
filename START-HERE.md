@@ -105,6 +105,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-10 — Grok (Adam / abarish-dev, guest): at Adam's request merged #165 (Starfall evening tint + yard footprint, `28cee8c`) and #166 (play/starfall rebuilt, `d146ce9`), each after a self-check (checks green; Starfall Godot 152/0; full suite 16/16 with Godot; preview verified in headless Chrome).
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): re-exported `play/starfall/` (pack only, 3,231,660 bytes, from `28cee8c`; build.json + BUILD.md like Wildbond's) and refreshed images/play/sf-town.png; verified in headless Chrome + SwiftShader.
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): Starfall evening tint and yard footprint (SF2.6 follow-ups, guest/starfall-evening-yard). Starfall Godot 152/0.
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): at Adam's request merged #162 (ART-SF-7: side-on west gate, 2-tile smithy and tavern, `a4afc54`) after a self-check (checks green; fit --check PASS; Starfall Godot 149/0; full suite 16/16 with Godot). Still open: Starfall's evening tint; play/starfall re-export.
