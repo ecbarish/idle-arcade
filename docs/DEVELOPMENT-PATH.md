@@ -401,3 +401,5 @@ line or two, with the page that holds the detail.
 - **2026-10-09, T58:** reveal handoffs distinguish observed documents from character interpretation, shared evidence from optional family perspective, and written restoration from engine placement. Never claim the visual payoff ships with a JSON file.
 - **2026-10-07 to 10-09, earlier lessons:** recorded in docs/PROJECTS.md "Read first" (the game window, depth, woven
   stories, player text, variety, friends' testing, the process).
+
+- [ ] RB1.7 [ChatGPT] Realmbound inn furnishing pass (claimed: Codex, 2026-10-10). Files: 22-hub-layouts.js, 22-town.js, tests/realmbound-inn-layout.js and its test-page hookup, screenshots and task notes. Give the existing inn distinct sleeping, dining and hearth spaces, keep the doorway and Keeper reachable, preserve services and saves. Score: 15/21 (clarity 3, feel 3, scope 3, risk 2, evidence 2, reuse 1, priority 1).
