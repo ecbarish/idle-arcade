@@ -322,6 +322,9 @@ line or two, with the page that holds the detail.
   template), Starfall's look sheet and frontier mock-up (docs/art/starfall.md), and six drawing tasks (ART-SF-1 to 6)
   any AI can claim. Wildbond's art page (docs/art/wildbond-art-direction.md, PR #123) is the first look sheet; the
   games share only ink #1e1a22 and lamplight #f2d080, and Starfall's roofs are weathered wood so they never echo Wildbond's slate.
+- **2026-10-09, DM2 playtest (Claude, Playtester):** simulating many seasons through the game's own functions (hands-off
+  against active) finds balance problems a single playthrough can't: in Diamond Manager the choices barely moved
+  results. Actioned: three small fixes and ticket DM-B (docs/playtests/diamond-manager-1.md).
 - **2026-10-09, AR2.12 the front door (Claude, website thread):** three homepage styles split the effort and the
   living world could only fit four or five games, so a style that holds every game wins: the arcade hall is now the
   only one (Evan's call). Players could not tell what a game was or how to control it, so every card now says what you

@@ -21,8 +21,7 @@ Take the first unclaimed task in "Up next", do it, test it as the file says, the
 - **Tests must stay all-pass:** the eight browser pages in `tests/` (run, wildbond, starfall, sound, offline, diamond,
   otherworld, runner-safety; click **Run checks**) and, for the Godot games, `tests/run_tests.gd` in each project.
   **`node tools/run-all-checks.cjs` runs all ten at once**, and GitHub runs it on every push and pull request: never
-  merge a red cross. Add checks for what you build. How we build (saves, sound formats, Godot structure): docs/learning/. After merging, `git grep -n "^<<<<<<< "` must find nothing.
-- **Old saves must keep loading.** New save fields need defaults (Wildbond `fresh()`/`load()`, Realmbound `migrate()`).
+  merge a red cross. Add checks for what you build. How we build (saves, sound formats, Godot structure): docs/learning/. After merging, `git grep -n "^- **Old saves must keep loading.** New save fields need defaults (Wildbond `fresh()`/`load()`, Realmbound `migrate()`).
 - **Small playable steps,** each with a line in README.md's changelog.
 - **Save your work to GitHub at the end of every step** (commit and push). Never leave finished work only on one
   computer or only in one assistant's sandbox.
@@ -107,6 +106,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 ## Session log (newest first; one or two lines each)
 
 - 2026-10-09 Claude (Art direction thread, was Game assets): one arcade-wide art guide (docs/art/README.md), Starfall's look sheet, palette and frontier mock-up (docs/art/starfall.md), and drawing tasks ART-SF-1 to 6 in QUEUE.md "Art tasks" for any AI. Wildbond's page (PR #123) is linked as the first sheet. Next: review ART-SF PRs; then sheets for the browser games as they move into the game window.
+- 2026-10-09 Claude (Playtester thread): DM2, the Diamond Manager playtest (docs/playtests/diamond-manager-1.md). It passes the bar (15), but over two seasons an active manager wins no more than a hands-off one. Three small fixes landed; the deeper fix is ticket DM-B in docs/plans/sports-management.md.
 - 2026-10-09 Codex (Adam / abarish-dev): WB5.1 in PR #129 builds the post-Champion Lighthouse Spire (escalating floors, five-floor rests, saved best floor) plus progressively stronger Warden rematches; old saves default the new fields safely and automated league/Spire captures pass.
 - 2026-10-09 Grok (Adam / abarish-dev, guest): Godot Wildbond playtest fixes on guest/wildbond-ui-fixes: card.gd sizes 3+ button rows to their words (workbench "Have it made" was cut off); main.gd's after-Wren caption no longer says "End of the trial" and clears at any door. Three new run_tests.gd checks.
 - 2026-10-09 Codex (Adam / abarish-dev): WD4a Thornwood in PR #128 splits the first region into Thornwood Trail, the preserved Thornwood settlement, and Stone-gated Old Root Grove; old-save coordinates are covered, full checks and 1366x768 map captures are the merge gate.

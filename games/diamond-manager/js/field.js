@@ -10,6 +10,7 @@ function drawField(cv, L, ev) {
   for(let x=0;x<w;x+=36){c.fillStyle=(x/36)%2?'#2a6b3c':'#256236';c.fillRect(x,0,36,h);}
   // The park is sized to the window: home plate near the bottom middle, the outfield fence near the top.
   const s=Math.min(w/2.4,h/1.25), hx=w/2, hy=h*.5+s*.5, base=s*.42;
+  PERSON=Math.max(1,Math.min(2.5,s/210)); // people grow with the park, so a big screen doesn't show specks (playtest DM2)
   const u=L?L.upgrades:{seats:0,lights:0};
   // Stands: one ring per seats level, behind the fence.
   c.save(); c.translate(hx,hy);
@@ -42,5 +43,6 @@ function drawField(cv, L, ev) {
   c.fillStyle='#1b3639d0'; c.fillRect(12,h-42,180,30); c.fillStyle='#fff4cd'; c.font='12px system-ui'; c.fillText('LAMPLIGHT FIELD',24,h-22);
   return {s,base};
 }
-function person(c,x,y,col){ c.fillStyle='#1d1d1d'; c.fillRect(x-3,y+1,6,9); c.fillStyle=col; c.fillRect(x-4,y-1,8,8); c.fillStyle='#d9a77a'; c.fillRect(x-3,y-7,6,6); }
+let PERSON=1;
+function person(c,x,y,col){ c.save(); c.translate(x,y); c.scale(PERSON,PERSON); x=0; y=0; c.fillStyle='#1d1d1d'; c.fillRect(x-3,y+1,6,9); c.fillStyle=col; c.fillRect(x-4,y-1,8,8); c.fillStyle='#d9a77a'; c.fillRect(x-3,y-7,6,6); c.restore(); }
 function throwBall(res,s){ const far=res===4?1.15:res===3?.95:res===2?.85:.55, a=Math.PI*(1.3+Math.random()*.4); FIELD.ball={at:performance.now(),to:[Math.cos(a)*s*far,Math.sin(a)*s*far]}; }

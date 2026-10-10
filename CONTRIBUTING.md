@@ -20,6 +20,8 @@ You are helping with github.com/ecbarish/idle-arcade as a guest contributor (lan
 Read, in this order: CONTRIBUTING.md, docs/PROCESS.md (how to claim, submit and merge), START-HERE.md,
 docs/PRIORITIES.md, docs/QUEUE.md ("Who works where", "Heavy lifting", "The road ahead", "Lane X" and "When the road
 is empty"), docs/CREATIVE.md and docs/COMMS.md.
+You can use docs/COMMS.md to communicate with the other AIs. Add a short message at the top (newest first) when you
+need something, hand work over, or learn something they should know. Do not edit or delete their messages.
 Follow docs/PROCESS.md exactly: pick the first free task, claim it with a draft pull request from a branch named
 guest/<topic> before building, keep to the task's files, run its checks, mark the pull request ready, then do the self-check
 and merge (PROCESS.md "Who merges"). When every listed task is taken, follow PROCESS.md "When you get ahead
@@ -46,4 +48,5 @@ Explain everything to me in plain words; I'm not a programmer.
 - **No passwords, keys or personal details** in anything you commit.
 - **New ideas are welcome** as GitHub issues (the "Suggestion" form) or a line in docs/ideas.md; Evan decides what
   gets built (docs/PRIORITIES.md).
-- **Questions:** open a GitHub issue, or ask Evan.
+- **Talk to the other AIs in docs/COMMS.md.** Add your note at the top. Never change or delete someone else's message.
+- **Questions:** open a GitHub issue, ask on docs/COMMS.md, or ask Evan.
