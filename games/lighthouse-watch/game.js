@@ -1,6 +1,6 @@
 /* Lighthouse Watch: original Saltmarsh lighthouse art, shared arcade sound and settings. */
 (function(){'use strict';
- const M=WatchModel,$=id=>document.getElementById(id),canvas=$('sea'),ctx=canvas.getContext('2d'),KEY='lighthouse-watch-save-v1';
+ const M=WatchModel,$=id=>document.getElementById(id),canvas=$('sea'),ctx=canvas.getContext('2d'),KEY='lighthouse-watch-save-v1',VERSION='0.1.0';
  Arcade.validators[KEY]=o=>!!o&&o.v===1&&o.game==='lighthouse-watch'&&Array.isArray(o.scores);
  const raw=Arcade.load(KEY),valid=Arcade.validators[KEY](raw),save={v:1,game:'lighthouse-watch',scores:M.scores(valid?raw.scores:[]),sound:valid&&[0,1,2].includes(raw.sound)?raw.sound:0,scanlines:!!(valid&&raw.scanlines===true)};
  let state=null,demo=M.create(1,31),last=0,queuedFire=false,tapAt=null,padPause=false,padMove=false,entry=0,entries=[],uiPhase='title';
@@ -10,6 +10,7 @@
  const audio=ArcadeSound.create({mode:()=>save.sound,setMode:v=>{save.sound=v;persist();},button:()=>$('sound'),musicKey:()=>state&&state.phase==='playing'&&!state.paused?'watch':null,tracks:{watch:{bpm:92,lead:'square',mel:'A4 . C5 . E5 . D5 C5 A4 . G4 . A4 . . .',bass:'A2 . A2 . F2 . F2 . G2 . G2 . E2 . E2 .',drum:'k . . h s . h .'}}});
  $('sound').addEventListener('click',()=>audio.cycle());audio.render();
  const settings=Settings.create({mount:'#settingsMount',rows:[{label:'Sound',options:[[0,'Off'],[1,'Effects'],[2,'Effects and music']],get:()=>save.sound,set:v=>{save.sound=v;persist();audio.render();audio.sfx('select');}},{label:'Scanlines',options:[[false,'Off'],[true,'On']],get:()=>save.scanlines,set:v=>{save.scanlines=v;scan();persist();},note:'A soft cabinet texture. Hidden with reduced motion.'}]});
+ if(window.Feedback)Feedback.register('Lighthouse Watch',VERSION,()=>state?'player '+(state.active+1)+' of '+state.players.length+', night '+M.current(state).wave+', '+M.current(state).score+' points':'title screen');
  settings.button.addEventListener('click',()=>{clearInput();if(state&&state.phase==='playing')pause();});
  function clearInput(){keys.clear();pointers.clear();queuedFire=false;tapAt=null;}
  function table(){return '<table class="scores"><caption>Lighthouse high scores</caption><tbody>'+(save.scores.length?save.scores.map((r,i)=>'<tr><td>'+String(i+1).padStart(2,'0')+'</td><th scope="row">'+r.name+'</th><td>'+String(r.score).padStart(6,'0')+'</td></tr>').join(''):'<tr><td>No scores yet. Keep the boats safe.</td></tr>')+'</tbody></table>';}
