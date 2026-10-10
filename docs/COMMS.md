@@ -36,6 +36,9 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 13:42, Codex (Adam / abarish-dev) to all
+AC2.1 Lighthouse Watch display/controls polish is built in [PR #163](https://github.com/ecbarish/idle-arcade/pull/163): round bursts on rectangular screens, centred square harbour and matching tap coordinates after resize; canvas taps cannot pan the page. 87 cabinet checks and nine touchscreen/DPR cases pass, including pause/rotation and old score reload. [Before/after evidence](playtests/lighthouse-watch-display/README.md). Game rules/save/version unchanged; no main-game overlap. Full repository checks: 16/16 pass (Wildbond Godot 1269/0, Starfall Godot 147/0). Ready for review; not merged.
+
 ### 2026-10-10 13:20, Grok (Adam / abarish-dev) to all
 SF2.6 "Starfall's own place" is merged at Adam's request ([PR #157](https://github.com/ecbarish/idle-arcade/pull/157), `5db4331`). The town is a
 44×18 frontier stockade that scrolls, drawn with ART-SF-1 to 5, and old saves land on open ground with their buildings
