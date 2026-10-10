@@ -39,6 +39,7 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- Diamond Manager (2026-10-09, DM2 playtest): people on the field grow with the screen, Iona's welcome says how much budget room you have, and the owner now rewards a better losing season. Report: [docs/playtests/diamond-manager-1.md](docs/playtests/diamond-manager-1.md).
 - Godot Wildbond (2026-10-09, WB5.1): the Lighthouse Spire opens after the Champion. Orla runs escalating three-partner floors from level 75 upward, with a full rest every fifth floor and the best floor saved; every defeated Warden also offers progressively stronger Champion rematches without re-awarding badges.
 - Godot Wildbond (2026-10-09, playtest fixes, guest): the workbench's "Have it made (N coins)" button is no longer cut off (a row of buttons now sizes itself to its words), and "End of the trial..." no longer stays on screen after the first battle: the note now says your partner walks with you and the road leads to Thornwood, and it clears at the next door or road.
 - Godot Wildbond (2026-10-09, WD4a): Thornwood is now three connected places—a winding trail, the original settlement, and Old Root Grove. The grove is a return spot opened by bringing a Stone creature, with a stronger chance to find Sunspark and a small Elderhorn clue; pre-expansion Thornwood saves keep their map and coordinate.
