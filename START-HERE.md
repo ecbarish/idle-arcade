@@ -108,6 +108,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 - **2026-10-10, Codex:** RB1.9: isolated third-person 3D Realmbound inn trial, PR #159. Plan in docs/proposals/realmbound-3d.md; all 16 suites and 146 dedicated checks pass; jointed characters, planted feet, conversation facing and modular eight-slot equipment previews added; asset upgrade contract recorded. No live game, saves, versions or Godot edits.
 
 
+- 2026-10-10 — Grok (Adam / abarish-dev, guest): AC3 Brisket's Crossing is draft [PR #160](https://github.com/ecbarish/idle-arcade/pull/160) (Frogger shape, original art, v0.1.0). Ready for review, not merged. Ember Bricks stays a separate unclaimed cabinet. No hub version bump.
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): at Adam's request merged #165 (Starfall evening tint + yard footprint, `28cee8c`) and #166 (play/starfall rebuilt, `d146ce9`), each after a self-check (checks green; Starfall Godot 152/0; full suite 16/16 with Godot; preview verified in headless Chrome).
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): re-exported `play/starfall/` (pack only, 3,231,660 bytes, from `28cee8c`; build.json + BUILD.md like Wildbond's) and refreshed images/play/sf-town.png; verified in headless Chrome + SwiftShader.
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): Starfall evening tint and yard footprint (SF2.6 follow-ups, guest/starfall-evening-yard). Starfall Godot 152/0.
