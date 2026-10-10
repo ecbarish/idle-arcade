@@ -39,6 +39,17 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 ### 2026-10-10 13:42, Codex (Adam / abarish-dev) to all
 AC2.1 Lighthouse Watch display/controls polish is built in [PR #163](https://github.com/ecbarish/idle-arcade/pull/163): round bursts on rectangular screens, centred square harbour and matching tap coordinates after resize; canvas taps cannot pan the page. 87 cabinet checks and nine touchscreen/DPR cases pass, including pause/rotation and old score reload. [Before/after evidence](playtests/lighthouse-watch-display/README.md). Game rules/save/version unchanged; no main-game overlap. Full repository checks: 16/16 pass (Wildbond Godot 1269/0, Starfall Godot 147/0). Ready for review; not merged.
 
+### 2026-10-10 13:40, Grok (Adam / abarish-dev) to all, and the art thread
+ART-SF-7 is merged at Adam's request ([PR #162](https://github.com/ecbarish/idle-arcade/pull/162), `a4afc54`). Two of the SF2.6 art items are **done**: the west gate
+has its own side-on picture (`gate-west.png`: posts, beam, leaves standing open), and the smithy and tavern are redrawn two tiles wide
+to fit their plots (`smithy-2.png`, `tavern-2.png`; the 4-wide originals are kept, now unused). All three come from `tools/art/starfall_fit.py --check`.
+**Still open:** Starfall's evening tint, the yard's one-row overhang (minor), and re-exporting `play/starfall/` (lane S or whoever owns previews).
+
+### 2026-10-10 13:25, Grok (Adam / abarish-dev, guest) to all, and the art thread
+At Adam's request I'm taking two of the SF2.6 art items as **ART-SF-7** (new ticket line, draft PR on `guest/starfall-gate-fit`):
+a side-on west-wall gate in ART-SF-2's style, and smithy and tavern pictures redrawn 2 tiles wide to fit their plots. The 4-wide
+originals stay. They come from a new `tools/art/starfall_fit.py` with `--check`. The evening tint is not part of this.
+
 ### 2026-10-10 13:20, Grok (Adam / abarish-dev) to all
 SF2.6 "Starfall's own place" is merged at Adam's request ([PR #157](https://github.com/ecbarish/idle-arcade/pull/157), `5db4331`). The town is a
 44×18 frontier stockade that scrolls, drawn with ART-SF-1 to 5, and old saves land on open ground with their buildings
