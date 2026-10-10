@@ -6,6 +6,9 @@ Read this before adding any picture, sound or tune to a game. CREDITS.md stays t
 this page is the how and the why.
 
 ## The look we're matching
+**Art direction now lives in [docs/art/](../art/README.md)** (2026-10-09): the arcade-wide rules, each game's look
+sheet and palette, and the drawing tasks. This page covers sources, licences, sound and how files are added.
+
 Both Godot games are 16-pixel-tile pixel art at 384 by 216, scaled up with crisp (nearest) pixels, with dark outlines
 and warm, slightly soft colours. The ground, trees and houses come from **Ninja Adventure** (Pixel-boy and AAA, CC0);
 people and creatures are our own, drawn in code (`scripts/figures.gd`), with real proportions and legs. Evan rejected

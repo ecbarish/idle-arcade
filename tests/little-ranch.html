@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Little Ranch checks</title>
+<style>body{font:16px system-ui;background:#1d3a2a;color:#f2eedb;padding:20px}.pass{color:#9ee7ba}.fail{color:#ffaaa6}button{min-height:44px}iframe{border:0;display:block}</style></head>
+<body><h1>Little Ranch checks</h1>
+<p>LR1, the smallest test: one baby, feed, bubbles, peekaboo and bedtime; no words, nothing to fail, no links out, a grown-up lock. Only the sound choice (little-ranch-settings-v1) is ever stored; every other key is compared before and after.</p>
+<button id="run">Run checks</button><p id="summary" role="status">Ready.</p><ol id="results"></ol><div id="game"></div>
+<script>
+'use strict';
+document.querySelector('#run').onclick = async () => {
+  const sum = document.querySelector('#summary'), list = document.querySelector('#results'), button = document.querySelector('#run');
+  button.disabled = true; list.replaceChildren(); sum.textContent = 'Running…'; let n = 0, frame, errors = [];
+  const PREF = 'little-ranch-settings-v1', keep = localStorage.getItem(PREF);
+  const others = () => JSON.stringify(Object.keys(localStorage).filter(k => k !== PREF).sort().map(k => [k, localStorage.getItem(k)]));
+  const before = others();
+  const check = (name, ok) => { n++; const li = document.createElement('li'); li.className = ok ? 'pass' : 'fail'; li.textContent = (ok ? 'PASS — ' : 'FAIL — ') + name; list.appendChild(li); if (!ok) throw Error(name); };
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  try {
+    localStorage.removeItem(PREF);
+    frame = document.createElement('iframe'); frame.title = 'Little Ranch test instance'; frame.style.cssText = 'width:375px;height:812px';
+    frame.src = '../games/little-ranch/index.html';
+    await new Promise((ok, no) => { const t = setTimeout(() => no(Error('load timed out')), 20000); frame.onload = () => { clearTimeout(t); ok(); }; document.querySelector('#game').appendChild(frame); });
+    const w = frame.contentWindow, d = frame.contentDocument; w.addEventListener('error', e => errors.push(e.message));
+    for (let i = 0; i < 50 && !w.LR; i++) await sleep(100);
+    const LR = w.LR, cv = d.querySelector('#ranch'); let pid = 1;
+    const ev = (el, type, p) => el.dispatchEvent(new w.PointerEvent(type, { pointerId: pid, clientX: p.x, clientY: p.y, bubbles: true, cancelable: true, isPrimary: true }));
+    const tap = q => { const p = LR.toScreen(q); pid++; ev(cv, 'pointerdown', p); ev(cv, 'pointerup', p); };
+    const drag = (a, b, steps) => { pid++; ev(cv, 'pointerdown', LR.toScreen(a)); for (let i = 1; i <= steps; i++) { ev(cv, 'pointermove', LR.toScreen({ x: a.x + (b.x - a.x) * i / steps, y: a.y + (b.y - a.y) * i / steps })); LR.advance(.05); } ev(cv, 'pointerup', LR.toScreen(b)); };
+    const S = () => LR.state, L = () => LR.layout, baby = () => ({ x: S().baby.x, y: L().home.y - L().size * .9 });
+    const visible = el => { const s = w.getComputedStyle(el); return !el.closest('[hidden]') && s.display !== 'none' && s.visibility !== 'hidden'; };
+
+    // ---- safe by design
+    const text = [...d.body.querySelectorAll('*')].filter(el => visible(el) && !['SCRIPT', 'STYLE'].includes(el.tagName)).map(el => [...el.childNodes].filter(c => c.nodeType === 3).map(c => c.textContent.trim()).join('')).join('');
+    check('No words on screen while playing (nothing to read)', text === '');
+    const links = [...d.querySelectorAll('a[href]')];
+    check('No links out: the only link is back to the arcade, inside the grown-up panel', links.length === 1 && new URL(links[0].href).origin === location.origin && /\/index\.html$/.test(links[0].href) && links[0].closest('#grown').hidden);
+    check('No forms, frames, feedback buttons or outside scripts', !d.querySelector('form,iframe,input,[data-feedback],#feedback') && [...d.scripts].every(s => !s.src || new URL(s.src).origin === location.origin));
+    check('The game starts in play, with one baby and nothing counted', S().mode === 'play' && S().acts === 0 && LR.VERSION === '0.1.0');
+
+    // ---- big targets, away from the edges, on every screen
+    for (const [width, height] of [[320, 568], [375, 812], [667, 375], [1366, 768], [1920, 1080], [3440, 1440]]) {
+      frame.style.width = width + 'px'; frame.style.height = height + 'px'; await sleep(150); LR.advance(.1);
+      const sc = LR.scale, l = L(), r = cv.getBoundingClientRect();
+      const spots = [l.bowl, l.sponge, l.bush, l.home].map(p => LR.toScreen(p)).map(p => ({ x: p.x - r.left, y: p.y - r.top }));
+      check(`${width}×${height}: the ranch fills the screen with no scrolling`, Math.abs(r.width - width) <= 1 && Math.abs(r.height - height) <= 1 && d.documentElement.scrollWidth <= width && d.documentElement.scrollHeight <= height);
+      check(`${width}×${height}: tap targets are big (at least 80 px across) and away from the edges`, l.R * 2 * sc >= 80 && spots.every(p => p.x > width * .08 && p.x < width * .92 && p.y > height * .1 && p.y < height * .95));
+    }
+    frame.style.width = '375px'; frame.style.height = '812px'; await sleep(150); LR.newVisit(); LR.advance(.1);
+
+    // ---- the three things to do, by real taps and drags
+    tap(L().bowl); check('Tapping the bowl fills it', S().bowl.food === 1);
+    LR.advance(1.5); check('The baby walks over and eats', S().baby.act === 'eat');
+    LR.advance(3); check('After eating the bowl is empty and it counts as one happy thing', S().bowl.food === 0 && S().acts === 1);
+    LR.advance(2.5);
+    const sp = { x: L().sponge.x, y: L().sponge.y }; drag(sp, baby(), 16); LR.advance(1); drag(sp, { x: baby().x - L().size * .5, y: baby().y }, 16);
+    check('Dragging the sponge over the baby makes bubbles (each bath counts once)', S().bubbles.length > 0 && S().acts === 3);
+    const bub = S().bubbles[0], count = S().bubbles.length; tap({ x: bub.x + Math.sin(S().t * 2 + bub.seed) * bub.r * .8, y: bub.y });
+    check('Tapping a bubble pops it', S().bubbles.length < count);
+    LR.advance(2); tap(L().sponge); LR.advance(1.2); check('Just tapping the sponge gives a bath too (for little hands)', !!S().sponge.auto && S().bubbles.length > 0);
+    LR.advance(1.5); check('The tapped bath counts once', S().acts === 4 && !S().sponge.auto);
+    S().bubbles.length = 0; // a bubble in the way is popped first (that is a tap's answer too); clear them for the next taps
+    tap({ x: L().bush.x, y: L().bush.y - L().R * .4 }); LR.advance(2); check('Tapping the bush: the baby hides behind it', S().baby.act === 'hide');
+    tap({ x: L().bush.x, y: L().bush.y - L().R * .4 }); check('Tapping again: peekaboo!', S().baby.act === 'peek');
+    LR.advance(1.6); check('Peekaboo counts and the baby comes back out', S().acts === 5 && S().baby.act === null);
+    LR.advance(3); S().bubbles.length = 0; tap(baby()); check('Tapping the baby makes it giggle', S().baby.act === 'giggle' && S().acts === 6);
+    LR.advance(1); const sparks = S().fx.length; tap({ x: L().home.x - L().size * 3, y: L().ground * .4 }); check('A tap on empty sky still answers (a sparkle)', S().fx.length > sparks);
+
+    // ---- nothing to fail: a toddler bashing the screen
+    LR.newVisit(); let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    for (let i = 0; i < 300; i++) { const p = { x: rnd() * L().home.x * 2, y: rnd() * L().home.y * 1.3 };
+      if (i % 5 === 0) drag(p, { x: rnd() * L().home.x * 2, y: rnd() * L().home.y * 1.3 }, 3); else tap(p); LR.advance(rnd() * .4); }
+    check('300 random taps and drags: no errors, no scores, no losing, still a calm state', errors.length === 0 && ['play', 'dusk', 'sleep'].includes(S().mode) && !('score' in S()) && !('lives' in S()));
+
+    // ---- bedtime ends the visit gently
+    LR.newVisit(); S().acts = LR.BEDTIME_ACTS; LR.advance(.2); check('After enough play the baby yawns and the sky starts to turn', S().mode === 'dusk' && S().baby.act === 'yawn');
+    LR.advance(12); check('Then night: the baby curls up asleep and the visit is over', S().mode === 'sleep' && S().baby.act === 'sleep' && S().dusk === 1 && S().lullabyAt !== null);
+    tap(baby()); tap(L().bowl); tap({ x: L().bush.x, y: L().bush.y }); LR.advance(1); check('At bedtime taps only twinkle; nothing wakes the baby', S().mode === 'sleep' && S().baby.act === 'sleep' && S().bowl.food === 0);
+
+    // ---- the grown-up lock
+    const lock = d.querySelector('#lock'), panel = d.querySelector('#grown'), lp = (type) => lock.dispatchEvent(new w.PointerEvent(type, { pointerId: 99, bubbles: true, cancelable: true }));
+    lp('pointerdown'); await sleep(600); lp('pointerup'); await sleep(100); check('A short press on the lock does nothing', panel.hidden);
+    lp('pointerdown'); await sleep(LR.HOLD_MS + 400); lp('pointerup'); check('Holding the lock for three seconds opens the grown-up panel', !panel.hidden);
+    d.querySelector('#gSound').click(); check('The sound switch is behind the lock and is the only thing stored', JSON.parse(localStorage.getItem(PREF)).sound === false && others() === before);
+    d.querySelector('#gSound').click(); d.querySelector('#gNew').click(); check('"New visit" starts a fresh, sunny visit', panel.hidden && S().mode === 'play' && S().acts === 0 && S().dusk === 0);
+    check('No other storage was touched', others() === before);
+    check('No errors on the page', errors.length === 0);
+    sum.className = 'pass'; sum.textContent = 'PASS — ' + n + ' Little Ranch checks.';
+  } catch (e) { sum.className = 'fail'; sum.textContent = 'FAIL — ' + e.message; }
+  finally { if (frame) frame.remove(); if (keep === null) localStorage.removeItem(PREF); else localStorage.setItem(PREF, keep); button.disabled = false; }
+};
+</script></body></html>
