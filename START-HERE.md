@@ -105,6 +105,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- 2026-10-10 Codex: SCENE-PLAN, PR #151, docs/plans/scene-layout-pass.md; Evan's shared interior/scene outline, Larkhaven briefs and claimable follow-ups complement MAP-AUDIT #147 and issues #149/#150. Docs only; no game/art/preview edits.
+
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): AR2.11 "Tell us" in [PR #146](https://github.com/ecbarish/idle-arcade/pull/146): a row in the shared Settings panel built on shared/feedback.js, Storm Front hooked up, issue forms list every game, ten-minute playtest on Come Play, tests/tell-us.html in run-all-checks. Ready for review, not merged.
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): AC2 Lighthouse Watch cabinet in [PR #145](https://github.com/ecbarish/idle-arcade/pull/145), built like Storm Front: new folder, one launcher link and cover, tests/lighthouse-watch.html (45 checks) in run-all-checks. Ready for review, not merged.
 - 2026-10-10 Grok (Adam / abarish-dev, guest): PR #137 updated with Adam's decisions: Mira (Pip's mum) and Nora (his gran, Nora's cottage) introduce themselves once; lore/wildbond.md has both homes, wildbond-threads.md thread 7 the harvest hum (origin open); run_tests.gd door check (every door, doorway and road has an open, reachable tile in front; none blocked).
