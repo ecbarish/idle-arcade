@@ -312,6 +312,8 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
   the game.
 - **Small local-helper jobs** (Lane D), checked by a person.
 
+- [ ] SCENE-PLAN [any] (claimed: Codex, 2026-10-10, codex/scene-layout-outline) Shared scene/interior design outline requested by Evan: docs/plans/scene-layout-pass.md; distinct Larkhaven home briefs, entrance/input/visual checks and independently claimable follow-ups. Complements MAP-AUDIT #147; no engine or art edits. Done when the brief and COMMS handoff are published. Score 18/21 (fun 3x2, heart 2x2, friends 3, focus 2, cheap 3).
+
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
 
 - **2026-10-09, WD2 data (Codex, PR #113):** the roster has 104 base species and three hybrids added by the ranch module. Validate the full exporter, not just 00-data.js; all 107 preserve their original gameplay fields. Drawing hints stay out of creature saves; the appearance contract is in docs/lore/wildbond-looks.md.
