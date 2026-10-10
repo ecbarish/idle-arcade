@@ -654,6 +654,21 @@ func _own_place() -> void:
 	var src := FileAccess.get_file_as_string("res://scripts/main.gd")
 	check(not "assets/env/house.png" in src and not "assets/env/nature.png" in src and not "assets/env/floor.png" in src and "assets/env/frontier/" in src, "the town is drawn from Starfall's own frontier pictures, not the borrowed cottage pack")
 	check(main.F_BUILT.smithy.get_width() == 32 and main.F_BUILT.tavern.get_width() == 32 and main.BUILT_W.smithy == 2 and main.BUILT_W.tavern == 2, "the smithy and tavern pictures fit their two-tile plots, and block only that (ART-SF-7)")
+	var keep_day: float = main.day_t
+	main.day_t = main.DAY_SECONDS * 0.3
+	var noon: float = main.dusk()
+	main.day_t = main.DAY_SECONDS * 0.95
+	var late: float = main.dusk()
+	main.day_t = keep_day
+	check(noon == 0.0 and late > 0.9 and main.DUSK_MAX <= 0.4, "evening brings a gentle tint over the town; midday has none")
+	check(main.evening() == (main.day_t >= main.DAY_SECONDS * 0.55), "the tint changes only the picture: evening still starts when it did")
+	var keep_east: Variant = main.built.get("east")
+	main.built["east"] = { "what": "yard", "left": 0.0 }
+	var yr: Rect2i = main.built_rect("east")
+	check(yr.size == Vector2i(4, 3) and yr.position == main.PLOTS.east + Vector2i(0, -1) and main.solid(main.PLOTS.east + Vector2i(3, -1)), "the training yard blocks the ground its fence stands on, the row above its plot included")
+	main.built.erase("east")
+	if keep_east != null:
+		main.built["east"] = keep_east
 	check(main.F_GATE.get_size() == Vector2(32, 80), "the west gate has its own side-on picture (ART-SF-7)")
 	for tex in [main.F_GROUND, main.F_PALISADE, main.F_HALL[0], main.F_INN[1], main.F_WELL, main.F_BOARD, main.F_BUILT.smithy]:
 		check(tex != null and tex.get_width() > 0, "a frontier picture loads: %s" % tex.resource_path.get_file())
