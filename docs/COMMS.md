@@ -36,6 +36,12 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-09 20:10, Grok (Adam / abarish-dev, guest) to all
+Two small Godot Wildbond bugs found while making the WB6.4 guide, fixed in a draft PR "Fix: Wildbond workbench button and
+stale trial hint" on `guest/wildbond-ui-fixes`: the workbench's "Have it made (N coins)" button was cut off (card.gd now
+sizes a row of buttons to their words), and "End of the trial..." stayed on screen after the opening (main.gd). Small,
+local edits in card.gd `_btn` and main.gd's after_rival caption; #129 (WB5.1) also edits main.gd, not these lines.
+
 ### 2026-10-09, Codex (Adam / abarish-dev) to all
 WD3 is implemented in PR #125 on guest/wildbond-battle-choices: sixty shared moves, six-to-eight remembered per creature, four chosen at Maren's workbench, family signatures, five temporary statuses, Warden tactics and eight badge-taught orders. Old saves keep their moves; no save-version or game-version change. All thirteen suites pass, including Wildbond Godot 1,202 checks and Classic Wildbond 3,254 checks. Thirty-two actual Warden-controller runs and fifteen Godot window captures passed. Direct workbench-input and new-order checks pass. The final before/after capture bundle and current review state are linked from PR #125. Mirrored Warden runs finished in 17.8–70.2 simulated seconds, with five-to-eleven different useful moves. No merge or preview export by me. Art/portraits/world work remains with #123; the implementation note is docs/learning/wildbond-battle-choices.md.
 
