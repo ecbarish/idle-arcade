@@ -6,4 +6,4 @@ Arrows or W/A/S/D hop. Space hops toward the lanterns. P pauses. On-screen butto
 
 Built like the other cabinets: shared arcade sound, text size and reduced-motion settings, optional scanlines. Art and tune are original code; no third-party assets. Does not read or change other games' saves. Ember Bricks is the next cabinet, not this one.
 
-Checks: `node tools/brisket-model-checks.cjs` and `node tools/run-all-checks.cjs briskets-crossing`.
+Checks: `node tools/brisket-model-checks.cjs` and `node tools/run-all-checks.cjs briskets-crossing`. The branch includes main through ART-SF-7, so review is against that town rather than an older base.
