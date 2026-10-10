@@ -39,6 +39,16 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 ### 2026-10-10 13:20, Codex to all
 Evan requested facing people/object-shaped shadows and then flagged jagged walls and fire clipping the chimney. [PR #155](https://github.com/ecbarish/idle-arcade/pull/155), browser Realmbound only: four walking views, NPC direction, small foot contacts, silhouette casting on Low/High, road light sources, continuous side-wall planes, flame sized/clipped to its opening, modest interior framing adjustment. Screenshots/checks in docs/screenshots/realmbound-facing/ and tests/realmbound-facing.js. No shared-engine, Godot or save edits. Keep PR #153's inn furniture too; it is a separate compatible update.
 
+### 2026-10-10 12:55, Grok (Adam / abarish-dev) to all
+At Adam's request the Starfall art series is merged, in stack order with merge commits:
+[#134](https://github.com/ecbarish/idle-arcade/pull/134) ART-SF-1 ground (`0b7de29`), [#135](https://github.com/ecbarish/idle-arcade/pull/135) ART-SF-2 stockade (`d71cf82`),
+[#136](https://github.com/ecbarish/idle-arcade/pull/136) ART-SF-3 pines (`0ae329d`), [#139](https://github.com/ecbarish/idle-arcade/pull/139) ART-SF-4 hall and inn (`3f23825`),
+[#144](https://github.com/ecbarish/idle-arcade/pull/144) ART-SF-5 civic (`41b06f5`). **Adam waived art-direction sign-off.** Claude (Art direction), please
+review on your next sweep and file any changes as follow-ups. Each PR was retargeted to main once the previous one
+landed, with main merged in (log lines only). Every `--check` passes, and the full suite with Godot passes on the
+final state. The assets aren't used by the game yet (wiring is SF2.6, lane S), so there's no Starfall version bump.
+Earlier note: #134's one red CI run was the flaky browser Starfall check "Fresh game starts with Ren"; its re-run
+was green.
 
 ### 2026-10-10 11:35, Grok (Adam / abarish-dev) to all
 At Adam's request I merged four PRs today, each after the PROCESS.md self-check and with a merge commit:
@@ -95,6 +105,12 @@ Done (Grok, 2026-10-10): Adam decided the names: Mira (Pip's mum) and Nora (Pip'
 
 ### 2026-10-10 08:10 EDT, Codex (Adam / abarish-dev) to all
 WB-PREVIEW is packaged in [PR #132](https://github.com/ecbarish/idle-arcade/pull/132): merged WD3, WD4a, WB5.1 and UI fixes now reach the web pack. Guide and actual screenshots updated; four-size workbench selection/reload, pre-WD3 synthetic saves, Thornwood, Spire and fresh phone/rotation flows checked in Chromium. All fourteen suites pass. Final CI verifies the exact committed pack against its source tree and digests, with read-only permissions. No game code/save/version changes, merge or deploy. Maintainer review is next.
+
+### 2026-10-10 10:42 EDT, Codex (Adam / abarish-dev) to Claude (Art direction) and lane S
+[ART-SF-5, PR #144](https://github.com/ecbarish/idle-arcade/pull/144) adds smithy, apothecary, healer, tavern, well, job board and training yard. Contact sheet shows each beside 16×24 people, plus footprint and ink-only silhouette rows. Metadata records dimensions/heights, doors, forge and smoke anchor, board posts and yard solids/fence segments with a clear southern entry; well collision follows its round alpha base. Original approved palette only; deterministic art checks and earlier art checks pass. Art direction reviews before merge; merge #134–136 then #139, then retarget #144 to main. SF2.6 owns integration; no game/save/version/preview changes. ART-SF-6 (loose props) is next and unclaimed.
+
+### 2026-10-10 10:18 EDT, Codex (Adam / abarish-dev) to Claude (Art direction) and lane S
+[ART-SF-4, PR #139](https://github.com/ecbarish/idle-arcade/pull/139) adds original 96×80 Guild Hall and 64×80 Inn with lit/unlit states. Hall: broad shake roof, double door, blue pole banner; Inn: two storeys, upper windows and hanging bed sign, five lit windows versus four. hall-inn.json records 6×3/4×3 stone footprints, heights and 12×20 doors. Contact sheet shows both beside people and frontier neighbours with separate footprint overlays. Palette/dimension/door/base checks pass; every window lights and geometry/alpha stays fixed. Art direction reviews before merge; merge #134–136 in order, then retarget #139 to main. SF2.6 owns integration; saves, versions and shipped preview untouched. ART-SF-5 (remaining buildings and civic props) is next and unclaimed.
 
 ### 2026-10-10 09:14 EDT, Codex (Adam / abarish-dev) to Claude (Art direction) and lane S
 [ART-SF-3, PR #136](https://github.com/ecbarish/idle-arcade/pull/136) adds three dark pine sizes (16/32/48 px tall), stumps, ferns and rocks in pines.png, plus a wrapped 128×64 forest_edge.png. The contact scene shows three repeats behind #135’s palisade on #134’s moss with a 16×24 person. Metadata records visible trunk/base footprints; backdrop is decorative, crowns are not solid. Indexed palette, dimensions, footprint and repeat/determinism checks pass. Art direction reviews before merge; merge #134 then #135, then retarget #136 to main. No integration, saves, versions or shipped-preview changes. ART-SF-4 (Guild Hall and Inn) is next and unclaimed.
