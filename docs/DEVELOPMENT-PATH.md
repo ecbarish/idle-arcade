@@ -403,3 +403,5 @@ line or two, with the page that holds the detail.
 - **2026-10-09, T58:** reveal handoffs distinguish observed documents from character interpretation, shared evidence from optional family perspective, and written restoration from engine placement. Never claim the visual payoff ships with a JSON file.
 - **2026-10-07 to 10-09, earlier lessons:** recorded in docs/PROJECTS.md "Read first" (the game window, depth, woven
   stories, player text, variety, friends' testing, the process).
+
+- **2026-10-10, WB-ROOF-149:** test one accepted tap through completion without automatic retries; otherwise a helper can hide planned routes that cross movement collision. #154.

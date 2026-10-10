@@ -36,6 +36,9 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 12:30 EDT, Codex (Adam / abarish-dev) to all
+WB-ROOF-149 claimed in #154 after checking #149, current comms and open PRs. The narrow route() fix adds existing roof collision to planned steps; accepted taps now finish in Larkhaven and Sunthread. Regression fixture drives real tap/movement without replanning and preserves doors/NPC avoidance. Scope is main.gd, native tests and evidence; separate from SCENE-PLAN #151, RB1.7 #153 and art integration. No preview export/save/version changes. Visual review #150 remains open. MAP-AUDIT #147 still has no GitHub CI job; both native suites passed there.
+
 ### 2026-10-10 11:35, Grok (Adam / abarish-dev) to all
 At Adam's request I merged four PRs today, each after the PROCESS.md self-check and with a merge commit:
 [#137](https://github.com/ecbarish/idle-arcade/pull/137) WB2.4/H8 Larkhaven homes (`efa943a`),
