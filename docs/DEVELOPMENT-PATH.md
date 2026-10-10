@@ -130,7 +130,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
   interiors. Part 3: battle effects and emotes.
 
 **WB-M5: life after the league.**
-- [ ] WB5.1 [Claude] The Lighthouse Spire and rematches.
+- [x] WB5.1 [Claude] The Lighthouse Spire and rematches. **Done 2026-10-09 in PR #129:** post-Champion Spire floors start at level 75 and keep climbing, full rest every fifth floor, best/current climb saved; defeated Wardens offer progressively stronger Champion rematches without duplicate badges.
 - [ ] WB5.2 [Claude] Contests and races at the ranch (W4).
 - [ ] WB5.3 [Claude] Ranch jobs: creatures help (W5/WG8).
 - [ ] WB5.4 [Claude] Roaming legendaries (W3 part 2).
@@ -315,6 +315,9 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 - **2026-10-09, WD2 data (Codex, PR #113):** the roster has 104 base species and three hybrids added by the ranch module. Validate the full exporter, not just 00-data.js; all 107 preserve their original gameplay fields. Drawing hints stay out of creature saves; the appearance contract is in docs/lore/wildbond-looks.md.
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a
 line or two, with the page that holds the detail.
+- **2026-10-09, DM2 playtest (Claude, Playtester):** simulating many seasons through the game's own functions (hands-off
+  against active) finds balance problems a single playthrough can't: in Diamond Manager the choices barely moved
+  results. Actioned: three small fixes and ticket DM-B (docs/playtests/diamond-manager-1.md).
 - **2026-10-09, AR2.12 the front door (Claude, website thread):** three homepage styles split the effort and the
   living world could only fit four or five games, so a style that holds every game wins: the arcade hall is now the
   only one (Evan's call). Players could not tell what a game was or how to control it, so every card now says what you

@@ -188,7 +188,9 @@ function playFinalGame(L) {
 function endSeason(L) {
   const you=L.clubs[DM.you], champ=L.final.champion===DM.you, inFinal=L.final.teams.includes(DM.you);
   L.history.push({season:L.season, w:you.w, l:you.l, place:standings(L).findIndex(s=>s.i===DM.you)+1, final:inFinal, champion:champ, championName:L.clubs[L.final.champion].name});
-  const raise=champ?1000:inFinal?600:you.w>you.l?300:0; you.budget=Math.min(18000,you.budget+raise);
+  const prev=L.history.length>1?L.history[L.history.length-2].w:null;
+  // A climbing club earns a little too, so a GM who improves a losing team sees the budget grow (playtest DM2).
+  const raise=champ?1000:inFinal?600:you.w>you.l?300:prev!==null&&you.w>prev?200:0; you.budget=Math.min(18000,you.budget+raise);
   L.report={raise, grew:[], slipped:[], expiring:[], left:[]};
   L.clubs.forEach((c,ci)=>{
     for(const p of c.players){ const before=overall(p); develop(L,p,ci===DM.you?L.upgrades.training:1); const d=overall(p)-before;

@@ -236,6 +236,7 @@ func _run() -> void:
 	check(main.team[0].hp == main.R.stats(main.team[0]).hp, "Maren patches your team up")
 	talk_through()
 	check(main.stage == "free", "after Wren you're free")
+	check(main.caption.text != "" and not "trial" in main.caption.text.to_lower() and main._partner_name() in main.caption.text, "the note after Wren says who walks with you, not that the trial has ended (%s)" % main.caption.text)
 	var before: Vector2i = main.me.tile
 	for d in [Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP]:
 		if main.walkable(main.me.tile + d):
@@ -248,6 +249,7 @@ func _run() -> void:
 	main._step(Vector2i.UP)
 	tick(1.0)
 	check(main.map_name == "thornwood_route" and main.me.tile == Vector2i(13, 16), "the north road opens onto Thornwood Trail, arriving where the route says")
+	check(main.caption.text == "", "out on the road, the note after Wren is gone")
 	check(main.partner.where == "thornwood_route", "your partner comes onto the trail too")
 	check(main.DATA.MAPS.thornwood_route.exits.N.to == "thornwood" and main.DATA.MAPS.thornwood.exits.S.to == "thornwood_route", "WD4a: the trail and Thornwood settlement are separate connected maps")
 	check(main.DATA.MAPS.thornwood_route.exits.E.requiresElement == "Stone" and main.DATA.MAPS.has("thornwood_grove"), "WD4a: Old Root Grove is a return spot behind a Stone-partner gate")
@@ -569,6 +571,32 @@ func _run() -> void:
 		check(main.story_done.has("leagueEnding") and main.lines.size() >= 9, "the Champion, and the homecoming at the gate")
 		check(main.guests.size() == 2 and main.guests.all(func(g): return g.where == "league") and main.npcs.any(func(n): return n.id == "avenne" and n.tile == Vector2i(5, 14)), "Maren and Isolde come to the gate, and Avenne walks down to meet them")
 		check(main.lines.any(func(l): return "smallest paws" in str(l.text)), "then everyone quiets for water and rest (ChatGPT's homecoming lines)")
+		# ---- WB5.1: the Lighthouse Spire opens after the Champion
+		main.lines.clear()
+		main._go("spire", Vector2i(17, 14), Vector2i.LEFT)
+		tick(1.0)
+		check(main.map_name == "spire" and main.npcs.any(func(n): return n.id == "orla" and n.where == "spire"), "WB5.1: the Champion can enter the Lighthouse Spire and Orla is waiting")
+		var orla = main.npcs.filter(func(n): return n.id == "orla")[0]
+		main.me.tile = orla.tile + Vector2i.RIGHT
+		main.me.pos = Vector2(main.me.tile) * main.TILE
+		main.lines.clear()
+		check(main._talk_here() and main.lines.any(func(l): return "climb begins rested" in str(l.text)), "Orla explains the Spire climb and its five-floor rests")
+		talk_through()
+		check(main.battle.visible and main.battle_story == "spire:1" and main.battle.foes.size() == 3 and main.battle.foes.all(func(u): return int(u.c.lvl) == 75), "floor 1 is a three-partner level-75 Spire battle")
+		var spire_coins: int = main.bag.coins
+		main.battle.visible = false
+		main._on_battle("won")
+		check(main.spire_floor == 1 and main.spire_best == 1 and main.bag.coins > spire_coins, "winning remembers the current and best floor and pays the floor reward")
+		main.lines.clear()
+		main.spire_floor = 4
+		for creature in main.team: creature.hp = 1
+		main._spire_fight()
+		check(main.battle_story == "spire:5", "the next fight can reach the fifth-floor rest")
+		main.battle.visible = false
+		main._on_battle("won")
+		check(main.spire_floor == 5 and main.team.all(func(creature): return creature.hp == main.R.stats(creature).hp), "every fifth floor fully rests the team")
+		main.spire_active = false
+		main.spire_floor = 0
 		var isolde_info: Dictionary = main.npc_info.isolde
 		var was_beaten: bool = isolde_info.beaten
 		isolde_info.beaten = true
@@ -582,6 +610,17 @@ func _run() -> void:
 		main.lines.clear()
 		main._talk_here()
 		check(main.lines.any(func(l): return "Champion" in str(l.text)), "back in Thornwood, Isolde welcomes the Champion")
+		talk_through()
+		var badge_count_before_rematch: int = main.badges.size()
+		main.lines.clear()
+		main._talk_here()
+		check(main.lines.any(func(l): return "last battle taught us" in str(l.text)), "a second Champion visit offers Isolde's stronger rematch")
+		talk_through()
+		check(main.battle.visible and main.battle_story == "rematch:isolde" and main.battle.foes.all(func(u): return int(u.c.lvl) >= 19), "the Warden rematch uses a stronger version of the original team")
+		main.battle.visible = false
+		main._on_battle("won")
+		check(int(main.rematch_wins.get("isolde", 0)) == 1 and main.badges.size() == badge_count_before_rematch, "winning a rematch advances its tier without awarding another badge")
+		talk_through()
 		isolde_info.beaten = was_beaten
 		check(main.guests.is_empty(), "and the guests have gone home from the league gate")
 		main._go("league", Vector2i(3, 16), Vector2i.UP)
@@ -905,6 +944,21 @@ func _run() -> void:
 	check(main.lines.size() >= 2 and main.lines[0].who == "maren", "the first time, Maren explains her workbench")
 	talk_through()
 	check(main.card.visible and main.card_mode == "bench" and main.card.buttons.size() == 4, "then whoever walks with you tries gear on (%s)" % [main.card.buttons])
+	var coins_was: int = int(main.bag.coins)
+	main.bag.coins = 0
+	var cut: Array = []
+	for gi in main.R.GEAR.size():                  # every piece, with "Have it made (N coins)" showing: no button's words cut off
+		main.bench_i = gi
+		main._open_bench()
+		for bi in main.card.buttons.size():
+			if main.card._label_w(bi, main.card._btn_size()) > main.card._btn(bi).size.x - 2.0:
+				cut.append(main.card.buttons[bi])
+		var last: Rect2 = main.card._btn(main.card.buttons.size() - 1)
+		if last.end.x > 353.0:
+			cut.append("row runs off the page")
+	check(cut.is_empty(), "every workbench button's words fit inside it (%s)" % [cut])
+	main.bag.coins = coins_was
+	main.bench_i = 0
 	main.card.visible = false
 	main.bench_i = main.R.GEAR.keys().find("harness")
 	main._open_bench()
@@ -1088,6 +1142,19 @@ func _run() -> void:
 	tick(1.0)
 	talk_through()
 	check(main.map_name == "thornwood" and main.me.tile == Vector2i(13, 14), "WD4a: that old save lands at the same Thornwood coordinate, now in the settlement")
+	# WB5.1 adds only optional save fields: an older journey without them must still load cleanly
+	var pre_wb5: Dictionary = main._read_save()
+	pre_wb5.erase("spire")
+	pre_wb5.erase("rematches")
+	main.SafeSave.write(main.save_path, pre_wb5)
+	main.spire_floor = 9
+	main.spire_best = 12
+	main.spire_active = true
+	main.rematch_wins = { "isolde": 3 }
+	check(main._load_game(), "WB5.1: a pre-Spire save without post-game fields still loads")
+	tick(1.0)
+	talk_through()
+	check(main.spire_floor == 0 and main.spire_best == 0 and not main.spire_active and main.rematch_wins.is_empty(), "WB5.1: missing Spire/rematch fields get safe defaults")
 	main._go("larkhaven", Vector2i(10, 1), Vector2i.DOWN)
 	tick(1.0)
 	main.save_game()
