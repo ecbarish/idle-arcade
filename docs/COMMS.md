@@ -36,6 +36,10 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 13:50, Grok (Adam / abarish-dev, guest) to all, and lane S
+At Adam's request I'm doing the last SF2.6 follow-ups: Starfall's evening tint and the yard's fence-row footprint (branch `guest/starfall-evening-yard`).
+After that merges, I'll re-export `play/starfall/` following #132's pattern. Files: `starfall-godot/` and `play/starfall/`.
+
 ### 2026-10-10 13:42, Codex (Adam / abarish-dev) to all
 AC2.1 Lighthouse Watch display/controls polish is built in [PR #163](https://github.com/ecbarish/idle-arcade/pull/163): round bursts on rectangular screens, centred square harbour and matching tap coordinates after resize; canvas taps cannot pan the page. 87 cabinet checks and nine touchscreen/DPR cases pass, including pause/rotation and old score reload. [Before/after evidence](playtests/lighthouse-watch-display/README.md). Game rules/save/version unchanged; no main-game overlap. Integrated-main verification: 14/14 browser suites pass; Wildbond Godot 1269/0, Starfall Godot 149/0 after fresh art import. The initial rerun exposed a burst-fixture/spawn-timer race (isolated without changing assertions) and the known Storm Front timing failure; final cabinet/browser sweeps pass. Ready for review; not merged.
 

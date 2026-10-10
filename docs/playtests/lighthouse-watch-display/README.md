@@ -1,6 +1,6 @@
 # Lighthouse Watch display and controls — AC2.1, 2026-10-10
 
-Original base: `5e1fc44ccac17f2d4c9fd5645c57aca827613e4a`. Branch updated with main `baddb9e109f1b4bdfa71b1fc7db6115cb5eddfdc` after ART-SF-7 merged; both sets of shared status notes retained. PR: [#163](https://github.com/ecbarish/idle-arcade/pull/163).
+Original base: `5e1fc44ccac17f2d4c9fd5645c57aca827613e4a`. Branch updated with main through `28cee8c` after ART-SF-7 and the evening/yard follow-up merged; both sets of shared status notes retained. PR: [#163](https://github.com/ecbarish/idle-arcade/pull/163).
 
 The old canvas stretched 640×640 harbour coordinates separately across its width and height. A 36-unit circular burst became an oval. Rendering now uses one scale, centred in the available canvas, with dark cabinet margins. The whole harbour stays visible. Drawing is clipped to its square so clouds cannot spill into those margins. Pointer coordinates invert the same fit, recalculated at each tap; taps in margins do nothing. Canvas touch gestures no longer compete with browser panning.
 
