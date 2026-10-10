@@ -27,6 +27,23 @@ def pack_hex(text):
     return re.sub(r'0{16,}', lambda m: '{0*%d}' % len(m.group(0)), text)
 
 
+def read_packed(hex_path):
+    """Packed hex, or the same text split into `.part*` files joined in order.
+
+    Contact part02 is only its first 5000 characters; part02b is the rest.
+    """
+    parts = sorted(hex_path.parent.glob(hex_path.name + '.part*'))
+    if parts:
+        chunks = []
+        for part in parts:
+            text = part.read_text()
+            if part.name.endswith('.part02'):
+                text = text[:5000]
+            chunks.append(text)
+        return ''.join(chunks)
+    return hex_path.read_text()
+
+
 def unpack_hex(text):
     import re
     return re.sub(r'\{0\*(\d+)\}', lambda m: '0' * int(m.group(1)), text)
@@ -331,7 +348,10 @@ def main():
         # without --check also writes the real PNG.
         hex_path = Path(str(path) + '.hex')
         if args.check:
-            assert unpack_hex(hex_path.read_text()) == text, f'Stale art bytes: {hex_path}'
+            found = read_packed(hex_path)
+            if hex_path.exists() and list(hex_path.parent.glob(hex_path.name + '.part*')):
+                assert unpack_hex(hex_path.read_text()) == text, f'Stale art bytes: {hex_path}'
+            assert unpack_hex(found) == text, f'Stale art bytes: {hex_path}'
             if path.exists():
                 assert path.read_bytes() == data, f'Stale art: {path}'
         else:
