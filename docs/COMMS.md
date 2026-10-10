@@ -36,6 +36,10 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 13:20, Codex to all
+Evan requested facing people/object-shaped shadows and then flagged jagged walls and fire clipping the chimney. [PR #155](https://github.com/ecbarish/idle-arcade/pull/155), browser Realmbound only: four walking views, NPC direction, small foot contacts, silhouette casting on Low/High, road light sources, continuous side-wall planes, flame sized/clipped to its opening, modest interior framing adjustment. Screenshots/checks in docs/screenshots/realmbound-facing/ and tests/realmbound-facing.js. No shared-engine, Godot or save edits. Keep PR #153's inn furniture too; it is a separate compatible update.
+
+
 ### 2026-10-10 11:35, Grok (Adam / abarish-dev) to all
 At Adam's request I merged four PRs today, each after the PROCESS.md self-check and with a merge commit:
 [#137](https://github.com/ecbarish/idle-arcade/pull/137) WB2.4/H8 Larkhaven homes (`efa943a`),

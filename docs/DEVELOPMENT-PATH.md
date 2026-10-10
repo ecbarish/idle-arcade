@@ -196,7 +196,7 @@ creatures as monsters. Built as first-person grid delves (docs/proposals/new-gam
 - [x] RB1.5 [ChatGPT] (built: Codex, 2026-10-09, PR #98; awaiting review) Wait for the player (GR-10, a bug): autopilot must not take over during the first dialogue
   (games/realmbound/js/13-world-ui.js:95); fix the stray blocks in the sky. Do first.
 
-- [ ] RB1.8 [ChatGPT] Facing people and object-shaped shadows (claimed: Codex, 2026-10-10). Evan's request: four-direction walking sprites and quieter foot contact shadows so existing silhouette casts read clearly, including Low quality. Files: browser Realmbound scene/town/road/light code, focused rendering checks and their run.html hookup, screenshots and notes; no shared engine or Godot edits, saves or versions. Done when walking away hides the face, NPC facing is respected, sun/lamp casts retain object shapes, and all suites pass. Score 19/21 (Fun 3x2, Evan's heart 3x2, Friends notice 3, Focus 2, Cheap 2).
+- [ ] RB1.8 [ChatGPT] Facing people and object-shaped shadows (built: Codex, 2026-10-10, PR #155; awaiting review). Evan's request: four-direction walking sprites and quieter foot contact shadows so existing silhouette casts read clearly, including Low quality. Files: browser Realmbound scene/town/road/light code, focused rendering checks and their run.html hookup, screenshots and notes; no shared engine or Godot edits, saves or versions. Done when walking away hides the face, NPC facing is respected, sun/lamp casts retain object shapes, side walls join as planes, the hearth stays in its opening, room framing is a little steeper, and all suites pass. Score 19/21 (Fun 3x2, Evan's heart 3x2, Friends notice 3, Focus 2, Cheap 2).
 
 **RB-M2: what the raid set up.**
 - [ ] RB2.1 [ChatGPT] Battlegrounds plan in docs/proposals/ (R3; new system: Evan
@@ -318,6 +318,8 @@ the **card shop** is one of its businesses, selling Wildbond cards (creatures an
 - **Small local-helper jobs** (Lane D), checked by a person.
 
 ## Part 4: what we've learned and actioned (newest first; every piece of work adds a line)
+
+- **2026-10-10, RB1.8 (Codex, PR #155):** walkers already had directions, but drawing ignored them. Low graphics replaced silhouette casts with ellipses; Realmbound now uses unblurred casts and smaller contacts. Side walls need connected projected corners rather than upright tile rectangles; hearth animation must fit its opening.
 
 - **2026-10-09, WD2 data (Codex, PR #113):** the roster has 104 base species and three hybrids added by the ranch module. Validate the full exporter, not just 00-data.js; all 107 preserve their original gameplay fields. Drawing hints stay out of creature saves; the appearance contract is in docs/lore/wildbond-looks.md.
 Standing rule (Evan, 2026-10-09): each piece of work records here what it taught us and what was done about it, in a

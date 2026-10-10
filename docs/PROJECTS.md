@@ -55,7 +55,7 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 
 | ID | Project | Status |
 |---|---|---|
-| RB1.8 | Directional people and visible silhouette shadows | claimed: Codex, 2026-10-10, codex/realmbound-facing-shadows |
+| RB1.8 | Directional people and visible silhouette shadows | ready: Codex, PR #155, 2026-10-10 |
 
 ## How to use this list
 
