@@ -38,7 +38,24 @@ function checkRealmFacing(frame){return frame.contentWindow.eval('('+function(){
  for(const x of [0,room.rows[0].length-1])for(let y=1;y<room.rows.length-2;y++){const a=realmSideWallPoints(x,y,room,1.75),b=realmSideWallPoints(x,y+1,room,1.75);check(a&&b&&a[1].every((v,i)=>Math.abs(v-b[0][i])<.001)&&a[2].every((v,i)=>Math.abs(v-b[3][i])<.001),'side '+x+' rows '+y+'/'+(y+1)+' share exact top and floor corners');}
  TOWN.inside='inn';TOWN_WALK.place(...SERVICE_ROOMS.inn.start);TOWN.on=true;
  for(const offset of [0,.25]){TOWN_WALK.fx=7+offset;TOWN_WALK.fy=8-offset;drawTown(0);const points=realmSideWallPoints(0,1,{rows:TOWN.map.rows,pos:{x:TOWN_WALK.fx,y:TOWN_WALK.fy},horizon:.12},1.75),floor=TOWN.cam.fwd(1,2);check(points[2].every((v,i)=>Math.abs(v-floor[i])<.001),'side-wall plane matches floor camera while moving '+offset);}TOWN_WALK.place(...SERVICE_ROOMS.inn.start);
- const fire=AMB.fire;let clipping=false,fireOptions;const clip=g.clip;g.clip=function(){clipping=true;return clip.apply(this,arguments);};
- try{AMB.fire=function(c,x,y,px,t,o){fireOptions=o;check(clipping&&o.embers===false,'hearth flame is clipped inside the opening with no escaping embers');return fire.call(this,c,x,y,px,t,o);};TOWN.pal=townPal();townStand(g,'H',20,120,48,0,8,1);check(fireOptions.size<1,'hearth flame fits the opening');}finally{AMB.fire=fire;g.clip=clip;}
+ const fire=AMB.fire;let clipping=false,fireCalls=0;const clip=g.clip;g.clip=function(){clipping=true;return clip.apply(this,arguments);};
+ try{AMB.fire=function(c,x,y,px,t,o){fireCalls++;check(clipping&&o.embers===false,'hearth flame is contained without escaping embers');return fire.call(this,c,x,y,px,t,o);};TOWN.pal=townPal();
+  for(const [name,rows,y,start,end]of [['town',SERVICE_ROOMS.inn.rows,1,7,8],['road',REALM_ROAD_INN.rows,2,4,5]]){
+   const s=48,u=s/8,left=80,base=160;
+   for(const t of [0,.13,.5,1.7]){
+    g.clearRect(0,0,240,200);clipping=false;const before=fireCalls;
+    townStand(g,'H',left-s,base,s,t,start,y,undefined,rows);
+    check(fireCalls===before,name+' hearth is drawn once for the two-tile footprint');
+    townStand(g,'H',left,base,s,t,end,y,undefined,rows);
+    const a=pixels();let minY=200,maxY=0,count=0,outside=false;
+    for(let i=0;i<a.length;i+=4)if(a[i]>150&&a[i+1]>40&&a[i+1]<245&&a[i+2]<100&&a[i+3]){
+     const xx=i/4%240,yy=Math.floor(i/4/240);count++;minY=Math.min(minY,yy);maxY=Math.max(maxY,yy);
+     if(xx<left-s+2*u||xx>=left+s-2*u||yy<base-12*u||yy>=base-u)outside=true;
+    }
+    check(count>0&&!outside,name+' visible flame stays inside the stone opening at '+t);
+    check(maxY-minY>s*.65,name+' fire remains substantial beside person-sized furnishings at '+t);
+   }
+  }
+ }finally{AMB.fire=fire;g.clip=clip;}
 return checks;
 }.toString()+')()');}
