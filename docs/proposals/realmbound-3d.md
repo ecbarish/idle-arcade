@@ -41,7 +41,7 @@ Before anyone connects the trial to production, check open PRs and COMMS. RB1.7 
 
 ## Evidence
 
-`node tests/realmbound-3d.cjs http://localhost:8766` runs 146 checks in isolated browser contexts. Covers 375x812, 1366x768, 1920x1080 and 3440x1440, real keyboard and touch input, collisions, camera bounds, shared dialogue, entry/exit, unchanged sentinel saves, animation, drag orbit, wheel zoom and library-load failure. Additional rig checks sample 16 stride phases for planted feet and floor clearance, and verify reduced-motion freeze, no marching against collisions reciprocal conversation facing, and no horizontal sliding during straight stance steps. Captures live in docs/screenshots/realmbound-3d/. All 16 existing suites pass using `node tools/run-all-checks.cjs`.
+`node tests/realmbound-3d.cjs http://localhost:8766` runs 146 checks in isolated browser contexts. Covers 375x812, 1366x768, 1920x1080 and 3440x1440, real keyboard and touch input, collisions, camera bounds, shared dialogue, entry/exit, unchanged sentinel saves, animation, drag orbit, wheel zoom and library-load failure. Additional rig checks sample 16 stride phases for planted feet and floor clearance, and verify reduced-motion freeze, no marching against collisions reciprocal conversation facing, and no horizontal sliding during straight stance steps. Captures live in docs/screenshots/realmbound-3d/. All 17 existing suites pass using `node tools/run-all-checks.cjs`.
 
 Headless browser checks are not a hardware performance guarantee. Judge camera comfort, art quality and motion by playing on Evan's actual desktop and phone. Known limits: simple procedural models/fire, an open-roof room, no full game integration, no audio in the trial, no pinch zoom, and no gamepad controls yet.
 

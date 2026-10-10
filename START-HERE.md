@@ -105,7 +105,7 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
-- **2026-10-10, Codex:** RB1.9: isolated third-person 3D Realmbound inn trial, PR #159. Plan in docs/proposals/realmbound-3d.md; all 16 suites and 146 dedicated checks pass; jointed characters, planted feet, conversation facing and modular eight-slot equipment previews added; asset upgrade contract recorded. No live game, saves, versions or Godot edits.
+- **2026-10-10, Codex:** RB1.9: isolated third-person 3D Realmbound inn trial, PR #159. Plan in docs/proposals/realmbound-3d.md; all 17 suites and 146 dedicated checks pass; jointed characters, planted feet, conversation facing and modular eight-slot equipment previews added; asset upgrade contract recorded. No live game, saves, versions or Godot edits.
 
 
 - 2026-10-10 — Grok (Adam / abarish-dev, guest): AC3 Brisket's Crossing is draft [PR #160](https://github.com/ecbarish/idle-arcade/pull/160) (Frogger shape, original art, v0.1.0). Ready for review, not merged. Ember Bricks stays a separate unclaimed cabinet. No hub version bump.
