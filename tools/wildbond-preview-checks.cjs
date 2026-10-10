@@ -202,9 +202,8 @@ async function continueJourney(page) {
     await champion.page.keyboard.up('ArrowLeft');
     await persisted(champion.page, d => d.map === 'spire', 'legacy Champion can walk into the new Lighthouse Spire');
     await shot(champion.page, 'spire-arrival');
-    await champion.page.keyboard.down('ArrowLeft');
-    await champion.page.waitForTimeout(2750);
-    await champion.page.keyboard.up('ArrowLeft');
+    await step(champion.page, 'ArrowLeft', 11);
+    await persisted(champion.page, d => d.map === 'spire' && d.x === 6 && d.y === 14, 'walk beside Orla through real keyboard inputs');
     await press(champion.page, 'e', 2);
     await champion.page.waitForTimeout(2500);
     await shot(champion.page, 'spire-battle');

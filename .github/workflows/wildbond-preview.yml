@@ -4,7 +4,7 @@ on:
     paths: ['tools/wildbond-preview-*', '.github/workflows/wildbond-preview.yml', 'play/wildbond/**']
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 concurrency:
   group: wildbond-preview-${{ github.ref }}
   cancel-in-progress: true
@@ -29,24 +29,25 @@ jobs:
           echo "GODOT=$RUNNER_TEMP/godot/Godot_v4.7.2-stable_linux.x86_64" >> "$GITHUB_ENV"
           npm install --no-save --no-package-lock playwright@1.56.1
           npx playwright install --with-deps chromium
-      - name: Build only the game pack, retaining the existing engine
+      - name: Verify the exact shipped pack and retain the previous preview
         run: |
           set -euo pipefail
-          timeout 120 "$GODOT" --headless --path wildbond-godot --editor --import --quit
           mkdir -p preview-review
-          sha256sum play/wildbond/index.wasm play/wildbond/index.js > preview-review/engine-before.sha256
-          cp play/wildbond/index.pck "$RUNNER_TEMP/wildbond-before.pck"
-          timeout 120 "$GODOT" --headless --path wildbond-godot --export-pack Web ../play/wildbond/index.pck
-          python - <<'PY'
+          python - <<'PYVERIFY'
+          import hashlib, json, re, subprocess
           from pathlib import Path
-          import re
-          p = Path('play/wildbond/index.html')
-          s = p.read_text()
-          s, n = re.subn(r'("index.pck"\s*:\s*)\d+', lambda m: m[1] + str(Path('play/wildbond/index.pck').stat().st_size), s)
-          assert n == 1, 'Expected one pack size in the generated shell'
-          p.write_text(s)
-          PY
-          sha256sum -c preview-review/engine-before.sha256
+          manifest = json.loads(Path('play/wildbond/build.json').read_text())
+          tree = subprocess.check_output(['git', 'rev-parse', 'HEAD:wildbond-godot'], text=True).strip()
+          assert tree == manifest['source_tree'], 'Game source differs from the reviewed pack'
+          for name, digest in manifest['sha256'].items():
+              assert hashlib.sha256(Path('play/wildbond', name).read_bytes()).hexdigest() == digest, name + ' digest mismatch'
+          size = int(re.search(r'"index.pck"\s*:\s*(\d+)', Path('play/wildbond/index.html').read_text())[1])
+          assert size == Path('play/wildbond/index.pck').stat().st_size
+          Path('preview-review/build.json').write_text(json.dumps(manifest, indent=2) + '\n')
+          print('Verified committed pack, shell, unchanged engine and source tree')
+          PYVERIFY
+          git fetch --depth=1 origin 0bc8e7b84deaadd72cb2555cc4941078ce89e310
+          git show FETCH_HEAD:play/wildbond/index.pck > "$RUNNER_TEMP/wildbond-before.pck"
       - name: Generate saves with the real pre-WD3 writer
         run: |
           set -euo pipefail
@@ -56,31 +57,10 @@ jobs:
           timeout 120 "$GODOT" --headless --path "$RUNNER_TEMP/wildbond-legacy/wildbond-godot" --editor --import --quit
           timeout 60 "$GODOT" --headless --path "$RUNNER_TEMP/wildbond-legacy/wildbond-godot" --script res://tests/preview-fixtures.gd
           cp -r "$RUNNER_TEMP/wildbond-legacy/wildbond-godot/frames/preview-fixtures" preview-review/fixtures
-      - name: Play the exported web pack, load legacy saves, and capture it
+      - name: Play the committed web pack, load legacy saves, and capture it
         env:
           BEFORE_PACK: ${{ runner.temp }}/wildbond-before.pck
         run: node tools/wildbond-preview-checks.cjs
-      - name: Store verified pack and screenshots as unreferenced Git blobs
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPOSITORY: ${{ github.repository }}
-        run: |
-          python - <<'PY'
-          import base64, hashlib, json, os, urllib.request
-          from pathlib import Path
-          files = [Path('play/wildbond/index.pck'), Path('play/wildbond/index.html')]
-          files += sorted(Path('preview-review/screens').glob('*.png'))
-          manifest = []
-          for p in files:
-              data = p.read_bytes()
-              request = urllib.request.Request('https://api.github.com/repos/' + os.environ['REPOSITORY'] + '/git/blobs', data=json.dumps({'content': base64.b64encode(data).decode(), 'encoding': 'base64'}).encode(), headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json'}, method='POST')
-              with urllib.request.urlopen(request, timeout=120) as response:
-                  blob = json.load(response)
-              entry = {'path': str(p), 'sha': blob['sha'], 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
-              manifest.append(entry)
-              print('PREVIEW_BLOB ' + json.dumps(entry))
-          Path('preview-review/blobs.json').write_text(json.dumps(manifest, indent=2) + '\n')
-          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
