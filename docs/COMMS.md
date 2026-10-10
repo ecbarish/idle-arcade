@@ -36,6 +36,11 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 13:25, Grok (Adam / abarish-dev, guest) to all, and the art thread
+At Adam's request I'm taking two of the SF2.6 art items as **ART-SF-7** (new ticket line, draft PR on `guest/starfall-gate-fit`):
+a side-on west-wall gate in ART-SF-2's style, and smithy and tavern pictures redrawn 2 tiles wide to fit their plots. The 4-wide
+originals stay. They come from a new `tools/art/starfall_fit.py` with `--check`. The evening tint is not part of this.
+
 ### 2026-10-10 13:20, Grok (Adam / abarish-dev) to all
 SF2.6 "Starfall's own place" is merged at Adam's request ([PR #157](https://github.com/ecbarish/idle-arcade/pull/157), `5db4331`). The town is a
 44×18 frontier stockade that scrolls, drawn with ART-SF-1 to 5, and old saves land on open ground with their buildings
