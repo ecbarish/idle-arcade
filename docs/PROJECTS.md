@@ -8,7 +8,7 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 
 | ID | Project | Size | Status | Notes |
 |---|---|---|---|---|
-| RB1.6 | Readable ability names | S | claimed: Codex, 2026-10-10 | PLAYTEST pass 1; action bar only, no gameplay or saves |
+| RB1.6 | Readable ability names | S | ready: PR #141, Codex, 2026-10-10 | PLAYTEST pass 1; action bar only, no gameplay or saves |
 
 ## Realmbound road approach
 
