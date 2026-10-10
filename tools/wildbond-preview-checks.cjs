@@ -39,7 +39,7 @@ async function open(browser, size, fixture, before = false) {
   await page.route('**/play/wildbond/', route => {
     let source = fs.readFileSync(path.join(root, 'play/wildbond/index.html'), 'utf8');
     let hook = 'window.__reviewEngine = engine;';
-    if (fixture) hook += `engine.preloadFile(new TextEncoder().encode(${JSON.stringify(JSON.stringify(fixture))}), '/userfs/journey.json');`;
+    if (fixture) hook += `engine.preloadFile(new TextEncoder().encode(${JSON.stringify(JSON.stringify(fixture))}), '/userfs/godot/app_userdata/Wildbond (Godot trial)/journey.json');`;
     source = source.replace('const engine = new Engine(GODOT_CONFIG);', 'const engine = new Engine(GODOT_CONFIG);' + hook);
     assert(source.includes('__reviewEngine'), 'Review override attached to exported shell');
     route.fulfill({ contentType: 'text/html', body: source });
@@ -59,6 +59,19 @@ async function shot(page, label) {
 }
 async function press(page, key, times = 1, delay = 350) {
   for (let i = 0; i < times; i++) { await page.keyboard.press(key); await page.waitForTimeout(delay); }
+}
+async function goToBench(page) {
+  const size = page.viewportSize();
+  const scale = Math.max(1, Math.floor(Math.min(size.width / 384, size.height / 216)));
+  await page.mouse.click((size.width - 384 * scale) / 2 + 40 * scale, (size.height - 216 * scale) / 2 + 152 * scale);
+  let save = await persisted(page, d => d.map === 'barn' && d.x === 2 && d.y >= 8 && d.y <= 10, 'walk across the barn through the web canvas');
+  if (save.y !== 9) {
+    const direction = save.y > 9 ? 'ArrowUp' : 'ArrowDown';
+    await page.keyboard.down(direction);
+    await page.waitForTimeout(120);
+    await page.keyboard.up(direction);
+    save = await persisted(page, d => d.map === 'barn' && d.x === 2 && d.y === 9, 'stand beside Maren’s workbench through keyboard input');
+  }
 }
 async function readSave(page) {
   return page.evaluate(() => {
@@ -82,6 +95,7 @@ async function persisted(page, test, label) {
     save = await readSave(page);
     if (save && test(save)) { check(true, label); return save; }
   }
+  await shot(page, 'failed-persistence');
   throw new Error(label + ': last save ' + JSON.stringify(save));
 }
 async function continueJourney(page) {
@@ -102,6 +116,8 @@ async function continueJourney(page) {
       if (size.width === 667 || size.width === 1920) {
         const old = await open(browser, size, fixtures.barn, true);
         await continueJourney(old.page);
+        await persisted(old.page, d => d.saved !== fixtures.barn.saved && d.map === 'barn', 'the previous web pack loads the old-format review journey at ' + tag);
+        await goToBench(old.page);
         await press(old.page, 'e');
         await shot(old.page, `before-workbench-${tag}`);
         await old.context.close();
@@ -111,7 +127,8 @@ async function continueJourney(page) {
       await shot(page, `continue-${tag}`);
       await continueJourney(page);
       const loaded = await persisted(page, d => d.saved !== fixtures.barn.saved, 'legacy barn journey is loaded and saved by the new web game at ' + tag);
-      check(loaded.map === 'barn' && loaded.x === 2 && loaded.y === 9 && loaded.bag.coins === 321 && loaded.bag.lures === 17 && loaded.team[0].sp === fixtures.barn.team[0].sp && loaded.team[0].lvl === 30, 'legacy position, satchel and creature survive at ' + tag);
+      check(loaded.map === 'barn' && loaded.x === 11 && loaded.y === 11 && loaded.bag.coins === 321 && loaded.bag.lures === 17 && loaded.team[0].sp === fixtures.barn.team[0].sp && loaded.team[0].lvl === 30, 'legacy barn entry, satchel and creature survive at ' + tag);
+      await goToBench(page);
       await press(page, 'e');
       await shot(page, `workbench-${tag}`);
       await press(page, 'ArrowRight'); // Cards start on Done; wrap to Practice.
