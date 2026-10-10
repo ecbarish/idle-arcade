@@ -20,8 +20,16 @@ CELLS = {
 ATLAS = (112, 96)
 
 
-def sprite(size):
-    return ground.image(size), ImageDraw.Draw(ground.image(size))
+def pack_hex(text):
+    """Palette padding is a long zero run. Store it as {0*N} so a text commit
+    cannot shorten it. --check expands the marker before comparing bytes."""
+    import re
+    return re.sub(r'0{16,}', lambda m: '{0*%d}' % len(m.group(0)), text)
+
+
+def unpack_hex(text):
+    import re
+    return re.sub(r'\{0\*(\d+)\}', lambda m: '0' * int(m.group(1)), text)
 
 
 def new(size):
@@ -316,18 +324,20 @@ def main():
         im.save(buf, format='PNG', transparency=0)
         data = buf.getvalue()
         text = data.hex() + '\n'
-        # Hex is the committed byte copy. This writer can only push text, and a
-        # PNG signature is not valid UTF-8, so --check locks the exact PNG bytes
-        # in the .hex file. Running without --check also writes the real PNG.
+        packed = pack_hex(text)
+        # Packed hex is the committed byte copy. This writer can only push text,
+        # and a PNG signature is not valid UTF-8, so --check locks the exact PNG
+        # bytes in the .hex file. A long zero run is written as {0*N}. Running
+        # without --check also writes the real PNG.
         hex_path = Path(str(path) + '.hex')
         if args.check:
-            assert hex_path.read_text() == text, f'Stale art bytes: {hex_path}'
+            assert unpack_hex(hex_path.read_text()) == text, f'Stale art bytes: {hex_path}'
             if path.exists():
                 assert path.read_bytes() == data, f'Stale art: {path}'
         else:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(data)
-            hex_path.write_text(text)
+            hex_path.write_text(packed)
     path = ASSETS / 'props.json'
     data = json.dumps(meta, indent=2) + '\n'
     if args.check:
