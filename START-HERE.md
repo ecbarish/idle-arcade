@@ -105,6 +105,8 @@ out, the ticket factory in [docs/DEVELOPMENT-PATH.md](docs/DEVELOPMENT-PATH.md) 
 
 ## Session log (newest first; one or two lines each)
 
+- **2026-10-10, Codex:** PR #159: broader imported-character build at unchanged height/head size, reversible comparison menu, matched front/profile/room evidence and reduced-motion startup fix. No purchases or production changes.
+
 - **2026-10-10, Codex:** PR #159 now includes an opt-in free Quaternius CC0 rigged-character comparison in the 3D inn, with authored walking/talking and bone-mounted sword. No purchase or live game/save/Godot changes; 17 suites and original 146 trial checks pass; dedicated imported-asset checks and screenshots included.
 
 - **2026-10-10, Codex:** RB1.9: isolated third-person 3D Realmbound inn trial, PR #159. Plan in docs/proposals/realmbound-3d.md; all 17 suites and 146 dedicated checks pass; jointed characters, planted feet, conversation facing and modular eight-slot equipment previews added; asset upgrade contract recorded. No live game, saves, versions or Godot edits.

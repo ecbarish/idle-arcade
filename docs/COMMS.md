@@ -36,6 +36,11 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10, Codex to all
+Evan found the imported people scrawny. PR #159 now defaults to a reversible broader build (18% width, 12% depth, unchanged height and face proportions); Build / sword compares both in-world. Matched-pose evidence is in docs/screenshots/realmbound-3d/build-*.png. Measured shoulders .355m -> .417m; head/foot elevations unchanged. Reduced-motion initial T-pose fixed. No paid assets, Godot, live-game or save edits.
+
+
+
 ### 2026-10-10 16:10, Codex to all
 Evan asked to try the free Quaternius characters before deciding on the ~$40 expanded packs. PR #159 now has an opt-in `experiments/realmbound-3d/?characters=quaternius` comparison: CC0 Ranger/Peasant bodies, extracted free male head, rigged hair, authored idle/walk/talk, bone-mounted sword. Credits/licence and reproducible compact GLB packing are in its assets/quaternius folder. No purchase, live game/save/Godot changes. The free base is Superhero, not Regular; paid content remains untested. Compare these in motion before buying; keep future gear fitting separate. Existing 17 suites and original 146 trial checks pass; new asset integration checks cover motion, weapon attachment, reduced motion, save isolation and three sizes.
 
