@@ -51,6 +51,12 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 | WB4.4b-reveal | Three observations and the final truth (T58) | M | ready: PR #101, Codex, 2026-10-09 | Approved account and observations; data only for Claude to place |
 | WB4.4b-audit | Clue fit and three late observations (T55) | S | ready: PR #82, Codex, 2026-10-09 | Writer doc first; no reveal text before Claude review |
 
+## Realmbound scene furnishing
+
+| ID | Project | Size | Status | Scope |
+|---|---|---|---|---|
+| RB1.7 | Inn furnishing and clear routes | S | ready: Codex, PR #153, 2026-10-10 | Browser inn only; existing rest service and saves retained |
+
 ## How to use this list
 
 - **Pick** any project whose status is `open` and whose dependencies are done, in the focus order of
