@@ -263,7 +263,7 @@ browser (E4). (claimed: Grok, 2026-10-09, grok/studio-text-browser; Lane C task 
 - [ ] AR2.8 [Claude] Split Wildbond's main.gd as systems are touched (godot-practices.md rule 1): music and ambience
   first, then festivals, interiors, the ranch; one system per commit, checks passing.
 - [ ] AR2.11 [any] Hearing from players (GR-9): a "Tell us" in every game's settings that opens a prefilled GitHub
-  issue; a 10-minute playtest script on Come Play.
+  issue; a 10-minute playtest script on Come Play. (claimed: Grok for Adam / abarish-dev, 2026-10-10, guest/tell-us)
 - [x] AR2.12 [any] The front door (done 2026-10-09, Claude, PR #109: the hall only, sections by kind, how to play on every card) (GR-12): the hub leads with the Godot games, Starfall Guild and Primordial move to
   Classic, the old homepage vote closes; START-HERE versions corrected (Claude).
 **AR-M3: the walk-in arcade and friends.**
