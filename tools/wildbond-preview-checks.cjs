@@ -46,7 +46,7 @@ async function open(browser, size, fixture, before = false) {
   });
   if (before) await page.route('**/play/wildbond/index.pck', route => route.fulfill({ path: process.env.BEFORE_PACK, contentType: 'application/octet-stream' }));
   await page.goto(`http://127.0.0.1:${server.address().port}/play/wildbond/`);
-  await page.waitForFunction(() => document.querySelector('#status').style.display === 'none', null, { timeout: 90000 });
+  await page.waitForFunction(() => !document.querySelector('#status'), null, { timeout: 90000 });
   await page.waitForTimeout(1200);
   check(errors.length === 0, `${before ? 'previous' : 'refreshed'} web pack starts at ${size.width}×${size.height}`);
   return { context, page, errors };
@@ -114,7 +114,8 @@ async function continueJourney(page) {
       check(loaded.map === 'barn' && loaded.x === 2 && loaded.y === 9 && loaded.bag.coins === 321 && loaded.bag.lures === 17 && loaded.team[0].sp === fixtures.barn.team[0].sp && loaded.team[0].lvl === 30, 'legacy position, satchel and creature survive at ' + tag);
       await press(page, 'e');
       await shot(page, `workbench-${tag}`);
-      await press(page, 'Enter'); // First workbench button: Practice.
+      await press(page, 'ArrowRight'); // Cards start on Done; wrap to Practice.
+      await press(page, 'Enter');
       await shot(page, `practice-${tag}`);
       await press(page, 'ArrowDown', 3, 120);
       await press(page, 'e', 2); // Select Pack Hunt, then rest the first old move.
@@ -126,7 +127,7 @@ async function continueJourney(page) {
       // Reload without fixture injection: this checks browser persistence, not a repeated preload.
       await page.unroute('**/play/wildbond/');
       await page.reload();
-      await page.waitForFunction(() => document.querySelector('#status').style.display === 'none', null, { timeout: 90000 });
+      await page.waitForFunction(() => !document.querySelector('#status'), null, { timeout: 90000 });
       await page.waitForTimeout(900);
       await continueJourney(page);
       const reloaded = await readSave(page);

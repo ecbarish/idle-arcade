@@ -24,7 +24,11 @@ func write_fixtures() -> void:
 	main.battle.visible = false
 	main.no_save = false
 	main.my_look.name = "Review Rowan"
-	main.team[0].lvl = 30
+	main.team = [main.R.make("cindercub", 30, { "rar": 1 }, main.rng)]
+	for starter in main.starters:
+		if starter.id == "cindercub": main.partner = starter
+	main.seen["cindercub"] = true
+	main.bonded["cindercub"] = true
 	main.team[0].hp = main.R.stats(main.team[0]).hp
 	main.team[0]["hold"] = 999
 	main.bag.coins = 321
