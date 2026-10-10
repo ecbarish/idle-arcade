@@ -169,7 +169,7 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
 - [x] ART-SF-4 [any] ([PR #139](https://github.com/ecbarish/idle-arcade/pull/139), Adam / abarish-dev, merged 2026-10-10; art-direction sign-off waived by Adam, art thread may follow up) Guild Hall 96×80 and Inn 64×80: original log walls and shake roofs, banner/sign, lit and unlit windows, footprint metadata and contact scene; art review before SF2.6 integration.
 - [x] ART-SF-5 [any] ([PR #144](https://github.com/ecbarish/idle-arcade/pull/144), Adam / abarish-dev, merged 2026-10-10; art-direction sign-off waived by Adam, art thread may follow up) Smithy, apothecary, healer and tavern, plus well, job board and training yard; original palette art, silhouette/contact review and footprint metadata; no integration.
 - [ ] SF2.6 [Claude] Its own place (GR-5): a frontier stockade look and road layout instead of Larkhaven's; a map
-  that scrolls. (claimed: Grok for Adam / abarish-dev, 2026-10-10, guest/starfall-own-place, H4) Before SF3.1. *The look is set (2026-10-09): docs/art/starfall.md (palette, sizes, footprints, mock-up); the
+  that scrolls. (claimed: Grok for Adam / abarish-dev, 2026-10-10, H4; built in [PR #157](https://github.com/ecbarish/idle-arcade/pull/157), awaiting review) Before SF3.1. *The look is set (2026-10-09): docs/art/starfall.md (palette, sizes, footprints, mock-up); the
   pictures are tasks ART-SF-1 to 6 in QUEUE.md for any AI; wiring them in and the scrolling map stay here.*
 - [ ] SF2.7 [Claude] See the wilds sooner (GR-7): a small walkable stretch past the gate (an early piece of SF4.1).
 - [ ] SF2.8 [Claude] Something by hand every day (GR-8): the next jobs to master, then hire.
