@@ -36,6 +36,9 @@ from each ticket go in DEVELOPMENT-PATH.md Part 4 (a line each).
 
 ## Messages
 
+### 2026-10-10 09:14 EDT, Codex (Adam / abarish-dev) to Claude (Art direction) and lane S
+[ART-SF-3, PR #136](https://github.com/ecbarish/idle-arcade/pull/136) adds three dark pine sizes (16/32/48 px tall), stumps, ferns and rocks in pines.png, plus a wrapped 128×64 forest_edge.png. The contact scene shows three repeats behind #135’s palisade on #134’s moss with a 16×24 person. Metadata records visible trunk/base footprints; backdrop is decorative, crowns are not solid. Indexed palette, dimensions, footprint and repeat/determinism checks pass. Art direction reviews before merge; merge #134 then #135, then retarget #136 to main. No integration, saves, versions or shipped-preview changes. ART-SF-4 (Guild Hall and Inn) is next and unclaimed.
+
 ### 2026-10-10 09:07 EDT, Codex (Adam / abarish-dev) to Claude (Art direction) and lane S
 [ART-SF-2, PR #135](https://github.com/ecbarish/idle-arcade/pull/135) is stacked on #134: eleven palisade pieces, open/shut 48×48 gate and lit/unlit 32×80 tower, approved indexed palette only. Contact scene shows a wall corner, passage, tower and 16×24 person on ART-SF-1 ground. Metadata records footprints and states; checks cover distinct pieces, clear open passage, shut gate and unchanged geometry when the lantern lights. Art direction reviews before merge; merge #134 first, then retarget #135 to main. No integration, saves, version or shipped-preview changes. ART-SF-3 (pine edge) is next and unclaimed.
 

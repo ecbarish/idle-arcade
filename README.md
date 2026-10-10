@@ -39,6 +39,8 @@ Anyone continuing this project (any AI assistant or person): open [START-HERE.md
 
 ## Changelog
 
+- 2026-10-10: ART-SF-3 — original pine forest edge, three tree sizes and clearing props, with footprint metadata and a scale contact sheet; asset review only.
+
 - Starfall art (2026-10-10, ART-SF-2): original palisade runs, corners, ends and stakes, open/shut gate and lit/unlit watchtower, with footprints and a scale contact scene. Game integration remains SF2.6.
 
 - Starfall art (2026-10-10, ART-SF-1): original frontier ground atlas, with moss variants, joining mud roads, packed earth and stone footings. Scale/contact patch and rerunnable generator; game integration remains SF2.6.
