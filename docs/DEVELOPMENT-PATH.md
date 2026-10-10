@@ -419,4 +419,4 @@ line or two, with the page that holds the detail.
 
 ## Maintenance
 
-- [ ] **FB-17 [any]: onboarding instructions cleanup** (claimed: Codex / Adam, 2026-10-10). Files: START-HERE.md and task/status notes only. Repair the broken old-save rule, refer test coverage to the runner, and align claim/merge instructions with PROCESS.md. Done when links resolve and the diff changes documentation only.
+- [ ] **FB-17 [any]: onboarding instructions cleanup** (ready: PR #168, Codex / Adam, 2026-10-10). Files: START-HERE.md and task/status notes only. Repair the broken old-save rule, refer test coverage to the runner, and align claim/merge instructions with PROCESS.md. Done when links resolve and the diff changes documentation only.
