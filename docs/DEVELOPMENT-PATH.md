@@ -164,6 +164,7 @@ yard, smithy and Garrick, apothecary and prices, ranks and newcomers, music, det
 - [x] SF2.4 [ChatGPT] (T52 merged and applied to starfall-godot/data/stories.json 2026-10-09: six members, three beats each; was: writing handoff, integration pending) Story text for SF2.1 (the system is built; extend `starfall-godot/data/stories.json`: arcs for Kaito, Hana and Sora, and a third beat for Aki, Ren and Yuna; keep its format and the four traits): three short arcs per adventurer (choices that can go either way), in a
   data file Claude wires in (`starfall-godot/data/stories.json`; ChatGPT may write that one data file).
 - [ ] ART-SF-1 [any] (art review: [PR #134](https://github.com/ecbarish/idle-arcade/pull/134), Adam / abarish-dev, 2026-10-10) Starfall frontier ground: 16 px moss variants, joining mud roads, packed-earth square and stone footing; palette-only atlas plus scale/contact patch; art review before SF2.6 integration.
+- [ ] WB-ROOF-149 [any] (claimed: Adam / abarish-dev, 2026-10-10) Fix #149: tap routes avoid roof collision while preserving doors and NPC avoidance; wildbond-godot/scripts/main.gd and native tests; done when both witnessed taps and existing transition checks pass.
 - [ ] SF2.6 [Claude] Its own place (GR-5): a frontier stockade look and road layout instead of Larkhaven's; a map
   that scrolls. Before SF3.1. *The look is set (2026-10-09): docs/art/starfall.md (palette, sizes, footprints, mock-up); the
   pictures are tasks ART-SF-1 to 6 in QUEUE.md for any AI; wiring them in and the scrolling map stay here.*
