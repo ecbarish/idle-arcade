@@ -35,5 +35,6 @@ function diamondManagerChecks(){
     return [...items].some(([k,v])=>k.startsWith('arcade-backup:')&&JSON.parse(v).data===raw);
   });
   check('A full season remains a valid save at every phase',()=>{const L=d.newLeague(2);while(L.phase==='season'){d.playDay(L);assert(d.validLeague(L),'season');}while(L.phase==='final'){d.playFinalGame(L);assert(d.validLeague(L),'final/offseason');}return true;});
+  check('Blocked browser storage still permits a new league',()=>d.loadLeague({getItem(){throw Error('blocked');}},[])===null);
   return out;
 }

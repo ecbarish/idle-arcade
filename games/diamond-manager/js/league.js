@@ -332,7 +332,8 @@ function validLeague(o) {
 }
 /* Recover structurally damaged JSON as well as truncated JSON. Preserve the original before any new save. */
 function loadLeague(storage, backups) {
-  const raw = storage.getItem(DM.key);
+  let raw;
+  try { raw = storage.getItem(DM.key); } catch (_) { return null; } // private/blocked storage still permits a new visit
   if (raw) {
     try { const parsed = JSON.parse(raw); if (validLeague(parsed)) return parsed; } catch (_) {}
     try { storage.setItem('arcade-backup:' + DM.key + ':rejected-' + Date.now(), JSON.stringify({at:Date.now(),why:'Unreadable league preserved before recovery',data:raw,ver:'0.1.0'})); }
