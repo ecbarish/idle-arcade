@@ -76,7 +76,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB2.2 [Claude] Depth step 1 (WG6): ground heights, object footprints and heights (part 1 done 2026-10-08: the colour layer drawn in true depth order, people in front of you faded as the world is). Part 2 done 2026-10-09: trees beside open ground stand at their true height and their crowns pass in front of you (see-through, faded like the world: shaders/canopy.gdshader), never over a sign or an item. Left: ground heights, footprints and heights on objects (houses and rocks).
 - [ ] WB2.3 [Claude] Variety pass (WG7) (done 2026-10-08: an animated effect per element in battle; waves and wind under the music. Tried the pack's water ripples: opaque tiles, rejected). Left: waterfalls, edge
   tiles.
-- [ ] WB2.4 [Claude] Interiors: the inn, the shop and two homes in Larkhaven, walkable (inn and shop done 2026-10-08, with Old Ned and Juniper; homes left; the pack's unused Interior tileset has furniture, floors and walls: docs/learning/assets.md).
+- [x] WB2.4 [Claude] Interiors: the inn, the shop and two homes in Larkhaven, walkable (inn and shop done 2026-10-08, with Old Ned and Juniper; both homes done 2026-10-10: Pip's home with Mira and Nora's cottage, Grok for Adam / abarish-dev, PR #137, H8; the pack's unused Interior tileset has furniture, floors and walls: docs/learning/assets.md).
 - [x] WB2.5 [Claude] Maren's letter and the field book's "where next" hint (WG8): done 2026-10-08.
 - [x] WB2.6 [ChatGPT] (done, merged 2026-10-09; T45) Lore: a heritage line for every Warden and townsperson in areas 1-4 (data in the browser game,
   exported to Godot), recorded in the thread ledger.
@@ -139,6 +139,7 @@ Tick a box when the deliverable is merged (`- [x]`, with the date). IDs are stab
 - [ ] WB5.7 [Claude] Fishing at Saltmarsh (from docs/proposals/new-game-ideas.md, scored 16/18; added 2026-10-09).
 
 **WB-M6: version 2.0, ready for everyone.**
+- [x] WB-PREVIEW [any] **Done 2026-10-10:** merged and deployed; all 14 main suites pass, exact committed pack passed 55 browser checks with 27 captures and synthetic pre-WD3 saves, and all four live-file hashes match the reviewed build. (merged: [PR #132](https://github.com/ecbarish/idle-arcade/pull/132), Adam / abarish-dev, 2026-10-10, `guest/wildbond-preview-integration`) Refresh the `play/wildbond` pack to include WD3, WD4a, WB5.1 and the UI fixes. Scope: `play/wildbond`, release/guide notes and verification screenshots. Done when the full tests pass and the web build is verified playable.
 - [x] WB6.1 [Claude] Phone controls (WG10). **Done 2026-10-09:** named actions in `controls.gd`, the phone pad in `touch_pad.gd`, gamepads. Start by moving every key to named Input Map actions
   (docs/learning/godot-practices.md rule 2), so on-screen buttons, a gamepad and rebinding all come free.
 - [x] WB6.2 [Claude] **Done 2026-10-09** (`settings.gd`, the book's Settings page). Settings in the game window (sound, music, text size,
@@ -265,8 +266,8 @@ browser (E4). (claimed: Grok, 2026-10-09, grok/studio-text-browser; Lane C task 
   chooses you; then the arcade's own menu sounds and jingles, replacing the pack's by name. Evan listens before merge.
 - [ ] AR2.8 [Claude] Split Wildbond's main.gd as systems are touched (godot-practices.md rule 1): music and ambience
   first, then festivals, interiors, the ranch; one system per commit, checks passing.
-- [ ] AR2.11 [any] Hearing from players (GR-9): a "Tell us" in every game's settings that opens a prefilled GitHub
-  issue; a 10-minute playtest script on Come Play.
+- [x] AR2.11 [any] Hearing from players (GR-9): a "Tell us" in every game's settings that opens a prefilled GitHub
+  issue; a 10-minute playtest script on Come Play. (built: Grok for Adam / abarish-dev, PR #146, merged 2026-10-10; arcade v1.5.1; Godot previews and Primordial are follow-ups)
 - [x] AR2.12 [any] The front door (done 2026-10-09, Claude, PR #109: the hall only, sections by kind, how to play on every card) (GR-12): the hub leads with the Godot games, Starfall Guild and Primordial move to
   Classic, the old homepage vote closes; START-HERE versions corrected (Claude).
 **AR-M3: the walk-in arcade and friends.**
@@ -280,7 +281,7 @@ No-server sharing: trade and battle codes, ghost teams (V6 part 1).
   ending; no reading, no failing, no links or purchases, a grown-up lock. Shares the baby-form drawings W9/W10 needs. (claimed: Grok for Adam / abarish-dev, 2026-10-09, guest/little-ranch)
 **The Arcade Cabinets (browser), original single-screen games in the 1978-85 style.**
 - [x] AC1 [any] Storm Front (the Space Invaders shape, Evan's pick): one cabinet, original name and art, one PR. (built: Codex for Adam / abarish-dev, guest/storm-front, PR #119; awaiting review)
-- [ ] AC2 [any] Lighthouse Watch (the Missile Command shape).
+- [x] AC2 [any] Lighthouse Watch (the Missile Command shape). (built: Grok for Adam / abarish-dev, PR #145, merged 2026-10-10; v0.1.0)
 - [ ] AC3 [any] Brisket's Crossing (the Frogger shape) and Ember Bricks (the Breakout shape), one PR each.
 
 ### Parked (Evan decides when)
