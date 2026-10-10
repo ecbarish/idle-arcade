@@ -189,6 +189,8 @@ creatures as monsters. Built as first-person grid delves (docs/proposals/new-gam
 - [ ] SF4.2 [Claude] Phone controls and settings; Starfall guide [any]; trailer.
 
 ### Realmbound (browser)
+- [ ] RB1.9 [ChatGPT] Third-person 3D inn trial (claimed: Codex, 2026-10-10). Evan asked for a modern Pokemon-like third-person presentation. Isolated prototype, original procedural stylized models, honest character/furniture dimensions, walk/orbit/collision, a substantial contained hearth, real light/shadow geometry, phone and ultrawide checks. Files: experiments/realmbound-3d/, tests/realmbound-3d.cjs, docs/proposals/realmbound-3d.md, screenshots and handoff. No production renderer, saves, shared engines or Godot edits. Score 18/21 (Fun 3x2, Heart 3x2, Notice 3, Focus 2, Cheap 1).
+
 **RB-M1: in the game window.**
 - [x] Part 1 (T38).
 - [x] RB1.2 [ChatGPT] Part 2: pages become places (T41). (merged 2026-10-09)

@@ -51,6 +51,12 @@ is to do*. Ground rules for how assistants work, and how much creative freedom t
 | WB4.4b-reveal | Three observations and the final truth (T58) | M | ready: PR #101, Codex, 2026-10-09 | Approved account and observations; data only for Claude to place |
 | WB4.4b-audit | Clue fit and three late observations (T55) | S | ready: PR #82, Codex, 2026-10-09 | Writer doc first; no reveal text before Claude review |
 
+## Realmbound third-person trial
+
+| ID | Project | Status |
+|---|---|---|
+| RB1.9 | A walkable stylized 3D inn, isolated from the live game | claimed: Codex, 2026-10-10, codex/realmbound-3d-trial |
+
 ## How to use this list
 
 - **Pick** any project whose status is `open` and whose dependencies are done, in the focus order of
