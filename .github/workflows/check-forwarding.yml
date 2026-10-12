@@ -1,0 +1,44 @@
+name: Check the old address forwards
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Old links land on the same page under /generations/
+        run: |
+          cat > check.cjs <<'JS'
+          const { chromium } = require('playwright');
+          const base = 'https://ecbarish.github.io';
+          const cases = [
+            ['/idle-arcade/', '/generations/'],
+            ['/idle-arcade/games/briskets-crossing/?x=1#top', '/generations/games/briskets-crossing/?x=1#top'],
+            ['/idle-arcade/playtest.html', '/generations/playtest.html'],
+          ];
+          (async () => {
+            const sleep = ms => new Promise(r => setTimeout(r, ms));
+            for (let i = 0; i < 40; i++) {
+              const r = await fetch(base + '/idle-arcade/sw.js', { cache: 'no-store' });
+              if (r.ok && (await r.text()).includes('unregister')) break;
+              console.log('Waiting for the Pages deploy...'); await sleep(15000);
+            }
+            const browser = await chromium.launch(); const page = await browser.newPage();
+            await page.goto(base + '/generations/'); await page.evaluate(() => localStorage.setItem('forward-check', 'kept'));
+            let failed = 0;
+            for (const [from, to] of cases) {
+              await page.goto(base + from); await page.waitForURL(u => u.pathname.startsWith('/generations'), { timeout: 20000 });
+              const ok = page.url() === base + to && await page.evaluate(() => localStorage.getItem('forward-check')) === 'kept';
+              console.log(ok ? 'ok  ' : 'FAIL', from, '->', page.url()); if (!ok) failed++;
+            }
+            await browser.close(); process.exit(failed ? 1 : 0);
+          })().catch(e => { console.error(e); process.exit(1); });
+          JS
+          node check.cjs
