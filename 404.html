@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generations has moved</title>
+<link rel="canonical" href="https://ecbarish.github.io/generations/">
+<script>
+// Idle Arcade is now Generations. Send every old address to the same page under /generations/,
+// keeping the path, ?query and #hash. Saves live in this browser for the whole ecbarish.github.io
+// site, so they carry over unchanged.
+(function () {
+  var l = location, p = l.pathname.replace(/^\/idle-arcade(\/|$)/, '/generations$1');
+  if (p === l.pathname) p = '/generations/';
+  l.replace(p + l.search + l.hash);
+})();
+</script>
+<meta http-equiv="refresh" content="2; url=https://ecbarish.github.io/generations/">
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 16px; box-sizing: border-box;
+         font: 18px/1.5 system-ui, sans-serif; background: #15131c; color: #f3eee2; text-align: center; }
+  a { color: #f2c46b; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Idle Arcade is now Generations</h1>
+  <p>Taking you there now. Your saved games come with you.</p>
+  <p><a href="https://ecbarish.github.io/generations/">Go to Generations</a></p>
+</main>
+</body>
+</html>
